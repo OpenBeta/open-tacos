@@ -36,6 +36,14 @@ module.exports = {
         ],
       },
     },
+    `gatsby-transformer-json`,
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `climbing-routes`,
+        path: `${__dirname}/data/routes`,
+      },
+    },
     `gatsby-plugin-offline`,
   ],
 };
