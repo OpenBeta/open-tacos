@@ -1,37 +1,62 @@
-var slugify = require("slugify");
+const slugify = require("slugify");
+const path = require(`path`);
 
 exports.onCreateNode = ({ node, getNode, actions }) => {
-  if (node.internal.type === "RoutesJson") {
+  if (node.internal.type === "AreasJson") {
     const { createNodeField } = actions;
     createNodeField({
       node,
       name: `slug`,
-      value: slugify(node.route_name),
+      value: slugify(node.area_name),
     });
   }
 };
 
 exports.createPages = async ({ graphql, actions }) => {
+  // const result = await graphql(`
+  //   query {
+  //     allRoutesJson {
+  //       edges {
+  //         node {
+  //           metadata {
+  //             mp_route_id
+  //           }
+  //           fields {
+  //             slug
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // `);
+
   const result = await graphql(`
-    query {
-      allRoutesJson {
-        edges {
-          node {
-            fields {
-              slug
-            }
+  query {
+    allAreasJson {
+      edges {
+        node {
+          id
+          area_name
+          climbs
+          fields {
+            slug
           }
         }
       }
     }
-  `);
+  }
+`);
+
   // Iterate through each climb object and create a new page
-  result.data.allRoutesJson.edges.forEach(({ node }) => {
+  const { createPage } = actions;
+  result.data.allAreasJson.edges.forEach(({ node }) => {
     createPage({
       path: node.fields.slug,
-      component: path.resolve(`./src/templates/climb-page.js`),
+      component: path.resolve(`./src/templates/sector-page.js`),
       context: {
-        //mp_route_id: node.metadata.mp_route_id,
+        id: node.id,
+        climbs: node.climbs,
+        name: node.area_name,
         slug: node.fields.slug,
       },
     });

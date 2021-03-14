@@ -5,10 +5,11 @@ import Header from "./header";
 
 function Layout({ children }) {
   return (
-    <div className="flex flex-col min-h-screen font-sans text-gray-900">
+    // <div className="flex flex-col min-h-screen font-sans text-gray-900">
+    <div className="min-h-screen font-sans text-gray-900">
       <Header />
 
-      <main className="flex-1 w-full max-w-4xl px-4 py-8 mx-auto md:px-8 md:py-16">
+      <main className="w-full max-w-4xl mx-auto md:px-8 md:py-20">
         {children}
       </main>
 

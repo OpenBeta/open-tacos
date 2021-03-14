@@ -41,7 +41,7 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `climbing-routes`,
-        path: `${__dirname}/data/routes`,
+        path: `${__dirname}/data`,
       },
     },
     `gatsby-plugin-offline`,

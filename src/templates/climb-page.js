@@ -1,22 +1,40 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { graphql } from "gatsby";
-import { Layout, SEO } from "../components/layout";
+import Card from "../components/ui/card"
 
 export default function ClimbPage({ data }) {
-  console.log(data);
+    console.log(data)
+  //const { fa, description, protection, YDS, location, route_name } = data.routesJson;
   return (
-    <Layout>
-      <SEO keywords={[`foo`, `bar`]} title="About" />
-      <div>Hello blog post</div>
-    </Layout>
+      <Card {...data.routesJson}/>
   );
 }
 
-// export const query = graphql`
-//   query($mp_route_id: String!) {
-//     routesJson(metadata: { mp_route_id: { eq: $mp_route_id } }) {
-//       route_name
-//       fa
-//     }
-//   }
-// `;
+ClimbPage.propTypes = {
+  data: PropTypes.object,
+};
+export const query = graphql`
+  query($mp_route_id: String!) {
+    routesJson(metadata: { mp_route_id: { eq: $mp_route_id } }) {
+      route_name
+      fa
+      YDS
+      description
+      location
+      protection
+      safety
+      type {
+        trad
+        tr
+        aid
+        boulder
+        sport
+        ice
+        alpine
+        mixed
+        snow
+      }
+    }
+  }
+`;
