@@ -44,6 +44,14 @@ module.exports = {
         path: `${__dirname}/data`,
       },
     },
+    {
+      resolve: 'gatsby-plugin-react-svg',
+      options: {
+        rule: {
+          include: /assets/,
+        },
+      },
+    },
     `gatsby-plugin-offline`,
   ],
 };
