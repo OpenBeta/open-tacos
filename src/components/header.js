@@ -1,29 +1,30 @@
-import { graphql, useStaticQuery, Link } from "gatsby";
+import { Link } from "gatsby";
 import React, { useState } from "react";
+import TacoIcon from "../assets/icons/taco.svg";
+import ClimbSearch from "../components/ClimbSearch";
 
 function Header() {
   const [isExpanded, toggleExpansion] = useState(false);
-  const { site } = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `);
+  // const { site } = useStaticQuery(graphql`
+  //   query SiteTitleQuery {
+  //     site {
+  //       siteMetadata {
+  //         title
+  //       }
+  //     }
+  //   }
+  // `);
 
   return (
     <header className="fixed w-full bg-white border-b py-1">
       <div className="flex flex-wrap items-center justify-between max-w-4xl mx-auto md:p-2">
         <Link to="/">
-          <h1 className="flex items-center text-white no-underline">
-            <span className="text-xl font-bold tracking-tight">
-              {site.siteMetadata.title}
-            </span>
-          </h1>
+          <TacoIcon className="animate-pulse" />
         </Link>
 
+        <div>
+          <ClimbSearch />
+        </div>
         <button
           className="items-center block px-3 py-2 text-black border border-white rounded md:hidden"
           onClick={() => toggleExpansion(!isExpanded)}

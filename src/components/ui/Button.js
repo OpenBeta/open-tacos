@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 export function IconButton({onClick, children, active, className }) {
   return (
@@ -11,10 +10,3 @@ export function IconButton({onClick, children, active, className }) {
     </button>
   );
 }
-
-IconButton.propTypes = {
-  className: PropTypes.string,
-  active: PropTypes.bool,
-  children: PropTypes.any,
-  onClick: PropTypes.func
-};
