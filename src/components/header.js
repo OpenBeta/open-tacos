@@ -1,7 +1,7 @@
 import { Link } from "gatsby";
 import React, { useState } from "react";
 import TacoIcon from "../assets/icons/taco.svg";
-import ClimbSearch from "../components/ClimbSearch";
+import SearchBar from "../components/SearchBar";
 
 function Header() {
   const [isExpanded, toggleExpansion] = useState(false);
@@ -16,14 +16,14 @@ function Header() {
   // `);
 
   return (
-    <header className="fixed w-full bg-white border-b py-1">
-      <div className="flex flex-wrap items-center justify-between max-w-4xl mx-auto md:p-2">
-        <Link to="/">
-          <TacoIcon className="animate-pulse" />
-        </Link>
+    <header className="fixed w-full bg-white border-b">
+      <div className="flex flex-nowrap items-center justify-between max-w-4xl mx-auto md:p-2">
+        <div className="flex flex-nowrap items-center">
+          <Link to="/">
+            <TacoIcon className="animate-pulse" />
+          </Link>
 
-        <div>
-          <ClimbSearch />
+          <SearchBar className="ml-4"/>
         </div>
         <button
           className="items-center block px-3 py-2 text-black border border-white rounded md:hidden"

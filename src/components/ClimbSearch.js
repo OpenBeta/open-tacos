@@ -25,9 +25,8 @@ export default function ClimbSearch({ onClimbNameChange }) {
     <SuggestionEntry suggestion={suggestion} />
   );
 
-  const onSuggestionsClearRequested = () => {};
-
-  const getSuggestionsFromBackend = async ({ value, reason, isFa }) => {
+  const onSuggestionsClearRequested = () => setSuggestions([]);
+  const getSuggestionsFromBackend = async ({ value, reason }) => {
     if (reason === "input-focused") {
       return;
     }
@@ -36,7 +35,7 @@ export default function ClimbSearch({ onClimbNameChange }) {
       return;
     }
 
-    const rs = isFa
+    const rs = fa
       ? await search_climbs_by_fa(value)
       : await search_climbs_by_name(value);
     rs && setSuggestions(rs);
@@ -45,13 +44,6 @@ export default function ClimbSearch({ onClimbNameChange }) {
   const onSuggestionSelected = (event, { suggestion }) =>
     onClimbNameChange && onClimbNameChange({ ...suggestion });
 
-  // const onNameInputChange = (event, { newValue, method }) => {
-  //   setName(newValue);
-  // };
-
-  // const onFAInputChange = (event, { newValue, method }) => {
-  //   setFA(newValue);
-  // };
 
   const inputNameProps = {
     placeholder: fa ? "FA name" : "Climb name",
@@ -62,20 +54,12 @@ export default function ClimbSearch({ onClimbNameChange }) {
     },
   };
 
-  // const inputFAProps = {
-  //   placeholder: "Example: Joanne Urioste",
-  //   value: fa,
-  //   //eslint-disable-next-line no-unused-vars
-  //   onChange: (event, { newValue, method }) => {
-  //     setFA(newValue);
-  //   },
-  // };
-
   return (
     // <>border-2 rounded-lg border-gray-300
     <div className="flex items-center">
       <div className="flex">
         <Autosuggest
+          autofocus={true}
           suggestions={suggestions}
           onSuggestionsFetchRequested={getSuggestionsFromBackend}
           onSuggestionsClearRequested={onSuggestionsClearRequested}
@@ -90,7 +74,7 @@ export default function ClimbSearch({ onClimbNameChange }) {
           </IconButton>
         )}
       </div>
-      <Toggle onClick={() => setFA(!fa)} label="FA search" className="px-4"/>
+      <Toggle onClick={() => setFA(!fa)} label="FA search" className="px-4" />
     </div>
   );
 }
