@@ -1,19 +1,24 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { graphql } from "gatsby";
-import Card from "../components/ui/card"
+import Layout from "../components/layout";
+import SEO from "../components/seo";
+import Card from "../components/ui/card";
 
+/**
+ * Templage for generating individual page for the climb
+ */
 export default function ClimbPage({ data }) {
-    console.log(data)
+  const { route_name, fields } = data.routesJson;
+  const { parent_slug } = fields;
   //const { fa, description, protection, YDS, location, route_name } = data.routesJson;
   return (
-      <Card {...data.routesJson}/>
+    <Layout>
+      <SEO keywords={[`foo`, `bar`]} title={route_name} />
+      <Card isGrid={false} parent_slug={parent_slug} {...data.routesJson} isStandalone={true}/>
+    </Layout>
   );
 }
 
-ClimbPage.propTypes = {
-  data: PropTypes.object,
-};
 export const query = graphql`
   query($mp_route_id: String!) {
     routesJson(metadata: { mp_route_id: { eq: $mp_route_id } }) {
@@ -34,6 +39,12 @@ export const query = graphql`
         alpine
         mixed
         snow
+      }
+      metadata {
+        parent_sector
+      }
+      fields {
+        parent_slug
       }
     }
   }

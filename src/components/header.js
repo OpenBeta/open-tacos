@@ -40,7 +40,7 @@ function Header() {
         </button>
 
         <nav
-          className={`${
+          className={`text-sm ${
             isExpanded ? `block` : `hidden`
           } md:block md:items-center w-full md:w-auto`}
         >

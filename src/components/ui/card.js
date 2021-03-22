@@ -1,8 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { Link } from "gatsby";
+// import { IconButton } from "./Button";
+// import LinkIcon from "../..//assets/icons/link.svg";
+const slugify = require("slugify");
 
 export default function Card({
   isGrid,
+  isStandalone,
   fa,
   description,
   protection,
@@ -11,15 +15,33 @@ export default function Card({
   route_name,
   type,
   safety,
+  metadata,
+  parent_slug,
 }) {
+  const { parent_sector } = metadata;
+
+  const singleUrl = `/climbs/${metadata.mp_route_id}/${slugify(route_name, {
+    lower: true,
+  })}`;
   return (
     <div
-      className={`card border rounded-lg ${isGrid ? "cursor-pointer hover:bg-yellow-50" : ""}`}
+      className={`card rounded-lg ${
+        isGrid ? "cursor-pointer hover:bg-yellow-50" : ""
+      } ${isStandalone ? "boder-0" : "border"}`}
     >
-      <div className="m-5">
+      <div className={`${isStandalone ? "px-5" : "m-5"}`}>
         {!isGrid && (
-          <div className="flex flex-wrap justify-end">
-            <div></div>
+          <div className="flex justify-between items-center">
+            <div>
+              {parent_slug && (
+                <span className="bg-gray-50 font-light text-sm text-gray-500 -ml-5 pl-2 pr-2 py-1">
+                  <Link to={parent_slug} className="underline">
+                    {parent_sector}
+                  </Link>
+                  &nbsp;&rarr;
+                </span>
+              )}
+            </div>
             <div className="font-light text-sm text-gray-700">{fa}</div>
           </div>
         )}
@@ -30,13 +52,24 @@ export default function Card({
         >
           {route_name}
         </h2>
-        <div className="mt-4">
-          <span className="text-sm text-white font-mono bg-gray-700 rounded py-1.5 px-2 mr-4">
-            {YDS}
-            {safety && ` ${safety}`}
-          </span>
-          {type.trad && <Chip type="trad" />}
-          {type.sport && <Chip type="sport" />}
+        <div className="mt-4 flex justify-between items-center">
+          <div>
+            <span className="text-sm text-white font-mono bg-gray-700 rounded py-1.5 px-2 mr-4">
+              {YDS}
+              {safety && ` ${safety}`}
+            </span>
+            {type.trad && <Chip type="trad" />}
+            {type.sport && <Chip type="sport" />}
+          </div>
+          <div>
+            {!isGrid && !isStandalone && (
+              <span className="font-light text-xs text-gray-900">
+                <Link to={singleUrl} className="underline">
+                  Single page view
+                </Link>
+              </span>
+            )}
+          </div>
         </div>
 
         {!isGrid && (
@@ -74,8 +107,6 @@ export default function Card({
   );
 }
 
-//const truncate = (str, max, suffix) => str.length < max ? str : `${str.substr(0, str.substr(0, max - suffix.length).lastIndexOf(' '))}${suffix}`;
-
 const ChipType = {
   sport: "border-indigo-400",
   trad: "border-red-700",
@@ -90,18 +121,3 @@ function Chip({ type }) {
     </span>
   );
 }
-Chip.propTypes = {
-  type: PropTypes.string,
-};
-
-Card.propTypes = {
-  isGrid: PropTypes.bool,
-  fa: PropTypes.string,
-  description: PropTypes.array,
-  protection: PropTypes.array,
-  YDS: PropTypes.string,
-  location: PropTypes.array,
-  route_name: PropTypes.string,
-  type: PropTypes.object,
-  safety: PropTypes.string,
-};

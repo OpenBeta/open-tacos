@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { graphql } from "gatsby";
 const slugify = require("slugify");
 
@@ -74,10 +73,6 @@ export default function SectorPage({ data, pageContext }) {
   );
 }
 
-SectorPage.propTypes = {
-  data: PropTypes.object,
-  pageContext: PropTypes.object,
-};
 /* export const query = graphql`
   query($id: String!) {
     areasJson(id: { eq: $id }) {
