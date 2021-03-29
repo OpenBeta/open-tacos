@@ -6,7 +6,6 @@ import { IconButton } from "../components/ui/Button";
 import Toggle from "../components/ui/Toggle";
 
 import XIcon from "../assets/icons/xcircle.svg";
-// import * as theme from "../styles/autosuggest.css";
 import {
   search_climbs_by_name,
   search_climbs_by_fa,
