@@ -5,9 +5,9 @@ const fullConfig = resolveConfig(tailwindConfig);
 
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Starter Tailwind`,
-    description: `Gatsby starter styled with Tailwind`,
-    author: `@taylorbryant`,
+    title: `El Gordo`,
+    description: `Open collaboration climbing platform for Red Rocks, NV `,
+    author: `@openbeta.io`,
   },
   plugins: [
     `gatsby-plugin-eslint`,
@@ -21,7 +21,7 @@ module.exports = {
         background_color: fullConfig.theme.colors.white,
         theme_color: fullConfig.theme.colors.green["500"],
         display: `minimal-ui`,
-        icon: `src/images/tailwind-icon.png`,
+        icon: `src/assets/icons/taco.svg`,
       },
     },
     {
