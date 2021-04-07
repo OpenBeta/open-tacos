@@ -5,9 +5,9 @@ OpenTacos is an proof-of-concept/MVP showing it's possible to build a collaborat
 For now frontend code and data files live in the same repo.  They will be separated in the future.
 
 1. Data:
-- Climbing route data such as name, grade, FA, etc are stored human-readable text files (markdown syntax)
-- Use folders and files to organize crag/area and climb relationship.
-- Git-based CMS:  Use Git for user management, access control, submission reviews
+- Climbing route data such as name, grade, FA, etc are stored in human-readable text files (markdown syntax),
+- Take advantage of folder and file structure to organize crag/area and climb relationship.
+- Git-based CMS: Use Git for user management, access control, content review.
 
 2. Frontend:
 - Gatsby.js, React.js, TailwindCSS
