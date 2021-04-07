@@ -1,6 +1,8 @@
 # OpenTacos
 OpenTacos is an proof-of-concept/MVP showing it's possible to build a collaborative climbing route catalog.
 
+[Live demo](https://infallible-clarke-23564d.netlify.app/areas/105732162/black-velvet-wall) 🚀
+
 ## Tech stack
 For now frontend code and data files live in the same repo.  They will be separated in the future.
 
