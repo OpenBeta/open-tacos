@@ -14,8 +14,6 @@ For now frontend code and data files live in the same repo.  They will be separa
 
 Learn more about [Jamstack](https://jamstack.org)
 
-Note: 
-
 ## How to build
 Make sure you have the following Javascript tools installed on your computer
 - [Node](https://nodejs.org)
