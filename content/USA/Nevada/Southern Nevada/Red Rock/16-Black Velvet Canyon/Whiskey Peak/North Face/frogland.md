@@ -1,0 +1,13 @@
+---
+route_name: Frogland
+type:
+  trad: true
+YDS: '5.8'
+fa: George & Joanne Urioste, Mike Gilbert
+metadata:
+  legacy_id: '105732398'
+---
+# Description
+A great route!  And VERY popular.  Start early.For the approach, take the trail that skirts the pink cliff band on the left.  Work your way around the cliff band and to the right.  Look for a huge roof capping a large slab and make your way to the crack on the right side of this feature.  Scramble up a few 4th-class sections to the a nice terrace and the beginning of a LF corner/crack that has a few bolts (why?)...P1: 5.7, 150'  Climb a crack in a block (awkward) to gain the left-facing corner/crack.  Climb this for a nice long pitch and belay on the second of two big ledges.  Tree anchor.P2: 5.7, 150'  Work right from the belay and climb a lower-angle crack in a LF corner to a ledge.  From here (a) Make a few exciting moves out left and up a crack to another ledge. Or (b) continue straight up through a wide overhanging flake/crack section to a small ledge.P3: 5.6, 100'  Work out left into a nice right-facing dihedral, up this, then out right through a small overhang and belay at the base of an obtuse corner with some thin face moves to the right.The next 3 pitches are PG so be ready for some spice!P4: 5.8, 140'  Climb out left of the thin corner on small edges and thin pro.  Gain a decent crack that climbs up to the right side of the giant roof clipping an old pin along the way.  Check out the slabby leftward traverse under the roof which marks the crux of the route.  Make the delicate moves across to a thin crack and up about 40' to a small belay stance that takes 1.5-3" gear.  Awesome!P5: 5.8, 130'  Make some PG face moves up to a bolt.  Climb up left to a huge chockstone and tunnel behind it.  Work up and right into a right-facing corner and up to a ledge with tricky belay gear.P6: 5.6, 160'?  Work out right onto the face and let the better gear lead your way up to a small bulge at the top.  Turn the bulge and head up 5.2 terrain to the top.  This pitch is broken up into 2 pitches in the book but we've always done it as one with a 60m rope.  Alternatively, follow the corner at about 5.7.Descent:  Follow the cairns. Pick your way over the peak and turn left down the gully leading east. Go down the white rock on the left side of the gully. Take the gully down and to the left and contour around the mountain and back to the base of the climb.# Location
+# Protection
+Pro to 3".

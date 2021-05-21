@@ -1,0 +1,13 @@
+---
+route_name: East Arete
+type:
+  trad: true
+YDS: '5.8'
+fa: Larry DeAngelo, John Hegyes
+metadata:
+  legacy_id: '108567407'
+---
+# Description
+On my most recent trip to Red Rocks I was paging through Handren's guide for something more remote with a reasonable amount of vertical.  It was also early January, so I knew I couldn't go overboard with the minimal amount of daylight. The E Arete, noted as aworthy alpine style excursion, caught my eye.  There was barely any beta listed in Handren beyond the approach and the fact it starts in the gully. I had done the approach to Inti Watana twice before and the long descent off the summit once (mostly in the dark), so I realized it could be a long day but I wasn't going in completely blind. Larry kindly provided advice about the approximate start, rock quality and max sized gear.  Lastly, I convinced one of my Sierra partners to tag along.Editorial CommentaryIt's definitely not sustained climbing (we soloed most of it) and there's plenty of shrubbery. Not surprisingly there was some friable rock in spots. But if you're down for an alpine-like adventure route with hard to beat summit views and don't have a ton of daylight, then this could be your route.RouteIt's a ridge traverse of a fairly broad ridge, so it's kind of a choose your own adventure. Larry advised against the direct start, which is vegetated and lacks pro placements.  Based on his advice start in the gully slightly uphill from the start ofGift of the Wind Gods.  From here gain the ridge and follow it to the summit.SunThe lower portion of the route quickly goes into the shade during the winter.# Location
+ApproachKnowing that we would come out via Oak Creek Canyon and not wanting to drive the loop road, we parked at the pullout 0.5 miles from the loop road exit near the old campground road.Approach as for Inti Watana (see excellent approach beta fromEric and LucieorDow), but don't take the side gully coming in from the left. Instead continue up the main gully to an obvious saddle next to Aeolian Wall. Walk downhill for a short ways, then scramble up the steepening gully a short ways until you find a suitable spot to surmount the ridge. This took us a little over 2 hours, although I am reasonably familiar with the Inti Watana approach twice.DescentSee the Cactus Flower summit descent listed forCinnamon Hedgehog.# Protection
+alpine rack to a #3 Camalot will suffice; no fixed anchors; may want to bring webbing to backup the rap station(s)

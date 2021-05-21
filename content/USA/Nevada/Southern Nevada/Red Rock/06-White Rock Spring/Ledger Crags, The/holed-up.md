@@ -1,0 +1,13 @@
+---
+route_name: Holed Up
+type:
+  trad: true
+YDS: 5.10+
+fa: Steve Allen, Joe Herbst, Tom Kaufman
+metadata:
+  legacy_id: '112423589'
+---
+# Description
+Clearly visible from the Loop Road, Holed Up is the massive wide crack leading to a cave-like feature on the most varnished portion of the Ledger Crag. The first and last pitches are chossy entry/exit pitches, but they are not the reason you came up here: You came for the second pitch which is a burly, overhanging offwidth. This route bakes in the sun from morning until late afternoon and is a good winter destination.P1 (100', 5.6): Begin below the wide crack at the righthand of two short, chossy, pink chimneys separated by a pink fin of rock. Climb the chimney and move up and right into a decomposing corner. Belay from a sloping ledge that is held together by a few large scrub oaks.P2 (90', 5.10+): Move up the wide crack which is relatively easy at first and leads to a strenuous stance on an obvious foothold. From this foothold, the crack overhangs wildly and the next 15' are very difficult. Thrutch upwards to a salvation hand jam and mantle onto a flake for a rest. From here a relatively easy squeeze chimney leads up and into the "hole". I recommend moving just above the hole to a great stance for a belay off of medium wires. A memorable pitch.P3 (60', 5.9): Climb up and left on a ramp. Perhaps the most logical option would be to move around the corner at this point to a large platform shared with the second pitch of The Ledger and descend that route, but the original line moved back right onto the face (one unprotected 5.9 move) to easier climbing up thin patches of varnish to the top of the wall.Descend by doing three raps with a single 60m rope down The Ledger. The first and last rappels are off bolts; the middle rappel is off a slung boulder on the platform.# Location
+# Protection
+A single set from Purple TCU (or equivalent) to #6 Camalot with a VG9 and a set of wires would be more than enough... And having the VG9 is very nice.If I did it again I would bring (crux pitch only):A #5 Camalot for the start of the OW.A #6 Camalot and a VG9 to walk up the majority of the pitch.A #4 BD Stopper for a small constriction at the start of the crux section.A Purple TCU (or equivalent) for a small slot at the top of the crux section.A 0.75 Camalot for the flake before the final squeeze.Additional wires for the belay.You'd be hard pressed to place any other cams on the crux pitch (it goes wide immediately and stays wide) and could use this same rack to protect the first and last pitches as well.

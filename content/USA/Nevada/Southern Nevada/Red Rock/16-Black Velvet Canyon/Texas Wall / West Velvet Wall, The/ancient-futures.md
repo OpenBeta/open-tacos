@@ -1,0 +1,13 @@
+---
+route_name: Ancient Futures
+type:
+  trad: true
+YDS: 5.12a
+fa: Dan McQuade & Randal Grandstaff - 1997
+metadata:
+  legacy_id: '107455347'
+---
+# Description
+Technical and thought-provoking, Ancient Futures is a great rock climb that flirts with Epinephrine but takes a mostly independent line up a beautiful stretch of rock just right of the Black Tower.  Begin as for Epi.P1-2: Climb the first three pitches of Epinephrine which are easily linked into two pitches right up to the bottom of the main chimney.P3: Just right of the main chimney, climb a slot formed by a huge, wedged pillar of rock.  Near the top there is a bolt around to the left that protects some awkward and difficult moves out of the slot and up to a belay ledge with bolts.  5.10d, 110'.P4: Continue up a thin crack, clipping a bolt off the belay, and then stem with great difficulty out right to a flake.  Continue up this (hollow?) flake to the right-facing corner above and an excellent rest.  From here the climbing gets really difficult: Instincts may tell you to stem desperately up the corner, but the way to go is unlikely: Work up sloping holds on the face to the right for a body-length before collapsing back into the corner and some thank-god jugs.  Two bolts protect this crux, and above is some wide climbing that will feel downright easy, though it's probably 5.9 or 5.10.  Belay at a bolted anchor on a ledge.  5.12a, 140'.P5: The route apparently originally climbed up a severely overhanging, leaning, and yes, blank, corner above the belay passing two bolts.  This seemed very 5.12 to me, so I instead pre-clipped the second bolt and down-climbed from the belay and moved right to an improbable, hidden crack.  Great 5.11 climbing up this crack rejoins the original line just above the corner.  Continue up through a roof and tricky face climbing and gear to a stance.  Above is a stretch of bolted face climbing up fragile holds.  This climbing is spectacular, interesting, and exposed, but the holds are flexing - without a very delicate touch this pitch could be destroyed - use caution!  Belay on a narrow ledge at a bolted anchor.  5.11+, 140'.P6:  A very difficult move right off the belay past a bolt leads to some scary, frightening, and balancey moves back to the left where, if memory serves me correctly, there's gear and/or some bolts.  I remember thinking I'd annihilate my belayer if I fell off this section.  Above, some easy climbing up the right side of the Elephant's Trunk leads past a bolt and wildly up soft rock to the top of the trunk.  5.10++, 150'Rap the route with two ropes or continue up Epinephrine.# Location
+# Protection
+Single set of cams from blue Alien/0 TCU to #3 Camalot, wires, at least a dozen draws/slings, two ropes.

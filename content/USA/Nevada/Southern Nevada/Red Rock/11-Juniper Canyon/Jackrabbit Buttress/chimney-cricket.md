@@ -1,0 +1,13 @@
+---
+route_name: Chimney Cricket
+type:
+  trad: true
+YDS: '5.9'
+fa: Derek & Giselle Field (2019)
+metadata:
+  legacy_id: '116368939'
+---
+# Description
+Chimney Cricketclimbs the wide cleft to the left ofDegunker. Although the chimney is virtually unbroken from bottom to top, a good portion of the climbing is done on the sculpted slab on the left side of the cleft itself. You'll be bouncing in and out of the chimney like a cricket, y'know. Like its neighbours on the south face of Jackrabbit Buttress, this route makes a fine approach to Brownstone Wall.Pitch 1 (5.9, 120 feet):Climb the thin sandy dihedral leading into a hanging chimney. Soon it opens up and gradually forces you slightly left on steepening parallel cracks. At the sharp contact between yellow and pink stone, traverse 15 feet right into the main left-facing corner (i.e. the only crack that breaks the headwall above).Pitch 2 (5.8, 160 feet):Grunt up the strenuous offwidth and pull over the roof on glorious buckets. Soon you can exit the chimney and meander up the rippled slab on the left side, placing gear where available. At some point in the pink zebra band, you will be forced back into the chimney. Exit again to the left slab where a single juniper corpse chokes the chimney. Belay on the sloping ledge.Pitch 3 (5.7, 150 feet):Climb sparse varnished plates up the slab to the left of the chimney. As you get higher, you can choose to either: (1) Continue straight up a thin 5.7 crack, or (2) Move right into a delicious low-angle handcrack that becomes a right-facing corner/arch. Both options funnel into a sweet varnished alcove, a belay shared withDegunker.Pitch 4 (5.2, 200 feet):Hop over the little shelf and jog up the left-leaning crack until it peters out on the summit slabs. Recommended to simul this pitch as it is very easy and you've gotta get toArmatronquick!Descent:Walk straight back to Brownstone Wall. If you have time, climb one of those routes. If not, descend the easy slabs into Juniper Canyon and follow the trail back down, passing close to the base of the route.# Location
+Approach (30-40 mins):As for all routes on the south face of Jackrabbit Buttress (Smooth Operator, Degunker, Ernest Stemmingway, etc.) walk into Juniper Canyon and tunnel through vegetation just upstream of the big brown boulder.Chimney Cricketis the obvious wide crack to the left ofDegunker. It starts as a thin sandy dihedral that feeds into a hanging chimney 20 feet off the ground.# Protection
+Standard Red Rocks rack to 3" + one each 5" and 6" cams

@@ -1,0 +1,13 @@
+---
+route_name: Finnegans Wake
+type:
+  trad: true
+YDS: '5.8'
+fa: unknown
+metadata:
+  legacy_id: '119971936'
+---
+# Description
+Finnegans Wake is an adventurous and relatively short outing onto Kraft Mountain that has a variety of variations, all mostly crack based, that could change the difficulty from 5.7-5.10. It is truly a "choose your own adventure" type of route. If you really wanted you could make almost any crack/feature an eliminate and get more laps/climbing in. Either way, the most recognizable pitch is the large chimney that makes the 2nd pitch and summit buttress of the route.  Another stand-out feature, and possibly the crux highlight of the route is an offwidth roof (5.10-) midway on the first pitch.  This can be avoided by climbing cracks to the left that come in at about 5.7/5.8. More info below...Pitch 1 - Start to the left of a pillar that forms two corner cracks, with another finger crack/flake just to the left. Up this to a ledge, then decide if you'd like to get funky up the roof or keep it easy by heading left up the handcrack. If going left, follow another dual crack system to another good stance, then scramble up easy 5th class to the base of the wide chimney. 5.7 100'Variation - Climb the wide roof midway on Pitch 1.  Because of the ledge below the roof, it is recommended to break this into two short pitches, as to avoid a ledge fall if one comes off the roof. Get creative with the roof and continue up the offwidth to easier 5th class to the base of the large chimney.  (two #6's and #5 will be handy) 5.10- 50'Pitch 2 - The large chimney.  Probably the highlight of the route if you skipped the roof.  Squeeze into the chimney and squirm your way up, eventually getting a small nut some ways up.  Keep chimneying until you reach a slanting foot ledge/ramp inside the chimney that traverses up and into the chasm diagonally. Follow this until it ends and continue upwards to a good cam placement.  Onward to the summit... 5.8R 75'# Location
+Directly North of the Kraft parking lot on the West end of Kraft Mtn. Look for the large chimney that forms the 2nd pitch.Descent - Walk off climbers right.  Traverse a bit at the summit to reach a steepish gully that will meander you down to just above the pink cliff band. Once you hit the pink cliff band, traverse skiers left to reach the gully that brought you up to the base originally.  The large chimney is your best landmark to not miss this turn back to the base of the route.# Protection
+Standard route - Single rack to #3 and a few small stoppers. - Variation wide roof - add #4, #5, (2) #6's. The gold and blue Big Bro's could be used in the chimney but not really worth trekking in unless you really want to place them.

@@ -1,0 +1,13 @@
+---
+route_name: South Calico Traverse
+type:
+  trad: true
+YDS: 4th
+fa: unknown
+metadata:
+  legacy_id: '112487905'
+---
+# Description
+The South Calico ridge has a nice setting with big views and interesting rock situations, and fairly close to trailheads.The main problem is that the crest of the ridge is obstructed by chasms across it.The strategy of this route is to go SE to NW, and avoid the more difficult chasms by going off the ridge to one side or the other (often the southwest side).. . (A different strategy would be to seek out the most interesting climbing sequences staying as much as possible on crest of the ridge --See the route South Calico Ridge).This route is described in detail in the print guidebook,Hiking Las Vegas, by Branch Whitney (Huntington Press, 2015), on page 22 where it is called the "Calico Hills Traverse".. . (I have not yet talked with anyone who has actually done this route).Since the terrain on and around this ridge is complicated, likely the best way to find the route sections which avoid the big difficulties is to get a copy of that print guidebook, which includes careful photos of the key navigation points, and a list of GPS latitude-longitude waypoints.Given the complexity of the navigation, don't be surprised if you encounter some more difficult 5th class climbing sequences - (especially if you attempt this traverse without using the detailed photos and GPS waypoints).warning: Many loose rocks and weak breakable hand- and foot-holds on and around this route - (even when the rock plenty dry). The rock becomes especially weak for a couple of days after significant rain or snow, so holds are even more likely to break off.# Location
+- - >"sr" on themap.From Red Springs parking (lat long approx N36.1464 W115.4189).-.(elevation 3600ft /1100m), hike up SouthWest about +200 vertical feet over 0.3 mile distance to reach the SE end of the rock of the ridge (N36.1422 W115.4207).-.(elev 3800ft /1150m).Or if doing the traverse in the reverse direction (NW to SE), start from Red Springs parking and hike NorthWest (later gets steeper perhaps with some scrambling) to the obvious pass at the NW end of the South Calico ridge (N36.1534 W115.4323).-.(elev 4225ft /1290m) - about +625 vertical feet over 0.8 mile distance.The ends of this ridge could also be reached from the 1st and/or 2nd Pull-out on the Red Rock Scenic Loop road.# Protection
+There is no fixed gear.Protection for Trad leading is unknown.

@@ -1,0 +1,13 @@
+---
+route_name: Raptor Tower (Bill & Fer's Excellent Adventure)
+type:
+  trad: true
+YDS: 5.9+
+fa: ''
+metadata:
+  legacy_id: '118800619'
+---
+# Description
+Raptor Tower is a distinct 300-foot high triangular tower on the left side of the Flight Path Area with a wonderful summit. It also guards the right entrance of Stick Gully. This route climbs to the summit from the ground.Pitch 1: Ascend the off-width crack to a chimney. This is trickier than it looks (5.8+) but takes great gear (one or two #4 cams). Work up the short chimney (5.7+) to a stance. Ascend a steep varnished face left of the pinch (very fun 5.7+ with good protection), and then continue up the ramp for about 40 feet to a point where it makes sense to step left onto the face. Take the face (5.7, thin protection) up to the large ledge system (this is Falcon Ledge) and belay. 120' 5.8+Pitch 2: Move the belay to the main wall and climb a terrific right-facing fist / hand crack (5.9) that bulges out to the right and then achieves a stance at 60 feet. This is known as the F-15 crack. From here tackle a short bulge and climb the (5.7) face just to the right of the main slot / corner for about 50 feet up to the next ledge (Eagle Ledge) and locate two anchor / rappel bolts. The crack protects with multiple hand-sized cams (#1 thru #3) and the upper face protects with smaller cams and stoppers. 110' 5.9Pitch 3: From the anchor climb a fun easy slab angling up and right to gain the next ledge 20 feet above the belay (4th class no protection). Climb the left face with a protection bolt (5.9+) to a stance, plug some gear, step right and ascend the final face 15 feet to a nook and gear belay. 60' 5.9+Descent: From the belay stance scramble up and over the long summit block (3rd class). On the other side step across a gap to reach the rappel anchors. Rappel 70 feet down to Eagle Ledge. Walk 100 feet left along the ledge back to the anchors above pitch 2 and rappel 110 feet down to Falcon Ledge. Scramble 100 feet right down to the anchors above Commuted Sentence and rappel 80 feet to the ground. One 70-meter rope will suffice. Alternatively, if you have two ropes, you can rappel the F-117 chimney for your 2nd rappel. This drops you right at the rappel anchors atop Commutted Sentence.# Location
+On the left side of the base of Raptor Tower locate an obvious wide right-angling crack.# Protection
+Doubles of #2 thru #4 Cams will be helpful, plus an assortment of smaller gear. A #5 for p2 could be used but not necessary.

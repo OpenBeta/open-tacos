@@ -1,0 +1,13 @@
+---
+route_name: Orange Clonus
+type:
+  trad: true
+YDS: 5.11a
+fa: unknown
+metadata:
+  legacy_id: '106095101'
+---
+# Description
+Orange Clonus is a wonderful traditional multipitch climb.  It has a good variety of face and crack climbing with excellent position and exposure.  Also a plus, all belays are on huge ledges if done in 4 pitches.  The heart of the route is a huge 200 foot widening splitter which may be done in as little as 1 pitch or in as many as 3 which is what the guidebook suggests.  The nature of the climbing and the non-trivial descent make for a fun adventure.P1 (100ft, 10d): The first pitch is the technical crux of the route.  Climb the clean varnished dihedral past 5 bolts to a small ledge (10d).  Continue up the corner on more fragile rock to a big ledge with a tree (5.7).P2 (150 ft, 5.5R): Carefully climb the very delicate and runout face for 20 feet until you reach a wide crack which you can chimney inside.  Continue until you reach an enormous ledge at the base of a chimney.  Belay with a great view.P3 (80ft, 5.8): Avoid the ugly chimney by going  straight up the steep face (5.8) to a ledge system.  Walk rightwards across the ledge, battling trees and other desert flora (2nd class).  Belay underneath the obvious crack system.P4 (200ft, 10d): The heart of the route.  Climb the widening splitter crack for 200 feet.  The pitch ends when the crack ends, at a huge ledge.  (Alternatively, this pitch may be broken into three pitches as the guidebook suggests: 60ft of 5.8 fingers to a piton belay in a slot; 60 feet of 10d thin hands to a belay in an alcove below a roof; 80 feet up the 10a hands and fist crack to the big ledge.)Descent: Three rappels and downclimbing into The Beer and Ice Gully.Rap 1: Walk across the ledge and rap off a tree.Rap 2: Downclimb to the right (towards the gully) to another ledge and rap station at a tree.Rap 3: A short rappel off of another tree will get you to the ground.  (This last rap is very cool!)# Location
+The first pitch begins in a very clean left-facing corner on the rounded buttress to the right of the entrance of The Beer and Ice Gully and to the left of the Straight Shooter Wall.From the Straight Shooter area, walk leftwards contouring the wall.  The clean left-facing corner with bolts marks the first pitch.# Protection
+Standard traditional rack to 3.5 inches, doubles or triples of 1.5 to 2.5 inches, and many long slings.Crux pitches beta:P1: 5 bolts, single set of .5 to 2 inchesP4: If done in a single pitch, I recommend taking 2 purple, 3-4 green, 2 red, 2 gold, 2 blue, and 1 gray Camalot (and no more).

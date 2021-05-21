@@ -1,0 +1,13 @@
+---
+route_name: Somewhere Over the Rainbow
+type:
+  trad: true
+YDS: 5.11c
+fa: Roxanna Brock, Gary Fike
+metadata:
+  legacy_id: '105918243'
+---
+# Description
+This is a pretty decent route with the best pitches being the 1st and 3rd. As recomended in "red rock canyon: a climbing guide", we only did the first seven pitches. Three more pitches continue up, but are apparently dirty and bushy. After the 3rd pitch, the rock quality diminishes greatly. However, those 3 pitches are well worth the effort.P1: 5.11a Climb a thin, flaring finger crack on varnished rock to a series of R-facing flakes and pillars. Continue the crack up on questionable rock to reach a comfortable alcove with a 2-bolt anchor. 140 ft.P2: 5.7 Stem and chimney up a right-facing corner to a low angle slab. Stop at anchors. 100 ft.P3: 5.11b Meander up and left to a thin crack on varnished rock. The crack you are looking for is formed by two very shallow corners that face each other about 2 ft apart. Climb up these corners, reaching a wide, R-facing flake system. Belay at anchors before it ends. 130 ft.P4: 5.8R Step back left to the wide crack, step left again when it ends and continue up the well featured face on questionable holds. Pro is good when available. A 4 friend fits well in a pocket midway up. 120 ft.P5: 5.10c Continue up, past a few bushy ledges, eventually gaining a R-facing, rotten corner. Follow this corner until it begins to widen, and belay at bolts L of the crack. 110 ft.P6: 5.11d Take on the roof above you by following the crack as it widens to a chimney, then back down to 4-5". Milk a good rest before taking on the roof, which is 1.5" for a few feet, then widens to hands. Finally, pull around the roof and find the good stance before clipping the anchors. 50 ft.P7: 5.9 Keep climbing up the corner to a ledge, then traverse right to a L-facing corner and up to another ledge. 120 ft.# Location
+This route is pretty much on Ginger Buttress. It starts in the bowl above Power Failure. Approach any number of ways (all require technical climbimg), with Power Failure being the shortest. After gaining the bowl, move to the high left portion of by any means possible. Its possible to go directly up and left to reach the base, but its much easier to go up, then traverse left at the base of the wall. You will be looking for a flaring, shallow crack on varnished rock.# Protection
+Roxanna suggested gear from 00-5 friends with doubles of 1.5, 3, 3.5. We took them and didn't ever use the doubles. RP's and micro cams were helpful on pitch 3. The 5 friend was nice for the 6th pitch, but wasn't really needed (a 4 protected almost as well). The pitch lengths come from Roxanna's book, but didn't seem quite right when rapping.

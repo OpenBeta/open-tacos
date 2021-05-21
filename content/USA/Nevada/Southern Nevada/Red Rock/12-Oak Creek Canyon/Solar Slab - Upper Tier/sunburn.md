@@ -1,0 +1,13 @@
+---
+route_name: Sunburn
+type:
+  trad: true
+YDS: '5.7'
+fa: 'FRA: Anthony Anagnostou, Karsten Duncan, John Campbell, Larry DeAngelo'
+metadata:
+  legacy_id: '105818059'
+---
+# Description
+This is a wonderful sleeper of a route.  Probably lots of folks have looked up at it and thought, "looks like a miserable gully slog-- no way it could be good."  Surprise!About 100 yards to the left of Beulah's Book is an indistinct buttress leading up to the left side of a huge roof.  The buttress is bordered on its left side by a brushy, unappealing gully.  Start at the very toe of this buttress.Pitch 1: Pleasant face climbing leads up to a right-slanting crack.  Belay at its top.Pitch 2: Step right and climb over a slight bulge, then face climb straight up staying near the junction of the white and dark rock.  Belay on a ledge to the left.  (Just left of this ledge is a rap station on a tree in the gully; one long rappel, down and west, reaches the ground near the start of Dubious Flirtations.)  Note also that there is an off route bolt a little to the right of the beginning of this pitch, presumably as part of a variation start.Pitch 3: Step right and continue up a small dihedral. Belay at a small stance with shrubbery and a chimney above.Pitch 4: Move up the dihedral past an annoying bush and into a featured squeeze chimney.  Climb this chimney to a wide clean gully and continue up to another wide gully/chimney to another stance by a large chockstone.Pitch 5: Climb out of the gully onto the arete and face on the left side of the slot, then up and out onto slab.  Move up until reaching a ledge approximately even with the large Solar Slab Terrace.  (An easy traverse right at this point gives access to the Terrace and the routes continuing there.)Pitch 6: Continue straight up the rounded buttress above on pleasant slab climbing.  A very long pitch (60m+?) leads to a good belay ledge at a pine tree.  (Alternatively, divide the pitch in two  by belaying at a varnished scoop.)Pitch 7: Climb up and slightly right on even more pleasant slabs until reaching a large brushy ledge.At this point you can scramble right (class 3) for 100 feet, passing the top of Going Nuts, and join Solar Slab two pitches above the terrace.  Alternatively, and more direct, continue up over broken rock (better on the right) and join Sunspot Ridge at The Notch.  Continue to the top by one of these routes, and descend as for Solar Slab.# Location
+# Protection
+Standard rack

@@ -1,0 +1,13 @@
+---
+route_name: Sunspot Ridge
+type:
+  trad: true
+YDS: 5.8-
+fa: 'FRA: John Hegyes, John Wilder, George Urioste, Larry DeAngelo'
+metadata:
+  legacy_id: '105791012'
+---
+# Description
+Red Rock isn't normally known for its ridge climbs, but this route has a good line, airy location, and even a gendarme or two.  The rock is good and the route is long-- a great combination!To the left of Solar Slab, the base of the wall bends down, reaching the streambed a few hundred yards to the west.  The buttress that protrudes into the canyon continues upward as a blunt ridge separating the Solar Slab from the large wall containing Black Orpheus.  Sunspot Ridge climbs this feature.On the left side of the southeast-facing buttress is a gully system.  Some bushwhacking leads to a belay alcove at its base.  Climb a pitch up the crack on the left wall of the gully and belay in a cavelike chimney/tunnel.  Move up and right, passing a small bulge.  Continue right and up the varnished face, protected by tricky wired nut placements.  Eventually move left and belay on a good ledge.  Climb up for about thirty feet to a small triangular ceiling, then traverse right until you reach a left-slanting crack.  Follow this crack to the Lower Shoulder.  This shoulder can also be reached by climbing Solar Flare or by complicated scrambling and easy climbing from the west.From the large shoulder platform, scramble up on an easy pitch of mostly 4th-class climbing, staying slightly left, to a good belay niche near a bush.  The next pitch involves face-climbing straight up the knobby ridge crest above.  Another face-climbing pitch continues up the ridge, with limited protection, to some good ledges.  Two more fourth-class pitches lead up the ridge, passing a gendarme or two.  These pitches end at The Notch, a spacious and airy perch where the ridge merges into the main wall.  The improbable headwall above turns out to be beautiful 5.0 climbing on varnished plates.  Another pitch up one of the cracks above (both are about 5.7) leads to the ledges at the top Solar Slab's fifth or sixth pitch.  Either continue to the top and descend via the Painted Bowl, or rappel Solar Slab via the bolted rap stations.(Another descent option begins at the Notch: downclimb east for 15 feet to a short rappel from a flimsy bush and a jammed knot.  This takes you to the top of Solar Slab's second pitch.  Then rappel Solar Slab.)# Location
+# Protection
+Standard rack, wires.

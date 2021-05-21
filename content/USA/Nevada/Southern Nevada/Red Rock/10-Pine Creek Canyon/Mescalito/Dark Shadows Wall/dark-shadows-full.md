@@ -1,0 +1,13 @@
+---
+route_name: Dark Shadows (Full)
+type:
+  trad: true
+YDS: '5.8'
+fa: unknown
+metadata:
+  legacy_id: '109607912'
+---
+# Description
+Climb the first 4 pitches of the normal "Dark Shadows" build your last belay at the furthest right of the three anchors.P5) Clip a bolt and head up. Pull an easy roof/bulge and follow the crack up and left. Some squeeze chimney (or face climbing) will put you on a small detached tower with two rusty old bolts. Recommend a gear anchor in cracks/huecos at the back (wide hand size pieces for anchor).P6) Path of least resistance up the chimney behind the tower. After passing a short roof on its right (~50' from belay) head up and left eventually finding one new and one old bolt on low angle face to belay off of. (can be backed up with thin gear).P7) follow the crack up and slightly right, placing thin gear. Build a belay on the varnished bench 20'-30' below an obvious roof. Gear takes big nuts and ~1" size cams (or that was just what I had).P8/9) Climb off the ledge and pass the roof on its right. Head up and easy flaring hand crack and hit a series of bushy ledges. (potentially belay here with a 60M). Launch off of these ledges up some steep (for the grade) cracks for another 30'-40' and belay on a comfy varnished ledge with a two bolt anchors. ONLY ONE HAS A HANGER (Oct. 2014)!P9/10) Climb the right facing dihedral and when it rounds off to the left, go straight up the varnished face and into the cracked roof above. Massive jugs make pulling this roof consistent for the grade. Cruise up low angle flaring hand crack for many more feet to find yourself at a well cairned massive ledge. Easiest belay is off one of the big trees. Might be tight with a 60M.# Location
+Start the normal first four pitches of Dark Shadows and keep going.Finish on a big ledge. With cairns. To get down you still have several hundred feet of easy 5th free soloing or adventurous/wandering/easy leading to the summit. Head a little up and a bit left to a left facing dihedral hand crack with a cairn (Oct. 2014) to start the last ascent to the summit.From the summit, follow the ridgeline then cairns northwest until they take you to a descent gully. This led us to a three rappel gully (with a 70M) the last rappel was into a tree with a few inches of rope left. Followed by 15' of downclimbing the tree. I can't recommend this, however maybe another gully for a single 60M exists. This puts you in the wash upstream from the base of the climb. Hike it back to your packs.# Protection
+Possible on a single rack with runout and a strong leader. Otherwise bring a double to 2" or 3".

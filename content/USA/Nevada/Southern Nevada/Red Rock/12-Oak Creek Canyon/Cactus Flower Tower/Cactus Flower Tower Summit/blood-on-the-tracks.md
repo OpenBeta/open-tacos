@@ -1,0 +1,13 @@
+---
+route_name: Blood on the Tracks
+type:
+  trad: true
+YDS: '5.9'
+fa: Blake Herrington, Chris Weidner  April 4, 2012
+metadata:
+  legacy_id: '107558327'
+---
+# Description
+This route has sustained 5.9 crack climbing for about 1000 feet. The overall route quality is very high so don't be dismayed by the heavy moss on the first half of the first pitch.Approach as for Cinnamon Hedgehog. After climbing the 5.7 chimney, downclimb 30 feet until beneath two right-facing corners. Begin in the left of the two corners in scooped, white rock.P1: Climb up the wide, right-facing corner to a small stance below a large bush. The rock is mossy on the first half of this pitch. 5.9 55mP2: Continue up the corner through a chamber-like chimney and over a juggy roof. Belay at a stance where a two-foot wide ledge leads rightward. 5.9 60mP3: Walk right on the ledge to just before the right-hand crack system. Face climb up and right on creaky flakes to join the crack about 30 feet above the ledge (alternatively, walk the ledge all the way to the crack and climb it). Continue up the crack and belay when the rope runs out. 5.8 70mP4: Follow the crack to a large ledge 20 feet higher. Climb an intermittent seam straight up over a bulge of dark rock, then follow it up and slightly right. Protection is finicky but adequate. When the rock turns slabby, head right and belay in the wide corner beneath a gully. 5.9 45mP5: Face climb up and right into the left-facing, flaring chimney with some loose rock. Climb it to its top and belay in a flat alcove. 5.9 50mP6:  Face climb up and left into a shallow, right-facing corner and follow this to a broad flat area and belay. 5.8 25mP7: Gain a ledge just above with the help of a large pine tree. Walk the ledge right to a wide, left-leaning juggy crack and climb it to a large ledge on the right with two bolts  the top anchor of The Warrior. 5.7 40m Rap here, or continue scrambling up a gully that leads up and left past some pine trees to the summit of Cactus Flower Tower.# Location
+Blood on the Tracks climbs the double cracks between Cinnamon Hedgehog and The Warrior on the east face of Cactus Flower Tower. The first ascent party summitted the Tower then descended to the notch between the Tower and Mt. Wilson and continued up Cactus Connection (another new route) to the summit of Mt. Wilson.Scramble and downclimb to the notch between Cactus Flower Tower and Mt. Wilson. The final move involves a leap across a chasm (belay recommended). Rappel 70 feet to the east off a small tree to a flat area beneath the north face of Mt. Wilson.Alternatively, rappel The Warrior.# Protection
+1ea: cams #00TCU through #5 Camalot; set of nuts2ea: #.3 Camalot-#3Camalot

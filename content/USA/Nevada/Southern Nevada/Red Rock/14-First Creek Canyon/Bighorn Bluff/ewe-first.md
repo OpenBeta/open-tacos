@@ -1,0 +1,13 @@
+---
+route_name: Ewe First
+type:
+  trad: true
+YDS: 5.10b/c
+fa: Derek & Giselle Field (2019)
+metadata:
+  legacy_id: '116819244'
+---
+# Description
+Ewe First is an adventurous ramble directly up the most prominent crack system on Bighorn Bluff. The style varies between long stretches of mellow climbing and short stressful cruxes.Pitch 1 (5.6, 100 feet):Climb/scramble about 30 feet up a low-angle groove, then shuffle 15 feet right (look for a cairn here) and paddle around a bush to the innermost corner system (optional belay). Head straight up the varnished chimney and continue straight up varied cracks to a sizeable belay ledge.Pitch 2 (5.8, 100 feet):Climb the left-facing corner to the next major ledge system which hosts a small forest of bushes and plenty of options for a natural belay.Pitch 3 (5.4 R, 50 feet):Miniature scramble pitch. Skirt the forest on its left side by climbing an unprotected pink slab up to a gap in the trees. Belay in the comfy varnished nook.Pitch 4 (5.5, 120 feet):Fun pitch! Jog up the varnished ramp. Stop and belay where it curves left.Pitch 5 (5.5, 100 feet):Continue left up the ramp as it rolls over into 3rd-class. Set up beneath the obvious diagonal crack.Pitch 6 (5.10b/c, 120 feet):Battle through ~20 feet of steep business (weird pods) to a stance below an insecure slab move. A few more funky moves past a wide horizontal gain a teetering stance in a sandy stembox. Thin gear and tenuous slopers keep it engaging right up to the finish. Belay in the wicked-cool white-spotted red band at the entrance to the cave.Move the belay to the back of the varnished cave.Pitch 7 (5.9+ PG-13, 80 feet):An incredibly smooth bombay slot guards a few nice jams. Ditch the helmet, kiss your rock-solid 2" cam goodbye, and charge up the smooth black offwidth. This is certainly a spicy runout (decking possibility) without mega gear, as a #6 camalot is too small. From the big ledge above the offwidth, head left up a short left-facing corner to the rounded top of the bluff.Descent:Walk left (west) along the sloping ledge back into the main First Creek drainage. The final step is a 50-foot rappel from a slung boulder.# Location
+Approach:Hike about two hours up First Creek Canyon until reaching the base of Slippery Peak Apron (where red slabs on the left side reach all the way down into the main wash). At this point, bushwhack directly up the right side of the canyon, past a couple marker trees, to the base of the wall on the north side of the canyon. At the base of the wall is a massive shelf that extends several hundred yards east. Walk the shelf for several hundred yards -Ewe Firstis almost at the far end.# Protection
+Double set of cams to 3", single set of nutsOne rope

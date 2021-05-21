@@ -1,0 +1,13 @@
+---
+route_name: Rainbow Buttress
+type:
+  trad: true
+YDS: 5.8+
+fa: Joe Herbst & Joe Frani, 1970's
+metadata:
+  legacy_id: '105732368'
+---
+# Description
+This is the easiest way up the Eagle Wall.  Given the length of the approach and descent, it's a long day.  Due to lack of fixed anchors, you cannot rap this route so plan on going over the top (leave extra water, etc in the creek bed before heading up the the base of the wall).I found the crux pitch a bit scary for 5.8, there is pro but some 15' runouts, but a 5.9 leader should have no problem with it (except for this one pitch, the rest didn't even seem 5.8).  The final pitch used to be very runout but there is now a bolted alternative.I've heard several negative opinions on this route from people who would give it one or even zero stars.  The rock is not as good as it is on other routes to the left.  I enjoyed the length and position of the route, so I give it 1.5 stars rounded up.  If you are up for the challenge, Eagle Dance or Leviation 29 are much more highly regarded.Follow the approach ramp up and right, past the start of Eagle Dance and Levitation 29, until you reach a sort of a col where you can look down into the Painted Bowl.  The route begins at the col.  We found the route fairly easy to follow using Swain's description, just follow the easiest line up cracks to the right of a buttress leading up.  We thought we would be able to chat with friends on Lev 29 but this is around the corner and no communication was possible.After about five pitches there are two alternatives: (1) head up and then angle left as in thisEagle Wall from the lower Painted Bowl with routes marked (note that bottom pitches of these routes are not visible due to the "foreground bump"), or (2) traverse right to an obvious left facing corner (easy), belay and then climb the corner (crux).  The second alternative seems to be slightly harder but is followed by many parties (including us) because it is such an obvious corner.Eventually you will reach a final slab, the original 8th pitch went up and left 5.5X to the summit.  However now there are a bunch of bolts leading straight up at about 5.7 for a much less terrifying finish.Swain claims the descent can be done in an hour, but this is speedy.  We followed his descent description and made no wrong turns; we were not in a hurry as we were hoping our friends on Lev 29 would catch up so it took us at least 2 hours from the top all the way to the car.There is an entire chapter about this route inRed Rock Odyssey# Location
+# Protection
+Standard rack to #4 Camalot

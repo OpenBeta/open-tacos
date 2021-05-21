@@ -1,0 +1,13 @@
+---
+route_name: The Kor Route "Free"
+type:
+  trad: true
+YDS: 5.12a
+fa: 'Fa: Layton Kor, Sibylle Hetchel, Allison Sheets, April 1988, FFA: December 2020'
+metadata:
+  legacy_id: '120049476'
+---
+# Description
+This route was originally named "Corporate Takeover." However, in the book and internet forums, it was referred to as "The Kor Route," so I decided it was best to leave it like that. This route is a lot of fun and features well-protected cruxes. However, the easier pitches run across very delicate climbing making the route very interesting, and a little bold. I don't know if it is quite PG:13, but a couple of pitches feel a little heads up.P1:Climb up a 5.4 gully past a large tree/bush and make a 5.7 move around another small tree. Chimney to a ledge and climb around the corner to a set of anchor bolts.P2:Climb up straight up the slab that follows the broken crack, clip one bolt, 5.10d. Then climb up and left to a flake. After the flake, climb the face to a second bolt and then climb left and pull the roof 5.10a. Follow the awesome crack to a fat ledge or stop at the intermediary anchors 5.7.P3:Climb up the awesome splitter crack for 30 ft, 5.10c. before the hollow horn flake, climb left onto the face 10ft to a bolt. Follow the bolt line under the arch, this is the crux, 5.12a. Clip the last bolt then continue to climb 10ft left to the end of the arch. Place a blue totem in the crack, then continue straight left for 10ft on easy but delicate climbingh to a set of anchors. 6 or 7 bolts?P4:Climb up the face to a bolt. Finesse your way through some scary holds to a second bolt then climb your way up a scary tower/dihedral thing 5.9/10. Climb left and search the face for a hidden star drive bolt. Climb left up a crack to a ledge, then climb up a large crack to a set of anchors on a small ledge.PG-13ishP5:The second crux. Climb your way up the delicate face that follows the crack. Follow the bolts to a ledge and a set of anchors 5.11d ish. The only cams you need is a #2 and a #1. 8 bolts I think but bring some extra draws.P6:Slab your way along the path of least resistance to a fat ledge where you can build a gear anchor. 5.9. There is also a huge tree on the ledge.P7-P10:Walk 300ft left along the ledge to a corner system and choose your own adventure up 5.5-5.7 chossy climbing to the summitDecent:Rap Bird Hunter Buttress rappel route.# Location
+Starts 150ft to the left of Brown Recluse# Protection
+double rack to #2 + 1 #3

@@ -1,0 +1,13 @@
+---
+route_name: Marijuana
+type:
+  trad: true
+YDS: '5.11'
+fa: Tom Cecil, Chris Tolin, John Rosholt - 1980's.
+metadata:
+  legacy_id: '107468337'
+---
+# Description
+Marijuana is an excellent, clean route up the huge brown buttress to the left of Black Orpheus and to the right of the Black Arch Wall.  Mostly following interesting corners, the climb is capped by two lovely, testy pitches.  It is south facing and offers nice, sunny climbing  perfect for a clear winter day.  Approach as for Black Orpheus, but head left across the slabs (may require some exposed easy 5th class) and away from Black Orpheus to reach an indistinct weakness below the left side of the towering buttress above. You may arrive at a small, body-sized cave that is just left of the line and just to the right of a narrow ridge of rock that separates the Black Orpheus side of the amphitheater from the There and Back Again side. About 20' below this cave is a nice ledge and a single bolt which is a good place to begin.P1: As for Tuscarora - depending on where you start, begin climbing up a corner and onto broken rock, working out left then back right underneath a steep wall, then continue just right of a vegetated right-facing corner to a nice ledge with a bolted anchor.  5.5-5.8.P2: Again, as for Tuscarora - climb up interesting features passing two bolts to a bolted anchor on a sloping ledge directly below the large roof.  5.10b, 100.P3: Traverse right via an easy, but exposed move on a loose ledge system to a bolted anchor at the base of a short, steep corner. Low 5th class, 50'.P4: Climb up a very steep left-facing corner passing two bolts to a bolted anchor on a ledge.  5.11, 50'.P5: Head up a corner to the right (don't go straight up) and pull up with difficulty onto a long, leaning left-facing ramp system.  There are several bolts and well-spaced but solid gear placements along this ramp - the very end of the system is steep, run out, and difficult, but the climbing is beautiful and face holds appear to ease the passage.  End at a bolted anchor.  5.11d, 120'.Rappel from here with a 70m rope, following the ramp back down (a leaver 'biner on one or two of the bolts will make this much easier).  Alternatively, it is possible to continue up to the top of the formation via a huge right-facing corner system which faces Black Orpheus.  This supposedly goes at 5.10a.# Location
+# Protection
+One each from blue Alien/0 TCU to #2 Camalot.  Two each 0.4 and 0.5 Camalots.  Wires.  70m rope.

@@ -1,0 +1,13 @@
+---
+route_name: Desert Solitaire (Free)
+type:
+  trad: true
+YDS: 5.13b
+fa: 'FFA: Unknown'
+metadata:
+  legacy_id: '118637237'
+---
+# Description
+I thought this route deserved its own page for the free climbing. Gorgeous route about 100 yards to the left of the original route that follows and links multiple corner systems up the wall. Technical sustained climbing. If you are a fan of desperate technical stemming, this route is for you!!!According to the guidebook, the climbing and rock quality deteriorate significantly after pitch 8.Pitch 1:Exit the bivy ledge on the right and wander up easy slabby rock to a small buldge. pull the bulge into shallow opposing corners (bolt) and head up to a nice ledge. Rock quality and protection on this pitch are so so. 5.10cPitch 2:The guidebook said to climb the awkward corner off the belay, but the one pin looked old as hell and the climbing looked really difficult to protect. We headed right and then traversed back left into the corner higher up. Enjoyable pitch and soft for 5.11d.Pitch 3:Easy fun stemming leads you up to a bolt and then you have to bust out a desperate as hell boulder problem on microscopic holds. Head up and then right to another good ledge to belay from. 5.12bPitch 4:Absolutely mind blowing pitch. Some awkward climbing and laybacking up a slot unlocks an incredible three part overlapping corner system. Sustained and technical stemming up 4 bolts to a hanging belay. 5.12aPitch 5:an imposing corner with complex insecure stemming to a burly layback. Move up and right to another hanging belay. 7 bolts. 5.13bPitch 6:Another shallow technical stemming corner to a bolt and then steep baggy hands crack/flake up and right to a ledge. 5.12-Pitch 7:Head right to find 6 bolts protecting a left leaning hand traverse on a flake. then head up a flaky face past 3 more bolts. 5.12aPitch 8:Unprotected moves off the belay on a hollow flake to gain yet another corner. The corner opens from hands to chimney back to tips sizes. Continue up and left to a belay. 5.11dPitches 9-11:Per the guidebook the climbing deteriorates significantly and is loose and junky rock quality. Pitch 9 is 5.9, Pitch 10 is 5.10c, Pitch 11 is 5.9.To descend, you can rap the route with 2 70's. There is currently an old fixed line at the top of pitch 2. We used it but it was a bit sketch and didn't inspire confidence.# Location
+To the climbers left of the original route, maybe 100 yards or so.# Protection
+Doubles to #3, one #4, Brass, and Ballnuts. Extra small/tips sized cams wouldn't be the worst idea.

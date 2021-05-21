@@ -1,0 +1,13 @@
+---
+route_name: Earth Juice
+type:
+  trad: true
+YDS: 5.11c
+fa: Kurt Reider, Chris Robbins, Augie KIein
+metadata:
+  legacy_id: '112842746'
+---
+# Description
+Jerry Handren's Guidebook describes this route as "Thin face climbing with some scary run outs."  I'm inclined to agree.  Nevertheless, when I first led this route one year ago I was addicted and made the decision then to replace the old star drives and rusted Leeper hangers placed in 1979 with new 1/2 inch expansion bolts (Two newer 3/8inch bolts remain part of the route).  Out of respect for the first ascensionists no additional bolts were added, but the anchor is moved higher up the route to what would seem a more logical stance at 95 feet (which also allows a midway anchor for a single 60m rope rap of Kisses Don't Lie).  It does appear that sometime between 1979 and present a bolt was added at the bottom of the route. The guidebook clocks this at 10d!, but the second pitch traverse left to finish on KDL is easily 11c and is an impressive onsite.To the beta!  Climb up the ramp right of Kisses Don't Lie.P1 (95', 5.10d R) The crux of the first pitch is the smooth friction climbing past the first two bolts. Some might consider clipping the first bolt given the precarious start. Continue up a series of easier crimps with widely spaced bolts to a small crack then move up and left in shallow corner to the new camouflaged chain anchors (5 bolts).P2 (45', 5.11c PG13) The second pitch is heady with runout but the crux is protected by a new bolt on the traverse.  There is gear before the bolt at the crux.  From the anchor traverse out right around the rib then make easier moves working up and back left of the rib into the corner (5.8).  After clipping the bolt down climb and then traverse left using the short crack and some very tenuous footwork in small dishes (crux).  After a sigh of relief finish on the last 15 feet (5.9) of Kisses Don't Lie to the anchor.The pitches can be combined into one awesome 140' pitch (bring a long sling) but isn't as awesome as its neighbor to the left. On the second pitch beware the stacked rock in the corner right of the  traverse bolt as it is loose and off route.# Location
+Rap the route with one 60M rope to the midway anchor, then rap to the ground.# Protection
+9-10 quick draws, 2-3 slings,  cams to 1.5",  several medium to large nuts (DMM offset in the mid to large size work well for the second pitch).

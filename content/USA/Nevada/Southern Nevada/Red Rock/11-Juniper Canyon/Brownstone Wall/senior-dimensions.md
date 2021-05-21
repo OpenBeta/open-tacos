@@ -1,0 +1,13 @@
+---
+route_name: Senior Dimensions
+type:
+  trad: true
+YDS: 5.10b
+fa: Unknown.
+metadata:
+  legacy_id: '117833423'
+---
+# Description
+Senior Dimensions is a nice pitch of face climbing on excellent rock high on the Brownstone Wall that is, unfortunately, guarded by three pitches of much lower quality, and somewhat dangerous, rock. Jerry Handren suggests in his guidebook approaching these final pitches by way of Pro Choice, and I agree. The cool thing about this zone is you can climb these approach pitches to reach a large, comfortable "Party Ledge" high on the wall, and from here you can have a fantastic cragging day climbing really high quality pitches off the ledge. These include (from left to right): Pro Choice, Pro Life, Immaculate Conception, Corruption of the Jesuit, and Senior Dimensions. Lots of grades to choose from and if you tick them all this would be one of the better outings in Red Rocks, but I digress...Begin tucked up in a narrow gully at the very right edge of the lower half of the Brownstone Wall, a few hundred feet up and right from Nightcrawler.P1 (80', 5.8 R): Climb up the lowest toe of the wall up a blunt white arete to a bolt (visible from the ground) and on to a bolted anchor on a big ledge with a large scrub oak.P2 (80', 5.10c): From the back of the ledge, follow a leaning, right-facing corner up stacked blocks. Move out of the corner to the left past a bolt (crux), a second bolt, then up and back right to a bolted anchor.P3 (100', 5.8 R): Climb up above the anchor (poor gear) to a few good gear placements in horizontals and then through run out terrain and four bolts to a bolted anchor on the Party Ledge. This is the same ledge from which the final pitch of Pro Choice and Pro Life begin.P4 (40', 5.8): A short pitch moves up a left-facing corner then immediately steps right and heads up easy ground to a stance at a bolted anchor. Consider bringing a pair of quicklinks and rings to improve this anchor.P5 (130', 5.10b): Traverse right 20' to a bolt and then quest up the varnished face passing several bolts and gear placements to a bolted anchor at the top of the wall.# Location
+Far right side of the left half of the Brownstone Wall.The upper pitch of this route faces slightly east and gets shade in the afternoon even though the Brownstone Wall has a southerly aspect.# Protection
+1x Cams small to #1 Camalot.A set of wires.Two ropes, or an 80m rope, should be considered essential.A pair of quicklinks and rings to improve the P4 anchor.

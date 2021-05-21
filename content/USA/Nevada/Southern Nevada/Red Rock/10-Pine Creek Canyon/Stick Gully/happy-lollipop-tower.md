@@ -1,0 +1,13 @@
+---
+route_name: happy lollipop tower
+type:
+  trad: true
+YDS: '5.9'
+fa: an ascent has been made, april 2017
+metadata:
+  legacy_id: '111602736'
+---
+# Description
+P1 200' Intricate climbing up the crack systems. start in the alcove below the middle crack; up this ~30 feet. below a 4 inch roof on the left, traverse left into the next crack system [alternatively,  continue up the crack past a wide section, a tree, and another tree to the ledge system at 200 feet]. up the crack to an alcove; up and left to another alcove if continuing up; if rappelling, up and right to rappel anchor.P2 100' From the belay nook to the top of the block on the left; step awkwardly across into the obvious crack. When the crack ends, traverse right to the next crack/chimney system; for the left, wide option, belay here; for the right hand crack option, continue right and up to a small stance beneath a tight hand crack.P3 100' Up the wide crack on the left or up the hand crack on the right; both pitches end on a ledge with a tree.P4 160' Up the chimney & crack on the left. #5 & #6 camalots, big bros, & valley giants. other gear options are widely spaced. Belay below the final overhang.P5 40' Up into the chimney, squirm horizontal, move out to the lip, let your feet cut loose, and squeeze upward to a stance. In places it was possible to turn my helmeted head. The valley giants were not necessary on this pitch; make a present of them to your second...P6 70' continue up the wide crack and chimney abovesomeone has sawn oak trees at the base of the climb pre-fire. there are bolts on top of pitch 1, getting past the trees on the alternative first pitch clearly had not been done by humans in decades... just above P1, there are old, rusted nuts and rappel tat. above this, there was no sign of previous climbing.# Location
+Start in the alcove right of the Datura pillar. Go up the cracks to the obvious chimney system through the overhang at the skyline.# Protection
+normal rack; one each #5 & #6 BD Camalot, #1 & #2 valley giant, #5 bigbro; shuttle these, can't imagine carrying any more big stuff; expect 250+ feet of wide with rare options for smaller gear/belay stances.This climb can be done with just doubles to #6 if you reach way back into the crack on pitch 4 and if you're comfortable climbing above your gear. The #6's protect the first 30 feet of pitch 4 and the #5's are useful higher - a third #5 is nice but not entirely necessary.
