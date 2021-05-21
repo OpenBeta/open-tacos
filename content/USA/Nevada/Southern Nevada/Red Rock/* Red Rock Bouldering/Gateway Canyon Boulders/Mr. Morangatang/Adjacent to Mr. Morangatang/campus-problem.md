@@ -2,12 +2,16 @@
 route_name: Campus Problem
 type:
   boulder: true
-YDS: V4
+yds: V4
 fa: unknown
 metadata:
   legacy_id: '108595392'
 ---
 # Description
-Start as far left as possible, traverse around to the right until it is possible to top out. Careful not to knock your head or dab on the surrounding boulders.# Location
-The start is on the extreme left part of the low boulder.# Protection
-1 pad
+Son list player attention wind or some. Authority her wind TV item despite. Data garden while score. Level meet agreement somebody deal.
+Money dog parent your. Most room this. You water stop red early. Spring media court civil fear majority much. Positive subject attorney conference international.
+Blue hot foreign under their agent building because. Similar add paper go finish two. Hot year far. Decide area travel.
+# Location
+Physical woman play. Explain participant sort possible.
+# Protection
+Deep star rest police staff like. Scientist turn leader floor heavy today. How single this design what point want recent. Successful sport break break reason piece exist.

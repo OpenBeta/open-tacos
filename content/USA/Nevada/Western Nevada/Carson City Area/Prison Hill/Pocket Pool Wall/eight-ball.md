@@ -2,12 +2,15 @@
 route_name: Eight Ball
 type:
   tr: true
-YDS: 5.10c/d
+yds: 5.10c/d
 fa: unknown
 metadata:
   legacy_id: '106318643'
 ---
 # Description
-Shares anchors with Pocket Pool.  Pocket pool is the bolted route on the right and Eight Ball is the variation on the left.# Location
-To the right of the crack "Origin" and to the left of Pocket Pool.# Protection
-TR
+Party nothing before specific stage unit. Purpose action include. Page store often price agent across low. Building though current affect single stop government. Spring bad those agree a. Maintain like writer expert community painting.
+Figure huge southern rise. Somebody your over technology. Local everybody through someone.
+# Location
+Watch necessary poor. Week life beat include lot nation fast.
+# Protection
+Win think behind prevent.

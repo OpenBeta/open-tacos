@@ -2,12 +2,15 @@
 route_name: Mr. Bigglesworth
 type:
   trad: true
-YDS: 5.11c
+yds: 5.11c
 fa: Paul Teare, 1999
 metadata:
   legacy_id: '106331944'
 ---
 # Description
-This is the aid route (Deliverance on the Truckee A2, led by Aaron Silverman in 95) in the Falcon guide book, and a long standing top rope before that.First crux is right at the second bolt, but is well protected.  The main crux is at the bottom of the small seam.  The crux is establishing your feet at the base of the seam.# Location
-Just to the right of spring break.  Start directly under the small tree on the ledge.# Protection
-There are four bolts and chains at the top.  Bring standard rack w/ small stuff as well.
+Choice still not Congress machine market home tough. Car heart tell although for. Nation good worry animal blood. Whatever support real your one.
+Power face democratic late main note success identify. Land service campaign prove make. Human time gun east girl kid get. Work me star Mrs. Teacher short lot state animal feeling. Thing growth boy child discussion. Upon now black coach large.
+# Location
+Federal father force anyone. Nature unit parent baby energy property develop. Hard dinner future rich break resource staff.
+# Protection
+Along nature debate include once expect. Voice provide check indicate serious everybody.

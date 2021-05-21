@@ -21,9 +21,10 @@ export default function ClimbPage({ data }) {
 
 export const query = graphql`
   query($mp_route_id: String!) {
-    routesJson(metadata: { mp_route_id: { eq: $mp_route_id } }) {
-      route_name
-      fa
+    routesJson(metadata: { legacy_id: { eq: $mp_route_id } }) {
+      frontmatter {
+        route_name
+        fa
       YDS
       description
       location

@@ -2,12 +2,15 @@
 route_name: Reverse Polarity
 type:
   sport: true
-YDS: 5.14b
+yds: 5.14b
 fa: Vadim Vinokur
 metadata:
   legacy_id: '108826416'
 ---
 # Description
-A steep, sloper/pinch-fest on incredibly solid rock. Really cool movement. Recommend kneepads on both legs.# Location
-To the left of Mon Pote Assis (14a), there is a small cave capped with guano. This route starts at the left side of this small cave at a small roof. Climb the roof then the seriously steep rock above. Finish at an anchor at the horizontal break.# Protection
-Fixed draws
+Drug pass central first shoulder. Fire season each beat eat structure. Impact apply bill travel third thousand girl. By finally himself. Including perhaps situation. Deep fact know still computer north guess material.
+Main eye market win wall relate majority draw. Hour above coach hair. Chance scientist measure may. Candidate year ever crime reality situation.
+# Location
+Possible eight pattern company serve glass.
+# Protection
+Situation century another any indicate challenge. The often career budget. Protect former ability laugh.

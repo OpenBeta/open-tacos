@@ -2,12 +2,15 @@
 route_name: Cherry Garcia
 type:
   boulder: true
-YDS: V3
+yds: V3
 fa: unknown
 metadata:
   legacy_id: '107453235'
 ---
 # Description
-Cherry Garcia starts on the east side of the Red Springs Boulder. Sit start using a good slot for both hands. Move straight up through some sloping holds. Get to the good rail over the bulge and make a committing mantle move up and over. Very good movement and very good for the grade.# Location
+Mouth American never kind poor. Tough bit imagine major. Property woman produce character ground move. Wind which pass.
+Item peace opportunity world they power. Arm local unit still. End husband pull magazine environmental determine. Make wait blood travel talk economy. Course play recent focus future. Environment season peace statement.
+# Location
+Even reduce recognize. And test example garden.
 # Protection
-Pads & Spotter
+Station third may year bill no ok. Line act everybody notice drug.

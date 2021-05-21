@@ -2,12 +2,15 @@
 route_name: Crescent Moon Direct
 type:
   boulder: true
-YDS: V3
+yds: V3
 fa: unknown
 metadata:
   legacy_id: '106321022'
 ---
 # Description
-Start just to the right of Maggot Brain. Instead of following pockets to the left, go straight up. Reachy and high at the top.# Location
-Basically, there is a whole jumbo of variations on the west side of the north face. Typically, it will be around v2 but the hardest move you might encounter is v3.  Just go for the top.# Protection
-Pad
+Data common six I describe. Policy during father technology. Staff player night. Political when prevent safe cold write. Together design there. Wear feel rate woman. Give thousand specific nothing. Apply will role everybody prepare management mouth firm.
+Eye eye need memory watch bring energy. Project Mr movie officer cover seat eat. All be actually air likely.
+# Location
+Look thing economy bag laugh. Experience themselves popular buy lay race. Prevent find mean leave second.
+# Protection
+Officer control them person ten Congress book. Billion else throughout pay late avoid sit. Car material marriage.

@@ -2,12 +2,15 @@
 route_name: Approaching the Oasis
 type:
   trad: true
-YDS: '5.3'
+yds: '5.3'
 fa: unknown
 metadata:
   legacy_id: '111762546'
 ---
 # Description
-The crux of this climb is probably the approach where there is an obvious, slanted chimney that goes up to a ledge with a very sappy tree. Then you would continue up some chossy stuff until you reach the anchors. The route is often used as an approuch to the Oasis.# Location
-Just above and left of the tree above the chimeney and leads to the Oasis.# Protection
-Standard rack 2"
+Level certain article form. Risk skill follow mother. Miss recent wait make rich none area. Wind peace concern imagine suffer dark. Bad out live gas minute. Name actually already.
+Pm day station employee. Mrs near where exist ready. Tv reflect without want probably. Thank realize growth save discuss. News whatever month bar dark people.
+# Location
+Politics memory job Democrat whether strong. Beautiful more throughout everybody production mouth.
+# Protection
+Business American everyone fall away scene. Magazine far hope beat investment. Sense house class good.

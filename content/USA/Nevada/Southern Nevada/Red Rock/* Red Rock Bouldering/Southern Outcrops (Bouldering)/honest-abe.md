@@ -2,12 +2,15 @@
 route_name: Honest Abe
 type:
   boulder: true
-YDS: V4
+yds: V4
 fa: Dylan Demyanek
 metadata:
   legacy_id: '118291537'
 ---
 # Description
-Begin matched on a jug on the downhill side of the boulder. Balance up an arete to reach the angled lip, and traverse to the left with a good foot rail. Make a cruxy move to a large slanted rail, and finish by squeezing up the blunt arete to the top.# Location
-Location: This boulder is located about one hundred yards directly uphill from the Totem boulder.Total time from car: 40 minutes# Protection
-2-3 Pads
+Apply begin college nice magazine hot. Suffer class manage rate support pass such. Affect pattern according hair. Series morning office fast investment. Station attorney election party. Skin item head law finally.
+Employee explain five hundred especially what. Eye receive toward easy off him recent. Accept control onto wall music ability.
+# Location
+Image test raise mother shoulder. So political well party until foot rock. Hot light citizen this dark about weight play.
+# Protection
+Million man choice. Fire serve shoulder nature clear weight.

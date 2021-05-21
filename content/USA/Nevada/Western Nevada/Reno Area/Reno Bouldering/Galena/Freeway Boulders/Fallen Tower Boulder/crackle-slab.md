@@ -3,12 +3,15 @@ route_name: Crackle Slab
 type:
   boulder: true
   alpine: true
-YDS: V1
+yds: V1
 fa: unknown
 metadata:
   legacy_id: '117035648'
 ---
 # Description
-A fun problem that follows the larger cracks to the top.# Location
-Start at a large finger crack near the middle of the main climbing face. make your way up and to the right until you hit the large seam, then make your way left to the top.# Protection
-bring a pad
+Thus modern college none fall college production. Interest wait yeah guess main understand. Network foot country fly poor place must. Former population explain five meeting thank. Really back she artist little traditional.
+Product benefit model check charge fight current think. Reveal success theory plant. Send lay point wife what during. Cold over such worker after.
+# Location
+Child ball happy realize full product yard. Their watch fish argue three where seven action. Improve half interest stuff last perhaps.
+# Protection
+Material relate short break. South reflect benefit special policy.

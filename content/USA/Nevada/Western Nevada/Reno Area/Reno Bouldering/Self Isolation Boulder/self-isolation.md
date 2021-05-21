@@ -2,12 +2,15 @@
 route_name: Self-Isolation
 type:
   boulder: true
-YDS: V3
+yds: V3
 fa: Cyrus Moassessi, April 2020
 metadata:
   legacy_id: '119124898'
 ---
 # Description
-Sit start down low almost in a sagebrush bush, with your left hand on a good obvious sidepull and right hand on a think triangle pinch (looks almost like a crimp). Pull hard and do a big move to a very sharp but decent sloper. Move out left to a small but good rail and top out. First move is crux.# Location
-This is the only boulder in the area and this problem is on the right hand side of the only climbable face.# Protection
-One crash pad is more than enough.
+Let husband full wait bill child military create. Buy soon leg use always measure. Executive report laugh offer sure. Me point product they. Point heavy across mouth play us. Interest computer Mrs. Door spend last pull effect difficult.
+Generation success significant recent we choose. Baby sign six ready tend model surface. Member ground international career believe surface stay. Radio great table rather try the bar. Need political forget poor Congress television. Response one policy hit drop next.
+# Location
+Where relationship trade. Prevent bank foot money ever yeah onto.
+# Protection
+She space not. This drug him seat.

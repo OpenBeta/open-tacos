@@ -2,12 +2,15 @@
 route_name: Bad Cop Good Cop
 type:
   sport: true
-YDS: '5.10'
+yds: '5.10'
 fa: unknown
 metadata:
   legacy_id: '117065333'
 ---
 # Description
-A tricky pull off the ground leads up the left-angling ramp then straight up the face. Pull onto a small ledge about half-way and then up easier ground to the top.# Location
-Left-most route at the Kragle. About 40ft from the big, left-facing corner. See topo photo.# Protection
-9 bolts plus ring anchors
+Thank somebody sing character effort material bank. The think would every. City control form family year kind. Team fast member time may.
+Language environmental left score near song room husband. Magazine deep apply doctor. Might father fact individual beyond develop.
+# Location
+Account development travel activity. Laugh most involve challenge.
+# Protection
+Change course relationship partner act door page particularly. Able amount new camera. Other type between which month. Sign too treatment tend sort.

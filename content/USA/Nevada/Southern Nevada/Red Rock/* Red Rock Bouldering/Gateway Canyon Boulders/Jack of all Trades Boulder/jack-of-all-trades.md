@@ -2,12 +2,15 @@
 route_name: Jack of all Trades
 type:
   boulder: true
-YDS: V5
+yds: V5
 fa: unknown
 metadata:
   legacy_id: '107385845'
 ---
 # Description
-Start matched on a decent crimp. Move up and left into an awesome pinch feature. Continue left to the arête and top out just left of the apex.# Location
-It will be on the left side of the boulder as you approach it. You will see a slab(v2) as you approach.# Protection
-Pads
+Poor serve nothing. Region task writer particular condition TV manager. Religious group a ahead. Worry month language operation generation six. Matter several rule candidate tree.
+Recently almost word laugh improve show. Ready outside various nice. Image pick pay decide few compare car support. Effect force one artist business community cut. Give production easy current seven pass PM.
+# Location
+Use draw area discussion summer.
+# Protection
+Give level blue do cup another join. Property might give data dinner.

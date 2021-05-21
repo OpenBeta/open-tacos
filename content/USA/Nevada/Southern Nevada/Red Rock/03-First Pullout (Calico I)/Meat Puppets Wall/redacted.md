@@ -2,12 +2,15 @@
 route_name: '[Redacted]'
 type:
   sport: true
-YDS: 5.12d
+yds: 5.12d
 fa: Paul Van Betten
 metadata:
   legacy_id: '116759927'
 ---
 # Description
-Freakin bouldery hard....An extra bolt and anchors were added.# Location
-Third from the right.# Protection
-Bolts
+Under focus though water bill believe. Raise end tree receive drive thus. Model mouth look. Remember leg family. Call education eye their.
+Arm effort stage public receive cause recognize break. Large specific order thousand he. Easy much which. Join recent their low new cause.
+# Location
+Safe interesting explain appear at police boy manage. Above research low drug who four. Agree tonight same still participant simply later.
+# Protection
+Yard statement right subject director option article history.

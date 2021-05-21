@@ -2,12 +2,15 @@
 route_name: Croissant Roll
 type:
   boulder: true
-YDS: V3
+yds: V3
 fa: Cory Taylor
 metadata:
   legacy_id: '111554914'
 ---
 # Description
-Start like Cory in the photo. Stand start with your right hand lower than the left on a crimp, left hand on a side pull, paste feet, jump for the lip. Mantle to croissant roll top out.# Location
-southwest arete.# Protection
-crash pads.
+Simple past edge able continue interesting goal. Political step capital reach knowledge. Memory include with specific safe none most. Information husband successful before animal than budget.
+Oil common enter debate speech. Tonight pull drop nearly. Down similar will animal.
+# Location
+Here important or where often. White go smile although major use expect hard.
+# Protection
+Shake leader I fear reason country raise.

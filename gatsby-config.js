@@ -36,17 +36,17 @@ module.exports = {
         ],
       },
     },
-    `gatsby-transformer-json`,
+    // `gatsby-transformer-json`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `climbing-routes`,
-        // path: `${__dirname}/data`,
-        path: `${__dirname}/content/*.md`,
+        path: `${__dirname}/content`,
         ignore: [`**/\.*`], // ignore files starting with a dot
 
       },
     },
+    `gatsby-transformer-remark`,
     {
       resolve: 'gatsby-plugin-react-svg',
       options: {

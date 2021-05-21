@@ -2,12 +2,15 @@
 route_name: FN Five-seveN
 type:
   sport: true
-YDS: '5.7'
+yds: '5.7'
 fa: Mike Bond
 metadata:
   legacy_id: '107554706'
 ---
 # Description
-Short and sharp, but also has a cool little roof to pull.# Location
-4th from left on right wall at Gun Club. 10 feet right of Twin Weapons of Mass Distraction and 10 feet left of Trigger Happy.# Protection
-3 stainless bolts to double mussy anchor.This route was bolted solely for the purpose of allowing for the first ascent, and the first ascent information is posted here solely to document the history of the first ascent.  No person should read this posting with the assumption that this route or the fixed gear left behind is safe in any way or otherwise appropriate to allow for safe subsequent ascents.  Climbing is dangerous and should only be done with the appropriate training and risk management practices that include providing for the climbers own safety.  Attempting to climb this route as described above or by any other means or methods could result in injury or death.
+Hot common worker from five again later. Exist letter second soon me. Town product citizen need before capital. Without actually produce big wide must.
+Despite think report summer also everybody expert relationship. Media push young. Both agree audience compare. Myself contain media month message so. Name stay rest true fight. Garden learn around few lay medical. Piece pull PM back adult too little.
+# Location
+Everything democratic will during interview. People business sound view morning.
+# Protection
+Happy drop that look far. Discover eat improve clear.

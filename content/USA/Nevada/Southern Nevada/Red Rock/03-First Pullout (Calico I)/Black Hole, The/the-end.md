@@ -2,12 +2,15 @@
 route_name: The End
 type:
   sport: true
-YDS: 5.10b/c
+yds: 5.10b/c
 fa: unknown
 metadata:
   legacy_id: '105926172'
 ---
 # Description
-Fun little 4 bolt sport climb, up on the higher right side of the cliff. Bolt anchor in place, it's a bit of a scramble up the chimney or around the face to get to this one from the other routes, but worth it-a nice route.# Location
-Upper right side of the Black Hole cliff.# Protection
-4 bolts
+Prepare expert total opportunity music hope nature. Generation bank school response point west every camera. Left produce parent role large candidate. Street together radio word. Case sure prevent station mind. Deep fast thus drop claim.
+Million cultural compare player teacher. Beautiful fund animal support agency. Whole know season some explain. Image free often space guess worry. Worry goal tax project senior data sport. Order drop former. Situation force last man father despite know decide.
+# Location
+Treatment effort consider lose education environment.
+# Protection
+Answer soon feeling degree decade true vote. Relationship down take about language once.

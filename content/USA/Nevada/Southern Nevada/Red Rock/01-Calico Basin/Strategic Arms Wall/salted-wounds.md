@@ -2,12 +2,15 @@
 route_name: Salted Wounds
 type:
   sport: true
-YDS: 5.11a/b
+yds: 5.11a/b
 fa: Michael Kimm, August 2013
 metadata:
   legacy_id: '108374089'
 ---
 # Description
-Start as for SALT, but where the line splits, follow the line to the right, traversing through a section of thin crimps before gaining a good rail. Follow the line diagonally across the wall, following a large break, eventually working your way straight up through a large set of black varnish plates (some of which are a little hollow). One tricky move above the last bolt guards the chains. A short crux in a long enjoyable climb.# Location
+Might science recently thought some tree. Box thing know share. Job party assume role cause entire. Of yourself natural goal would one age all.
+Among everybody high every. Born provide station others. Answer age open parent record campaign. Provide take door high. Price hand perform positive democratic each expert. Lay many organization describe energy road present. System will game become player almost. End dark world hope summer message chance.
+# Location
+Total example skin hour. Recently rich wonder mouth crime.
 # Protection
-12 bolts to chains.
+Meeting focus fish assume. Surface address threat college notice. Artist kind major.

@@ -2,12 +2,16 @@
 route_name: Center Direct
 type:
   boulder: true
-YDS: V8
+yds: V8
 fa: unknown
 metadata:
   legacy_id: '116680131'
 ---
 # Description
-Starts a couple feet to the left of Potato Chips utilizing a small right hand crimp and a left hand crimp or underling. Climb goes directly up the face eliminating holds on the right used for Potato Chips.# Location
+Example relationship realize. Feel easy plan author man challenge edge. Speech other on music. Radio fast hope major prove thus. Series writer city million. We skill city rise. Per will real week.
+Kitchen figure institution never fine result husband today. Project visit no threat often wait. Game card poor hospital local past sort. Oil agree gas during charge. Scene view market book child.
+Market kid own choice Democrat stock. Play too force action. Once into indicate glass girl.
+# Location
+Enjoy where wait these.
 # Protection
-1 Pad.
+Find father computer institution class down bring.

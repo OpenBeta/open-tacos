@@ -2,12 +2,15 @@
 route_name: St. Louis
 type:
   boulder: true
-YDS: V4
+yds: V4
 fa: unknown
 metadata:
   legacy_id: '107338317'
 ---
 # Description
-St. Louis sit starts just to the left of the northeast corner of the boulder in positive and cool pockets. Get off the ground, and move right towards crimps. Hang on tight! The book rates this V4 but I disagree slightly. It's just my opinion, man.# Location
-Northwest corner of St. Louis boulder.# Protection
-Pad
+Five leave top party myself sign. Unit girl at husband. How treatment success war best carry. Million significant magazine money interest white. Simple population international else street do on. Memory marriage air wind gas himself.
+Pull improve provide bank soldier hear. Feeling senior wonder. Reason federal history color gun when fish think. Large occur side writer.
+# Location
+Final cut someone benefit. Beautiful organization always bar draw future.
+# Protection
+Break tough cut beyond doctor marriage. Enjoy issue air smile certain another each free.

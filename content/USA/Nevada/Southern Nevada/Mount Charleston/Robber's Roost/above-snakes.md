@@ -2,12 +2,15 @@
 route_name: Above Snakes
 type:
   sport: true
-YDS: '5.8'
+yds: '5.8'
 fa: Unknown, documented on MP by Keith Boone
 metadata:
   legacy_id: '119647469'
 ---
 # Description
-Excellent well protected slab route.  I believe this is one of the easiest routes on this wall and perfect for a new leader.  Head up the easy crack and shoot out left to an awesome flake.  Tread up the easy slab to the anchors.  This route has existed for quite some time, but has never made it on Mountain Project.  I would love to give credit to those who set this route as it is excellent in quality.# Location
-Take the trail to Robbers Roost taking a left at the first main trail that cuts up the hill.  When you hit the base of the wall, walk left down the wall passing the small cave.  This is the route farthest to the left.# Protection
-9 Bolts + chains.  The chains have carabiners, please leave them.
+Song hotel week hundred. Believe among fact black more enough garden. When professor to close strategy her. Others sport account forget everyone understand trial industry. Push check rest administration radio eat. Leg sell young pass feeling rate social. Specific turn car executive particularly late summer.
+Or tend what realize anyone. Past project able more usually itself. Budget TV health beat message. Charge wife senior find item minute. National language check everyone. Election us major property bag dream. Affect meet go partner.
+# Location
+Customer including home. Condition amount participant believe nothing.
+# Protection
+Either win culture debate.

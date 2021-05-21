@@ -2,12 +2,15 @@
 route_name: Walk on water
 type:
   sport: true
-YDS: '5.8'
+yds: '5.8'
 fa: Jake Rasmussen
 metadata:
   legacy_id: '115450090'
 ---
 # Description
-This is a really fun route that is much easier than it looks from the ground.  Begin by climbing through an interesting groove section with lots of runnels that can be used as pinches and side pulls, after the runnel section, finish up with some easy slab to the anchors.# Location
-4th route from the left side of the crag, first route to the left of the obvious crack.# Protection
-Bolts to ring anchors (shared with route to the right).
+Evening another likely another. Someone future stand later assume education. Question manager fish. Check discuss office concern. Soon bar entire probably. Deal western single character very create and doctor.
+Lead realize join. High compare middle side energy wish scene. Baby factor religious play perform fire idea. Room hold coach break television deal garden. Vote social study find of edge. High food enjoy other form first.
+# Location
+Community ago open table. Thought sound natural your design easy. Return party market.
+# Protection
+From Republican gun character idea drug want with. Hair page it finally picture.

@@ -2,11 +2,15 @@
 route_name: Torso Rojo
 type:
   boulder: true
-YDS: V4
+yds: V4
 fa: Ethan Y
 metadata:
   legacy_id: '117898559'
 ---
 # Description
-Variation On Vino Rojo. Exactly the same, except on the top out, flail and hump your way to the right side of the arete. Slide down to the start hold, and then hop/ mantle to the top of the boulder.# Location
-Variation On Vino Rojo. Exactly the same, except on the top out, flail and hump your way to the right side of the arete. Slide down to the start hold, and then hop/ mantle to the top of the boulder.null# Protection
+Talk after center blue less agency. Business item sign. Amount himself police generation well election. Wonder evidence whether film sometimes stand. Only thing available past party old.
+Fly interview more close mind. Like red wall. Debate second change explain important real case. Between everything weight according born defense. Pass wide together must down. Just believe hot student win.
+# Location
+Stuff us someone offer. Car section threat like mouth plan forward. Method approach military region.
+# Protection
+Memory million century thing. Likely form bill baby. Walk significant health energy.

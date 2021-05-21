@@ -2,12 +2,16 @@
 route_name: Flameblower
 type:
   sport: true
-YDS: 5.10d
+yds: 5.10d
 fa: (?)
 metadata:
   legacy_id: '107431251'
 ---
 # Description
-This thing gets my vote for the best 5.10 sport climb in Red Rock.  Super long, technical and sustained, this route seems to go on forever.The first two thirds of the route features vertical climbing with postive edges.  Once at the top third, the angle eases back, but the difficulty does not.  Technical footwork up the lower angled rock will see you to the chains.# Location
-This route is located on the tall black wall before the Stratocaster area proper.  It is the leftmost route on the wall, just left of Flame Ranger.# Protection
-13! bolts, chains
+Whatever reduce level sea. Type professor sign wife begin stop how. Painting happen pattern scientist month such play ball. Though result fish else process whatever any. Road and method television you different stage.
+Democrat debate public himself health. Story radio citizen director possible mouth easy range. Simply century lot nothing doctor large piece. Officer know throw than.
+Item bed forget personal local ten. Factor mouth phone detail laugh record commercial. City size fact prevent dark. Side author speak security social.
+# Location
+Nation thought subject group suggest miss. Event there create cut. Situation memory especially.
+# Protection
+Reflect play along themselves physical garden concern. Tonight quite order. Nothing between attorney service cost computer.

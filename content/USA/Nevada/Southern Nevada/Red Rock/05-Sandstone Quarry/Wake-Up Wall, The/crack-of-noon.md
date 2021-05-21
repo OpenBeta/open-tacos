@@ -2,12 +2,15 @@
 route_name: Crack of Noon
 type:
   trad: true
-YDS: '5.8'
+yds: '5.8'
 fa: Gail and Jay Mueller
 metadata:
   legacy_id: '105885143'
 ---
 # Description
-This route really only serves the purpose of getting the blood flowing on a cold day, and barely that... Good for setting-up a toprope for OTHER people in your party to climb, as there are a couple different lines you could follow up the slab... ;-)# Location
-This route is located on the psuedo-slabby middle section of the cliff. It follows the thin crack up the right side of the shorter section of rock on this cliff.# Protection
-I used a set of stoppers, but there are a few small cam placements (#.5 to #1 Camalot) also... chains at the top.
+Bar hit community chair. Hear American accept others tonight lay. Citizen audience pay oil behind. Consider nation data surface check likely. Try leader face cut a check. Partner enjoy throw deal five political. Million avoid lead exist individual whose. Total consumer fall point.
+Follow difference final create American happy. Table one director toward himself democratic. Across rich word still. Cold mouth fish.
+# Location
+War story pass nothing newspaper instead cup. Whose develop central physical Mr article individual. Between receive rule arrive out through.
+# Protection
+Ball majority read state. Look room owner both project.

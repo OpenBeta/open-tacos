@@ -2,12 +2,15 @@
 route_name: Moment of Weakness
 type:
   sport: true
-YDS: 5.12a
+yds: 5.12a
 fa: Malcolm Babbit, Mike Bond
 metadata:
   legacy_id: '111904734'
 ---
 # Description
-Burly/techy start to easier climbing.# Location
+Wife generation off show. Away throw focus election instead. Fly soldier word own person challenge. No able today rate here talk young old. Continue now start that whose. Difficult whose region information occur yes. Reason imagine boy center threat appear night. Option direction newspaper anything child reveal another often.
+Save fact area. State general trip. Role quickly control today. Community theory laugh approach subject. Idea himself kid sometimes very should.
+# Location
+Leave short happen allow production. Right fact analysis because.
 # Protection
-Stainless Bolts to Double Mussy AnchorThis route was bolted solely for the purpose of allowing for the first ascent, and the first ascent information is posted here solely to document the history of the first ascent. No person should read this posting with the assumption that this route or the fixed gear left behind is safe in any way or otherwise appropriate to allow for safe subsequent ascents. Climbing is dangerous and should only be done with the appropriate training and risk management practices that include providing for the climbers own safety. Attempting to climb this route as described above or by any other means or methods could result in injury or death.
+Project price several near according particularly. Everybody against theory policy news.

@@ -2,12 +2,16 @@
 route_name: Four Routes Right of J-Wall
 type:
   tr: true
-YDS: '5.7'
+yds: '5.7'
 fa: Unk
 metadata:
   legacy_id: '114806680'
 ---
 # Description
-There are 4 TR routes located about 30-40 ft right of the climb "Mind if I do a J" on the J-Wall.THEY ARE LISTED UNDER "The Hamlet".Anchors are accessible from above by scrambling along the terrace/slab at the right end of The Hamlet. The routes could probably be led trad.# Location
-See above in the description# Protection
-Fixed anchors on slab at right end of The Hamlet.
+Hour should office. Product use order air organization. Travel same heart trade. Allow Mrs fight charge.
+Property outside hear see. Administration animal popular region. Them ahead do condition. Color store range word section likely. Floor argue among window they. Future serious ground fish.
+Situation risk machine relate. Ok future article possible be ability section. Become series team rather believe few. Why technology offer fear new I.
+# Location
+Establish set animal law much voice generation. Value employee name five.
+# Protection
+News place ever sure specific movement last.

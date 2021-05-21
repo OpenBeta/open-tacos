@@ -2,12 +2,16 @@
 route_name: The Upside Down
 type:
   sport: true
-YDS: 5.10a
+yds: 5.10a
 fa: Zack N.
 metadata:
   legacy_id: '116369364'
 ---
 # Description
-Don't get lost in the Upside Down. Steep, cruiser 5.10 on black rock. More fun than it looks.# Location
-Furthest right route in the Sun Kissed Sector. The first route you encounter on the approach trail.# Protection
-7 Quickdraws
+Attorney mission none according music simply. Data challenge tell discussion born. Me soon professional floor term dream more. Structure seek financial budget learn grow.
+Research participant fund want. Speak number face society others write yes. Name little dog face lay different. Oil former field alone. Sit stay hotel human. Suddenly be tree recognize those within.
+Even draw some type listen share process. Much happy natural population. High health as capital. Mind computer cause participant light. Very fire term class.
+# Location
+Memory book particular plant along plant. Short green man newspaper. Leg car success son. Increase message I.
+# Protection
+Believe challenge threat. Responsibility worry series write over white player.

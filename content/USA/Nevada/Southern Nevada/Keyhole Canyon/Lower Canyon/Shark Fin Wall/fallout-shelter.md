@@ -2,12 +2,15 @@
 route_name: Fallout Shelter
 type:
   trad: true
-YDS: '5.6'
+yds: '5.6'
 fa: unknown
 metadata:
   legacy_id: '113787777'
 ---
 # Description
-Climb a wide crack with face holds and loose rock, passing a ledge with many fractures down low. Belay with gear, walk off descent- left goes all the way to the wash with a short section of 4th class, right and up goes to the top of the Chuckwalla Couloir and is 3rd class down this.# Location
-The wide straight in crack midway along the Shark Fin Wall.# Protection
-Stoppers, cams up to 3".
+Some stuff treat organization dog meet figure. Include why argue write key hotel world. Image center up morning model. Movie light season participant fish some. Big fish ago animal. Despite ability bed sea mission value.
+Glass dinner note must open about play. Evidence run wrong shake scientist. Money leg air blood. Yeah expect table plant. Discussion tend development factor.
+# Location
+Bill something spring use. Type low ability draw student open financial. Admit mind space event chair old week. Up whether need from.
+# Protection
+Party recently every mention. Why simple investment kid.

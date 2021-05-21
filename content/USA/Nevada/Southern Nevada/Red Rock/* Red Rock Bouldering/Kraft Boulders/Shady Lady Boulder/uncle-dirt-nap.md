@@ -2,12 +2,15 @@
 route_name: Uncle Dirt Nap
 type:
   boulder: true
-YDS: V4
+yds: V4
 fa: unknown
 metadata:
   legacy_id: '110224441'
 ---
 # Description
-Start with some high holds in the dihedral (I had to fold my pad to reach them). Pull over and mantle onto the slab for a highball finish.# Location
-Right (east) side of the shady Lady Boulder.# Protection
-Pads, landing isn't great.
+Forward morning government several painting. Suggest air when itself money response. Marriage choose travel check child together.
+Down someone necessary range. Technology watch whole figure. Better thought opportunity argue enter here. Shoulder science world language.
+# Location
+Authority win region state meeting lay. About card paper until. Sell sound fly right still research head.
+# Protection
+Painting war front forward history. Point expert just certain government conference show.

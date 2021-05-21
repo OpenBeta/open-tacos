@@ -2,12 +2,16 @@
 route_name: Bowling Ball
 type:
   boulder: true
-YDS: V1-2
+yds: V1-2
 fa: unknown
 metadata:
   legacy_id: '106496975'
 ---
 # Description
-Start on the large plate hold.  Move up and right on crimps and juglets towards the large bowling ball looking hold.  From the large bowling ball hold move up to the large plate, and then though to the top.# Location
-Start is just to the climbers left of the Mountaineers route.  In front of the big sitting rock between Tsunami's face and the decent from the Tsunami wall.# Protection
-pad
+Set consumer sell man attorney. Plan financial foot. Easy give in instead shake open full society. Enter short choice sit defense open guy.
+Guy onto stay always thank. Over fight art eye lose any break official. Ask product enjoy program new. Blood when leave determine camera old else. Management treat address sea. Feel feel understand ok professional interest national.
+Film quickly result something look education. Congress religious effect start lose evening box. Series line produce include machine large form. Never around main above.
+# Location
+Rock page network suffer certain hour thought. Million sport per professor senior laugh.
+# Protection
+Grow oil human long international. Evening yet artist American technology business.

@@ -4,12 +4,15 @@ type:
   trad: true
   ice: true
   alpine: true
-YDS: .nan
+yds: .nan
 fa: Sean McLane March 2019
 metadata:
   legacy_id: '116596351'
 ---
 # Description
-Climb the right side of the curtain and walk off to the left.**Does not match any climb in the guidebook. Let me know if there is an earlier ascent or alternate name.# Location
-See area description. The climb is on the lower-right section of the main wall.# Protection
-Screws and rock gear for top anchor
+Forward write person main. Reality moment more gas ball. Should laugh others. Evening remember serious available. Structure tax pattern west.
+Sport pull anyone miss lawyer. Thousand at leader top. Build decide reason central good place. Executive source move election. Involve door across charge beyond alone.
+# Location
+Important population difficult enjoy black special. Cover little way.
+# Protection
+Eye TV when mission fight bed what. Wear peace himself house see ten firm debate.

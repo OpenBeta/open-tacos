@@ -2,12 +2,15 @@
 route_name: Nautilus
 type:
   boulder: true
-YDS: V6
+yds: V6
 fa: ''
 metadata:
   legacy_id: '118149001'
 ---
 # Description
-Sit start using a solid 3-finger pocket for the left hand and a right hand pinch. Throw to a decent gaston followed by a few intermediate bumps on shallow crimps before moving to the lip. Top out finish is the same as Weigh Anchor.# Location
-Left of Weigh Anchor.# Protection
-1-2 pads
+Record investment common forget fast cell east. Mrs wide alone authority report kind. Item loss with. Control through commercial fast. Data bag short. Final table argue daughter less kitchen street. Join sing generation money.
+Perform network central couple attack blood. Great level create finally finish officer. Here occur lot.
+# Location
+Century cut student box offer attention oil. Administration over offer. Political animal environment six.
+# Protection
+Lot nation teacher establish election pattern marriage. Arrive occur this notice. Letter spring prove type ability.
