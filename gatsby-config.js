@@ -41,7 +41,10 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `climbing-routes`,
-        path: `${__dirname}/data`,
+        // path: `${__dirname}/data`,
+        path: `${__dirname}/content/*.md`,
+        ignore: [`**/\.*`], // ignore files starting with a dot
+
       },
     },
     {
