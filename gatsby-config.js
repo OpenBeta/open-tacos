@@ -36,13 +36,13 @@ module.exports = {
         ],
       },
     },
-    // `gatsby-transformer-json`,
+
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `climbing-routes`,
         path: `${__dirname}/content`,
-        ignore: [`**/\.*`, `**/index\.md`], // ignore files starting with a dot
+        ignore: [`**/\.*`, `**/index\.md`],
       },
     },
     {
@@ -50,7 +50,7 @@ module.exports = {
       options: {
         name: `area-indices`,
         path: `${__dirname}/content/`,
-        ignore: [`**/^((?!index\.md))*$`], // ignore files starting with a dot
+        ignore: [`**/^((?!index\.md))*$`], // A hack to include only index.md
       },
     },
     {

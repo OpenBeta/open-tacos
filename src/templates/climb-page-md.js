@@ -6,7 +6,6 @@ import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import { Link } from "gatsby";
 
-//import Card from "../components/ui/card";
 const shortcodes = { Link }; // Provide common components here
 
 /**
@@ -21,12 +20,10 @@ export default function ClimbPage({ data: { mdx } }) {
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
       </MDXProvider>
-      {/* <Card isGrid={false} parent_slug={parent_slug} {...data.routesJson} isStandalone={true}/> */}
     </Layout>
   );
 }
 
-//    mdx(frontmatter: { metadata: { legacy_id: { eq: $legacy_id } } }) {
 
 export const query = graphql`
   query ($legacy_id: String!) {

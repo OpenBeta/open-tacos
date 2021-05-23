@@ -2,20 +2,9 @@ const slugify = require("slugify");
 const path = require(`path`);
 
 exports.onCreateNode = ({ node, getNode, actions }) => {
-  // areas.json file -> 'AreasJson'
-  // if (node.internal.type === "MarkdownRemark") {
-  //   const { createNodeField } = actions;
-  //   console.log(node)
-  //   // createNodeField({
-  //   //   node,
-  //   //   name: `slug`,
-  //   //   value: `areas/${node.id}/${slugify(node.area_name, { lower: true })}`,
-  //   // });
-  // }
   if (node.internal.type === "Mdx") {
-    const { createNodeField, createNode, createParentChildLink } = actions;
+    const { createNodeField } = actions;
     const parent = getNode(node["parent"]);
-    //console.log(parent['sourceInstanceName'])
     nodeType = parent["sourceInstanceName"];
     if (nodeType === "climbing-routes") {
       createNodeField({
@@ -33,6 +22,12 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
         name: `collection`,
         value: nodeType,
       });
+      //TODO: create a new field to help linking with parent area. But how??
+      // createNodeField({
+      //   node,
+      //   name: `parent`,
+      //   value: ???,
+      // });
     } else if (nodeType === "area-indices") {
       createNodeField({
         node,
