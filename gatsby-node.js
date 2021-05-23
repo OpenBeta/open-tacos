@@ -12,25 +12,44 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
   //   //   value: `areas/${node.id}/${slugify(node.area_name, { lower: true })}`,
   //   // });
   // }
-  if (node.internal.type === "MarkdownRemark") {
-    const { createNodeField } = actions;
-    createNodeField({
-      node,
-      name: `slug`,
-      value: `climbs/${node.frontmatter.metadata.legacy_id}/${slugify(
-        node.frontmatter.route_name,
-        {
-          lower: true,
-        }
-      )}`,
-    });
-    //   createNodeField({
-    //     node,
-    //     name: `parent_slug`,
-    //     value: `/areas/${node.metadata.mp_sector_id}/${slugify(node.metadata.parent_sector, {
-    //       lower: true,
-    //     })}`,
-    //   });
+  if (node.internal.type === "Mdx") {
+    const { createNodeField, createNode, createParentChildLink } = actions;
+    const parent = getNode(node["parent"]);
+    //console.log(parent['sourceInstanceName'])
+    nodeType = parent["sourceInstanceName"];
+    if (nodeType === "climbing-routes") {
+      createNodeField({
+        node,
+        name: `slug`,
+        value: `climbs/${node.frontmatter.metadata.legacy_id}/${slugify(
+          node.frontmatter.route_name,
+          {
+            lower: true,
+          }
+        )}`,
+      });
+      createNodeField({
+        node,
+        name: `collection`,
+        value: nodeType,
+      });
+    } else if (nodeType === "area-indices") {
+      createNodeField({
+        node,
+        name: `slug`,
+        value: `/areas/${node.frontmatter.metadata.legacy_id}/${slugify(
+          node.frontmatter.area_name,
+          {
+            lower: true,
+          }
+        )}`,
+      });
+      createNodeField({
+        node,
+        name: `collection`,
+        value: nodeType,
+      });
+    }
   }
 };
 
@@ -67,29 +86,30 @@ exports.createPages = async ({ graphql, actions }) => {
   // });
   const result = await graphql(`
     query {
-      allMarkdownRemark {
+      allMdx(filter: {fields: {collection: {eq: "climbing-routes"}}}) {
         edges {
           node {
+            fields {
+              slug
+            }
             frontmatter {
               metadata {
                 legacy_id
               }
-            }
-            fields {
-              slug
             }
           }
         }
       }
     }
   `);
-  //Create a single page for each climb
-  result.data.allMarkdownRemark.edges.forEach(({ node }) => {
+  // Create a single page for each climb
+  console.log(result);
+  result.data.allMdx.edges.forEach(({ node }) => {
     createPage({
       path: node.fields.slug,
       component: path.resolve(`./src/templates/climb-page-md.js`),
       context: {
-        mp_route_id: node.frontmatter.metadata.legacy_id,
+        legacy_id: node.frontmatter.metadata.legacy_id,
         slug: node.fields.slug,
       },
     });

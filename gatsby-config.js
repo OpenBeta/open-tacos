@@ -42,13 +42,25 @@ module.exports = {
       options: {
         name: `climbing-routes`,
         path: `${__dirname}/content`,
-        ignore: [`**/\.*`], // ignore files starting with a dot
-
+        ignore: [`**/\.*`, `**/index\.md`], // ignore files starting with a dot
       },
     },
-    `gatsby-transformer-remark`,
     {
-      resolve: 'gatsby-plugin-react-svg',
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `area-indices`,
+        path: `${__dirname}/content/`,
+        ignore: [`**/^((?!index\.md))*$`], // ignore files starting with a dot
+      },
+    },
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        extensions: [`.mdx`, `.md`],
+      },
+    },
+    {
+      resolve: "gatsby-plugin-react-svg",
       options: {
         rule: {
           include: /assets/,
