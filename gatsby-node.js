@@ -49,30 +49,10 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
 };
 
 exports.createPages = async ({ graphql, actions }) => {
-  // var result = await graphql(`
-  //   query {
-  //   TBD
-  //   }
-  // `);
-  // Create each index page for leaf area
-  const { createPage } = actions;
-  // result.data.allAreasJson.edges.forEach(({ node }) => {
-  //   createPage({
-  //     path: node.fields.slug,
-  //     component: path.resolve(`./src/templates/sector-page.js`),
-  //     context: {
-  //       id: node.id,
-  //       climbs: node.climbs,
-  //       name: node.area_name,
-  //       slug: node.fields.slug,
-  //     },
-  //   });
-  // });
-
-  // Query all route .md documents
-  const result = await graphql(`
+  // Query all leaf area index documents
+  var result = await graphql(`
     query {
-      allMdx(filter: {fields: {collection: {eq: "climbing-routes"}}}) {
+      allMdx(filter: { fields: { collection: { eq: "area-indices" } } }) {
         edges {
           node {
             fields {
@@ -88,7 +68,41 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `);
-  
+  // Create each index page for each leaf area
+  const { createPage } = actions;
+  result.data.allMdx.edges.forEach(({ node }) => {
+    createPage({
+      path: node.fields.slug,
+      component: path.resolve(`./src/templates/leaf-area-page-md.js`),
+      context: {
+        legacy_id: node.frontmatter.metadata.legacy_id,
+        // climbs: node.climbs,
+        // name: node.area_name,
+        slug: node.fields.slug,
+      },
+    });
+  });
+
+  // Query all route .md documents
+  result = await graphql(`
+    query {
+      allMdx(filter: { fields: { collection: { eq: "climbing-routes" } } }) {
+        edges {
+          node {
+            fields {
+              slug
+            }
+            frontmatter {
+              metadata {
+                legacy_id
+              }
+            }
+          }
+        }
+      }
+    }
+  `);
+
   // Create a single page for each climb
   result.data.allMdx.edges.forEach(({ node }) => {
     createPage({
