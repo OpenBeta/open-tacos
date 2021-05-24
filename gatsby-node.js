@@ -2,110 +2,102 @@ const slugify = require("slugify");
 const path = require(`path`);
 
 exports.onCreateNode = ({ node, getNode, actions }) => {
-  // areas.json file -> 'AreasJson'
-  if (node.internal.type === "AreasJson") {
+  if (node.internal.type === "Mdx") {
     const { createNodeField } = actions;
-    createNodeField({
-      node,
-      name: `slug`,
-      value: `areas/${node.id}/${slugify(node.area_name, { lower: true })}`,
-    });
-  }
-  if (node.internal.type === "RoutesJson") {
-    const { createNodeField } = actions;
-    createNodeField({
-      node,
-      name: `slug`,
-      value: `climbs/${node.metadata.mp_route_id}/${slugify(node.route_name, {
-        lower: true,
-      })}`,
-    });
-    createNodeField({
-      node,
-      name: `parent_slug`,
-      value: `/areas/${node.metadata.mp_sector_id}/${slugify(node.metadata.parent_sector, {
-        lower: true,
-      })}`,
-    });
+    const parent = getNode(node["parent"]);
+    nodeType = parent["sourceInstanceName"];
+    if (nodeType === "climbing-routes") {
+      createNodeField({
+        node,
+        name: `slug`,
+        value: `climbs/${node.frontmatter.metadata.legacy_id}/${slugify(
+          node.frontmatter.route_name,
+          {
+            lower: true,
+          }
+        )}`,
+      });
+      createNodeField({
+        node,
+        name: `collection`,
+        value: nodeType,
+      });
+      //TODO: create a new field to help linking with parent area. But how??
+      // createNodeField({
+      //   node,
+      //   name: `parent`,
+      //   value: ???,
+      // });
+    } else if (nodeType === "area-indices") {
+      createNodeField({
+        node,
+        name: `slug`,
+        value: `/areas/${node.frontmatter.metadata.legacy_id}/${slugify(
+          node.frontmatter.area_name,
+          {
+            lower: true,
+          }
+        )}`,
+      });
+      createNodeField({
+        node,
+        name: `collection`,
+        value: nodeType,
+      });
+    }
   }
 };
 
 exports.createPages = async ({ graphql, actions }) => {
-  // const result = await graphql(`
+  // var result = await graphql(`
   //   query {
-  //     allRoutesJson {
-  //       edges {
-  //         node {
-  //           metadata {
-  //             mp_route_id
-  //           }
-  //           fields {
-  //             slug
-  //           }
-  //         }
-  //       }
-  //     }
+  //   TBD
   //   }
   // `);
+  // Create each index page for leaf area
+  const { createPage } = actions;
+  // result.data.allAreasJson.edges.forEach(({ node }) => {
+  //   createPage({
+  //     path: node.fields.slug,
+  //     component: path.resolve(`./src/templates/sector-page.js`),
+  //     context: {
+  //       id: node.id,
+  //       climbs: node.climbs,
+  //       name: node.area_name,
+  //       slug: node.fields.slug,
+  //     },
+  //   });
+  // });
 
-  var result = await graphql(`
+  // Query all route .md documents
+  const result = await graphql(`
     query {
-      allAreasJson {
+      allMdx(filter: {fields: {collection: {eq: "climbing-routes"}}}) {
         edges {
           node {
-            id
-            area_name
-            climbs
             fields {
               slug
+            }
+            frontmatter {
+              metadata {
+                legacy_id
+              }
             }
           }
         }
       }
     }
   `);
-
-  // Iterate through each climb area and create a new page
-  const { createPage } = actions;
-  result.data.allAreasJson.edges.forEach(({ node }) => {
+  
+  // Create a single page for each climb
+  result.data.allMdx.edges.forEach(({ node }) => {
     createPage({
       path: node.fields.slug,
-      component: path.resolve(`./src/templates/sector-page.js`),
+      component: path.resolve(`./src/templates/climb-page-md.js`),
       context: {
-        id: node.id,
-        climbs: node.climbs,
-        name: node.area_name,
+        legacy_id: node.frontmatter.metadata.legacy_id,
         slug: node.fields.slug,
       },
     });
   });
-
-  result = await graphql(`
-    query {
-      allRoutesJson {
-        edges {
-          node {
-            metadata {
-              mp_route_id
-            }
-            fields {
-              slug
-            }
-          }
-        }
-      }
-    }
-  `);
-
-    // Create a new page for each climb
-    result.data.allRoutesJson.edges.forEach(({ node }) => {
-      createPage({
-        path: node.fields.slug,
-        component: path.resolve(`./src/templates/climb-page.js`),
-        context: {
-          mp_route_id: node.metadata.mp_route_id,
-          slug: node.fields.slug,
-        },
-      });
-    });
 };
