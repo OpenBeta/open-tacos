@@ -7,6 +7,7 @@ import catAndHumanIllustration from "../images/cat-and-human-illustration.svg";
 function IndexPage() {
   return (
     <Layout>
+      {/* eslint-disable react/jsx-pascal-case */}
       <SEO
         keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
         title="Home"

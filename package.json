@@ -1,8 +1,8 @@
 {
-  "name": "gatsby-starter-tailwind",
+  "name": "openbeta-climbing-route-catalog",
   "description": "Gatsby starter styled with Tailwind",
-  "version": "5.0.0",
-  "author": "Taylor Bryant <taylor@bryant.io>",
+  "version": "1.0.0",
+  "author": "OpenBeta <hello@openbeta.io>",
   "dependencies": {
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
@@ -27,12 +27,11 @@
     "slugify": "^1.5.3"
   },
   "keywords": [
-    "gatsby",
-    "tailwind",
-    "tailwindcss",
-    "purgecss"
+    "rock climbing",
+    "climbing",
+    "openbeta"
   ],
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "analyze:lint": "eslint --ext .jsx --ext .js .",
     "analyze:prettier": "prettier --list-different \"**/*.{css,js,jsx,json,md}\"",
@@ -51,22 +50,16 @@
   "devDependencies": {
     "@tailwindcss/forms": "0.3.2",
     "autoprefixer": "10.2.5",
-    "babel-eslint": "10.1.0",
     "cssnano": "5.0.4",
-    "eslint": "7.26.0",
-    "eslint-loader": "4.0.2",
-    "eslint-plugin-import": "2.23.3",
-    "eslint-plugin-react": "7.23.2",
-    "gatsby-plugin-eslint": "3.0.0",
     "postcss": "8.3.0",
     "prettier": "2.3.0",
     "tailwindcss": "2.1.2"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/taylorbryant/gatsby-starter-tailwind"
+    "url": "https://github.com/OpenBeta/open-tacos"
   },
   "bugs": {
-    "url": "https://github.com/taylorbryant/gatsby-starter-tailwind/issues"
+    "url": "https://github.com/OpenBeta/open-tacos/issues"
   }
 }

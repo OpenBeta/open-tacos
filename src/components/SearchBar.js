@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { navigate } from "gatsby";
-const slugify = require("slugify");
 
 import ClimbSearch from "./ClimbSearch";
 import { IconButton } from "./ui/Button";
 import SearchIcon from "../assets/icons/search.svg";
+
+const slugify = require("slugify");
 
 export default function SearchBar({ className }) {
   const [activated, setActivated] = useState(false);

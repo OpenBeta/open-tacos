@@ -51,21 +51,10 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
 exports.createPages = async ({ graphql, actions }) => {
   // var result = await graphql(`
   //   query {
-  //     allAreasJson {
-  //       edges {
-  //         node {
-  //           id
-  //           area_name
-  //           climbs
-  //           fields {
-  //             slug
-  //           }
-  //         }
-  //       }
-  //     }
+  //   TBD
   //   }
   // `);
-  // Iterate through each climb area and create a new page
+  // Create each index page for leaf area
   const { createPage } = actions;
   // result.data.allAreasJson.edges.forEach(({ node }) => {
   //   createPage({
@@ -79,6 +68,8 @@ exports.createPages = async ({ graphql, actions }) => {
   //     },
   //   });
   // });
+
+  // Query all route .md documents
   const result = await graphql(`
     query {
       allMdx(filter: {fields: {collection: {eq: "climbing-routes"}}}) {
@@ -97,8 +88,8 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `);
+  
   // Create a single page for each climb
-  console.log(result);
   result.data.allMdx.edges.forEach(({ node }) => {
     createPage({
       path: node.fields.slug,

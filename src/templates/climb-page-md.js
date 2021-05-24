@@ -15,6 +15,7 @@ export default function ClimbPage({ data: { mdx } }) {
   const { route_name } = mdx.frontmatter;
   return (
     <Layout>
+      {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[route_name]} title={route_name} />
       <h1 className="font-medium font-sans my-4">{route_name}</h1>
       <MDXProvider components={shortcodes}>
@@ -23,7 +24,6 @@ export default function ClimbPage({ data: { mdx } }) {
     </Layout>
   );
 }
-
 
 export const query = graphql`
   query ($legacy_id: String!) {
