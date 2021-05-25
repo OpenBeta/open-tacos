@@ -1,3 +1,7 @@
+[![Build Status - master](https://www.travis-ci.com/OpenBeta/open-tacos.svg?branch=master)](https://www.travis-ci.com/OpenBeta/open-tacos)
+
+[![develop](https://www.travis-ci.com/OpenBeta/open-tacos.svg?branch=develop)](https://www.travis-ci.com/OpenBeta/open-tacos)
+
 # OpenTacos
 OpenTacos is an proof-of-concept/MVP showing it's possible to build a collaborative climbing route catalog.
 
