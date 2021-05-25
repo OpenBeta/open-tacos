@@ -1,9 +1,11 @@
-[![Build Status - master](https://www.travis-ci.com/OpenBeta/open-tacos.svg?branch=master)](https://www.travis-ci.com/OpenBeta/open-tacos)
+<p align="center">
+Build status: [![master](https://www.travis-ci.com/OpenBeta/open-tacos.svg?branch=master)](https://www.travis-ci.com/OpenBeta/open-tacos)
 
 [![develop](https://www.travis-ci.com/OpenBeta/open-tacos.svg?branch=develop)](https://www.travis-ci.com/OpenBeta/open-tacos)
+</p>
 
 # OpenTacos
-OpenTacos is an proof-of-concept/MVP showing it's possible to build a collaborative climbing route catalog.
+OpenTacos is a proof-of-concept/MVP showing it's possible to build a collaborative climbing route catalog.
 
 [Live demo](https://infallible-clarke-23564d.netlify.app/areas/105732162/black-velvet-wall) 🚀
 
