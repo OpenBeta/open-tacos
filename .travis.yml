@@ -5,4 +5,6 @@ cache: yarn
 before_script:
   - "npm i -g gatsby yarn"
 script:
+  - export NODE_ENV=test
   - yarn analyze
+  - gatsby build
