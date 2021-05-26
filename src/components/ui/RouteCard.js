@@ -2,7 +2,7 @@ import React from "react";
 import Card from './Card';
 import Chip from "./Chip";
 
-function RouteCard({children, route_name, type, safety, YDS}) {
+function RouteCard({route_name, type, safety, YDS}) {
   return (
     <Card>
       <h2
