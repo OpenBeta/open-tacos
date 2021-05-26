@@ -5,7 +5,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
   if (node.internal.type === "Mdx") {
     const { createNodeField } = actions;
     const parent = getNode(node["parent"]);
-    nodeType = parent["sourceInstanceName"];
+    const nodeType = parent["sourceInstanceName"];
     if (nodeType === "climbing-routes") {
       createNodeField({
         node,
