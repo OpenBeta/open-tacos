@@ -3,6 +3,8 @@ import React from "react";
 const ChipType = {
   sport: "border-indigo-400",
   trad: "border-red-700",
+  boulder: "border-green-700",
+  tr: "border-yellow-400"
 };
   
 function Chip({ type }) {

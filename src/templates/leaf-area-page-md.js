@@ -6,16 +6,15 @@ import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import { Link } from "gatsby";
 import RouteCard from "../components/ui/RouteCard";
+import slugify from "slugify";
 
 const shortcodes = { Link };
 
 /**
  * Templage for generating individual page for the climb
  */
-export default function LeafAreaPage({ data }) {
-  const {mdx, climbs} = data;
+export default function LeafAreaPage({ data: {mdx, climbs} }) {
   const { area_name } = mdx.frontmatter;
-  console.log(data);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -24,7 +23,28 @@ export default function LeafAreaPage({ data }) {
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
       </MDXProvider>
-      
+      <div className="grid grid-cols-3 gap-x-3">
+        {
+          climbs.edges.map(({ node }) => {
+            const {frontmatter} = node;
+            const {yds, route_name, metadata, type} = frontmatter;
+            return(
+              <div
+                className="pt-6 max-h-96"
+                id={slugify(route_name)}
+                key={metadata.legacy_id}
+              >
+                <RouteCard
+                  route_name={route_name}
+                  YDS={yds}
+                  // safety="{}" TODO: Find out what routes have this value?
+                  type={type}
+                ></RouteCard>
+              </div>
+            )
+          })
+        }
+      </div>
     </Layout>
   );
 }
@@ -57,6 +77,16 @@ export const query = graphql`
             }
             frontmatter {
               route_name
+              yds
+              type {
+                tr
+                trad
+                sport
+                boulder
+              }
+              metadata {
+                legacy_id
+              }
             }
           }
       }
