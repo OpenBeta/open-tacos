@@ -5,14 +5,17 @@ import SEO from "../components/seo";
 import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import { Link } from "gatsby";
+import RouteCard from "../components/ui/RouteCard";
 
 const shortcodes = { Link };
 
 /**
  * Templage for generating individual page for the climb
  */
-export default function LeafAreaPage({ data: { mdx } }) {
+export default function LeafAreaPage({ data }) {
+  const {mdx, climbs} = data;
   const { area_name } = mdx.frontmatter;
+  console.log(data);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -21,13 +24,14 @@ export default function LeafAreaPage({ data: { mdx } }) {
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
       </MDXProvider>
+      
     </Layout>
   );
 }
 
 export const query = graphql`
-  query ($legacy_id: String!) {
-    mdx(
+  query ($legacy_id: String!, $pathId: String) {
+    mdx: mdx(
       fields: { collection: { eq: "area-indices" } }
       frontmatter: { metadata: { legacy_id: { eq: $legacy_id } } }
     ) {
@@ -41,6 +45,17 @@ export const query = graphql`
         }
       }
       body
+    }
+    climbs: mdx(
+      fields: { collection: { eq: "climbing-routes" }, parentId: { eq: $pathId } }
+    ) {
+      id
+      frontmatter {
+        route_name
+        metadata {
+          legacy_id
+        }
+      }
     }
   }
 `;
