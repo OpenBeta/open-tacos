@@ -46,15 +46,19 @@ export const query = graphql`
       }
       body
     }
-    climbs: mdx(
-      fields: { collection: { eq: "climbing-routes" }, parentId: { eq: $pathId } }
+    climbs: allMdx(
+      filter:{fields:{collection:{eq:"climbing-routes"}, parentId:{eq:$pathId}}}
     ) {
-      id
-      frontmatter {
-        route_name
-        metadata {
-          legacy_id
-        }
+ 			totalCount
+      edges {
+				node {
+            fields {
+   						parentId
+            }
+            frontmatter {
+              route_name
+            }
+          }
       }
     }
   }
