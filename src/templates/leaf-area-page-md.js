@@ -69,26 +69,26 @@ export const query = graphql`
     climbs: allMdx(
       filter:{fields:{collection:{eq:"climbing-routes"}, parentId:{eq:$pathId}}}
     ) {
- 			totalCount
+      totalCount
       edges {
-				node {
-            fields {
-   						parentId
+        node {
+          fields {
+            parentId
+          }
+          frontmatter {
+            route_name
+            yds
+            type {
+              tr
+              trad
+              sport
+              boulder
             }
-            frontmatter {
-              route_name
-              yds
-              type {
-                tr
-                trad
-                sport
-                boulder
-              }
-              metadata {
-                legacy_id
-              }
+            metadata {
+              legacy_id
             }
           }
+        }
       }
     }
   }
