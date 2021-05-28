@@ -1,5 +1,5 @@
 import React from "react";
-import { graphql } from "gatsby";
+import { graphql, navigate } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { MDXProvider } from "@mdx-js/react";
@@ -9,7 +9,6 @@ import RouteCard from "../components/ui/RouteCard";
 import slugify from "slugify";
 
 const shortcodes = { Link };
-
 /**
  * Templage for generating individual page for the climb
  */
@@ -35,7 +34,9 @@ export default function LeafAreaPage({ data: {mdx, climbs} }) {
                 key={metadata.legacy_id}
               >
                 <RouteCard
+                  onPress={()=>{navigate(`/climbs/${metadata.legacy_id}/${slugify(route_name,{lower:true})}`)}}
                   route_name={route_name}
+                  legacy_id={metadata.legacy_id}
                   YDS={yds}
                   // safety="{}" TODO: Find out what routes have this value?
                   type={type}
