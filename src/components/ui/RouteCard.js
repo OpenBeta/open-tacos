@@ -1,5 +1,5 @@
 import React from "react";
-import Card from './Card';
+import Card from './card';
 import Chip from "./Chip";
 
 function RouteCard({route_name, type, safety, YDS}) {
