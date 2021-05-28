@@ -111,20 +111,6 @@ exports.createPages = async ({ graphql, actions }) => {
       },
     });
   }
-  // result.data.allMdx.edges.forEach(({ node }) => {
-  //   const climbs = await retrieveClimbs(node.fields.pathId);
-  //   console.log(climbs);
-  //   createPage({
-  //     path: node.fields.slug,
-  //     component: path.resolve(`./src/templates/leaf-area-page-md.js`),
-  //     context: {
-  //       legacy_id: node.frontmatter.metadata.legacy_id,
-  //       // climbs: node.climbs,
-  //       // name: node.area_name,
-  //       slug: node.fields.slug,
-  //     },
-  //   });
-  // });
 
   // Query all route .md documents
   result = await graphql(`
