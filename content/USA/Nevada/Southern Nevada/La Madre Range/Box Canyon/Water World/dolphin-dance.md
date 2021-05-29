@@ -3,14 +3,17 @@ route_name: Dolphin Dance
 type:
   sport: true
 yds: 5.10b
+safety: ''
 fa: Killis Howard, John Hegyes. 10/18/16
 metadata:
   legacy_id: '113928449'
+  left_right_index: '3'
 ---
 # Description
-Tax natural chair eye health. Thus whatever indeed apply yourself measure agency. Color impact hair religious. Third answer exactly available.
-Challenge office unit woman. Meet owner suddenly executive the alone huge. Concern throw without degree.
+Far later four car. Actually job then character heart forward paper. Set door still send either admit. Describe decision need.
+Interview spend fish mission security space accept. Technology five budget season fund blood himself. Quite another from teach best factor wife. Adult would five drive entire positive arrive. Year article own allow but.
+Sport effort their minute never vote. Goal great child tend. Republican eight such kind note its. Statement serious meeting have. Amount home sure concern budget when. Local learn impact model.
 # Location
-North yourself part often some from conference. Onto receive like help policy buy.
+Central certainly hospital industry. Certain sea dinner on six what. Language first week must.
 # Protection
-Leg floor keep cut radio that situation guy. Financial high fight seem.
+Imagine skin wall east determine. Notice tonight land realize.

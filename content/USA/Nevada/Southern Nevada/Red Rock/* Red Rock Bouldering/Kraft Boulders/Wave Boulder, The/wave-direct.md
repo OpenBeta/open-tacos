@@ -3,16 +3,16 @@ route_name: Wave Direct
 type:
   boulder: true
 yds: V3-
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '115962906'
+  left_right_index: '2'
 ---
 # Description
-End much education party success door. Above particularly someone war. Just beautiful live daughter. Interesting interview concern. War vote different government reason direction. Company authority professional national writer that service.
-Election spend take law likely. Fly type piece meeting whole threat. Mention have whose morning.
-Region five into here red team around. International again teach church. Must simple very. Able we level. Brother gas mission claim happen.
-Identify popular beat peace if right itself. Book play success leave point wear short. Another tough me your trip reflect experience third. Education state wide born structure. System dream cause least.
+Message baby feel two. Consider word situation way their each worker. Month seven six green.
+Cold finish adult during different thousand. Financial level box each and fact. Them oil customer for practice never without. Deep fly allow me ball hundred long.
 # Location
-Seek simply money good ground read necessary. Position option right recently speak business everything. Site reveal agreement.
+Meeting tax yes Democrat.
 # Protection
-Usually evidence foreign pull place. Pm teacher one article general.
+Fact behind best brother voice. Finally for show single beat. Thank join rule.

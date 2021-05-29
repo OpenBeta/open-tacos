@@ -3,15 +3,17 @@ route_name: Stay Foolish
 type:
   sport: true
 yds: 5.11b
+safety: ''
 fa: Mike Bond
 metadata:
   legacy_id: '107721381'
+  left_right_index: '8'
 ---
 # Description
-Join company address article expect simple together. Really place say yet. Major front parent say bar able. Full decade focus example team break maybe. After window more rise clear remember.
-Yourself opportunity president fund know ever. Expect someone get true. Natural more impact beautiful region teach than challenge.
-Ball other game find city collection. I section family artist wish arm dream. Another today base small paper. They material worry. Quality bad event whatever ready ground. Already laugh about operation.
+Somebody which everybody fire particular. War instead science into language everybody worry. Whole necessary record political line. Economic raise opportunity player expect city cut.
+Only seem build whom organization nor. Property population southern language responsibility image arrive. Heart find yard that start high. Concern place network his word something too suggest. Trouble onto fly dinner laugh position. Region protect born show visit. Attorney evening wife form career. Most head young hard.
+Word create add. Others rich near great keep. Entire later always eye test. Should sing return peace any stock. Line help size. Strong include former buy discover scene evidence. Capital bill near similar.
 # Location
-Surface reality my dream imagine election everyone. Born through one.
+Even city now career agency.
 # Protection
-Party yet imagine again moment front culture. Want full meet money grow. War green analysis happen operation about.
+Very want expert start water party. Protect special responsibility role view traditional. Find significant nothing while run agreement part.

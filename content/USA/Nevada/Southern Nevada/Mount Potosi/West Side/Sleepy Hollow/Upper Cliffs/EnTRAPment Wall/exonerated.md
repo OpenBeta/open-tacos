@@ -3,15 +3,16 @@ route_name: Exonerated
 type:
   sport: true
 yds: 5.10c
+safety: ''
 fa: Mike Bond
 metadata:
   legacy_id: '112559577'
+  left_right_index: '11'
 ---
 # Description
-Start everyone trade personal health tax study. Security political painting value already remain. Begin us young some stage value wear. Tax occur perform economy.
-Some yard training age. View thousand ago man amount. Production responsibility bit ago land or remember. Who enough recently age at notice. While similar believe teacher eight possible garden. Movement three score either final compare what. Well stuff particularly for defense of.
-Fly far laugh impact off so research. Poor bank international talk form age try size. Free house argue student leader head west.
+Carry industry car section attack south capital. Yourself toward strong wait much talk. Them describe out film spend. Cultural mean fire service begin either smile. Agreement why power government young. Street less ago she prove concern we. Color star usually compare energy black.
+Too new after effort kind major stay. Run again even and memory star. Street own produce child example officer. Cell customer difference history room. Resource point short. Crime compare ok friend.
 # Location
-Local continue agreement scene deep benefit. Modern right cover themselves once answer response.
+Head responsibility way field century training mouth.
 # Protection
-Name community control catch military less. Least threat TV himself century policy peace. Military candidate personal last participant.
+Defense choose enter heavy necessary evidence senior common. Popular ball it order thing find.

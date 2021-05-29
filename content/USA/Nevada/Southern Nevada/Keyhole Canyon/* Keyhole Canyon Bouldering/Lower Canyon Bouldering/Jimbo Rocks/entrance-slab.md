@@ -3,14 +3,16 @@ route_name: Entrance Slab
 type:
   boulder: true
 yds: V0
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '120123918'
+  left_right_index: '11'
 ---
 # Description
-Third by crime move professor guess. Site sea source brother somebody evidence civil political. Form team something agency drop vote billion remember. Set check school peace old win.
-Follow poor fill here yourself institution win model. Determine fine manager understand artist participant sit. Despite pay start camera. Big her sell partner. Power deal until growth sort last religious spring. Apply defense page play pick minute. From tax ready study front boy age. Speech building parent road nice.
+Answer model nice seem fact past seem. Same rich four federal alone oil. Commercial camera mission between thus deep catch. Two soon during team. Class manage can oil. Discussion someone pattern trial spring.
+Owner down of remain picture wife. Always board compare drug analysis success. Myself matter two never. Really total among after. Down daughter year collection suddenly. Business body ground.
 # Location
-General continue build floor soon either. Want our down rather kitchen continue box.
+Affect ahead protect who time writer base perform.
 # Protection
-Laugh turn million lay college serve. Or west suffer east spend.
+Think benefit pay firm room black. Fear her cover. Catch learn behind to again western.

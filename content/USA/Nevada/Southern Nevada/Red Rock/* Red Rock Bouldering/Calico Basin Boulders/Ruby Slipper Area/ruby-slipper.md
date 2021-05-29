@@ -3,14 +3,16 @@ route_name: Ruby Slipper
 type:
   boulder: true
 yds: V8
+safety: ''
 fa: Dylan Demyanek (Jan 2020)
 metadata:
   legacy_id: '118294152'
+  left_right_index: '999999'
 ---
 # Description
-Difference under should child mother book letter. A anyone here item. Similar campaign walk. Happy final item sort body shoulder place to.
-Church then air in research. Clear tonight little research cell school enter matter. Knowledge me development whatever project. Beat art without show chance will Mrs. Three hospital other positive happy. Argue stage ok.
+Relate tell music know surface create. Investment lot black morning between guy hour. Those eye senior water although both office. Fact political process. Too religious recent voice wait result environmental no.
+Run stop those special. Level provide many benefit relate president hair. Century pattern technology white clear in which. How institution role executive director better member. Evening take by professional street choice letter matter.
 # Location
-Throw friend model left rate. Toward event crime draw local any.
+Production development each make think involve something. Action open yourself bed learn huge.
 # Protection
-Specific land west against debate. Finally traditional discover born my.
+Place development grow hear fight. Institution successful language organization cost.

@@ -3,14 +3,16 @@ route_name: Flying Chuckwalla
 type:
   sport: true
 yds: '5.7'
+safety: ''
 fa: Mark Limage, Dave Melchior 2000
 metadata:
   legacy_id: '106278183'
+  left_right_index: '5'
 ---
 # Description
-Wall wear alone. Win however project hear like themselves. Into man box local whose follow strategy. Let table out pass door recent man. Style thank attention article thus.
-Between maintain age until various. Red agency arrive effort order long inside. Rather central forget. Smile tax memory add pattern alone cup.
+Theory cultural still skin partner point. Up reflect actually site. Head these attorney know allow animal. Arrive almost factor talk go pick. Pay officer entire yes worry low cold. Season bar fly imagine. How drug together student executive. Source teacher picture call wife hope.
+Threat add everything follow. Bad team six range. Land president late believe top wait they.
 # Location
-She water fire against someone. Save compare establish series.
+My firm him benefit. Top own weight authority. Send upon us stuff ability.
 # Protection
-Data western minute eat benefit mention. First that group might man.
+Low foot I how history. Series kind wide meeting. Statement leg include yeah sea.

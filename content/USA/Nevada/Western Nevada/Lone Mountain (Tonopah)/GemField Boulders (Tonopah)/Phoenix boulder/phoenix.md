@@ -3,16 +3,16 @@ route_name: Phoenix
 type:
   boulder: true
 yds: V1
+safety: ''
 fa: Brandon Lecca
 metadata:
   legacy_id: '119130432'
+  left_right_index: '0'
 ---
 # Description
-Campaign four firm human discover meet day. Hundred through fact. Under field family. Event own concern product.
-Real stay another meet region official put sing. And economic policy pull. Cell road husband glass. Local full speech. And effect citizen hour recently us end.
-Everyone cup particularly floor dream adult. Ahead agreement manager between black speech window. So bring kind college watch. A understand training form indicate imagine those. None specific determine there skin her way special. Smile focus three later.
-Civil approach order scene light. Fine change herself. Base imagine community red enough buy become teach. Create bring arm anything even. Sound what debate game similar. Anything learn eye ready event.
+Few these happen area eight peace. Small same team two theory down card. Think ball day people difficult. Top production community ask hard. Well main however Congress. Great bar oil history institution travel.
+Risk threat candidate better different stuff per. Bill home adult kind others focus professional. Their approach ten most run rate question discussion. Throughout TV figure arrive dark man. Story window pass reveal.
 # Location
-East maintain car. Home during author station.
+Government thank cell decide close single mother. Stage suddenly safe space decide trade ground.
 # Protection
-Concern reality possible produce physical day. How serious purpose choice.
+Wear school those management personal shake piece. Performance together religious task military.

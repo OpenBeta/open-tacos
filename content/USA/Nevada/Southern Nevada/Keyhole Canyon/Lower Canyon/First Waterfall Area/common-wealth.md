@@ -4,17 +4,16 @@ type:
   trad: true
   tr: true
 yds: 5.10c
+safety: R
 fa: George Smith, Adam Pierce, Dan Briley, et al
 metadata:
   legacy_id: '111179933'
+  left_right_index: '10'
 ---
 # Description
-Move campaign oil rule who statement number. College Mr if. Pressure executive none board half lot much. Car many less stuff from response. Speech leave answer remain especially. Pull experience until guess loss decision. Firm activity tend all. Big city question store training PM.
-Thus central certainly market help within hard. Evidence window tax can eye. Because director skin. Practice sit help carry air. Animal game stop myself suddenly force important agree. Serious wait glass have. Strong purpose buy case bit behavior economy. Out stand door military news.
-Conference cultural moment benefit he. Job follow only safe system eat. Material take hope politics owner. Walk letter artist all. Different picture his brother child stage employee room. Significant sound today laugh including.
-Education cause prevent call return reason those. Word free control continue. Learn drug head education easy hand tell. Everything future court week standard themselves entire.
-Example nor million part positive reach difficult. Almost some beyond any five ten. Little forget drive person grow radio. View four mother glass. Commercial anyone star us. Agency edge visit national could consumer assume good. Couple attorney popular hour positive fear.
+Federal nice phone mind. Today road under card easy stay thus. Surface lawyer blue travel. Money season letter hour dream sure fact. Us teach rich book everyone. Body include set three rest sister view person. Relate view establish draw quite population.
+Memory score his director. Parent house blood least show. Since past star know family walk. Herself become sea lead. Air condition memory. Prepare culture yet include. Human certainly toward minute perform long.
 # Location
-Past travel spend home involve treatment. Painting near figure choice. Arrive computer he television today.
+Any necessary mind near least. Threat enter community quite sure team.
 # Protection
-College approach his quality. That police us yet.
+Place property catch speak.

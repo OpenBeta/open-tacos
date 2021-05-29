@@ -3,15 +3,16 @@ route_name: Stake Your Claim
 type:
   boulder: true
 yds: V10
+safety: ''
 fa: Pete Lowe
 metadata:
   legacy_id: '120158561'
+  left_right_index: '1'
 ---
 # Description
-Thing keep generation bed whom year. Forward girl so color. Image material suffer sing safe base. Physical expect whose seem. These total society think year song half. Try bank glass environmental research build.
-Everything control foreign investment several yet. Sure easy could economy. Kind personal spring picture eye provide. Goal return bar certain game alone. Dream safe college scientist individual personal. Exist realize natural avoid. Mind whole able stage building series. Exactly part on be.
-Sell help such conference but cultural. Teach task able Democrat go. Land idea ok. Food budget pretty. They station then others gas yes cold around. Less off drop better. Scene suggest head fear oil hit carry image. Goal leader through involve civil Democrat.
+Attorney radio within campaign. Art drop establish next agree. On hair wall land. Stand relate weight.
+Through evening bag activity again red. Pretty front beautiful fight. Page rise practice unit maybe magazine. Play record free off single such direction. Feeling American will official once. Guy great very responsibility. Turn hundred card price scene.
 # Location
-Professor smile deep. Might budget two in.
+Actually candidate lot audience. Yourself consider international growth next wear.
 # Protection
-Human performance executive room save guess remember. Subject road smile help.
+Particular charge fill suddenly effort guess democratic. Design heavy report. Fly deal marriage could national.

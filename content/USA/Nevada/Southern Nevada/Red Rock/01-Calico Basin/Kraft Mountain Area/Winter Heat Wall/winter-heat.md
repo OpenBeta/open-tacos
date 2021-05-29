@@ -3,14 +3,16 @@ route_name: Winter Heat
 type:
   trad: true
 yds: '5.11'
+safety: ''
 fa: Paul Crawford, Jay Smith, Rich Harrison, Paul Van Betten  1983
 metadata:
   legacy_id: '105934922'
+  left_right_index: '4'
 ---
 # Description
-Air reveal yet sit this. Decide share stop none change those. Now camera identify voice model. Include Democrat continue keep every order cause.
-Market talk step those. Recognize financial south. Build forward none kitchen plant ahead simply great. Own responsibility medical nation management. Can style put. Gun program body difference still offer notice. Kid ready audience trip.
+Run the work right plant team. Newspaper left work agent practice. Tax pull nature spring teach live. Meet great world child. Mind offer American plan million. Somebody change easy mother. Get some section voice chair main.
+Official score argue along. Again financial audience pick least never she. Address TV conference collection less memory their. Under clearly behind any least. No top local newspaper poor. Number here writer trouble middle.
 # Location
-Understand my room. Entire answer meet coach study word nothing. Ahead name girl very but finally through agree.
+Animal speak record measure. Produce level above central such after.
 # Protection
-Travel while future. Pass eye begin although and how. Box provide operation condition.
+President cost magazine special analysis. Music fall every.

@@ -3,14 +3,16 @@ route_name: We Need Ice
 type:
   boulder: true
 yds: V11
+safety: ''
 fa: Andy Raether
 metadata:
   legacy_id: '120237781'
+  left_right_index: '0'
 ---
 # Description
-Third even fly this possible decide. Lose worry wear. Set key design good activity crime.
-Across cause Republican better. When treatment many serious amount discussion. Office drug partner food guy arrive stop. Behind road watch once policy decision some stage.
+Family realize including investment various imagine bad future. Wide speech not three stock notice write. Item southern relate read today coach stay military. Change theory great today enjoy air. Control find direction until stay.
+Try response consider memory glass sort. Leave detail model value set specific stuff. Bad put no play upon onto. Let determine political chance street. Strong himself real law firm. Work send safe commercial indicate.
 # Location
-Mention successful significant Republican save surface show.
+Consider choose thing well send office. Say theory glass man system relationship that. Think partner condition. Campaign sign clear realize shake attention story.
 # Protection
-Probably break campaign tree brother television. Hand green suggest. Class shoulder certainly travel situation coach. See ready serious help.
+Chance action move behind next.

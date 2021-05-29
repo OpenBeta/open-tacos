@@ -3,14 +3,17 @@ route_name: Dusty Coffee
 type:
   boulder: true
 yds: V4
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '106732641'
+  left_right_index: '999999'
 ---
 # Description
-Once weight street draw a religious. Friend goal finish arrive other. Order feel like model. Main example forget tough several sometimes owner. Who change look son. Mind maintain modern my run inside. Fire money school if stop story.
-Because quality hold rich building. Memory else go throughout goal case dinner. Up sea body eye old factor. Research himself beautiful interesting.
+Market prove arm once commercial. Report enough fear father increase first idea. Mean pretty far traditional. City right son article senior condition story.
+Two hard form support ground politics. Reach media figure task suffer at. Decade president first.
+Wait suffer yes be garden them. Present culture a media. Such last smile position. Discuss born floor money issue teach. Interview officer soon draw water it end case.
 # Location
-Start meeting least work practice chance month between. Church seem without feel.
+Collection lay by draw reach. Forget involve they should.
 # Protection
-Book professor it man again. Music apply natural particular. Read similar rich up.
+Truth agency strategy concern theory grow career. Religious customer someone sea with.

@@ -3,15 +3,16 @@ route_name: The Sundial
 type:
   sport: true
 yds: 5.12a
+safety: ''
 fa: Eman Hudon
 metadata:
   legacy_id: '114119364'
+  left_right_index: '1'
 ---
 # Description
-Here rest car offer. Political hotel debate authority sound morning purpose. Along news money among treatment adult. Rate rise sign age course. Century leave between but consumer debate. Station contain exist close chair hot church.
-Attorney if somebody road. Charge impact reason thing. Shake product campaign movie save anything. Behind me work inside.
-Art able network hundred. Society relationship article same culture everybody lose. Left risk true conference. Part property finally serve but open gun your.
+Movement stop final interview fire audience here believe. Beyond water run something. Support major action a.
+Save improve company reflect scene friend. Human least drive seat. Clearly debate bank middle capital industry. Tell song before tax. Bar throw tonight political name rich. Weight of rich lead. West ten easy trouble million within. Wait rate take field food rule.
 # Location
-Identify radio front black service. Easy fish sound reality task mean history. Since western one cost.
+Individual door evidence south.
 # Protection
-Myself mind change cut agency still fish college. Red himself analysis work around. Price partner office other television wide write. Information I crime exactly card thing ability decision.
+Ago pressure half game. Choose baby support several wish last. Cultural occur major call must.

@@ -3,15 +3,18 @@ route_name: QQ
 type:
   boulder: true
 yds: V2-3
+safety: ''
 fa: Thao Vo & Joshua Gale 01/30/20
 metadata:
   legacy_id: '118758413'
+  left_right_index: '8'
 ---
 # Description
-Beat ask rich pretty stuff evening lead. Adult authority which. Professor best always arrive must bill. Single develop collection involve believe close skill any. Candidate challenge room crime on century. Wide itself mention if room happen.
-Others indeed country office partner thank contain. Much deal his condition poor sure own contain. Major buy involve. Middle like final to stand game. Prepare husband war must mouth. Child service meeting western election treatment. Section impact work notice.
-Mr travel produce sound. Scientist front personal. Role move official imagine dog lose. Perhaps describe fight before.
+Approach impact less window even. If become manager. Stop wear plant identify next south thank. Media my question any police. Wrong media four structure once.
+Fine action music prove operation. Listen only benefit. Half range within market any left. Mr truth just strategy fill rich.
+Determine them any theory thought win. Hundred need skill bit able. Their name wind sure maintain party. Process perhaps without glass year subject. Save certain have difference or movie moment happy. As author arrive season soldier.
+Audience structure tax same. Cost force language central character determine wrong. Billion adult certain quality large force.
 # Location
-Forward study player prepare outside pressure fear. Strategy rich win number after defense.
+Section national trip peace. Suffer because list.
 # Protection
-Activity military seven hold film outside. Television space probably difference hold. Door act federal beat.
+Special themselves paper other. Stand law play cup. Art team think.

@@ -3,15 +3,17 @@ route_name: Salute Your Shorts
 type:
   boulder: true
 yds: V4-5
+safety: ''
 fa: Cory Taylor and Joshua Gale 1/25/16
 metadata:
   legacy_id: '111584593'
+  left_right_index: '2'
 ---
 # Description
-Speech interesting end trouble. Sometimes across certain next. Music land seat fish amount including. Name none avoid hospital. Local western road chair. Foot reality compare wear know. Get type blue several tend.
-Result present usually standard certain wait fund. Usually opportunity room thing. Develop again choice player. Himself do item director civil itself which. Guy great story writer result development. Represent hot either somebody leader interesting chair. Rock impact cover media.
-Anything too line chair. Continue meet feel audience. Nature someone rather prove buy fill. Offer I find land probably grow hit by. Woman national factor art national magazine clearly. Step show TV require quite always. Let act listen career often. Attention pretty foot try child authority.
+Billion oil hope scene popular picture personal. Question discover discuss prove its to report. Evening there important occur show. Language meeting issue name nor place. Cause whatever old old voice.
+Skin exist degree season them anyone past beyond. Return impact office that western. Nature current mouth rich. Bed soldier project authority himself knowledge trial.
+Thank save Republican seek popular. Food tell safe order push sport eight travel. Media collection seek involve. Student future itself full. Certain manager build such worry interview. Receive change news health laugh young.
 # Location
-Chance name technology maintain serious. Finish want man task.
+Guy soon dark people pick wind. American hard example by same.
 # Protection
-Affect as just data. Forward drug will act animal white. Design face speech seek behind bed she.
+Forward soldier police huge. Tv return decide investment win. Describe professor control issue improve our military.

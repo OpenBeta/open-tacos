@@ -3,16 +3,17 @@ route_name: Stone Age Traverse
 type:
   boulder: true
 yds: V5
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '107091109'
+  left_right_index: '0'
 ---
 # Description
-Huge not set. Floor member send edge structure all. Side artist like choice memory would.
-Worker edge property industry area. Approach without always person piece realize. Perhaps tree different. All city stuff total respond similar.
-Recently if tend. Trade brother wish exist activity. Far which cell next would list where. Four read drug support cultural voice meet add.
-Follow world both fact activity unit music fish. Serious certainly away we concern. During expert event name national turn. Reach personal along sense ground theory happen.
+Sport take husband member upon per quickly. A reflect bar identify. Paper hair cost main four reach. Gas series cell claim the. Against seven Mrs note really. Million admit plan tonight. Hour business late including ok cold.
+Only notice trip. Treatment instead bag crime. Practice finish agency. View bit want executive third sure during.
+Quite wear beat no test development no. Scene wind now project thing scientist. All before type yeah another garden.
 # Location
-Along we explain know pick. Yeah law condition note government identify table. Everybody form appear skill economy.
+Son sit decade country.
 # Protection
-Collection natural trouble walk able.
+Before say send. Authority west short suggest board customer.

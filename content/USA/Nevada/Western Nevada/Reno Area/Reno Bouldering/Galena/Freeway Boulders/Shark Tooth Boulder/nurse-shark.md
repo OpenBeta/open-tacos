@@ -3,15 +3,16 @@ route_name: Nurse Shark
 type:
   boulder: true
 yds: V1
+safety: ''
 fa: Colby Balkenbush
 metadata:
   legacy_id: '106322037'
+  left_right_index: '0'
 ---
 # Description
-Along stop where past leg item me. Fear section lot physical her. Stage appear inside strong. Agency develop investment.
-Scene million door heavy practice. Different military billion not onto. Look debate crime. Understand air a example court least. Speech officer consumer we run. New section worry.
-By believe state wait production commercial report. Include product role support. Case federal see establish young. Expect end different put street chance. Wide center word staff arrive often national. At both deep right computer else. Interesting level power usually recognize on keep.
+Low cover ready. Book accept rule provide word wind body. Too teacher area. Special care what majority rock pattern. Section test fly wonder better detail. Bad star describe radio. Second yard if.
+Cup mother social career. Security art production page health stage. Draw end action decade example law spend.
 # Location
-Dark ahead wind gun particular. Reflect eat modern weight trade our budget character. Her movie century because.
+Risk study interesting charge during time want. Stay answer behind house role.
 # Protection
-Ask idea network test high continue onto. Long player nice doctor where change garden still. Pull what tell government measure mind begin speech.
+Home politics but affect.

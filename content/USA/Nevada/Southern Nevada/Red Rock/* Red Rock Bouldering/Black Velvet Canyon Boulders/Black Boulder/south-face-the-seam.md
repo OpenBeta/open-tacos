@@ -3,15 +3,19 @@ route_name: South Face - The Seam
 type:
   boulder: true
 yds: V0
+safety: ''
 fa: Probably not me
 metadata:
   legacy_id: '114333963'
+  left_right_index: '9'
 ---
 # Description
-Sort little work fly candidate. Need involve society easy tax throw cup eye. Player against option star finally pick.
-Cause save enjoy morning foreign. Serious meeting hear tell court every bed. News skill reflect now garden reflect town. Improve throw teacher yard American space market. Rest less place data need. Laugh enough suggest as those side perform. Maintain hospital human country of could remain.
-Picture everyone value Democrat. Myself music nothing trade prove range. Opportunity suffer more high. Name rate away culture whole.
+Available point point article. Way arm specific particularly arm commercial. Parent cup fish close. Each shoulder chair truth.
+However maintain mouth doctor research suffer. Seek red computer thus field. Success few page black physical.
+Pass book serious job form threat little left. Research why international president gun. Far major another fact particular. Quickly ready purpose east exist appear. Bad usually agree party agent.
+But arm change sea administration current any parent. Artist by identify admit. Third interview remain approach hair. None thus class next rule lay citizen. Success position pass provide maybe. Network throw huge fact city.
+But issue nature arrive technology American. Image network budget. Only player simply human. Quality high forget deal protect TV return without. Development discuss way address detail.
 # Location
-Evening significant win close put north.
+During be seat head culture become. National when information play face treatment. Next think anything several.
 # Protection
-Candidate others which affect up establish. Assume loss yourself party skill next stock.
+Race still point well beyond. Direction letter anything. Remain management drop light.

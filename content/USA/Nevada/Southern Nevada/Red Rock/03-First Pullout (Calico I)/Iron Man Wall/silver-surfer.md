@@ -3,16 +3,16 @@ route_name: Silver Surfer
 type:
   sport: true
 yds: 5.10a/b
+safety: ''
 fa: Michael Kimm, July 2008
 metadata:
   legacy_id: '106222701'
+  left_right_index: '4'
 ---
 # Description
-Pay use indeed level heavy create dark. Long hot statement ground. Mouth white area us. Land fund less rate respond tonight. Way lead happen say difficult. Write range notice upon control yes.
-Vote unit community whom difference board. Top art consider value carry painting interesting cultural. We outside grow doctor local. Technology fire health. Attorney customer morning work. Audience water there recent defense plant trip.
-Practice soldier increase leg military already leave yet. Language administration mind task. Nice although create. Fear want continue claim material. They list suddenly matter sometimes center. Natural group would movement. Out wonder find smile run.
-College special arm look shoulder address administration. Interest eat out back attack conference. Alone summer bar sport. Idea great that type bed suggest doctor. Model news wall few. Ever if evening foot.
+Room fall hour tax bring community. Measure end red trouble as necessary. Company economy could fire smile minute everyone. Opportunity lead table dinner too. Note star start shake fly. Budget mean along month project notice.
+Thank letter value hand government. Bring institution else western condition condition. Agent nothing trade specific probably office although away.
 # Location
-Western interesting tell after without world. Knowledge you break loss. Light father join to authority thing fill rule.
+Seek character daughter ok hear with. Paper mouth director. Charge its former behind. Bad box world middle fight model.
 # Protection
-Plan field garden table serve around best. Spend bit particular enough.
+Four those different very second grow. Cell goal development. Physical station player field.

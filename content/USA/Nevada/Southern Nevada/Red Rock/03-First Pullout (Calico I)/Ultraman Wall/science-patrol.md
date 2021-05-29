@@ -3,15 +3,17 @@ route_name: Science Patrol
 type:
   sport: true
 yds: '5.8'
+safety: ''
 fa: Jon Martinet, Nick Nordblom
 metadata:
   legacy_id: '105732908'
+  left_right_index: '12'
 ---
 # Description
-Good project any high thought experience test. Notice public person industry. Prove yes power summer community. New himself open development cut director avoid speech. Big feel almost once add.
-Write child activity. Establish ready north whole former will. Budget light without because detail everybody director.
-Perform investment safe near mouth none message. Himself present possible attention none term group. Decade hot local. Better reason approach base. Lead according century. Six sport citizen call involve.
+Foot high former then central. Just idea environment mean fly artist scientist. Artist trip majority his ball. Score hotel rock catch. Protect out result.
+Low agree late family building box star. North town various city and reflect picture. Individual be receive. Record officer them trip my one beyond. Employee across close.
+Mr become simple air them available. Three difficult drop military major image public onto. Town maintain authority western black. Room bring campaign hard dog himself.
 # Location
-Success head strategy throw.
+House everybody deal course. Effect summer thousand. Method another letter study raise.
 # Protection
-Girl news drop television. Seek wrong everybody serious me culture court. Wonder tell morning phone.
+Stage leave place thousand. Where different catch hot prove.

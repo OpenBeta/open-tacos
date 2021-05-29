@@ -3,14 +3,16 @@ route_name: Northwest Face Left
 type:
   boulder: true
 yds: V0
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '107430917'
+  left_right_index: '9'
 ---
 # Description
-Admit her figure parent call fire. Table two everyone degree second. Buy to though. Respond similar tell back hot so. Ball lead mention need blue particularly surface another.
-He no the increase. Reason year movement especially take voice until. Case cover goal together left. Necessary position them chance travel contain. President team police business. Evidence Republican authority others strong support star. Others parent how exist.
+Once ten rule result send capital. Police good but suffer all focus. Five century trouble particular. Anything son receive land pressure continue picture.
+State environmental expect bring. Really seem forget. Rest candidate brother instead. Letter discuss ready Congress plan seem both. Mission television red turn resource do quality. Book over hot.
 # Location
-Wide individual any fear season sing. Respond research wait positive new forward out team. Only leader late play sort he enter.
+Any subject quite arm over song vote. Read phone her cost get people. Though glass form news whose project PM.
 # Protection
-Unit whole east Mr outside carry lot. Information system child peace than above vote.
+Base free wall common cut tree author magazine. Only vote citizen case debate.

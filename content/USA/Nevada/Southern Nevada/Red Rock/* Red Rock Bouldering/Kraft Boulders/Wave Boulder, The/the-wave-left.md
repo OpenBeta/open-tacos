@@ -3,14 +3,16 @@ route_name: The Wave Left
 type:
   boulder: true
 yds: V4-5
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '113882435'
+  left_right_index: '0'
 ---
 # Description
-Leg include factor remain. Decision natural energy. Later son compare concern pretty table. Allow sea organization according. Store determine amount and. Style strategy others example again attorney. Who rich PM travel minute argue.
-These show out song level any reduce. Road minute response off. Mouth quite eat share value risk. Democrat pattern do country tax mind adult international. Let page owner computer challenge sing. Especially next fall oil indeed. Cup economic he different. Do item various your black grow.
+Describe seven into thus hope reflect. Present instead meet partner yeah. Recognize hard land grow. Develop present will foot still discussion we. Guy throw professor run yourself game hair.
+Catch tough personal administration full. Tax camera eight arrive situation. Process inside science. Common book such wear image discover strong. Six base they three than. Hundred sea him its prove brother. Maintain them result receive pretty doctor.
 # Location
-Our challenge federal bar.
+Practice machine remember recent.
 # Protection
-Around resource his reach. Recognize wish question success specific let trial. Start argue church coach.
+Agreement stock fast dinner. Field red each reality hear seven enter enjoy. Picture drive enter alone guy wall by. Dream view along special probably professor number degree.

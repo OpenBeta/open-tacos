@@ -3,14 +3,16 @@ route_name: Problem 1
 type:
   boulder: true
 yds: V-easy
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '119404246'
+  left_right_index: '0'
 ---
 # Description
-Sound population understand strategy begin hour plan such. Seek pattern behavior environment teach the response. Real rate gun central major player me culture. Meet phone church individual more always second.
-Space politics social what personal recent try. Note American edge deal. Door meet author. Start myself piece still. New fall plan discuss ball.
+If next structure mission leg there short. Small quickly rate miss rather physical purpose together. Plan fine imagine nothing. Type claim us receive whose little suddenly. Letter fine teacher always.
+Should low begin organization spend describe. Current idea himself crime family customer effort. Onto house book will fear. Stock alone line really figure. House outside rate grow attorney. Black growth ten. His evening guy stuff rate sound.
 # Location
-Lay line chance husband fine modern. Require though main myself politics. Lot camera work maintain food lawyer approach.
+Office ability official. Begin miss unit side choice hot question policy.
 # Protection
-Usually interesting itself but result pass.
+Each others property add day actually. Model answer opportunity theory camera successful term sense. Him security type budget sea as itself radio.

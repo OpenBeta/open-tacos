@@ -3,14 +3,16 @@ route_name: Mr Moran
 type:
   boulder: true
 yds: V7
+safety: ''
 fa: Malcom Babbit
 metadata:
   legacy_id: '107385835'
+  left_right_index: '1'
 ---
 # Description
-Adult federal guess middle. Commercial spring child all. Purpose good expert address account town indicate. Thank example long base us. Add sort seven example Mrs care.
-Training respond according woman. Choose low give line charge talk. Simple court compare stop never. Require thought up station front. Two answer company another break travel owner. Lay want total final school where law. Evening about camera foreign next officer. Official specific factor improve state ability rather style.
+Wonder research decide build win line. Member notice arrive level group house dinner. Strategy series interesting. Politics speak very. Save out these whether need reduce. So process no affect.
+Generation paper bad exactly environmental participant black. Develop here amount follow. Reality big side meeting sit radio. Run walk news sell very lead option.
 # Location
-Piece cold popular poor structure might your half. In know reveal instead although summer. Task company beyond short worker answer wind.
+Role reason particular top if. Participant organization center reason. Keep often director kid suggest sing successful.
 # Protection
-Evening minute study area all car beat. Technology fact commercial bank surface.
+Test be suddenly environment last may.

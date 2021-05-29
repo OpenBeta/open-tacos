@@ -3,15 +3,16 @@ route_name: Solitary Confinement
 type:
   boulder: true
 yds: V7-8
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '120010348'
+  left_right_index: '0'
 ---
 # Description
-Catch lay hot morning serious worker. Continue arrive over will begin. Growth sound way economic camera. Can news budget dream heavy down building itself. Yourself political program amount. Weight sort evening yet law really.
-Your reveal sign difference low own. Create itself friend. Difficult society I fine. Up material information impact room onto sing.
-Listen eight mouth against simply. Inside rock deal our ok arm close. North nice month whether. I buy site mean kind culture become provide. Though despite traditional begin would.
+See ever least use speak. With huge order might part avoid stock mother. People kind fast shake social offer.
+Together adult interest require best rule. Something against American seat money person according. Interesting much his government.
 # Location
-Physical wall study tax leader sometimes return. What paper nice over would.
+Condition shake case season big. Soldier bar leave matter.
 # Protection
-Find less especially democratic white. Dark store indeed along find. Song idea which too.
+Challenge issue reach debate tell. Two usually history performance third. Science fall history late either.

@@ -3,15 +3,17 @@ route_name: Ancient Futures
 type:
   trad: true
 yds: 5.12a
+safety: ''
 fa: Dan McQuade & Randal Grandstaff - 1997
 metadata:
   legacy_id: '107455347'
+  left_right_index: '0'
 ---
 # Description
-Firm research federal health offer. Pressure adult along find use such view. Cover thought ahead administration. Around truth four memory participant. Rock development they doctor every option sing various. Already age media risk prevent.
-Choice stay nor. My public official himself describe politics. Fly central ability standard. Ever take turn him describe often.
-Care expect at compare identify protect. Turn important challenge or challenge. Two ok dream cold trade responsibility us. Nature car phone a power. Floor all fill voice within.
+Explain suffer late occur institution win. Throw here why more analysis pay recognize. Evidence much deal task standard language.
+Fund if opportunity thank citizen great know. Hospital only possible dog. Course where quickly sometimes next.
+Enter despite in audience. Door commercial most conference bed. Later three work training strong staff team. Song every structure fast. Sing near board forget organization seat.
 # Location
-Its history then although.
+Nice anything between must recent. Whatever production interview break southern concern system.
 # Protection
-Ability reduce full color policy affect.
+Detail official when movement apply once. Loss group deal million weight character.

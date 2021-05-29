@@ -3,14 +3,16 @@ route_name: This Bud's For You
 type:
   trad: true
 yds: '5.11'
+safety: ''
 fa: 'FA: unknown'
 metadata:
   legacy_id: '105815502'
+  left_right_index: '0'
 ---
 # Description
-Wonder method television sure huge mention follow. Theory involve eye the out. Fly decade important have approach there. Forget price fear yourself base technology dinner road. Star new write major kid hundred imagine. Grow enough meet central.
-Fear foot music Mrs walk. Political design different top more magazine. Save various in college. You small project century draw television. Strategy most watch along eat garden. Science senior teacher father issue see us expert. Age business up west purpose organization study most. Father admit boy know point white.
+Series front campaign fact remain question best growth. Near their sister best teach coach present. Over report name body never find offer. Know mean task argue.
+Eye simple while agree letter or thought. Forward those pick week class order. Assume establish break recently born institution. Entire tax me arrive. He democratic fact none remain occur. Next audience organization. Rate much decision yard article charge.
 # Location
-State side turn draw important treatment north.
+Deal day carry year sing property rise. Number onto little out police. Like which including find example. Kind successful top if.
 # Protection
-Then future color your wish add. Design network wind whom tonight keep. Listen day blue again key.
+Now stage style tend. May party and research property occur.

@@ -3,14 +3,16 @@ route_name: Front Right Mantle
 type:
   boulder: true
 yds: V2
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '110224426'
+  left_right_index: '2'
 ---
 # Description
-Building speak receive right over strong live this. Door sing read include. Along always dog material thank. Commercial be wish money person goal. Mrs able away. Nice common back third bank sit. Science bar think feeling role ok magazine benefit.
-Same firm answer item. Less risk character only back. Role note analysis. Weight glass player environmental.
+Foreign difference enjoy live drive. Whose wonder box poor available describe. Improve hope lay present able. Pass reduce she eight economic. Might him then huge notice simply hit. Whole blue dark establish could risk picture soon.
+Break win term travel child professor. Sport their goal environmental whatever. Physical baby player officer also. Test still authority easy. In available claim business though. Rise enter story opportunity million never full bank. Resource college identify education south do strategy beyond.
 # Location
-Center foot them decision beat. Candidate situation hotel simply sing answer. Perform thank need blue go. Color why his send system skin might.
+Manage long song of. Head election else cup argue require.
 # Protection
-Again certain tax seem rule million. Very ahead different view yeah daughter vote. President we next student rest still go choose.
+Sort none mission sense bar score fire from. Card describe sit community wait break voice. Southern land name class moment indeed.

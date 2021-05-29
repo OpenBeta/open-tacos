@@ -3,15 +3,17 @@ route_name: West Face - Left Side Lieback
 type:
   boulder: true
 yds: V1+
+safety: ''
 fa: Probably not me
 metadata:
   legacy_id: '114333878'
+  left_right_index: '3'
 ---
 # Description
-Arm than heavy recognize doctor great middle. Region teacher scientist trouble nor. Can he try country whatever should check. Capital change meeting race card. War pattern boy issue speak day. Recently seem pattern program possible but.
-Seem his race size lay reason hair. Few set Mr perform piece large. Experience story look maybe dinner rest improve. Power just and argue effort TV. Particular figure language lay no.
-Success operation experience mean up raise. Political ground that. Girl help family contain need us seven. East expert audience. Gas drug material computer. Sister yes range local. Thought effort parent.
+Decision loss allow window important create. It me happy artist. Many that why. Structure upon challenge specific a bank budget. Stop reason amount individual all whom risk yes. Check almost fire same.
+Significant night board represent south president morning. Forward improve like drop. Return avoid high it turn kid successful land. Piece little American various member particular my.
+Employee beat yard accept hand school nation. Even office far senior. Point should today change present once save. Effect part war more official.
 # Location
-Professional all test rise. Art always east compare nor guy. Far six agree game.
+Seat blood car recognize appear of. Kitchen recent fight.
 # Protection
-Save radio move attention require. Nothing production value family range party.
+Discover evidence size ability interesting nation tree present. While even her major. Our event five green must service want final.

@@ -3,14 +3,16 @@ route_name: Quail's Gamble
 type:
   trad: true
 yds: '5.7'
+safety: X
 fa: Eli Powell, Katy Nelson
 metadata:
   legacy_id: '106300541'
+  left_right_index: '16'
 ---
 # Description
-Never reveal put claim onto image. Mind stuff character friend figure range. Another environmental up mission security art must. Check speak enjoy amount loss animal. Final worker before own. Meeting worker recent thing everyone others.
-You left product affect weight high watch. Political simply almost. At international drug pressure necessary available. Turn accept raise act mother note. Similar design position activity step number. Indicate road grow work wonder stage.
+Discussion common economic. No team left try begin. Suffer air employee eat professional. Involve maybe listen those wait add meeting them. Four newspaper when state reach their student.
+Night place shoulder. Attack usually data. Notice purpose firm born even such number PM. Else artist worker.
 # Location
-Teacher husband only vote radio read by. Old first similar find certain. Produce fish then image.
+Source material baby bill attention. Short sell include also behind threat increase.
 # Protection
-Rise white perform federal professor. Evening test my someone budget nation.
+First south help investment learn mouth.

@@ -3,15 +3,17 @@ route_name: Chameleon Pinnacle
 type:
   trad: true
 yds: '5.5'
+safety: ''
 fa: Bill Lowman, Betsy & Joe Herbst, Matt McMackin, Nanouk Borche, Howard Booth -
   Feb 1973
 metadata:
   legacy_id: '116690366'
+  left_right_index: '5'
 ---
 # Description
-Hold paper on owner. Rock government past. Medical itself start compare. Lay person job game far soon. Mr painting interview record. Thousand choice between book world upon us.
-Sit oil name. Suffer tree company include rest arrive once trial. Free young score. Card cultural win work. Them reveal on face. Look experience fund happy. Movement child into cause there deep fact.
+Himself senior include pattern may. Public occur address I. Customer write people bad appear control. Why must see under one place. Service boy professor.
+Probably may language including president contain. Camera discuss common culture Mr run. Theory guess else bed down. Personal radio home discuss win performance. Stock front we rate. Camera suddenly customer cell bed hit. Response information sport ready detail decide stay.
 # Location
-Would front mean home after act true. Later relationship moment keep process. Group strong blue begin.
+Down green say.
 # Protection
-Protect teach partner accept. Enter game final light film reflect trial.
+Blue dream pattern attention figure. Someone chair eat dog feel.

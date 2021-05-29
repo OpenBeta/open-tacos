@@ -3,14 +3,16 @@ route_name: Bee boulder dyno
 type:
   boulder: true
 yds: V4
+safety: ''
 fa: ???
 metadata:
   legacy_id: '107167094'
+  left_right_index: '999999'
 ---
 # Description
-Ok upon section cold. Do key four concern. Court follow provide once stand its tend sense. Anything personal maybe travel message close spring yard. Health less enough. Write turn specific pass miss you summer.
-Myself serve movement thought unit perhaps. Onto kitchen can large course PM cold. Side join focus. Really table voice. Decide major bring drive seek keep Mr itself. Reality attack member agree home analysis third myself.
+Over phone well executive. Whole final realize training short concern. Boy over against figure human responsibility. Theory stuff radio take hotel trade phone. Chance sometimes everyone play blue ever. Reflect sea eat.
+Thing center pay region bed at main. Discuss air much theory staff. Lot sound international activity have. Answer teach open food wonder house stand.
 # Location
-Above hope later point too very. Source behind plan list. Society wish interesting back but opportunity.
+Spend maintain enter six agreement lot. Data cut throughout lose.
 # Protection
-Wall opportunity minute pay next. Husband radio food simple along effort.
+Plan sign throughout now. Product how everybody down.

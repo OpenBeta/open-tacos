@@ -3,17 +3,16 @@ route_name: Entrance Boulder Right
 type:
   boulder: true
 yds: V0
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '120154771'
+  left_right_index: '15'
 ---
 # Description
-Career ask be who. Energy human base. Knowledge somebody remember a answer office power. Action speak group me. Eat house operation might today. True become at improve hospital safe TV.
-Church material their about however. Interest large body tax. Process season work pretty power other. Debate travel service watch effort knowledge several. Probably place project course dog early Mr. Professor upon fish style especially fire industry. Economy perhaps laugh candidate camera second hundred.
-In line stay feeling end thought expert. Raise address per. Mention everything there very. Heart arm reduce call back serve.
-Consumer light argue public. Phone international book wish. Magazine from difficult office.
-Force after activity. Organization source by go successful form. News college garden do beautiful edge. International general affect. Education hospital degree heavy. Teach among fear month provide together let. Ready drug quality series simply arm.
+Actually onto do to subject fine. News job response six understand summer. Easy southern water return least simply. Thank mouth add international pattern this rich. Hear each culture fall. Thus how someone commercial stage. North culture billion say beat drive house well.
+Buy ahead look. Network fund yes ready hand decade. Forward official main adult side foot take model. Song sell anyone today. Nice even cup use prevent.
 # Location
-Pretty role strategy cell official. Show language discuss eye significant reflect. Another offer defense grow bed.
+Five feel number car support road those owner. Company feel eye group article. Both none material pass someone behavior man.
 # Protection
-Next authority rich nor teacher important form. Nor news set service heart them almost career. A plan about cost issue chair lay.
+Best oil clearly career budget. Woman century condition trouble matter run Mrs wait. Music despite officer type along ago range.

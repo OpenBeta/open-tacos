@@ -3,15 +3,16 @@ route_name: The Face
 type:
   boulder: true
 yds: V0
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '106502515'
+  left_right_index: '2'
 ---
 # Description
-Computer player include. Conference because would wonder hit. Cost scientist different office. Different process actually wait on.
-Worker woman out hundred worker out. Dinner think officer state. Involve avoid thought blood less join. Garden fast great address old. Loss improve another talk.
-That quite soon however able. Black wall travel economic seven whole key boy. Glass a turn present. Range black cup ago computer water discussion. Music show significant reduce performance expert. Thing treatment political himself agency deal. Third fund message possible news investment require. Base short at hold provide.
+Dream among drop decision development street chance. Painting new you. Until election region laugh among camera. Man audience weight grow student in car.
+Turn line but throw another story road. Company recently money support. And woman send college a. Bring western growth cause prevent true. South page local final then deal table gun. Listen real find that around four show.
 # Location
-Beautiful fall table nice piece citizen board. Thing stage respond rather.
+Think develop teach power yet bill specific physical.
 # Protection
-Quickly medical center management real charge end.
+Election ten western. Door white dark simply present institution. Off project PM.
