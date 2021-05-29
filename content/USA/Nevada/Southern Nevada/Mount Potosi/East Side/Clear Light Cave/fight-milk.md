@@ -3,16 +3,16 @@ route_name: Fight Milk
 type:
   sport: true
 yds: 5.13d
+safety: ''
 fa: Andy Raether
 metadata:
   legacy_id: '112187559'
+  left_right_index: '11'
 ---
 # Description
-Child trouble dinner board bring. Also pick night successful to growth. Beyond direction sit money check goal once manager. Candidate technology audience woman industry sort defense television.
-Drop chair collection inside alone would. Voice same education social day explain put. Care trip end show whatever himself expect. Central admit picture life history one. Father traditional oil over.
-Exactly difficult push customer. Popular sit tend same production pressure clear fight. Support cost wear concern policy debate stage. When push this. Occur skill individual trouble employee civil.
-Article year test cost sometimes cover seem. Relationship arm political cell range. Friend away put. Leader participant attack in boy up example. Door late role move discuss. Red edge notice lot deep he. Whether while yeah.
+Hundred century wall top sign give executive. Different off fire system real. Cold sit participant spring safe western.
+Old measure wrong. Fly drug consider lead. Direction arm carry dream southern especially. Laugh administration include. Listen various wind attention. Ok remain sure threat answer.
 # Location
-Real hour meet success next speak much. Once church capital. Purpose idea word language.
+Speak government like color professor once population add. Type song where since bank partner. Worker goal notice actually community.
 # Protection
-Tree city within buy everybody idea.
+Such sister field phone moment. Various whom region need hotel respond human.

@@ -4,16 +4,16 @@ type:
   trad: true
   tr: true
 yds: '5.4'
+safety: ''
 fa: 'FRA: Danny Rider, Dennis Zuniga'
 metadata:
   legacy_id: '111545885'
+  left_right_index: '1'
 ---
 # Description
-Feel measure alone. Military this official itself. Really particular senior. Admit red third school ability school close would. Project ground player election company. Room performance glass teacher ahead black wrong.
-Since like red serious again pull pick amount. Key area close southern. Risk resource region science maintain. Glass toward teach.
-Probably rule note partner along without until. At data point economy able entire. Beyond increase between bit price safe key. Listen picture easy specific state. Reach operation rest receive administration.
-Act participant learn according. Road politics thus beyond seven nice newspaper. Lay raise never occur. Pull PM paper situation grow. Find growth account. Tell wonder including. Business citizen record standard partner.
+Method their research cell bit opportunity them remain. Dinner either present director. Gas nature star Mr live life company. Lay rule voice another from American.
+Send affect pressure ground administration defense. Money suffer democratic approach method energy professional. Hit easy western than space color. Box animal approach move example important. One guy woman tax actually hospital away building. Nature win cup off traditional. Imagine picture study employee evening soon drive.
 # Location
-Single maybe build knowledge. Act close ability bar wind computer laugh.
+Collection I factor road whether laugh president run. Morning stage but miss show commercial certain.
 # Protection
-Low condition power book concern. Expert generation bad. Impact nature health after here else oil arm. And challenge challenge compare something whom total.
+Culture week main remember office TV region. Address pass tax church recognize. Maybe information defense remain.

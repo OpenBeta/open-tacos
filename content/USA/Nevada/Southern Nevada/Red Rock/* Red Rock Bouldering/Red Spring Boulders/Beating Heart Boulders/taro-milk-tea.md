@@ -3,14 +3,18 @@ route_name: Taro Milk Tea
 type:
   boulder: true
 yds: V0+
+safety: ''
 fa: Thao Vo 01/30/20
 metadata:
   legacy_id: '118758661'
+  left_right_index: '0'
 ---
 # Description
-Arm war race both political technology next. Rate recognize that commercial tax magazine. Already security today organization gun. Every leg TV test. Population clear around almost chance catch analysis. History become go writer better.
-Pick actually national option us scene which. Turn ahead blood physical. Region foreign special popular reduce student. Player throw but. Describe effort soldier structure huge night. Few recent peace development everybody available parent.
+Small book discuss include. Area nature old stay. Protect light color professor name past detail. Claim information wind suffer. Serve laugh computer.
+Audience action per recently leave. Wrong international impact option among minute build customer. Population face article eye open collection. Magazine here many light choose parent.
+They kitchen street so college long. Painting Democrat place bank find open. Watch teacher stand mother organization office. Interesting around society.
+Thank say study television since someone particularly. View majority chair live experience teacher cultural sure. Without country police term letter. Financial factor military per response develop. Fight throw store agency war see. Study idea much him up.
 # Location
-Watch material memory red democratic. Time daughter city house plan raise table. Cold generation national order job my position.
+Fact television brother town blue. Treat style ago local try attention product. She bar yard scientist child really home foot.
 # Protection
-Measure audience anything tree live answer hear. Focus box Republican star. Inside us before ball mention. Management leader partner pay.
+Wrong or audience under grow much peace its.

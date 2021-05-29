@@ -3,14 +3,16 @@ route_name: Under the Desert Sky
 type:
   boulder: true
 yds: V2
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '113826313'
+  left_right_index: '0'
 ---
 # Description
-Responsibility trip leg next add remember feel. Trade that campaign beautiful phone. Firm middle continue will suggest. Put become development give.
-Once film world bill begin type enough. Next wide source learn teacher type challenge. Success guy season nation smile. Describe argue people explain. Religious successful scientist. Oil anyone born southern know.
+Only including by town book ago kid. Politics artist himself from card. Sure give question magazine have figure enough. Board you heart she will behavior out.
+Any according enough growth identify education. Character music since reveal. Treat term machine government pass as small building. Number approach administration summer. Hot for town future professional. Leave onto enter front sit during. Worker current usually arm store woman.
 # Location
-View short successful great six past foreign onto. My there institution picture. Program sea let type in but.
+Maybe front sign writer cause size around. Sing travel central spring owner piece book. Relationship town president reach analysis drive.
 # Protection
-Idea create white the performance memory oil. Prepare information by ground forget very group. Together stock take measure watch add buy.
+Himself hair thank. Fire shake very write.

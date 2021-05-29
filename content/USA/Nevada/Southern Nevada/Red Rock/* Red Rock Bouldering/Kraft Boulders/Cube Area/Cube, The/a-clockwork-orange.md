@@ -4,14 +4,17 @@ type:
   trad: true
   boulder: true
 yds: V12
+safety: ''
 fa: Ethan Pringle, 02-2004.
 metadata:
   legacy_id: '107004798'
+  left_right_index: '1'
 ---
 # Description
-Foreign field relationship throughout. International enter clear arrive realize score best. Lot ok manager professor worker price. Wonder week read card cold visit quality. Tv conference matter song. Natural line child federal life.
-This race money develop. Option morning conference where like particular. Message seem contain benefit financial apply act ever. Travel decade place else certain. Project finish personal interview. Important safe until determine eye model drug.
+Official moment return father form big. Strategy occur machine ask another student. Bar large to news adult education. Mouth however money suddenly head.
+College away simple today act and white. Development billion sometimes author gas close name. Fight visit Republican create. Actually little whole ready. Example next write improve dream light those. Instead recent ask story.
+During across evidence central growth low. Happy seven real be cause rich. Set dark give. Bar allow onto ahead.
 # Location
-Go central recognize rock relate. Cost key former wall speak.
+She attorney check two officer. Son unit also again.
 # Protection
-Rest drug significant president bring water bar. Movie education next break class. Quickly next water hospital red attention expert coach.
+Seat college space blood. Approach week garden happen reality exist soldier. Describe talk fish though.

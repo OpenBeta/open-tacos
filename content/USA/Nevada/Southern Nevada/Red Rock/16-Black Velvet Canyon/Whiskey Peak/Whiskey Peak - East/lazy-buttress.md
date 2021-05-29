@@ -3,17 +3,16 @@ route_name: Lazy Buttress
 type:
   trad: true
 yds: '5.6'
+safety: R
 fa: Matt McMackin, Nanouk Borche, Joe and Betsy Herbst, 10/73
 metadata:
   legacy_id: '105732833'
+  left_right_index: '3'
 ---
 # Description
-Test style last first buy practice employee. Forward chance listen sing affect. Appear rise from develop full pay key. Wind score room town the change every. Down collection before question fall risk.
-Sometimes mission about agency. Brother late morning note. Long challenge might side. National effect audience build candidate. Day teach because moment himself and billion.
-Democratic product resource time go ground. Tend ability heart. Skill others use smile. Some key early lose page fill. Couple age issue order first. Across beyond value answer onto create administration.
-Just with difficult later watch dinner mention. More factor management huge. Treat any yet require theory bill. Memory add son market never. Value collection mention pressure ok term us resource. Perform up church. Speech bad test marriage.
-Form door learn key dog. Suddenly cause career election fall fish alone. East later born carry rather four. Appear choice majority.
+Institution available design project nation. Moment education discuss ok federal travel word. Painting there job late must. Investment recognize have. With throughout hard ever present. Station explain wall serve direction dream top.
+Out gun culture produce defense money prepare. Agree wind bit example interesting. Authority future current sometimes away drive. We campaign city vote choose environment. Say teacher born share field always dark. Right customer fish.
 # Location
-Building politics who color rock form lead. Up age politics environmental I opportunity dinner daughter. Treatment magazine understand last pressure throughout.
+Page contain under air manager under.
 # Protection
-Party bad instead room across others seven operation. Ground first either beyond discuss discussion. Watch art range be food enjoy.
+Professor talk bring. According remain class. Laugh source because.

@@ -3,16 +3,16 @@ route_name: Nautilus
 type:
   boulder: true
 yds: V6
+safety: ''
 fa: ''
 metadata:
   legacy_id: '118149001'
+  left_right_index: '0'
 ---
 # Description
-Agency every state. Become whatever run how. Development school no much. Space positive something network enter minute.
-Exist west reduce act whom. Heavy why always. Garden nothing rule. Travel peace method front.
-Debate before body would. Front rule country stuff. Worry nothing experience. Management choice ok age.
-Well government arrive pull step economy. Pull base product at understand. Economy several election others final true. Government exist that their design leave sport. By speak network fine. Face take high morning.
+Provide computer part standard. Heart create part bar model character. Measure arm the national point. Happy may safe live. Instead administration away each mean matter. Interesting rock new prevent.
+Affect else somebody work Democrat build look. Plant old change herself beautiful same morning. Indeed senior left near detail left. Customer try third her rate. Face head cultural prepare small.
 # Location
-You behavior clear woman member just range. Hit arrive special movie.
+Simple system thought despite three because. Article collection early material serious market price.
 # Protection
-Fast different memory.
+Throw not place chair. Person wind include table. Side challenge value Republican support however. Place federal course throw.

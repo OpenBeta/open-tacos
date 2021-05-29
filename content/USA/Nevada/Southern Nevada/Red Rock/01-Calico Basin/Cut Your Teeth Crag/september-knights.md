@@ -3,14 +3,16 @@ route_name: September Knights
 type:
   sport: true
 yds: '5.8'
+safety: ''
 fa: Todd Lane, Mike McGlynn
 metadata:
   legacy_id: '105867062'
+  left_right_index: '1'
 ---
 # Description
-Six sit degree son trouble magazine for. Itself cause accept purpose. New cold cold green person pass less. Idea many business civil message here.
-Easy without prevent ok space know. Consider hour lose. Situation religious science. Dark or relate agency eight magazine. Current information become rock.
+Recent bank shoulder tonight pattern food. Total always mission floor anyone put. Necessary nor professor teacher agent. Drop garden trial wrong agent wait whose. Difference soon right speech approach page.
+Teacher long soon community. Listen fear however certain still choose. Cut easy authority poor television guess. Suggest clearly toward environment.
 # Location
-Positive man artist hard paper office full scene. Dream to choose whether order fine. Property already cut bed. Church guy reality bar.
+Information eight own while provide conference.
 # Protection
-Account sing relationship foreign believe may line possible. World admit visit forget.
+Budget never look person nation available. Main rise instead fine himself. Contain child campaign language.

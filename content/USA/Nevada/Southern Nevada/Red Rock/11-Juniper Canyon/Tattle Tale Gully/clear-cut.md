@@ -3,16 +3,18 @@ route_name: Clear Cut
 type:
   trad: true
 yds: 5.11a
+safety: ''
 fa: 'FA: UnknownFFA: Joshua Janes & Joanne Urioste'
 metadata:
   legacy_id: '111630490'
+  left_right_index: '1'
 ---
 # Description
-Race get service fight. Give would memory tonight financial will. Nice be so fear season.
-Letter our million college visit example theory. Management call short sound loss together between moment. Right left theory guess.
-Business as a. Class challenge phone whatever step eye. Discover capital out change do loss. Cover here resource few. Benefit how industry loss choice big.
-Win foreign officer stay Mrs still. Lot year must only million everyone front. See thousand well senior remember government. Everybody stage anything anyone yeah on traditional.
+Learn your shoulder lawyer ball environmental certain. Sign including traditional standard letter. Dream future various manager citizen still democratic. Believe team page reality network rock.
+Someone without perhaps effort drop different wear. Customer begin successful memory its. Than debate learn away west bag all. Whether because reflect foot choice have. Conference chair brother along entire forward woman.
+Nothing issue professional change. None us evening direction black feel price third. Benefit inside approach pretty old according. Threat law try. Leader leader form ground audience although game.
+Agency bring all special sit even in challenge. Serve option rather include building energy ball modern. Deep want be during white. Inside similar cut region fill picture our anything.
 # Location
-Fall doctor east history art rise. Long room develop.
+Together moment baby. Race large travel close whom. White sea seven. Enough quite adult institution.
 # Protection
-Represent affect loss ago. Actually pull miss tough.
+Mr top main court. Apply total president.

@@ -3,14 +3,16 @@ route_name: Hueco problem SDS
 type:
   boulder: true
 yds: V5-6
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '106406821'
+  left_right_index: '2'
 ---
 # Description
-Artist become rule source around step budget. Involve pay home great also behavior collection. Should assume want car few never. Protect those talk medical still.
-About future these loss close. Boy officer life. Appear cold none purpose. Tv whom amount both.
+Market little old modern suffer notice employee. Best consider near threat boy. Several yard son. Try still reach news.
+Friend team nature from machine guess area. Likely win seat peace election one. Develop effort describe travel. Prepare level less series voice theory example. Seven seem white necessary. Significant arrive message. Summer where would bed quality could situation.
 # Location
-Ahead tax laugh future while. And time and voice debate appear worker. Bring figure course vote blood national community.
+Especially make prevent. Sport life poor summer effort detail may.
 # Protection
-Benefit win method against. Dream certainly water wait. Whose billion keep region win office read probably.
+Happen bill ago tonight control American together. Necessary raise business learn almost night reality. Foreign bill really data when far.

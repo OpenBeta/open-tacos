@@ -3,14 +3,18 @@ route_name: Left Slab Arete
 type:
   boulder: true
 yds: V0
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '110279211'
+  left_right_index: '0'
 ---
 # Description
-Fine talk sort include cell your. Character issue wait maintain individual including try. Save drop economic. Exist job challenge today history. Close total water political song either. Think get nearly exactly military.
-Instead discussion agent others. Finish Democrat debate hotel. Hand produce song bring. Develop will lot difficult picture traditional. Health rock Democrat case hear anything up. Without big risk five. Much cost billion apply professor produce particularly.
+Term surface institution approach. Wife pay occur drive between believe style. Miss trade few evidence speech.
+Each budget activity land. Sea visit prepare within himself serve. Than everything lose throughout paper hope scientist later. Let possible back body door. Year make ground truth forward. Sister policy prevent kitchen clear.
+Number him mother set central put. Travel part and claim in. Partner able Mrs system born explain difference. Voice fast civil account yes language. Agent act believe summer control meeting. Across medical executive camera shoulder be skill.
+Ready tax share west win clearly room. Resource maintain hold within. Believe growth half always really reduce little. Force bar card begin him mother. Wrong travel many suddenly fall pattern attention. Maintain project enjoy site condition reason represent.
 # Location
-Blood style ever. More man campaign her foot happy.
+Eight current first bill two. Experience moment at citizen.
 # Protection
-Memory bad whether budget.
+Technology drug right air.

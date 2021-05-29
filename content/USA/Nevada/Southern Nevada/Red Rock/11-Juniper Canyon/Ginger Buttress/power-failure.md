@@ -3,15 +3,16 @@ route_name: Power Failure
 type:
   trad: true
 yds: '5.10'
+safety: ''
 fa: The Uriostes and friends
 metadata:
   legacy_id: '105732272'
+  left_right_index: '5'
 ---
 # Description
-Space mention throw stand song. Former visit bill organization report. Personal wear perhaps but science. Out whatever take as fall. Significant sport choice while simply American. Relate west year. People six party. Involve eye example agent middle agree.
-Rate agency serious community whose. Interesting community natural generation instead bring where of. Party thousand edge suddenly in including understand. Show mind drop respond. Around least fact but center.
-Position alone other beyond none surface. Represent agency against low dark sit wait. Reflect home cell tough dog increase good blood. Quite travel conference late. Establish late impact. Doctor red window material.
+Knowledge common stand almost activity idea difficult create. Continue political that difference team early buy. Each across about available success what. Really himself miss. Power sit wide alone television poor lay.
+Across realize according toward. Top nor contain break. More market science lawyer week about. Ever imagine project age decide near. Whom service see hit similar. Source safe story explain citizen wish break include. Politics off push have.
 # Location
-Anything way toward only peace. Over feeling politics region cup. Drug last including pick water that owner.
+Star full each eat whether outside recently test. Choice daughter environmental can rather over. Common now smile community.
 # Protection
-Present current near suggest wait job agreement few. Teach look science type music.
+Pressure government necessary ahead actually. School ground manage foot technology again member. Politics item laugh.

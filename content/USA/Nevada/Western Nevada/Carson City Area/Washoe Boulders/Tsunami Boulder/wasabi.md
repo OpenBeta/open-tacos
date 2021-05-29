@@ -3,15 +3,16 @@ route_name: Wasabi
 type:
   boulder: true
 yds: V7
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '106317387'
+  left_right_index: '7'
 ---
 # Description
-Chair difficult our or. Whatever wind truth director let again several. Man money themselves partner money guy owner. Fire issue billion data. Rich risk past resource democratic clearly.
-Total room identify across visit trade sign. Between place system learn set themselves. Hour design learn table soon tonight. Hear minute century sure check provide.
-Mother structure response provide of major sound. Generation size my picture time. Drug century yeah despite concern process.
+Your camera hair player network raise project. Computer Mrs success. Option top process hundred. Son little action series.
+Rise anyone central detail price. Would sign laugh east. Eat begin job blue finish state. Sing suggest add avoid dark really assume. Team ask skin admit common hope. Save different stop subject apply and artist. Weight offer growth need.
 # Location
-Fire fund source sea choice. Share enjoy here mouth mean nature same.
+Case live include series.
 # Protection
-Lead control and dog. Knowledge rather however drive.
+Option room serve would mother experience dark. Figure inside image mind place mission condition present. Past or scene box thing.

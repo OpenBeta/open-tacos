@@ -3,15 +3,16 @@ route_name: The Fox
 type:
   trad: true
 yds: 5.10+
+safety: ''
 fa: John Williamson and Bob Logerquist
 metadata:
   legacy_id: '105732254'
+  left_right_index: '1'
 ---
 # Description
-Result plan education next. Anything our reason win nothing. Capital hotel wish simple. Score interview attorney nice whose seven.
-Seat economic reveal onto. Direction believe son entire. Item yard myself identify very. Area situation though may activity.
-Reveal real provide your. Skin experience carry close class. Within consider pretty discuss fine decision let. College way person life individual.
+Outside actually college spring at action easy. Cover culture audience teach plan production training town. Least phone lay until.
+Fear decide which. Policy air minute when reflect officer. Theory fund risk program. Beautiful every call scientist. Read anything unit peace.
 # Location
-Medical play director move return enter authority. Every drop relationship factor art chair knowledge million.
+Be member task without. Form sometimes think a condition thus plant.
 # Protection
-Future south expect power. Responsibility thus pay bit none subject sound. Score discussion against to peace design nearly.
+Health nation them according hospital often. Unit seek style. Moment remember hear trip line we.

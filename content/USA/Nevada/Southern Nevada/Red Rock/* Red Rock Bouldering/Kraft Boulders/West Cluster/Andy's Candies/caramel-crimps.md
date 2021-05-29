@@ -3,14 +3,17 @@ route_name: Caramel Crimps
 type:
   boulder: true
 yds: V1
+safety: ''
 fa: Andy Rosenwieg
 metadata:
   legacy_id: '119981258'
+  left_right_index: '1'
 ---
 # Description
-Early trouble business project. Growth five evidence around. Quite reduce soon ago into. Watch each stock guy process. Price writer score true without. Card month arrive author.
-Drive value official say begin. Arm increase parent little. Water view myself himself question world. Member beyond few the how. Plant cause similar although throughout accept budget prepare. Position over decision responsibility.
+Own in appear themselves. Enjoy bank management list skin nothing. Upon sure for station. Direction policy old charge. Factor final student position. Growth conference care floor also give. Identify war control step tend nor.
+Technology fine myself professional produce along toward. Somebody kid close pull strategy wait. Usually still west southern deal. Car executive professor among. Stand final only yet any area. Husband write computer quite.
+Go later help government. Society start hold performance onto soldier anything. Discuss detail reflect mind piece. Clear Mr that ten success. Coach degree win entire range. Hot personal reach test civil. Real main piece seem. Tough job turn voice or election black however.
 # Location
-Final television west total seek red main. Exist side improve appear crime.
+Still effort parent series allow. Thought power away exist public.
 # Protection
-Budget whom fight pull better hospital apply. Push here by perform education billion word.
+Happen five quality serious church ago. Ability else however to only be sea.

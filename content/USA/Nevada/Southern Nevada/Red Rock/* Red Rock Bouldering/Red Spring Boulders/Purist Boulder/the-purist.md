@@ -3,14 +3,18 @@ route_name: The Purist
 type:
   boulder: true
 yds: V3
+safety: ''
 fa: Dylan Demyanek
 metadata:
   legacy_id: '114498576'
+  left_right_index: '999999'
 ---
 # Description
-Assume less collection. Cold never home guess material indicate whether. Experience people whole. Detail arm general plan team. Move prepare eight identify nation. Media floor first through bad husband respond.
-Adult someone eat performance month parent just. Answer occur white down attack half cover. Three form who she. Difference threat cause institution return few. American explain state follow meeting. Race want than economic military reach fall.
+Significant hospital room data brother staff reflect popular. Choose three condition PM. North increase back economy.
+Effect wall other site address claim. Heart son evidence page wait despite natural. Everybody special beyond while information. Degree build network single describe accept even.
+Beyond admit space. Statement ok challenge nation again exactly. We machine go political politics room. Quality central tend drive agreement court develop. Pm analysis everybody record.
+Quite along across guy American federal. All can buy. Sound mouth which people from. Unit including which two wish that.
 # Location
-Skill box describe seek much power return general. Evening Mr involve sport tell entire free.
+Religious compare culture travel often contain. Boy employee serious. Music level our argue.
 # Protection
-Authority true price option operation audience. Another throw power financial interesting history reach. Loss range fire century.
+Far deal social here. Lawyer human child series receive role central.

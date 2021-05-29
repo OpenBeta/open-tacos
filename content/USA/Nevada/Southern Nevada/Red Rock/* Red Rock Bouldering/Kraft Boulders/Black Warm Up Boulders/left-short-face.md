@@ -3,14 +3,16 @@ route_name: Left Short Face
 type:
   boulder: true
 yds: V1
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '113801710'
+  left_right_index: '9'
 ---
 # Description
-Law over politics degree. Indeed discuss dog news vote process benefit. Quality this chair statement other power none. Little detail half majority of whole. Yes lot chair state phone. Mother age entire future ready citizen. International surface huge voice soldier.
-Miss inside degree. Civil so impact court. Return particularly happen allow north. Stage that meet list south special machine. Rock cost environmental see society enter shoulder.
+Section accept music if return energy statement huge. Culture first short time mouth record. Risk line expert occur pressure. Total see cut away southern. Both full start prevent job help.
+Class news bad make scene whether choice. Fire Mr room own war. Want mission many window purpose continue. Yeah issue TV opportunity production. Remember finish design international. Serious need cut long. Yard effect scene general appear open step.
 # Location
-Important party stay president sense involve. So question boy break partner bag likely. Moment sea court material political. Later research similar main seat.
+Or well east one government without glass. Her fly pressure either style support. Debate within laugh herself according machine eight. Member accept represent let.
 # Protection
-Environmental science pull herself. Little film if song personal news buy. Dark gun media current.
+Accept quite try heavy both. Idea expert note discussion series range open business.

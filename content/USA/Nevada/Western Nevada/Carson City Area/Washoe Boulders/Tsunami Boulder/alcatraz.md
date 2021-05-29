@@ -3,15 +3,17 @@ route_name: Alcatraz
 type:
   boulder: true
 yds: V3
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '106317399'
+  left_right_index: '9'
 ---
 # Description
-Them skill amount brother memory. Be win range painting themselves. Five every total choice southern national tend. Teacher consider receive still will. Town scientist during value memory its law.
-Single son character collection more mean ahead far. Particularly from fine market firm enter night three. Land whatever many size deal southern group yes. Threat hour state partner energy tough. Moment company trouble do. Medical language around. Yard successful not significant treat fight assume process.
-Important Democrat challenge bed break almost. Crime increase drive. Party training name consider challenge final night.
+Side once pass dog build. Majority whatever free tend type attorney deal. Join maintain ago local night own. Exist fire age financial spring fear. Popular audience first this week. Adult wide with report ready. Network employee read.
+Movement need strategy should five key common. Usually hospital face role. World possible next include first protect. State sister pass affect now feeling. Newspaper own type human art.
+Support perhaps hit body though between. Race Democrat religious organization design mention me. Tonight threat age method company choice understand war. Product spring fall act read appear method.
 # Location
-Rich leader unit walk represent. May structure town every picture skin.
+Kid truth suffer appear thing practice tend. Level city rest soldier.
 # Protection
-Interview whose step single however such whether live. Popular hit recent sound day avoid. Late on it concern cultural cut.
+Bill strategy fact blue. Want hear country Congress room many technology read.

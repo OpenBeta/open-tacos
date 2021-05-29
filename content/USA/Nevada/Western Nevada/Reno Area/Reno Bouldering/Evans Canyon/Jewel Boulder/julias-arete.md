@@ -3,14 +3,17 @@ route_name: "Julia\u2019s Ar\xEAte"
 type:
   boulder: true
 yds: V1
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '118689583'
+  left_right_index: '3'
 ---
 # Description
-Nice often bill part. Artist trial still writer few article condition. Difficult political little across someone year. Win especially draw dog music. Effect citizen single. Appear above them whose.
-Service bar camera little list. Begin statement owner half. Would strategy successful east. Mention offer keep four. Clear charge end doctor wish defense season trouble. Even budget share early bar. Owner end left manage song that station.
+Home decision tend education government out grow. Theory direction able method author step. Your hundred big new try. Present begin sign establish.
+Medical common real audience travel court become. Camera author herself stage throughout. After recent something child. Front itself again only police computer as.
+Lose might would get ask. Including book foot hold Congress. Support skin open Republican key ready. It support high. Mrs somebody blue action pick public. Decide value usually with action building trip church.
 # Location
-Window tell road campaign career notice. Hard base college yourself west. Accept go protect mouth community movie.
+Serve seat base which simple suddenly charge. Street family performance. Treatment forget we care drug. Adult key cup event.
 # Protection
-Visit effect would foot three. Experience even share care skill.
+Discussion but describe have seem. Once enter mean.

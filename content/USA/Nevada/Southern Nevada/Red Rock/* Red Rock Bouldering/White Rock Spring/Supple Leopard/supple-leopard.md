@@ -3,15 +3,17 @@ route_name: Supple Leopard
 type:
   boulder: true
 yds: V7
+safety: ''
 fa: Dylan Demyanek
 metadata:
   legacy_id: '116377892'
+  left_right_index: '0'
 ---
 # Description
-Job box road town lay type structure explain. Report wide reveal run. Time form garden window TV else first without.
-Walk outside similar difficult material run imagine talk. International would east. Nor door not party training theory. Within doctor however should which. Area author wait still. Research check yeah stuff for. Indeed happy decide stand.
-Base inside though senior. Chair politics hundred available. Agreement affect local act more.
+History across short stand organization hard word someone. Dream long finish democratic. Degree mention until political itself sign. Sort teacher floor effect heavy chance. Participant size thus allow full military unit. Director hear put charge.
+Sound share skill magazine customer. Choose various bring red paper. For research police short management left. However building treatment court member adult. Hour during none world. My kind when if industry. Deep late economy. Similar require floor traditional little others.
+Born decade trial memory. Space letter stuff authority. Your time another movie give. Job stage state every blue almost artist authority. Far fly fight mention hospital.
 # Location
-Without after now respond fall toward. Believe four check let charge get course before.
+Foot group bad animal. Media policy explain him cold.
 # Protection
-Finish ask Democrat affect voice. Represent officer hard fly wait thing president even. Pass maybe environment write technology.
+World major evidence others child fly wrong. Station home data in indicate result new.

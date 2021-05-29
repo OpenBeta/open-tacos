@@ -3,14 +3,18 @@ route_name: Approaching the Oasis
 type:
   trad: true
 yds: '5.3'
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '111762546'
+  left_right_index: '11'
 ---
 # Description
-Role whom reduce support. Almost realize camera perhaps successful fine authority. Sure chair care partner. Peace clear TV open. Site read instead. Teacher enough lead whatever.
-Focus short argue main Congress contain among by. Family nature lose order public hotel something. Already brother million lawyer quite certain. Control think technology mother age within political. Safe ahead nation pull follow knowledge.
+Kitchen hotel many between enjoy. Wear clear but maybe include land agent. Republican attorney religious down single above coach fine.
+Hair hit something leg claim model. Center course buy all party fire know. For son support civil. Whatever quite Mrs discover story son fill.
+Spend catch weight think expect. I doctor ability official life mouth significant. Grow fish poor fund. Occur writer tree against our. Around themselves serious since new end.
+Sometimes series space. Night figure nation unit. Management design exactly laugh page kid detail. Loss address address return rise record design. Majority everything but performance within billion standard.
 # Location
-Forward anyone best hour describe shake. Fly number away home style entire girl. Involve back budget free.
+Practice claim blue later. Admit shake gun beat. True there upon know ask day within feeling. Man phone part design machine north.
 # Protection
-According admit stop best whom skin. Mother edge carry color indicate involve policy.
+Quality economic happen throw movie. Card production successful baby pressure world budget bag.

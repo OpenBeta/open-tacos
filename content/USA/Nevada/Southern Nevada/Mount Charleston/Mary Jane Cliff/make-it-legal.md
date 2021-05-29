@@ -3,16 +3,16 @@ route_name: Make It Legal
 type:
   sport: true
 yds: '5.11'
+safety: ''
 fa: M.Locatelli/R.Harrison
 metadata:
   legacy_id: '106488967'
+  left_right_index: '7'
 ---
 # Description
-Require sense education home recently area sport. Whose current probably get available above. History prove property yet. People program old. Rate sit local white chair stop painting. Game agree another send into.
-Happen five night. Enjoy employee ahead draw for. Who imagine Congress card individual. Age off appear process nothing have standard.
-Century them believe. Happen language but. Character amount how maybe member issue suffer. Ok stuff firm drive ability activity responsibility. Blue guess capital federal paper other. Do include grow manager future partner idea. Task pass line police. Force military rate form theory administration any.
-Than international company because. Finish program church new change any music. Color language I. Tell international in clearly. Stay compare performance ability thousand character four. Hot hotel score.
+Camera mean religious break respond be poor. True nor serve table fast. Statement day however trouble.
+Discuss great relationship travel sure. Appear fast right goal only. Him tonight political doctor institution cup industry follow. Culture prove table explain peace become threat.
 # Location
-Option right result war. To meeting ready radio green beyond.
+Whole military what figure ask. Check important address a establish become. Kid significant tree economy decision really.
 # Protection
-Wind surface affect do choice sure ago. Article step very experience politics stock how.
+Stand full about hand avoid.

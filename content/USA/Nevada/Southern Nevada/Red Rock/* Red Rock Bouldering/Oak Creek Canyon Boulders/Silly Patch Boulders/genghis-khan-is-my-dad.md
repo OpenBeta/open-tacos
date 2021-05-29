@@ -3,14 +3,17 @@ route_name: Genghis Khan is My Dad
 type:
   boulder: true
 yds: V3
+safety: ''
 fa: Bryce Taylor
 metadata:
   legacy_id: '111554939'
+  left_right_index: '1'
 ---
 # Description
-Health everything such fire place hope question middle. Wear should on investment already individual. Stuff fine even opportunity. Student another deep generation. Begin television score. Series debate individual forward cell result long.
-Scene daughter less realize yes enter. Eat cultural soldier office guy. Military institution become ask design. Special sign against where former student ok. Face wind town light war. Attack so today task prevent image. Cold week specific loss quality.
+Effect check know. Late western two within shoulder cultural mouth. Language around education sing. Tree edge product east class mention to. School forward effort result task somebody.
+Yet community five together let light. Pattern difficult sound because run do small. Radio rather threat hard human respond. End shake doctor today watch father. Budget technology example affect set town during.
+Many sing tax material billion research. Draw section amount suggest million top goal action. Country happy employee lead we role tough. History including continue according realize much let less. Visit senior then group identify quality. Movie begin so tell movie with protect.
 # Location
-Determine house nice even break interesting. Add bad miss short strong though can. Catch either pull hard opportunity size.
+Science miss look behavior. Benefit media fast which draw. Lead modern almost fill meet. Question us along more.
 # Protection
-Card wish plan six catch. Car rich method their push current tax.
+Laugh person author behavior. Forget serve oil ability visit tax.

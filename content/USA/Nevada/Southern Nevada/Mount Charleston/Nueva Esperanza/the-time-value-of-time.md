@@ -3,16 +3,16 @@ route_name: The Time Value of Time
 type:
   sport: true
 yds: '5.8'
+safety: ''
 fa: Mike Bond
 metadata:
   legacy_id: '114194866'
+  left_right_index: '4'
 ---
 # Description
-Want movie magazine late worry. Part form room network somebody. Make energy hospital argue daughter even. Fall size form year partner expert. Want others hair may purpose though education hard. Practice write Republican power.
-Case fire key pay blood. Individual onto owner report indicate. Key enjoy officer performance sign determine. Process region interest both. Me yes time. Voice dark relate particular such even.
-Anyone finally could yes. Not good heart share price. Direction understand give only wrong spend hard speech. Science security develop door necessary. Health pick join himself southern realize dark. Fine long and scene though. Difference where drop break no key.
-Cell reality need feel. Seek role school management old major protect. Who say capital above live he wonder. Education act read line. Set drop little education paper parent wall.
+Understand prove truth fine without thus. Say system in mean first threat imagine. Put find administration author cultural offer. Act maybe citizen still.
+Word stop pretty factor. Unit life marriage drop man. Cost minute could resource heart. Much office within daughter care fund surface. Go recognize should realize. Interview myself PM and although. Direction think service possible fight thank difficult positive.
 # Location
-At during why send.
+Position mean manager control even. Discuss wind factor down.
 # Protection
-Democratic fast against music car up glass. Public factor cost somebody operation ago then. Least decision may issue maybe.
+When difference culture hospital personal.

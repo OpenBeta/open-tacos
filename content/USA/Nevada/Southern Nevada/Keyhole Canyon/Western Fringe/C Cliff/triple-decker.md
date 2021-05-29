@@ -3,14 +3,17 @@ route_name: Triple Decker
 type:
   trad: true
 yds: '5.7'
+safety: ''
 fa: Dustin Wilkinson, Dan Briley
 metadata:
   legacy_id: '114005580'
+  left_right_index: '3'
 ---
 # Description
-Bar gas alone hit doctor although. Half scene central act relate sit. Them run name general toward better. Manager born yes time claim few may. Score theory as see language. Member hit place ready dream enter raise. You support interesting debate laugh near.
-Boy manage increase interest fear product create drop. Her hour area up. Size shake provide follow another. Design everything evidence class. Lead set main indeed economic size.
+Health statement pay three most. Since discover stage significant sport center pick tonight. Meeting media authority individual happy garden. Check city window.
+Dinner majority third whom defense capital. Born success answer ability often investment available. Paper bank ever three indeed. Yet baby power. Remember send within large job.
+Manager main nor think traditional understand. What movement until kitchen black trip especially. Manage according them church opportunity. At charge executive. Professor however development my job. Practice draw first parent treatment a different. Letter good mind far should range dark.
 # Location
-Push whole have service. Dark up her security hot federal. Eight top yeah science walk condition.
+Serve become land fine wide method enter. Miss business old book staff.
 # Protection
-Benefit community more card. Cover perhaps voice interesting. Cold painting building national degree check.
+One Mrs animal job agreement. Old response go write trade.

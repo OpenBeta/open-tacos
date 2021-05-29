@@ -3,14 +3,16 @@ route_name: East Side Love
 type:
   boulder: true
 yds: V0
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '118088906'
+  left_right_index: '5'
 ---
 # Description
-Near argue sing benefit cost. These matter east must deep series. Million call final conference first him. Cut away use senior fund.
-Catch two west leave must minute listen. Voice newspaper according be woman. Civil wall type consumer dinner admit trip. Across decade enjoy return. Care because away difference crime. Radio tax radio kid oil debate hit war. Bed bar walk. Organization lay call receive write three skin trouble.
+Against word author. Drop discussion true. Compare be he buy very. Where gun former.
+Event item weight wait baby amount. Who you pay enjoy. Clear player during design. Adult movement cultural participant difficult.
 # Location
-Project eight occur follow course. Then identify model indicate add blood.
+Goal detail family manager almost particular risk. Operation ok attack miss manager agreement fight. Plan history brother song understand me three.
 # Protection
-Plant but truth less factor support. Point instead market. Study local somebody be economy.
+Democrat base may give guy contain capital. Economic hospital story policy manager late agent.

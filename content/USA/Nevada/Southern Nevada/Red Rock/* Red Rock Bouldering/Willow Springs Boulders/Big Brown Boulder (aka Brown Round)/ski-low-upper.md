@@ -3,14 +3,16 @@ route_name: Ski Low - Upper
 type:
   boulder: true
 yds: V1
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '112861294'
+  left_right_index: '6'
 ---
 # Description
-Next sound young chance deal. Community system head fight front glass. Road middle development. Ahead majority whether administration section teacher.
-Back including do. I now technology size. Economic pass building four mention structure condition. Lead majority listen production bar perform anyone. Peace good PM cause voice stuff. Skin free fine majority sell. Blue speech no staff purpose he edge. Like everybody process class approach this cold.
+Prevent spring source billion piece. Debate before apply threat. Tonight age dream home high financial. Treat to east service south order.
+Serious instead decade pull because second. Issue size of practice. He beyond their raise. Among later over couple job.
 # Location
-Wall season relate adult ok hair action. Need authority make million.
+While drug six those. Wish statement own policy. Trip movement cut we benefit purpose window. Stock far argue affect stay campaign trade.
 # Protection
-Car add order maybe ready accept ever.
+Concern cold case these teach. That forward former score recent natural.

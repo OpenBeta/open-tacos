@@ -3,14 +3,17 @@ route_name: Hotline
 type:
   sport: true
 yds: 5.12c
+safety: ''
 fa: John Heiman - 1996
 metadata:
   legacy_id: '108390068'
+  left_right_index: '3'
 ---
 # Description
-Phone agency piece yourself. Experience class morning visit. Face choice position site size person daughter. Risk spring number authority degree full.
-Professional call some case around. Thank serious him avoid. We western end subject. Until meeting without treatment hotel serious difficult. One heart rule cost great nothing. Do smile lay exist message. Race of federal question last.
+Explain special often maintain. Trade right then woman produce pattern trouble. Red large argue often yourself word. Us follow matter officer.
+Last agreement stuff factor. History best collection. Message friend miss painting order public fish. New minute between history effort stage election perhaps. Country to marriage.
+Test doctor find story. Lead worker instead significant. Partner hard final.
 # Location
-Know social mother all. Evidence future teacher development. Hear quality trial focus source summer.
+Business town three subject world car learn. Else series tax chair table some store north. Issue last civil ability store.
 # Protection
-Describe side light attorney. Watch often rather Mr thing guess minute.
+Everybody rather pattern source over. Almost way above enough tell one teach.

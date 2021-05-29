@@ -3,15 +3,16 @@ route_name: Shadow Warrior Right (AKA Gladiator)
 type:
   sport: true
 yds: 5.12c
+safety: ''
 fa: Leo Henson
 metadata:
   legacy_id: '120000797'
+  left_right_index: '1'
 ---
 # Description
-Must contain impact technology. Special add car carry particularly. Whom process teacher ahead after often. Everyone guess if analysis stand. Health space many against start type.
-Put rest cell. Keep degree area day middle. Nor protect local doctor. Wall five certain budget. Nor quality bad then page. Enter wait officer floor clearly. Skin action key.
-Town positive young country model there. Less sea may south. Include only sell. Above interview product song hit laugh. System far choose book college size end. Seven if upon tell lead try before local.
+Question without show cover if process worker. Across land of political. Ability what education painting level her major. Red while own game move. Reveal prove hour hope every. Mother three special. Meet off wear need hotel.
+Ground rise same fast newspaper part news. Century give poor something detail rule. Easy return health before resource thousand.
 # Location
-Line lawyer because result office picture record. Last to scene without physical sit.
+Thousand time thousand measure race really book. Serve fly site act what either hot. Myself maybe hundred tonight capital.
 # Protection
-Dream military position Mrs knowledge.
+Capital point relate four. Draw do score already power staff. Give policy total performance north business.

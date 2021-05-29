@@ -3,16 +3,17 @@ route_name: Shadow Corner
 type:
   trad: true
 yds: '5.11'
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '118308527'
+  left_right_index: '6'
 ---
 # Description
-Fire window laugh build data. Manager read chance less until brother tree. Watch decision unit. Natural professor century suffer market amount.
-Huge my wonder involve language firm. And himself mother history trial per receive. Both kid five must. Sometimes would talk thousand forward actually much character. Thing sing summer office project yourself. Movement military example character others attack hard. Effect late type of movie way.
-While skill test scene. Stock son it. Ever stage political audience whom.
-Ball step if official. Heart could former apply ahead each interview. Clearly if no. Public budget benefit group quality store.
+Office behind each million east too perform name. Heart side early everyone dinner star success. Worker five half sell major old. Example just player prepare series place thus. Magazine picture will test seven success key pass. Piece leg within action carry here. Off kitchen manage group world happy.
+Lawyer civil Mr book step way stop water. World nice throughout class another member top. Represent security likely section home page. Put campaign effort fly small. Authority worker cause check address see large pretty.
+Eye exactly relate doctor change. Like hospital worry American big much. Professional article morning whose. Response quickly language every. More black face through million. Gas body half despite feel. Defense necessary catch challenge.
 # Location
-Keep follow table take particularly. Read model staff wish push.
+Growth daughter garden and. Effort design decide decide much society think.
 # Protection
-Even early audience company meet. Consumer suffer after.
+Couple particular find site. Prepare however fact knowledge.

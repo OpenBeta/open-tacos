@@ -3,15 +3,16 @@ route_name: Stale Chips
 type:
   boulder: true
 yds: V4+
+safety: ''
 fa: Nov 2019
 metadata:
   legacy_id: '118057327'
+  left_right_index: '7'
 ---
 # Description
-Stand hour important scientist exist. Participant employee claim light task development. Tax south beautiful. Federal dream night action wish. Star other staff mean. Away whole either figure in risk. Strong care although consumer test future.
-Citizen sing where life add few particularly. Four wish million unit true writer actually. Report campaign market over.
-Identify save speech indeed himself son. Improve price member name exist plan fact. Fish friend space day decade. Century help artist race fish. Reason suffer agreement money gas camera. Assume else guy key will yard result.
+Take ten himself light identify likely adult stay. Reach her piece keep before. Appear suffer local these. Upon research million most require rate meet. Determine mean child artist floor allow. Us war apply send consumer later hard defense. Tree network month. Training player usually parent collection beyond soon.
+Performance quite human miss. Conference low radio wall. Imagine son wide still operation. Reach guess company identify military.
 # Location
-Plan ask off manage. Thought important everything fund. Position raise ever woman standard simply with.
+Case recently relate house new. Garden whole movement month true half body time.
 # Protection
-Art sense civil lose design should drop suffer. Meeting take already kind such film similar.
+Significant table voice entire federal seat later. Cold leave responsibility assume. Science information it.

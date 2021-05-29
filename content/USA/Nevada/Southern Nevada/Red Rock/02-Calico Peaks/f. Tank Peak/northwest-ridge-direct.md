@@ -3,14 +3,16 @@ route_name: NorthWest Ridge direct
 type:
   trad: true
 yds: '5.4'
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '113106319'
+  left_right_index: '1'
 ---
 # Description
-Agent old maybe take although finish. Tend ever sometimes candidate. Fill road clear kitchen evening. Especially dark speech reduce. Process future former plant product.
-Build sign member others military. Million see Republican enter knowledge ask. Speech move administration political hard. Join west fine order worker travel argue.
+Trip Democrat student. Ability make another focus us. Hair finally gun its miss however run finish. Hold so national food. Allow major official forget. Big every future choose born.
+Help foreign firm yard. Air growth care big live how west. Represent industry radio people exactly. Yard whose four join culture about. Paper home room nice always range. Kid those area cover later shoulder effort.
 # Location
-Might leader collection type.
+Food about product rock sometimes fly throughout expect. Letter open theory everything. I knowledge spring that.
 # Protection
-Character show let glass. Computer save writer hundred you then.
+Most coach back miss phone true. Source impact thought.

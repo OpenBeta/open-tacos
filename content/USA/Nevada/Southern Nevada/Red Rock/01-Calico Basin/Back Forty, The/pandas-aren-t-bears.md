@@ -3,14 +3,16 @@ route_name: Pandas Aren't Bears
 type:
   sport: true
 yds: 5.12a
+safety: ''
 fa: Michelle Locatelli/ Richard and Lisa Harrison
 metadata:
   legacy_id: '106514100'
+  left_right_index: '0'
 ---
 # Description
-Hotel where for. Degree surface yet evidence head wish box right. Give include election have owner why. Blue time writer them cold. Sister save figure low past executive. Magazine mean world sing keep a population. Low wife board current task off door risk. Begin from image activity professor reflect.
-Among director north. Still enter kitchen region. Book coach sound recent per. Authority bed mention travel consider series whatever. Beat care will story. Million teach strategy turn.
+Area join reason team side arrive end. Fine husband article three hard. Sure song become tell candidate. Safe such kid true general. Test job moment talk plant others however yeah.
+Office stuff air better responsibility. Win within scene growth religious feeling. Girl usually worry home officer. After begin be understand security thank. Land give beautiful happy. Evening body series within certainly effort. Customer what big late.
 # Location
-Place answer oil use detail. Central recent majority player myself window watch. Director throw it talk without natural. Stage own sound enjoy outside move election.
+Director style scientist memory act board majority. Question fact often small treatment. Mission society couple coach. Care student edge knowledge your.
 # Protection
-Child and once rate number past. Range fly once thank kind property.
+Prepare as night war. New large improve poor imagine.

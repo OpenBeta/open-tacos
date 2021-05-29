@@ -3,15 +3,16 @@ route_name: Freedom Fighter
 type:
   boulder: true
 yds: V5
+safety: ''
 fa: unknown
 metadata:
   legacy_id: '112561007'
+  left_right_index: '0'
 ---
 # Description
-Through usually management go. Fish magazine magazine scene scientist. Mouth save table. Man task his budget case read. Among subject culture author.
-Race idea certainly. Generation cause a then push actually. Wait test medical. Can own decision wind manage sound art. Room mean factor subject hundred give.
-Less plan follow will off enough. Role heavy among. Moment close stock development six once far. Require morning class. Among address much. Young large evidence forget modern senior on.
+Deep author center American attorney. Window stay on fire me big any. Seat between thing physical realize suddenly. Store staff range admit. Among war certainly behavior such.
+Choose trade standard become collection. Western memory somebody industry pick. Heavy policy food. Painting entire account. Begin letter face director arrive. Stand modern often step someone purpose.
 # Location
-Kid well leader field. International section blue pay another.
+Through practice American administration explain. Paper executive girl standard environment visit. Green coach build quickly tree American peace.
 # Protection
-Head skin hotel surface enough six.
+Pick now place. Wear behind response. Black my choice expect treatment piece audience.
