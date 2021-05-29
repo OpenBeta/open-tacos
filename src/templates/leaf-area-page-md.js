@@ -7,17 +7,19 @@ import { MDXRenderer } from "gatsby-plugin-mdx";
 import { Link } from "gatsby";
 import RouteCard from "../components/ui/RouteCard";
 import slugify from "slugify";
+import BreadCrumbs from "../components/ui/BreadCrumbs";
 
 const shortcodes = { Link };
 /**
  * Templage for generating individual page for the climb
  */
-export default function LeafAreaPage({ data: {mdx, climbs} }) {
+export default function LeafAreaPage({ data: {mdx, climbs, parentAreas} }) {
   const { area_name } = mdx.frontmatter;
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[area_name]} title={area_name} />
+      <BreadCrumbs path={mdx.fields.parentId}></BreadCrumbs>
       <h1 className="text-lg font-bold font-sans my-4">{area_name}</h1>
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
@@ -51,12 +53,16 @@ export default function LeafAreaPage({ data: {mdx, climbs} }) {
 }
 
 export const query = graphql`
-  query ($legacy_id: String!, $pathId: String) {
+  query ($legacy_id: String!, $pathId: String, $possibleParentPaths: [String]) {
     mdx: mdx(
       fields: { collection: { eq: "area-indices" } }
       frontmatter: { metadata: { legacy_id: { eq: $legacy_id } } }
     ) {
       id
+      fields {
+        parentId
+        pathId
+      }
       frontmatter {
         area_name
         metadata {
@@ -91,6 +97,11 @@ export const query = graphql`
           }
         }
       }
+    }
+    parentAreas: allMdx(
+      filter:{fields:{collection:{eq:"area-indices"}, pathId:{in:$possibleParentPaths}}}
+    ){
+      totalCount
     }
   }
 `;
