@@ -50,6 +50,10 @@ export const createNavigatePaths = (pathId, parentAreas) => {
   const allPossibleParentPaths = pathIdToAllPossibleParentPaths(pathId);
   const navigationPaths = {};
 
+  if (!parentAreas || parentAreas.length === 0) {
+    return navigationPaths;
+  }
+
   // initialize all the paths with null
   allPossibleParentPaths.forEach((possiblePath)=>{
     navigationPaths[possiblePath] = null
@@ -60,7 +64,7 @@ export const createNavigatePaths = (pathId, parentAreas) => {
     const legacy_id = node.frontmatter.metadata.legacy_id;
     const sluggedAreaName = slugify(node.frontmatter.area_name, {lower:true});
     navigationPaths[currentPathId] = `/areas/${legacy_id}/${sluggedAreaName}`;    
-  };
+  }
 
   return navigationPaths;
 };

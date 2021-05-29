@@ -8,6 +8,7 @@ import { Link } from "gatsby";
 import RouteCard from "../components/ui/RouteCard";
 import slugify from "slugify";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
+import {createNavigatePaths} from "../js/utils";
 
 const shortcodes = { Link };
 /**
@@ -15,11 +16,13 @@ const shortcodes = { Link };
  */
 export default function LeafAreaPage({ data: {mdx, climbs, parentAreas} }) {
   const { area_name } = mdx.frontmatter;
+  const parentId = mdx.fields.parentId;
+  const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[area_name]} title={area_name} />
-      <BreadCrumbs path={mdx.fields.parentId}></BreadCrumbs>
+      <BreadCrumbs path={parentId} navigationPaths={navigationPaths}></BreadCrumbs>
       <h1 className="text-lg font-bold font-sans my-4">{area_name}</h1>
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
