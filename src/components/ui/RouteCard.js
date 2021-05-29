@@ -1,5 +1,5 @@
 import React from "react";
-import Card from './Card';
+import Card from './card';
 import Chip from "./Chip";
 
 function RouteCard({route_name, type, safety, YDS}) {
@@ -18,6 +18,8 @@ function RouteCard({route_name, type, safety, YDS}) {
             </span>
             {type.trad && <Chip type="trad" />}
             {type.sport && <Chip type="sport" />}
+            {type.tr && <Chip type="tr" />}
+            {type.boulder && <Chip type="boulder" />}
           </div>
         </div>
     </Card>

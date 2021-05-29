@@ -6,7 +6,12 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
     const { createNodeField } = actions;
     const parent = getNode(node["parent"]);
     const nodeType = parent["sourceInstanceName"];
+
     if (nodeType === "climbing-routes") {
+      
+      // Computed on the fly based off relative path of the current file
+      // climbing routes's parent id is the current directory.
+      const parentId = path.dirname(parent.relativePath);
       createNodeField({
         node,
         name: `slug`,
@@ -22,6 +27,11 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
         name: `collection`,
         value: nodeType,
       });
+      createNodeField({
+        node,
+        name: `parentId`,
+        value: parentId
+      })
       //TODO: create a new field to help linking with parent area. But how??
       // createNodeField({
       //   node,
@@ -29,6 +39,13 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       //   value: ???,
       // });
     } else if (nodeType === "area-indices") {
+
+      // Computed on the fly based off relative path of the current file
+      // If you looking at an index.md for an area the parent would be the 
+      // index.md of 1 directory level up.
+      // i.g. Take current path, go up one directory.
+      const parentId = path.normalize(path.join(path.dirname(parent.relativePath),'..'));
+      const pathId = path.dirname(parent.relativePath);
       createNodeField({
         node,
         name: `slug`,
@@ -44,6 +61,16 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
         name: `collection`,
         value: nodeType,
       });
+      createNodeField({
+        node,
+        name: `parentId`,
+        value: parentId
+      });
+      createNodeField({
+        node,
+        name: `pathId`,
+        value: pathId
+      });
     }
   }
 };
@@ -57,6 +84,7 @@ exports.createPages = async ({ graphql, actions }) => {
           node {
             fields {
               slug
+              pathId
             }
             frontmatter {
               metadata {
@@ -70,7 +98,7 @@ exports.createPages = async ({ graphql, actions }) => {
   `);
   // Create each index page for each leaf area
   const { createPage } = actions;
-  result.data.allMdx.edges.forEach(({ node }) => {
+  for (const {node} of result.data.allMdx.edges) {
     createPage({
       path: node.fields.slug,
       component: path.resolve(`./src/templates/leaf-area-page-md.js`),
@@ -79,9 +107,10 @@ exports.createPages = async ({ graphql, actions }) => {
         // climbs: node.climbs,
         // name: node.area_name,
         slug: node.fields.slug,
+        pathId: node.fields.pathId
       },
     });
-  });
+  }
 
   // Query all route .md documents
   result = await graphql(`
