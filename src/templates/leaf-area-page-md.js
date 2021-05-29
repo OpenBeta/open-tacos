@@ -9,15 +9,17 @@ import RouteCard from "../components/ui/RouteCard";
 import slugify from "slugify";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
 import {createNavigatePaths} from "../js/utils";
+import AreaCard from"../components/ui/AreaCard";
 
 const shortcodes = { Link };
 /**
  * Templage for generating individual page for the climb
  */
-export default function LeafAreaPage({ data: {mdx, climbs, parentAreas} }) {
+export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAreas} }) {
   const { area_name } = mdx.frontmatter;
   const parentId = mdx.fields.parentId;
   const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
+  console.log(childAreas);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -27,6 +29,26 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas} }) {
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
       </MDXProvider>
+      <div className="grid grid-cols-3 gap-x-3">
+        {
+          childAreas.edges.map(({ node }) => {
+            const {frontmatter} = node;
+            const {area_name, metadata} = frontmatter;
+            return(
+              <div
+                className="pt-6 max-h-96"
+                id={slugify(area_name)}
+                key={metadata.legacy_id}
+              >
+                <AreaCard
+                  onPress={()=>{navigate(`/areas/${metadata.legacy_id}/${slugify(area_name,{lower:true})}`)}}
+                  area_name={area_name}
+                ></AreaCard>
+              </div>
+            )
+          })
+        }
+      </div>
       <div className="grid grid-cols-3 gap-x-3">
         {
           climbs.edges.map(({ node }) => {
@@ -101,10 +123,41 @@ export const query = graphql`
         }
       }
     }
+    childAreas: allMdx(
+      filter: {fields:{collection:{eq:"area-indices"}, parentId:{eq:$pathId}}}
+    ){
+      totalCount
+      edges {
+        node {
+          fields {
+            pathId
+          }
+          frontmatter {
+            area_name
+            metadata {
+              legacy_id
+            }
+          }
+        }
+      }
+    }
     parentAreas: allMdx(
       filter:{fields:{collection:{eq:"area-indices"}, pathId:{in:$possibleParentPaths}}}
     ){
       totalCount
+      edges {
+        node {
+          fields {
+            pathId
+          }
+          frontmatter {
+            area_name
+            metadata {
+              legacy_id
+            }
+          }
+        }
+      }
     }
   }
 `;

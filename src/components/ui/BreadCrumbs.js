@@ -10,6 +10,10 @@ function BreadCrumbs({path, navigationPaths}) {
         const possibleNavigation = entries[index];
         const navigationPath = possibleNavigation && 
           possibleNavigation.length > 0 ? possibleNavigation[1] : null;
+      
+        // If the path is . it means it is at the root level. Add a empty
+        // character for it still renders the BreadCrumbs element.
+        const formattedPlace = place === '.' ? '\u00A0' : place;
         return (
           <span 
             key={index}
@@ -17,7 +21,7 @@ function BreadCrumbs({path, navigationPaths}) {
             <span
               onClick={()=>{navigationPath && navigate(navigationPath)}} 
               className="hover:underline cursor-pointer hover:text-gray-900">
-              {place} 
+              {formattedPlace} 
             </span>
             {!isLastElement && <span className="mx-1.5">/</span>}
           </span>
