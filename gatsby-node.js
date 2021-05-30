@@ -1,6 +1,45 @@
 const slugify = require("slugify");
 const path = require(`path`);
 
+/**
+ * Converts the relativePath to a POSIX path.
+ * This is to unify all paths to one structure for consistent ids
+ * @param {String} relativePath 
+ * @returns 
+ */
+const convertPathToPOSIX = (relativePath) => {
+  return relativePath.split(path.sep).join(path.posix.sep);
+};
+
+/**
+ * This will take a path 
+ * i.g. USA/Nevada/Southern Nevada/Red Rock/16-Black Velvet Canyon/Black Velvet Wall
+ * and split it into all possible paths
+ * USA/Nevada/Southern Nevada/Red Rock/16-Black Velvet Canyon/Black Velvet Wall
+ * USA/Nevada/Southern Nevada/Red Rock/16-Black Velvet Canyon/
+ * USA/Nevada/Southern Nevada/Red Rock/
+ * USA/Nevada/Southern Nevada/
+ * etc...
+ * 
+ * @param {String} pathId is a POSIX path with / delimiters
+ * @returns {Array} returns all the possible paths. The highest root level
+ * path will be the first element in the array i.g. ["USA","USA/Nevada",etc...]
+ */
+const pathIdToAllPossibleParentPaths = (pathId) => {
+  const allPossiblePaths = [];
+  const splitPathId = pathId.split('/');
+  const totalNumberOfPossiblePaths = splitPathId.length;
+
+  let runningPath = [];
+  for(let index = 0; index < totalNumberOfPossiblePaths; index++) {
+    let currentPath = splitPathId[index];
+    runningPath.push(currentPath);
+    allPossiblePaths.push(runningPath.join('/'));
+  }
+  
+  return allPossiblePaths;
+};
+
 exports.onCreateNode = ({ node, getNode, actions }) => {
   if (node.internal.type === "Mdx") {
     const { createNodeField } = actions;
@@ -11,7 +50,8 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       
       // Computed on the fly based off relative path of the current file
       // climbing routes's parent id is the current directory.
-      const parentId = path.dirname(parent.relativePath);
+      const parentId = convertPathToPOSIX(path.join(path.dirname(parent.relativePath)));
+      const possibleParentPaths = pathIdToAllPossibleParentPaths(parentId);
       createNodeField({
         node,
         name: `slug`,
@@ -32,20 +72,20 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
         name: `parentId`,
         value: parentId
       })
-      //TODO: create a new field to help linking with parent area. But how??
-      // createNodeField({
-      //   node,
-      //   name: `parent`,
-      //   value: ???,
-      // });
+      createNodeField({
+        node,
+        name: `possibleParentPaths`,
+        value: possibleParentPaths
+      });
     } else if (nodeType === "area-indices") {
 
       // Computed on the fly based off relative path of the current file
       // If you looking at an index.md for an area the parent would be the 
       // index.md of 1 directory level up.
       // i.g. Take current path, go up one directory.
-      const parentId = path.normalize(path.join(path.dirname(parent.relativePath),'..'));
-      const pathId = path.dirname(parent.relativePath);
+      const parentId = convertPathToPOSIX(path.join(path.dirname(parent.relativePath),'..'));
+      const pathId = convertPathToPOSIX(path.join(path.dirname(parent.relativePath)));
+      const possibleParentPaths = pathIdToAllPossibleParentPaths(parentId);
       createNodeField({
         node,
         name: `slug`,
@@ -71,6 +111,11 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
         name: `pathId`,
         value: pathId
       });
+      createNodeField({
+        node,
+        name: `possibleParentPaths`,
+        value: possibleParentPaths
+      });
     }
   }
 };
@@ -85,6 +130,7 @@ exports.createPages = async ({ graphql, actions }) => {
             fields {
               slug
               pathId
+              possibleParentPaths
             }
             frontmatter {
               metadata {
@@ -107,7 +153,8 @@ exports.createPages = async ({ graphql, actions }) => {
         // climbs: node.climbs,
         // name: node.area_name,
         slug: node.fields.slug,
-        pathId: node.fields.pathId
+        pathId: node.fields.pathId,
+        possibleParentPaths: node.fields.possibleParentPaths
       },
     });
   }
@@ -120,6 +167,8 @@ exports.createPages = async ({ graphql, actions }) => {
           node {
             fields {
               slug
+              parentId
+              possibleParentPaths
             }
             frontmatter {
               metadata {
@@ -140,6 +189,8 @@ exports.createPages = async ({ graphql, actions }) => {
       context: {
         legacy_id: node.frontmatter.metadata.legacy_id,
         slug: node.fields.slug,
+        parentId: node.fields.parentId,
+        possibleParentPaths: node.fields.possibleParentPaths
       },
     });
   });
