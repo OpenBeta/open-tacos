@@ -19,6 +19,7 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAre
   const { area_name } = mdx.frontmatter;
   const parentId = mdx.fields.parentId;
   const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
+  console.log(childAreas);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
