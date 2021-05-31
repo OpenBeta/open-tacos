@@ -71,8 +71,8 @@ export const createNavigatePaths = (pathId, parentAreas) => {
 
 /**
  * Given a path or parent id and the type of the page generate the GitHub URL
- * @param {String} pathOrParentId 
- * @param {String} pageType pass "area" or "climb"
+ * @param {String} pathOrParentId from createNodeField in gatsby-node.js
+ * @param {String} fileName the file name of the markdown file without extension
  */
 export const pathOrParentIdToGitHubLink = (pathOrParentId, fileName) => {
   const baseUrl = 'https://github.com/OpenBeta/open-tacos/blob/develop/content/';
