@@ -45,9 +45,8 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
     const { createNodeField } = actions;
     const parent = getNode(node["parent"]);
     const nodeType = parent["sourceInstanceName"];
-
+    const markdownFileName = path.posix.parse(parent.relativePath).name;
     if (nodeType === "climbing-routes") {
-      
       // Computed on the fly based off relative path of the current file
       // climbing routes's parent id is the current directory.
       const parentId = convertPathToPOSIX(path.join(path.dirname(parent.relativePath)));
@@ -62,6 +61,11 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
           }
         )}`,
       });
+      createNodeField({
+        node,
+        name:`filename`,
+        value: markdownFileName
+      })
       createNodeField({
         node,
         name: `collection`,
@@ -96,6 +100,11 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
           }
         )}`,
       });
+      createNodeField({
+        node,
+        name:`filename`,
+        value: markdownFileName
+      })
       createNodeField({
         node,
         name: `collection`,
@@ -154,7 +163,7 @@ exports.createPages = async ({ graphql, actions }) => {
         // name: node.area_name,
         slug: node.fields.slug,
         pathId: node.fields.pathId,
-        possibleParentPaths: node.fields.possibleParentPaths
+        possibleParentPaths: node.fields.possibleParentPaths,
       },
     });
   }
@@ -190,7 +199,7 @@ exports.createPages = async ({ graphql, actions }) => {
         legacy_id: node.frontmatter.metadata.legacy_id,
         slug: node.fields.slug,
         parentId: node.fields.parentId,
-        possibleParentPaths: node.fields.possibleParentPaths
+        possibleParentPaths: node.fields.possibleParentPaths,
       },
     });
   });
