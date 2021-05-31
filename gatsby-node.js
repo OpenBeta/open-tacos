@@ -163,7 +163,7 @@ exports.createPages = async ({ graphql, actions }) => {
         // name: node.area_name,
         slug: node.fields.slug,
         pathId: node.fields.pathId,
-        possibleParentPaths: node.fields.possibleParentPaths,
+        possibleParentPaths: node.fields.possibleParentPaths
       },
     });
   }
@@ -199,7 +199,7 @@ exports.createPages = async ({ graphql, actions }) => {
         legacy_id: node.frontmatter.metadata.legacy_id,
         slug: node.fields.slug,
         parentId: node.fields.parentId,
-        possibleParentPaths: node.fields.possibleParentPaths,
+        possibleParentPaths: node.fields.possibleParentPaths
       },
     });
   });
