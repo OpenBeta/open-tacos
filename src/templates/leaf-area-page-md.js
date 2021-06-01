@@ -8,8 +8,9 @@ import { Link } from "gatsby";
 import RouteCard from "../components/ui/RouteCard";
 import slugify from "slugify";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
-import {createNavigatePaths} from "../js/utils";
-import AreaCard from"../components/ui/AreaCard";
+import {createNavigatePaths, pathOrParentIdToGitHubLink} from "../js/utils";
+import AreaCard from "../components/ui/AreaCard";
+import LinkToGithub from "../components/ui/LinkToGithub";
 
 const shortcodes = { Link };
 /**
@@ -17,9 +18,9 @@ const shortcodes = { Link };
  */
 export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAreas} }) {
   const { area_name } = mdx.frontmatter;
-  const parentId = mdx.fields.parentId;
+  const {parentId, pathId, filename} = mdx.fields;
   const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
-  console.log(childAreas);
+  const githubLink = pathOrParentIdToGitHubLink(pathId, filename);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -73,6 +74,7 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAre
           })
         }
       </div>
+      <LinkToGithub link={githubLink} docType="area"></LinkToGithub>
     </Layout>
   );
 }
@@ -87,6 +89,7 @@ export const query = graphql`
       fields {
         parentId
         pathId
+        filename
       }
       frontmatter {
         area_name

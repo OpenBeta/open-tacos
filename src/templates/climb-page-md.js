@@ -6,7 +6,8 @@ import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import { Link } from "gatsby";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
-import {createNavigatePaths} from "../js/utils";
+import {createNavigatePaths, pathOrParentIdToGitHubLink} from "../js/utils";
+import LinkToGithub from "../components/ui/LinkToGithub";
 
 const shortcodes = { Link }; // Provide common components here
 
@@ -15,8 +16,9 @@ const shortcodes = { Link }; // Provide common components here
  */
 export default function ClimbPage({ data: { mdx, parentAreas } }) {
   const { route_name } = mdx.frontmatter;
-  const parentId = mdx.fields.parentId;
+  const {parentId, filename} = mdx.fields;
   const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
+  const githubLink = pathOrParentIdToGitHubLink(parentId, filename);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -26,6 +28,7 @@ export default function ClimbPage({ data: { mdx, parentAreas } }) {
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
       </MDXProvider>
+      <LinkToGithub link={githubLink} docType="climb"></LinkToGithub>
     </Layout>
   );
 }
@@ -39,6 +42,7 @@ export const query = graphql`
       id
       fields {
         parentId
+        filename
       }
       frontmatter {
         route_name
