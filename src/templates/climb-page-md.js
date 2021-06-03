@@ -8,10 +8,12 @@ import { Link } from "gatsby";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
 import {createNavigatePaths, pathOrParentIdToGitHubLink} from "../js/utils";
 import LinkToGithub from "../components/ui/LinkToGithub";
+import shortCode_H1 from "../components/ui/shortcodes/h1";
+import {template_h1_css} from "../js/styles";
 
 const shortcodes = { 
   Link,
-  h1: (props) => <h1 {...props} className="text-2xl font-medium my-3"/>
+  h1: shortCode_H1
 }; // Provide common components here
 
 /**
@@ -27,7 +29,7 @@ export default function ClimbPage({ data: { mdx, parentAreas } }) {
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[route_name]} title={route_name} />
       <BreadCrumbs path={parentId} navigationPaths={navigationPaths}></BreadCrumbs>
-      <h1 className="text-4xl font-bold font-sans my-4">{route_name}</h1>
+      <h1 className={template_h1_css}>{route_name}</h1>
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
       </MDXProvider>

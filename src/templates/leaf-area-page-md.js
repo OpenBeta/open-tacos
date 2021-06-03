@@ -11,8 +11,14 @@ import BreadCrumbs from "../components/ui/BreadCrumbs";
 import {createNavigatePaths, pathOrParentIdToGitHubLink} from "../js/utils";
 import AreaCard from "../components/ui/AreaCard";
 import LinkToGithub from "../components/ui/LinkToGithub";
+import shortCode_H1 from "../components/ui/shortcodes/h1";
+import {template_h1_css} from "../js/styles";
 
-const shortcodes = { Link };
+const shortcodes = { 
+  Link,
+  h1: shortCode_H1 
+};
+
 /**
  * Templage for generating individual page for the climb
  */
@@ -26,7 +32,7 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAre
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[area_name]} title={area_name} />
       <BreadCrumbs path={parentId} navigationPaths={navigationPaths}></BreadCrumbs>
-      <h1 className="text-lg font-bold font-sans my-4">{area_name}</h1>
+      <h1 className={template_h1_css}>{area_name}</h1>
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
       </MDXProvider>
