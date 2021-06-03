@@ -9,7 +9,10 @@ import BreadCrumbs from "../components/ui/BreadCrumbs";
 import {createNavigatePaths, pathOrParentIdToGitHubLink} from "../js/utils";
 import LinkToGithub from "../components/ui/LinkToGithub";
 
-const shortcodes = { Link }; // Provide common components here
+const shortcodes = { 
+  Link,
+  h1: (props) => <h1 {...props} className="text-2xl font-medium my-3"/>
+}; // Provide common components here
 
 /**
  * Templage for generating individual page for the climb
@@ -24,7 +27,7 @@ export default function ClimbPage({ data: { mdx, parentAreas } }) {
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[route_name]} title={route_name} />
       <BreadCrumbs path={parentId} navigationPaths={navigationPaths}></BreadCrumbs>
-      <h1 className="font-medium font-sans my-4">{route_name}</h1>
+      <h1 className="text-4xl font-bold font-sans my-4">{route_name}</h1>
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
       </MDXProvider>
