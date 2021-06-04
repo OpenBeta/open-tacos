@@ -84,3 +84,7 @@
     border-radius:  1.5rem;
   }
   
+  /* Main page hero card gradient color overlay */
+  .hero-card {
+    background-image: linear-gradient(to right top, #12bee5, #00b6f4, #1bacff, #58a0ff, #888fff, #ac80f2, #c970e0, #e05ec8, #ee52ad, #f64b91, #f74a75, #f24f5a);
+  }
