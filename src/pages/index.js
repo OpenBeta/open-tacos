@@ -2,7 +2,7 @@ import React from "react";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import catAndHumanIllustration from "../images/cat-and-human-illustration.svg";
+import homePageImage from "../images/lukas-schulz-n6uOlqYPMXY-unsplash.jpg";
 
 function IndexPage() {
   return (
@@ -12,30 +12,19 @@ function IndexPage() {
         keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
         title="Home"
       />
-
       <section className="text-center">
-        <img
-          alt="Cat and human sitting on a couch"
-          className="block w-1/2 mx-auto mb-8"
-          src={catAndHumanIllustration}
-        />
-
-        <h2 className="inline-block p-3 mb-4 text-2xl font-bold bg-yellow-400">
-          Hey there! Welcome to your first Gatsby site.
-        </h2>
-
-        <p className="leading-loose">
-          This is a barebones starter for Gatsby styled using{` `}
-          <a
-            className="font-bold text-gray-900 no-underline"
-            href="https://tailwindcss.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Tailwind CSS
-          </a>
-          , a utility-first CSS framework.
-        </p>
+        <div className="relative hero-card rounded-lg h-64 overflow-hidden">
+          <img
+            alt="Yosemite National Park"
+            className="block mx-auto mb-8 rounded-lg opacity-40 absolute -top-20"
+            src={homePageImage}
+          />
+          <div className="absolute top-20 left-10 text-left">
+            <span className="font-bold text-2xl text-gray-50">OpenTacos</span>
+            <h1 className="text-5xl font-bold text-gray-50">Become a <span className="font-light">Contributor</span></h1>
+            <span className="text-gray-50 text-lg top-5 relative">collaborative climbing route catalog</span>
+          </div>
+        </div>
       </section>
     </Layout>
   );
