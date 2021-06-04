@@ -69,7 +69,7 @@ function IndexPage() {
         </div>
         <div className="flex justify-end mt-10">
           <div className="w-2/6">
-            <h2 className="text-right font-light">Random Route</h2>
+            <h2 className="text-left font-light">Randomly Featured Route</h2>
             <RandomRouteCard climb={randomClimb}></RandomRouteCard>
           </div>
         </div>
