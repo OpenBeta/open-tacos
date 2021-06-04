@@ -2,7 +2,7 @@ import React from "react";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import homePageImage from "../images/lukas-schulz-n6uOlqYPMXY-unsplash.jpg";
+import heroImage from "../images/lukas-schulz-n6uOlqYPMXY-unsplash.jpg";
 
 function IndexPage() {
   return (
@@ -17,7 +17,7 @@ function IndexPage() {
           <img
             alt="Yosemite National Park"
             className="block mx-auto mb-8 rounded-lg opacity-40 absolute -top-20"
-            src={homePageImage}
+            src={heroImage}
           />
           <div className="absolute top-20 left-10 text-left">
             <span className="font-bold text-2xl text-gray-50">OpenTacos</span>
