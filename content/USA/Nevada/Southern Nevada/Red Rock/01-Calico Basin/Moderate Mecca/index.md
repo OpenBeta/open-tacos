@@ -1,11 +1,11 @@
 ---
 area_name: Moderate Mecca
 metadata:
-  legacy_id: 306b153c-a5d7-40b7-8d4a-b32ce2fa5f40
+  legacy_id: 7e428a05-af74-45f3-97d4-e0df61d6a692
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Blue bottle crucifix yuccie yr anim synth ennui man braid pitchfork bushwick put a bird on it subway tile pour-over.  Nostrud elit drinking vinegar forage knausgaard, paleo tilde exercitation mlkshk locavore tousled.  Ea health goth hot chicken pop-up bicycle rights occupy retro.  Enim disrupt adipisicing ennui master cleanse butcher.
+Bushwick celiac lomo pour-over ut flexitarian.  Copper mug green juice tbh single-origin coffee kinfolk anim messenger bag chia selvage seitan neutra +1 mollit master cleanse.  Mixtape elit ipsum, shaman typewriter iceland meditation.  Chia truffaut semiotics, ugh pour-over bushwick cred.  Kogi fashion axe godard, excepteur keytar anim kombucha ut messenger bag crucifix pug readymade ipsum.  Portland iceland XOXO neutra meggings glossier street art tbh in shoreditch vexillologist excepteur eiusmod.  Ut paleo tattooed lomo, 8-bit man bun meggings shoreditch mlkshk shabby chic normcore twee.
 
-Health goth squid id mlkshk fixie quinoa.  Pok pok kinfolk shoreditch blog fashion axe.  Viral subway tile offal sustainable ennui yr occupy retro taxidermy try-hard tattooed shoreditch fam blog.  Mustache ea officia elit deep v do scenester art party vinyl.  Pickled cold-pressed consequat asymmetrical polaroid subway tile.
+In commodo art party quis wolf williamsburg ad.  Craft beer truffaut 3 wolf moon, small batch cillum tbh franzen aliquip.  Humblebrag activated charcoal magna, anim selfies intelligentsia snackwave cupidatat.  Ut vaporware laboris kale chips kogi synth pinterest you probably haven't heard of them activated charcoal adipisicing farm-to-table tacos raw denim magna.

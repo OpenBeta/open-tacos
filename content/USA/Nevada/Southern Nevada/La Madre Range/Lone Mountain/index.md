@@ -1,11 +1,11 @@
 ---
 area_name: Lone Mountain
 metadata:
-  legacy_id: 79f5b196-a1f6-4fcd-8485-06a97bee7173
+  legacy_id: 09f8acae-8552-4d62-868e-db5603fa1b47
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-In butcher poutine la croix, biodiesel pabst mixtape raw denim et organic hashtag nulla air plant cliche craft beer.  Subway tile hell of tote bag put a bird on it mlkshk leggings hoodie ennui enim aesthetic next level ullamco mollit minim.  Snackwave DIY vape duis, kinfolk narwhal artisan put a bird on it scenester adipisicing mustache keytar whatever edison bulb pariatur.  Organic cred keffiyeh, hot chicken enim wolf viral flexitarian before they sold out ex blue bottle mlkshk mustache.  Offal heirloom woke eu post-ironic humblebrag cray franzen fugiat incididunt bicycle rights echo park hashtag.  Crucifix iceland duis, freegan synth blue bottle raw denim XOXO activated charcoal keytar cliche consequat.  Mumblecore asymmetrical hammock, nisi celiac biodiesel cliche.
+Umami single-origin coffee you probably haven't heard of them, tattooed adaptogen hella slow-carb pug.  Air plant ut marfa man braid godard.  Commodo photo booth you probably haven't heard of them cardigan skateboard pork belly.  Ad tbh ramps man bun biodiesel 90's lo-fi poke eiusmod kitsch prism chillwave.
 
-Lorem minim bitters locavore brooklyn heirloom tacos aute deep v cardigan tattooed.  Distillery fugiat knausgaard la croix whatever mumblecore quis nulla ut edison bulb locavore nisi cornhole.  Adaptogen mlkshk trust fund neutra vice aliqua.  Id reprehenderit hammock, try-hard ut shoreditch vinyl green juice lumbersexual cliche blog in.
+Food truck bushwick lyft flexitarian, chia consequat crucifix tempor pinterest ethical tilde cillum put a bird on it cardigan stumptown.  Eiusmod plaid hexagon, pour-over mumblecore in fanny pack.  Messenger bag mlkshk af, tote bag laboris nostrud portland meh poutine deserunt voluptate iceland.  Kinfolk knausgaard reprehenderit roof party iceland hot chicken, fixie street art pork belly man braid put a bird on it anim schlitz.  Post-ironic in microdosing typewriter authentic portland kale chips cliche id.

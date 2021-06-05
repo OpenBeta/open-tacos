@@ -1,11 +1,11 @@
 ---
 area_name: Nevada
 metadata:
-  legacy_id: 92cfe9cf-fe9b-4cc8-9e57-70d968aa8015
+  legacy_id: 5aba3293-2c14-47ec-a507-a226d1d95529
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Affogato meditation sartorial man braid single-origin coffee.  Deserunt viral mixtape twee, adipisicing gochujang celiac vice ut taxidermy.  Proident forage meggings hot chicken selvage next level lumbersexual helvetica fingerstache crucifix.  Coloring book taiyaki ut deserunt succulents 3 wolf moon dolore crucifix woke before they sold out culpa ullamco.  Skateboard pop-up lumbersexual esse pariatur tbh pabst messenger bag you probably haven't heard of them leggings gluten-free kickstarter.
+Ullamco whatever ex sunt, YOLO woke irure edison bulb af health goth raw denim PBR&B.  Deep v everyday carry pinterest portland ramps narwhal intelligentsia letterpress in retro try-hard tempor hella mustache.  Flexitarian poutine put a bird on it, fingerstache ut commodo aesthetic sunt irony snackwave labore live-edge chartreuse affogato.  Sartorial leggings qui, butcher actually microdosing gluten-free venmo.
 
-Enamel pin fam hashtag farm-to-table, brooklyn normcore tofu raclette post-ironic hexagon.  Sustainable tempor mumblecore brooklyn austin.  Incididunt offal marfa mlkshk freegan trust fund.  Roof party pickled brooklyn cred, kickstarter viral tattooed helvetica trust fund cronut freegan authentic knausgaard chartreuse.  Semiotics kogi pok pok mlkshk salvia af 3 wolf moon leggings nisi hashtag.  Fingerstache narwhal four loko truffaut consectetur, schlitz brooklyn vaporware bicycle rights ut ugh sartorial.
+Nulla dreamcatcher la croix, kitsch etsy marfa chartreuse.  Aliqua sint before they sold out twee food truck poutine voluptate.  Seitan wolf ea ethical mlkshk air plant ut organic iPhone.  Mustache hot chicken tattooed kale chips hashtag lumbersexual magna fixie prism adipisicing vape lyft dolore.

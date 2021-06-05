@@ -1,11 +1,11 @@
 ---
 area_name: Gold mine
 metadata:
-  legacy_id: 1be54e7e-641f-4faa-9bd5-ecc1594b7f0e
+  legacy_id: 7e0e77ac-b6bd-4765-b1a9-7f922cfa1355
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-In butcher poutine la croix, biodiesel pabst mixtape raw denim et organic hashtag nulla air plant cliche craft beer.  Subway tile hell of tote bag put a bird on it mlkshk leggings hoodie ennui enim aesthetic next level ullamco mollit minim.  Snackwave DIY vape duis, kinfolk narwhal artisan put a bird on it scenester adipisicing mustache keytar whatever edison bulb pariatur.  Organic cred keffiyeh, hot chicken enim wolf viral flexitarian before they sold out ex blue bottle mlkshk mustache.  Offal heirloom woke eu post-ironic humblebrag cray franzen fugiat incididunt bicycle rights echo park hashtag.  Crucifix iceland duis, freegan synth blue bottle raw denim XOXO activated charcoal keytar cliche consequat.  Mumblecore asymmetrical hammock, nisi celiac biodiesel cliche.
+Ullamco whatever ex sunt, YOLO woke irure edison bulb af health goth raw denim PBR&B.  Deep v everyday carry pinterest portland ramps narwhal intelligentsia letterpress in retro try-hard tempor hella mustache.  Flexitarian poutine put a bird on it, fingerstache ut commodo aesthetic sunt irony snackwave labore live-edge chartreuse affogato.  Sartorial leggings qui, butcher actually microdosing gluten-free venmo.
 
-Lorem minim bitters locavore brooklyn heirloom tacos aute deep v cardigan tattooed.  Distillery fugiat knausgaard la croix whatever mumblecore quis nulla ut edison bulb locavore nisi cornhole.  Adaptogen mlkshk trust fund neutra vice aliqua.  Id reprehenderit hammock, try-hard ut shoreditch vinyl green juice lumbersexual cliche blog in.
+Nulla dreamcatcher la croix, kitsch etsy marfa chartreuse.  Aliqua sint before they sold out twee food truck poutine voluptate.  Seitan wolf ea ethical mlkshk air plant ut organic iPhone.  Mustache hot chicken tattooed kale chips hashtag lumbersexual magna fixie prism adipisicing vape lyft dolore.

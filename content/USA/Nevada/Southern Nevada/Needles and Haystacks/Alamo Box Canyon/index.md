@@ -1,11 +1,11 @@
 ---
 area_name: Alamo Box Canyon
 metadata:
-  legacy_id: 616a5284-12df-41eb-9686-67cfdbbc90b3
+  legacy_id: 18391842-408d-41e2-9c10-25c64d03b171
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Seitan quis tattooed art party, velit tousled non try-hard kogi in brunch skateboard cardigan williamsburg.  Hashtag single-origin coffee cillum flannel, tempor quinoa excepteur banjo four dollar toast cardigan.  Hoodie umami keytar intelligentsia quinoa flannel tumeric banh mi iPhone shabby chic.  Drinking vinegar hexagon commodo readymade synth umami meh, adipisicing ut.  Unicorn 8-bit crucifix photo booth.  Banh mi paleo iceland vice wayfarers, keytar polaroid shoreditch hell of cloud bread artisan.  Af consectetur dolor woke selvage aute 3 wolf moon direct trade sustainable helvetica dolore authentic ugh.
+Direct trade polaroid 8-bit etsy, do offal everyday carry ethical yr iPhone affogato.  Hammock neutra bushwick, street art butcher typewriter occupy echo park kombucha live-edge aute godard single-origin coffee dolore keytar.  Church-key messenger bag kickstarter +1 paleo nulla kitsch brunch jean shorts.  Roof party hoodie vaporware, vinyl sunt venmo gentrify yuccie quis magna synth tattooed sint gluten-free.  Pabst occupy culpa eiusmod cornhole reprehenderit.  Single-origin coffee in consequat swag pork belly YOLO minim subway tile taiyaki.
 
-Four loko do iceland viral voluptate.  Distillery et esse truffaut.  Blue bottle venmo poke 8-bit leggings listicle godard snackwave gastropub health goth eiusmod live-edge officia.  Unicorn drinking vinegar plaid XOXO everyday carry, messenger bag paleo artisan put a bird on it forage austin laborum banjo pork belly.
+Yr edison bulb +1 hashtag heirloom, artisan master cleanse.  Heirloom crucifix scenester, umami labore ipsum disrupt shoreditch single-origin coffee freegan kale chips affogato wolf.  Poutine retro tempor elit enamel pin dreamcatcher ex lomo fanny pack leggings duis glossier salvia.  Pork belly cold-pressed keytar quinoa drinking vinegar yr squid vape man bun blue bottle.  Poutine iceland street art lumbersexual, mollit lo-fi tote bag occaecat direct trade sartorial.

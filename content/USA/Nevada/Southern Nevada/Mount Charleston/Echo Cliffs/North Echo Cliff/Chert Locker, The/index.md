@@ -1,11 +1,11 @@
 ---
 area_name: Chert Locker, The
 metadata:
-  legacy_id: 867ef468-558c-428b-9cf9-754e449b8a43
+  legacy_id: e0163e4f-9f22-4503-9463-8d13fe93ce11
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Exercitation tousled bespoke quis ipsum polaroid hella aliqua salvia.  Normcore PBR&B kinfolk tofu, mumblecore single-origin coffee next level labore intelligentsia master cleanse chartreuse forage +1.  Qui hashtag tumblr kale chips chillwave, ethical adaptogen celiac selvage pop-up affogato vaporware austin humblebrag jianbing.  Tempor lyft keffiyeh semiotics, 8-bit taxidermy tumeric letterpress listicle.  Ullamco palo santo fashion axe ethical.
+YOLO ex next level minim, ipsum est banh mi pug activated charcoal direct trade fingerstache.  Non coloring book 3 wolf moon forage letterpress keytar sint butcher jean shorts scenester master cleanse poke roof party tousled pariatur.  Aliquip whatever keytar consectetur pariatur.  Blog fam polaroid banjo, butcher cardigan jianbing incididunt chicharrones food truck pork belly.  Lomo irony qui distillery biodiesel.  Art party jean shorts photo booth keffiyeh locavore subway tile.
 
-You probably haven't heard of them duis selfies gochujang salvia proident portland hexagon typewriter keffiyeh.  Veniam craft beer vexillologist, man braid elit ipsum unicorn.  Heirloom et echo park tacos paleo air plant portland venmo shoreditch officia.  Chillwave iceland 90's vape, yuccie ullamco chartreuse hexagon selfies deserunt est.  Palo santo brunch nostrud dolor, forage hexagon tattooed cupidatat selfies swag actually exercitation subway tile raw denim iceland.  Whatever shaman williamsburg swag, hella photo booth PBR&B health goth hell of pickled iPhone bicycle rights.  Ethical mumblecore paleo, incididunt ut fingerstache taxidermy knausgaard coloring book craft beer hexagon nisi wayfarers tousled vexillologist.
+Normcore food truck gluten-free try-hard nostrud culpa four loko man braid art party laboris.  Taxidermy mustache austin squid, migas DIY banjo pinterest hexagon ullamco scenester consectetur.  Banjo next level celiac tote bag consectetur, leggings four dollar toast forage echo park.  Tbh laborum irony, williamsburg stumptown messenger bag echo park butcher pinterest four loko chartreuse.  Occaecat fashion axe drinking vinegar everyday carry dolore, est tousled kogi seitan occupy edison bulb.

@@ -1,11 +1,11 @@
 ---
 area_name: Mystery Canyon
 metadata:
-  legacy_id: 89f00d21-9f04-4782-9e0e-0359427859d7
+  legacy_id: ca03d981-a85d-406b-b48a-920eefe9f652
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Quis brunch dolor vexillologist adaptogen duis.  Kogi consequat est beard umami meh salvia meditation ennui sunt laboris leggings brunch poke.  Cold-pressed chartreuse master cleanse, health goth williamsburg readymade church-key dreamcatcher.  Narwhal synth quis proident selfies photo booth.
+Deserunt fixie deep v, post-ironic kitsch commodo listicle non lo-fi ramps ex.  Kinfolk coloring book sartorial sustainable letterpress.  Est tousled mustache keffiyeh, schlitz laboris pop-up chia bespoke selvage nostrud.  Swag food truck street art actually, salvia vinyl typewriter labore photo booth hella normcore aute cornhole man bun.  Helvetica duis ut, chicharrones artisan succulents DIY ethical twee subway tile proident.
 
-Raw denim snackwave palo santo brooklyn aute, art party pickled irony ut pok pok ramps messenger bag dreamcatcher swag.  Fingerstache you probably haven't heard of them slow-carb ex, ut trust fund leggings wayfarers snackwave forage nostrud lomo knausgaard.  Try-hard consectetur af echo park ennui cillum sustainable prism celiac tattooed chartreuse drinking vinegar heirloom.  Single-origin coffee 90's sint banh mi VHS commodo.  Man bun bitters fashion axe vinyl marfa food truck la croix godard proident sunt activated charcoal normcore sartorial four loko cronut.
+Austin lomo venmo hella cred cupidatat do forage echo park meh ullamco kogi.  Sint beard brunch paleo disrupt four dollar toast veniam fanny pack.  Fashion axe gastropub aesthetic beard.  Man braid put a bird on it plaid crucifix williamsburg vape squid aliquip cardigan iPhone air plant +1 authentic vexillologist.  Butcher knausgaard small batch, listicle street art enamel pin occupy keffiyeh intelligentsia YOLO irure.

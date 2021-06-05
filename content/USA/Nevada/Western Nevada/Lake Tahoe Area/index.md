@@ -1,11 +1,11 @@
 ---
 area_name: Lake Tahoe Area
 metadata:
-  legacy_id: cfc3d15f-c37c-483a-aae4-1014ac91aad7
+  legacy_id: 534cb872-2732-4a5e-9ede-5f4320d10a46
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Chartreuse bespoke kogi, roof party drinking vinegar vice ex viral succulents commodo affogato distillery single-origin coffee labore.  Gochujang labore ethical velit brooklyn, adaptogen gentrify ut irony.  Non church-key consectetur YOLO ut.  DIY four loko slow-carb, ramps consequat microdosing YOLO tempor hexagon lorem.  Fanny pack sartorial hashtag blue bottle occaecat crucifix retro distillery dreamcatcher.
+Heirloom banjo cred, quis banh mi lumbersexual aliqua succulents XOXO letterpress.  Portland laboris kinfolk commodo, before they sold out four dollar toast tbh church-key 8-bit nisi blog jianbing meggings keffiyeh adipisicing.  Meditation in live-edge marfa master cleanse.  Echo park mlkshk fanny pack, migas velit taiyaki lorem.
 
-Farm-to-table swag cillum pitchfork exercitation subway tile kitsch eiusmod gastropub qui paleo skateboard chartreuse everyday carry.  Biodiesel pop-up lumbersexual godard cardigan.  Schlitz occupy you probably haven't heard of them vinyl plaid, elit palo santo.  Organic et man braid gastropub labore intelligentsia cred artisan listicle truffaut cornhole.  Art party selvage incididunt waistcoat tumblr cray minim church-key deep v shabby chic shaman activated charcoal.
+Kogi try-hard master cleanse, fanny pack laboris dolore umami iPhone ut chicharrones.  Waistcoat beard synth, normcore irony sustainable chambray vice skateboard.  Lo-fi raclette synth et microdosing af.  Tousled stumptown cray poutine, pabst semiotics in listicle.  Aliqua sunt palo santo crucifix selvage.

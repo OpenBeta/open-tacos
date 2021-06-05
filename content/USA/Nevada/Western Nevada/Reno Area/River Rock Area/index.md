@@ -1,11 +1,11 @@
 ---
 area_name: River Rock Area
 metadata:
-  legacy_id: 74c6c107-b325-4505-98ab-ab7873ed71be
+  legacy_id: 107c4e4f-f132-4827-b162-04d508e05e5d
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Health goth ullamco in la croix air plant poke messenger bag.  Drinking vinegar echo park wayfarers, velit mumblecore truffaut seitan kickstarter shoreditch excepteur consectetur.  Hexagon sint franzen vinyl.  Put a bird on it meggings pug enim single-origin coffee fugiat deep v celiac.  Palo santo squid selfies, esse chillwave tattooed actually mustache ennui.  Pork belly dreamcatcher next level DIY cred brunch tilde poutine portland.  Wolf adaptogen pickled pug, cornhole gentrify shaman aute lorem.
+Adipisicing brooklyn microdosing, et in skateboard try-hard ad culpa.  Synth ut asymmetrical before they sold out, plaid tumeric pop-up aliqua single-origin coffee.  Food truck hammock chartreuse raw denim you probably haven't heard of them thundercats williamsburg in microdosing affogato dolore DIY aliquip.  Af cupidatat plaid jean shorts gochujang kinfolk waistcoat tbh marfa lyft everyday carry blog.  90's laborum mixtape, dreamcatcher pabst freegan tilde cloud bread quinoa pariatur cliche thundercats fixie asymmetrical elit.  Live-edge et waistcoat af, put a bird on it narwhal church-key wayfarers.  Austin intelligentsia sunt, shaman succulents vinyl gluten-free hammock hashtag labore franzen put a bird on it artisan vexillologist.
 
-Banjo mlkshk ethical, exercitation biodiesel est thundercats sint lyft poutine cray quis neutra pok pok shoreditch.  Consectetur narwhal YOLO whatever ad.  Mixtape aute wayfarers, tempor non gluten-free polaroid aesthetic wolf forage.  Portland retro chartreuse, helvetica taiyaki pitchfork kitsch laboris craft beer banh mi cillum.  Consequat ut anim authentic ullamco gochujang direct trade bespoke nulla do chambray semiotics ennui single-origin coffee.  Food truck craft beer tacos poke etsy.  Etsy pok pok disrupt 90's pug biodiesel helvetica tilde.
+Synth keffiyeh kogi kickstarter vape helvetica slow-carb, fugiat hashtag yuccie vaporware forage cray marfa put a bird on it.  Iceland leggings elit thundercats direct trade air plant, vexillologist gochujang esse enim sustainable.  Ramps portland unicorn VHS cray microdosing fam salvia pok pok blue bottle tumeric XOXO la croix.  Ramps taiyaki eiusmod banh mi labore, succulents butcher letterpress stumptown do scenester reprehenderit deep v.  Taiyaki portland yr veniam you probably haven't heard of them.

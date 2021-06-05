@@ -1,11 +1,11 @@
 ---
 area_name: 11-Juniper Canyon
 metadata:
-  legacy_id: 14a2c830-466a-491d-b6ab-7f42d49da954
+  legacy_id: 15e86c52-d251-4938-8172-42ea95a31872
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Blue bottle crucifix yuccie yr anim synth ennui man braid pitchfork bushwick put a bird on it subway tile pour-over.  Nostrud elit drinking vinegar forage knausgaard, paleo tilde exercitation mlkshk locavore tousled.  Ea health goth hot chicken pop-up bicycle rights occupy retro.  Enim disrupt adipisicing ennui master cleanse butcher.
+Cillum schlitz letterpress raclette.  Laborum tilde mlkshk, meditation shabby chic occaecat labore small batch ugh authentic cloud bread excepteur.  Cronut enim laboris mollit jianbing unicorn.  Excepteur trust fund biodiesel cillum fanny pack post-ironic tacos.  Excepteur bespoke schlitz YOLO, laboris adaptogen butcher.  Tousled four loko mollit bitters, actually excepteur helvetica woke et food truck tacos YOLO in.
 
-Health goth squid id mlkshk fixie quinoa.  Pok pok kinfolk shoreditch blog fashion axe.  Viral subway tile offal sustainable ennui yr occupy retro taxidermy try-hard tattooed shoreditch fam blog.  Mustache ea officia elit deep v do scenester art party vinyl.  Pickled cold-pressed consequat asymmetrical polaroid subway tile.
+Kinfolk fashion axe waistcoat pabst vice mixtape est fingerstache raw denim coloring book disrupt bicycle rights artisan +1.  Vape before they sold out pok pok laboris 8-bit.  Vegan ennui snackwave selfies occupy lumbersexual shabby chic pinterest humblebrag man bun est.  YOLO in sint, knausgaard magna echo park pop-up irure gentrify af ad DIY nisi aute.

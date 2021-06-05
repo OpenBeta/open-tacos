@@ -1,11 +1,11 @@
 ---
 area_name: North Side
 metadata:
-  legacy_id: 684b4d07-d105-4f89-a56b-7131c4e87487
+  legacy_id: a27a9e7b-4127-4b26-bfae-95f1f6f87c57
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Normcore minim ullamco intelligentsia, williamsburg irony cillum tumeric selfies.  Cliche snackwave af austin, VHS skateboard sunt viral chambray.  Hoodie tumeric consequat fixie ullamco eu sed qui skateboard flannel.  Keffiyeh bitters incididunt biodiesel gluten-free selvage.
+Gluten-free hot chicken dreamcatcher, health goth ut synth typewriter everyday carry man bun aliqua pariatur in in poke.  Direct trade la croix single-origin coffee taxidermy blue bottle, hoodie veniam selvage ramps everyday carry cray aliqua church-key listicle seitan.  Butcher brooklyn vexillologist, wolf lorem pinterest ex kombucha salvia master cleanse.  Marfa austin PBR&B meh street art, bitters nostrud sunt hashtag meggings.
 
-Quinoa et 8-bit hashtag heirloom lomo id chartreuse VHS elit.  Bespoke knausgaard dreamcatcher stumptown voluptate.  90's roof party etsy, minim taxidermy heirloom iPhone kickstarter ugh et.  Ut quinoa forage vaporware ex vexillologist.  Gochujang small batch kitsch banh mi fanny pack sustainable seitan letterpress proident meh organic +1.
+Actually glossier bespoke, 3 wolf moon everyday carry do quinoa exercitation small batch disrupt hella knausgaard ullamco voluptate ipsum.  Cronut deep v fam food truck copper mug.  Leggings laboris distillery biodiesel.  Stumptown crucifix photo booth, leggings mollit synth master cleanse letterpress.

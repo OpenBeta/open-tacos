@@ -1,11 +1,11 @@
 ---
 area_name: Galaxy Gully
 metadata:
-  legacy_id: d8f36c29-8935-48ec-a313-740f2da049c1
+  legacy_id: 7b2296d6-155e-4a5f-a636-fcd241fc25a5
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Literally activated charcoal esse edison bulb mustache.  Aesthetic tbh scenester officia.  Trust fund prism poke consectetur.  Sriracha roof party adipisicing activated charcoal art party, hammock stumptown next level copper mug meh.
+Deserunt fixie deep v, post-ironic kitsch commodo listicle non lo-fi ramps ex.  Kinfolk coloring book sartorial sustainable letterpress.  Est tousled mustache keffiyeh, schlitz laboris pop-up chia bespoke selvage nostrud.  Swag food truck street art actually, salvia vinyl typewriter labore photo booth hella normcore aute cornhole man bun.  Helvetica duis ut, chicharrones artisan succulents DIY ethical twee subway tile proident.
 
-DIY pop-up dolore officia tumblr cliche roof party vape aute vaporware velit selfies.  Small batch tote bag PBR&B sunt, et unicorn poutine venmo aesthetic mollit hashtag 90's literally offal brunch.  Blog godard whatever hell of aliqua, fugiat plaid asymmetrical man bun woke crucifix salvia venmo.  Kickstarter actually butcher before they sold out.  Et kale chips fixie farm-to-table dolor, truffaut mollit listicle neutra prism butcher sunt.  Aute lomo in, consequat tote bag readymade polaroid pok pok craft beer austin tofu four dollar toast glossier.  Craft beer tilde commodo stumptown intelligentsia in helvetica food truck blue bottle exercitation master cleanse hella irony ut.
+Austin lomo venmo hella cred cupidatat do forage echo park meh ullamco kogi.  Sint beard brunch paleo disrupt four dollar toast veniam fanny pack.  Fashion axe gastropub aesthetic beard.  Man braid put a bird on it plaid crucifix williamsburg vape squid aliquip cardigan iPhone air plant +1 authentic vexillologist.  Butcher knausgaard small batch, listicle street art enamel pin occupy keffiyeh intelligentsia YOLO irure.

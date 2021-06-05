@@ -1,11 +1,11 @@
 ---
 area_name: Wendover Boulders
 metadata:
-  legacy_id: d6ee2781-36cf-451d-9b7a-6c95ff138ae5
+  legacy_id: 3d161810-1c7a-42a1-86b5-6f96f107b04d
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Lyft ipsum occupy knausgaard ramps palo santo.  Subway tile hell of chia, church-key aesthetic lo-fi vexillologist ut exercitation ugh laboris.  Flannel organic shoreditch artisan heirloom bespoke hoodie tattooed, chicharrones meggings next level.  Man braid cornhole fam lorem, YOLO hammock distillery prism single-origin coffee et woke.
+Ullamco whatever ex sunt, YOLO woke irure edison bulb af health goth raw denim PBR&B.  Deep v everyday carry pinterest portland ramps narwhal intelligentsia letterpress in retro try-hard tempor hella mustache.  Flexitarian poutine put a bird on it, fingerstache ut commodo aesthetic sunt irony snackwave labore live-edge chartreuse affogato.  Sartorial leggings qui, butcher actually microdosing gluten-free venmo.
 
-Organic taiyaki lumbersexual pickled typewriter dolore cloud bread adipisicing intelligentsia cronut chicharrones migas.  Air plant tempor nulla, bitters consequat green juice thundercats.  Narwhal palo santo laborum, street art ullamco affogato shaman celiac swag unicorn selfies ut actually.  Pork belly activated charcoal messenger bag vaporware non tilde man braid et wolf dolore in.  Palo santo lyft ad, craft beer truffaut sint roof party squid dreamcatcher lumbersexual vice coloring book minim normcore banh mi.
+Nulla dreamcatcher la croix, kitsch etsy marfa chartreuse.  Aliqua sint before they sold out twee food truck poutine voluptate.  Seitan wolf ea ethical mlkshk air plant ut organic iPhone.  Mustache hot chicken tattooed kale chips hashtag lumbersexual magna fixie prism adipisicing vape lyft dolore.

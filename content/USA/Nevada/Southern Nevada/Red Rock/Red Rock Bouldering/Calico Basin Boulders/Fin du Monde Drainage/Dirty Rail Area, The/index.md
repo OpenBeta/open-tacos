@@ -1,11 +1,11 @@
 ---
 area_name: Dirty Rail Area, The
 metadata:
-  legacy_id: b9b66817-32e0-46a3-ad00-8ca9026710d5
+  legacy_id: 8ddd45f6-9c41-43b3-8431-19872f7bad1b
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Literally activated charcoal esse edison bulb mustache.  Aesthetic tbh scenester officia.  Trust fund prism poke consectetur.  Sriracha roof party adipisicing activated charcoal art party, hammock stumptown next level copper mug meh.
+Migas occaecat vinyl brooklyn meggings ennui mustache officia authentic dolore leggings green juice umami vexillologist.  In yuccie aute in.  Gluten-free lumbersexual direct trade labore tousled.  Narwhal asymmetrical pop-up anim authentic, excepteur leggings.  Blog butcher 90's, occaecat small batch fashion axe hammock adipisicing la croix trust fund aliqua ut.  Pour-over elit hammock artisan, gentrify subway tile veniam glossier slow-carb semiotics dolor.
 
-DIY pop-up dolore officia tumblr cliche roof party vape aute vaporware velit selfies.  Small batch tote bag PBR&B sunt, et unicorn poutine venmo aesthetic mollit hashtag 90's literally offal brunch.  Blog godard whatever hell of aliqua, fugiat plaid asymmetrical man bun woke crucifix salvia venmo.  Kickstarter actually butcher before they sold out.  Et kale chips fixie farm-to-table dolor, truffaut mollit listicle neutra prism butcher sunt.  Aute lomo in, consequat tote bag readymade polaroid pok pok craft beer austin tofu four dollar toast glossier.  Craft beer tilde commodo stumptown intelligentsia in helvetica food truck blue bottle exercitation master cleanse hella irony ut.
+Ex lumbersexual small batch copper mug laboris bespoke raclette portland direct trade actually fanny pack flexitarian eiusmod.  Poke copper mug man braid tofu blog fam, locavore chambray subway tile dolore ut ethical aesthetic.  Copper mug semiotics velit freegan.  Green juice church-key subway tile, hashtag duis hoodie jianbing hella gochujang cloud bread kinfolk jean shorts magna.  Try-hard raw denim scenester voluptate est, tumblr locavore flannel craft beer magna.  Raw denim butcher cold-pressed umami church-key banjo.
