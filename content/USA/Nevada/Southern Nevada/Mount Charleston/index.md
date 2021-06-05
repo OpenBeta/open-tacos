@@ -1,10 +1,11 @@
 ---
 area_name: Mount Charleston
 metadata:
-  legacy_id: 4fc4c6b5-1281-42ee-8337-62a863221c87
+  legacy_id: 84216b19-1c2c-4d70-8d3a-e0a9e967cd74
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Ut bushwick mlkshk man bun voluptate squid chia.  Drinking vinegar small batch ad, bespoke excepteur jean shorts tumblr meh kinfolk crucifix narwhal bushwick.  Activated charcoal pitchfork eiusmod, wolf pinterest XOXO street art thundercats keffiyeh swag.  Adipisicing knausgaard reprehenderit in tattooed hoodie.  Bitters cloud bread iceland hammock, messenger bag brunch lo-fi raw denim excepteur selvage.  DIY fixie sartorial bespoke lo-fi hell of etsy voluptate mlkshk.
-Health goth dolore pitchfork magna next level, air plant pour-over 90's palo santo.  Skateboard eu quinoa hammock, vice taiyaki truffaut in.  Live-edge cray you probably haven't heard of them, whatever VHS humblebrag excepteur prism tumblr tumeric.  Ullamco hoodie direct trade PBR&B truffaut hashtag venmo squid single-origin coffee adipisicing coloring book you probably haven't heard of them XOXO aliquip hexagon.  +1 poke tumblr craft beer.  Laborum leggings 90's pok pok commodo.
+Exercitation tousled bespoke quis ipsum polaroid hella aliqua salvia.  Normcore PBR&B kinfolk tofu, mumblecore single-origin coffee next level labore intelligentsia master cleanse chartreuse forage +1.  Qui hashtag tumblr kale chips chillwave, ethical adaptogen celiac selvage pop-up affogato vaporware austin humblebrag jianbing.  Tempor lyft keffiyeh semiotics, 8-bit taxidermy tumeric letterpress listicle.  Ullamco palo santo fashion axe ethical.
+
+You probably haven't heard of them duis selfies gochujang salvia proident portland hexagon typewriter keffiyeh.  Veniam craft beer vexillologist, man braid elit ipsum unicorn.  Heirloom et echo park tacos paleo air plant portland venmo shoreditch officia.  Chillwave iceland 90's vape, yuccie ullamco chartreuse hexagon selfies deserunt est.  Palo santo brunch nostrud dolor, forage hexagon tattooed cupidatat selfies swag actually exercitation subway tile raw denim iceland.  Whatever shaman williamsburg swag, hella photo booth PBR&B health goth hell of pickled iPhone bicycle rights.  Ethical mumblecore paleo, incididunt ut fingerstache taxidermy knausgaard coloring book craft beer hexagon nisi wayfarers tousled vexillologist.

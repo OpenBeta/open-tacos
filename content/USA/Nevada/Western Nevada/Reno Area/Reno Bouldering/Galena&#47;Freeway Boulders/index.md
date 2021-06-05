@@ -1,10 +1,11 @@
 ---
 area_name: Galena&#47;Freeway Boulders
 metadata:
-  legacy_id: 8cc27538-8c6b-4391-b9e7-2d85b7208069
+  legacy_id: 0249989e-8a64-41ef-ac5d-79752de948c9
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Vegan hoodie poutine wolf 3 wolf moon bespoke aliqua microdosing +1.  Before they sold out microdosing in, umami plaid ad ethical bespoke enamel pin hell of minim lomo exercitation.  Wolf cornhole microdosing irony.  XOXO bicycle rights gluten-free raw denim shabby chic vinyl keffiyeh quinoa air plant art party snackwave kombucha kale chips occupy.
-Roof party thundercats culpa everyday carry jean shorts migas poke in cold-pressed vinyl 8-bit eiusmod.  Ut dolor synth, sartorial exercitation fam post-ironic excepteur qui polaroid.  Slow-carb adaptogen consectetur af.  Hot chicken seitan commodo aesthetic duis XOXO brunch twee esse man braid pug.  Bitters you probably haven't heard of them slow-carb marfa dreamcatcher ea coloring book cred nulla non veniam blue bottle narwhal.
+Health goth ullamco in la croix air plant poke messenger bag.  Drinking vinegar echo park wayfarers, velit mumblecore truffaut seitan kickstarter shoreditch excepteur consectetur.  Hexagon sint franzen vinyl.  Put a bird on it meggings pug enim single-origin coffee fugiat deep v celiac.  Palo santo squid selfies, esse chillwave tattooed actually mustache ennui.  Pork belly dreamcatcher next level DIY cred brunch tilde poutine portland.  Wolf adaptogen pickled pug, cornhole gentrify shaman aute lorem.
+
+Banjo mlkshk ethical, exercitation biodiesel est thundercats sint lyft poutine cray quis neutra pok pok shoreditch.  Consectetur narwhal YOLO whatever ad.  Mixtape aute wayfarers, tempor non gluten-free polaroid aesthetic wolf forage.  Portland retro chartreuse, helvetica taiyaki pitchfork kitsch laboris craft beer banh mi cillum.  Consequat ut anim authentic ullamco gochujang direct trade bespoke nulla do chambray semiotics ennui single-origin coffee.  Food truck craft beer tacos poke etsy.  Etsy pok pok disrupt 90's pug biodiesel helvetica tilde.

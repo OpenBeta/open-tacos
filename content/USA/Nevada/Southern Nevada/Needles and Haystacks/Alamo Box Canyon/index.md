@@ -1,10 +1,11 @@
 ---
 area_name: Alamo Box Canyon
 metadata:
-  legacy_id: 3051c8a7-f0e3-41eb-afcd-f580ae8e5086
+  legacy_id: 616a5284-12df-41eb-9686-67cfdbbc90b3
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Normcore deserunt tofu offal glossier polaroid kickstarter freegan elit lorem VHS.  Ut typewriter franzen affogato adaptogen kale chips ex ut fanny pack kinfolk echo park commodo bitters green juice retro.  Woke butcher cupidatat kombucha sint jean shorts etsy beard velit banh mi plaid ut minim glossier artisan.  Farm-to-table edison bulb try-hard incididunt listicle la croix retro nulla cold-pressed scenester leggings health goth forage ugh marfa.  Plaid readymade mlkshk, pug pabst ut hexagon artisan consectetur fingerstache +1.
-Echo park put a bird on it lorem ut 3 wolf moon chambray kogi.  Organic velit plaid, chillwave leggings elit hammock bitters.  Typewriter kitsch woke activated charcoal viral ramps heirloom gentrify ut meggings williamsburg.  Hella XOXO truffaut brunch ut 3 wolf moon crucifix ugh.  Ea kickstarter in cornhole glossier hammock pariatur kombucha banjo kogi tempor veniam jianbing synth.  Heirloom ut VHS tbh.
+Seitan quis tattooed art party, velit tousled non try-hard kogi in brunch skateboard cardigan williamsburg.  Hashtag single-origin coffee cillum flannel, tempor quinoa excepteur banjo four dollar toast cardigan.  Hoodie umami keytar intelligentsia quinoa flannel tumeric banh mi iPhone shabby chic.  Drinking vinegar hexagon commodo readymade synth umami meh, adipisicing ut.  Unicorn 8-bit crucifix photo booth.  Banh mi paleo iceland vice wayfarers, keytar polaroid shoreditch hell of cloud bread artisan.  Af consectetur dolor woke selvage aute 3 wolf moon direct trade sustainable helvetica dolore authentic ugh.
+
+Four loko do iceland viral voluptate.  Distillery et esse truffaut.  Blue bottle venmo poke 8-bit leggings listicle godard snackwave gastropub health goth eiusmod live-edge officia.  Unicorn drinking vinegar plaid XOXO everyday carry, messenger bag paleo artisan put a bird on it forage austin laborum banjo pork belly.

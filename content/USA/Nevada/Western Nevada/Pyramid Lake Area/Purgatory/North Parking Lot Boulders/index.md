@@ -1,10 +1,11 @@
 ---
 area_name: North Parking Lot Boulders
 metadata:
-  legacy_id: d0acfc23-97bd-46e4-9b99-304622596a83
+  legacy_id: c1bdfcd6-d9af-4377-a730-e57eaf8e75a0
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Sunt sartorial mlkshk portland retro aliquip, tilde air plant vaporware church-key green juice id snackwave.  Elit humblebrag put a bird on it chambray non.  Bushwick vape ipsum food truck, sartorial authentic fingerstache salvia chartreuse microdosing air plant fugiat listicle anim.  Master cleanse authentic salvia gluten-free.  Chicharrones ad truffaut aliquip literally disrupt kombucha eu.
-Selfies subway tile master cleanse, pok pok art party etsy 3 wolf moon meditation drinking vinegar migas banjo microdosing irure ad elit.  Roof party tumeric swag deserunt knausgaard helvetica hexagon.  Direct trade poke anim, retro tofu chia stumptown voluptate man bun pabst polaroid.  Adaptogen hella salvia, id reprehenderit ut tacos ramps venmo elit palo santo occaecat sartorial 3 wolf moon etsy.
+Chartreuse bespoke kogi, roof party drinking vinegar vice ex viral succulents commodo affogato distillery single-origin coffee labore.  Gochujang labore ethical velit brooklyn, adaptogen gentrify ut irony.  Non church-key consectetur YOLO ut.  DIY four loko slow-carb, ramps consequat microdosing YOLO tempor hexagon lorem.  Fanny pack sartorial hashtag blue bottle occaecat crucifix retro distillery dreamcatcher.
+
+Farm-to-table swag cillum pitchfork exercitation subway tile kitsch eiusmod gastropub qui paleo skateboard chartreuse everyday carry.  Biodiesel pop-up lumbersexual godard cardigan.  Schlitz occupy you probably haven't heard of them vinyl plaid, elit palo santo.  Organic et man braid gastropub labore intelligentsia cred artisan listicle truffaut cornhole.  Art party selvage incididunt waistcoat tumblr cray minim church-key deep v shabby chic shaman activated charcoal.

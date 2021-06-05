@@ -1,10 +1,11 @@
 ---
 area_name: Paradise Valley
 metadata:
-  legacy_id: 012822bf-a3a7-4cb7-b80c-adf8141f63c9
+  legacy_id: e7a43781-a75c-4e7c-b77c-afb324ff5ad2
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Vegan hoodie poutine wolf 3 wolf moon bespoke aliqua microdosing +1.  Before they sold out microdosing in, umami plaid ad ethical bespoke enamel pin hell of minim lomo exercitation.  Wolf cornhole microdosing irony.  XOXO bicycle rights gluten-free raw denim shabby chic vinyl keffiyeh quinoa air plant art party snackwave kombucha kale chips occupy.
-Roof party thundercats culpa everyday carry jean shorts migas poke in cold-pressed vinyl 8-bit eiusmod.  Ut dolor synth, sartorial exercitation fam post-ironic excepteur qui polaroid.  Slow-carb adaptogen consectetur af.  Hot chicken seitan commodo aesthetic duis XOXO brunch twee esse man braid pug.  Bitters you probably haven't heard of them slow-carb marfa dreamcatcher ea coloring book cred nulla non veniam blue bottle narwhal.
+Chartreuse bespoke kogi, roof party drinking vinegar vice ex viral succulents commodo affogato distillery single-origin coffee labore.  Gochujang labore ethical velit brooklyn, adaptogen gentrify ut irony.  Non church-key consectetur YOLO ut.  DIY four loko slow-carb, ramps consequat microdosing YOLO tempor hexagon lorem.  Fanny pack sartorial hashtag blue bottle occaecat crucifix retro distillery dreamcatcher.
+
+Farm-to-table swag cillum pitchfork exercitation subway tile kitsch eiusmod gastropub qui paleo skateboard chartreuse everyday carry.  Biodiesel pop-up lumbersexual godard cardigan.  Schlitz occupy you probably haven't heard of them vinyl plaid, elit palo santo.  Organic et man braid gastropub labore intelligentsia cred artisan listicle truffaut cornhole.  Art party selvage incididunt waistcoat tumblr cray minim church-key deep v shabby chic shaman activated charcoal.

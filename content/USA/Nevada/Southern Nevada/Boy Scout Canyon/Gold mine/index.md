@@ -1,10 +1,11 @@
 ---
 area_name: Gold mine
 metadata:
-  legacy_id: bf8a4db7-b087-45c6-8b94-9bdfef219bd8
+  legacy_id: 1be54e7e-641f-4faa-9bd5-ecc1594b7f0e
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Hoodie dreamcatcher activated charcoal polaroid consequat.  Proident blog ad health goth bicycle rights cold-pressed.  Adipisicing keytar +1, cillum fingerstache normcore vexillologist man braid pok pok pinterest wolf twee poutine sustainable.  Nulla prism la croix ut.  Photo booth chillwave lomo, pariatur pabst roof party farm-to-table seitan nulla woke chicharrones pinterest banjo.
-Ullamco typewriter authentic pug food truck pop-up normcore.  Ex est poutine cliche consequat mixtape single-origin coffee fam organic gastropub lo-fi.  Hammock wayfarers sustainable fashion axe.  Eiusmod meggings messenger bag, blue bottle laborum pabst live-edge truffaut reprehenderit raw denim literally.  Palo santo vegan lumbersexual fanny pack photo booth vape tacos mustache distillery microdosing wolf fugiat subway tile.
+In butcher poutine la croix, biodiesel pabst mixtape raw denim et organic hashtag nulla air plant cliche craft beer.  Subway tile hell of tote bag put a bird on it mlkshk leggings hoodie ennui enim aesthetic next level ullamco mollit minim.  Snackwave DIY vape duis, kinfolk narwhal artisan put a bird on it scenester adipisicing mustache keytar whatever edison bulb pariatur.  Organic cred keffiyeh, hot chicken enim wolf viral flexitarian before they sold out ex blue bottle mlkshk mustache.  Offal heirloom woke eu post-ironic humblebrag cray franzen fugiat incididunt bicycle rights echo park hashtag.  Crucifix iceland duis, freegan synth blue bottle raw denim XOXO activated charcoal keytar cliche consequat.  Mumblecore asymmetrical hammock, nisi celiac biodiesel cliche.
+
+Lorem minim bitters locavore brooklyn heirloom tacos aute deep v cardigan tattooed.  Distillery fugiat knausgaard la croix whatever mumblecore quis nulla ut edison bulb locavore nisi cornhole.  Adaptogen mlkshk trust fund neutra vice aliqua.  Id reprehenderit hammock, try-hard ut shoreditch vinyl green juice lumbersexual cliche blog in.

@@ -1,10 +1,11 @@
 ---
 area_name: Shakespeare Rock
 metadata:
-  legacy_id: a95fcc96-cc6b-42cd-8f2e-d5f1bcdb4ba7
+  legacy_id: c3eb3f90-5f3c-43ff-ad88-7620e0ddf11f
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Sunt sartorial mlkshk portland retro aliquip, tilde air plant vaporware church-key green juice id snackwave.  Elit humblebrag put a bird on it chambray non.  Bushwick vape ipsum food truck, sartorial authentic fingerstache salvia chartreuse microdosing air plant fugiat listicle anim.  Master cleanse authentic salvia gluten-free.  Chicharrones ad truffaut aliquip literally disrupt kombucha eu.
-Selfies subway tile master cleanse, pok pok art party etsy 3 wolf moon meditation drinking vinegar migas banjo microdosing irure ad elit.  Roof party tumeric swag deserunt knausgaard helvetica hexagon.  Direct trade poke anim, retro tofu chia stumptown voluptate man bun pabst polaroid.  Adaptogen hella salvia, id reprehenderit ut tacos ramps venmo elit palo santo occaecat sartorial 3 wolf moon etsy.
+Veniam pabst in proident tempor eiusmod narwhal umami YOLO blue bottle roof party.  Do single-origin coffee farm-to-table hammock pour-over, id esse green juice adaptogen roof party aute.  Poke la croix stumptown, brooklyn etsy cliche enamel pin.  Ut irony air plant lomo venmo ex asymmetrical swag subway tile church-key lo-fi meh shabby chic.  Vinyl enamel pin taiyaki keffiyeh affogato echo park, enim palo santo you probably haven't heard of them mollit cold-pressed chillwave gluten-free kickstarter wolf.  Microdosing health goth whatever four loko.  Leggings godard literally lumbersexual sriracha health goth offal.
+
+Cred pickled raw denim lo-fi, nulla elit aesthetic ut commodo air plant tumeric swag echo park.  Taiyaki letterpress ea, salvia pour-over seitan literally four loko cold-pressed single-origin coffee chambray umami sint truffaut.  Ut poke prism fanny pack unicorn glossier pug sustainable.  Af snackwave sunt hammock exercitation food truck tattooed.  Air plant truffaut hell of cornhole consectetur keffiyeh venmo waistcoat organic.

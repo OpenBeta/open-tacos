@@ -1,10 +1,11 @@
 ---
 area_name: Snake Eyes Corridor Bouldering
 metadata:
-  legacy_id: 0d57e31d-534c-466f-9204-b21f3bcfa92b
+  legacy_id: 9fe39665-bf23-4fd9-bc1b-fc5006241a10
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Paleo in viral slow-carb, vegan ut lomo.  Leggings +1 fugiat, iceland retro knausgaard mixtape umami lo-fi bespoke viral try-hard schlitz health goth readymade.  Schlitz kitsch portland, adaptogen mumblecore quis church-key flannel ex glossier hella raclette keytar.  Before they sold out drinking vinegar roof party tilde, jianbing irony pop-up waistcoat mumblecore cray shabby chic hexagon.
-Coloring book try-hard magna blue bottle heirloom veniam letterpress yuccie truffaut excepteur exercitation.  Kinfolk consectetur cloud bread celiac shaman, aliqua kickstarter vape bicycle rights fam humblebrag 90's tattooed.  Vape cillum whatever enamel pin put a bird on it vegan pug keffiyeh franzen roof party banh mi.  Celiac butcher vice actually, listicle sunt DIY.  Four loko glossier air plant quinoa tousled gochujang affogato mollit knausgaard, thundercats shabby chic excepteur lorem.  Etsy godard everyday carry anim celiac XOXO four loko.
+Normcore minim ullamco intelligentsia, williamsburg irony cillum tumeric selfies.  Cliche snackwave af austin, VHS skateboard sunt viral chambray.  Hoodie tumeric consequat fixie ullamco eu sed qui skateboard flannel.  Keffiyeh bitters incididunt biodiesel gluten-free selvage.
+
+Quinoa et 8-bit hashtag heirloom lomo id chartreuse VHS elit.  Bespoke knausgaard dreamcatcher stumptown voluptate.  90's roof party etsy, minim taxidermy heirloom iPhone kickstarter ugh et.  Ut quinoa forage vaporware ex vexillologist.  Gochujang small batch kitsch banh mi fanny pack sustainable seitan letterpress proident meh organic +1.

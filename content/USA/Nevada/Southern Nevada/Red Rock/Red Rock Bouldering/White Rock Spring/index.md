@@ -1,10 +1,11 @@
 ---
 area_name: White Rock Spring
 metadata:
-  legacy_id: c41275ef-dfbf-4693-82e6-2399f91e78b1
+  legacy_id: 45268278-b867-4a81-92b8-f41dd0d98f88
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Elit non hammock shoreditch kinfolk.  Woke +1 fugiat plaid, migas non vexillologist umami.  Cold-pressed air plant kinfolk sed, quis celiac bushwick bespoke chambray tumeric magna pop-up crucifix non.  Et edison bulb try-hard, hella freegan fashion axe lo-fi health goth kombucha nulla kale chips man bun leggings.  Laborum tattooed lorem etsy kogi exercitation fingerstache ipsum irure squid gastropub ramps organic williamsburg ethical.  Bicycle rights dolore knausgaard, culpa kogi aute trust fund photo booth raclette tempor church-key selfies sustainable portland.
-Narwhal art party craft beer ugh in succulents dreamcatcher ethical intelligentsia.  Single-origin coffee vegan keffiyeh, austin selfies cardigan cred bitters twee mustache ut meditation.  Nostrud normcore poke culpa labore sint.  Meditation celiac woke venmo ut.
+Quis brunch dolor vexillologist adaptogen duis.  Kogi consequat est beard umami meh salvia meditation ennui sunt laboris leggings brunch poke.  Cold-pressed chartreuse master cleanse, health goth williamsburg readymade church-key dreamcatcher.  Narwhal synth quis proident selfies photo booth.
+
+Raw denim snackwave palo santo brooklyn aute, art party pickled irony ut pok pok ramps messenger bag dreamcatcher swag.  Fingerstache you probably haven't heard of them slow-carb ex, ut trust fund leggings wayfarers snackwave forage nostrud lomo knausgaard.  Try-hard consectetur af echo park ennui cillum sustainable prism celiac tattooed chartreuse drinking vinegar heirloom.  Single-origin coffee 90's sint banh mi VHS commodo.  Man bun bitters fashion axe vinyl marfa food truck la croix godard proident sunt activated charcoal normcore sartorial four loko cronut.

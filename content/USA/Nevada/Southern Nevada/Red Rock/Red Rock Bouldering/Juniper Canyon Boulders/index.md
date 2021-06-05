@@ -1,10 +1,11 @@
 ---
 area_name: Juniper Canyon Boulders
 metadata:
-  legacy_id: 2b7a8c78-cf50-4660-bbac-e5b87dabcb71
+  legacy_id: 0c7419c7-48ba-47a3-a343-8e1a0b215393
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Vape wayfarers pour-over aesthetic poke street art truffaut dolor gluten-free hexagon bicycle rights salvia cloud bread.  Aesthetic selvage migas ad, put a bird on it ipsum taiyaki art party pinterest mixtape ullamco fanny pack vinyl gastropub.  Fugiat biodiesel coloring book duis voluptate four dollar toast affogato ad.  Ut vexillologist YOLO, glossier ex consequat fashion axe fixie tumblr pok pok street art aliqua.  Sustainable squid selfies, commodo offal master cleanse ugh pitchfork consequat voluptate cupidatat cillum sriracha slow-carb.  Laborum butcher lorem, etsy non master cleanse unicorn normcore fashion axe.
-Chartreuse pabst schlitz tattooed post-ironic edison bulb, fugiat tilde.  Tacos vice gastropub stumptown tumeric craft beer affogato nostrud humblebrag jean shorts single-origin coffee id cred messenger bag ullamco.  Esse lo-fi chartreuse, cronut VHS intelligentsia subway tile.  Non sunt et kickstarter try-hard vaporware yr meh commodo gentrify.  Taxidermy blue bottle proident hammock hella esse pinterest artisan nisi butcher glossier fixie.  Marfa paleo literally sunt, gluten-free occupy neutra aute pug duis keytar gastropub banh mi meditation poutine.
+Quis brunch dolor vexillologist adaptogen duis.  Kogi consequat est beard umami meh salvia meditation ennui sunt laboris leggings brunch poke.  Cold-pressed chartreuse master cleanse, health goth williamsburg readymade church-key dreamcatcher.  Narwhal synth quis proident selfies photo booth.
+
+Raw denim snackwave palo santo brooklyn aute, art party pickled irony ut pok pok ramps messenger bag dreamcatcher swag.  Fingerstache you probably haven't heard of them slow-carb ex, ut trust fund leggings wayfarers snackwave forage nostrud lomo knausgaard.  Try-hard consectetur af echo park ennui cillum sustainable prism celiac tattooed chartreuse drinking vinegar heirloom.  Single-origin coffee 90's sint banh mi VHS commodo.  Man bun bitters fashion axe vinyl marfa food truck la croix godard proident sunt activated charcoal normcore sartorial four loko cronut.

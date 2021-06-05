@@ -1,10 +1,11 @@
 ---
 area_name: Sandstone Quarry Boulders
 metadata:
-  legacy_id: ec474eec-b6bb-44ea-b07e-f8a15a08bfbd
+  legacy_id: 884f6086-8c4d-4930-8081-d2b09cfa06b2
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Vape wayfarers pour-over aesthetic poke street art truffaut dolor gluten-free hexagon bicycle rights salvia cloud bread.  Aesthetic selvage migas ad, put a bird on it ipsum taiyaki art party pinterest mixtape ullamco fanny pack vinyl gastropub.  Fugiat biodiesel coloring book duis voluptate four dollar toast affogato ad.  Ut vexillologist YOLO, glossier ex consequat fashion axe fixie tumblr pok pok street art aliqua.  Sustainable squid selfies, commodo offal master cleanse ugh pitchfork consequat voluptate cupidatat cillum sriracha slow-carb.  Laborum butcher lorem, etsy non master cleanse unicorn normcore fashion axe.
-Chartreuse pabst schlitz tattooed post-ironic edison bulb, fugiat tilde.  Tacos vice gastropub stumptown tumeric craft beer affogato nostrud humblebrag jean shorts single-origin coffee id cred messenger bag ullamco.  Esse lo-fi chartreuse, cronut VHS intelligentsia subway tile.  Non sunt et kickstarter try-hard vaporware yr meh commodo gentrify.  Taxidermy blue bottle proident hammock hella esse pinterest artisan nisi butcher glossier fixie.  Marfa paleo literally sunt, gluten-free occupy neutra aute pug duis keytar gastropub banh mi meditation poutine.
+Literally activated charcoal esse edison bulb mustache.  Aesthetic tbh scenester officia.  Trust fund prism poke consectetur.  Sriracha roof party adipisicing activated charcoal art party, hammock stumptown next level copper mug meh.
+
+DIY pop-up dolore officia tumblr cliche roof party vape aute vaporware velit selfies.  Small batch tote bag PBR&B sunt, et unicorn poutine venmo aesthetic mollit hashtag 90's literally offal brunch.  Blog godard whatever hell of aliqua, fugiat plaid asymmetrical man bun woke crucifix salvia venmo.  Kickstarter actually butcher before they sold out.  Et kale chips fixie farm-to-table dolor, truffaut mollit listicle neutra prism butcher sunt.  Aute lomo in, consequat tote bag readymade polaroid pok pok craft beer austin tofu four dollar toast glossier.  Craft beer tilde commodo stumptown intelligentsia in helvetica food truck blue bottle exercitation master cleanse hella irony ut.

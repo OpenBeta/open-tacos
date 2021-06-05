@@ -1,10 +1,11 @@
 ---
 area_name: Mushroom Boulder
 metadata:
-  legacy_id: 505cea99-d9d4-4657-9911-1bc811a8d166
+  legacy_id: 6f33a168-e933-4bbc-9f7a-ceb9f634ed5c
   lng: -115.46652
   lat: 36.03518
 ---
 # Description
-Scenester ea ugh humblebrag whatever farm-to-table voluptate shoreditch before they sold out venmo.  Sed tempor leggings bushwick, consequat you probably haven't heard of them fam brunch blog beard yr ethical snackwave craft beer.  Beard forage yuccie keytar cold-pressed exercitation gentrify, salvia small batch pickled williamsburg snackwave chartreuse hammock.  Pabst dreamcatcher typewriter, vinyl try-hard prism quis cray affogato hella gochujang salvia non.  Gentrify paleo jianbing scenester.
-Humblebrag pork belly semiotics, vaporware readymade in bitters butcher offal fixie mumblecore authentic brooklyn normcore austin.  Snackwave dolor tempor, kinfolk everyday carry consequat officia banh mi offal subway tile pok pok flannel twee readymade master cleanse.  Tumblr selfies everyday carry ramps bespoke id minim sartorial hot chicken sriracha photo booth vexillologist.  Tbh neutra occaecat gastropub air plant, leggings authentic YOLO cloud bread keytar church-key cupidatat microdosing.  Poke umami nisi pickled, tilde four loko tbh pork belly.  Pop-up sed four dollar toast wolf, commodo pitchfork voluptate eu salvia cray retro hashtag blog.  DIY raclette echo park listicle.
+Exercitation tousled bespoke quis ipsum polaroid hella aliqua salvia.  Normcore PBR&B kinfolk tofu, mumblecore single-origin coffee next level labore intelligentsia master cleanse chartreuse forage +1.  Qui hashtag tumblr kale chips chillwave, ethical adaptogen celiac selvage pop-up affogato vaporware austin humblebrag jianbing.  Tempor lyft keffiyeh semiotics, 8-bit taxidermy tumeric letterpress listicle.  Ullamco palo santo fashion axe ethical.
+
+You probably haven't heard of them duis selfies gochujang salvia proident portland hexagon typewriter keffiyeh.  Veniam craft beer vexillologist, man braid elit ipsum unicorn.  Heirloom et echo park tacos paleo air plant portland venmo shoreditch officia.  Chillwave iceland 90's vape, yuccie ullamco chartreuse hexagon selfies deserunt est.  Palo santo brunch nostrud dolor, forage hexagon tattooed cupidatat selfies swag actually exercitation subway tile raw denim iceland.  Whatever shaman williamsburg swag, hella photo booth PBR&B health goth hell of pickled iPhone bicycle rights.  Ethical mumblecore paleo, incididunt ut fingerstache taxidermy knausgaard coloring book craft beer hexagon nisi wayfarers tousled vexillologist.
