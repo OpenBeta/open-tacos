@@ -7,4 +7,4 @@ before_script:
 script:
   - export NODE_ENV=test
   - yarn analyze
-  - gatsby build
+  - ./prebuild.sh full && gatsby build
