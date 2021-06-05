@@ -1,4 +1,5 @@
 import slugify from "slugify";
+import {ClimbTypeToColor} from "./constants";
 
 /**
  * TODO: I know this is a duplicated function in gatsby-node.js
@@ -77,4 +78,41 @@ export const createNavigatePaths = (pathId, parentAreas) => {
 export const pathOrParentIdToGitHubLink = (pathOrParentId, fileName) => {
   const baseUrl = 'https://github.com/OpenBeta/open-tacos/blob/develop/content/';
   return baseUrl + pathOrParentId + `/${fileName}.md`;
+};
+
+/**
+ * Given an array of objects that are climbs, generate the percents
+ * and colors of all the types of climbs. This is used in the BarPercent 
+ * component.
+ * @param {Object[]} climbs, these are the nodes {frontmatter, fields} format
+ * @returns {percents: [], colors:[]}
+ */
+export const computeClimbingPercentsAndColors = (climbs) => {
+  const typeToCount = {};
+  climbs.forEach(({node:climb})=>{
+    const {type} = climb.frontmatter;
+    const types = Object.keys(type);
+    types.forEach((key)=>{
+      const isType = type[key];
+      if (!isType) return;
+      if (typeToCount[key]) {
+        typeToCount[key] = typeToCount[key] + 1;      
+      } else {
+        typeToCount[key] = 1;
+      }
+    });
+  });
+  const counts = Object.values(typeToCount) || [];
+  const reducer = (accumulator, currentValue) => accumulator + currentValue;
+  const totalClimbs = counts.reduce(reducer,0);
+  const percents = counts.map((count)=>{
+    return count/totalClimbs * 100;
+  })  
+  const colors = Object.keys(typeToCount).map((key)=>{
+    return ClimbTypeToColor[key];
+  });
+  return {
+    percents,
+    colors
+  };
 };

@@ -13,6 +13,7 @@ import AreaCard from "../components/ui/AreaCard";
 import LinkToGithub from "../components/ui/LinkToGithub";
 import shortCode_H1 from "../components/ui/shortcodes/h1";
 import {template_h1_css} from "../js/styles";
+import AreaStatistics from "../components/AreaStatistics";
 
 const shortcodes = { 
   Link,
@@ -33,6 +34,7 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAre
       <SEO keywords={[area_name]} title={area_name} />
       <BreadCrumbs path={parentId} navigationPaths={navigationPaths}></BreadCrumbs>
       <h1 className={template_h1_css}>{area_name}</h1>
+      <AreaStatistics climbs={climbs}></AreaStatistics>
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
       </MDXProvider>
