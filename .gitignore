@@ -73,4 +73,5 @@ yarn-error.log
 .yarn-integrity
 
 # opentacos-content repo cache
+opentacos-content
 content
