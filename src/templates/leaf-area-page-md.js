@@ -43,6 +43,7 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAre
           childAreas.edges.map(({ node }) => {
             const {frontmatter} = node;
             const {area_name, metadata} = frontmatter;
+            const {slug} = node.fields
             return(
               <div
                 className="pt-6 max-h-96"
@@ -50,7 +51,7 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAre
                 key={metadata.legacy_id}
               >
                 <AreaCard
-                  onPress={()=>{navigate(`/areas/${metadata.legacy_id}/${slugify(area_name,{lower:true})}`)}}
+                  onPress={()=>{navigate(slug)}}
                   area_name={area_name}
                 ></AreaCard>
               </div>
@@ -63,6 +64,7 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAre
           climbs.edges.map(({ node }) => {
             const {frontmatter} = node;
             const {yds, route_name, metadata, type} = frontmatter;
+            const {slug} = node.fields;
             return(
               <div
                 className="pt-6 max-h-96"
@@ -70,7 +72,8 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAre
                 key={metadata.legacy_id}
               >
                 <RouteCard
-                  onPress={()=>{navigate(`/climbs/${metadata.legacy_id}/${slugify(route_name,{lower:true})}`)}}
+                  //                  onPress={()=>{navigate(`/climbs/${metadata.legacy_id}/${slugify(route_name,{lower:true})}`)}}
+                  onPress={()=>{navigate(slug)}}
                   route_name={route_name}
                   legacy_id={metadata.legacy_id}
                   YDS={yds}
@@ -116,7 +119,8 @@ export const query = graphql`
       edges {
         node {
           fields {
-            parentId
+            parentId,
+            slug
           }
           frontmatter {
             route_name
@@ -142,6 +146,7 @@ export const query = graphql`
         node {
           fields {
             pathId
+            slug
           }
           frontmatter {
             area_name
