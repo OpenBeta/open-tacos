@@ -2,7 +2,7 @@ cache:
   paths:
     - node_modules/
 
-image: node:alpine:3.11
+image: node:alpine3.13
 
 pages:
   script:
