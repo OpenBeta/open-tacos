@@ -2,7 +2,7 @@ cache:
   paths:
     - node_modules/
 
-image: node:alpine3.13
+image: 16.3-buster-slim
 
 pages:
   script:
