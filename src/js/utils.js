@@ -1,5 +1,6 @@
 import slugify from "slugify";
 import {ClimbTypeToColor} from "./constants";
+const path = require(`path`);
 
 /**
  * TODO: I know this is a duplicated function in gatsby-node.js
@@ -63,7 +64,7 @@ export const createNavigatePaths = (pathId, parentAreas) => {
   for ( const {node} of parentAreas) {
     const currentPathId = node.fields.pathId;
     const legacy_id = node.frontmatter.metadata.legacy_id;
-    const sluggedAreaName = slugify(node.frontmatter.area_name, {lower:true});
+    const sluggedAreaName = slugify(path.basename(currentPathId), {lower:true});
     navigationPaths[currentPathId] = `/areas/${legacy_id}/${sluggedAreaName}`;    
   }
 
@@ -76,7 +77,7 @@ export const createNavigatePaths = (pathId, parentAreas) => {
  * @param {String} fileName the file name of the markdown file without extension
  */
 export const pathOrParentIdToGitHubLink = (pathOrParentId, fileName) => {
-  const baseUrl = 'https://github.com/OpenBeta/open-tacos/blob/develop/content/';
+  const baseUrl = 'https://github.com/OpenBeta/opentacos-content/blob/nevada/content/';
   return baseUrl + pathOrParentId + `/${fileName}.md`;
 };
 

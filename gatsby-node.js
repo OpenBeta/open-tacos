@@ -54,8 +54,8 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       createNodeField({
         node,
         name: `slug`,
-        value: `climbs/${node.frontmatter.metadata.legacy_id}/${slugify(
-          node.frontmatter.route_name,
+        value: `/climbs/${node.frontmatter.metadata.legacy_id}/${slugify(
+          markdownFileName,
           {
             lower: true,
           }
@@ -94,7 +94,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
         node,
         name: `slug`,
         value: `/areas/${node.frontmatter.metadata.legacy_id}/${slugify(
-          node.frontmatter.area_name,
+          path.basename(pathId), // use dir name since it's sanitized/has less special chars
           {
             lower: true,
           }
@@ -204,3 +204,17 @@ exports.createPages = async ({ graphql, actions }) => {
     });
   });
 };
+
+/**
+ * Webpack no longer includes path-browserify.  Adding this
+ * function to make 'path' library available to client-side code.
+ */
+exports.onCreateWebpackConfig = ({ actions }) => {
+  actions.setWebpackConfig({
+   resolve: {
+      fallback: {
+        path: require.resolve('path-browserify'),
+      },
+    },
+  })
+}
