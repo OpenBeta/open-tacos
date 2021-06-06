@@ -75,3 +75,6 @@ yarn-error.log
 # opentacos-content repo cache
 opentacos-content
 content
+
+# Visual Studio Code
+.vscode/
