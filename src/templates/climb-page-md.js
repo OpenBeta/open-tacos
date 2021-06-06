@@ -8,12 +8,13 @@ import { Link } from "gatsby";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
 import {createNavigatePaths, pathOrParentIdToGitHubLink} from "../js/utils";
 import LinkToGithub from "../components/ui/LinkToGithub";
-import shortCode_H1 from "../components/ui/shortcodes/h1";
+import {h1, p} from "../components/ui/shortcodes";
 import {template_h1_css} from "../js/styles";
 
 const shortcodes = { 
   Link,
-  h1: shortCode_H1
+  h1: h1,
+  p: p
 }; // Provide common components here
 
 /**

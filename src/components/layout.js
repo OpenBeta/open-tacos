@@ -1,13 +1,20 @@
 import PropTypes from "prop-types";
 import React from "react";
+import { Location } from "@reach/router";
 
 import Header from "./header";
+import LandingHero from "./ui/LandingHero";
 
 function Layout({ children }) {
   return (
-    // <div className="flex flex-col min-h-screen font-sans text-gray-900">
     <div className="min-h-screen font-sans text-gray-900">
       <Header />
+
+      {/* Only show hero on index page. We place it here instead of index.js
+      in order to fill the whole screen (escaping main container's width).*/}
+      <Location> 
+        {({ location }) => location.pathname === "/" && <LandingHero />}
+      </Location>
 
       <main className="w-full max-w-4xl mx-auto md:px-8 md:py-20">
         {children}
