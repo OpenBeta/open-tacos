@@ -5,6 +5,9 @@ cache:
 image: node:16.3-buster-slim
 
 pages:
+  only:
+    - develop  # Only run for this branch
+ 
   before_script:
     - apt-get update && apt install -y git
     - yarn install
@@ -13,6 +16,6 @@ pages:
     - ./prebuild.sh full # fetch content repo
     - ./node_modules/.bin/gatsby build
 
-  artifacts:
+  artifacts:  # Use by GitLab pages
     paths:
       - public
