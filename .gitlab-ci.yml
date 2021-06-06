@@ -5,10 +5,14 @@ cache:
 image: node:16.3-buster-slim
 
 pages:
-  script:
+  before_script:
+    - apt install -y git
     - yarn install
+
+  script:
     - ./prebuild.sh full # fetch content repo
     - ./node_modules/.bin/gatsby build
+
   artifacts:
     paths:
       - public
