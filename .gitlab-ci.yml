@@ -6,7 +6,7 @@ image: node:16.3-buster-slim
 
 pages:
   before_script:
-    - apt install -y git
+    - apt-get update && apt install -y git
     - yarn install
 
   script:
