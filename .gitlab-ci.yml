@@ -1,0 +1,14 @@
+cache:
+  paths:
+    - node_modules/
+
+image: node:alpine:3.11
+
+pages:
+  script:
+    - yarn install
+    - ./prebuild.sh full # fetch content repo
+    - ./node_modules/.bin/gatsby build
+  artifacts:
+    paths:
+      - public
