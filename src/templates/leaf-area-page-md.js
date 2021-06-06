@@ -11,13 +11,14 @@ import BreadCrumbs from "../components/ui/BreadCrumbs";
 import {createNavigatePaths, pathOrParentIdToGitHubLink} from "../js/utils";
 import AreaCard from "../components/ui/AreaCard";
 import LinkToGithub from "../components/ui/LinkToGithub";
-import shortCode_H1 from "../components/ui/shortcodes/h1";
+import {h1, p} from "../components/ui/shortcodes.js";
 import {template_h1_css} from "../js/styles";
 import AreaStatistics from "../components/AreaStatistics";
 
 const shortcodes = { 
   Link,
-  h1: shortCode_H1 
+  h1: h1,
+  p: p  
 };
 
 /**
