@@ -10,6 +10,8 @@ import {createNavigatePaths, pathOrParentIdToGitHubLink} from "../js/utils";
 import LinkToGithub from "../components/ui/LinkToGithub";
 import {h1, p} from "../components/ui/shortcodes";
 import {template_h1_css} from "../js/styles";
+import RouteGradeChip from "../components/ui/RouteGradeChip";
+import RouteTypeChips from "../components/ui/RouteTypeChips";
 
 const shortcodes = { 
   Link,
@@ -21,7 +23,7 @@ const shortcodes = {
  * Templage for generating individual page for the climb
  */
 export default function ClimbPage({ data: { mdx, parentAreas } }) {
-  const { route_name } = mdx.frontmatter;
+  const { route_name, yds, type, safety} = mdx.frontmatter;
   const {parentId, filename} = mdx.fields;
   const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
   const githubLink = pathOrParentIdToGitHubLink(parentId, filename);
@@ -31,6 +33,8 @@ export default function ClimbPage({ data: { mdx, parentAreas } }) {
       <SEO keywords={[route_name]} title={route_name} />
       <BreadCrumbs path={parentId} navigationPaths={navigationPaths}></BreadCrumbs>
       <h1 className={template_h1_css}>{route_name}</h1>
+      <RouteGradeChip yds={yds} safety={safety}></RouteGradeChip>
+      <RouteTypeChips type={type}></RouteTypeChips>
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
       </MDXProvider>
@@ -54,6 +58,14 @@ export const query = graphql`
         route_name
         metadata {
           legacy_id
+        }
+        yds
+        safety
+        type {
+          tr
+          trad
+          sport
+          boulder
         }
       }
       body
