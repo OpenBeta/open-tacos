@@ -51,7 +51,7 @@ function IndexPage() {
         keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
         title="Home"
       />
-      <h4 className="text-xl font-medium mt-12 mb-4">Explore by States</h4>
+      <h4 className="text-xl font-medium my-4">Explore by States</h4>
       <div class="flex gap-x-4">
         <div className="text-gray-400">California</div>
         <div>
