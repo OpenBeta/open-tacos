@@ -5,7 +5,7 @@ const fullConfig = resolveConfig(tailwindConfig);
 
 module.exports = {
   siteMetadata: {
-    title: `El Gordo`,
+    title: `OpenTacos`,
     description: `Open collaboration climbing platform`,
     author: `hello@openbeta.io`,
   },
