@@ -12,7 +12,7 @@ shopt -s extglob
 rm -rf opentacos-content
 rm -rf content
 
-git clone --depth 1 --branch nevada \
+git clone --depth 1 --branch develop \
   https://github.com/OpenBeta/opentacos-content.git \
   opentacos-content
 
