@@ -12,9 +12,10 @@ prebuild:
   only:
   - develop
   - main
-  
+  - gitlab-debug
+
   script:
-  - apt install -y git
+  - apt-get update && apt-get install -y --no-install-recommends git
   - yarn install
   - ./prebuild.sh full # fetch content repo
 
@@ -23,6 +24,7 @@ gatsby-build:
   only: # Only run for this branch
   - develop
   - main
+  - gitlab-debug
  
   script:
   - ./node_modules/.bin/gatsby build
