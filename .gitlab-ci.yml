@@ -5,7 +5,7 @@ cache:
 image: node:16.3-buster-slim
 
 variables:
-  GIT_DEPTH: 1
+  GIT_DEPTH: 5
 
 gatsby-build:
   only: # Only run for these branches
