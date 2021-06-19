@@ -7,25 +7,17 @@ image: node:16.3-buster-slim
 variables:
   GIT_DEPTH: 1
 
-prebuild:
-  stage: .pre
-  only:
+gatsby-build:
+  only: # Only run for these branches
   - develop
   - main
   - gitlab-debug
 
-  script:
+  before_script:
   - apt-get update && apt-get install -y --no-install-recommends git
   - yarn install
   - ./prebuild.sh full # fetch content repo
 
-gatsby-build:
-  stage: build
-  only: # Only run for this branch
-  - develop
-  - main
-  - gitlab-debug
- 
   script:
   - ./node_modules/.bin/gatsby build
 
