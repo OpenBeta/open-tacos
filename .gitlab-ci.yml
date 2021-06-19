@@ -21,7 +21,7 @@ gatsby-build:
 
   before_script:
   - apt-get update && apt-get install -y git
-  - yarn install
+  - yarn install --no-progress
   - ./prebuild.sh full # fetch content repo
 
   script:
