@@ -48,7 +48,6 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAre
             return(
               <div
                 className="pt-6 max-h-96"
-                id={slugify(area_name)}
                 key={metadata.legacy_id}
               >
                 <AreaCard
@@ -69,7 +68,6 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAre
             return(
               <div
                 className="pt-6 max-h-96"
-                id={slugify(route_name)}
                 key={metadata.legacy_id}
               >
                 <RouteCard

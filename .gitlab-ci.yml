@@ -6,24 +6,24 @@ image: node:16.3-buster-slim
 
 variables:
   GIT_DEPTH: 1
-
-prebuild:
-  stage: .pre
-  only:
-  - develop
-  - main
-  
-  script:
-  - apt install -y git
-  - yarn install
-  - ./prebuild.sh full # fetch content repo
+  DOCKER_DRIVER: overlay2
 
 gatsby-build:
-  stage: build
-  only: # Only run for this branch
+  only: # Only run for these branches
   - develop
   - main
- 
+  - gitlab-debug
+
+  stage: build
+
+  tags:
+  - docker
+
+  before_script:
+  - apt-get update && apt-get install -y git
+  - yarn install --no-progress
+  - ./prebuild.sh full # fetch content repo
+
   script:
   - ./node_modules/.bin/gatsby build
 
