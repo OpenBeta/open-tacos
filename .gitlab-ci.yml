@@ -6,6 +6,7 @@ image: node:16.3-buster-slim
 
 variables:
   GIT_DEPTH: 1
+  DOCKER_DRIVER: overlay2
 
 gatsby-build:
   only: # Only run for these branches
