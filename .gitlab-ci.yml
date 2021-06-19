@@ -5,7 +5,7 @@ cache:
 image: node:16.3-buster-slim
 
 variables:
-  GIT_DEPTH: 5
+  GIT_DEPTH: 1
 
 gatsby-build:
   only: # Only run for these branches
@@ -14,7 +14,7 @@ gatsby-build:
   - gitlab-debug
 
   before_script:
-  - apt-get update && apt-get install -y --no-install-recommends git
+  - apt-get update && apt-get install -y git
   - yarn install
   - ./prebuild.sh full # fetch content repo
 
