@@ -42,18 +42,25 @@
     "start": "gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "test": "jest"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.3",
     "@babel/plugin-proposal-decorators": "^7.14.2",
     "@tailwindcss/forms": "0.3.2",
     "autoprefixer": "10.2.5",
-    "babel-preset-gatsby": "^1.5.0",
+    "babel-jest": "^27.0.2",
+    "babel-preset-gatsby": "^1.7.1",
+    "chai": "^4.3.4",
     "cssnano": "5.0.4",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
     "eslint": "^7.27.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.0.4",
     "postcss": "8.3.0",
     "prettier": "2.3.0",
+    "react-test-renderer": "^17.0.2",
     "tailwindcss": "2.1.2"
   },
   "repository": {
@@ -62,5 +69,10 @@
   },
   "bugs": {
     "url": "https://github.com/OpenBeta/open-tacos/issues"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "./setupTests.js"
+    ]
   }
 }
