@@ -8,6 +8,7 @@
     "@mdx-js/react": "^1.6.22",
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.21.1",
+    "cross-env": "^7.0.3",
     "gatsby": "^3.5.1",
     "gatsby-plugin-image": "^1.6.0",
     "gatsby-plugin-manifest": "^3.7.1",
@@ -37,7 +38,7 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "analyze": "eslint --ext .jsx --ext .js .",
-    "build": "gatsby build",
+    "build": "GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true gatsby build",
     "develop": "gatsby develop",
     "start": "gatsby develop",
     "serve": "gatsby serve",
