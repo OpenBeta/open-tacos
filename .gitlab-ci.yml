@@ -1,21 +1,34 @@
 cache:
   paths:
     - node_modules/
+    - .cache
+    - public
 
 image: node:16.3-buster-slim
 
-pages:
-  only:
-    - develop  # Only run for this branch
- 
+variables:
+  GIT_DEPTH: 1
+  DOCKER_DRIVER: overlay2
+
+gatsby-build:
+  only: # Only run for these branches
+  - develop
+  - main
+  - gitlab-debug
+
+  stage: build
+
+  tags:
+  - docker
+
   before_script:
-    - apt-get update && apt install -y git
-    - yarn install
+  - apt-get update && apt-get install -y git
+  - yarn install --no-progress
+  - ./prebuild.sh full # fetch content repo
 
   script:
-    - ./prebuild.sh full # fetch content repo
-    - ./node_modules/.bin/gatsby build
+  - ./node_modules/.bin/gatsby build
 
   artifacts:  # Use by GitLab pages
     paths:
-      - public
+    - public
