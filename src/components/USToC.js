@@ -5,7 +5,7 @@ function USToC() {
   return (
     <section>
       <h4 className="text-xl font-medium my-4">Explore by State</h4>
-      <div class="flex gap-x-4">
+      <div className="flex gap-x-4">
         <div className="text-gray-400">California</div>
         <div>
           <Link to="/areas/2c278fe6-c679-4aef-a6e1-085d9d205bab/nevada">
