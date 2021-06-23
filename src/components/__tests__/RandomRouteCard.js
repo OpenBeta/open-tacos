@@ -1,6 +1,5 @@
 import React from "react";
 import { render } from "enzyme";
-import { expect } from "chai";
 import RandomRouteCard from "../RandomRouteCard";
 
 describe("RandomRouteCard", () => {
@@ -19,6 +18,6 @@ describe("RandomRouteCard", () => {
     const wrapper = render(<RandomRouteCard climb={mocked}/>);
     const actual = wrapper.find('h2').text();
     const expected = mocked.frontmatter.route_name;
-    expect(actual).to.be.equal(expected);
+    expect(actual).toBe(expected);
   })
 })

@@ -6,7 +6,6 @@ import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import { Link } from "gatsby";
 import RouteCard from "../components/ui/RouteCard";
-import slugify from "slugify";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
 import {createNavigatePaths, pathOrParentIdToGitHubLink} from "../js/utils";
 import AreaCard from "../components/ui/AreaCard";
