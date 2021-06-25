@@ -30,9 +30,11 @@ module.exports ={
   },
   plugins: [
     "react",
+    "jest"
   ],
   extends: [
     "eslint:recommended", // use recommended configs
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:jest/recommended"
   ]
 }
