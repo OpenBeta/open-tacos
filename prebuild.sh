@@ -1,5 +1,5 @@
 #!/bin/bash
-# Prepare the build environment
+# Prepare the build environment by downloading the content repo locally
 #
 # Syntax:
 #     ./prebuild [full]
@@ -7,19 +7,24 @@
 #     Specify 'full' include the entire dataset
 #
 
-shopt -s extglob
-
+rm -rf content/*
 rm -rf opentacos-content
-rm -rf content
 
 git clone --depth 1 --branch develop \
-  https://github.com/OpenBeta/opentacos-content.git \
-  opentacos-content
+  https://github.com/OpenBeta/opentacos-content.git 
 
 if [ "$1" != "full" ];
 then
-  echo "Triming data files..."
-  rm -rf opentacos-content/content/USA/Nevada/?(Eastern*|Western*)
-fi
+  echo "Copying selected content..."
+  pushd opentacos-content/content
+  export target="../../content"
 
-ln -s opentacos-content/content content
+  # Copy only the first and 2nd level index.md for each state 
+  find . -mindepth 2 -maxdepth 4  -name "index*"  -exec rsync -aR "{}" $target \;
+
+  # Copy only a few specific areas
+  mkdir -p $target/$target
+  rsync -aR ./USA/Oregon/Central\ Oregon/Smith\ Rock $target
+  rsync -aR ./USA/Nevada/Southern\ Nevada/Red\ Rock $target
+  popd
+fi

@@ -7,7 +7,7 @@ export default function LandingHero() {
   return (
     <div style={{ display: "grid" }}>
       <StaticImage
-        src="../../images/landing-hero.jpg"
+        src="../../images/landing-hero-v1.jpg"
         alt="Indian Creek at sunset"
         layout="fullWidth"
         placeholder="blurred"
