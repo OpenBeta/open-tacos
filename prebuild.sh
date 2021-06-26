@@ -8,7 +8,6 @@
 #
 
 rm -rf content
-mkdir content
 
 rm -rf opentacos-content
 
@@ -17,10 +16,10 @@ git clone --depth 1 --branch develop \
 
 if [ "$1" != "full" ];
 then
+  mkdir content
   echo "Copying selected content..."
   pushd opentacos-content/content
   export target="../../content"
-
   # Copy only the first and 2nd level index.md for each state 
   find . -mindepth 2 -maxdepth 4  -name "index*"  -exec rsync -aR "{}" $target \;
 
@@ -29,6 +28,6 @@ then
   rsync -aR ./USA/Nevada/Southern\ Nevada/Red\ Rock $target
   popd
 else
-  # create a symlink to the entire content repo
+  echo "Creating a symlink to entire content repo"
   ln -s opentacos-content/content content
 fi
