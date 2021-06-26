@@ -10,7 +10,8 @@ variables:
   GIT_DEPTH: 1
   DOCKER_DRIVER: overlay2
 
-gatsby-build:
+# Job name must be 'pages' in order for GitLab to deploy to static site
+pages:
   only: # Only run for these branches
   - develop
   - main
