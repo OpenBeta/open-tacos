@@ -1,4 +1,4 @@
-# How to Contributing to the OpenBeta project
+# How to Contribute to the OpenBeta project
 
 :+1::tada: First off, thanks for taking the time to contribute! :tada::+1:
 
