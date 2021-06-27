@@ -1,4 +1,4 @@
-# Contributing to Open-Tacos
+# How to Contributing to the OpenBeta project
 
 :+1::tada: First off, thanks for taking the time to contribute! :tada::+1:
 
@@ -13,8 +13,6 @@ The following is a set of guidelines for contributing to Open-Tacos and related 
 [How Can I Contribute?](#how-can-i-contribute)
   * [Reporting Bugs](#reporting-bugs)
   * [Suggesting Enhancements](#suggesting-enhancements)
-  * [Your First Code Contribution](#your-first-code-contribution)
-  * [Pull Requests](#pull-requests)
 
 
 ## Code of Conduct
@@ -27,18 +25,39 @@ This project and everyone participating in it is governed by the [OpenBeta of Co
 
 We have an official message board where the community chimes in with helpful advice if you have questions.
 
-* [Discuss, the official OpenBeta community message board](https://community.openbeta.io)
+* [**Community**](https://community.openbeta.io) &mdash; the official OpenBeta community message board
 
 If chat is more your speed, you can join the Discord chat server:
 
 * [Join the Discord chat server](https://discord.gg/xcWha22BhT)
     * Even though Discord is a chat service, sometimes it takes several hours for community members to respond &mdash; please be patient!
     * Assign yourself role(s) according the type of climbing often do, eg: bouldering, sport, etc.
-    * Ender **OpenBeta category**, use the `#general` channel  for general questions or discussion about contributing to the project.
+    * Under **OpenBeta category**, use the `#general` channel  for general questions or discussion about contributing to the project.
     * Use the `#openbeta-dev` channel for technical discussion about our on-going projects.
     * Under **Community category**, use the `#general` channel for discussion with other community members.
     * There are many other channels available, check the channel list
 
+## How Can I Contribute?
+
+### Reporting Bugs
+
+#### How Do I Submit A (Good) Bug Report?
+
+Explain the problem and include additional details to help maintainers reproduce the problem:
+
+* **Use a clear and descriptive title** for the issue to identify the problem.
+* **Describe the exact steps which reproduce the problem** in as many details as possible. 
+* **Provide specific examples to demonstrate the steps**. Include links to files or GitHub projects, or copy/pasteable snippets.
+
+> **Note:** If you find a **Closed** issue that seems like it is the same thing that you're experiencing, open a new issue and include a link to the original issue in the body of your new one.
+
+### Suggesting Enhancements
+
+* **Use a clear and descriptive title** for the issue to identify the suggestion.
+* **Provide a step-by-step description of the suggested enhancement** in as many details as possible.
+* **Explain why this enhancement would be useful** to most OpenBeta users.
+
+This guide was adapted from project [Atom's](https://github.com/atom/atom)
 
 OpenBeta is a volunteer effort. We encourage you to pitch in and join the team!
 
