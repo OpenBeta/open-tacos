@@ -77,7 +77,7 @@ export const createNavigatePaths = (pathId, parentAreas) => {
  * @param {String} fileName the file name of the markdown file without extension
  */
 export const pathOrParentIdToGitHubLink = (pathOrParentId, fileName) => {
-  const baseUrl = 'https://github.com/OpenBeta/opentacos-content/blob/nevada/content/';
+  const baseUrl = 'https://github.com/OpenBeta/opentacos-content/blob/develop/content/';
   return baseUrl + pathOrParentId + `/${fileName}.md`;
 };
 
