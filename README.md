@@ -18,7 +18,8 @@ OpenTacos is a proof-of-concept/MVP showing it's possible to build a collaborati
 Learn more about [Jamstack](https://jamstack.org)
 
 ## How to build
-Make sure you have the following Javascript tools installed on your computer
+Make sure you have the following tools installed on your computer
+- [Git](https://github.com/git-guides/install-git)
 - [Node](https://nodejs.org)
 - [npm](https://www.npmjs.com/get-npm)
 - [yarn](https://classic.yarnpkg.com/en/docs/install)
@@ -50,6 +51,11 @@ yarn install
 gatsby develop
 ```
 The application will be run at `http://localhost:8000`
+
+## How to contribute
+
+See [How to contribute guide](CONTRIBUTING.md) for more details.
+
 
 ## License
 AGPL
