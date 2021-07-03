@@ -11,6 +11,9 @@ module.exports = {
   },
   flags: {
     PRESERVE_WEBPACK_CACHE: true,
+    FAST_DEV: true,
+    PRESERVE_FILE_DOWNLOAD_CACH: true,
+    PARALLEL_SOURCING: true
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -58,9 +61,20 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `pages`,
+        path: `${__dirname}/src/pages`,
+        ignore: [`**/\.*`], // Ignore file starting with dot
+      },
+    },
+    {
       resolve: `gatsby-plugin-mdx`,
       options: {
         extensions: [`.mdx`, `.md`],
+        defaultLayouts: {
+          pages: require.resolve("./src/components/StandardPageLayout.js"),
+        },
       },
     },
     {
