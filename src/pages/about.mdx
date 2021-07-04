@@ -4,13 +4,46 @@ keywords:
  - OpenBeta
  - rock climbing
 ---
-# Welcome!
+<Header text="Welcome! 👋"/>
 
-OpenBeta is a grassroots initiative where climbers coming together with a common goal to keep climbing information free and accessible.
- We are building a new open collaboration platform for sharing climbing routes (project codename: open-tacos).
+OpenBeta is a grassroots initiative that brings climbers together with one common goal:  keep rock climbing information free and open for everyone.
 
+## Why an Open platform?
+OpenBeta platform is a new avenue for climbers to share and receive free climbing beta.  The project is backed by a not-for-profit organization that is run by climbers and puts climbers' interests first and foremost.
 
-To make things easier to manage, we split the project into two distinct parts:
-- Climb route content:  ([GitHub](https://github.com/OpenBeta/opentacos-content))
-- Cource code ([GitHub](https://github.com/openbeta/open-tacos))
+Unlike other climbing sites that let you view the information other climbers have generous contributed, they actually have legal restrictions on their use, [preventing people from using the information](https://www.climbing.com/news/mountain-project-openbeta-and-the-fight-over-climbing-data-access/) in creative and productive ways.
 
+# Getting Started
+
+To make things easier to manage, we split the platform (codename: open-tacos) into two distinct parts:
+- Climbing content aka "Beta":  GPS coordinates, grade, photos, description, etc. for routes and areas.  ([GitHub](https://github.com/OpenBeta/opentacos-content))
+- Source code:  Javascript, HTML code, icons, buttons, etc. ([GitHub](https://github.com/openbeta/open-tacos))
+
+When combing the two parts together, poof! we have this complete website you're looking at.
+The separation allows different teams of volunteers to work independently which is similar to running an online publication – writers can focus on producing and improving the content, while web developers and designers can work on the visual representation of the content. 
+
+## How to submit an edit
+
+We host all the climbing content on  GitHub, a popular source code hosting platform.
+Information about each climbing route is stored in a human-readable text file.
+We purposely avoid complex database techonology, instead rely on many existing features of GitHub to help us track user edits.  Climbers can join an area admin group to help us review and approve changes.
+
+A sample route description file:
+
+```
+---
+route_name: Chain Reaction
+type:
+  sport: true
+yds: 5.12c
+fa: Alan Watts
+---
+
+# Description
+One of the most photogenic routes at Smith Rock.
+
+# Protection
+Quickdraws
+```
+
+This file format is commonly known as Markdown. The "front matter", the section between two --- lines, containing useful metadata about the climb or the area can also be read by software code.

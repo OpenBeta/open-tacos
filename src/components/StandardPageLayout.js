@@ -2,9 +2,9 @@ import React from "react";
 import { MDXProvider } from "@mdx-js/react";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import {h1, h2, p, a, ol, ul} from "../components/ui/shortcodes"
+import {Header, h1, h2, p, a, ol, ul, pre} from "../components/ui/shortcodes"
 
-const shortcodes = {h1, h2, p, a, ol, ul};
+const shortcodes = {Header, h1, h2, p, a, ol, ul, pre};
 
 export default ({ pageContext, children }) => {
   const { frontmatter } = pageContext;
