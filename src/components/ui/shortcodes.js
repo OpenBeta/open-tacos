@@ -9,11 +9,11 @@ export const Header = (props) => (
  * <h1> short code to be used in templates
  */
 export const h1 = (props) => (
-  <h1 {...props} className="text-2xl font-medium mt-8 mb-1" />
+  <h1 {...props} className="text-3xl font-medium mt-8 mb-1" />
 );
 
 export const h2 = (props) => (
-  <h2 {...props} className="text-lg font-medium mt-8 mb-1" />
+  <h2 {...props} className="text-xl font-bold mt-8 mb-1" />
 );
 
 export const p = (props) => <p {...props} className="my-4" />;
@@ -27,6 +27,8 @@ export const ul = (props) => (
 export const ol = (props) => (
   <ol {...props} className="list-inside list-decimal" />
 );
+
+export const blockquote =(props) => (<blockquote {...props} className="border-l-4 border-gray-200 pl-6"/>)
 
 
 export const pre = (props) => (<pre {...props} className="font-mono text-sm rounded-xl bg-yellow-50 p-4"/>)
