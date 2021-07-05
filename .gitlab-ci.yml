@@ -25,7 +25,7 @@ pages:
   before_script:
   - apt-get update && apt-get install -y git
   - yarn install --no-progress
-  - ./prebuild.sh full # fetch content repo
+  - ./prebuild.sh # fetch content repo
 
   script:
   - ./node_modules/.bin/gatsby build

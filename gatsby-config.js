@@ -12,7 +12,7 @@ module.exports = {
   flags: {
     PRESERVE_WEBPACK_CACHE: true,
     FAST_DEV: true,
-    PRESERVE_FILE_DOWNLOAD_CACH: true,
+    PRESERVE_FILE_DOWNLOAD_CACHE: true,
     PARALLEL_SOURCING: true
   },
   plugins: [
@@ -20,8 +20,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `openbeta-rock-climbing-catalog`,
-        short_name: `Open source rock climbing catalog`,
+        name: `openbeta-rock-climbing-platform`,
+        short_name: `Open source rock climbing platform`,
         start_url: `/`,
         background_color: fullConfig.theme.colors.white,
         theme_color: fullConfig.theme.colors.green["500"],
