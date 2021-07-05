@@ -1,0 +1,69 @@
+---
+title: About the project
+keywords:
+ - OpenBeta
+ - rock climbing
+---
+<Header text="Welcome! 👋"/>
+
+OpenBeta is a grassroots initiative that brings climbers together with one common goal:  keep rock climbing information free and open for everyone.
+
+## Why an open platform?
+OpenBeta platform is a new avenue for climbers to share and receive free climbing beta.  We set up the project as a nonprofit foundation so that it would always serve the climbing community, rather than investors and shareholders.
+
+We pledge to keep climbers' generous contribution free and open, and do not have legal restrictions [preventing people from using the information](https://www.climbing.com/news/mountain-project-openbeta-and-the-fight-over-climbing-data-access/) in creative and productive ways.
+
+## Project structure
+
+To make things easier to manage,the platform (codename: open-tacos) is split into two distinct parts:
+- **Climbing content**:  GPS coordinates, grade, photos, description aka "Beta" for routes and areas.  ([GitHub](https://github.com/OpenBeta/opentacos-content))
+- **Source code**: HTML, Javascript code, icons, buttons, etc. ([GitHub](https://github.com/openbeta/open-tacos))
+
+When combing the two parts together, poof! we have this complete website you're currently looking at.
+The separation allows different teams of volunteers to work independently which is similar to running an online publication – writers can focus on producing and improving the content, while web developers and designers can work on the visual representation of the content. 
+
+# How to contribute
+
+We want contributing to the project be fun and educational.  All contributions are welcome, including new route content, blog posts, bug fixes, and more.
+
+## Not sure how to start contributing?
+
+No worries, you can ask questions on the community [message board](https://community.openbeta.io) or on [OpenBeta Discord](https://discord.gg/w2KpQu2ca5) chat server.
+
+## How to submit an edit
+
+We host all the climbing content on GitHub.com, a popular source code hosting platform.
+Information for each climbing route/area is stored in a human-readable text file.
+We purposely avoid complex database techonology, instead rely on many existing features of GitHub to help us keep track user edits.  Climbers can join an area admin group to help us review and approve changes.
+
+A sample route description file:
+
+```
+---
+route_name: Chain Reaction
+type:
+  sport: true
+yds: 5.12c
+fa: Alan Watts
+---
+
+# Description
+One of the most photogenic routes at Smith Rock.
+
+# Protection
+Quickdraws
+```
+
+This file format is commonly known as Markdown. The "front matter", the section between two --- lines, containing useful metadata about the climb or the area can also be read by software code.
+
+> Note: For now, you need to create an account on GitHub.com to add new routes/areas or edit existing content.  We are working on simplifying the process in the near future.
+
+## How to contribute code
+
+We're looking for help with User experience design, web development (CSS/React/Node.js), and data science (Python/Pandas).
+
+OpenBeta is a volunteer effort. We encourage you to pitch in and join the team!
+
+Thanks! ❤️ ❤️ ❤️
+
+OpenBeta Team

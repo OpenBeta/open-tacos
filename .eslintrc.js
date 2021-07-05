@@ -5,6 +5,7 @@ module.exports ={
     requireConfigFile: false
   },
   "rules": {
+    "no-unused-var": 1,
     "react/prop-types": 0,
     "no-useless-escape": 0,
     "react/react-in-jsx-scope": "off",

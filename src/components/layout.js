@@ -16,7 +16,7 @@ function Layout({ children }) {
         {({ location }) => location.pathname === "/" && <LandingHero />}
       </Location>
 
-      <main className="w-full max-w-4xl mx-auto md:px-8 md:py-20">
+      <main className="w-full max-w-4xl mx-auto px-4 py-20 md:px-24 sm:px-8" >
         {children}
       </main>
 
