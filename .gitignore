@@ -71,3 +71,10 @@ yarn-error.log
 
 # Yarn Integrity file
 .yarn-integrity
+
+# opentacos-content repo cache
+opentacos-content
+content
+
+# Visual Studio Code
+.vscode/

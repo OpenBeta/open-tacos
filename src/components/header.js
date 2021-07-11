@@ -16,7 +16,7 @@ function Header() {
   // `);
 
   return (
-    <header className="fixed w-full bg-white border-b">
+    <header className="fixed w-full bg-white border-b z-50">
       <div className="flex flex-nowrap items-center justify-between max-w-4xl mx-auto md:p-2">
         <div className="flex flex-nowrap items-center">
           <Link to="/">
@@ -48,11 +48,7 @@ function Header() {
             {
               route: `/about`,
               title: `About`,
-            },
-            {
-              route: `/contact`,
-              title: `Contact`,
-            },
+            }
           ].map((link) => (
             <Link
               className="block mt-4 no-underline md:inline-block md:mt-0 md:ml-6"

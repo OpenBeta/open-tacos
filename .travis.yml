@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - '14'
+cache: yarn
+before_script:
+  - "npm i -g gatsby"
+script:
+  - export NODE_ENV=test
+  - yarn analyze
+  - ./prebuild.sh full && gatsby build

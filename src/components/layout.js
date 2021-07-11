@@ -1,36 +1,43 @@
 import PropTypes from "prop-types";
 import React from "react";
+import { Location } from "@reach/router";
 
 import Header from "./header";
+import LandingHero from "./ui/LandingHero";
 
 function Layout({ children }) {
   return (
-    // <div className="flex flex-col min-h-screen font-sans text-gray-900">
     <div className="min-h-screen font-sans text-gray-900">
       <Header />
 
-      <main className="w-full max-w-4xl mx-auto md:px-8 md:py-20">
+      {/* Only show hero on index page. We place it here instead of index.js
+      in order to fill the whole screen (escaping main container's width).*/}
+      <Location> 
+        {({ location }) => location.pathname === "/" && <LandingHero />}
+      </Location>
+
+      <main className="w-full max-w-4xl mx-auto px-4 py-20 md:px-24 sm:px-8" >
         {children}
       </main>
 
       <footer className="bg-blue-700">
         <nav className="flex justify-between max-w-4xl p-4 mx-auto text-sm md:p-8">
           <p className="text-white">
-            Created by{` `}
+            A project by {` `}
             <a
               className="font-bold no-underline"
-              href="https://bryant.io"
+              href="https://openbeta.io"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Taylor Bryant
+              OpenBeta
             </a>
           </p>
 
           <p>
             <a
               className="font-bold text-white no-underline"
-              href="https://github.com/taylorbryant/gatsby-starter-tailwind"
+              href="https://github.com/OpenBeta/open-tacos"
               target="_blank"
               rel="noopener noreferrer"
             >

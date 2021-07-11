@@ -7,6 +7,7 @@ import abductionIllustration from "../images/abduction-illustration.svg";
 function NotFoundPage() {
   return (
     <Layout>
+      {/* eslint-disable react/jsx-pascal-case */}
       <SEO title="404: Not found" />
       <div>
         <img
