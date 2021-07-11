@@ -4,7 +4,7 @@ cache:
     - .cache
     - public
 
-image: node:16.3-buster-slim
+image: registry.gitlab.com/openbeta/openbeta-nodejs-docker:16.3
 
 variables:
   GIT_DEPTH: 1
@@ -23,7 +23,6 @@ pages:
   - docker
 
   before_script:
-  - apt-get update && apt-get install -y git rsync
   - yarn install --no-progress
   - ./prebuild.sh # fetch content repo
 
