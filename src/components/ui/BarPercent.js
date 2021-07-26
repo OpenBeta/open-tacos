@@ -1,7 +1,6 @@
 import React from "react";
 
 function BarPercent ({percents=[], colors=[], styles=""}) {
-  console.log(styles);
   return (
     <div>
       <div className={`h-2 w-100 flex ${styles}`}>

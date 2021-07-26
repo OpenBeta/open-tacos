@@ -2,6 +2,12 @@ import React from "react";
 import Card from './card';
 import BarPercent from "./BarPercent";
 
+/**
+ * area_name - A string of the climbing areas name 
+ * onPress - callback function for when the card is clicked
+ * stats - {percent, colors} an object that contains the data for the BarPercent
+ *   component
+ */
 function AreaCard({area_name, onPress, stats}) {
   return (
     <Card

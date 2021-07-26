@@ -13,7 +13,7 @@ import LinkToGithub from "../components/ui/LinkToGithub";
 import {h1, p} from "../components/ui/shortcodes.js";
 import {template_h1_css} from "../js/styles";
 import AreaStatistics from "../components/AreaStatistics";
-import { computeClimbingPercentsAndColors } from "../js/utils";
+import { computeStatsBarPercentPerAreaFromClimbs } from "../js/utils";
 
 const shortcodes = { 
   Link,
@@ -21,39 +21,15 @@ const shortcodes = {
   p: p  
 };
 
-const areasToClimbs = {};
-const areasToStatsBar = {};
-
-function matchingAreasAndClimbs (climbs) {
-  climbs.edges.map(({node})=>{
-    const parentId = node.fields.parentId;
-    if (areasToClimbs[parentId]) {
-      areasToClimbs[parentId].push(node.frontmatter)
-    } else {
-      areasToClimbs[parentId] = [node.frontmatter];
-    }
-  });
-}
-
 /**
  * Templage for generating individual page for the climb
  */
-export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAreas, areaClimbs} }) {
-  matchingAreasAndClimbs(areaClimbs);
-  Object.keys(areasToClimbs).map((key)=>{
-    const formatted = areasToClimbs[key].map((c)=>{
-      return {
-        node: {
-          frontmatter: c
-        }
-      };
-    });
-    areasToStatsBar[key] = computeClimbingPercentsAndColors(formatted);
-  })
+export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAreas, climbsPerChildArea} }) {
   const { area_name } = mdx.frontmatter;
   const {parentId, pathId, filename} = mdx.fields;
   const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
   const githubLink = pathOrParentIdToGitHubLink(pathId, filename);
+  const areasToStatsBar = computeStatsBarPercentPerAreaFromClimbs(climbsPerChildArea);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -119,7 +95,7 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAre
 }
 
 export const query = graphql`
-  query ($legacy_id: String!, $pathId: String, $possibleParentPaths: [String], $childAreaPaths: [String]) {
+  query ($legacy_id: String!, $pathId: String, $possibleParentPaths: [String], $childAreaPathIds: [String]) {
     mdx: mdx(
       fields: { collection: { eq: "area-indices" } }
       frontmatter: { metadata: { legacy_id: { eq: $legacy_id } } }
@@ -166,8 +142,8 @@ export const query = graphql`
         }
       }
     }
-    areaClimbs: allMdx(
-      filter:{fields:{collection:{eq:"climbing-routes"}, parentId:{in:$childAreaPaths}}}
+    climbsPerChildArea: allMdx(
+      filter:{fields:{collection:{eq:"climbing-routes"}, parentId:{in:$childAreaPathIds}}}
     ) {
       totalCount
       edges {
