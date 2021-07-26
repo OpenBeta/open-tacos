@@ -5,6 +5,7 @@ import RouteGradeChip from "./ui/RouteGradeChip";
 import { navigate } from "gatsby-link";
 
 function RandomRouteCard({climb}) {
+  if (!climb) return null;
   const {type, route_name, safety, yds} = climb.frontmatter;
   const {parentId, slug} = climb.fields;
   const numberOfAreas = parentId.split('/').length;

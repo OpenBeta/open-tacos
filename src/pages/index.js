@@ -43,7 +43,10 @@ function IndexPage() {
   const min = 0;
   const max = allClimbingRoutes.allMdx.edges.length;
   const randomIndex = getRandomInt(min, max);
-  const randomClimb = allClimbingRoutes.allMdx.edges[randomIndex].node;
+  let randomClimb = null;
+  if (allClimbingRoutes.allMdx.edges === 0) {
+    randomClimb = allClimbingRoutes.allMdx.edges[randomIndex].node;
+  }
   allClimbingRoutes = [];
   return (
     <Layout>

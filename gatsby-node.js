@@ -140,6 +140,7 @@ exports.createPages = async ({ graphql, actions }) => {
               slug
               pathId
               possibleParentPaths
+              parentId
             }
             frontmatter {
               metadata {
@@ -151,9 +152,24 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `);
+
+  const childAreas = {};
+  result.data.allMdx.edges.map(({node})=>{
+    const parentId = node.fields.parentId;
+    const pathId = node.fields.pathId;
+
+    if (childAreas[parentId]) {
+      childAreas[parentId].push(pathId)
+      childAreas[parentId] = [...new Set(childAreas[parentId])];
+    } else {
+      childAreas[parentId] = [pathId];
+    }
+  }); 
+
   // Create each index page for each leaf area
   const { createPage } = actions;
   for (const {node} of result.data.allMdx.edges) {
+    const childAreaPaths = childAreas[node.fields.pathId] ? childAreas[node.fields.pathId] : [];
     createPage({
       path: node.fields.slug,
       component: path.resolve(`./src/templates/leaf-area-page-md.js`),
@@ -163,7 +179,8 @@ exports.createPages = async ({ graphql, actions }) => {
         // name: node.area_name,
         slug: node.fields.slug,
         pathId: node.fields.pathId,
-        possibleParentPaths: node.fields.possibleParentPaths
+        possibleParentPaths: node.fields.possibleParentPaths,
+        childAreaPaths: childAreaPaths
       },
     });
   }
