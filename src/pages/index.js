@@ -44,7 +44,7 @@ function IndexPage() {
   const max = allClimbingRoutes.allMdx.edges.length;
   const randomIndex = getRandomInt(min, max);
   let randomClimb = null;
-  if (allClimbingRoutes.allMdx.edges.length >= 0) {
+  if (allClimbingRoutes.allMdx.edges.length > 0) {
     randomClimb = allClimbingRoutes.allMdx.edges[randomIndex].node;
   }
   allClimbingRoutes = [];
