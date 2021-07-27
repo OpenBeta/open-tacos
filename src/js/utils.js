@@ -119,7 +119,9 @@ export const computeClimbingPercentsAndColors = (climbs) => {
 };
  
 /**
- * 
+ * Given a set of climbs, map them back to their parent areas. For each
+ * parent area compute the percents and colors for all of the types of climbs
+ * within the area.
  * @param {Object[]} climbs - These are the values within the frontmatter object
  * @returns Object
  */
