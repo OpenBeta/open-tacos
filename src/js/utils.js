@@ -117,7 +117,12 @@ export const computeClimbingPercentsAndColors = (climbs) => {
     colors
   };
 };
-
+ 
+/**
+ * 
+ * @param {Object[]} climbs - These are the values within the frontmatter object
+ * @returns Object
+ */
 export const computeStatsBarPercentPerAreaFromClimbs = (climbs) => {
 
   const areasToClimbs = {};
