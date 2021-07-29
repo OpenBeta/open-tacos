@@ -1,9 +1,9 @@
 import React from "react";
 
-function BarPercent ({percents=[], colors=[]}) {
+function BarPercent ({percents=[], colors=[], styles=""}) {
   return (
     <div>
-      <div className="h-2 w-100 flex">
+      <div className={`h-2 w-100 flex ${styles}`}>
         {
           percents.map((percent, index)=> {
             const color = colors[index];
@@ -26,7 +26,7 @@ function BarPercent ({percents=[], colors=[]}) {
               <span
                 key={index}
                 className={`${borderRounding} h-2 bg-${color} inline-block`}
-                style={{ width: `${percent}px` }}
+                style={{ width: `${percent}%` }}
               ></span>
             );
           })

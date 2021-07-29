@@ -117,3 +117,41 @@ export const computeClimbingPercentsAndColors = (climbs) => {
     colors
   };
 };
+ 
+/**
+ * Given a set of climbs, map them back to their parent areas. For each
+ * parent area compute the percents and colors for all of the types of climbs
+ * within the area.
+ * @param {Object[]} climbs - These are the values within the frontmatter object
+ * @returns Object
+ */
+export const computeStatsBarPercentPerAreaFromClimbs = (climbs) => {
+
+  const areasToClimbs = {};
+  const areasToPercentAndColors = {};
+
+  // map each climb to the area 
+  climbs.edges.map(({node})=>{
+    const parentId = node.fields.parentId;
+    if (areasToClimbs[parentId]) {
+      areasToClimbs[parentId].push(node.frontmatter)
+    } else {
+      areasToClimbs[parentId] = [node.frontmatter];
+    }
+  });
+
+  // compute the stats and percent per area
+  // do a little formatting to  reuse the helper function
+  Object.keys(areasToClimbs).map((key)=>{
+    const formatted = areasToClimbs[key].map((c)=>{
+      return {
+        node: {
+          frontmatter: c
+        }
+      };
+    });
+    areasToPercentAndColors[key] = computeClimbingPercentsAndColors(formatted);
+  })
+
+  return areasToPercentAndColors;
+};

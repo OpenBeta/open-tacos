@@ -13,6 +13,7 @@ import LinkToGithub from "../components/ui/LinkToGithub";
 import {h1, p} from "../components/ui/shortcodes.js";
 import {template_h1_css} from "../js/styles";
 import AreaStatistics from "../components/AreaStatistics";
+import { computeStatsBarPercentPerAreaFromClimbs } from "../js/utils";
 
 const shortcodes = { 
   Link,
@@ -23,11 +24,12 @@ const shortcodes = {
 /**
  * Templage for generating individual page for the climb
  */
-export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAreas} }) {
+export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAreas, climbsPerChildArea} }) {
   const { area_name } = mdx.frontmatter;
   const {parentId, pathId, filename} = mdx.fields;
   const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
   const githubLink = pathOrParentIdToGitHubLink(pathId, filename);
+  const areasToStatsBar = computeStatsBarPercentPerAreaFromClimbs(climbsPerChildArea);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -43,16 +45,20 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAre
           childAreas.edges.map(({ node }) => {
             const {frontmatter} = node;
             const {area_name, metadata} = frontmatter;
-            const {slug} = node.fields
+            const {slug, pathId} = node.fields
+            const stats = areasToStatsBar[pathId];
             return(
               <div
                 className="pt-6 max-h-96"
                 key={metadata.legacy_id}
               >
-                <AreaCard
-                  onPress={()=>{navigate(slug)}}
-                  area_name={area_name}
-                ></AreaCard>
+                <div>
+                  <AreaCard
+                    onPress={()=>{navigate(slug)}}
+                    area_name={area_name}
+                    stats={stats}
+                  ></AreaCard>
+                </div>
               </div>
             )
           })
@@ -89,7 +95,7 @@ export default function LeafAreaPage({ data: {mdx, climbs, parentAreas, childAre
 }
 
 export const query = graphql`
-  query ($legacy_id: String!, $pathId: String, $possibleParentPaths: [String]) {
+  query ($legacy_id: String!, $pathId: String, $possibleParentPaths: [String], $childAreaPathIds: [String]) {
     mdx: mdx(
       fields: { collection: { eq: "area-indices" } }
       frontmatter: { metadata: { legacy_id: { eq: $legacy_id } } }
@@ -112,6 +118,32 @@ export const query = graphql`
     }
     climbs: allMdx(
       filter:{fields:{collection:{eq:"climbing-routes"}, parentId:{eq:$pathId}}}
+    ) {
+      totalCount
+      edges {
+        node {
+          fields {
+            parentId,
+            slug
+          }
+          frontmatter {
+            route_name
+            yds
+            type {
+              tr
+              trad
+              sport
+              boulder
+            }
+            metadata {
+              legacy_id
+            }
+          }
+        }
+      }
+    }
+    climbsPerChildArea: allMdx(
+      filter:{fields:{collection:{eq:"climbing-routes"}, parentId:{in:$childAreaPathIds}}}
     ) {
       totalCount
       edges {
