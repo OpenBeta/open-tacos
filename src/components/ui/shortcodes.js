@@ -9,11 +9,11 @@ export const Header = (props) => (
  * <h1> short code to be used in templates
  */
 export const h1 = (props) => (
-  <h1 {...props} className="text-3xl font-medium mt-8 mb-2" />
+  <h1 {...props} className="md-h1" />
 );
 
 export const h2 = (props) => (
-  <h2 {...props} className="text-xl font-bold mt-10 mb-1" />
+  <h2 {...props} className="md-h2" />
 );
 
 export const p = (props) => <p {...props} className="my-4" />;
