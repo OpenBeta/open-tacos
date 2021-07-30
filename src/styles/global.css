@@ -40,51 +40,60 @@
     outline: none;
   }
   
-  .react-autosuggest__input--focused {
-    outline: none;
-    border: 2px solid rgba(229, 231, 235,1) !important;
-    box-shadow: none !important;
-  }
-  
+.react-autosuggest__input--focused {
+  outline: none;
+  border: 2px solid rgba(229, 231, 235,1) !important;
+  box-shadow: none !important;
+}
 
-  .react-autosuggest__suggestions-container {
-    display: none;
-  }
 
-  .react-autosuggest__suggestions-container--open {
-    display: block;
-    position: absolute;
-    top: 66px;
-    width: 422px;
-    border-radius: 1.5rem;
-    border: 2px solid rgba(229, 231, 235,1);
-    background-color: #fff;
-    color: #264653;
-    font-family: "Open Sans", sans-serif;
-    font-weight: 300;
-    font-size: 14px;
-    /* border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px; */
-    z-index: 2;
-  }
-  
-  .react-autosuggest__suggestions-list {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-  }
-  
-  .react-autosuggest__suggestion {
-    cursor: pointer;
-    padding: 10px 20px;
-  }
-  
-  .react-autosuggest__suggestion--highlighted {
-    background-color: #ddd;
-    border-radius:  1.5rem;
-  }
-  
-  /* Main page hero card gradient color overlay */
-  .hero-card {
-    background-image: linear-gradient(to right top, #12bee5, #00b6f4, #1bacff, #58a0ff, #888fff, #ac80f2, #c970e0, #e05ec8, #ee52ad, #f64b91, #f74a75, #f24f5a);
-  }
+.react-autosuggest__suggestions-container {
+  display: none;
+}
+
+.react-autosuggest__suggestions-container--open {
+  display: block;
+  position: absolute;
+  top: 66px;
+  width: 422px;
+  border-radius: 1.5rem;
+  border: 2px solid rgba(229, 231, 235,1);
+  background-color: #fff;
+  color: #264653;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  /* border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px; */
+  z-index: 2;
+}
+
+.react-autosuggest__suggestions-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.react-autosuggest__suggestion {
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.react-autosuggest__suggestion--highlighted {
+  background-color: #ddd;
+  border-radius:  1.5rem;
+}
+
+/* Main page hero card gradient color overlay */
+.hero-card {
+  background-image: linear-gradient(to right top, #12bee5, #00b6f4, #1bacff, #58a0ff, #888fff, #ac80f2, #c970e0, #e05ec8, #ee52ad, #f64b91, #f74a75, #f24f5a);
+}
+
+.md-h1 {
+  @apply text-3xl font-medium mt-8 mb-2;
+}
+
+.md-h2 {
+  @apply text-xl font-bold mt-10 mb-1;
+}
+
