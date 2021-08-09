@@ -1,0 +1,54 @@
+@font-face {
+    font-family: "ISO";
+    src: url("ISOv0.9-Thin.woff2") format('woff2');
+    font-style: normal;
+    font-weight: 100;
+  }
+  
+  @font-face {
+    font-family: "ISO";
+    src: url("ISOv0.9-Light.woff2") format('woff2');
+    font-style: normal;
+    font-weight: 200;
+  }
+  
+  @font-face {
+      font-family: "ISO";
+      src: url("ISOv0.9-Regular.woff2") format('woff2');
+      font-style: normal;
+      font-weight: 400;
+    }
+
+  @font-face {
+    font-family: "ISO";
+    src: url("ISOv0.9-RegularItalic.woff2") format('woff2');
+    font-style: italic;
+    font-weight: 400;
+    }
+  
+  @font-face {
+    font-family: "ISO";
+    src: url("ISOv0.9-Medium.woff2") format('woff2');
+    font-style: normal;
+    font-weight: 600;
+  }
+  @font-face {
+    font-family: "ISO";
+    src: url("ISOv0.9-Medium.woff2") format('woff2');
+    font-style: normal;
+    font-weight: 600;
+  }
+  
+  @font-face {
+    font-family: "ISO";
+    src: url("ISOv0.9-Bold.woff2") format('woff2');
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  @font-face {
+    font-family: "ISO";
+    src: url("ISOv0.9-Black.woff2") format('woff2');
+    font-style: normal;
+    font-weight: 900;
+  }
