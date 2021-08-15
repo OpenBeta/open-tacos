@@ -97,3 +97,17 @@
   @apply text-xl font-bold mt-10 mb-1;
 }
 
+@layer components {
+
+  .btn {
+    @apply no-underline rounded-md px-4 py-2 text-gray-900 font-medium text-base;
+  }
+  .btn-primary {
+    @apply bg-yellow-300 hover:bg-yellow-400;
+  }
+
+  .link-primary {
+    @apply underline hover:text-yellow-600;
+  }
+
+}
