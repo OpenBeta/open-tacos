@@ -89,15 +89,15 @@ export const Icon = React.forwardRef(({ className, ...props }, ref) => (
 ));
 
 export const IconBold = (props) => (
-  <span className="font-bold text-2xl">B</span>
+  <span className="font-base text-2xl">B</span>
 );
 
 export const IconItalic = (props) => (
-  <span className="font-bold text-2xl italic">I</span>
+  <span className="font-base text-2xl italic">I</span>
 );
 
 export const IconUnderline = (props) => (
-  <span className="font-bold text-2xl underline">U</span>
+  <span className="font-base text-2xl underline">U</span>
 );
 
 export const IconCode = (props) => (
@@ -105,7 +105,7 @@ export const IconCode = (props) => (
 );
 
 export const IconH1 = (props) => (
-    <span className="font-base text-2xl">H1</span>
+    <span className="font-base text-2xl w-2">H1</span>
   );
 
 export const Instruction = React.forwardRef(({ className, ...props }, ref) => (

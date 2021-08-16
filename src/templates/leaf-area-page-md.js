@@ -4,7 +4,6 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
-import { Link } from "gatsby";
 import RouteCard from "../components/ui/RouteCard";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
 import { createNavigatePaths, pathOrParentIdToGitHubLink } from "../js/utils";
@@ -16,7 +15,6 @@ import AreaStatistics from "../components/AreaStatistics";
 import { computeStatsBarPercentPerAreaFromClimbs } from "../js/utils";
 
 const shortcodes = {
-  Link,
   h1: h1,
   p: p,
 };
@@ -41,16 +39,15 @@ export default function LeafAreaPage({
         path={parentId}
         navigationPaths={navigationPaths}
       ></BreadCrumbs>
-      <div className="float-right">
-        <Link
-          className="bg-yellow-300 px-4 py-2 mt-8"
-          to={`/edit?file=${pathId}/${filename}.md`}
-        >
-          Edit Me
-        </Link>
-      </div>
       <h1 className={template_h1_css}>{area_name}</h1>
-
+      <div className="float-right">
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate(`/edit?file=${pathId}/${filename}.md`)}
+        >
+          Edit
+        </button>
+      </div>
       <AreaStatistics climbs={climbs}></AreaStatistics>
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>

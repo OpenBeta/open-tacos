@@ -1,5 +1,5 @@
 import React from "react";
-import { graphql, Link } from "gatsby";
+import { graphql, navigate } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { MDXProvider } from "@mdx-js/react";
@@ -13,7 +13,6 @@ import RouteGradeChip from "../components/ui/RouteGradeChip";
 import RouteTypeChips from "../components/ui/RouteTypeChips";
 
 const shortcodes = {
-  Link,
   h1: h1,
   p: p,
 }; // Provide common components here
@@ -36,12 +35,9 @@ export default function ClimbPage({ data: { mdx, parentAreas } }) {
       ></BreadCrumbs>
       <h1 className={template_h1_css}>{route_name}</h1>
       <div className="float-right">
-        <Link
-          className="bg-yellow-300 px-4 py-2 mt-8"
-          to={`/edit?file=${parentId}/${filename}.md`}
-        >
-          Edit Me
-        </Link>
+        <button className="btn btn-primary" onClick={()=>navigate(`/edit?file=${parentId}/${filename}.md`)}>
+          Edit
+        </button>
       </div>
       <RouteGradeChip yds={yds} safety={safety}></RouteGradeChip>
       <RouteTypeChips type={type}></RouteTypeChips>

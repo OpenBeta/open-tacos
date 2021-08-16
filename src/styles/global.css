@@ -97,13 +97,29 @@
   @apply text-xl font-bold mt-10 mb-1;
 }
 
+.slate-ToolbarButton {
+  @apply text-gray-400;
+}
+
+.slate-ToolbarButton-active {
+  @apply text-gray-900;
+}
+
 @layer components {
 
   .btn {
-    @apply no-underline rounded-md px-4 py-2 text-gray-900 font-medium text-base;
+    @apply no-underline rounded-lg px-6 py-2 text-gray-900 font-medium text-base shadow-md;
   }
   .btn-primary {
     @apply bg-yellow-300 hover:bg-yellow-400;
+  }
+
+  .btn-link {
+    @apply hover:underline shadow-none
+  }
+
+  .btn-default {
+    @apply  text-gray-600
   }
 
   .link-primary {
