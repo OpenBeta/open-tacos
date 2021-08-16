@@ -9,14 +9,15 @@ import BreadCrumbs from "../components/ui/BreadCrumbs";
 import { createNavigatePaths, pathOrParentIdToGitHubLink } from "../js/utils";
 import AreaCard from "../components/ui/AreaCard";
 import LinkToGithub from "../components/ui/LinkToGithub";
-import { h1, p } from "../components/ui/shortcodes.js";
+import { h1, h2, p } from "../components/ui/shortcodes.js";
 import { template_h1_css } from "../js/styles";
 import AreaStatistics from "../components/AreaStatistics";
 import { computeStatsBarPercentPerAreaFromClimbs } from "../js/utils";
 
 const shortcodes = {
-  h1: h1,
-  p: p,
+  h1,
+  h2,
+  p,
 };
 
 /**

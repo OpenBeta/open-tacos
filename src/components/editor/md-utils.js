@@ -16,13 +16,16 @@ const DESERIALIZE_OPTS = {
     ...defaultNodeTypes,
     paragraph: "p",
     heading: { ...DEFAULT_HEADINGS },
+    link: "a",
   },
+  linkDestinationKey: 'url',
 };
 
 const SERIALIZE_OPTS = {
   nodeTypes: {
     ...defaultNodeTypes,
     paragraph: "p",
+    link: "a",
     heading: { ...DEFAULT_HEADINGS },
   },
 };

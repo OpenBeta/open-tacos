@@ -3469,7 +3469,7 @@
     "@udecode/plate-common" "1.1.6"
     "@udecode/plate-core" "1.0.0"
 
-"@udecode/plate-link-ui@1.1.7":
+"@udecode/plate-link-ui@1.1.7", "@udecode/plate-link-ui@^1.1.7":
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/@udecode/plate-link-ui/-/plate-link-ui-1.1.7.tgz#53e330ce474a5e744f571f145ada2b0dd50e7f53"
   integrity sha512-FxyGMMpWn1tZcO3zChz5lbJdQ1elqTBY2p+gXTBOFe4pkU1tDAZEayiYVANZ0zesrMv5XfjVY6MUKBFPsscNmw==
@@ -3480,7 +3480,7 @@
     "@udecode/plate-styled-components" "1.1.7"
     "@udecode/plate-toolbar" "1.1.7"
 
-"@udecode/plate-link@1.1.6":
+"@udecode/plate-link@1.1.6", "@udecode/plate-link@^1.1.6":
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/@udecode/plate-link/-/plate-link-1.1.6.tgz#f38a96c75a0d648baf6891dc41e24597637c104a"
   integrity sha512-ZgruMPA+JjHb5W1ysrzs2noywRJf24vvWKsFuSsszD6BBjEbU1jFbjt0rzkvhAtXpeSexnqtMQcUcFNv/ri9dA==
@@ -18653,6 +18653,11 @@ yargs@^16.0.3, yargs@^16.1.0:
     string-width "^4.2.0"
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
+
+yarn@^1.22.11:
+  version "1.22.11"
+  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.22.11.tgz#d0104043e7349046e0e2aec977c24be106925ed6"
+  integrity sha512-AWje4bzqO9RUn3sdnM5N8n4ZJ0BqCc/kqFJvpOI5/EVkINXui0yuvU7NDCEF//+WaxHuNay2uOHxA4+tq1P3cg==
 
 yauzl@^2.4.2:
   version "2.10.0"

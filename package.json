@@ -13,6 +13,8 @@
     "@udecode/plate-block-quote": "^1.1.6",
     "@udecode/plate-code-block": "^1.1.6",
     "@udecode/plate-heading": "^1.1.6",
+    "@udecode/plate-link": "^1.1.6",
+    "@udecode/plate-link-ui": "^1.1.7",
     "@udecode/plate-md-serializer": "^1.1.8",
     "@udecode/plate-paragraph": "^1.1.6",
     "@udecode/plate-toolbar": "^1.1.7",
@@ -50,7 +52,8 @@
     "slate-hyperscript": "^0.62.0",
     "slate-react": "^0.65.3",
     "slugify": "^1.5.3",
-    "unified": "^10.1.0"
+    "unified": "^10.1.0",
+    "yarn": "^1.22.11"
   },
   "keywords": [
     "rock climbing",

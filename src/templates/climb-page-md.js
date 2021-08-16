@@ -7,14 +7,15 @@ import { MDXRenderer } from "gatsby-plugin-mdx";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
 import { createNavigatePaths, pathOrParentIdToGitHubLink } from "../js/utils";
 import LinkToGithub from "../components/ui/LinkToGithub";
-import { h1, p } from "../components/ui/shortcodes";
+import { h1, h2, p } from "../components/ui/shortcodes";
 import { template_h1_css } from "../js/styles";
 import RouteGradeChip from "../components/ui/RouteGradeChip";
 import RouteTypeChips from "../components/ui/RouteTypeChips";
 
 const shortcodes = {
-  h1: h1,
-  p: p,
+  h1,
+  h2,
+  p,
 }; // Provide common components here
 
 /**

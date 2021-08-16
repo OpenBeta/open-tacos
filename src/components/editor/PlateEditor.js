@@ -3,21 +3,14 @@ import ReactPlaceholder from "react-placeholder";
 import { navigate } from "gatsby";
 import {
   Plate,
-  createBasicElementPlugins,
+  createBasicElementPlugins, // h1, h2, blockquote, codeblock and p
   createReactPlugin,
   createHistoryPlugin,
-  createBasicMarkPlugins,
-  createParagraphPlugin,
+  createBasicMarkPlugins, // bold, italic, underline
   createPlateComponents,
   createPlateOptions,
-  createBlockquotePlugin,
-  createHeadingPlugin,
-  createBoldPlugin,
-  createItalicPlugin,
+  createLinkPlugin,
   createDeserializeMDPlugin,
-  useStoreEditorRef,
-  useEventEditorId,
-  getPlatePluginType,
 } from "@udecode/plate";
 import FormatToolbar from "./FormatToolbar";
 import { md_to_slate, slate_to_md } from "./md-utils";
@@ -26,10 +19,11 @@ import { md_to_slate, slate_to_md } from "./md-utils";
 const editableProps = {
   style: {
     padding: "16px",
+    minHeight: "4rem"
     //backgroundColor: "#FEF9E7",
   },
 };
-const PlateEditor = ({ markdown, onSubmit }) => {
+const PlateEditor = ({ markdown, onSubmit, debug }) => {
   const components = createPlateComponents();
   const options = createPlateOptions();
 
@@ -37,24 +31,27 @@ const PlateEditor = ({ markdown, onSubmit }) => {
     // editor
     createReactPlugin(),
     createHistoryPlugin(),
-    createParagraphPlugin(),
+    createLinkPlugin(),
     ...createBasicElementPlugins(),
     ...createBasicMarkPlugins(),
   ];
 
   plugins.push(...[createDeserializeMDPlugin({ plugins })]);
 
-  const [debugValue, setDebugValue] = useState(null);
+  const [ast, setAST] = useState(null);
 
   useEffect(() => {
-    // Since the markdown prop is a result of an async API call to GitHub
+    // Since 'markdown' prop is a result of an async API call to GitHub,
     // we need track it in useEffect
     const slateAST = md_to_slate(markdown);
-    setDebugValue(slateAST);
+    setAST(slateAST);
   }, [markdown]);
 
   const onSubmitLocal = () => {
-    onSubmit({ markdown: slate_to_md(debugValue) });
+    if (debug) {
+      console.log("Slate document > ", ast);
+    }
+    onSubmit({ markdown: slate_to_md(ast) });
   };
 
   return (
@@ -79,16 +76,16 @@ const PlateEditor = ({ markdown, onSubmit }) => {
           rows={16}
           color="#F4F6F6"
         >
-          <div className="transition duration-500 opacity-100">
+          <div className="transition duration-850 opacity-100">
             <Plate
               id="1"
               editableProps={editableProps}
               plugins={plugins}
               components={components}
               options={options}
-              value={debugValue}
+              value={ast}
               onChange={(newValue) => {
-                setDebugValue(newValue);
+                setAST(newValue);
               }}
             ></Plate>
           </div>

@@ -1,12 +1,14 @@
-import React, { Ref } from "react";
+import React  from "react";
 import ReactDOM from "react-dom";
-import { cx, css } from "@emotion/css";
+import { cx, css } from "@emotion/css"; // need to get rid of this
+
+import LinkIcon from "../../assets/icons/link.svg"
 
 export const Button = React.forwardRef(
   ({ className, active, reversed, ...props }, ref) => (
     <span
       className={`cursor-pointer px-2 py-1 ${
-        active ? 'text-gray-900' : 'text-gray-400'
+        active ? "text-gray-900" : "text-gray-400"
       }`}
       {...props}
       ref={ref}
@@ -101,12 +103,20 @@ export const IconUnderline = (props) => (
 );
 
 export const IconCode = (props) => (
-  <span className="font-mono font-bold text-lg">&lt;&gt;</span>
+  <span className="font-base  text-xl">&lt;&gt;</span>
+);
+
+export const IconURL = (props) => (
+  <span ><LinkIcon/></span>
 );
 
 export const IconH1 = (props) => (
-    <span className="font-base text-2xl w-2">H1</span>
-  );
+  <span className="text-center font-base text-xl w-6 py-10">H1</span>
+);
+
+export const IconH2 = (props) => (
+  <span className="text-center font-base text-xl w-6 py-10">H2</span>
+);
 
 export const Instruction = React.forwardRef(({ className, ...props }, ref) => (
   <div
