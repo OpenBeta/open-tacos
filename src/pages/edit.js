@@ -3,12 +3,12 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Editor from "../components/editor/Editor";
 
-export const edit = (props) => {
+const edit = (props) => {
   return (
     <Layout>
       <SEO
-        keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
-        title="Home"
+        keywords={[`openbeta`, `rock climbing`, `open data`]}
+        title="Edit"
       />
       <Editor/>
     </Layout>

@@ -20,8 +20,11 @@ const DESERIALIZE_OPTS = {
 };
 
 const SERIALIZE_OPTS = {
-  ...defaultNodeTypes,
-  heading: { ...DEFAULT_HEADINGS },
+  nodeTypes: {
+    ...defaultNodeTypes,
+    paragraph: "p",
+    heading: { ...DEFAULT_HEADINGS },
+  },
 };
 
 export const md_to_slate = (md_str) => {

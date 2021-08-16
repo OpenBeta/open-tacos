@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactPlaceholder from "react-placeholder";
 import { navigate } from "gatsby";
 import {
   Plate,
@@ -71,23 +72,27 @@ const PlateEditor = ({ markdown, onSubmit }) => {
       </div>
       <FormatToolbar />
       <div className="mt-4 border-gray-300 border-2 rounded-lg">
-        <Plate
-          id="1"
-          editableProps={editableProps}
-          plugins={plugins}
-          components={components}
-          options={options}
-          value={debugValue}
-          onChange={(newValue) => {
-            setDebugValue(newValue);
-            // console.log(
-            //   newValue.map((v) => serialize(v, deserialized_opts)).join("")
-            // );
-            // save newValue...
-          }}
+        <ReactPlaceholder
+          className="p-4 mt-20"
+          type="text"
+          ready={markdown !== null}
+          rows={16}
+          color="#F4F6F6"
         >
-          {/* value: {JSON.stringify(debugValue)} */}
-        </Plate>
+          <div className="transition duration-500 opacity-100">
+            <Plate
+              id="1"
+              editableProps={editableProps}
+              plugins={plugins}
+              components={components}
+              options={options}
+              value={debugValue}
+              onChange={(newValue) => {
+                setDebugValue(newValue);
+              }}
+            ></Plate>
+          </div>
+        </ReactPlaceholder>
       </div>
     </>
   );
