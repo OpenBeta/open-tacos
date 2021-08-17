@@ -116,7 +116,7 @@
   }
 
   .btn-link {
-    @apply hover:underline shadow-none
+    @apply hover:bg-gray-200 hover:underline shadow-none
   }
 
   .btn-default {
@@ -127,6 +127,10 @@
     @apply underline hover:text-yellow-600;
   }
 
+  .pill {
+    @apply rounded-full py-2 px-4;
+  }
+
   .slate-ToolbarButton {
     @apply fill-current text-gray-500 justify-center !important;
   }
@@ -135,6 +139,16 @@
     @apply fill-current text-pink-600 !important;
   }
 
+  .edit-input {
+    @apply flex-grow w-full	outline-none	border border-gray-100 rounded-md focus:outline-none;
+  }
+  .edit-input:focus {
+    @apply border-2 border-gray-700 ring-transparent;
+  }
+
+  .edit-form-row {
+    @apply py-8 flex flex-col items-center md:flex-row;
+  }
 }
 
 .slate-h1 {
@@ -151,4 +165,9 @@
   
 .slate-code {
   @apply md-code;
+}
+
+input:checked + label {
+  @apply text-white;
+  @apply bg-gray-700;
 }

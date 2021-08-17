@@ -21,6 +21,7 @@
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.21.1",
     "cross-env": "^7.0.3",
+    "formik": "^2.2.9",
     "front-matter": "^4.0.2",
     "gatsby": "^3.10.2",
     "gatsby-plugin-image": "^1.6.0",

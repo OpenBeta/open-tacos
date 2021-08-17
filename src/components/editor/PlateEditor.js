@@ -68,7 +68,7 @@ const PlateEditor = ({ markdown, onSubmit, debug }) => {
         </button>
       </div>
       <FormatToolbar />
-      <div className="mt-4 border-gray-300 border-2 rounded-lg">
+      <div className="mt-4 border-gray-300 border rounded-lg">
         <ReactPlaceholder
           className="p-4 mt-20"
           type="text"

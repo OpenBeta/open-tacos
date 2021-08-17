@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import PlateEditor from "./PlateEditor";
 import axios from "axios";
 import queryString from "query-string";
-
 import fm from "front-matter";
+
+import PlateEditor from "./PlateEditor";
+import FronmatterForm from "./FrontmatterForm";
 
 //TODO: make this a configurable option in gatsby-config.js
 const CONTENT_BRANCH = "develop";
@@ -20,10 +21,10 @@ export const Editor = () => {
         );
         if (res.status === 200) {
           const md = fm(res.data);
-          setValue(md.body);
+          setValue(md);
         }
       }
-      if (parsed.debug === 'true') {
+      if (parsed.debug === "true") {
         setDebug(true);
       }
     };
@@ -34,7 +35,18 @@ export const Editor = () => {
     console.log("## commit to github > ", markdown);
   };
 
-  return <PlateEditor markdown={value} onSubmit={onSubmit} debug={debug} />;
+  return (
+    <>
+      {value && value.attributes &&(
+        <FronmatterForm frontmatter={value.attributes} />
+      )}
+      <PlateEditor
+        markdown={(value && value.body) || null}
+        onSubmit={onSubmit}
+        debug={debug}
+      />
+    </>
+  );
 };
 
 export const client = axios.create({
