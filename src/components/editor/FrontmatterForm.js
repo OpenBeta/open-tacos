@@ -1,15 +1,25 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
+import XCircleIcon from "../../assets/icons/xcircle.svg";
+
+const ROPE_CLIMB_TYPE_DEFAULTS = {
+  boulder: false,
+  trad: false,
+  sport: false,
+  ice: false,
+  tr: false,
+  alpine: false,
+};
 
 const FrontmatterForm = ({ frontmatter }) => {
   console.log("# frontmatter ", frontmatter);
-  const { route_name, yds, fa, safety } = frontmatter;
+  const { route_name, yds, fa, safety, type } = frontmatter;
 
   const initialValues = {
     name: route_name,
     fa: fa,
     grade: yds,
-    type: "",
+    type: { ...ROPE_CLIMB_TYPE_DEFAULTS, ...type },
     safety,
   };
 
@@ -22,7 +32,11 @@ const FrontmatterForm = ({ frontmatter }) => {
 
   return (
     <div className="w-full border-gray-300 border rounded-lg p-8 ">
-      <Formik initialValues={initialValues} onSubmit={onSubmit}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        handleChange={(e) => console.log(e)}
+      >
         {({ values, handleChange, handleBlur, isSubmitting }) => (
           <Form className="divide-y divide-gray-200 max-w-full">
             <TextField name="name" label="Name" />
@@ -30,33 +44,13 @@ const FrontmatterForm = ({ frontmatter }) => {
 
             <div className="edit-form-row">
               <span className="font-semibold md:w-36">Type</span>
-              <div className="flex gap-x-2">
-                <RadioButton
-                  id="1"
-                  value="boulder"
-                  groupName="type"
-                  label="Bouldering"
-                />
-                <RadioButton
-                  id="2"
-                  value="sport"
-                  groupName="type"
-                  label="Sport"
-                />
-                <RadioButton
-                  id="3"
-                  value="trad"
-                  groupName="type"
-                  label="Trad"
-                />
-                <RadioButton id="4" value="tr" groupName="type" label="TR" />
-                <RadioButton id="5" value="ice" groupName="type" label="Ice" />
-                <RadioButton
-                  id="6"
-                  value="alpine"
-                  groupName="type"
-                  label="Alpine"
-                />
+              <div className="flex flex-wrap gap-x-4 gap-y-4">
+                <Checkbox name="type.boulder" label="Bouldering" />
+                <Checkbox name="type.sport" label="Sport" />
+                <Checkbox name="type.trad" label="Trad" />
+                <Checkbox name="type.tr" label="Tope rope" />
+                <Checkbox name="type.ice" label="Ice" />
+                <Checkbox name="type.alpine" label="Alpine" />
               </div>
             </div>
             <TextField name="grade" label="Grade" />
@@ -78,7 +72,7 @@ const FrontmatterForm = ({ frontmatter }) => {
                   groupName="safety"
                   label="PG 13"
                 />
-                <RadioButton id="4" value="X" groupName="safety" label="X" />
+                <RadioButton id="4" value="X" groupName="safety" label="&nbsp;X&nbsp;" />
 
                 {/* {formik.errors.password && touched.password && errors.password} */}
               </div>
@@ -115,11 +109,48 @@ const RadioButton = ({ id, groupName, value, label }) => {
         value={value}
       />
       <label
-        className="pill flex flex-col border-2 border-gray-200 cursor-pointer"
+        className="pill flex flex-col border border-gray-200 cursor-pointer"
         htmlFor={idStr}
       >
-        <span className="text-xs font-semibold uppercase">{label}</span>
+        <span className="text-sm font-semibold uppercase">{label}</span>
       </label>
+    </div>
+  );
+};
+
+const Checkbox = ({ name, value, label }) => {
+  return (
+    <div>
+      <Field name={name}>
+        {({ field, form, meta }) => {
+          return (
+            <>
+              <label
+                className={`rounded-full py-1 pl-2 pr-1 flex items-center border border-gray-200 cursor-pointer ${
+                  field.value ? "bg-red-200" : ""
+                }`}
+                onClick={() => {
+                  form.setFieldValue(name, !field.value, false);
+                }}
+                htmlFor={name}
+              >
+                <input
+                  type="checkbox"
+                  className="opacity-0 w-1 h-1"
+                  checked={field.value}
+                  onChange={() => form.setFieldValue(name, !field.value, false)}
+                />
+                <span className="text-sm font-base uppercase">{label}</span>
+                {
+                  <XCircleIcon
+                    className={`ml-2  text-gray-600 ${field.value ? "" : "opacity-0"}`}
+                  />
+                }
+              </label>
+            </>
+          );
+        }}
+      </Field>
     </div>
   );
 };
