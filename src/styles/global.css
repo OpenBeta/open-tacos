@@ -116,7 +116,7 @@
   }
 
   .btn-link {
-    @apply hover:underline shadow-none
+    @apply underline hover:bg-gray-100 shadow-none
   }
 
   .btn-default {

@@ -26,7 +26,7 @@ import {
   IconURL,
   IconH1,
   IconH2,
-} from "./components";
+} from "./ToolbarIcons"
 
 const FormatToolbar = () => {
   const editor = useStoreEditorRef(useEventEditorId("focus"));
