@@ -233,7 +233,24 @@ exports.onCreateWebpackConfig = ({ actions }) => {
    resolve: {
       fallback: {
         path: require.resolve('path-browserify'),
+        stream: false
       },
     },
   })
 }
+
+exports.onCreatePage = async ({ page, actions }) => {
+
+  const { createPage } = actions;
+  
+  // Matching pages on the client side
+  if(page.path.match(/^\/protectedtest/)) {
+    page.matchPath = "/protectedtest/*";
+
+    // Update the page
+    createPage(page);
+  }
+
+
+
+};

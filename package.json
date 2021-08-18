@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "author": "OpenBeta <hello@openbeta.io>",
   "dependencies": {
+    "@auth0/auth0-react": "^1.6.0",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
     "awesome-debounce-promise": "^2.1.0",
@@ -21,6 +22,8 @@
     "gatsby-source-filesystem": "^3.5.0",
     "gatsby-transformer-json": "^3.5.0",
     "gatsby-transformer-sharp": "^3.6.0",
+    "netlify-cms-core": "^2.47.0",
+    "netlify-cms-widget-markdown": "^2.14.1",
     "path-browserify": "^1.0.1",
     "query-string": "^7.0.0",
     "react": "^17.0.2",
