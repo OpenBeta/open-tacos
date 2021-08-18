@@ -4,7 +4,6 @@
   "version": "1.0.0",
   "author": "OpenBeta <hello@openbeta.io>",
   "dependencies": {
-    "@emotion/css": "^11.1.3",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
     "@udecode/plate": "^1.1.8",
@@ -36,6 +35,7 @@
     "gatsby-source-filesystem": "^3.5.0",
     "gatsby-transformer-json": "^3.5.0",
     "gatsby-transformer-sharp": "^3.6.0",
+    "js-yaml": "^4.1.0",
     "path-browserify": "^1.0.1",
     "query-string": "^7.0.1",
     "react": "^17.0.2",

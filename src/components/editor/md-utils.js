@@ -31,6 +31,9 @@ const SERIALIZE_OPTS = {
 };
 
 export const md_to_slate = (md_str) => {
+  if (!md_str) {
+    return null
+  }
   const processor = unified().use(markdown).use(slate, DESERIALIZE_OPTS);
   return processor.processSync(md_str).result;
 };
