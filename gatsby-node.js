@@ -240,7 +240,8 @@ exports.createPages = async ({ graphql, actions }) => {
     resolve: {
       fallback: {
         path: require.resolve("path-browserify"),
-        "assert": false
+        "assert": false,
+        "stream": false
       },
     },
   });

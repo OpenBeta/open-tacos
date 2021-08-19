@@ -4,14 +4,6 @@ import LogoutButton from "../components/ui/LogoutButton";
 import Auth0Profile from "../components/ui/Auth0Profile";
 import { Auth0Provider} from '@auth0/auth0-react';
 
-import NetlifyCmsWidgetMarkdown from "netlify-cms-widget-markdown";
-// Core
-import { NetlifyCmsCore as CMS } from 'netlify-cms-core';
-CMS.registerWidget([
-  NetlifyCmsWidgetMarkdown.Widget(),
-]);
-
-const PreviewComponent = NetlifyCmsWidgetMarkdown.controlComponent;
 
 function protectedtest() {  
   return (
@@ -26,7 +18,6 @@ function protectedtest() {
         <p>This is a protectedtest</p>
         <LoginButton></LoginButton>
         <LogoutButton></LogoutButton>
-        <PreviewComponent></PreviewComponent>
         <Auth0Profile></Auth0Profile>
       </div>
     </Auth0Provider>
