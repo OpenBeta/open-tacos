@@ -1,14 +1,26 @@
 {
   "name": "openbeta-climbing-route-catalog",
-  "description": "Gatsby starter styled with Tailwind",
+  "description": "Open source climbing route catalog",
   "version": "1.0.0",
   "author": "OpenBeta <hello@openbeta.io>",
   "dependencies": {
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
+    "@udecode/plate": "^1.1.8",
+    "@udecode/plate-basic-marks": "^1.1.6",
+    "@udecode/plate-block-quote": "^1.1.6",
+    "@udecode/plate-code-block": "^1.1.6",
+    "@udecode/plate-heading": "^1.1.6",
+    "@udecode/plate-link": "^1.1.6",
+    "@udecode/plate-link-ui": "^1.1.7",
+    "@udecode/plate-md-serializer": "^1.1.8",
+    "@udecode/plate-paragraph": "^1.1.6",
+    "@udecode/plate-toolbar": "^1.1.7",
+    "assert": "^2.0.0",
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.21.1",
     "cross-env": "^7.0.3",
+    "front-matter": "^4.0.2",
     "gatsby": "^3.10.2",
     "gatsby-plugin-image": "^1.6.0",
     "gatsby-plugin-manifest": "^3.7.1",
@@ -23,13 +35,22 @@
     "gatsby-transformer-json": "^3.5.0",
     "gatsby-transformer-sharp": "^3.6.0",
     "path-browserify": "^1.0.1",
-    "query-string": "^7.0.0",
+    "query-string": "^7.0.1",
     "react": "^17.0.2",
     "react-autosuggest": "^10.1.0",
     "react-dom": "^17.0.2",
     "react-helmet": "6.1.0",
+    "react-placeholder": "^4.1.0",
     "recharts": "^2.0.9",
-    "slugify": "^1.5.3"
+    "remark-parse": "^10.0.0",
+    "remark-slate": "^1.8.0",
+    "slate": "^0.65.3",
+    "slate-history": "^0.65.3",
+    "slate-hyperscript": "^0.62.0",
+    "slate-react": "^0.65.3",
+    "slugify": "^1.5.3",
+    "unified": "^10.1.0",
+    "yarn": "^1.22.11"
   },
   "keywords": [
     "rock climbing",
@@ -76,5 +97,9 @@
     "setupFilesAfterEnv": [
       "./setupTests.js"
     ]
-  }
+  },
+  "browserslist": [
+    ">0.25%",
+    "not dead"
+  ]
 }

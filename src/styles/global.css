@@ -90,10 +90,65 @@
 }
 
 .md-h1 {
-  @apply text-3xl font-medium mt-8 mb-2;
+  @apply text-3xl font-medium tracking-tight mt-14 mb-4 !important;
 }
 
 .md-h2 {
-  @apply text-xl font-bold mt-10 mb-1;
+  @apply text-2xl font-bold mt-4 mb-1 !important;
 }
 
+.md-code {
+  @apply text-base font-sans bg-green-100 -mx-1.5 px-1.5 py-1.5 !important;
+}
+
+.md-p {
+  @apply text-base mt-4 mb-8 leading-8 !important;
+}
+
+
+@layer components {
+
+  .btn {
+    @apply no-underline rounded-lg px-6 py-2 text-gray-900 font-medium text-base shadow-md;
+  }
+  .btn-primary {
+    @apply bg-yellow-300 hover:bg-yellow-400;
+  }
+
+  .btn-link {
+    @apply underline hover:bg-gray-100 shadow-none
+  }
+
+  .btn-default {
+    @apply  text-gray-600
+  }
+
+  .link-primary {
+    @apply underline hover:text-yellow-600;
+  }
+
+  .slate-ToolbarButton {
+    @apply fill-current text-gray-500 justify-center !important;
+  }
+  
+  .slate-ToolbarButton-active {
+    @apply fill-current text-pink-600 !important;
+  }
+
+}
+
+.slate-h1 {
+  @apply md-h1 ;
+}
+
+.slate-h2 {
+  @apply md-h2;
+}
+
+.slate-p {
+  @apply md-p;
+}
+  
+.slate-code {
+  @apply md-code;
+}
