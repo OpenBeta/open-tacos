@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import XCircleIcon from "../../assets/icons/xcircle.svg";
+import PlusSmalllIcon from "../../assets/icons/plus-sm.svg";
 
 const ROPE_CLIMB_TYPE_DEFAULTS = {
   boulder: false,
   trad: false,
   sport: false,
+  aid: false,
   ice: false,
   tr: false,
   alpine: false,
@@ -32,14 +34,16 @@ const FrontmatterForm = ({ frontmatter, formikRef }) => {
   }
 
   return (
-    <div className="mt-8 w-full border-gray-300 border rounded-lg shadow-md">
-      <div className="border-b py-4 px-8 bg-gray-100 text-base align-middle	">Basic information</div>
+    <div className="mt-8 w-full border-gray-300 border rounded-lg shadow-sm bg-white">
+      <div className="border-b py-4 px-8 bg-gray-100 text-base align-middle rounded-lg">
+        Basic information
+      </div>
       <Formik
         innerRef={formikRef}
         initialValues={initialValues}
         enableReinitialize={true}
       >
-        {({ values, handleBlur, isSubmitting }) => {
+        {({ values, handleBlur }) => {
           return (
             <Form className="divide-y divide-gray-200 max-w-full px-8">
               <TextField name="name" label="Name" />
@@ -51,7 +55,8 @@ const FrontmatterForm = ({ frontmatter, formikRef }) => {
                   <Checkbox name="type.boulder" label="Bouldering" />
                   <Checkbox name="type.sport" label="Sport" />
                   <Checkbox name="type.trad" label="Trad" />
-                  <Checkbox name="type.tr" label="Tope rope" />
+                  <Checkbox name="type.tr" label="Top rope" />
+                  <Checkbox name="type.aid" label="Aid" />
                   <Checkbox name="type.ice" label="Ice" />
                   <Checkbox name="type.alpine" label="Alpine" />
                 </div>
@@ -144,20 +149,18 @@ const Checkbox = ({ name, label }) => {
               }}
               htmlFor={name}
             >
-              <input // this is for a11y -  TODO: find a premade component
+              <input // this is for a11y -  TODO: find a pre-made component
                 type="checkbox"
                 className="opacity-0 w-1 h-1"
                 checked={field.value}
                 onChange={() => form.setFieldValue(name, !field.value, false)}
               />
-              <span className="text-sm font-base uppercase">{label}</span>
-              {
-                <XCircleIcon
-                  className={`ml-2  text-gray-600 ${
-                    field.value ? "" : "opacity-0"
-                  }`}
-                />
-              }
+              <span className="text-sm font-base uppercase mr-2">{label}</span>
+              {field.value ? (
+                <XCircleIcon className="text-gray-600" />
+              ) : (
+                <PlusSmalllIcon className="w-6 h-6 text-gray-200" />
+              )}
             </label>
           </>
         );
