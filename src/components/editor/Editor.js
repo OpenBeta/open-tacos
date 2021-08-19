@@ -9,7 +9,7 @@ import { useStoreEditorState } from "@udecode/plate";
 import PlateEditor from "./PlateEditor";
 import FronmatterForm from "./ClimbProfile";
 import AreaProfile from "./AreaProfile";
-import ProfilePlaceholder from "./ProfilePlaceholder"
+import ProfilePlaceholder from "./ProfilePlaceholder";
 import PageHeader from "./PageHeader";
 import { slate_to_md } from "./md-utils";
 
@@ -20,6 +20,7 @@ export const Editor = () => {
   const formikRef = React.useRef(null);
   const editor = useStoreEditorState();
 
+  const [errorIO, setErrorIO] = useState(false);
   const [value, setValue] = useState(null);
   const [debug, setDebug] = useState(false);
 
@@ -27,12 +28,18 @@ export const Editor = () => {
     const get_file_from_github = async () => {
       const parsed = queryString.parse(location.search);
       if (parsed.file) {
-        const res = await client.get(
-          `${CONTENT_BRANCH}/content/${parsed.file}`
-        );
-        if (res.status === 200) {
-          const md = fm(res.data);
-          setValue(md);
+        try {
+          const res = await client.get(
+            `${CONTENT_BRANCH}/content/${parsed.file}`
+          );
+          if (res.status === 200) {
+            const md = fm(res.data);
+            setValue(md);
+          } else {
+            setErrorIO(true);
+          }
+        } catch (e) {
+          setErrorIO(true);
         }
       }
       if (parsed.debug === "true") {
@@ -60,10 +67,17 @@ export const Editor = () => {
 
   return (
     <>
-      <PageHeader onSubmit={onSubmit} editType={editType} />
-      <div className="max-w-4xl  mx-auto flex flex-col gap-y-4 2xl:layout-edit-wide">
+      <PageHeader onSubmit={onSubmit} editType={editType}>
+        {errorIO ? (
+          <IOErrorMessage />
+        ) : (
+          <div className="text-gray-700">
+            You are in edit mode. Changes will not be saved until submit.
+          </div>
+        )}
+      </PageHeader>
+      <div className="layout-edit-narrow 2xl:layout-edit-wide">
         <ReactPlaceholder
-          className=""
           customPlaceholder={<ProfilePlaceholder />}
           ready={editType === "climb" || editType === "area"}
         >
@@ -100,6 +114,18 @@ const get_type = (md) => {
   }
   return "unknown";
 };
+
+const IOErrorMessage = () => (
+  <div className="text-sm">
+    <span>Oops, something went wrong.</span>
+    <button
+      className="btn btn-link text-sm"
+      onClick={() => window.location.reload()}
+    >
+      Try again
+    </button>
+  </div>
+);
 
 export const client = axios.create({
   baseURL: "https://raw.githubusercontent.com/OpenBeta/opentacos-content",

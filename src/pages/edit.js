@@ -7,7 +7,7 @@ const edit = (props) => {
   return (
     <Layout
       layoutClz="layout-edit"
-      customClz="bg-gradient-to-r from-pink-300 via-yellow-300 to-green-500"
+      customClz="bg-gradient-to-r from-pink-400 via-yellow-300 to-green-400"
     >
       <SEO keywords={[`openbeta`, `rock climbing`, `open data`]} title="Edit" />
       <Editor />

@@ -1,5 +1,6 @@
 import React from "react";
 import { Formik, Form } from "formik";
+import * as Yup from "yup";
 
 import TextField from "../ui/TextField";
 import RadioButton from "../ui/RadioButton";
@@ -14,6 +15,13 @@ const ROPE_CLIMB_TYPE_DEFAULTS = {
   tr: false,
   alpine: false,
 };
+
+const ClimbProfileSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(3, "Too short!")
+    .max(150, "Too Long!")
+    .required("Required"),
+});
 
 const ClimbProfile = ({ frontmatter, formikRef }) => {
   let initialValues = {
@@ -36,14 +44,13 @@ const ClimbProfile = ({ frontmatter, formikRef }) => {
   }
 
   return (
-    <div className="w-full 2xl:w-1/3 border-gray-300 border rounded-lg shadow-sm bg-white">
-      <div className="border-b py-4 px-4 h-14 bg-gray-100 text-base align-middle rounded-t-lg">
-        Basic information
-      </div>
+    <div className="editor-profile-container">
+      <div className="editor-profile-header">Profile</div>
       <Formik
         innerRef={formikRef}
         initialValues={initialValues}
         enableReinitialize={true}
+        validationSchema={ClimbProfileSchema}
       >
         <Form className="divide-y divide-gray-200 max-w-full px-4">
           <TextField name="name" label="Name" />
@@ -72,7 +79,7 @@ const ClimbProfile = ({ frontmatter, formikRef }) => {
                 id="1"
                 value="G"
                 groupName="safety"
-                label="G / Unknown"
+                label="Unspecified"
               />
               <RadioButton id="2" value="PG" groupName="safety" label="PG" />
               <RadioButton
@@ -82,7 +89,13 @@ const ClimbProfile = ({ frontmatter, formikRef }) => {
                 label="PG 13"
               />
               <RadioButton
-                id="4"
+                id="5"
+                value="R"
+                groupName="safety"
+                label="&nbsp;R&nbsp;"
+              />
+              <RadioButton
+                id="6"
                 value="X"
                 groupName="safety"
                 label="&nbsp;X&nbsp;"

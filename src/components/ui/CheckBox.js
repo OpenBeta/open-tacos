@@ -15,8 +15,8 @@ const CheckBox = ({ name, label }) => {
         return (
           <>
             <label
-              className={`rounded-full py-1 pl-2 pr-1 flex items-center border border-gray-200 cursor-pointer ${
-                field.value ? "bg-red-200" : ""
+              className={`rounded-full py-1 pl-2 pr-1 flex items-center border border-gray-300 bg-gray-100 cursor-pointer ${
+                field.value ? "bg-pink-300" : ""
               }`}
               onClick={() => {
                 form.setFieldValue(name, !field.value, false);
@@ -33,7 +33,7 @@ const CheckBox = ({ name, label }) => {
               {field.value ? (
                 <XCircleIcon className="text-gray-600" />
               ) : (
-                <PlusSmalllIcon className="w-6 h-6 text-gray-200" />
+                <PlusSmalllIcon className="w-6 h-6 text-gray-300" />
               )}
             </label>
           </>

@@ -17,9 +17,9 @@ const AreaProfile = ({ frontmatter, formikRef }) => {
   }
 
   return (
-    <div className="w-full 2xl:w-1/3 flex-shrink min-h-0 border-gray-300 border rounded-lg shadow-sm bg-white">
-      <div className="border-b py-4 px-4 h-14 bg-gray-100 text-base align-middle rounded-t-lg">
-        Basic information
+    <div className="editor-profile-container">
+      <div className="editor-profile-header">
+        Profile
       </div>
       <Formik
         innerRef={formikRef}

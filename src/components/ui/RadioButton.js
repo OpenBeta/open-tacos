@@ -23,7 +23,7 @@ const RadioButton = ({ id, groupName, value, label }) => {
         className="pill flex flex-col border border-gray-200 cursor-pointer"
         htmlFor={idStr}
       >
-        <span className="text-sm font-semibold uppercase whitespace-nowrap">
+        <span className="text-sm font-semibold whitespace-nowrap">
           {label}
         </span>
       </label>

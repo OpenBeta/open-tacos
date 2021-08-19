@@ -17,9 +17,9 @@ module.exports = {
       },
       colors: {
         'custom-green': '#8BB191',//'#FF4500CC',
-        'custom-mango': '#FFB000',
-        'custom-teal': '#00A6A5',
-        'custom-mint': '#0DD3BB',
+        'custom-blue': '#62cae3',
+        'custom-avery': '#a5d9cf',
+        'custom-orange': '#e7811d',
       },
     },
   },
