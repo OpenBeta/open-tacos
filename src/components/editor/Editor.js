@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { navigate } from "gatsby";
 import axios from "axios";
 import queryString from "query-string";
 import fm from "front-matter";
 import yaml from "js-yaml";
 import ReactPlaceholder from "react-placeholder";
-
 import { useStoreEditorState } from "@udecode/plate";
 
 import PlateEditor from "./PlateEditor";
-import FronmatterForm from "./FrontmatterForm";
-import { md_to_slate, slate_to_md } from "./md-utils";
+import FronmatterForm from "./ClimbProfile";
+import AreaProfile from "./AreaProfile";
+import ProfilePlaceholder from "./ProfilePlaceholder"
+import PageHeader from "./PageHeader";
+import { slate_to_md } from "./md-utils";
 
 //TODO: make this a configurable option in gatsby-config.js
 const CONTENT_BRANCH = "develop";
@@ -59,14 +60,26 @@ export const Editor = () => {
 
   return (
     <>
-      <Header onSubmit={onSubmit} editType={editType} />
-      <div className=" max-w-4xl mx-auto">
-        {editType === "climb" && (
-          <FronmatterForm
-            formikRef={formikRef}
-            frontmatter={(value && value.attributes) || null}
-          />
-        )}
+      <PageHeader onSubmit={onSubmit} editType={editType} />
+      <div className="max-w-4xl  mx-auto flex flex-col gap-y-4 2xl:layout-edit-wide">
+        <ReactPlaceholder
+          className=""
+          customPlaceholder={<ProfilePlaceholder />}
+          ready={editType === "climb" || editType === "area"}
+        >
+          {editType === "climb" && (
+            <FronmatterForm
+              formikRef={formikRef}
+              frontmatter={(value && value.attributes) || null}
+            />
+          )}
+          {editType === "area" && (
+            <AreaProfile
+              formikRef={formikRef}
+              frontmatter={(value && value.attributes) || null}
+            />
+          )}
+        </ReactPlaceholder>
         <PlateEditor markdown={(value && value.body) || null} debug={debug} />
       </div>
     </>
@@ -88,32 +101,6 @@ const get_type = (md) => {
   return "unknown";
 };
 
-const Header = ({ onSubmit, editType }) => {
-  return (
-    <div className="flex justify-between mb-12">
-      <div className="">
-        <div className="text-lg font-bold">
-          Edit {editType !== "unknown" ? editType : ""}
-        </div>
-        <div className="text-gray-700">You are in edit mode. Changes will not be saved until submit.</div>
-      </div>
-      <div className="flex flex-col items-end justify-between gap-2">
-        <div>&nbsp;{/*future buttons, submenu*/}</div>
-        <div>
-          <button
-            className="btn btn-link btn-default mr-4"
-            onClick={() => navigate(-1)}
-          >
-            Cancel
-          </button>
-          <button className="btn btn-primary" onClick={onSubmit}>
-            Submit
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
 export const client = axios.create({
   baseURL: "https://raw.githubusercontent.com/OpenBeta/opentacos-content",
 });

@@ -37,21 +37,11 @@ const PlateEditor = ({ markdown, onSubmit, debug }) => {
 
   plugins.push(...[createDeserializeMDPlugin({ plugins })]);
 
-  const [ast, setAST] = useState(null);
-
-  // useEffect(() => {
-  //   // Since 'markdown' prop is a result of an async API call to GitHub,
-  //   // we need track it in useEffect
-  //   const slateAST = md_to_slate(markdown);
-  //   setAST(slateAST);
-  // }, [markdown]);
-
   return (
-    <>
-      <div className="mt-8 border-gray-300 border rounded-lg shadow-sm">
+      <div className="flex-grow 2xl:w-2/3 2xl:max-w-5xl border-gray-300 border rounded-lg shadow-sm">
         <FormatToolbar />
         <ReactPlaceholder
-          className="p-8 mt-20"
+          className="p-8 mt-12"
           type="text"
           ready={markdown !== null}
           rows={16}
@@ -68,7 +58,6 @@ const PlateEditor = ({ markdown, onSubmit, debug }) => {
           </div>
         </ReactPlaceholder>
       </div>
-    </>
   );
 };
 
