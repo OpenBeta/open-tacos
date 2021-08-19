@@ -1,8 +1,15 @@
 import React from "react";
 import { Formik, Form } from "formik";
+import * as Yup from "yup";
 
 import TextField from "../ui/TextField";
 
+const AreaProfileSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(3, "Too short!")
+    .max(150, "Too Long!")
+    .required("Required"),
+});
 
 const AreaProfile = ({ frontmatter, formikRef }) => {
   let initialValues = {
@@ -25,10 +32,10 @@ const AreaProfile = ({ frontmatter, formikRef }) => {
         innerRef={formikRef}
         initialValues={initialValues}
         enableReinitialize={true}
+        validationSchema={AreaProfileSchema}
       >
         <Form className="divide-y divide-gray-200 max-w-full px-4">
           <TextField name="name" label="Area name" />
-          {/* {formik.errors.password && touched.password && errors.password} */}
         </Form>
       </Formik>
     </div>
