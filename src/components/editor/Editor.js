@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import queryString from "query-string";
 import fm from "front-matter";
-
 import PlateEditor from "./PlateEditor";
 
 // TODO: make this a configurable option in gatsby-config.js
@@ -10,6 +9,7 @@ import PlateEditor from "./PlateEditor";
 const CONTENT_BRANCH = "develop";
 
 export const Editor = () => {
+
   const [errorIO, setErrorIO] = useState(false);
   const [value, setValue] = useState(null);
   const [debug, setDebug] = useState(false);
