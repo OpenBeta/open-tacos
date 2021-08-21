@@ -33,6 +33,7 @@ const edit = (props) => {
         keywords={[`openbeta`, `rock climbing`, `open data`]}
         title="Edit"
       />
+
       <Auth0NavBar/>
       <Editor/>
     </Layout>

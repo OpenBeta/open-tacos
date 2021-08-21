@@ -16,7 +16,7 @@ export const Editor = () => {
   const [value, setValue] = useState(null);
   const [debug, setDebug] = useState(false);
 
-  useEffect(async () => {
+  useEffect(() => {
     const get_file_from_github = async () => {
       const parsed = queryString.parse(location.search);
       if (parsed.file) {
