@@ -252,8 +252,8 @@ exports.onCreatePage = async ({ page, actions }) => {
   const { createPage } = actions;
   
   // Matching pages on the client side
-  if(page.path.match(/^\/protectedtest/)) {
-    page.matchPath = "/protectedtest/*";
+  if(page.path.match(/^\/edit/)) {
+    page.matchPath = "/edit/*";
 
     // Update the page
     createPage(page);

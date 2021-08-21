@@ -4,7 +4,6 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import USToc from "../components/USToC";
 import RandomRouteCard from "../components/RandomRouteCard";
-import { Auth0Provider } from '@auth0/auth0-react';
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -58,8 +57,6 @@ function IndexPage() {
       />
 
       <USToc />
-
-      <Link to="/protectedtest">Go to protected test</Link>
 
       <h2 className="text-xl font-medium mt-12 mb-4">
         Randomly Featured Route
