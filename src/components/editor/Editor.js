@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import queryString from "query-string";
 import fm from "front-matter";
-import { useAuth0 } from "@auth0/auth0-react";
 import PlateEditor from "./PlateEditor";
 
 // TODO: make this a configurable option in gatsby-config.js
@@ -10,7 +9,6 @@ import PlateEditor from "./PlateEditor";
 const CONTENT_BRANCH = "develop";
 
 export const Editor = () => {
-  const { isAuthenticated } =  useAuth0();
 
   const [errorIO, setErrorIO] = useState(false);
   const [value, setValue] = useState(null);
@@ -44,10 +42,11 @@ export const Editor = () => {
   const onSubmit = ({ markdown }) => {
     console.log("## commit to github > ", markdown);
   };
+
   return (
     <>
       {errorIO && <ErrorMessage />}
-      { isAuthenticated && <PlateEditor markdown={value} onSubmit={onSubmit} debug={debug} /> }
+      <PlateEditor markdown={value} onSubmit={onSubmit} debug={debug} />
     </>
   );
 };
