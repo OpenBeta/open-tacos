@@ -35,8 +35,6 @@
     "gatsby-source-filesystem": "^3.5.0",
     "gatsby-transformer-json": "^3.5.0",
     "gatsby-transformer-sharp": "^3.6.0",
-    "netlify-cms-core": "^2.47.0",
-    "netlify-cms-widget-markdown": "^2.14.1",
     "path-browserify": "^1.0.1",
     "query-string": "^7.0.1",
     "react": "^17.0.2",
