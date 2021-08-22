@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Auth0Config } from "../../js/constants";
 
 const Auth0Profile = () => {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -8,7 +9,7 @@ const Auth0Profile = () => {
    * Allows us to fetch the accessToken that we will need for git gateway.
    */
   const callApi = async () => {
-    const domain = "dev-fmjy7n5n.us.auth0.com";
+    const domain = Auth0Config.domain;
     try {
       const accessToken = await getAccessTokenSilently({
         audience: `https://${domain}/api/v2/`,
