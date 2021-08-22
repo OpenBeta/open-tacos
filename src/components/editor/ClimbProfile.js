@@ -86,7 +86,7 @@ const ClimbProfile = ({ frontmatter, formikRef }) => {
                 id="3"
                 value="PG13"
                 groupName="safety"
-                label="PG 13"
+                label="PG-13"
               />
               <RadioButton
                 id="5"
@@ -100,8 +100,6 @@ const ClimbProfile = ({ frontmatter, formikRef }) => {
                 groupName="safety"
                 label="&nbsp;X&nbsp;"
               />
-
-              {/* {formik.errors.password && touched.password && errors.password} */}
             </div>
           </div>
         </Form>

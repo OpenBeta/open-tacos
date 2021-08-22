@@ -147,6 +147,14 @@
     @apply bg-yellow-300 hover:bg-yellow-400;
   }
 
+  .btn-success {
+    @apply bg-green-300 hover:bg-green-400;
+  }
+
+  .btn-candy {
+    @apply bg-pink-300 hover:bg-pink-400;
+  }
+
   .btn-link {
     @apply hover:bg-gray-200 underline shadow-none
   }

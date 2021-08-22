@@ -235,13 +235,29 @@ exports.createPages = async ({ graphql, actions }) => {
  * Webpack no longer includes path-browserify.  Adding this
  * function to make 'path' library available to client-side code.
  */
-exports.onCreateWebpackConfig = ({ actions }) => {
+ exports.onCreateWebpackConfig = ({ actions }) => {
   actions.setWebpackConfig({
     resolve: {
       fallback: {
         path: require.resolve("path-browserify"),
-        "assert": false
+        "assert": false,
+        "stream": false
       },
     },
   });
 };
+
+exports.onCreatePage = async ({ page, actions }) => {
+
+  const { createPage } = actions;
+  
+  // Matching pages on the client side
+  if(page.path.match(/^\/edit/)) {
+    page.matchPath = "/edit/*";
+
+    // Update the page
+    createPage(page);
+  }
+
+};
+
