@@ -15,6 +15,12 @@ module.exports = {
       fontFamily: {
         sans: ["ISO", ...defaultTheme.fontFamily.sans],
       },
+      colors: {
+        'custom-green': '#8BB191',
+        'custom-blue': '#62cae3',
+        'custom-avery': '#a5d9cf',
+        'custom-orange': '#e7811d',
+      },
     },
   },
 };

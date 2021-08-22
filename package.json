@@ -21,6 +21,7 @@
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.21.1",
     "cross-env": "^7.0.3",
+    "formik": "^2.2.9",
     "front-matter": "^4.0.2",
     "gatsby": "^3.10.2",
     "gatsby-plugin-image": "^1.6.0",
@@ -35,6 +36,7 @@
     "gatsby-source-filesystem": "^3.5.0",
     "gatsby-transformer-json": "^3.5.0",
     "gatsby-transformer-sharp": "^3.6.0",
+    "js-yaml": "^4.1.0",
     "path-browserify": "^1.0.1",
     "query-string": "^7.0.1",
     "react": "^17.0.2",
@@ -51,7 +53,8 @@
     "slate-react": "^0.65.3",
     "slugify": "^1.5.3",
     "unified": "^10.1.0",
-    "yarn": "^1.22.11"
+    "yarn": "^1.22.11",
+    "yup": "^0.32.9"
   },
   "keywords": [
     "rock climbing",

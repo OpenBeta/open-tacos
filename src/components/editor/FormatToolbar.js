@@ -31,7 +31,7 @@ import {
 const FormatToolbar = () => {
   const editor = useStoreEditorRef(useEventEditorId("focus"));
   return (
-    <div className="flex nowrap gap-x-4">
+    <div className="max-w-full flex nowrap h-14 gap-x-4 border-b pt-4 pb-2 px-4 bg-gray-100 rounded-t-lg">
       <ToolbarMark
         type={getPlatePluginType(editor, MARK_BOLD)}
         icon={<IconBold />}
