@@ -13,7 +13,6 @@ function getRandomInt(min, max) {
 }
 
 function IndexPage() {
-
   let allClimbingRoutes = useStaticQuery(graphql`
     query {
       allMdx(filter: { fields: { collection: { eq: "climbing-routes" } } }) {
