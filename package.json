@@ -20,6 +20,8 @@
     "assert": "^2.0.0",
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.21.1",
+    "btoa": "^1.2.1",
+    "buffer": "^6.0.3",
     "cross-env": "^7.0.3",
     "formik": "^2.2.9",
     "front-matter": "^4.0.2",

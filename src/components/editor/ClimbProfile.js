@@ -25,9 +25,9 @@ const ClimbProfileSchema = Yup.object().shape({
 
 const ClimbProfile = ({ frontmatter, formikRef }) => {
   let initialValues = {
-    name: "",
+    route_name: "",
     fa: "",
-    grade: "",
+    yds: "",
     type: { ...ROPE_CLIMB_TYPE_DEFAULTS },
     safety: "",
   };
@@ -35,9 +35,9 @@ const ClimbProfile = ({ frontmatter, formikRef }) => {
   if (frontmatter) {
     const { route_name, yds, fa, safety, type } = frontmatter;
     initialValues = {
-      name: route_name,
+      route_name,
       fa: fa,
-      grade: yds,
+      yds: yds,
       type: { ...ROPE_CLIMB_TYPE_DEFAULTS, ...type },
       safety,
     };
@@ -53,7 +53,7 @@ const ClimbProfile = ({ frontmatter, formikRef }) => {
         validationSchema={ClimbProfileSchema}
       >
         <Form className="divide-y divide-gray-200 max-w-full px-4">
-          <TextField name="name" label="Name" />
+          <TextField name="route_name" label="Name" />
           <TextField name="fa" label="FA" />
 
           <div className="edit-form-row">
@@ -69,7 +69,7 @@ const ClimbProfile = ({ frontmatter, formikRef }) => {
             </div>
           </div>
 
-          <TextField name="grade" label="Grade" />
+          <TextField name="yds" label="Grade" />
 
           <div className="edit-form-row">
             <span className="font-semibold md:w-36">Safety</span>

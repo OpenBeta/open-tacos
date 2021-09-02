@@ -1,69 +1,93 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import queryString from "query-string";
-import fm from "front-matter";
-import yaml from "js-yaml";
 import ReactPlaceholder from "react-placeholder";
 import { useStoreEditorState } from "@udecode/plate";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import PlateEditor from "./PlateEditor";
 import FronmatterForm from "./ClimbProfile";
 import AreaProfile from "./AreaProfile";
 import ProfilePlaceholder from "./ProfilePlaceholder";
 import PageHeader from "./PageHeader";
-import { slate_to_md } from "./md-utils";
+import { stringify } from "./md-utils";
+import { get_markdown_file, write_markdown_file } from "../../js/github-utils";
 
-//TODO: make this a configurable option in gatsby-config.js
-const CONTENT_BRANCH = "develop";
+// Main state of this component.  Mirror essential fields from the response object
+// returned from GitHub Rest API.
+// See https://docs.github.com/en/rest/reference/repos#get-repository-content
+// (go to 'Response if content is a file' for the response object structure)
+// We can add more fields to local state as needed.
+// Note: Frontmatter and markdown states are maintained internally
+// by Formik and Plate editor respectively.
+const initial_state = {
+  sha: null,
+  path: null,
+  content: {
+    attributes: null,
+    body: null,
+  },
+};
 
 export const Editor = () => {
+  const { getAccessTokenSilently, user } = useAuth0();
+  // to get access to climb metadata
   const formikRef = React.useRef(null);
+  // to get access climb content
   const editor = useStoreEditorState();
 
   const [errorIO, setErrorIO] = useState(false);
-  const [value, setValue] = useState(null);
-  const [debug, setDebug] = useState(false);
+  const [fileObj, setFileObject] = useState(initial_state);
 
   useEffect(() => {
     const get_file_from_github = async () => {
-      const parsed = queryString.parse(location.search);
-      if (parsed.file) {
-        try {
-          const res = await client.get(
-            `${CONTENT_BRANCH}/content/${parsed.file}`
-          );
-          if (res.status === 200) {
-            const md = fm(res.data);
-            setValue(md);
-          } else {
-            setErrorIO(true);
-          }
-        } catch (e) {
-          setErrorIO(true);
-        }
-      }
-      if (parsed.debug === "true") {
-        setDebug(true);
+      try {
+        const authToken = await getAccessTokenSilently({
+          audience: "https://git-gateway",
+        });
+        const { sha, path, content } = await get_markdown_file(authToken);
+        setFileObject({ sha, path, content });
+      } catch (e) {
+        setErrorIO(true);
       }
     };
     get_file_from_github();
   }, []);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!(editor || editor.children)) {
       return;
     }
     if (!(formikRef || formikRef.current || formikRef.current.values)) {
       return;
     }
-    const md = {
-      frontmatter: yaml.dump(formikRef.current.values),
-      body: slate_to_md(editor.children),
-    };
-    console.log("## commit to github > ", md);
+
+    try {
+      const authToken = await getAccessTokenSilently({
+        audience: "https://git-gateway",
+      });
+      const str = stringify({
+        frontmatter: formikRef.current.values,
+        body_ast: editor.children,
+      });
+      const committer = {
+        name: user.name,
+        email: user["htts://tacos.openbeta.io/username"] + "@noreply",
+      };
+      const { path, sha } = fileObj;
+      const res = await write_markdown_file(
+        str,
+        path,
+        sha,
+        committer,
+        authToken
+      );
+      console.log("## commit to github > ", res);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  const editType = get_type(value);
+  const { attributes, body } = fileObj.content;
+  const editType = get_type(attributes);
 
   return (
     <>
@@ -82,19 +106,13 @@ export const Editor = () => {
           ready={editType === "climb" || editType === "area"}
         >
           {editType === "climb" && (
-            <FronmatterForm
-              formikRef={formikRef}
-              frontmatter={(value && value.attributes) || null}
-            />
+            <FronmatterForm formikRef={formikRef} frontmatter={attributes} />
           )}
           {editType === "area" && (
-            <AreaProfile
-              formikRef={formikRef}
-              frontmatter={(value && value.attributes) || null}
-            />
+            <AreaProfile formikRef={formikRef} frontmatter={attributes} />
           )}
         </ReactPlaceholder>
-        <PlateEditor markdown={(value && value.body) || null} debug={debug} />
+        <PlateEditor markdown={body} debug={true} />
       </div>
     </>
   );
@@ -104,12 +122,11 @@ export const Editor = () => {
  * Determine if we're editing a climb, a boulder problem or an area
  * @param  fm frontmatter object
  */
-const get_type = (md) => {
-  if (md && md.attributes) {
-    const fm = md.attributes;
-    if (fm.route_name) return "climb";
-    if (fm.area_name) return "area";
-    if (fm.problem_name) return "problem";
+const get_type = (attributes) => {
+  if (attributes) {
+    if (attributes.route_name) return "climb";
+    if (attributes.area_name) return "area";
+    if (attributes.problem_name) return "problem";
     return "unknown";
   }
   return "unknown";
@@ -126,9 +143,5 @@ const IOErrorMessage = () => (
     </button>
   </div>
 );
-
-export const client = axios.create({
-  baseURL: "https://raw.githubusercontent.com/OpenBeta/opentacos-content",
-});
 
 export default Editor;
