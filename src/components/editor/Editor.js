@@ -34,6 +34,7 @@ export const Editor = () => {
   // to get access climb content
   const editor = useStoreEditorState();
 
+  const [submitting, setSubmitting] = useState(false)
   const [errorIO, setErrorIO] = useState(false);
   const [fileObj, setFileObject] = useState(initial_state);
 
@@ -56,7 +57,8 @@ export const Editor = () => {
     if (!(editor || editor.children)) {
       return;
     }
-    if (!(formikRef || formikRef.current || formikRef.current.values)) {
+
+    if (!isProfileFormValid(formikRef)) {
       return;
     }
 
@@ -69,9 +71,10 @@ export const Editor = () => {
         body_ast: editor.children,
       });
       const committer = {
-        name: user.name,
-        email: user["htts://tacos.openbeta.io/username"] + "@noreply",
+        name: user["https://tacos.openbeta.io/username"],
+        email: user["https://tacos.openbeta.io/username"] + "@noreply",
       };
+      setSubmitting(true)
       const { path, sha } = fileObj;
       const res = await write_markdown_file(
         str,
@@ -80,9 +83,12 @@ export const Editor = () => {
         committer,
         authToken
       );
-      console.log("## commit to github > ", res);
+
     } catch (e) {
+      //TODO: report error on screen
       console.log(e);
+    } finally {
+      setSubmitting(false)
     }
   };
 
@@ -91,7 +97,7 @@ export const Editor = () => {
 
   return (
     <>
-      <PageHeader onSubmit={onSubmit} editType={editType}>
+      <PageHeader onSubmit={onSubmit} submitting={submitting} editType={editType}>
         {errorIO ? (
           <IOErrorMessage />
         ) : (
@@ -143,5 +149,10 @@ const IOErrorMessage = () => (
     </button>
   </div>
 );
+
+const isProfileFormValid = (formikRef) =>
+  formikRef &&
+  formikRef.current &&
+  Object.keys(formikRef.current.errors).length === 0;
 
 export default Editor;

@@ -8,14 +8,14 @@ import { Field } from "formik";
  */
 const TextField = ({ name, label }) => (
   <div className="edit-form-row ">
-    <label className="font-semibold md:w-24" htmlFor={name}>
+    <label className="font-semibold md:w-24 md:-mt-2" htmlFor={name}>
       {label}
     </label>
     <Field id={name} name={name}>
       {({ field, meta }) => (
         <div className="w-full">
           <input className="w-full edit-input text-lg" type="text" {...field} />
-          <div className="h-3 text-sm pt-1 px-3 text-gray-600">{meta && meta.touched && meta.error ? meta.error : ""}</div>
+          <div className="h-3 text-sm pt-1 px-3 text-red-600">{meta && meta.touched && meta.error ? meta.error : ""}</div>
         </div>
       )}
     </Field>

@@ -8,6 +8,7 @@ module.exports = {
     title: `OpenTacos`,
     description: `Open collaboration climbing platform`,
     author: `hello@openbeta.io`,
+    content_edit_branch: `edit-test`
   },
   flags: {
     PRESERVE_WEBPACK_CACHE: true,

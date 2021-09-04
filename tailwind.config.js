@@ -8,6 +8,7 @@ module.exports = {
   variants: {
     extend: {
       backgroundColor: ["even"],
+      opacity: ['disabled']
     },
   },
   theme: {

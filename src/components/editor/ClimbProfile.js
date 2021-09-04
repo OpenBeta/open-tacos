@@ -17,9 +17,17 @@ const ROPE_CLIMB_TYPE_DEFAULTS = {
 };
 
 const ClimbProfileSchema = Yup.object().shape({
-  name: Yup.string()
+  route_name: Yup.string()
     .min(3, "Too short!")
     .max(150, "Too Long!")
+    .required("Required"),
+  fa: Yup.string()
+    .min(3, "Too short!")
+    .max(150, "Too Long!")
+    .required("Required"),
+  yds: Yup.string() // TODO:  add real YDS validator
+    .min(3, "Too short!")
+    .max(20, "Too Long!")
     .required("Required"),
 });
 
@@ -33,13 +41,14 @@ const ClimbProfile = ({ frontmatter, formikRef }) => {
   };
 
   if (frontmatter) {
-    const { route_name, yds, fa, safety, type } = frontmatter;
+    const { route_name, yds, fa, safety, type, metadata } = frontmatter;
     initialValues = {
       route_name,
       fa: fa,
       yds: yds,
       type: { ...ROPE_CLIMB_TYPE_DEFAULTS, ...type },
       safety,
+      metadata, // while we're not editing metadata yet we still need give it to Formik so that it can be retrieved later onSubmit
     };
   }
 
@@ -77,7 +86,7 @@ const ClimbProfile = ({ frontmatter, formikRef }) => {
             <div className="flex gap-x-4">
               <RadioButton
                 id="1"
-                value="G"
+                value=""
                 groupName="safety"
                 label="Unspecified"
               />

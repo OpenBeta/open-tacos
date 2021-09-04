@@ -3,8 +3,7 @@ import fm from "front-matter";
 
 import { GithubClient } from "./GithubClient";
 
-//TODO: make this a configurable option in gatsby-config.js
-export const CONTENT_BRANCH = "develop";
+export const CONTENT_BRANCH = "edit-test";
 export const CONTENT_BASEDIR = "content";
 
 /**

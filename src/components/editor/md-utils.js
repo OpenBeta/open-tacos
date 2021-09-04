@@ -61,6 +61,8 @@ export const slate_to_md = (ast) => {
  * @returns {string} markdown string
  */
 export const stringify = ({ frontmatter, body_ast }) => {
-  frontmatter.type = simplify_climb_type_json(frontmatter.type);
-  return  "---\n" + yaml.dump(frontmatter) + "---\n" + slate_to_md(body_ast);
+  if (frontmatter.type) {
+    frontmatter.type = simplify_climb_type_json(frontmatter.type);
+  }
+  return "---\n" + yaml.dump(frontmatter) + "---\n" + slate_to_md(body_ast);
 };
