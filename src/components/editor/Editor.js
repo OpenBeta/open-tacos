@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import ReactPlaceholder from "react-placeholder";
 import { useStoreEditorState } from "@udecode/plate";
 import { useAuth0 } from "@auth0/auth0-react";
+import { navigate } from "gatsby";
+
 
 import PlateEditor from "./PlateEditor";
 import FronmatterForm from "./ClimbProfile";
@@ -83,7 +85,7 @@ export const Editor = () => {
         committer,
         authToken
       );
-
+      navigate("/dashboard")
     } catch (e) {
       //TODO: report error on screen
       console.log(e);

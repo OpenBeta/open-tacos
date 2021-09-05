@@ -23,6 +23,7 @@
     "btoa": "^1.2.1",
     "buffer": "^6.0.3",
     "cross-env": "^7.0.3",
+    "dayjs": "^1.10.6",
     "formik": "^2.2.9",
     "front-matter": "^4.0.2",
     "gatsby": "^3.10.2",

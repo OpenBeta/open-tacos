@@ -50,16 +50,12 @@ export class GithubClient {
       },
     });
 
-    console.log("### response ", response);
-
     return response;
   }
 
   async getBranch() {
     try {
-      console.log("## enter getBranch()");
       const branch = this.branchName;
-      console.log("#branch ", branch);
 
       const data = await this.req({
         url: `${GithubClient.GATEWAY}/git/ref/heads/${branch}`,
@@ -92,7 +88,7 @@ export class GithubClient {
         content: b64EncodeUnicode(fileContents),
         sha,
         branch,
-        committer
+        committer,
       },
     });
     return response;
@@ -113,6 +109,18 @@ export class GithubClient {
     return request;
   }
 
+  async getCommitsByUser(username) {
+    const branch = this.branchName;
+    const request = await this.req({
+      url: `${GithubClient.GATEWAY}/commits?sha=${branch}${
+        username ? `&author=${username}` : ""
+      }`,
+      method: "GET",
+      headers: this.headers,
+    });
+    return request;
+  }
+
   get branchName() {
     // const _branchName = this.getCookie(GithubClient.HEAD_BRANCH_COOKIE_KEY);
 
@@ -126,7 +134,6 @@ export class GithubClient {
   async req(data) {
     try {
       const response = await this.api(data);
-      console.log(">> req ", response);
       if (response.status.toString()[0] == "2") {
         return response.data;
       }
