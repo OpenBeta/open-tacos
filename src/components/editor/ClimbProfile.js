@@ -60,6 +60,7 @@ const ClimbProfile = ({ frontmatter, formikRef }) => {
         initialValues={initialValues}
         enableReinitialize={true}
         validationSchema={ClimbProfileSchema}
+        validateOnMount={true}
       >
         <Form className="divide-y divide-gray-200 max-w-full px-4">
           <TextField name="route_name" label="Name" />

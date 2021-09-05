@@ -48,11 +48,12 @@ export const write_markdown_file = async (
   path,
   sha,
   committer,
+  message,
   authToken
 ) => {
   const github = new GithubClient({
     authToken,
     baseBranch: CONTENT_BRANCH,
   });
-  return await github.commit(path, sha, str, committer);
+  return await github.commit(path, sha, str, committer, message);
 };

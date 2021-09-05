@@ -4,11 +4,11 @@ import { useStoreEditorState } from "@udecode/plate";
 import { useAuth0 } from "@auth0/auth0-react";
 import { navigate } from "gatsby";
 
-
 import PlateEditor from "./PlateEditor";
 import FronmatterForm from "./ClimbProfile";
 import AreaProfile from "./AreaProfile";
 import ProfilePlaceholder from "./ProfilePlaceholder";
+import CommitSubject from "./CommitSubject";
 import PageHeader from "./PageHeader";
 import { stringify } from "./md-utils";
 import { get_markdown_file, write_markdown_file } from "../../js/github-utils";
@@ -31,12 +31,14 @@ const initial_state = {
 
 export const Editor = () => {
   const { getAccessTokenSilently, user } = useAuth0();
+  // to get access to commit message
+  const commitMsgRef = React.useRef(null);
   // to get access to climb metadata
   const formikRef = React.useRef(null);
   // to get access climb content
   const editor = useStoreEditorState();
 
-  const [submitting, setSubmitting] = useState(false)
+  const [submitting, setSubmitting] = useState(false);
   const [errorIO, setErrorIO] = useState(false);
   const [fileObj, setFileObject] = useState(initial_state);
 
@@ -60,7 +62,7 @@ export const Editor = () => {
       return;
     }
 
-    if (!isProfileFormValid(formikRef)) {
+    if (!areFormsValid([formikRef, commitMsgRef])) {
       return;
     }
 
@@ -76,30 +78,36 @@ export const Editor = () => {
         name: user["https://tacos.openbeta.io/username"],
         email: user["https://tacos.openbeta.io/username"] + "@noreply",
       };
-      setSubmitting(true)
+
+      setSubmitting(true);
       const { path, sha } = fileObj;
       const res = await write_markdown_file(
         str,
         path,
         sha,
         committer,
+        commitMsgRef.current.values.message,
         authToken
       );
-      navigate("/dashboard")
+      navigate("/dashboard");
     } catch (e) {
       //TODO: report error on screen
       console.log(e);
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
   };
 
   const { attributes, body } = fileObj.content;
   const editType = get_type(attributes);
-
   return (
     <>
-      <PageHeader onSubmit={onSubmit} submitting={submitting} editType={editType}>
+      <PageHeader
+        onSubmit={onSubmit}
+        submitting={submitting}
+        editType={editType}
+      >
+        <CommitSubject formikRef={commitMsgRef} />
         {errorIO ? (
           <IOErrorMessage />
         ) : (
@@ -152,9 +160,9 @@ const IOErrorMessage = () => (
   </div>
 );
 
-const isProfileFormValid = (formikRef) =>
-  formikRef &&
-  formikRef.current &&
-  Object.keys(formikRef.current.errors).length === 0;
+const areFormsValid = (refs) =>
+  refs.every(
+    (ref) => ref && ref.current && Object.keys(ref.current.errors).length === 0
+  );
 
 export default Editor;

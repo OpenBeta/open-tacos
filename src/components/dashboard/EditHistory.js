@@ -34,7 +34,7 @@ function EditHistory() {
   }, [getAccessTokenSilently, user]);
 
   return (
-    <div>
+    <div className="mt-16">
       <div className="text-lg">Recent edits</div>
       <div className="divide-y">
         <ReactPlaceholder
