@@ -7,9 +7,10 @@ import { navigate } from "gatsby";
 import PlateEditor from "./PlateEditor";
 import FronmatterForm from "./ClimbProfile";
 import AreaProfile from "./AreaProfile";
-import ProfilePlaceholder from "./ProfilePlaceholder";
 import CommitSubject from "./CommitSubject";
+import ProfilePlaceholder from "./ProfilePlaceholder";
 import PageHeader from "./PageHeader";
+import ErrorMessage from "./ErrorMessage";
 import { stringify } from "./md-utils";
 import { get_markdown_file, write_markdown_file } from "../../js/github-utils";
 
@@ -29,6 +30,28 @@ const initial_state = {
   },
 };
 
+export const ERROR = Object.freeze({
+  NO_ERROR: {
+    code: 0,
+    msg: "",
+  },
+  FILE_LOAD_ERROR: {
+    code: 5,
+    msg: "Oops, an error has occurred while loading content from the server.  Please refresh your browser.  If the problem persists, notify us at support@openbeta.io",
+    cause: "Error loading file from GitHub",
+  },
+  FILE_WRITE_ERROR: {
+    code: 10,
+    msg: "Oops, we couldn't save your edit.  Please submit again.  If the problem persists,  notify us at support@openbeta.io",
+    cause: "Error writing file to GitHub",
+  },
+  FILE_CONFLICT_ERROR: {
+    code: 20,
+    msg: "Ay, caramba! Someone has just submitted an edit right before you did.  We tried but couldn't merge your changes with theirs.  Notify us at support@openbeta.io",
+    cause: "Error writing file to GitHub",
+  },
+});
+
 export const Editor = () => {
   const { getAccessTokenSilently, user } = useAuth0();
   // to get access to commit message
@@ -39,7 +62,7 @@ export const Editor = () => {
   const editor = useStoreEditorState();
 
   const [submitting, setSubmitting] = useState(false);
-  const [errorIO, setErrorIO] = useState(false);
+  const [error, setError] = useState(ERROR.NO_ERROR);
   const [fileObj, setFileObject] = useState(initial_state);
 
   useEffect(() => {
@@ -51,7 +74,8 @@ export const Editor = () => {
         const { sha, path, content } = await get_markdown_file(authToken);
         setFileObject({ sha, path, content });
       } catch (e) {
-        setErrorIO(true);
+        console.log(e);
+        e.setError(ERROR.FILE_LOAD_ERROR);
       }
     };
     get_file_from_github();
@@ -91,8 +115,16 @@ export const Editor = () => {
       );
       navigate("/dashboard");
     } catch (e) {
-      //TODO: report error on screen
-      console.log(e);
+      switch (e.httpStatus) {
+        case 409:
+          setError(ERROR.FILE_CONFLICT_ERROR);
+          break;
+        case 422:
+          console.log("GitHub commit error", e);
+        default:
+          setError(ERROR.FILE_WRITE_ERROR);
+          break;
+      }
     } finally {
       setSubmitting(false);
     }
@@ -102,19 +134,13 @@ export const Editor = () => {
   const editType = get_type(attributes);
   return (
     <>
+      <ErrorMessage {...error} setError={setError} />
       <PageHeader
         onSubmit={onSubmit}
         submitting={submitting}
         editType={editType}
       >
         <CommitSubject formikRef={commitMsgRef} />
-        {errorIO ? (
-          <IOErrorMessage />
-        ) : (
-          <div className="text-gray-700">
-            You are in edit mode. Changes will not be saved until submit.
-          </div>
-        )}
       </PageHeader>
       <div className="layout-edit-narrow 2xl:layout-edit-wide">
         <ReactPlaceholder
@@ -136,29 +162,17 @@ export const Editor = () => {
 
 /**
  * Determine if we're editing a climb, a boulder problem or an area
- * @param  fm frontmatter object
+ * @param fm  frontmatter object
  */
-const get_type = (attributes) => {
-  if (attributes) {
-    if (attributes.route_name) return "climb";
-    if (attributes.area_name) return "area";
-    if (attributes.problem_name) return "problem";
+const get_type = (fm) => {
+  if (fm) {
+    if (fm.route_name) return "climb";
+    if (fm.area_name) return "area";
+    if (fm.problem_name) return "problem";
     return "unknown";
   }
   return "unknown";
 };
-
-const IOErrorMessage = () => (
-  <div className="text-sm">
-    <span>Oops, something went wrong.</span>
-    <button
-      className="btn btn-link text-sm"
-      onClick={() => window.location.reload()}
-    >
-      Try again
-    </button>
-  </div>
-);
 
 const areFormsValid = (refs) =>
   refs.every(

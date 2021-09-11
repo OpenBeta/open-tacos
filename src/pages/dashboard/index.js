@@ -14,7 +14,6 @@ function DashboardIndex() {
     >
       <SEO keywords={[]} title="Dashboard" />
       <Auth0NavBar />
-
       <EditHistory />
     </Layout>
   );

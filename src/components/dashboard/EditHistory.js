@@ -78,6 +78,7 @@ const Commit = ({ sha, html_url, date, message }) => {
  * @param {Array} list 
  */
 const transform = (list) => {
+  if (!list) return []
   const newList = list.map(({ sha, html_url, commit }) => {
     const { author, message } = commit;
     const { date } = author;

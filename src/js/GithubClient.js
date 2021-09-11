@@ -137,31 +137,18 @@ export class GithubClient {
       if (response.status.toString()[0] == "2") {
         return response.data;
       }
-      // throw new GithubError(
-      //   data.message || response.statusText,
-      //   response.status
-      // );
+      throw new GithubError(response.statusText, response.status);
     } catch (e) {
-      console.log(e);
-      //throw new GithubError(e);
+      throw new GithubError(e, e.response.status);
     }
   }
-
-  async getGithubResponse(response) {
-    const data = await response.json();
-    //2xx status codes
-    if (response.status.toString()[0] == "2") return data;
-
-    throw new GithubError(data.message || response.statusText, response.status);
-  }
 }
-
 class GithubError extends Error {
-  status;
+  httpStatus;
   constructor(message, status) {
     super(message);
-    this.message = message;
-    this.status = status;
+    this.name = "GithubError";
+    this.httpStatus = status;
   }
 }
 

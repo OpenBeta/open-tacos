@@ -14,7 +14,7 @@ const PageHeader = ({ onSubmit, editType, submitting, children }) => {
         <div>&nbsp;{/*future buttons, submenu*/}</div>
         <div>
           <button
-            className="btn btn-link btn-default mr-4"
+            className="btn btn-text mr-4"
             onClick={() => navigate(-1)}
           >
             Cancel
