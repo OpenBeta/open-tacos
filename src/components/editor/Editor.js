@@ -75,7 +75,7 @@ export const Editor = () => {
         setFileObject({ sha, path, content });
       } catch (e) {
         console.log(e);
-        e.setError(ERROR.FILE_LOAD_ERROR);
+        setError(ERROR.FILE_LOAD_ERROR);
       }
     };
     get_file_from_github();
