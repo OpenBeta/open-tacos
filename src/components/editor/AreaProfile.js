@@ -17,9 +17,10 @@ const AreaProfile = ({ frontmatter, formikRef }) => {
   };
 
   if (frontmatter) {
-    const { area_name } = frontmatter;
+    const { area_name, metadata } = frontmatter;
     initialValues = {
-      name: area_name,
+      area_name: area_name,
+      metadata // while we're not editing metadata yet we still need give it to Formik so that it can be retrieved later onSubmit
     };
   }
 
@@ -35,7 +36,7 @@ const AreaProfile = ({ frontmatter, formikRef }) => {
         validationSchema={AreaProfileSchema}
       >
         <Form className="divide-y divide-gray-200 max-w-full px-4">
-          <TextField name="name" label="Area name" />
+          <TextField name="area_name" label="Area name" />
         </Form>
       </Formik>
     </div>

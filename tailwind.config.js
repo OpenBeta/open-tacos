@@ -8,6 +8,7 @@ module.exports = {
   variants: {
     extend: {
       backgroundColor: ["even"],
+      opacity: ['disabled']
     },
   },
   theme: {
@@ -17,9 +18,9 @@ module.exports = {
       },
       colors: {
         'custom-green': '#8BB191',
-        'custom-blue': '#62cae3',
+        'custom-secondary': '#62cae3',
         'custom-avery': '#a5d9cf',
-        'custom-orange': '#e7811d',
+        'custom-primary': '#e7811d',
       },
     },
   },

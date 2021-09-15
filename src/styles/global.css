@@ -84,6 +84,10 @@
   border-radius:  1.5rem;
 }
 
+body, html {
+  height: 100%;
+}
+
 /* Main page hero card gradient color overlay */
 .hero-card {
   background-image: linear-gradient(to right top, #12bee5, #00b6f4, #1bacff, #58a0ff, #888fff, #ac80f2, #c970e0, #e05ec8, #ee52ad, #f64b91, #f74a75, #f24f5a);
@@ -135,7 +139,7 @@
 }
 
 .editor-profile-header {
-  @apply bg-custom-blue border-custom-blue border-b py-4 px-4 h-14 bg-gray-100 text-base align-middle rounded-t-lg
+  @apply bg-custom-secondary border-custom-secondary border-b py-4 px-4 h-14 bg-gray-100 text-base align-middle rounded-t-lg
 }
 
 
@@ -143,8 +147,9 @@
   .btn {
     @apply no-underline rounded-lg px-6 py-2 text-gray-900 font-medium text-base shadow-md;
   }
+
   .btn-primary {
-    @apply bg-yellow-300 hover:bg-yellow-400;
+    @apply bg-custom-primary hover:bg-yellow-400;
   }
 
   .btn-success {
@@ -155,13 +160,14 @@
     @apply bg-pink-300 hover:bg-pink-400;
   }
 
-  .btn-link {
+  .btn-text {
     @apply hover:bg-gray-200 underline shadow-none
   }
 
   .btn-default {
-    @apply  text-gray-600
+    @apply bg-gray-200 text-gray-900 border-2 border-gray-700
   }
+
 
   .link-primary {
     @apply underline hover:text-yellow-600;
@@ -210,5 +216,5 @@
 /* for climb profile form */
 input:checked + label {
   @apply text-white;
-  @apply bg-red-700;
+  @apply bg-gray-700;
 }

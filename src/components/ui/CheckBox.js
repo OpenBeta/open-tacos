@@ -15,8 +15,8 @@ const CheckBox = ({ name, label }) => {
         return (
           <>
             <label
-              className={`rounded-full py-1 pl-2 pr-1 flex items-center border border-gray-300 bg-gray-100 cursor-pointer ${
-                field.value ? "bg-pink-300" : ""
+              className={`rounded-full py-0.5 pl-2 pr-1 flex items-center border border-gray-300 bg-gray-100 cursor-pointer ${
+                field.value ? "bg-gray-700" : ""
               }`}
               onClick={() => {
                 form.setFieldValue(name, !field.value, false);
@@ -29,11 +29,17 @@ const CheckBox = ({ name, label }) => {
                 checked={field.value}
                 onChange={() => form.setFieldValue(name, !field.value, false)}
               />
-              <span className="text-sm font-base uppercase mr-2">{label}</span>
+              <span
+                className={`text-sm font-base uppercase mr-2 ${
+                  field.value ? "text-white" : ""
+                }`}
+              >
+                {label}
+              </span>
               {field.value ? (
-                <XCircleIcon className="text-gray-600" />
+                <XCircleIcon className="w-5 h-5 text-gray-300" />
               ) : (
-                <PlusSmalllIcon className="w-6 h-6 text-gray-300" />
+                <PlusSmalllIcon className="w-5 h-5 text-gray-300 hover:text-gray-600" />
               )}
             </label>
           </>

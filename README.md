@@ -3,7 +3,7 @@
 # OpenTacos
 OpenTacos is a proof-of-concept/MVP showing it's possible to build a collaborative climbing route catalog.
 
-[Live demo](https://tacos.openbeta.io/areas/105732162/black-velvet-wall) 🚀
+[Live demo](https://tacos.openbeta.io) 🚀
 
 ## Tech stack
 
@@ -40,17 +40,20 @@ cd open-tacos
 yarn install
 ```
 
-3.  Download the data to local cache
+3.  Download climb data to local cache
 ```
-# Note: run this script as needed 
+# Note: run this script as needed
 ./prebuild.sh
 ```
 
 4.  Run the app
+Since we are using Auth0 for authenticating users, development server needs to run in https mode. 
+You will prompted to install additional components on the first runl
 ```
-gatsby develop
+npm run develop -- --https
 ```
-The application will be run at `http://localhost:8000`
+
+The application is now available at `https://localhost:8000`
 
 ## How to contribute
 
