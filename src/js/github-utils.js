@@ -3,7 +3,7 @@ import fm from "front-matter";
 
 import { GithubClient } from "./GithubClient";
 
-export const CONTENT_BRANCH = "edit-test";
+export const CONTENT_BRANCH = "develop";
 export const CONTENT_BASEDIR = "content";
 
 /**
