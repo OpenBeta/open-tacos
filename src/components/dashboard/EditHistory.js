@@ -24,7 +24,7 @@ function EditHistory() {
         email: user["https://tacos.openbeta.io/username"] + "@noreply",
       };
 
-      const github = new GithubClient({ authToken, baseBranch: "edit-test" });
+      const github = new GithubClient({ authToken});
       const list = await github.getCommitsByUser(author.email);
       setLoading(false);
       setCommits(transform(list));
