@@ -17,7 +17,7 @@ function AreaStatistics ({climbs}) {
           <td className="px-3.5">
           <SingleStat number={totalClimbsInArea} className="w-min"></SingleStat>
           </td>
-          <td className="px-3.5">
+          <td className="px-3.5 w-48">
             <BarPercent percents={percents} colors={colors}></BarPercent>
           </td>
         </tr>
