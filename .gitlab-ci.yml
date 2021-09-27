@@ -25,7 +25,7 @@ test-pages:
 
   before_script:
   - yarn install --no-progress
-  - ./prebuild.sh # fetch content repo
+  - ./prebuild.sh full # fetch content repo
 
   script:
   - ./node_modules/.bin/gatsby build
