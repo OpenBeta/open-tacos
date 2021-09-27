@@ -60,6 +60,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
           markdownFileName,
           {
             lower: true,
+            strict: true
           }
         )}`,
       });
@@ -103,6 +104,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
           path.basename(pathId), // use dir name since it's sanitized/has less special chars
           {
             lower: true,
+            strict: true
           }
         )}`,
       });
