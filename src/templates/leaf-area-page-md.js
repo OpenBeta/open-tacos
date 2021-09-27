@@ -24,11 +24,11 @@ const shortcodes = {
  * Templage for generating individual page for the climb
  */
 export default function LeafAreaPage({
-  data: { mdx, climbs, parentAreas, childAreas, climbsPerChildArea },
+  data: { mdx, climbs, childAreas, climbsPerChildArea },
 }) {
   const { area_name } = mdx.frontmatter;
   const { parentId, pathId, filename } = mdx.fields;
-  const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
+  //const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
   const githubLink = pathOrParentIdToGitHubLink(pathId, filename);
   const areasToStatsBar =
     computeStatsBarPercentPerAreaFromClimbs(climbsPerChildArea);
@@ -36,10 +36,10 @@ export default function LeafAreaPage({
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[area_name]} title={area_name} />
-      <BreadCrumbs
+      {/* <BreadCrumbs
         path={parentId}
         navigationPaths={navigationPaths}
-      ></BreadCrumbs>
+      ></BreadCrumbs> */}
       <h1 className={template_h1_css}>{area_name}</h1>
       <div className="float-right">
         <button
@@ -101,11 +101,12 @@ export default function LeafAreaPage({
   );
 }
 
+    // $possibleParentPaths: [String]
+
 export const query = graphql`
   query (
     $legacy_id: String!
     $pathId: String
-    $possibleParentPaths: [String]
     $childAreaPathIds: [String]
   ) {
     mdx: mdx(
@@ -214,28 +215,31 @@ export const query = graphql`
         }
       }
     }
-    parentAreas: allMdx(
-      filter: {
-        fields: {
-          collection: { eq: "area-indices" }
-          pathId: { in: $possibleParentPaths }
-        }
-      }
-    ) {
-      totalCount
-      edges {
-        node {
-          fields {
-            pathId
-          }
-          frontmatter {
-            area_name
-            metadata {
-              legacy_id
-            }
-          }
-        }
-      }
-    }
+ 
   }
 `;
+
+
+// parentAreas: allMdx(
+//   filter: {
+//     fields: {
+//       collection: { eq: "area-indices" }
+//       pathId: { in: $possibleParentPaths }
+//     }
+//   }
+// ) {
+//   totalCount
+//   edges {
+//     node {
+//       fields {
+//         pathId
+//       }
+//       frontmatter {
+//         area_name
+//         metadata {
+//           legacy_id
+//         }
+//       }
+//     }
+//   }
+// }

@@ -52,7 +52,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       const parentId = convertPathToPOSIX(
         path.join(path.dirname(parent.relativePath))
       );
-      const possibleParentPaths = pathIdToAllPossibleParentPaths(parentId);
+      //const possibleParentPaths = pathIdToAllPossibleParentPaths(parentId);
       createNodeField({
         node,
         name: `slug`,
@@ -81,7 +81,8 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       createNodeField({
         node,
         name: `possibleParentPaths`,
-        value: possibleParentPaths,
+        //value: possibleParentPaths,
+        value: []
       });
     } else if (nodeType === "area-indices") {
       // Computed on the fly based off relative path of the current file
@@ -94,7 +95,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       const pathId = convertPathToPOSIX(
         path.join(path.dirname(parent.relativePath))
       );
-      const possibleParentPaths = pathIdToAllPossibleParentPaths(parentId);
+      //const possibleParentPaths = pathIdToAllPossibleParentPaths(parentId);
       createNodeField({
         node,
         name: `slug`,
@@ -128,7 +129,8 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       createNodeField({
         node,
         name: `possibleParentPaths`,
-        value: possibleParentPaths,
+        //value: possibleParentPaths,
+        value: []
       });
     }
   }
@@ -136,27 +138,49 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
 
 exports.createPages = async ({ graphql, actions }) => {
   // Query all leaf area index documents
+  // var result = await graphql(`
+  //   query {
+  //     allMdx(filter: { fields: { collection: { eq: "area-indices" } } }) {
+  //       edges {
+  //         node {
+  //           fields {
+  //             slug
+  //             pathId
+  //             possibleParentPaths
+  //             parentId
+  //           }
+  //           frontmatter {
+  //             metadata {
+  //               legacy_id
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // `);
+
+  // same as above but without possibleParentPaths
   var result = await graphql(`
-    query {
-      allMdx(filter: { fields: { collection: { eq: "area-indices" } } }) {
-        edges {
-          node {
-            fields {
-              slug
-              pathId
-              possibleParentPaths
-              parentId
-            }
-            frontmatter {
-              metadata {
-                legacy_id
-              }
+  query {
+    allMdx(filter: { fields: { collection: { eq: "area-indices" } } }) {
+      edges {
+        node {
+          fields {
+            slug
+            pathId
+            parentId
+          }
+          frontmatter {
+            metadata {
+              legacy_id
             }
           }
         }
       }
     }
-  `);
+  }
+`);
 
   // For every node in "area-indices" create a parentId to child Ids look up
   // data structure
@@ -188,33 +212,55 @@ exports.createPages = async ({ graphql, actions }) => {
         legacy_id: node.frontmatter.metadata.legacy_id,
         slug: node.fields.slug,
         pathId: node.fields.pathId,
-        possibleParentPaths: node.fields.possibleParentPaths,
+        //possibleParentPaths: node.fields.possibleParentPaths,
+        possibleParentPaths: [],
         childAreaPathIds: childAreaPathIds,
       },
     });
   }
 
   // Query all route .md documents
+  // result = await graphql(`
+  //   query {
+  //     allMdx(filter: { fields: { collection: { eq: "climbing-routes" } } }) {
+  //       edges {
+  //         node {
+  //           fields {
+  //             slug
+  //             parentId
+  //             possibleParentPaths
+  //           }
+  //           frontmatter {
+  //             metadata {
+  //               legacy_id
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // `);
+
+  // same as above without possiblParentPaths
   result = await graphql(`
-    query {
-      allMdx(filter: { fields: { collection: { eq: "climbing-routes" } } }) {
-        edges {
-          node {
-            fields {
-              slug
-              parentId
-              possibleParentPaths
-            }
-            frontmatter {
-              metadata {
-                legacy_id
-              }
+  query {
+    allMdx(filter: { fields: { collection: { eq: "climbing-routes" } } }) {
+      edges {
+        node {
+          fields {
+            slug
+            parentId
+          }
+          frontmatter {
+            metadata {
+              legacy_id
             }
           }
         }
       }
     }
-  `);
+  }
+`);
 
   // Create a single page for each climb
   result.data.allMdx.edges.forEach(({ node }) => {
@@ -225,7 +271,8 @@ exports.createPages = async ({ graphql, actions }) => {
         legacy_id: node.frontmatter.metadata.legacy_id,
         slug: node.fields.slug,
         parentId: node.fields.parentId,
-        possibleParentPaths: node.fields.possibleParentPaths,
+        possibleParentPaths: []
+        //possibleParentPaths: node.fields.possibleParentPaths,
       },
     });
   });

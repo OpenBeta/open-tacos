@@ -11,11 +11,12 @@ variables:
   DOCKER_DRIVER: overlay2
 
 # Job name must be 'pages' in order for GitLab to deploy to static site
-pages:
-  only: # Only run for these branches
-  - develop
-  - main
-  - gitlab-debug
+# NOTE: Rename job and comment out branch restriction to test build time
+test-pages:
+#  only: # Only run for these branches
+#  - develop
+#  - main
+#  - gitlab-debug
 
   stage: build
 

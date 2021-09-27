@@ -21,22 +21,25 @@ const shortcodes = {
 /**
  * Templage for generating individual page for the climb
  */
-export default function ClimbPage({ data: { mdx, parentAreas } }) {
+export default function ClimbPage({ data: { mdx } }) {
   const { route_name, yds, type, safety } = mdx.frontmatter;
   const { parentId, filename } = mdx.fields;
-  const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
+  //const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
   const githubLink = pathOrParentIdToGitHubLink(parentId, filename);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[route_name]} title={route_name} />
-      <BreadCrumbs
+      {/* <BreadCrumbs
         path={parentId}
         navigationPaths={navigationPaths}
-      ></BreadCrumbs>
+      ></BreadCrumbs> */}
       <h1 className={template_h1_css}>{route_name}</h1>
       <div className="float-right">
-        <button className="btn btn-primary" onClick={()=>navigate(`/edit?file=${parentId}/${filename}.md`)}>
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate(`/edit?file=${parentId}/${filename}.md`)}
+        >
           Edit
         </button>
       </div>
@@ -50,8 +53,9 @@ export default function ClimbPage({ data: { mdx, parentAreas } }) {
   );
 }
 
+// $possibleParentPaths: [String]
 export const query = graphql`
-  query ($legacy_id: String!, $possibleParentPaths: [String]) {
+  query ($legacy_id: String!) {
     mdx: mdx(
       fields: { collection: { eq: "climbing-routes" } }
       frontmatter: { metadata: { legacy_id: { eq: $legacy_id } } }
@@ -77,28 +81,29 @@ export const query = graphql`
       }
       body
     }
-    parentAreas: allMdx(
-      filter: {
-        fields: {
-          collection: { eq: "area-indices" }
-          pathId: { in: $possibleParentPaths }
-        }
-      }
-    ) {
-      totalCount
-      edges {
-        node {
-          fields {
-            pathId
-          }
-          frontmatter {
-            area_name
-            metadata {
-              legacy_id
-            }
-          }
-        }
-      }
-    }
   }
 `;
+
+// parentAreas: allMdx(
+//   filter: {
+//     fields: {
+//       collection: { eq: "area-indices" }
+//       pathId: { in: $possibleParentPaths }
+//     }
+//   }
+// ) {
+//   totalCount
+//   edges {
+//     node {
+//       fields {
+//         pathId
+//       }
+//       frontmatter {
+//         area_name
+//         metadata {
+//           legacy_id
+//         }
+//       }
+//     }
+//   }
+// }
