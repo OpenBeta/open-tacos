@@ -18,8 +18,8 @@ module.exports = {
     FAST_DEV: true,
     PRESERVE_FILE_DOWNLOAD_CACHE: true,
     PARALLEL_SOURCING: true,
-    LMDB_STORE: false,
-    PARALLEL_QUERY_RUNNING: true
+    LMDB_STORE: true,
+    PARALLEL_QUERY_RUNNING: false
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
