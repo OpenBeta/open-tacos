@@ -108,6 +108,7 @@ export const query = graphql`
         parentId
         pathId
         filename
+        pathTokens
       }
       frontmatter {
         area_name

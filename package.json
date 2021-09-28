@@ -40,7 +40,6 @@
     "gatsby-source-filesystem": "^3.14.0",
     "gatsby-transformer-json": "^3.14.0",
     "gatsby-transformer-sharp": "^3.14.0",
-    "graceful-fs": "^4.2.8",
     "js-yaml": "^4.1.0",
     "path-browserify": "^1.0.1",
     "query-string": "^7.0.1",

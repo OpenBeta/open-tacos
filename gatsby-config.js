@@ -3,10 +3,6 @@ const tailwindConfig = require("./tailwind.config.js");
 
 const fullConfig = resolveConfig(tailwindConfig);
 
-const fs = require('fs');
-const gracefulFs = require('graceful-fs');
-gracefulFs.gracefulify(fs);
-
 module.exports = {
   siteMetadata: {
     title: `OpenTacos`,
