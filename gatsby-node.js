@@ -40,6 +40,10 @@ const pathIdToAllPossibleParentPaths = (pathId) => {
   return allPossiblePaths;
 };
 
+const slugify_path = (pathTokens) => {
+  return pathTokens.map((s) => slugify(s, { lower: true })).join("/");
+};
+
 exports.onCreateNode = ({ node, getNode, actions }) => {
   if (node.internal.type === "Mdx") {
     const { createNodeField } = actions;
@@ -52,17 +56,16 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       const parentId = convertPathToPOSIX(
         path.join(path.dirname(parent.relativePath))
       );
+      //console.log("# Parent id ", parentId);
       //const possibleParentPaths = pathIdToAllPossibleParentPaths(parentId);
+      const pathTokens = path.dirname(
+        node.fileAbsolutePath.replace(__dirname + "/content/", "")
+      ).split("/");
+
       createNodeField({
         node,
         name: `slug`,
-        value: `/climbs/${node.frontmatter.metadata.legacy_id}/${slugify(
-          markdownFileName,
-          {
-            lower: true,
-            strict: true
-          }
-        )}`,
+        value: `/${slugify_path(pathTokens)}`,
       });
       createNodeField({
         node,
@@ -81,9 +84,8 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       });
       createNodeField({
         node,
-        name: `possibleParentPaths`,
-        //value: possibleParentPaths,
-        value: []
+        name: `pathTokens`,
+        value: pathTokens,
       });
     } else if (nodeType === "area-indices") {
       // Computed on the fly based off relative path of the current file
@@ -93,20 +95,20 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       const parentId = convertPathToPOSIX(
         path.join(path.dirname(parent.relativePath), "..")
       );
+
+      //console.log("## ", __dirname)
+      const pathTokens = path.dirname(
+        node.fileAbsolutePath.replace(__dirname + "/content/", "")
+      ).split("/");
+
       const pathId = convertPathToPOSIX(
         path.join(path.dirname(parent.relativePath))
       );
-      //const possibleParentPaths = pathIdToAllPossibleParentPaths(parentId);
+      // const possibleParentPaths = pathIdToAllPossibleParentPaths(parentId);
       createNodeField({
         node,
         name: `slug`,
-        value: `/areas/${node.frontmatter.metadata.legacy_id}/${slugify(
-          path.basename(pathId), // use dir name since it's sanitized/has less special chars
-          {
-            lower: true,
-            strict: true
-          }
-        )}`,
+        value: `/${slugify_path(pathTokens)}`,
       });
       createNodeField({
         node,
@@ -128,11 +130,15 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
         name: `pathId`,
         value: pathId,
       });
+      // createNodeField({
+      //   node,
+      //   name: `possibleParentPaths`,
+      //   value: possibleParentPaths,
+      // });
       createNodeField({
         node,
-        name: `possibleParentPaths`,
-        //value: possibleParentPaths,
-        value: []
+        name: `pathTokens`,
+        value: pathTokens,
       });
     }
   }
@@ -140,49 +146,26 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
 
 exports.createPages = async ({ graphql, actions }) => {
   // Query all leaf area index documents
-  // var result = await graphql(`
-  //   query {
-  //     allMdx(filter: { fields: { collection: { eq: "area-indices" } } }) {
-  //       edges {
-  //         node {
-  //           fields {
-  //             slug
-  //             pathId
-  //             possibleParentPaths
-  //             parentId
-  //           }
-  //           frontmatter {
-  //             metadata {
-  //               legacy_id
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // `);
-
-  // same as above but without possibleParentPaths
   var result = await graphql(`
-  query {
-    allMdx(filter: { fields: { collection: { eq: "area-indices" } } }) {
-      edges {
-        node {
-          fields {
-            slug
-            pathId
-            parentId
-          }
-          frontmatter {
-            metadata {
-              legacy_id
+    query {
+      allMdx(filter: { fields: { collection: { eq: "area-indices" } } }) {
+        edges {
+          node {
+            fields {
+              slug
+              pathId
+              parentId
+            }
+            frontmatter {
+              metadata {
+                legacy_id
+              }
             }
           }
         }
       }
     }
-  }
-`);
+  `);
 
   // For every node in "area-indices" create a parentId to child Ids look up
   // data structure
@@ -214,55 +197,30 @@ exports.createPages = async ({ graphql, actions }) => {
         legacy_id: node.frontmatter.metadata.legacy_id,
         slug: node.fields.slug,
         pathId: node.fields.pathId,
-        //possibleParentPaths: node.fields.possibleParentPaths,
-        possibleParentPaths: [],
         childAreaPathIds: childAreaPathIds,
       },
     });
   }
 
-  // Query all route .md documents
-  // result = await graphql(`
-  //   query {
-  //     allMdx(filter: { fields: { collection: { eq: "climbing-routes" } } }) {
-  //       edges {
-  //         node {
-  //           fields {
-  //             slug
-  //             parentId
-  //             possibleParentPaths
-  //           }
-  //           frontmatter {
-  //             metadata {
-  //               legacy_id
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // `);
-
-  // same as above without possiblParentPaths
+  //  Query all route .md documents
   result = await graphql(`
-  query {
-    allMdx(filter: { fields: { collection: { eq: "climbing-routes" } } }) {
-      edges {
-        node {
-          fields {
-            slug
-            parentId
-          }
-          frontmatter {
-            metadata {
-              legacy_id
+    query {
+      allMdx(filter: { fields: { collection: { eq: "climbing-routes" } } }) {
+        edges {
+          node {
+            fields {
+              slug
+            }
+            frontmatter {
+              metadata {
+                legacy_id
+              }
             }
           }
         }
       }
     }
-  }
-`);
+  `);
 
   // Create a single page for each climb
   result.data.allMdx.edges.forEach(({ node }) => {
@@ -272,9 +230,6 @@ exports.createPages = async ({ graphql, actions }) => {
       context: {
         legacy_id: node.frontmatter.metadata.legacy_id,
         slug: node.fields.slug,
-        parentId: node.fields.parentId,
-        possibleParentPaths: []
-        //possibleParentPaths: node.fields.possibleParentPaths,
       },
     });
   });
@@ -284,29 +239,26 @@ exports.createPages = async ({ graphql, actions }) => {
  * Webpack no longer includes path-browserify.  Adding this
  * function to make 'path' library available to client-side code.
  */
- exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = ({ actions }) => {
   actions.setWebpackConfig({
     resolve: {
       fallback: {
         path: require.resolve("path-browserify"),
-        "assert": false,
-        "stream": false
+        assert: false,
+        stream: false,
       },
     },
   });
 };
 
 exports.onCreatePage = async ({ page, actions }) => {
-
   const { createPage } = actions;
-  
+
   // Matching pages on the client side
-  if(page.path.match(/^\/edit/)) {
+  if (page.path.match(/^\/edit/)) {
     page.matchPath = "/edit/*";
 
     // Update the page
     createPage(page);
   }
-
 };
-

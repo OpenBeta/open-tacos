@@ -3,6 +3,10 @@ const tailwindConfig = require("./tailwind.config.js");
 
 const fullConfig = resolveConfig(tailwindConfig);
 
+const fs = require('fs');
+const gracefulFs = require('graceful-fs');
+gracefulFs.gracefulify(fs);
+
 module.exports = {
   siteMetadata: {
     title: `OpenTacos`,
@@ -14,8 +18,8 @@ module.exports = {
     FAST_DEV: true,
     PRESERVE_FILE_DOWNLOAD_CACHE: true,
     PARALLEL_SOURCING: true,
-    LMDB_STORE: true,
-    PARALLEL_QUERY_RUNNING: false
+    LMDB_STORE: false,
+    PARALLEL_QUERY_RUNNING: true
   },
   plugins: [
     `gatsby-plugin-react-helmet`,

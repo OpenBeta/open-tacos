@@ -4,7 +4,7 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
-import BreadCrumbs from "../components/ui/BreadCrumbs";
+import {BreadCrumbs2} from "../components/ui/BreadCrumbs";
 import { createNavigatePaths, pathOrParentIdToGitHubLink } from "../js/utils";
 import LinkToGithub from "../components/ui/LinkToGithub";
 import { h1, h2, p } from "../components/ui/shortcodes";
@@ -23,17 +23,14 @@ const shortcodes = {
  */
 export default function ClimbPage({ data: { mdx } }) {
   const { route_name, yds, type, safety } = mdx.frontmatter;
-  const { parentId, filename } = mdx.fields;
-  //const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
+  const { parentId, filename, pathTokens } = mdx.fields;
+  // const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
   const githubLink = pathOrParentIdToGitHubLink(parentId, filename);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[route_name]} title={route_name} />
-      {/* <BreadCrumbs
-        path={parentId}
-        navigationPaths={navigationPaths}
-      ></BreadCrumbs> */}
+      <BreadCrumbs2 pathTokens={pathTokens}></BreadCrumbs2>
       <h1 className={template_h1_css}>{route_name}</h1>
       <div className="float-right">
         <button
@@ -53,7 +50,6 @@ export default function ClimbPage({ data: { mdx } }) {
   );
 }
 
-// $possibleParentPaths: [String]
 export const query = graphql`
   query ($legacy_id: String!) {
     mdx: mdx(
@@ -64,6 +60,7 @@ export const query = graphql`
       fields {
         parentId
         filename
+        pathTokens
       }
       frontmatter {
         route_name
@@ -83,27 +80,3 @@ export const query = graphql`
     }
   }
 `;
-
-// parentAreas: allMdx(
-//   filter: {
-//     fields: {
-//       collection: { eq: "area-indices" }
-//       pathId: { in: $possibleParentPaths }
-//     }
-//   }
-// ) {
-//   totalCount
-//   edges {
-//     node {
-//       fields {
-//         pathId
-//       }
-//       frontmatter {
-//         area_name
-//         metadata {
-//           legacy_id
-//         }
-//       }
-//     }
-//   }
-// }

@@ -5,7 +5,7 @@ import SEO from "../components/seo";
 import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import RouteCard from "../components/ui/RouteCard";
-import BreadCrumbs from "../components/ui/BreadCrumbs";
+import { BreadCrumbs2 } from "../components/ui/BreadCrumbs";
 import { createNavigatePaths, pathOrParentIdToGitHubLink } from "../js/utils";
 import AreaCard from "../components/ui/AreaCard";
 import LinkToGithub from "../components/ui/LinkToGithub";
@@ -27,8 +27,7 @@ export default function LeafAreaPage({
   data: { mdx, climbs, childAreas, climbsPerChildArea },
 }) {
   const { area_name } = mdx.frontmatter;
-  const { parentId, pathId, filename } = mdx.fields;
-  //const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
+  const { pathTokens, pathId, filename } = mdx.fields;
   const githubLink = pathOrParentIdToGitHubLink(pathId, filename);
   const areasToStatsBar =
     computeStatsBarPercentPerAreaFromClimbs(climbsPerChildArea);
@@ -36,10 +35,7 @@ export default function LeafAreaPage({
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[area_name]} title={area_name} />
-      {/* <BreadCrumbs
-        path={parentId}
-        navigationPaths={navigationPaths}
-      ></BreadCrumbs> */}
+      <BreadCrumbs2 pathTokens={pathTokens}></BreadCrumbs2>
       <h1 className={template_h1_css}>{area_name}</h1>
       <div className="float-right">
         <button
@@ -101,14 +97,8 @@ export default function LeafAreaPage({
   );
 }
 
-    // $possibleParentPaths: [String]
-
 export const query = graphql`
-  query (
-    $legacy_id: String!
-    $pathId: String
-    $childAreaPathIds: [String]
-  ) {
+  query ($legacy_id: String!, $pathId: String, $childAreaPathIds: [String]) {
     mdx: mdx(
       fields: { collection: { eq: "area-indices" } }
       frontmatter: { metadata: { legacy_id: { eq: $legacy_id } } }
@@ -215,31 +205,5 @@ export const query = graphql`
         }
       }
     }
- 
   }
 `;
-
-
-// parentAreas: allMdx(
-//   filter: {
-//     fields: {
-//       collection: { eq: "area-indices" }
-//       pathId: { in: $possibleParentPaths }
-//     }
-//   }
-// ) {
-//   totalCount
-//   edges {
-//     node {
-//       fields {
-//         pathId
-//       }
-//       frontmatter {
-//         area_name
-//         metadata {
-//           legacy_id
-//         }
-//       }
-//     }
-//   }
-// }
