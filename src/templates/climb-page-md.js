@@ -4,8 +4,8 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
-import {BreadCrumbs2} from "../components/ui/BreadCrumbs";
-import { createNavigatePaths, pathOrParentIdToGitHubLink } from "../js/utils";
+import BreadCrumbs from "../components/ui/BreadCrumbs";
+import { pathOrParentIdToGitHubLink } from "../js/utils";
 import LinkToGithub from "../components/ui/LinkToGithub";
 import { h1, h2, p } from "../components/ui/shortcodes";
 import { template_h1_css } from "../js/styles";
@@ -24,13 +24,12 @@ const shortcodes = {
 export default function ClimbPage({ data: { mdx } }) {
   const { route_name, yds, type, safety } = mdx.frontmatter;
   const { parentId, filename, pathTokens } = mdx.fields;
-  // const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
   const githubLink = pathOrParentIdToGitHubLink(parentId, filename);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[route_name]} title={route_name} />
-      <BreadCrumbs2 pathTokens={pathTokens}></BreadCrumbs2>
+      <BreadCrumbs pathTokens={pathTokens} isClimbPage={true} />
       <h1 className={template_h1_css}>{route_name}</h1>
       <div className="float-right">
         <button

@@ -1,5 +1,5 @@
+const path = require("path");
 const slugify = require("slugify");
-const path = require(`path`);
 
 /**
  * Converts the relativePath to a POSIX path.
@@ -12,36 +12,35 @@ const convertPathToPOSIX = (relativePath) => {
 };
 
 /**
- * This will take a path
- * i.g. USA/Nevada/Southern Nevada/Red Rock/16-Black Velvet Canyon/Black Velvet Wall
- * and split it into all possible paths
- * USA/Nevada/Southern Nevada/Red Rock/16-Black Velvet Canyon/Black Velvet Wall
- * USA/Nevada/Southern Nevada/Red Rock/16-Black Velvet Canyon/
- * USA/Nevada/Southern Nevada/Red Rock/
- * USA/Nevada/Southern Nevada/
- * etc...
+ * Remove project's content base dir (__dirname +"/content") from full path and split the rest with String.split("/").
+ * The output is used for generating page slug and breadcrumbs.
  *
- * @param {String} pathId is a POSIX path with / delimiters
- * @returns {Array} returns all the possible paths. The highest root level
- * path will be the first element in the array i.g. ["USA","USA/Nevada",etc...]
+ * Example:
+ * ```
+ * pathTokenizer("/Users/bob/projects/foo/content/usa/washington/seattle/index.md")
+ * => ["usa", "washington", "seattle"].
+ *
+ * Note that the file name 'index.md' is not included.
+ * ```
+ * @param {String} absolutePath
  */
-const pathIdToAllPossibleParentPaths = (pathId) => {
-  const allPossiblePaths = [];
-  const splitPathId = pathId.split("/");
-  const totalNumberOfPossiblePaths = splitPathId.length;
-
-  let runningPath = [];
-  for (let index = 0; index < totalNumberOfPossiblePaths; index++) {
-    let currentPath = splitPathId[index];
-    runningPath.push(currentPath);
-    allPossiblePaths.push(runningPath.join("/"));
-  }
-
-  return allPossiblePaths;
+const pathTokenizer = (absolutePath) => {
+  return path
+    .dirname(absolutePath.replace(__dirname + "/content/", ""))
+    .split("/");
 };
 
+/**
+ * Slugify each element of `pathTokens` and join them together.
+ * ```
+ * slugify_path(["USA", "This has space"]) => 'usa/this-has-space'
+ * ```
+ * @param {string[]} pathTokens
+ */
 const slugify_path = (pathTokens) => {
-  return pathTokens.map((s) => slugify(s, { lower: true })).join("/");
+  return pathTokens
+    .map((s) => slugify(s, { lower: true, strict: true }))
+    .join("/");
 };
 
 exports.onCreateNode = ({ node, getNode, actions }) => {
@@ -56,11 +55,8 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       const parentId = convertPathToPOSIX(
         path.join(path.dirname(parent.relativePath))
       );
-      //console.log("# Parent id ", parentId);
-      //const possibleParentPaths = pathIdToAllPossibleParentPaths(parentId);
-      const pathTokens = path.dirname(
-        node.fileAbsolutePath.replace(__dirname + "/content/", "")
-      ).split("/");
+      const pathTokens = pathTokenizer(node.fileAbsolutePath);
+      pathTokens.push(markdownFileName);
 
       createNodeField({
         node,
@@ -96,15 +92,11 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
         path.join(path.dirname(parent.relativePath), "..")
       );
 
-      //console.log("## ", __dirname)
-      const pathTokens = path.dirname(
-        node.fileAbsolutePath.replace(__dirname + "/content/", "")
-      ).split("/");
+      const pathTokens = pathTokenizer(node.fileAbsolutePath);
 
       const pathId = convertPathToPOSIX(
         path.join(path.dirname(parent.relativePath))
       );
-      // const possibleParentPaths = pathIdToAllPossibleParentPaths(parentId);
       createNodeField({
         node,
         name: `slug`,
@@ -130,11 +122,6 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
         name: `pathId`,
         value: pathId,
       });
-      // createNodeField({
-      //   node,
-      //   name: `possibleParentPaths`,
-      //   value: possibleParentPaths,
-      // });
       createNodeField({
         node,
         name: `pathTokens`,
@@ -195,7 +182,6 @@ exports.createPages = async ({ graphql, actions }) => {
       component: path.resolve(`./src/templates/leaf-area-page-md.js`),
       context: {
         legacy_id: node.frontmatter.metadata.legacy_id,
-        slug: node.fields.slug,
         pathId: node.fields.pathId,
         childAreaPathIds: childAreaPathIds,
       },
@@ -229,7 +215,6 @@ exports.createPages = async ({ graphql, actions }) => {
       component: path.resolve(`./src/templates/climb-page-md.js`),
       context: {
         legacy_id: node.frontmatter.metadata.legacy_id,
-        slug: node.fields.slug,
       },
     });
   });

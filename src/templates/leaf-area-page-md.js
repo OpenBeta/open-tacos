@@ -5,8 +5,8 @@ import SEO from "../components/seo";
 import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import RouteCard from "../components/ui/RouteCard";
-import { BreadCrumbs2 } from "../components/ui/BreadCrumbs";
-import { createNavigatePaths, pathOrParentIdToGitHubLink } from "../js/utils";
+import BreadCrumbs from "../components/ui/BreadCrumbs";
+import { pathOrParentIdToGitHubLink } from "../js/utils";
 import AreaCard from "../components/ui/AreaCard";
 import LinkToGithub from "../components/ui/LinkToGithub";
 import { h1, h2, p } from "../components/ui/shortcodes.js";
@@ -21,7 +21,7 @@ const shortcodes = {
 };
 
 /**
- * Templage for generating individual page for the climb
+ * Templage for generating individual Area page
  */
 export default function LeafAreaPage({
   data: { mdx, climbs, childAreas, climbsPerChildArea },
@@ -35,7 +35,7 @@ export default function LeafAreaPage({
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[area_name]} title={area_name} />
-      <BreadCrumbs2 pathTokens={pathTokens}></BreadCrumbs2>
+      <BreadCrumbs pathTokens={pathTokens} />
       <h1 className={template_h1_css}>{area_name}</h1>
       <div className="float-right">
         <button
