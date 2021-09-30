@@ -11,11 +11,11 @@ variables:
   DOCKER_DRIVER: overlay2
 
 # Job name must be 'pages' in order for GitLab to deploy to static site
-test-pages:
-#  only: # Only run for these branches
-#  - develop
-#  - main
-#  - gitlab-debug
+pages:
+  only: # Only run for these branches
+  - develop
+  - main
+  - gitlab-debug
 
   stage: build
 
@@ -24,7 +24,7 @@ test-pages:
 
   before_script:
   - yarn install --no-progress
-  - ./prebuild.sh full # fetch content repo
+  - ./prebuild.sh # fetch content repo
 
   script:
   - ./node_modules/.bin/gatsby build
