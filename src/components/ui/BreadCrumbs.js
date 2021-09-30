@@ -1,34 +1,54 @@
 import React from "react";
-import {navigate} from "gatsby";
+import { Link } from "gatsby";
+const slugify = require("slugify");
 
-function BreadCrumbs({path, navigationPaths}) {
-  const entries = navigationPaths ? Object.entries(navigationPaths) : [];
+/**
+ * Turn each element of `pathTokens` to a gatsby-link.
+ *
+ * Example:
+ * ```
+ * pathTokens = ["USA", "Nevada", "Area 51", "Ladder1"]
+ * isClimbPage = true
+ *   => USA / Nevada / Area 51
+ * isClimbPage = false
+ *   => USA / Nevada / Area 51 / Ladder1
+ * ```
+ * @param {{pathTokens:string[], isClimbPage:boolean}} Props component props
+ */
+function BreadCrumbs({ pathTokens, isClimbPage }) {
+  const tokens = isClimbPage
+    ? pathTokens.slice(0, pathTokens.length - 1)
+    : pathTokens;
+  // tokens.unshift("Home"); // Append 'Home' to the front
   return (
-    <div>{
-      path.split("/").map((place, index, array)=>{
+    <div>
+      <Link className="hover:underline hover:text-gray-900 text-gray-400 " to="/">
+        <b>Home</b>
+      </Link>
+      {tokens.map((place, index, array) => {
         const isLastElement = array.length - 1 === index;
-        const possibleNavigation = entries[index];
-        const navigationPath = possibleNavigation && 
-          possibleNavigation.length > 0 ? possibleNavigation[1] : null;
-      
-        // If the path is . it means it is at the root level. Add a empty
-        // character for it still renders the BreadCrumbs element.
-        const formattedPlace = place === '.' ? '\u00A0' : place;
+        const url = "/" + slugify_path(array.slice(0, index + 1));
         return (
-          <span 
-            key={index}
-            className={!isLastElement ? 'text-gray-400' : 'text-gray-700'}>
-            <span
-              onClick={()=>{navigationPath && navigate(navigationPath)}} 
-              className="hover:underline cursor-pointer hover:text-gray-900">
-              {formattedPlace} 
-            </span>
-            {!isLastElement && <span className="mx-1.5">/</span>}
+          <span key={index}>
+            <span className="text-gray-400 mx-1.5">/</span>
+            {isLastElement && !isClimbPage ? (
+              <span className="">{place}</span>
+            ) : (
+              <span className="text-gray-400">
+                <Link className="hover:underline hover:text-gray-900" to={url}>
+                  {place}
+                </Link>
+              </span>
+            )}
+            {/* {!isLastElement && <span className="text-gray-400 mx-1.5">/</span>} */}
           </span>
-        )
-      })
-    }</div>
+        );
+      })}
+    </div>
   );
 }
+
+const slugify_path = (pathTokens) =>
+  pathTokens.map((s) => slugify(s, { lower: true, strict: true })).join("/");
 
 export default BreadCrumbs;
