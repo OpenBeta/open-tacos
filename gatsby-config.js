@@ -11,10 +11,11 @@ module.exports = {
     content_edit_branch: `edit-test`
   },
   flags: {
-    PRESERVE_WEBPACK_CACHE: true,
     FAST_DEV: true,
     PRESERVE_FILE_DOWNLOAD_CACHE: true,
-    PARALLEL_SOURCING: true
+    PARALLEL_SOURCING: true,
+    LMDB_STORE: true,
+    PARALLEL_QUERY_RUNNING: false
   },
   plugins: [
     `gatsby-plugin-react-helmet`,

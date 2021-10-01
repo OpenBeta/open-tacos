@@ -1,5 +1,5 @@
+const path = require("path");
 const slugify = require("slugify");
-const path = require(`path`);
 
 /**
  * Converts the relativePath to a POSIX path.
@@ -12,32 +12,35 @@ const convertPathToPOSIX = (relativePath) => {
 };
 
 /**
- * This will take a path
- * i.g. USA/Nevada/Southern Nevada/Red Rock/16-Black Velvet Canyon/Black Velvet Wall
- * and split it into all possible paths
- * USA/Nevada/Southern Nevada/Red Rock/16-Black Velvet Canyon/Black Velvet Wall
- * USA/Nevada/Southern Nevada/Red Rock/16-Black Velvet Canyon/
- * USA/Nevada/Southern Nevada/Red Rock/
- * USA/Nevada/Southern Nevada/
- * etc...
+ * Remove project's content base dir (__dirname +"/content") from full path and split the rest with String.split("/").
+ * The output is used for generating page slug and breadcrumbs.
  *
- * @param {String} pathId is a POSIX path with / delimiters
- * @returns {Array} returns all the possible paths. The highest root level
- * path will be the first element in the array i.g. ["USA","USA/Nevada",etc...]
+ * Example:
+ * ```
+ * pathTokenizer("/Users/bob/projects/foo/content/usa/washington/seattle/index.md")
+ * => ["usa", "washington", "seattle"].
+ *
+ * Note that the file name 'index.md' is not included.
+ * ```
+ * @param {String} absolutePath
  */
-const pathIdToAllPossibleParentPaths = (pathId) => {
-  const allPossiblePaths = [];
-  const splitPathId = pathId.split("/");
-  const totalNumberOfPossiblePaths = splitPathId.length;
+const pathTokenizer = (absolutePath) => {
+  return path
+    .dirname(absolutePath.replace(__dirname + "/content/", ""))
+    .split("/");
+};
 
-  let runningPath = [];
-  for (let index = 0; index < totalNumberOfPossiblePaths; index++) {
-    let currentPath = splitPathId[index];
-    runningPath.push(currentPath);
-    allPossiblePaths.push(runningPath.join("/"));
-  }
-
-  return allPossiblePaths;
+/**
+ * Slugify each element of `pathTokens` and join them together.
+ * ```
+ * slugify_path(["USA", "This has space"]) => 'usa/this-has-space'
+ * ```
+ * @param {string[]} pathTokens
+ */
+const slugify_path = (pathTokens) => {
+  return pathTokens
+    .map((s) => slugify(s, { lower: true, strict: true }))
+    .join("/");
 };
 
 exports.onCreateNode = ({ node, getNode, actions }) => {
@@ -52,16 +55,13 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       const parentId = convertPathToPOSIX(
         path.join(path.dirname(parent.relativePath))
       );
-      const possibleParentPaths = pathIdToAllPossibleParentPaths(parentId);
+      const pathTokens = pathTokenizer(node.fileAbsolutePath);
+      pathTokens.push(markdownFileName);
+
       createNodeField({
         node,
         name: `slug`,
-        value: `/climbs/${node.frontmatter.metadata.legacy_id}/${slugify(
-          markdownFileName,
-          {
-            lower: true,
-          }
-        )}`,
+        value: `/${slugify_path(pathTokens)}`,
       });
       createNodeField({
         node,
@@ -80,8 +80,8 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       });
       createNodeField({
         node,
-        name: `possibleParentPaths`,
-        value: possibleParentPaths,
+        name: `pathTokens`,
+        value: pathTokens,
       });
     } else if (nodeType === "area-indices") {
       // Computed on the fly based off relative path of the current file
@@ -91,19 +91,16 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       const parentId = convertPathToPOSIX(
         path.join(path.dirname(parent.relativePath), "..")
       );
+
+      const pathTokens = pathTokenizer(node.fileAbsolutePath);
+
       const pathId = convertPathToPOSIX(
         path.join(path.dirname(parent.relativePath))
       );
-      const possibleParentPaths = pathIdToAllPossibleParentPaths(parentId);
       createNodeField({
         node,
         name: `slug`,
-        value: `/areas/${node.frontmatter.metadata.legacy_id}/${slugify(
-          path.basename(pathId), // use dir name since it's sanitized/has less special chars
-          {
-            lower: true,
-          }
-        )}`,
+        value: `/${slugify_path(pathTokens)}`,
       });
       createNodeField({
         node,
@@ -127,8 +124,8 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       });
       createNodeField({
         node,
-        name: `possibleParentPaths`,
-        value: possibleParentPaths,
+        name: `pathTokens`,
+        value: pathTokens,
       });
     }
   }
@@ -144,7 +141,6 @@ exports.createPages = async ({ graphql, actions }) => {
             fields {
               slug
               pathId
-              possibleParentPaths
               parentId
             }
             frontmatter {
@@ -186,15 +182,13 @@ exports.createPages = async ({ graphql, actions }) => {
       component: path.resolve(`./src/templates/leaf-area-page-md.js`),
       context: {
         legacy_id: node.frontmatter.metadata.legacy_id,
-        slug: node.fields.slug,
         pathId: node.fields.pathId,
-        possibleParentPaths: node.fields.possibleParentPaths,
         childAreaPathIds: childAreaPathIds,
       },
     });
   }
 
-  // Query all route .md documents
+  //  Query all route .md documents
   result = await graphql(`
     query {
       allMdx(filter: { fields: { collection: { eq: "climbing-routes" } } }) {
@@ -202,8 +196,6 @@ exports.createPages = async ({ graphql, actions }) => {
           node {
             fields {
               slug
-              parentId
-              possibleParentPaths
             }
             frontmatter {
               metadata {
@@ -223,9 +215,6 @@ exports.createPages = async ({ graphql, actions }) => {
       component: path.resolve(`./src/templates/climb-page-md.js`),
       context: {
         legacy_id: node.frontmatter.metadata.legacy_id,
-        slug: node.fields.slug,
-        parentId: node.fields.parentId,
-        possibleParentPaths: node.fields.possibleParentPaths,
       },
     });
   });
@@ -235,29 +224,26 @@ exports.createPages = async ({ graphql, actions }) => {
  * Webpack no longer includes path-browserify.  Adding this
  * function to make 'path' library available to client-side code.
  */
- exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = ({ actions }) => {
   actions.setWebpackConfig({
     resolve: {
       fallback: {
         path: require.resolve("path-browserify"),
-        "assert": false,
-        "stream": false
+        assert: false,
+        stream: false,
       },
     },
   });
 };
 
 exports.onCreatePage = async ({ page, actions }) => {
-
   const { createPage } = actions;
-  
+
   // Matching pages on the client side
-  if(page.path.match(/^\/edit/)) {
+  if (page.path.match(/^\/edit/)) {
     page.matchPath = "/edit/*";
 
     // Update the page
     createPage(page);
   }
-
 };
-

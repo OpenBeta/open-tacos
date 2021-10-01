@@ -6,7 +6,7 @@ import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import RouteCard from "../components/ui/RouteCard";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
-import { createNavigatePaths, pathOrParentIdToGitHubLink } from "../js/utils";
+import { pathOrParentIdToGitHubLink } from "../js/utils";
 import AreaCard from "../components/ui/AreaCard";
 import LinkToGithub from "../components/ui/LinkToGithub";
 import { h1, h2, p } from "../components/ui/shortcodes.js";
@@ -21,14 +21,13 @@ const shortcodes = {
 };
 
 /**
- * Templage for generating individual page for the climb
+ * Templage for generating individual Area page
  */
 export default function LeafAreaPage({
-  data: { mdx, climbs, parentAreas, childAreas, climbsPerChildArea },
+  data: { mdx, climbs, childAreas, climbsPerChildArea },
 }) {
   const { area_name } = mdx.frontmatter;
-  const { parentId, pathId, filename } = mdx.fields;
-  const navigationPaths = createNavigatePaths(parentId, parentAreas.edges);
+  const { pathTokens, pathId, filename } = mdx.fields;
   const githubLink = pathOrParentIdToGitHubLink(pathId, filename);
   const areasToStatsBar =
     computeStatsBarPercentPerAreaFromClimbs(climbsPerChildArea);
@@ -36,10 +35,7 @@ export default function LeafAreaPage({
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[area_name]} title={area_name} />
-      <BreadCrumbs
-        path={parentId}
-        navigationPaths={navigationPaths}
-      ></BreadCrumbs>
+      <BreadCrumbs pathTokens={pathTokens} />
       <h1 className={template_h1_css}>{area_name}</h1>
       <div className="float-right">
         <button
@@ -102,12 +98,7 @@ export default function LeafAreaPage({
 }
 
 export const query = graphql`
-  query (
-    $legacy_id: String!
-    $pathId: String
-    $possibleParentPaths: [String]
-    $childAreaPathIds: [String]
-  ) {
+  query ($legacy_id: String!, $pathId: String, $childAreaPathIds: [String]) {
     mdx: mdx(
       fields: { collection: { eq: "area-indices" } }
       frontmatter: { metadata: { legacy_id: { eq: $legacy_id } } }
@@ -117,6 +108,7 @@ export const query = graphql`
         parentId
         pathId
         filename
+        pathTokens
       }
       frontmatter {
         area_name
@@ -204,29 +196,6 @@ export const query = graphql`
           fields {
             pathId
             slug
-          }
-          frontmatter {
-            area_name
-            metadata {
-              legacy_id
-            }
-          }
-        }
-      }
-    }
-    parentAreas: allMdx(
-      filter: {
-        fields: {
-          collection: { eq: "area-indices" }
-          pathId: { in: $possibleParentPaths }
-        }
-      }
-    ) {
-      totalCount
-      edges {
-        node {
-          fields {
-            pathId
           }
           frontmatter {
             area_name
