@@ -54,13 +54,10 @@ export default function SearchBar({ className }) {
 }
 
 const navigateTo = (data) => {
-  const { meta_mp_route_id, name } = data;
-  navigate(build_url(meta_mp_route_id, name));
-  //console.log(data);
+  const { meta_mp_route_id } = data;
+  navigate(build_url(meta_mp_route_id));
 };
 
-const build_url = (meta_mp_route_id, name) => {
-  return `/climbs/${meta_mp_route_id}/${slugify(name, {
-    lower: true,
-  })}`;
+const build_url = (meta_mp_route_id) => {
+  return `/climbs/${meta_mp_route_id}`;
 };
