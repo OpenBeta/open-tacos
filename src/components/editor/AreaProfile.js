@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import TextField from "../ui/TextField";
 
 const AreaProfileSchema = Yup.object().shape({
-  name: Yup.string()
+  area_name: Yup.string()
     .min(3, "Too short!")
     .max(150, "Too Long!")
     .required("Required"),
