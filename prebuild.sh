@@ -29,6 +29,6 @@ then
   rsync -aR ./USA/Nevada/Southern\ Nevada/Red\ Rock $target
   popd
 else
-  echo "Creating a symlink to entire content repo"
-  ln -s opentacos-content/content content
+  echo "Make entire repo available to build"
+  mv opentacos-content/content content
 fi
