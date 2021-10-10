@@ -127,6 +127,7 @@ export const query = graphql`
           parentId: { eq: $pathId }
         }
       }
+      sort: { fields: frontmatter___metadata___left_right_index }
     ) {
       totalCount
       edges {
