@@ -43,9 +43,15 @@ const slugify_path = (pathTokens) => {
     .join("/");
 };
 
-exports.onCreateNode = ({ node, getNode, actions }) => {
+exports.onCreateNode = ({
+  node,
+  getNode,
+  actions,
+  createNodeId,
+  createContentDigest,
+}) => {
   if (node.internal.type === "Mdx") {
-    const { createNodeField } = actions;
+    const { createNodeField, createNode } = actions;
     const parent = getNode(node["parent"]);
     const nodeType = parent["sourceInstanceName"];
     const markdownFileName = path.posix.parse(parent.relativePath).name;
@@ -56,12 +62,37 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
         path.join(path.dirname(parent.relativePath))
       );
       const pathTokens = pathTokenizer(node.fileAbsolutePath);
+
+      const parentAreaId = createNodeId(`/${slugify_path(pathTokens)}`);
+      console.log("# parent id", parentAreaId);
       pathTokens.push(markdownFileName);
+
+      const slug = `/${slugify_path(pathTokens)}`;
+      const fieldData = {
+        slug,
+        frontmatter: node.frontmatter,
+        area___NODE: parentAreaId,
+      };
+
+      const climbNodeId = createNodeId(slug);
+
+      createNode({
+        ...fieldData,
+        // Required fields
+        id: climbNodeId,
+        parent: node.id,
+        children: [],
+        internal: {
+          type: `Climb`,
+          contentDigest: createContentDigest(node.internal.content),
+          description: `OpenBeta node for climb`,
+        },
+      });
 
       createNodeField({
         node,
         name: `slug`,
-        value: `/${slugify_path(pathTokens)}`,
+        value: slug,
       });
       createNodeField({
         node,
@@ -97,10 +128,33 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       const pathId = convertPathToPOSIX(
         path.join(path.dirname(parent.relativePath))
       );
+
+      const slug = `/${slugify_path(pathTokens)}`;
+
+      const fieldData = {
+        slug,
+        frontmatter: node.frontmatter,
+      };
+
+      const areaNodeId = createNodeId(slug);
+
+      createNode({
+        ...fieldData,
+        // Required fields
+        id: areaNodeId,
+        parent: node.id,
+        children: [],
+        internal: {
+          type: `Area`,
+          contentDigest: createContentDigest(node.internal.content),
+          description: `OpenBeta area for climb`,
+        },
+      });
+
       createNodeField({
         node,
         name: `slug`,
-        value: `/${slugify_path(pathTokens)}`,
+        value: slug,
       });
       createNodeField({
         node,
