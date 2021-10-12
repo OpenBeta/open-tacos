@@ -15,13 +15,11 @@ function getRandomInt(min, max) {
 function IndexPage() {
   let allClimbingRoutes = useStaticQuery(graphql`
     query {
-      allMdx(filter: { fields: { collection: { eq: "climbing-routes" } } }) {
+      allClimb {
         edges {
           node {
-            fields {
-              parentId
-              slug
-            }
+            slug
+            pathTokens
             frontmatter {
               route_name
               yds
@@ -41,11 +39,11 @@ function IndexPage() {
     }
   `);
   const min = 0;
-  const max = allClimbingRoutes.allMdx.edges.length;
+  const max = allClimbingRoutes.allClimb.edges.length;
   const randomIndex = getRandomInt(min, max);
   let randomClimb = null;
-  if (allClimbingRoutes.allMdx.edges.length > 0) {
-    randomClimb = allClimbingRoutes.allMdx.edges[randomIndex].node;
+  if (allClimbingRoutes.allClimb.edges.length > 0) {
+    randomClimb = allClimbingRoutes.allClimb.edges[randomIndex].node;
   }
   allClimbingRoutes = [];
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import { graphql, navigate } from "gatsby";
+import { graphql, navigate, Link } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { MDXProvider } from "@mdx-js/react";
@@ -13,6 +13,7 @@ import { h1, h2, p } from "../components/ui/shortcodes.js";
 import { template_h1_css } from "../js/styles";
 import AreaStatistics from "../components/AreaStatistics";
 import { computeStatsBarPercentPerAreaFromClimbs } from "../js/utils";
+import ClimbDetail from "../components/graphql/ClimbDetail";
 
 const shortcodes = {
   h1,
@@ -24,13 +25,13 @@ const shortcodes = {
  * Templage for generating individual Area page
  */
 export default function LeafAreaPage({
-  data: { mdx, climbs, childAreas, climbsPerChildArea },
+  data: { area, climbs, childAreas },
 }) {
-  const { area_name } = mdx.frontmatter;
-  const { pathTokens, pathId, filename } = mdx.fields;
-  const githubLink = pathOrParentIdToGitHubLink(pathId, filename);
-  const areasToStatsBar =
-    computeStatsBarPercentPerAreaFromClimbs(climbsPerChildArea);
+  const { area_name } = area.frontmatter;
+  const { pathTokens, rawPath } = area;
+  const githubLink = pathOrParentIdToGitHubLink(rawPath, "index");
+  // const areasToStatsBar =
+  //   computeStatsBarPercentPerAreaFromClimbs(climbsPerChildArea);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -40,32 +41,30 @@ export default function LeafAreaPage({
       <div className="float-right">
         <button
           className="btn btn-primary"
-          onClick={() => navigate(`/edit?file=${pathId}/${filename}.md`)}
+          onClick={() => navigate(`/edit?file=${rawPath}/index.md`)}
         >
           Edit
         </button>
       </div>
       <AreaStatistics climbs={climbs}></AreaStatistics>
       <MDXProvider components={shortcodes}>
-        <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
+        <MDXRenderer frontmatter={area.frontmatter}>
+          {area.parent.body}
+        </MDXRenderer>
       </MDXProvider>
       <div className="grid grid-cols-3 gap-x-3">
         {childAreas.edges.map(({ node }) => {
-          const { frontmatter } = node;
+          const { frontmatter, slug } = node;
           const { area_name, metadata } = frontmatter;
-          const { slug, pathId } = node.fields;
-          const stats = areasToStatsBar[pathId];
+          //const stats = areasToStatsBar[pathId];
           return (
             <div className="pt-6 max-h-96" key={metadata.legacy_id}>
-              <div>
+              <Link to={slug}>
                 <AreaCard
-                  onPress={() => {
-                    navigate(slug);
-                  }}
                   area_name={area_name}
-                  stats={stats}
+                  // stats={stats}
                 ></AreaCard>
-              </div>
+              </Link>
             </div>
           );
         })}
@@ -74,20 +73,18 @@ export default function LeafAreaPage({
         {climbs.edges.map(({ node }) => {
           const { frontmatter } = node;
           const { yds, route_name, metadata, type } = frontmatter;
-          const { slug } = node.fields;
+          const { slug } = node;
           return (
             <div className="pt-6 max-h-96" key={metadata.legacy_id}>
-              <RouteCard
-                //                  onPress={()=>{navigate(`/climbs/${metadata.legacy_id}/${slugify(route_name,{lower:true})}`)}}
-                onPress={() => {
-                  navigate(slug);
-                }}
-                route_name={route_name}
-                legacy_id={metadata.legacy_id}
-                YDS={yds}
-                // safety="{}" TODO: Find out what routes have this value?
-                type={type}
-              ></RouteCard>
+              <Link to={slug}>
+                <RouteCard
+                  route_name={route_name}
+                  legacy_id={metadata.legacy_id}
+                  YDS={yds}
+                  // safety="{}" TODO: Find out what routes have this value?
+                  type={type}
+                ></RouteCard>
+              </Link>
             </div>
           );
         })}
@@ -98,18 +95,11 @@ export default function LeafAreaPage({
 }
 
 export const query = graphql`
-  query ($legacy_id: String!, $pathId: String, $childAreaPathIds: [String]) {
-    mdx: mdx(
-      fields: { collection: { eq: "area-indices" } }
-      frontmatter: { metadata: { legacy_id: { eq: $legacy_id } } }
-    ) {
+  query ($node_id: String!) {
+    area: area(id: { eq: $node_id }) {
       id
-      fields {
-        parentId
-        pathId
-        filename
-        pathTokens
-      }
+      rawPath
+      pathTokens
       frontmatter {
         area_name
         metadata {
@@ -118,94 +108,76 @@ export const query = graphql`
           lat
         }
       }
-      body
-    }
-    climbs: allMdx(
-      filter: {
-        fields: {
-          collection: { eq: "climbing-routes" }
-          parentId: { eq: $pathId }
+      parent {
+        ... on Mdx {
+          body
         }
       }
+    }
+    climbs: allClimb(
+      filter: { area: { id: { eq: $node_id } } }
       sort: { fields: frontmatter___metadata___left_right_index }
     ) {
-      totalCount
       edges {
         node {
-          fields {
-            parentId
-            slug
+          area {
+            id
           }
-          frontmatter {
-            route_name
-            yds
-            type {
-              tr
-              trad
-              sport
-              boulder
-            }
-            metadata {
-              legacy_id
-            }
-          }
+          ...ClimbDetailFragment
         }
       }
     }
-    climbsPerChildArea: allMdx(
-      filter: {
-        fields: {
-          collection: { eq: "climbing-routes" }
-          parentId: { in: $childAreaPathIds }
-        }
-      }
-    ) {
-      totalCount
+
+    childAreas: allArea(filter: { parent_area: { id: { eq: $node_id } } }) {
       edges {
         node {
-          fields {
-            parentId
-            slug
-          }
-          frontmatter {
-            route_name
-            yds
-            type {
-              tr
-              trad
-              sport
-              boulder
-            }
-            metadata {
-              legacy_id
-            }
-          }
-        }
-      }
-    }
-    childAreas: allMdx(
-      filter: {
-        fields: {
-          collection: { eq: "area-indices" }
-          parentId: { eq: $pathId }
-        }
-      }
-    ) {
-      totalCount
-      edges {
-        node {
-          fields {
-            pathId
-            slug
-          }
+          id
+          slug
+          rawPath
+          pathTokens
           frontmatter {
             area_name
             metadata {
               legacy_id
             }
           }
+          parent_area {
+            id
+          }
         }
       }
     }
   }
 `;
+
+// climbsPerChildArea: allMdx(
+//   filter: {
+//     fields: {
+//       collection: { eq: "climbing-routes" }
+//       parentId: { in: $childAreaPathIds }
+//     }
+//   }
+// ) {
+//   totalCount
+//   edges {
+//     node {
+//       fields {
+//         parentId
+//         slug
+//       }
+//       frontmatter {
+//         route_name
+//         yds
+//         type {
+//           tr
+//           trad
+//           sport
+//           boulder
+//         }
+//         metadata {
+//           legacy_id
+//         }
+//       }
+//     }
+//   }
+// }
