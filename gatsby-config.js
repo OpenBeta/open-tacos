@@ -15,7 +15,7 @@ module.exports = {
     PRESERVE_FILE_DOWNLOAD_CACHE: true,
     PARALLEL_SOURCING: true,
     LMDB_STORE: true,
-    PARALLEL_QUERY_RUNNING: false,
+    PARALLEL_QUERY_RUNNING: true,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -54,14 +54,6 @@ module.exports = {
         ignore: [`**/\.*`],
       },
     },
-    // {
-    //   resolve: `gatsby-source-filesystem`,
-    //   options: {
-    //     name: `area-indices`,
-    //     path: `${__dirname}/content/`,
-    //     ignore: [`**/^((?!index\.md))*$`], // A hack to include only index.md
-    //   },
-    // },
     {
       resolve: `gatsby-source-filesystem`,
       options: {

@@ -24,8 +24,8 @@ const shortcodes = {
  */
 export default function ClimbPage({ data: { climb } }) {
   const { route_name, yds, type, safety } = climb.frontmatter;
-  const { parentRawPath, filename, pathTokens } = climb;
-  const githubLink = pathOrParentIdToGitHubLink(parentRawPath, filename);
+  const { rawPath, filename, pathTokens } = climb;
+  const githubLink = pathOrParentIdToGitHubLink(rawPath, filename);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -35,7 +35,7 @@ export default function ClimbPage({ data: { climb } }) {
       <div className="float-right">
         <button
           className="btn btn-primary"
-          onClick={() => navigate(`/edit?file=${parentRawPath}/${filename}.md`)}
+          onClick={() => navigate(`/edit?file=${rawPath}/${filename}.md`)}
         >
           Edit
         </button>

@@ -12,7 +12,6 @@ import LinkToGithub from "../components/ui/LinkToGithub";
 import { h1, h2, p } from "../components/ui/shortcodes.js";
 import { template_h1_css } from "../js/styles";
 import AreaStatistics from "../components/AreaStatistics";
-import { computeStatsBarPercentPerAreaFromClimbs } from "../js/utils";
 import ClimbDetail from "../components/graphql/ClimbDetail";
 
 const shortcodes = {
@@ -24,14 +23,11 @@ const shortcodes = {
 /**
  * Templage for generating individual Area page
  */
-export default function LeafAreaPage({
-  data: { area, climbs, childAreas },
-}) {
+export default function LeafAreaPage({ data: { area, climbs, childAreas } }) {
   const { area_name } = area.frontmatter;
+
   const { pathTokens, rawPath } = area;
   const githubLink = pathOrParentIdToGitHubLink(rawPath, "index");
-  // const areasToStatsBar =
-  //   computeStatsBarPercentPerAreaFromClimbs(climbsPerChildArea);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -56,13 +52,11 @@ export default function LeafAreaPage({
         {childAreas.edges.map(({ node }) => {
           const { frontmatter, slug } = node;
           const { area_name, metadata } = frontmatter;
-          //const stats = areasToStatsBar[pathId];
           return (
             <div className="pt-6 max-h-96" key={metadata.legacy_id}>
               <Link to={slug}>
                 <AreaCard
                   area_name={area_name}
-                  // stats={stats}
                 ></AreaCard>
               </Link>
             </div>
@@ -149,35 +143,3 @@ export const query = graphql`
     }
   }
 `;
-
-// climbsPerChildArea: allMdx(
-//   filter: {
-//     fields: {
-//       collection: { eq: "climbing-routes" }
-//       parentId: { in: $childAreaPathIds }
-//     }
-//   }
-// ) {
-//   totalCount
-//   edges {
-//     node {
-//       fields {
-//         parentId
-//         slug
-//       }
-//       frontmatter {
-//         route_name
-//         yds
-//         type {
-//           tr
-//           trad
-//           sport
-//           boulder
-//         }
-//         metadata {
-//           legacy_id
-//         }
-//       }
-//     }
-//   }
-// }

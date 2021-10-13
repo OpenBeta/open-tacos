@@ -3,7 +3,7 @@ export const query = graphql`
   fragment ClimbDetailFragment on Climb {
     id
     slug
-    parentRawPath
+    rawPath
     pathTokens
     filename
     frontmatter {

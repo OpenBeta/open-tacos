@@ -12,28 +12,9 @@ const convertPathToPOSIX = (relativePath) => {
 };
 
 /**
- * Remove project's content base dir (__dirname +"/content") from full path and split the rest with String.split("/").
- * The output is used for generating page slug and breadcrumbs.
- *
- * Example:
- * ```
- * pathTokenizer("/Users/bob/projects/foo/content/usa/washington/seattle/index.md")
- * => ["usa", "washington", "seattle"].
- *
- * Note that the file name 'index.md' is not included.
- * ```
- * @param {String} absolutePath
- */
-const pathTokenizer = (absolutePath) => {
-  return path
-    .dirname(absolutePath.replace(__dirname + "/content/", ""))
-    .split("/");
-};
-
-/**
  * Slugify each element of `pathTokens` and join them together.
  * ```
- * slugify_path(["USA", "This has space"]) => 'usa/this-has-space'
+ * slugify_path(["USA", "Oregon", "This has space"]) => 'usa/oregon/this-has-space'
  * ```
  * @param {string[]} pathTokens
  */
@@ -49,7 +30,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     type Climb implements Node {
       slug: String!
       filename: String!
-      parentRawPath: String!
+      rawPath: String!
       pathTokens: [String!]!
       frontmatter: ClimbFrontmatter!
     }
@@ -94,6 +75,11 @@ exports.createSchemaCustomization = ({ actions }) => {
   createTypes(typeDefs);
 };
 
+/**
+ * This is Gatsby's special callback that allows us to extend the existing data
+ * structure representing each .md file.
+ * The main purpose of this function is to create an 'Area' node for each index.md and 'Climb' nodes for other .md files.
+ */
 exports.onCreateNode = ({
   node,
   getNode,
@@ -102,45 +88,45 @@ exports.onCreateNode = ({
   createContentDigest,
 }) => {
   if (node.internal.type !== "Mdx") return;
+
+  // Mdx plugin creates a child node for each .md/mdx file
+  // with the parent node being the file node
+  // ie: [File node] -> [Mdx node]
+  // Use File node to get information about the underlying file,
+  // Mdx node for markdown content.
+
+  const fileNode = getNode(node["parent"]);
+  if (fileNode["sourceInstanceName"] !== "areas-routes") return;
+
   const { createNode } = actions;
-  const parent = getNode(node["parent"]);
-  const nodeType = parent["sourceInstanceName"];
-  if (nodeType !== "areas-routes") return;
-  const markdownFileName = path.posix.parse(parent.relativePath).name;
+  const rawPath = convertPathToPOSIX(fileNode.relativeDirectory);
+  const markdownFileName = fileNode.name;
+  // index.md: special file describing the area
+  // Create an Area node [File node] -> [Mdx node] -> [Area node]
   if (markdownFileName === "index") {
-    // Computed on the fly based off relative path of the current file
-    // If you looking at an index.md for an area the parent would be the
-    // index.md of 1 directory level up.
-    // i.g. Take current path, go up one directory.
-    // const parentId = convertPathToPOSIX(
-    //   path.join(path.dirname(parent.relativePath), "..")
-    // );
-
-    //const pathTokens = pathTokenizer(node.fileAbsolutePath);
-
-    
-    const pathId = convertPathToPOSIX(
-      path.join(path.dirname(parent.relativePath))
-    );
-    const pathTokens = pathId.split("/");
-
+    const pathTokens = rawPath.split("/");
     const slug = `/${slugify_path(pathTokens)}`;
+
     const fieldData = {
       slug,
       frontmatter: node.frontmatter,
-      rawPath: pathId,
+      rawPath,
       filename: markdownFileName,
       pathTokens,
     };
 
-    const areaNodeId = createNodeId(slug);
-    const _parentAreaPath = pathTokens.slice(0, pathTokens.length - 1);
+    // Calculate parent area by going up 1 level
+    const _parentAreaPath =
+      pathTokens.length === 1
+        ? null
+        : pathTokens.slice(0, pathTokens.length - 1);
+
     createNode({
       ...fieldData,
       // Required fields
-      id: areaNodeId,
+      id: createNodeId(slug),
       parent: node.id,
-      parent_area___NODE: createNodeId(`/${slugify_path(_parentAreaPath)}`),
+      parent_area___NODE: _parentAreaPath ? createNodeId(`/${slugify_path(_parentAreaPath)}`): null,
       children: [],
       internal: {
         type: `Area`,
@@ -151,11 +137,8 @@ exports.onCreateNode = ({
   } else {
     // Computed on the fly based off relative path of the current file
     // climbing routes's parent id is the current directory.
-    const parentId = convertPathToPOSIX(
-      path.join(path.dirname(parent.relativePath))
-    );
-
-    const pathTokens = parentId.split("/");
+    const rawPath = convertPathToPOSIX(fileNode.relativeDirectory);
+    const pathTokens = rawPath.split("/");
 
     const parentAreaId = createNodeId(`/${slugify_path(pathTokens)}`);
     pathTokens.push(markdownFileName);
@@ -164,22 +147,11 @@ exports.onCreateNode = ({
     const fieldData = {
       slug,
       frontmatter: node.frontmatter,
-      parentRawPath: parentId,
+      rawPath,
       filename: markdownFileName,
       pathTokens,
       area___NODE: parentAreaId,
     };
-
-    // const parentAreaNode = getNode(parentAreaId);
-    // if (!parentAreaNode) {
-    //   console.log("## can't find parent ", markdownFileName, parentId);
-    // } else {
-    //   console.log(
-    //     "# parent",
-    //     parentAreaNode,
-    //     markdownFileName
-    //   );
-    // }
 
     const climbNodeId = createNodeId(`${slug}-climbing-route`);
 
@@ -195,62 +167,10 @@ exports.onCreateNode = ({
         description: `OpenBeta node for climb`,
       },
     });
-
-    // const newClimbNode = getNode(climbNodeId);
-    // createParentChildLink({ parent: parentAreaNode, child: newClimbNode });
-
-    // createNodeField({
-    //   node,
-    //   name: `slug`,
-    //   value: slug,
-    // });
-    // createNodeField({
-    //   node,
-    //   name: `filename`,
-    //   value: markdownFileName,
-    // });
-    // createNodeField({
-    //   node,
-    //   name: `collection`,
-    //   value: nodeType,
-    // });
-    // createNodeField({
-    //   node,
-    //   name: `parentId`,
-    //   value: parentId,
-    // });
-    // createNodeField({
-    //   node,
-    //   name: `pathTokens`,
-    //   value: pathTokens,
-    // });
   }
 };
 
 exports.createPages = async ({ graphql, actions }) => {
-  // Query all leaf area index documents
-  // var result = await graphql(`
-  //   query {
-  //     allMdx(filter: { fields: { collection: { eq: "area-indices" } } }) {
-  //       edges {
-  //         node {
-  //           id
-  //           fields {
-  //             slug
-  //             pathId
-  //             parentId
-  //           }
-  //           frontmatter {
-  //             metadata {
-  //               legacy_id
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // `);
-
   var result = await graphql(`
     query {
       allArea {
@@ -264,38 +184,17 @@ exports.createPages = async ({ graphql, actions }) => {
     }
   `);
 
-  // For every node in "area-indices" create a parentId to child Ids look up
-  // data structure
-  const childAreas = {};
-  // result.data.allMdx.edges.map(({ node }) => {
-  //   const parentId = node.fields.parentId;
-  //   const pathId = node.fields.pathId;
-
-  //   if (childAreas[parentId]) {
-  //     childAreas[parentId].push(pathId);
-  //     childAreas[parentId] = [...new Set(childAreas[parentId])];
-  //   } else {
-  //     childAreas[parentId] = [pathId];
-  //   }
-  // });
-
-  // Create each index page for each leaf area
+  // Create each index page for each area
   const { createPage } = actions;
-  for (const { node } of result.data.allArea.edges) {
-    // For a given area indices, list out all the possible path strings for
-    // the children areas
-    // const childAreaPathIds = childAreas[node.fields.pathId]
-    //   ? childAreas[node.fields.pathId]
-    //   : [];
+  result.data.allArea.edges.forEach(({ node }) => {
     createPage({
       path: node.slug,
       component: path.resolve(`./src/templates/leaf-area-page-md.js`),
       context: {
         node_id: node.id,
-        childAreaPathIds: [], //childAreaPathIds,
       },
     });
-  }
+  });
 
   //  Query all route .md documents
   result = await graphql(`
