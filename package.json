@@ -68,7 +68,7 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "analyze": "eslint --ext .jsx --ext .js .",
-    "build": "GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true gatsby build",
+    "build": "gatsby build",
     "develop": "gatsby develop",
     "start": "gatsby develop",
     "serve": "gatsby serve",
@@ -81,7 +81,7 @@
     "@tailwindcss/forms": "^0.3.3",
     "autoprefixer": "^10.2.6",
     "babel-jest": "^27.0.2",
-    "babel-preset-gatsby": "^1.7.1",
+    "babel-preset-gatsby": "^1.14.0",
     "cssnano": "^5.0.6",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",

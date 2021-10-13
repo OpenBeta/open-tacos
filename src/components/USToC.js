@@ -5,13 +5,8 @@ import { Link } from "gatsby";
 function USToC() {
   const states = useStaticQuery(graphql`
     query myquery {
-      allMdx(
-        filter: {
-          fields: {
-            collection: { eq: "area-indices" }
-            parentId: { eq: "USA" }
-          }
-        }
+      allArea(
+        filter: { parent_area: { rawPath: { eq: "USA" } } }
         sort: { fields: frontmatter___area_name }
       ) {
         edges {
@@ -19,9 +14,7 @@ function USToC() {
             frontmatter {
               area_name
             }
-            fields {
-              slug
-            }
+            slug
           }
         }
       }
@@ -32,9 +25,8 @@ function USToC() {
     <section>
       <h4 className="text-xl font-medium my-4">Explore by State</h4>
       <div className="flex space-x-4">
-        {states.allMdx.edges.map(({ node }) => {
-          const { frontmatter, fields } = node;
-          const { slug } = fields;
+        {states.allArea.edges.map(({ node }) => {
+          const { frontmatter, slug } = node;
           return (
             <div key={slug}>
               <State area_name={frontmatter.area_name} slug={slug} />

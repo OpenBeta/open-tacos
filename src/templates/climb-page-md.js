@@ -11,6 +11,7 @@ import { h1, h2, p } from "../components/ui/shortcodes";
 import { template_h1_css } from "../js/styles";
 import RouteGradeChip from "../components/ui/RouteGradeChip";
 import RouteTypeChips from "../components/ui/RouteTypeChips";
+import ClimbDetail from "../components/graphql/ClimbDetail";
 
 const shortcodes = {
   h1,
@@ -21,10 +22,10 @@ const shortcodes = {
 /**
  * Templage for generating individual page for the climb
  */
-export default function ClimbPage({ data: { mdx } }) {
-  const { route_name, yds, type, safety } = mdx.frontmatter;
-  const { parentId, filename, pathTokens } = mdx.fields;
-  const githubLink = pathOrParentIdToGitHubLink(parentId, filename);
+export default function ClimbPage({ data: { climb } }) {
+  const { route_name, yds, type, safety } = climb.frontmatter;
+  const { rawPath, filename, pathTokens } = climb;
+  const githubLink = pathOrParentIdToGitHubLink(rawPath, filename);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -34,7 +35,7 @@ export default function ClimbPage({ data: { mdx } }) {
       <div className="float-right">
         <button
           className="btn btn-primary"
-          onClick={() => navigate(`/edit?file=${parentId}/${filename}.md`)}
+          onClick={() => navigate(`/edit?file=${rawPath}/${filename}.md`)}
         >
           Edit
         </button>
@@ -42,7 +43,9 @@ export default function ClimbPage({ data: { mdx } }) {
       <RouteGradeChip yds={yds} safety={safety}></RouteGradeChip>
       <RouteTypeChips type={type}></RouteTypeChips>
       <MDXProvider components={shortcodes}>
-        <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
+        <MDXRenderer frontmatter={climb.frontmatter}>
+          {climb.parent.body}
+        </MDXRenderer>
       </MDXProvider>
       <LinkToGithub link={githubLink} docType="climb"></LinkToGithub>
     </Layout>
@@ -50,32 +53,9 @@ export default function ClimbPage({ data: { mdx } }) {
 }
 
 export const query = graphql`
-  query ($legacy_id: String!) {
-    mdx: mdx(
-      fields: { collection: { eq: "climbing-routes" } }
-      frontmatter: { metadata: { legacy_id: { eq: $legacy_id } } }
-    ) {
-      id
-      fields {
-        parentId
-        filename
-        pathTokens
-      }
-      frontmatter {
-        route_name
-        metadata {
-          legacy_id
-        }
-        yds
-        safety
-        type {
-          tr
-          trad
-          sport
-          boulder
-        }
-      }
-      body
+  query ($node_id: String!) {
+    climb: climb(id: { eq: $node_id }) {
+      ...ClimbDetailFragment
     }
   }
 `;

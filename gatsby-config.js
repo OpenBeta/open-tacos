@@ -8,14 +8,14 @@ module.exports = {
     title: `OpenTacos`,
     description: `Open collaboration climbing platform`,
     author: `hello@openbeta.io`,
-    content_edit_branch: `edit-test`
+    content_edit_branch: `edit-test`,
   },
   flags: {
     FAST_DEV: true,
     PRESERVE_FILE_DOWNLOAD_CACHE: true,
     PARALLEL_SOURCING: true,
     LMDB_STORE: true,
-    PARALLEL_QUERY_RUNNING: false
+    PARALLEL_QUERY_RUNNING: true,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -49,17 +49,9 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `climbing-routes`,
+        name: `areas-routes`,
         path: `${__dirname}/content`,
-        ignore: [`**/\.*`, `**/index\.md`],
-      },
-    },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `area-indices`,
-        path: `${__dirname}/content/`,
-        ignore: [`**/^((?!index\.md))*$`], // A hack to include only index.md
+        ignore: [`**/\.*`],
       },
     },
     {
