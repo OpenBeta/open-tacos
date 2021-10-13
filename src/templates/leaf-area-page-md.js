@@ -13,6 +13,7 @@ import { h1, h2, p } from "../components/ui/shortcodes.js";
 import { template_h1_css } from "../js/styles";
 import AreaStatistics from "../components/AreaStatistics";
 import ClimbDetail from "../components/graphql/ClimbDetail";
+import AreaDetail from "../components/graphql/AreaDetail";
 
 const shortcodes = {
   h1,
@@ -23,10 +24,10 @@ const shortcodes = {
 /**
  * Templage for generating individual Area page
  */
-export default function LeafAreaPage({ data: { area, climbs, childAreas } }) {
+export default function LeafAreaPage({ data: { area, climbs } }) {
   const { area_name } = area.frontmatter;
 
-  const { pathTokens, rawPath } = area;
+  const { pathTokens, rawPath, children } = area;
   const githubLink = pathOrParentIdToGitHubLink(rawPath, "index");
   return (
     <Layout>
@@ -49,15 +50,13 @@ export default function LeafAreaPage({ data: { area, climbs, childAreas } }) {
         </MDXRenderer>
       </MDXProvider>
       <div className="grid grid-cols-3 gap-x-3">
-        {childAreas.edges.map(({ node }) => {
+        {children.map((node) => {
           const { frontmatter, slug } = node;
           const { area_name, metadata } = frontmatter;
           return (
             <div className="pt-6 max-h-96" key={metadata.legacy_id}>
               <Link to={slug}>
-                <AreaCard
-                  area_name={area_name}
-                ></AreaCard>
+                <AreaCard area_name={area_name}></AreaCard>
               </Link>
             </div>
           );
@@ -91,21 +90,14 @@ export default function LeafAreaPage({ data: { area, climbs, childAreas } }) {
 export const query = graphql`
   query ($node_id: String!) {
     area: area(id: { eq: $node_id }) {
-      id
-      rawPath
-      pathTokens
-      frontmatter {
-        area_name
-        metadata {
-          legacy_id
-          lng
-          lat
-        }
-      }
+      ...AreaDetailFragment
       parent {
         ... on Mdx {
           body
         }
+      }
+      children {
+        ...AreaDetailFragment
       }
     }
     climbs: allClimb(
@@ -118,26 +110,6 @@ export const query = graphql`
             id
           }
           ...ClimbDetailFragment
-        }
-      }
-    }
-
-    childAreas: allArea(filter: { parent_area: { id: { eq: $node_id } } }) {
-      edges {
-        node {
-          id
-          slug
-          rawPath
-          pathTokens
-          frontmatter {
-            area_name
-            metadata {
-              legacy_id
-            }
-          }
-          parent_area {
-            id
-          }
         }
       }
     }
