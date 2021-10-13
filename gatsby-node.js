@@ -121,12 +121,15 @@ exports.onCreateNode = ({
         ? null
         : pathTokens.slice(0, pathTokens.length - 1);
 
+    const nodeId = createNodeId(slug);
     createNode({
       ...fieldData,
       // Required fields
-      id: createNodeId(slug),
+      id: nodeId,
       parent: node.id,
-      parent_area___NODE: _parentAreaPath ? createNodeId(`/${slugify_path(_parentAreaPath)}`): null,
+      parent_area___NODE: _parentAreaPath
+        ? createNodeId(`/${slugify_path(_parentAreaPath)}`)
+        : null,
       children: [],
       internal: {
         type: `Area`,
@@ -135,8 +138,6 @@ exports.onCreateNode = ({
       },
     });
   } else {
-    // Computed on the fly based off relative path of the current file
-    // climbing routes's parent id is the current directory.
     const rawPath = convertPathToPOSIX(fileNode.relativeDirectory);
     const pathTokens = rawPath.split("/");
 
@@ -170,14 +171,17 @@ exports.onCreateNode = ({
   }
 };
 
-exports.createPages = async ({ graphql, actions }) => {
+exports.createPages = async ({ graphql, actions, getNode }) => {
   var result = await graphql(`
     query {
-      allArea {
+      allArea(sort: { fields: frontmatter___area_name }) {
         edges {
           node {
             id
             slug
+            parent_area {
+              id
+            }
           }
         }
       }
@@ -185,8 +189,17 @@ exports.createPages = async ({ graphql, actions }) => {
   `);
 
   // Create each index page for each area
-  const { createPage } = actions;
+  const { createPage, createParentChildLink } = actions;
   result.data.allArea.edges.forEach(({ node }) => {
+    if (node.parent_area) {
+      // Add children areas here instead of onCreateNode() because
+      // gatsby-filesystem-plugin process Mdx files in a random order;
+      // sometimes child areas are created before the parent.
+      createParentChildLink({
+        parent: getNode(node.parent_area.id),
+        child: node,
+      });
+    }
     createPage({
       path: node.slug,
       component: path.resolve(`./src/templates/leaf-area-page-md.js`),
