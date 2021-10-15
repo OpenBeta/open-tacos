@@ -27,10 +27,12 @@ const shortcodes = {
 export default function LeafAreaPage({ data: { area, climbs } }) {
   const { area_name } = area.frontmatter;
   const { pathTokens, rawPath, children } = area;
+
+  // Area.children[] can contain either sub-Areas or Climbs, but not both.
+  // 'hasChildAreas' is a simple test to determine what we have.
   const hasChildAreas =
     children.length > 0 && children[0].frontmatter.area_name ? true : false;
   const githubLink = pathOrParentIdToGitHubLink(rawPath, "index");
-  //console.log("# children ", hasChildAreas, children);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -107,6 +109,5 @@ export const query = graphql`
         ...ClimbDetailFragment
       }
     }
-
   }
 `;
