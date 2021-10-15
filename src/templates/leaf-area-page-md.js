@@ -4,6 +4,7 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
+import Droppin from "../assets/icons/droppin.svg";
 import RouteCard from "../components/ui/RouteCard";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
 import { pathOrParentIdToGitHubLink } from "../js/utils";
@@ -24,10 +25,9 @@ const shortcodes = {
 /**
  * Templage for generating individual Area page
  */
-export default function LeafAreaPage({ data: { area, climbs } }) {
-  const { area_name } = area.frontmatter;
+export default function LeafAreaPage({ data: { area } }) {
+  const { area_name, metadata } = area.frontmatter;
   const { pathTokens, rawPath, children } = area;
-
   // Area.children[] can contain either sub-Areas or Climbs, but not both.
   // 'hasChildAreas' is a simple test to determine what we have.
   const hasChildAreas =
@@ -39,7 +39,19 @@ export default function LeafAreaPage({ data: { area, climbs } }) {
       <SEO keywords={[area_name]} title={area_name} />
       <BreadCrumbs pathTokens={pathTokens} />
       <h1 className={template_h1_css}>{area_name}</h1>
-      <div className="float-right">
+      <span className="flex items-center flex-shrink text-gray-500 text-xs gap-x-1">
+        <Droppin className="stroke-current" />
+        <a
+          className="hover:underline hover:text-gray-800"
+          href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {metadata.lat},{metadata.lng}
+        </a>
+      </span>
+      {!hasChildAreas && <AreaStatistics climbs={children}></AreaStatistics>}
+      <div className="float-right mt-8">
         <button
           className="btn btn-primary"
           onClick={() => navigate(`/edit?file=${rawPath}/index.md`)}
@@ -47,9 +59,6 @@ export default function LeafAreaPage({ data: { area, climbs } }) {
           Edit
         </button>
       </div>
-      {!hasChildAreas && (
-        <AreaStatistics climbs={children}></AreaStatistics>
-      )}
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={area.frontmatter}>
           {area.parent.body}
@@ -72,7 +81,7 @@ export default function LeafAreaPage({ data: { area, climbs } }) {
       )}
       <div className="grid grid-cols-3 gap-x-3">
         {!hasChildAreas &&
-          children.map(node => {
+          children.map((node) => {
             const { frontmatter, slug } = node;
             const { yds, route_name, metadata, type } = frontmatter;
             return (

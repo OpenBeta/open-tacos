@@ -56,7 +56,7 @@ function IndexPage() {
 
       <USToc />
 
-      <h2 className="text-xl font-medium mt-12 mb-4">
+      <h2 className="text-xl font-bold mt-8">
         Randomly Featured Route
       </h2>
       <div className="flex">

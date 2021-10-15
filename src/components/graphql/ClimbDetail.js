@@ -11,6 +11,7 @@ export const query = graphql`
       metadata {
         legacy_id
       }
+      fa
       yds
       safety
       type {

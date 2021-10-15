@@ -11,7 +11,7 @@ function AreaStatistics({ climbs }) {
 
   const { percents, colors } = computeClimbingPercentsAndColors(climbs);
   return (
-    <table className="table-auto mx-auto">
+    <table className="table-auto mx-auto mt-8">
       <tbody>
         <tr>
           <td className="px-3.5">

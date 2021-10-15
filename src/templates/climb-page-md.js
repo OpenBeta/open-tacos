@@ -23,7 +23,7 @@ const shortcodes = {
  * Templage for generating individual page for the climb
  */
 export default function ClimbPage({ data: { climb } }) {
-  const { route_name, yds, type, safety } = climb.frontmatter;
+  const { route_name, yds, type, safety, fa } = climb.frontmatter;
   const { rawPath, filename, pathTokens, parent } = climb;
   const githubLink = pathOrParentIdToGitHubLink(rawPath, filename);
   return (
@@ -42,10 +42,9 @@ export default function ClimbPage({ data: { climb } }) {
       </div>
       <RouteGradeChip yds={yds} safety={safety}></RouteGradeChip>
       <RouteTypeChips type={type}></RouteTypeChips>
+      <div className="pt-4 text-sm text-gray-600 italic">FA: {fa}</div>
       <MDXProvider components={shortcodes}>
-        <MDXRenderer frontmatter={climb.frontmatter}>
-          {parent.body}
-        </MDXRenderer>
+        <MDXRenderer frontmatter={climb.frontmatter}>{parent.body}</MDXRenderer>
       </MDXProvider>
       <LinkToGithub link={githubLink} docType="climb"></LinkToGithub>
     </Layout>
@@ -64,4 +63,3 @@ export const query = graphql`
     }
   }
 `;
-
