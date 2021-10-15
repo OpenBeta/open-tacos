@@ -28,7 +28,6 @@ const shortcodes = {
 export default function LeafAreaPage({ data: { area } }) {
   const { area_name, metadata } = area.frontmatter;
   const { pathTokens, rawPath, children } = area;
-
   // Area.children[] can contain either sub-Areas or Climbs, but not both.
   // 'hasChildAreas' is a simple test to determine what we have.
   const hasChildAreas =
@@ -52,7 +51,7 @@ export default function LeafAreaPage({ data: { area } }) {
         </a>
       </span>
       {!hasChildAreas && <AreaStatistics climbs={children}></AreaStatistics>}
-      <div className="float-right">
+      <div className="float-right mt-8">
         <button
           className="btn btn-primary"
           onClick={() => navigate(`/edit?file=${rawPath}/index.md`)}

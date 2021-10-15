@@ -87,9 +87,10 @@ export const computeStatsBarPercentPerAreaFromClimbs = (climbs) => {
 
 /**
  * Remove leading (6) or (aa) from an area or climb name
- * @param {String} s 
+ * @param {String} s
  */
-export const sanitize_name = (s) => s.replace(/^(\(.+\) *)|((\d?[1-9]|[1-9]0)-)/, "");
+export const sanitize_name = (s) =>
+  s.replace(/^(\(.{1,3}\) *)|((\d?[1-9]|[1-9]0)-)/, "");
 
 /**
  * Simplify climb 'type' dictionary to contain only 'true' key-value pair.
