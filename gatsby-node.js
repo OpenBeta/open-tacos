@@ -18,11 +18,8 @@ const convertPathToPOSIX = (relativePath) => {
  * ```
  * @param {string[]} pathTokens
  */
-const slugify_path = (pathTokens) => {
-  return pathTokens
-    .map((s) => slugify(s, { lower: true, strict: true }))
-    .join("/");
-};
+const slugify_path = (pathTokens) =>
+  pathTokens.map((s) => slugify(s, { lower: true, strict: true })).join("/");
 
 exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
@@ -100,11 +97,12 @@ exports.onCreateNode = ({
 
   const { createNode } = actions;
   const rawPath = convertPathToPOSIX(fileNode.relativeDirectory);
-  const markdownFileName = fileNode.name;
+  const markdownFileName = fileNode.name; // filename without extension
   // index.md: special file describing the area
   // Create an Area node [File node] -> [Mdx node] -> [Area node]
   if (markdownFileName === "index") {
     const pathTokens = rawPath.split("/");
+    const areaNodeId = createNodeId(pathTokens.join("-"));
     const slug = `/${slugify_path(pathTokens)}`;
 
     const fieldData = {
@@ -115,21 +113,19 @@ exports.onCreateNode = ({
       pathTokens,
     };
 
-    // Calculate parent area by going up 1 level
-    const _parentAreaPath =
-      pathTokens.length === 1
-        ? null
-        : pathTokens.slice(0, pathTokens.length - 1);
+    // Calculate parent area by going up 1 level, ie. dropping the last elment.
+    // [] parent means this has no parent. It's a Country node.
+    const _parentAreaPath = pathTokens.slice(0, pathTokens.length - 1);
 
-    const nodeId = createNodeId(slug);
     createNode({
       ...fieldData,
       // Required fields
-      id: nodeId,
+      id: areaNodeId,
       parent: node.id,
-      parent_area___NODE: _parentAreaPath
-        ? createNodeId(`/${slugify_path(_parentAreaPath)}`)
-        : null,
+      parent_area___NODE:
+        _parentAreaPath.length === 0
+          ? null // no parent
+          : createNodeId(_parentAreaPath.join("-")),
       children: [],
       internal: {
         type: `Area`,
@@ -138,13 +134,23 @@ exports.onCreateNode = ({
       },
     });
   } else {
+    // Sample data:
+    // - rawPath: /USA/Oregon/Portland/Broughton Bluff/Hanging Gardens
+    // - markdownFileName: giants-staircase (without .md)
+    // Derived data:
+    //  - pathTokens: ["USA", "Oregon", "Portland", "Broughton Bluff", "Hanging Gardens"]
+    //  - slug: /usa-oregon-portland-broughton-bluff-hanging-gardens-giants-staircase
+    //  -  parentAreaId = <some uuid generated from rawPath>
+    //      (we use the parent Id as a way to link this Climb node with Area node)
+
     const rawPath = convertPathToPOSIX(fileNode.relativeDirectory);
     const pathTokens = rawPath.split("/");
-
-    const parentAreaId = createNodeId(`/${slugify_path(pathTokens)}`);
+    const parentAreaId = createNodeId(pathTokens.join("-"));
+    // include the climb.md file name (without .md)
     pathTokens.push(markdownFileName);
 
     const slug = `/${slugify_path(pathTokens)}`;
+
     const fieldData = {
       slug,
       frontmatter: node.frontmatter,
@@ -154,12 +160,10 @@ exports.onCreateNode = ({
       area___NODE: parentAreaId,
     };
 
-    const climbNodeId = createNodeId(`${slug}-climbing-route`);
-
     createNode({
       ...fieldData,
       // Required fields
-      id: climbNodeId,
+      id: createNodeId(pathTokens.join("-")),
       parent: node.id,
       children: [],
       internal: {
@@ -188,7 +192,7 @@ exports.createPages = async ({ graphql, actions, getNode }) => {
     }
   `);
 
-  // Create each index page for each area
+  // Create an index page for each area
   const { createPage, createParentChildLink } = actions;
   result.data.allArea.edges.forEach(({ node }) => {
     if (node.parent_area) {
@@ -200,6 +204,7 @@ exports.createPages = async ({ graphql, actions, getNode }) => {
         child: node,
       });
     }
+
     createPage({
       path: node.slug,
       component: path.resolve(`./src/templates/leaf-area-page-md.js`),
@@ -210,13 +215,17 @@ exports.createPages = async ({ graphql, actions, getNode }) => {
   });
 
   //  Query all route .md documents
-  result = await graphql(`
+  var result = await graphql(`
     query {
-      allClimb {
+      allClimb(sort: { fields: rawPath }) {
         edges {
           node {
             id
             slug
+            rawPath
+            area {
+              id
+            }
           }
         }
       }
@@ -225,6 +234,10 @@ exports.createPages = async ({ graphql, actions, getNode }) => {
 
   // Create a single page for each climb
   result.data.allClimb.edges.forEach(({ node }) => {
+    createParentChildLink({
+      parent: getNode(node.area.id),
+      child: node,
+    });
     createPage({
       path: node.slug,
       component: path.resolve(`./src/templates/climb-page-md.js`),

@@ -24,7 +24,7 @@ const shortcodes = {
  */
 export default function ClimbPage({ data: { climb } }) {
   const { route_name, yds, type, safety } = climb.frontmatter;
-  const { rawPath, filename, pathTokens } = climb;
+  const { rawPath, filename, pathTokens, parent } = climb;
   const githubLink = pathOrParentIdToGitHubLink(rawPath, filename);
   return (
     <Layout>
@@ -44,7 +44,7 @@ export default function ClimbPage({ data: { climb } }) {
       <RouteTypeChips type={type}></RouteTypeChips>
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={climb.frontmatter}>
-          {climb.parent.body}
+          {parent.body}
         </MDXRenderer>
       </MDXProvider>
       <LinkToGithub link={githubLink} docType="climb"></LinkToGithub>
@@ -56,6 +56,12 @@ export const query = graphql`
   query ($node_id: String!) {
     climb: climb(id: { eq: $node_id }) {
       ...ClimbDetailFragment
+      parent {
+        ... on Mdx {
+          body
+        }
+      }
     }
   }
 `;
+
