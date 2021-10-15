@@ -1,9 +1,6 @@
-const resolveConfig = require("tailwindcss/resolveConfig");
-const tailwindConfig = require("./tailwind.config.js");
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 });
-const fullConfig = resolveConfig(tailwindConfig);
 
 module.exports = {
   siteMetadata: {
@@ -27,24 +24,11 @@ module.exports = {
         name: `openbeta-rock-climbing-platform`,
         short_name: `Open source rock climbing platform`,
         start_url: `/`,
-        background_color: fullConfig.theme.colors.white,
-        theme_color: fullConfig.theme.colors.green["500"],
         display: `minimal-ui`,
         icon: `src/assets/icons/taco.svg`,
       },
     },
-    {
-      resolve: `gatsby-plugin-postcss`,
-      options: {
-        postCssPlugins: [
-          require(`tailwindcss`)(tailwindConfig),
-          require(`autoprefixer`),
-          ...(process.env.NODE_ENV === `production`
-            ? [require(`cssnano`)]
-            : []),
-        ],
-      },
-    },
+    `gatsby-plugin-postcss`,
     `gatsby-plugin-image`,
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
