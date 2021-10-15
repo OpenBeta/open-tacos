@@ -21,11 +21,6 @@ const convertPathToPOSIX = (relativePath) => {
 const slugify_path = (pathTokens) =>
   pathTokens.map((s) => slugify(s, { lower: true, strict: true })).join("/");
 
-const shorten = (slug, node_id) =>
-  slug.length < 120
-    ? slug
-    : slug.slice(0, 100) + node_id.slice(node_id.length - 15);
-
 exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
   const typeDefs = `
@@ -118,8 +113,8 @@ exports.onCreateNode = ({
       pathTokens,
     };
 
-    // Calculate parent area by going up 1 level
-    // [] parent means this node is a Country node.  It has no parent.
+    // Calculate parent area by going up 1 level, ie. dropping the last elment.
+    // [] parent means this has no parent. It's a Country node.
     const _parentAreaPath = pathTokens.slice(0, pathTokens.length - 1);
 
     createNode({
@@ -198,7 +193,7 @@ exports.createPages = async ({ graphql, actions, getNode }) => {
   `);
 
   // Create an index page for each area
-  const { createPage, createNodeField, createParentChildLink } = actions;
+  const { createPage, createParentChildLink } = actions;
   result.data.allArea.edges.forEach(({ node }) => {
     if (node.parent_area) {
       // Add children areas here instead of onCreateNode() because
@@ -239,20 +234,10 @@ exports.createPages = async ({ graphql, actions, getNode }) => {
 
   // Create a single page for each climb
   result.data.allClimb.edges.forEach(({ node }) => {
-    // const parentNode = getNode(node.area.id);
-    // const childClimbs = parentNode.fields && parentNode.fields.childClimbs___NODE || []
-    // childClimbs.push(node.id)
-    // console.log("#", childClimbs)
-
-    // await createNodeField({
-    //   node: parentNode,
-    //   name: 'childClimbs___NODE',
-    //   value: childClimbs
-    // })
-    // // createParentChildLink({
-    // //   parent: parentNode,
-    // //   child: node,
-    // // });
+    createParentChildLink({
+      parent: getNode(node.area.id),
+      child: node,
+    });
     createPage({
       path: node.slug,
       component: path.resolve(`./src/templates/climb-page-md.js`),

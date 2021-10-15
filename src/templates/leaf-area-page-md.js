@@ -30,6 +30,7 @@ export default function LeafAreaPage({ data: { area, climbs } }) {
   const hasChildAreas =
     children.length > 0 && children[0].frontmatter.area_name ? true : false;
   const githubLink = pathOrParentIdToGitHubLink(rawPath, "index");
+  //console.log("# children ", hasChildAreas, children);
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -44,7 +45,9 @@ export default function LeafAreaPage({ data: { area, climbs } }) {
           Edit
         </button>
       </div>
-      {!hasChildAreas && <AreaStatistics climbs={climbs.edges}></AreaStatistics>}
+      {!hasChildAreas && (
+        <AreaStatistics climbs={children}></AreaStatistics>
+      )}
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={area.frontmatter}>
           {area.parent.body}
@@ -67,7 +70,7 @@ export default function LeafAreaPage({ data: { area, climbs } }) {
       )}
       <div className="grid grid-cols-3 gap-x-3">
         {!hasChildAreas &&
-          climbs.edges.map(({node}) => {
+          children.map(node => {
             const { frontmatter, slug } = node;
             const { yds, route_name, metadata, type } = frontmatter;
             return (
@@ -101,14 +104,9 @@ export const query = graphql`
       }
       children {
         ...AreaDetailFragment
+        ...ClimbDetailFragment
       }
     }
-    climbs: allClimb(filter: { area: { id: { eq: $node_id } } }) {
-      edges {
-        node {
-          ...ClimbDetailFragment
-        }
-      }
-    }
+
   }
 `;
