@@ -23,10 +23,5 @@ export const query = graphql`
         mixed
       }
     }
-    parent {
-      ... on Mdx {
-        body
-      }
-    }
   }
 `;

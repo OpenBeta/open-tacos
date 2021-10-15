@@ -4,12 +4,12 @@ import BarPercent from "./ui/BarPercent";
 import {computeClimbingPercentsAndColors} from "../js/utils";
 
 function AreaStatistics ({climbs}) {
-  const totalClimbsInArea = climbs.edges.length;
+  const totalClimbsInArea = climbs.length;
 
   // If there are no climbs in an area do not render the stats
   if (totalClimbsInArea === 0) return null;
 
-  const {percents, colors} = computeClimbingPercentsAndColors(climbs.edges);
+  const {percents, colors} = computeClimbingPercentsAndColors(climbs);
   return (
     <table className="table-auto mx-auto">
       <tbody>

@@ -19,7 +19,6 @@ function BreadCrumbs({ pathTokens, isClimbPage }) {
   const tokens = isClimbPage
     ? pathTokens.slice(0, pathTokens.length - 1)
     : pathTokens;
-  // tokens.unshift("Home"); // Append 'Home' to the front
   return (
     <div>
       <Link className="hover:underline hover:text-gray-900 text-gray-400 " to="/">
