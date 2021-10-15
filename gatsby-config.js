@@ -1,6 +1,8 @@
 const resolveConfig = require("tailwindcss/resolveConfig");
 const tailwindConfig = require("./tailwind.config.js");
-
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
 const fullConfig = resolveConfig(tailwindConfig);
 
 module.exports = {
@@ -14,8 +16,8 @@ module.exports = {
     FAST_DEV: true,
     PRESERVE_FILE_DOWNLOAD_CACHE: true,
     PARALLEL_SOURCING: true,
-    LMDB_STORE: true,
-    PARALLEL_QUERY_RUNNING: true,
+    // PARALLEL_QUERY_RUNNING: true for faster build but may fail due to long file name issue
+    PARALLEL_QUERY_RUNNING: process.env.PARALLEL_QUERY_RUNNING || false,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
