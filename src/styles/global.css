@@ -145,7 +145,7 @@ body, html {
 
 @layer components {
   .btn {
-    @apply no-underline rounded-lg px-6 py-2 text-gray-900 font-medium text-base shadow-md;
+    @apply no-underline px-6 py-0.5 text-gray-900 font-medium text-base shadow-lg;
   }
 
   .btn-primary {

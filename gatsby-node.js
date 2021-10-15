@@ -21,6 +21,12 @@ const convertPathToPOSIX = (relativePath) => {
 const slugify_path = (pathTokens) =>
   pathTokens.map((s) => slugify(s, { lower: true, strict: true })).join("/");
 
+/**
+ * Remove leading (6), (aa) or '04-' from an area or climb name
+ * @param {String} s
+ */
+const sanitize_name = (s) => s.replace(/^(\(.+\) *)|((\d?[1-9]|[1-9]0)-)/, "");
+
 exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
   const typeDefs = `
@@ -107,7 +113,7 @@ exports.onCreateNode = ({
 
     const fieldData = {
       slug,
-      frontmatter: node.frontmatter,
+      frontmatter: { ...node.frontmatter, area_name: sanitize_name(node.frontmatter.area_name) },
       rawPath,
       filename: markdownFileName,
       pathTokens,
@@ -153,7 +159,7 @@ exports.onCreateNode = ({
 
     const fieldData = {
       slug,
-      frontmatter: node.frontmatter,
+      frontmatter: { ...node.frontmatter, route_name: sanitize_name(node.frontmatter.route_name) },
       rawPath,
       filename: markdownFileName,
       pathTokens,

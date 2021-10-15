@@ -86,6 +86,12 @@ export const computeStatsBarPercentPerAreaFromClimbs = (climbs) => {
 };
 
 /**
+ * Remove leading (6) or (aa) from an area or climb name
+ * @param {String} s 
+ */
+export const sanitize_name = (s) => s.replace(/^(\(.+\) *)|((\d?[1-9]|[1-9]0)-)/, "");
+
+/**
  * Simplify climb 'type' dictionary to contain only 'true' key-value pair.
  * @example {sport: true, boulder: false, trad: false} => {sport: true}
  * @param  type Climb type key-value dictionary

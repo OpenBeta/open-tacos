@@ -23,7 +23,7 @@ function USToC() {
 
   return (
     <section>
-      <h4 className="text-xl font-medium my-4">Explore by State</h4>
+      <h2 className="text-xl font-bold mt-6">Explore by State</h2>
       <div className="flex space-x-4">
         {states.allArea.edges.map(({ node }) => {
           const { frontmatter, slug } = node;
