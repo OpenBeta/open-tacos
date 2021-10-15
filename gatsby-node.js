@@ -122,6 +122,7 @@ exports.onCreateNode = ({
     // [] parent means this node is a Country node.  It has no parent.
     const _parentAreaPath = pathTokens.slice(0, pathTokens.length - 1);
 
+    const nodeId = createNodeId(slug);
     createNode({
       ...fieldData,
       // Required fields
@@ -199,6 +200,7 @@ exports.createPages = async ({ graphql, actions, getNode }) => {
 
   // Create an index page for each area
   const { createPage, createNodeField, createParentChildLink } = actions;
+  
   result.data.allArea.edges.forEach(({ node }) => {
     if (node.parent_area) {
       // Add children areas here instead of onCreateNode() because
@@ -209,7 +211,6 @@ exports.createPages = async ({ graphql, actions, getNode }) => {
         child: node,
       });
     }
-
     createPage({
       path: node.slug,
       component: path.resolve(`./src/templates/leaf-area-page-md.js`),
@@ -239,20 +240,6 @@ exports.createPages = async ({ graphql, actions, getNode }) => {
 
   // Create a single page for each climb
   result.data.allClimb.edges.forEach(({ node }) => {
-    // const parentNode = getNode(node.area.id);
-    // const childClimbs = parentNode.fields && parentNode.fields.childClimbs___NODE || []
-    // childClimbs.push(node.id)
-    // console.log("#", childClimbs)
-
-    // await createNodeField({
-    //   node: parentNode,
-    //   name: 'childClimbs___NODE',
-    //   value: childClimbs
-    // })
-    // // createParentChildLink({
-    // //   parent: parentNode,
-    // //   child: node,
-    // // });
     createPage({
       path: node.slug,
       component: path.resolve(`./src/templates/climb-page-md.js`),
