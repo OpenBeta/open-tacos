@@ -8,12 +8,6 @@ if (process.env.STAGING === "true") {
   });
 }
 
-console.log(
-  "$",
-  process.env.PARALLEL_QUERY_RUNNING,
-  process.env.NODE_ENV,
-  process.env.PARALLEL_QUERY_RUNNING === "true"
-);
 module.exports = {
   siteMetadata: {
     title: `OpenTacos`,
