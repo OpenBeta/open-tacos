@@ -1,7 +1,19 @@
-require("dotenv").config({
-  path: `.env.${process.env.NODE_ENV}`,
-});
+if (process.env.STAGING === "true") {
+  require("dotenv").config({
+    path: `.env.staging`,
+  });
+} else {
+  require("dotenv").config({
+    path: `.env.production`,
+  });
+}
 
+console.log(
+  "$",
+  process.env.PARALLEL_QUERY_RUNNING,
+  process.env.NODE_ENV,
+  process.env.PARALLEL_QUERY_RUNNING === "true"
+);
 module.exports = {
   siteMetadata: {
     title: `OpenTacos`,
@@ -13,8 +25,7 @@ module.exports = {
     FAST_DEV: true,
     PRESERVE_FILE_DOWNLOAD_CACHE: true,
     PARALLEL_SOURCING: true,
-    // PARALLEL_QUERY_RUNNING: true for faster build but may fail due to long file name issue
-    PARALLEL_QUERY_RUNNING: process.env.PARALLEL_QUERY_RUNNING || false,
+    PARALLEL_QUERY_RUNNING: process.env.PARALLEL_QUERY_RUNNING === "true",
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
