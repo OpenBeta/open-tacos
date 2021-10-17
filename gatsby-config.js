@@ -4,7 +4,7 @@ if (process.env.STAGING === "true") {
   });
 } else {
   require("dotenv").config({
-    path: `.env.production`,
+    path: `.env.${process.env.NODE_ENV}`,
   });
 }
 
@@ -19,6 +19,7 @@ module.exports = {
     FAST_DEV: true,
     PRESERVE_FILE_DOWNLOAD_CACHE: true,
     PARALLEL_SOURCING: true,
+    LMDB_STORE: process.env.LMDB_STORE === "true",
     PARALLEL_QUERY_RUNNING: process.env.PARALLEL_QUERY_RUNNING === "true",
   },
   plugins: [
@@ -60,6 +61,17 @@ module.exports = {
         defaultLayouts: {
           pages: require.resolve("./src/components/StandardPageLayout.js"),
         },
+        gatsbyRemarkPlugins: [
+          {
+            resolve: "gatsby-remark-images",
+            options: {
+              maxWidth: 850,
+              quality: 80,
+              showCaptions: true,
+              linkImagesToOriginal: true,
+            },
+          },
+        ],
       },
     },
     {
