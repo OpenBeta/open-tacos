@@ -26,6 +26,8 @@ export default function ClimbPage({ data: { climb } }) {
   const { route_name, yds, type, safety, fa } = climb.frontmatter;
   const { rawPath, filename, pathTokens, parent } = climb;
   const githubLink = pathOrParentIdToGitHubLink(rawPath, filename);
+  //  return <div>{JSON.stringify(climb, 2)}</div>;
+
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -43,9 +45,10 @@ export default function ClimbPage({ data: { climb } }) {
       <RouteGradeChip yds={yds} safety={safety}></RouteGradeChip>
       <RouteTypeChips type={type}></RouteTypeChips>
       <div className="pt-4 text-sm text-gray-600 italic">FA: {fa}</div>
-      <MDXProvider components={shortcodes}>
+      <div dangerouslySetInnerHTML={{ __html: parent.html }}></div>
+      {/* <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={climb.frontmatter}>{parent.body}</MDXRenderer>
-      </MDXProvider>
+      </MDXProvider> */}
       <LinkToGithub link={githubLink} docType="climb"></LinkToGithub>
     </Layout>
   );
@@ -56,8 +59,8 @@ export const query = graphql`
     climb: climb(id: { eq: $node_id }) {
       ...ClimbDetailFragment
       parent {
-        ... on Mdx {
-          body
+        ... on MarkdownRemark {
+          html
         }
       }
     }

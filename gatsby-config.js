@@ -41,9 +41,25 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `areas-routes`,
+        name: `areas-routes-wa`,
         path: `${__dirname}/content`,
-        ignore: [`**/\.*`],
+        ignore: [`**/Nevada`, `**/Oregon`],
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `areas-routes-or`,
+        path: `${__dirname}/content`,
+        ignore: [`**/Washington`, `**/Nevada`],
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `areas-routes-nv`,
+        path: `${__dirname}/content`,
+        ignore: [`**/Washington`, `**/Oregon`],
       },
     },
     {
@@ -55,13 +71,9 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-plugin-mdx`,
+      resolve: `gatsby-transformer-remark`,
       options: {
-        extensions: [`.mdx`, `.md`],
-        defaultLayouts: {
-          pages: require.resolve("./src/components/StandardPageLayout.js"),
-        },
-        gatsbyRemarkPlugins: [
+        plugins: [
           {
             resolve: "gatsby-remark-images",
             options: {
@@ -73,7 +85,26 @@ module.exports = {
           },
         ],
       },
-    },
+    }, // {
+    //   resolve: `gatsby-plugin-mdx`,
+    //   options: {
+    //     extensions: [`.mdx`, `.md`],
+    //     defaultLayouts: {
+    //       pages: require.resolve("./src/components/StandardPageLayout.js"),
+    //     },
+    //     gatsbyRemarkPlugins: [
+    //       {
+    //         resolve: "gatsby-remark-images",
+    //         options: {
+    //           maxWidth: 850,
+    //           quality: 80,
+    //           showCaptions: true,
+    //           linkImagesToOriginal: true,
+    //         },
+    //       },
+    //     ],
+    //   },
+    // },
     {
       resolve: "gatsby-plugin-react-svg",
       options: {
@@ -91,6 +122,6 @@ module.exports = {
         },
       },
     },
-    `gatsby-plugin-offline`,
+    // `gatsby-plugin-offline`,
   ],
 };

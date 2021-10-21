@@ -25,58 +25,106 @@ const slugify_path = (pathTokens) =>
  * Remove leading (6), (aa) or '04-' from an area or climb name.
  * @param {String} s
  */
-const sanitize_name = (s) => s.replace(/^(\(.{1,3}\) *)|((\d?[1-9]|[1-9]0)-)/, "");
+const sanitize_name = (s) =>
+  s.replace(/^(\(.{1,3}\) *)|((\d?[1-9]|[1-9]0)-)/, "");
 
-exports.createSchemaCustomization = ({ actions }) => {
-  const { createTypes } = actions;
-  const typeDefs = `
-    type Climb implements Node {
-      slug: String!
-      filename: String!
-      rawPath: String!
-      pathTokens: [String!]!
-      frontmatter: ClimbFrontmatter!
-    }
-    type ClimbFrontmatter {
-      route_name: String!
-      fa: String!
-      yds: String
-      safety: String!
-      type: ClimbType! 
-      metadata: ClimbMetadata!
-    }
-    type ClimbMetadata {
-      legacy_id: String!
-      left_right_index: String!
-    }
-    type ClimbType {
-      tr: Boolean
-      trad: Boolean
-      sport: Boolean
-      boulder: Boolean
-      alpine: Boolean
-      aid: Boolean
-      mixed: Boolean
-    }
-    type Area implements Node {
-      slug: String!
-      filename: String!
-      rawPath: String!
-      pathTokens: [String!]!
-      frontmatter: AreaFrontmatter!
-    }
-    type AreaFrontmatter {
-      area_name: String
-      metadata: AreaMetadata!
-    }
-    type AreaMetadata {
-      legacy_id: String!
-      lat: Float!
-      lng: Float!
-    }
-  `;
-  createTypes(typeDefs);
-};
+// exports.createSchemaCustomization = ({ actions }) => {
+//   const { createTypes } = actions;
+//   const typeDefs = `
+
+//     union MdFrontmatter = BaseMdFrontmatter | ClimbFrontmatter | AreaFrontmatter
+
+//     type BaseMdFrontmatter {
+//       title: String
+//     }
+
+//     type MarkdownRemark implements Node @dontInfer {
+//       id: ID!
+//       frontmatter: MdFrontmatter!
+//       children: [Node!]!
+
+//       excerpt(
+//          format: MarkdownExcerptFormats = PLAIN
+//          pruneLength: Int = 140
+//          truncate: Boolean = false
+//       ): String
+
+//       rawMarkdownBody: String
+//       fileAbsolutePath: String
+//       html: String
+//       htmlAst: JSON
+//       excerptAst(
+//         pruneLength: Int = 140
+//         truncate: Boolean = false
+//       ): JSON
+//       headings(depth: MarkdownHeadingLevels): [MarkdownHeading]
+//       timeToRead: Int
+//       tableOfContents(
+//         absolute: Boolean = false
+//         heading: String
+//         maxDepth: Int
+//         pathToSlugField: String = ""
+//       ): String
+//       wordCount: MarkdownWordCount
+//       parent: Node
+//       internal: Internal!
+//     }
+
+//     type Climb implements Node @dontInfer {
+//       id: ID!
+//       slug: String!
+//       filename: String!
+//       rawPath: String!
+//       pathTokens: [String!]!
+//       frontmatter: ClimbFrontmatter!
+//       parent: Node!
+//       children: [Node]!
+//       internal: Internal!
+//     }
+//     type ClimbFrontmatter {
+//       route_name: String!
+//       fa: String
+//       yds: String!
+//       safety: String!
+//       type: ClimbType! 
+//       metadata: ClimbMetadata!
+//     }
+//     type ClimbMetadata {
+//       legacy_id: String!
+//       left_right_index: String!
+//     }
+//     type ClimbType {
+//       tr: Boolean
+//       trad: Boolean
+//       sport: Boolean
+//       boulder: Boolean
+//       alpine: Boolean
+//       aid: Boolean
+//       mixed: Boolean
+//     }
+//     type Area implements Node @dontInfer {
+//       slug: String!
+//       filename: String!
+//       rawPath: String!
+//       pathTokens: [String!]!
+//       frontmatter: AreaFrontmatter!
+//       id: ID!
+//       parent: Node!
+//       children: [Node]!
+//       internal: Internal!
+//     }
+//     type AreaFrontmatter {
+//       area_name: String
+//       metadata: AreaMetadata!
+//     }
+//     type AreaMetadata {
+//       legacy_id: String!
+//       lat: Float!
+//       lng: Float!
+//     }
+//   `;
+//   createTypes(typeDefs);
+// };
 
 /**
  * This is Gatsby's special callback that allows us to extend the existing data
@@ -90,7 +138,7 @@ exports.onCreateNode = ({
   createNodeId,
   createContentDigest,
 }) => {
-  if (node.internal.type !== "Mdx") return;
+  if (node.internal.type !== "MarkdownRemark") return;
 
   // Mdx plugin creates a child node for each .md/mdx file
   // with the parent node being the file node
@@ -99,10 +147,11 @@ exports.onCreateNode = ({
   // Mdx node for markdown content.
 
   const fileNode = getNode(node["parent"]);
-  if (fileNode["sourceInstanceName"] !== "areas-routes") return;
+  if (!fileNode["sourceInstanceName"].startsWith("areas-routes")) return;
 
   const { createNode } = actions;
   const rawPath = convertPathToPOSIX(fileNode.relativeDirectory);
+  //console.log("# ", rawPath)
   const markdownFileName = fileNode.name; // filename without extension
   // index.md: special file describing the area
   // Create an Area node [File node] -> [Mdx node] -> [Area node]
@@ -124,17 +173,17 @@ exports.onCreateNode = ({
 
     // Calculate parent area by going up 1 level, ie. dropping the last elment.
     // [] parent means this has no parent. It's a Country node.
-    const _parentAreaPath = pathTokens.slice(0, pathTokens.length - 1);
+    // const _parentAreaPath = pathTokens.slice(0, pathTokens.length - 1);
 
     createNode({
       ...fieldData,
       // Required fields
       id: areaNodeId,
       parent: node.id,
-      parent_area___NODE:
-        _parentAreaPath.length === 0
-          ? null // no parent
-          : createNodeId(_parentAreaPath.join("-")),
+      // parent_area___NODE:
+      //   _parentAreaPath.length === 0
+      //     ? null // no parent
+      //     : createNodeId(_parentAreaPath.join("-")),
       children: [],
       internal: {
         type: `Area`,
@@ -154,7 +203,7 @@ exports.onCreateNode = ({
 
     const rawPath = convertPathToPOSIX(fileNode.relativeDirectory);
     const pathTokens = rawPath.split("/");
-    const parentAreaId = createNodeId(pathTokens.join("-"));
+    // const parentAreaId = createNodeId(pathTokens.join("-"));
     // include the climb.md file name (without .md)
     pathTokens.push(markdownFileName);
 
@@ -164,12 +213,13 @@ exports.onCreateNode = ({
       slug,
       frontmatter: {
         ...node.frontmatter,
+        yds: `${node.frontmatter.yds}`,
         route_name: sanitize_name(node.frontmatter.route_name),
       },
       rawPath,
       filename: markdownFileName,
       pathTokens,
-      area___NODE: parentAreaId,
+      // area___NODE: parentAreaId,
     };
 
     createNode({
@@ -187,7 +237,7 @@ exports.onCreateNode = ({
   }
 };
 
-exports.createPages = async ({ graphql, actions, getNode }) => {
+exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
   var result = await graphql(`
     query {
       allArea(sort: { fields: frontmatter___area_name }) {
@@ -195,9 +245,7 @@ exports.createPages = async ({ graphql, actions, getNode }) => {
           node {
             id
             slug
-            parent_area {
-              id
-            }
+            pathTokens
           }
         }
       }
@@ -207,12 +255,22 @@ exports.createPages = async ({ graphql, actions, getNode }) => {
   // Create an index page for each area
   const { createPage, createParentChildLink } = actions;
   result.data.allArea.edges.forEach(({ node }) => {
-    if (node.parent_area) {
-      // Add children areas here instead of onCreateNode() because
-      // gatsby-filesystem-plugin process Mdx files in a random order;
-      // sometimes child areas are created before the parent.
+    const _parentAreaPath = node.pathTokens.slice(
+      0,
+      node.pathTokens.length - 1
+    );
+
+    const parent_area_node =
+      _parentAreaPath.length === 0
+        ? null // no parent
+        : getNode(createNodeId(_parentAreaPath.join("-")));
+
+    // Add children areas here instead of onCreateNode() because
+    // gatsby-filesystem-plugin process Mdx files in a random order;
+    // sometimes child areas are created before the parent.
+    if (parent_area_node) {
       createParentChildLink({
-        parent: getNode(node.parent_area.id),
+        parent: parent_area_node,
         child: node,
       });
     }
@@ -235,9 +293,7 @@ exports.createPages = async ({ graphql, actions, getNode }) => {
             id
             slug
             rawPath
-            area {
-              id
-            }
+            pathTokens
           }
         }
       }
@@ -246,10 +302,19 @@ exports.createPages = async ({ graphql, actions, getNode }) => {
 
   // Create a single page for each climb
   result.data.allClimb.edges.forEach(({ node }) => {
-    createParentChildLink({
-      parent: getNode(node.area.id),
-      child: node,
-    });
+    const _parentAreaPath = node.pathTokens.slice(
+      0,
+      node.pathTokens.length - 1
+    );
+    const parentArea = getNode(createNodeId(_parentAreaPath.join("-")));
+    if (parentArea) {
+      createParentChildLink({
+        parent: parentArea,
+        child: node,
+      });
+    } else {
+      console.log("# without area ", node);
+    }
     createPage({
       path: node.slug,
       component: path.resolve(`./src/templates/climb-page-md.js`),
