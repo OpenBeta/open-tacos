@@ -85,26 +85,7 @@ module.exports = {
           },
         ],
       },
-    }, // {
-    //   resolve: `gatsby-plugin-mdx`,
-    //   options: {
-    //     extensions: [`.mdx`, `.md`],
-    //     defaultLayouts: {
-    //       pages: require.resolve("./src/components/StandardPageLayout.js"),
-    //     },
-    //     gatsbyRemarkPlugins: [
-    //       {
-    //         resolve: "gatsby-remark-images",
-    //         options: {
-    //           maxWidth: 850,
-    //           quality: 80,
-    //           showCaptions: true,
-    //           linkImagesToOriginal: true,
-    //         },
-    //       },
-    //     ],
-    //   },
-    // },
+    }, 
     {
       resolve: "gatsby-plugin-react-svg",
       options: {
