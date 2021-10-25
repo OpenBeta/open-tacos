@@ -2,25 +2,16 @@ import React from "react";
 import { graphql, navigate, Link } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import { MDXProvider } from "@mdx-js/react";
-import { MDXRenderer } from "gatsby-plugin-mdx";
 import Droppin from "../assets/icons/droppin.svg";
 import RouteCard from "../components/ui/RouteCard";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
 import { pathOrParentIdToGitHubLink } from "../js/utils";
 import AreaCard from "../components/ui/AreaCard";
 import LinkToGithub from "../components/ui/LinkToGithub";
-import { h1, h2, p } from "../components/ui/shortcodes.js";
 import { template_h1_css } from "../js/styles";
 import AreaStatistics from "../components/AreaStatistics";
 import ClimbDetail from "../components/graphql/ClimbDetail";
 import AreaDetail from "../components/graphql/AreaDetail";
-
-const shortcodes = {
-  h1,
-  h2,
-  p,
-};
 
 /**
  * Templage for generating individual Area page
@@ -61,13 +52,7 @@ export default function LeafAreaPage({ data: { area } }) {
           Edit
         </button></div>
       </div>
-      <div dangerouslySetInnerHTML={{ __html: parent.html }}></div>
-
-      {/* <MDXProvider components={shortcodes}>
-        <MDXRenderer frontmatter={area.frontmatter}>
-          {area.parent.body}
-        </MDXRenderer>
-      </MDXProvider> */}
+      <div className="markdown" dangerouslySetInnerHTML={{ __html: parent.html }}></div>
       {hasChildAreas && (
         <div className="grid grid-cols-3 gap-x-3">
           {children.map((node) => {

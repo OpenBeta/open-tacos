@@ -65,9 +65,9 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `pages`,
+        name: `regular-md`,
         path: `${__dirname}/src/pages`,
-        ignore: [`**/\.*`], // Ignore file starting with dot
+        ignore: [`**/*\.js`], // Ignore file starting with dot
       },
     },
     {

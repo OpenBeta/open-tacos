@@ -1,5 +1,6 @@
 const path = require("path");
 const slugify = require("slugify");
+const { createFilePath } = require(`gatsby-source-filesystem`);
 
 /**
  * Converts the relativePath to a POSIX path.
@@ -86,7 +87,7 @@ const sanitize_name = (s) =>
 //       fa: String
 //       yds: String!
 //       safety: String!
-//       type: ClimbType! 
+//       type: ClimbType!
 //       metadata: ClimbMetadata!
 //     }
 //     type ClimbMetadata {
@@ -147,11 +148,23 @@ exports.onCreateNode = ({
   // Mdx node for markdown content.
 
   const fileNode = getNode(node["parent"]);
+  const { createNode, createNodeField } = actions;
+
+  if (fileNode["sourceInstanceName"] === "regular-md") {
+    const relativeFilePath = createFilePath({
+      node,
+      getNode,
+    });
+    createNodeField({
+      node,
+      name: `slug`,
+      value: `/${slugify(relativeFilePath, { lower: true, strict: true })}`,
+    });
+    return;
+  }
   if (!fileNode["sourceInstanceName"].startsWith("areas-routes")) return;
 
-  const { createNode } = actions;
   const rawPath = convertPathToPOSIX(fileNode.relativeDirectory);
-  //console.log("# ", rawPath)
   const markdownFileName = fileNode.name; // filename without extension
   // index.md: special file describing the area
   // Create an Area node [File node] -> [Mdx node] -> [Area node]
@@ -318,6 +331,31 @@ exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
     createPage({
       path: node.slug,
       component: path.resolve(`./src/templates/climb-page-md.js`),
+      context: {
+        node_id: node.id,
+      },
+    });
+  });
+
+  //  Query all route .md documents
+  var result = await graphql(`
+    query {
+      allMarkdownRemark(filter: { fileAbsolutePath: { regex: "/.*pages/" } }) {
+        edges {
+          node {
+            id
+            fields {
+              slug
+            }
+          }
+        }
+      }
+    }
+  `);
+  result.data.allMarkdownRemark.edges.forEach(({ node }) => {
+    createPage({
+      path: node.fields.slug,
+      component: path.resolve(`./src/templates/general-page-md.js`),
       context: {
         node_id: node.id,
       },
