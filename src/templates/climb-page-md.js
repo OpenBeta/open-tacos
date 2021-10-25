@@ -17,8 +17,6 @@ export default function ClimbPage({ data: { climb } }) {
   const { route_name, yds, type, safety, fa } = climb.frontmatter;
   const { rawPath, filename, pathTokens, parent } = climb;
   const githubLink = pathOrParentIdToGitHubLink(rawPath, filename);
-  //  return <div>{JSON.stringify(climb, 2)}</div>;
-
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -36,7 +34,10 @@ export default function ClimbPage({ data: { climb } }) {
       <RouteGradeChip yds={yds} safety={safety}></RouteGradeChip>
       <RouteTypeChips type={type}></RouteTypeChips>
       <div className="pt-4 text-sm text-gray-600 italic">FA: {fa}</div>
-      <div className="markdown" dangerouslySetInnerHTML={{ __html: parent.html }}></div>
+      <div
+        className="markdown"
+        dangerouslySetInnerHTML={{ __html: parent.html }}
+      ></div>
       <LinkToGithub link={githubLink} docType="climb"></LinkToGithub>
     </Layout>
   );

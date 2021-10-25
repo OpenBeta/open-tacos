@@ -127,7 +127,7 @@ body, html {
 }
 
 .md-code {
-  @apply text-base font-sans bg-green-100 -mx-1.5 px-1.5 py-1.5 rounded !important;
+  @apply text-sm font-mono bg-green-100 -mx-1.5 px-1.5 py-1.5 rounded !important;
 }
 
 .md-p {
@@ -242,4 +242,12 @@ input:checked + label {
 
 .markdown pre {
   @apply md-code
+}
+
+.markdown ul {
+  @apply list-inside list-disc;
+}
+
+.markdown a {
+  @apply underline;
 }
