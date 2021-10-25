@@ -127,7 +127,7 @@ body, html {
 }
 
 .md-code {
-  @apply text-base font-sans bg-green-100 -mx-1.5 px-1.5 py-1.5 !important;
+  @apply text-sm font-mono bg-green-100 -mx-1.5 px-1.5 py-1.5 rounded !important;
 }
 
 .md-p {
@@ -217,4 +217,37 @@ body, html {
 input:checked + label {
   @apply text-white;
   @apply bg-gray-700;
+}
+
+.markdown h1 {
+  @apply md-h1
+}
+
+.markdown h2 {
+  @apply md-h2
+}
+
+.markdown p {
+  @apply md-p
+}
+
+.markdown figure+figure {
+  @apply mt-12
+}
+
+
+.markdown figcaption {
+  @apply text-gray-500 text-sm text-center my-4
+}
+
+.markdown pre {
+  @apply md-code
+}
+
+.markdown ul {
+  @apply list-inside list-disc;
+}
+
+.markdown a {
+  @apply underline;
 }

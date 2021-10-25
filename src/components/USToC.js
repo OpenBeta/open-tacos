@@ -6,7 +6,7 @@ function USToC() {
   const states = useStaticQuery(graphql`
     query myquery {
       allArea(
-        filter: { parent_area: { rawPath: { eq: "USA" } } }
+        filter: { rawPath: {regex: "/^USA\/[a-zA-Z\\s]+[^\/]$/" }}
         sort: { fields: frontmatter___area_name }
       ) {
         edges {

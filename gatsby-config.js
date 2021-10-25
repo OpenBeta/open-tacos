@@ -41,27 +41,39 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `areas-routes`,
+        name: `areas-routes-wa`,
         path: `${__dirname}/content`,
-        ignore: [`**/\.*`],
+        ignore: [`**/Nevada`, `**/Oregon`],
       },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `pages`,
-        path: `${__dirname}/src/pages`,
-        ignore: [`**/\.*`], // Ignore file starting with dot
+        name: `areas-routes-or`,
+        path: `${__dirname}/content`,
+        ignore: [`**/Washington`, `**/Nevada`],
       },
     },
     {
-      resolve: `gatsby-plugin-mdx`,
+      resolve: `gatsby-source-filesystem`,
       options: {
-        extensions: [`.mdx`, `.md`],
-        defaultLayouts: {
-          pages: require.resolve("./src/components/StandardPageLayout.js"),
-        },
-        gatsbyRemarkPlugins: [
+        name: `areas-routes-nv`,
+        path: `${__dirname}/content`,
+        ignore: [`**/Washington`, `**/Oregon`],
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `regular-md`,
+        path: `${__dirname}/src/pages`,
+        ignore: [`**/*\.js`], // Ignore .js files
+      },
+    },
+    {
+      resolve: `gatsby-transformer-remark`,
+      options: {
+        plugins: [
           {
             resolve: "gatsby-remark-images",
             options: {
@@ -73,7 +85,7 @@ module.exports = {
           },
         ],
       },
-    },
+    }, 
     {
       resolve: "gatsby-plugin-react-svg",
       options: {
@@ -91,6 +103,5 @@ module.exports = {
         },
       },
     },
-    `gatsby-plugin-offline`,
   ],
 };

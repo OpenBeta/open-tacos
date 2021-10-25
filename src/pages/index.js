@@ -38,6 +38,7 @@ function IndexPage() {
       }
     }
   `);
+
   const min = 0;
   const max = allClimbingRoutes.allClimb.edges.length;
   const randomIndex = getRandomInt(min, max);

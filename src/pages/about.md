@@ -4,7 +4,7 @@ keywords:
  - OpenBeta
  - rock climbing
 ---
-<Header text="Welcome! 👋"/>
+# Welcome! 👋
 
 OpenBeta is a grassroots initiative that brings climbers together for one common goal — to keep rock climbing information free and open for everyone.
 
