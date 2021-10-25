@@ -67,7 +67,7 @@ module.exports = {
       options: {
         name: `regular-md`,
         path: `${__dirname}/src/pages`,
-        ignore: [`**/*\.js`], // Ignore file starting with dot
+        ignore: [`**/*\.js`], // Ignore .js files
       },
     },
     {
@@ -103,6 +103,5 @@ module.exports = {
         },
       },
     },
-    // `gatsby-plugin-offline`,
   ],
 };

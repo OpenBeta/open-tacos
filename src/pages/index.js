@@ -46,7 +46,7 @@ function IndexPage() {
   if (allClimbingRoutes.allClimb.edges.length > 0) {
     randomClimb = allClimbingRoutes.allClimb.edges[randomIndex].node;
   }
-  //allClimbingRoutes = [];
+  allClimbingRoutes = [];
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
