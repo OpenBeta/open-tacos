@@ -23,7 +23,9 @@ pages:
   - docker
 
   before_script:
+  - if [ "$FORCE_CLEAN" == "true" ]; then rm -rf node_modules; fi;
   - yarn install --no-progress
+  - if [ "$FORCE_CLEAN" == "true" ]; then ./node_modules/.bin/gatsby clean; fi;
   - ./prebuild.sh # fetch content repo
 
   script:
