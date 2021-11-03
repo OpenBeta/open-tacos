@@ -9,10 +9,20 @@ import {
   createPlateComponents,
   createPlateOptions,
   createLinkPlugin,
+  createImagePlugin,
   createDeserializeMDPlugin,
+  createTrailingBlockPlugin,
+  createNormalizeTypesPlugin,
+  withProps,
+  ImageElement,
+  ELEMENT_IMAGE,
+  ELEMENT_H1,
+  ELEMENT_PARAGRAPH
 } from "@udecode/plate";
+import {useDropzone} from 'react-dropzone';
 import FormatToolbar from "./FormatToolbar";
-import { md_to_slate, slate_to_md } from "./md-utils";
+import {createCustomNormalizingPlugin} from "./createCustomNormalizingPlugin"
+import { md_to_slate } from "./md-utils";
 
 // customize the editor inner container
 const editableProps = {
@@ -31,33 +41,45 @@ const PlateEditor = ({ markdown, onSubmit, debug }) => {
     createReactPlugin(),
     createHistoryPlugin(),
     createLinkPlugin(),
+    createImagePlugin(),
     ...createBasicElementPlugins(),
     ...createBasicMarkPlugins(),
+    createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
+    createNormalizeTypesPlugin({
+      rules: [{ path: [0], strictType: ELEMENT_H1 }],
+    }),
+    createCustomNormalizingPlugin()
   ];
 
   plugins.push(...[createDeserializeMDPlugin({ plugins })]);
+  const [value, setValue] = useState();
 
+  const onChange = (props) => setValue(props);
+
+  const ast = md_to_slate(markdown);
   return (
-      <div className="flex-grow 2xl:w-2/3 2xl:max-w-5xl border-gray-300 border rounded-lg shadow-sm">
-        <FormatToolbar />
-        <ReactPlaceholder
-          className="p-8 mt-12"
-          type="text"
-          ready={markdown !== null}
-          rows={16}
-          color="#F4F6F6"
-        >
-          <div className="transition duration-850 opacity-100">
-            <Plate
-              editableProps={editableProps}
-              plugins={plugins}
-              components={components}
-              options={options}
-              initialValue={md_to_slate(markdown)}
-            ></Plate>
-          </div>
-        </ReactPlaceholder>
-      </div>
+    <div className="flex-grow 2xl:w-2/3 2xl:max-w-5xl border-gray-300 border rounded-lg shadow-sm">
+      <FormatToolbar />
+      <ReactPlaceholder
+        className="p-8 mt-12"
+        type="text"
+        ready={markdown !== null}
+        rows={16}
+        color="#F4F6F6"
+      >
+        <div className="transition duration-850 opacity-100">
+          <Plate
+            editableProps={editableProps}
+            plugins={plugins}
+            components={components}
+            options={options}
+            initialValue={ast}
+            onChange={onChange}
+          ></Plate>
+        </div>
+      </ReactPlaceholder>
+      <div className="break-all"><pre>{JSON.stringify(value, null, 2)}</pre></div>
+    </div>
   );
 };
 

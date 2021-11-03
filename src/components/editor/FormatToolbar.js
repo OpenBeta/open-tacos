@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 
 import {
   useStoreEditorRef,
@@ -21,17 +22,23 @@ import {
 import {
   IconBold,
   IconItalic,
-  IconUnderline,
   IconCode,
-  IconURL,
   IconH1,
   IconH2,
-} from "./ToolbarIcons"
+  IconPhoto,
+} from "./ToolbarIcons";
 
 const FormatToolbar = () => {
+  const onDrop = useCallback((acceptedFiles) => {
+    console.log("# file ", acceptedFiles)
+    // Do something with the files
+  }, []);
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
   const editor = useStoreEditorRef(useEventEditorId("focus"));
   return (
-    <div className="max-w-full flex nowrap h-14 gap-x-4 border-b pt-4 pb-2 px-4 bg-gray-100 rounded-t-lg">
+    <div className="max-w-full flex nowrap items-center	pt-1.5 gap-x-4 border-b px-4 bg-gray-100 rounded-t-lg">
       <ToolbarMark
         type={getPlatePluginType(editor, MARK_BOLD)}
         icon={<IconBold />}
@@ -52,7 +59,13 @@ const FormatToolbar = () => {
         type={getPlatePluginType(editor, ELEMENT_H2)}
         icon={<IconH2 />}
       />
-
+      <div {...getRootProps()}>
+        <input {...getInputProps()} />
+        <ToolbarElement
+          //type={getPlatePluginType(editor, ELEMENT_H2)}
+          icon={<IconPhoto />}
+        />
+      </div>
       {/* Comment out due to https://github.com/udecode/plate/issues/938
        <ToolbarLink icon={<IconURL />} /> */}
     </div>
