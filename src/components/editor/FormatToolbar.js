@@ -2,21 +2,16 @@ import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
 import {
-  useStoreEditorRef,
-  useEventEditorId,
+  usePlateEditorRef,
+  // useEventEditorId,
   getPlatePluginType,
-  ELEMENT_BLOCKQUOTE,
-  ELEMENT_CODE_BLOCK,
-  ELEMENT_CODE_LINE,
   ELEMENT_H1,
   ELEMENT_H2,
   MARK_BOLD,
   MARK_CODE,
   MARK_ITALIC,
-  MARK_UNDERLINE,
-  ToolbarElement,
-  ToolbarMark,
-  ToolbarLink,
+  BlockToolbarButton,
+  MarkToolbarButton,
 } from "@udecode/plate";
 
 import {
@@ -28,40 +23,63 @@ import {
   IconPhoto,
 } from "./ToolbarIcons";
 
+import { upload_image } from "../../js/image-utils";
+
 const FormatToolbar = () => {
   const onDrop = useCallback((acceptedFiles) => {
-    console.log("# file ", acceptedFiles)
+    console.log("# file ", acceptedFiles);
     // Do something with the files
+    acceptedFiles.forEach((file) => {
+      if (file.size > 5242880) {
+        alert("You tried to upload a photo larger than 5MB");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onabort = () => console.log("file reading was aborted");
+      reader.onerror = () => console.log("file reading has failed");
+      reader.onload = async (event) => {
+        // Do whatever you want with the file contents
+        const binaryStr = event.target.result;
+        const url = await upload_image(binaryStr);
+        console.log(url);
+        //console.log( binaryStr);
+      };
+      reader.readAsDataURL(file);
+    });
   }, []);
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    maxFiles: 1,
+    accept: "image/jpeg, image/png",
+  });
 
-  const editor = useStoreEditorRef(useEventEditorId("focus"));
+  const editor = usePlateEditorRef();
   return (
     <div className="max-w-full flex nowrap items-center	pt-1.5 gap-x-4 border-b px-4 bg-gray-100 rounded-t-lg">
-      <ToolbarMark
+      <MarkToolbarButton
         type={getPlatePluginType(editor, MARK_BOLD)}
         icon={<IconBold />}
       />
-      <ToolbarMark
+      <MarkToolbarButton
         type={getPlatePluginType(editor, MARK_ITALIC)}
         icon={<IconItalic />}
       />
-      <ToolbarMark
+      <MarkToolbarButton
         type={getPlatePluginType(editor, MARK_CODE)}
         icon={<IconCode />}
       />
-      <ToolbarElement
+      <BlockToolbarButton
         type={getPlatePluginType(editor, ELEMENT_H1)}
         icon={<IconH1 />}
       />
-      <ToolbarElement
+      <BlockToolbarButton
         type={getPlatePluginType(editor, ELEMENT_H2)}
         icon={<IconH2 />}
       />
       <div {...getRootProps()}>
         <input {...getInputProps()} />
-        <ToolbarElement
+        <BlockToolbarButton
           //type={getPlatePluginType(editor, ELEMENT_H2)}
           icon={<IconPhoto />}
         />
