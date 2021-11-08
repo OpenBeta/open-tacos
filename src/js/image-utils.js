@@ -13,8 +13,8 @@ export const upload_image = async (imageData, options) => {
   //   const context = object2context(options.context);
   //   options && options.context && payload.append("context", context);
 
-  console.log("#payload ", imageData, payload);
   const res = await client.post("/image/upload", payload);
+  console.log("# response ", res)
   if (res.status === 200) return res.data["secure_url"];
   return Promise.reject("Error uploading image");
 };

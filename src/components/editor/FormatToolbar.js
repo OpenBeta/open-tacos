@@ -14,6 +14,8 @@ import {
   MarkToolbarButton,
 } from "@udecode/plate";
 
+import { insertImage } from "@udecode/plate-image";
+
 import {
   IconBold,
   IconItalic,
@@ -27,7 +29,6 @@ import { upload_image } from "../../js/image-utils";
 
 const FormatToolbar = () => {
   const onDrop = useCallback((acceptedFiles) => {
-    console.log("# file ", acceptedFiles);
     // Do something with the files
     acceptedFiles.forEach((file) => {
       if (file.size > 5242880) {
@@ -41,12 +42,14 @@ const FormatToolbar = () => {
         // Do whatever you want with the file contents
         const binaryStr = event.target.result;
         const url = await upload_image(binaryStr);
-        console.log(url);
+        console.log("# uploaded", url, editor)
+        if (editor) insertImage(editor, url);
+        //console.log(url);
         //console.log( binaryStr);
       };
       reader.readAsDataURL(file);
     });
-  }, []);
+  }, [editor]);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
