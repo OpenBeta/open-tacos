@@ -1,7 +1,6 @@
 import { unified } from "unified";
 import markdown from "remark-parse";
-import remarkImages from "remark-images";
-import slate, { defaultNodeTypes, serialize } from "remark-slate";
+import slate, { defaultNodeTypes, serialize } from "@openbeta/remark-slate";
 import yaml from "js-yaml";
 
 import { simplify_climb_type_json } from "../../js/utils";
@@ -32,6 +31,7 @@ const SERIALIZE_OPTS = {
     ...defaultNodeTypes,
     paragraph: "p",
     link: "a",
+    image: "img",
     heading: { ...DEFAULT_HEADINGS },
   },
 };
@@ -44,9 +44,7 @@ export const md_to_slate = (md_str) => {
   if (!md_str) {
     return null;
   }
-  const processor = unified()
-    .use(markdown)
-    .use(slate, DESERIALIZE_OPTS);
+  const processor = unified().use(markdown).use(slate, DESERIALIZE_OPTS);
   return top_images(processor.processSync(md_str).result);
 };
 
@@ -55,7 +53,7 @@ export const md_to_slate = (md_str) => {
  * @param  ast
  */
 export const slate_to_md = (ast) => {
-  return ast ? ast.map((v) => serialize(v, SERIALIZE_OPTS)).join("") : "";
+  return ast ? ast.map((v) => serialize(v, SERIALIZE_OPTS)).join("\n") : "";
 };
 
 /**
@@ -66,11 +64,11 @@ export const top_images = (ast) => {
   return ast.reduce((acc, cur) => {
     const processedNode = cur;
     // Extract images from wrapping node while preserving any other children
-    if (processedNode.children && processedNode.type === 'p') {
+    if (processedNode.children && processedNode.type === "p") {
       const images = [];
       const children = [];
       processedNode.children.forEach((node) => {
-        if (node.type === 'img') {
+        if (node.type === "img") {
           images.push(node);
         } else {
           children.push(node);

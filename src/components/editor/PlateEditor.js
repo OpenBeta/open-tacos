@@ -1,27 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ReactPlaceholder from "react-placeholder";
+import { createPlateComponents, createPlateOptions } from "@udecode/plate";
 import {
   Plate,
-  createBasicElementPlugins, // h1, h2, blockquote, codeblock and p
   createReactPlugin,
   createHistoryPlugin,
-  createBasicMarkPlugins, // bold, italic, underline
-  createPlateComponents,
-  createPlateOptions,
-  createLinkPlugin,
-  createImagePlugin,
-  createDeserializeMDPlugin,
-  createTrailingBlockPlugin,
-  createNormalizeTypesPlugin,
-  withProps,
-  ImageElement,
-  ELEMENT_IMAGE,
-  ELEMENT_H1,
-  ELEMENT_PARAGRAPH
-} from "@udecode/plate";
-import {useDropzone} from 'react-dropzone';
+} from "@udecode/plate-core";
+import { createNormalizeTypesPlugin } from "@udecode/plate-normalizers";
+import { createTrailingBlockPlugin } from "@udecode/plate-trailing-block";
+import { createBasicMarkPlugins } from "@udecode/plate-basic-marks"; // bold, italic, underline
+import { createBasicElementPlugins } from "@udecode/plate-basic-elements"; // blockquote, codeblock and p
+import { ELEMENT_PARAGRAPH } from "@udecode/plate-paragraph";
+import { ELEMENT_H1 } from "@udecode/plate-heading"; //h1, h2
+import { createLinkPlugin } from "@udecode/plate-link";
+import { createImagePlugin } from "@udecode/plate-image";
 import FormatToolbar from "./FormatToolbar";
-import {createCustomNormalizingPlugin} from "./createCustomNormalizingPlugin"
+import { createCustomNormalizingPlugin } from "./createCustomNormalizingPlugin";
 import { md_to_slate } from "./md-utils";
 
 // customize the editor inner container
@@ -48,13 +42,12 @@ const PlateEditor = ({ markdown, onSubmit, debug }) => {
     createNormalizeTypesPlugin({
       rules: [{ path: [0], strictType: ELEMENT_H1 }],
     }),
-    createCustomNormalizingPlugin()
+    createCustomNormalizingPlugin(),
   ];
 
-  plugins.push(...[createDeserializeMDPlugin({ plugins })]);
   const [value, setValue] = useState();
 
-  const onChange = (props) => setValue(props);
+  const onChange = (props) => debug && setValue(props);
 
   const ast = md_to_slate(markdown);
   return (
@@ -78,7 +71,11 @@ const PlateEditor = ({ markdown, onSubmit, debug }) => {
           ></Plate>
         </div>
       </ReactPlaceholder>
-      <div className="break-all"><pre>{JSON.stringify(value, null, 2)}</pre></div>
+      {debug && (
+        <div className="break-all">
+          <pre>{JSON.stringify(value, null, 2)}</pre>
+        </div>
+      )}
     </div>
   );
 };

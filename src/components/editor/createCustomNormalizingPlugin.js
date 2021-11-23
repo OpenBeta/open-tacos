@@ -1,25 +1,23 @@
-import { getChildren } from "@udecode/plate-common";
-
-import { getPlatePluginWithOverrides, isElement } from "@udecode/plate-core";
+import { Transforms } from "slate";
+import { getPlatePluginWithOverrides } from "@udecode/plate-core";
 
 const withCustomNormalizing = (options) => (editor) => {
   const { normalizeNode } = editor;
 
   editor.normalizeNode = ([node, path]) => {
-    //console.log("#foos ", node);
-
-    if (node.type === "p") {
-      for (const child of node.children) {
-        console.log("# node", child);
-        //return;
+    if (node.type === "img") {
+      const pos = path[0];
+      if (pos > 0) {
+        const prevSibling = editor.children[pos - 1];
+        // if previous sibling is an empty paragraph, remove it
+        if (prevSibling.type === "p" && prevSibling.children[0].text === "") {
+          Transforms.removeNodes(editor, { at: [pos - 1] });
+          return;
+        }
       }
     }
-    //   if ( ) {
-    //     // do some transformations
-    //     return // if transformed
-    //   }
-
-    normalizeNode([node, path]); // continue the normalization chain if not transformed
+    // Continue with default normilization
+    normalizeNode([node, path]);
   };
 
   return editor;
