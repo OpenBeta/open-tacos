@@ -1,6 +1,7 @@
 import React from "react";
 
 import LinkIcon from "../../assets/icons/link.svg";
+import PhotoIcon from "../../assets/icons/photo.svg";
 
 export const IconBold = (props) => (
   <span className="font-base text-2xl">B</span>
@@ -30,4 +31,10 @@ export const IconH1 = (props) => (
 
 export const IconH2 = (props) => (
   <span className="text-center font-base text-xl w-6 py-10">H2</span>
+);
+
+export const IconPhoto = (props) => (
+  <span className="-mt-1">
+    <PhotoIcon />
+  </span>
 );

@@ -18,7 +18,7 @@ export default function Modal({
   return (
     <Dialog
       open={isOpen}
-      onClose={setIsOpen}
+      onClose={setIsOpen ?? (() => {})}
       as="div"
       className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto"
     >

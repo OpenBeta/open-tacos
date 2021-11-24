@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactPlaceholder from "react-placeholder";
-import { useStoreEditorState } from "@udecode/plate";
+import { usePlateValue } from "@udecode/plate-core";
 import { useAuth0 } from "@auth0/auth0-react";
 import { navigate } from "gatsby";
 
@@ -59,7 +59,7 @@ export const Editor = () => {
   // to get access to climb metadata
   const formikRef = React.useRef(null);
   // to get access climb content
-  const editor = useStoreEditorState();
+  const plateValue = usePlateValue();
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(ERROR.NO_ERROR);
@@ -82,9 +82,7 @@ export const Editor = () => {
   }, []);
 
   const onSubmit = async () => {
-    if (!(editor || editor.children)) {
-      return;
-    }
+    if (!plateValue) return;
 
     if (!areFormsValid([formikRef, commitMsgRef])) {
       return;
@@ -96,7 +94,7 @@ export const Editor = () => {
       });
       const str = stringify({
         frontmatter: formikRef.current.values,
-        body_ast: editor.children,
+        body_ast: plateValue,
       });
       const committer = {
         name: user["https://tacos.openbeta.io/username"],
@@ -154,7 +152,7 @@ export const Editor = () => {
             <AreaProfile formikRef={formikRef} frontmatter={attributes} />
           )}
         </ReactPlaceholder>
-        <PlateEditor markdown={body} debug={true} />
+        <PlateEditor markdown={body} debug={false} />
       </div>
     </>
   );
