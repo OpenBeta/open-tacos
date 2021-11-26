@@ -4,13 +4,13 @@ import { useStaticQuery, graphql, navigate, Link } from "gatsby";
 function Climbs({ id }) {
   let allClimbingRoutes = useStaticQuery(graphql`
     query {
-      allClimb(sort: { fields: frontmatter___metadata___legacy_id }) {
+      allClimb(sort: { fields: frontmatter___metadata___mp_id }) {
         edges {
           node {
             slug
             frontmatter {
               metadata {
-                legacy_id
+                mp_id
               }
             }
           }
@@ -22,7 +22,7 @@ function Climbs({ id }) {
   const list = allClimbingRoutes.allClimb.edges;
 
   const foundNode = list.find(
-    ({ node }) => id === node.frontmatter.metadata.legacy_id
+    ({ node }) => id === node.frontmatter.metadata.mp_id
   );
 
   if (foundNode) {

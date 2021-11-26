@@ -38,7 +38,7 @@ export default function ClimbPage({ data: { climb } }) {
         className="markdown"
         dangerouslySetInnerHTML={{ __html: parent.html }}
       ></div>
-      <LinkToGithub link={githubLink} docType="climb"></LinkToGithub>
+      <LinkToGithub link={githubLink} docType="climbs"></LinkToGithub>
     </Layout>
   );
 }
