@@ -30,7 +30,7 @@ function IndexPage() {
                 boulder
               }
               metadata {
-                legacy_id
+                climb_id
               }
             }
           }

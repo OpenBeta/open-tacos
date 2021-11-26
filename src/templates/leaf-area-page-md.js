@@ -18,7 +18,7 @@ import AreaDetail from "../components/graphql/AreaDetail";
  */
 export default function LeafAreaPage({ data: { area } }) {
   const { area_name, metadata } = area.frontmatter;
-  const { pathTokens, rawPath,  parent, children } = area;
+  const { pathTokens, rawPath, parent, children } = area;
 
   //return (<div>{JSON.stringify(area)}</div>)
   // Area.children[] can contain either sub-Areas or Climbs, but not both.
@@ -44,22 +44,20 @@ export default function LeafAreaPage({ data: { area } }) {
         </a>
       </span>
       {!hasChildAreas && <AreaStatistics climbs={children}></AreaStatistics>}
-      <div className="flex mt-8">
-        <div className="justify-right"><button
-          className="btn btn-primary"
-          onClick={() => navigate(`/edit?file=${rawPath}/index.md`)}
-        >
-          Edit
-        </button></div>
-      </div>
-      <div className="markdown" dangerouslySetInnerHTML={{ __html: parent.html }}></div>
+      <div
+        className="markdown"
+        dangerouslySetInnerHTML={{ __html: parent.html }}
+      ></div>
+      {parent.wordCount.words < 20 && (
+        <Cta isEmpty={parent.wordCount.words === 1} rawPath={rawPath}/>
+      )}
       {hasChildAreas && (
         <div className="grid grid-cols-3 gap-x-3">
           {children.map((node) => {
             const { frontmatter, slug } = node;
             const { area_name, metadata } = frontmatter;
             return (
-              <div className="pt-6 max-h-96" key={metadata.legacy_id}>
+              <div className="pt-6 max-h-96" key={metadata.area_id}>
                 <Link to={slug}>
                   <AreaCard area_name={area_name}></AreaCard>
                 </Link>
@@ -74,11 +72,11 @@ export default function LeafAreaPage({ data: { area } }) {
             const { frontmatter, slug } = node;
             const { yds, route_name, metadata, type } = frontmatter;
             return (
-              <div className="pt-6 max-h-96" key={metadata.legacy_id}>
+              <div className="pt-6 max-h-96" key={metadata.climb_id}>
                 <Link to={slug}>
                   <RouteCard
                     route_name={route_name}
-                    legacy_id={metadata.legacy_id}
+                    climb_id={metadata.climb_id}
                     YDS={yds}
                     // safety="{}" TODO: Find out what routes have this value?
                     type={type}
@@ -88,10 +86,28 @@ export default function LeafAreaPage({ data: { area } }) {
             );
           })}
       </div>
-      <LinkToGithub link={githubLink} docType="area"></LinkToGithub>
+      <LinkToGithub link={githubLink} docType="areas"></LinkToGithub>
     </Layout>
   );
 }
+
+const Cta = ({ isEmpty, rawPath }) => (
+  <div className="rounded border-2 p-4 border-gray-700 flex flex-col flex-nowrap gap-y-4 md:gap-x-4 md:flex-row  items-center justify-center ">
+    <div className="text-center">
+      {isEmpty
+        ? `This area description is empty. Be the first to contribute!`
+        : `Help us improve this page`}
+    </div>
+    <div>
+      <button
+        className="btn btn-primary"
+        onClick={() => navigate(`/edit?file=${rawPath}/index.md`)}
+      >
+        Edit
+      </button>
+    </div>
+  </div>
+);
 
 export const query = graphql`
   query ($node_id: String!) {
@@ -100,6 +116,9 @@ export const query = graphql`
       parent {
         ... on MarkdownRemark {
           html
+          wordCount {
+            words
+          }
         }
       }
       children {

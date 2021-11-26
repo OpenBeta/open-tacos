@@ -8,7 +8,7 @@ export const query = graphql`
     frontmatter {
       area_name
       metadata {
-        legacy_id
+        area_id
         lng
         lat
       }

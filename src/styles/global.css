@@ -149,7 +149,11 @@ body, html {
   }
 
   .btn-primary {
-    @apply bg-custom-primary hover:bg-yellow-400 border border-gray-700;
+    @apply bg-black hover:bg-custom-primary  border-2 border-black text-white;
+  }
+
+  .btn-secondary {
+    @apply bg-white hover:bg-custom-primary border-2 border-black;
   }
 
   .btn-success {

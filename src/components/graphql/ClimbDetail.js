@@ -9,7 +9,8 @@ export const query = graphql`
     frontmatter {
       route_name
       metadata {
-        legacy_id
+        climb_id
+        mp_id
       }
       fa
       yds
