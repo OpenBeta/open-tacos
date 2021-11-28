@@ -255,3 +255,12 @@ input:checked + label {
 .markdown a {
   @apply underline;
 }
+
+.history-table td {
+  padding: 15px;
+}
+
+.history-table th {
+  padding: 15px;
+  @apply text-left;
+}

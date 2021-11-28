@@ -51,7 +51,7 @@ function IndexPage() {
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO
-        keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
+        keywords={[`openbeta`, `rock climbing`, `climbing api`]}
         title="Home"
       />
 
