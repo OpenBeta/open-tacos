@@ -49,7 +49,7 @@ export default function LeafAreaPage({
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
       </MDXProvider>
-      <div className="grid grid-cols-3 gap-x-3">
+      <div className="sm:grid grid-cols-3 gap-x-3">
         {childAreas.edges.map(({ node }) => {
           const { frontmatter } = node;
           const { area_name, metadata } = frontmatter;
@@ -70,7 +70,7 @@ export default function LeafAreaPage({
           );
         })}
       </div>
-      <div className="grid grid-cols-3 gap-x-3">
+      <div className="sm:grid grid-cols-3 gap-x-3">
         {climbs.edges.map(({ node }) => {
           const { frontmatter } = node;
           const { yds, route_name, metadata, type } = frontmatter;
