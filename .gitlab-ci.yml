@@ -10,19 +10,14 @@ variables:
   GIT_DEPTH: 1
   DOCKER_DRIVER: overlay2
 
-# Job name must be 'pages' in order for GitLab to deploy to static site
-pages:
-  only: # Only run for these branches
-  - develop
-  - main
-  - gitlab-debug
-
+gatsby-build:
   stage: build
 
   tags:
   - docker
 
   before_script:
+  - git show --summary
   - if [ "$FORCE_CLEAN" == "true" ]; then rm -rf node_modules; fi;
   - yarn install --no-progress
   - if [ "$FORCE_CLEAN" == "true" ]; then ./node_modules/.bin/gatsby clean; fi;
@@ -31,6 +26,18 @@ pages:
   script:
   - ./node_modules/.bin/gatsby build
 
+# Job name must be 'pages' in order for GitLab to deploy to static site
+pages:
+  stage: build
+  tags:
+    - docker
+  needs: [gatsby-build]
+  only: # Only run for these branches
+  - develop
+  - main
+
+  script:
+    - ls -la public # Dummy command as required by Gitlab linter
   artifacts:  # Use by GitLab pages
     paths:
     - public
