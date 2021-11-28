@@ -17,12 +17,10 @@ import { b64EncodeUnicode } from "./base64";
 
 export class GithubClient {
   static GATEWAY = "https://git-gateway.openbeta.io/github";
+  static PUBLIC_GITHUB =
+    "https://api.github.com/repos/openbeta/opentacos-content";
   static WORKING_REPO_COOKIE_KEY = "working_repo_full_name";
   static HEAD_BRANCH_COOKIE_KEY = "head_branch";
-
-  api = axios.create({
-    baseURL: GithubClient.GATEWAY,
-  });
 
   constructor({
     baseBranch = "develop",
@@ -33,8 +31,17 @@ export class GithubClient {
     this.defaultCommitMessage = defaultCommitMessage;
     this.headers = {
       "content-type": "application/json",
-      authorization: `Bearer ${authToken}`,
     };
+    if (authToken) {
+      this.headers["authorization"] = `Bearer ${authToken}`;
+      this.api = axios.create({
+        baseURL: GithubClient.GATEWAY,
+      });
+    } else {
+      this.api = axios.create({
+        baseURL: GithubClient.PUBLIC_GITHUB,
+      });
+    }
   }
 
   async createBranch(name) {
@@ -109,10 +116,10 @@ export class GithubClient {
     return request;
   }
 
-  async getCommitsByUser(username) {
+  async getAllCommits(username) {
     const branch = this.branchName;
     const request = await this.req({
-      url: `${GithubClient.GATEWAY}/commits?sha=${branch}${
+      url: `commits?sha=${branch}${
         username ? `&author=${username}` : ""
       }`,
       method: "GET",

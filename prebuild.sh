@@ -24,9 +24,8 @@ then
   find . -mindepth 2 -maxdepth 4  -name "index*"  -exec rsync -aR "{}" $target \;
 
   # Copy only a few specific areas
-  rsync -aR ./USA/Oregon/Mt.\ Hood/Petes\ Pile $target
+  rsync -aR ./USA/Oregon/Mt.\ Hood $target
   rsync -aR ./USA/Oregon/Central\ Oregon/Smith\ Rock $target
-  rsync -aR ./USA/Nevada/Southern\ Nevada/Red\ Rock $target
   popd
 else
   echo "Make entire repo available to build"

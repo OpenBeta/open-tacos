@@ -5,15 +5,6 @@ import SearchBar from "../components/SearchBar";
 
 function Header() {
   const [isExpanded, toggleExpansion] = useState(false);
-  // const { site } = useStaticQuery(graphql`
-  //   query SiteTitleQuery {
-  //     site {
-  //       siteMetadata {
-  //         title
-  //       }
-  //     }
-  //   }
-  // `);
 
   return (
     <header className="fixed top-0 z-50 w-full bg-white border-b z-50">
@@ -52,7 +43,12 @@ function Header() {
             {
               route: `/about`,
               title: `About`,
+            },
+            {
+              route: `/history`,
+              title: `History`,
             }
+
           ].map((link) => (
             <Link
               className="block mt-4 no-underline md:inline-block md:mt-0 md:ml-6"
