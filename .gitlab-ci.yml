@@ -28,10 +28,16 @@ gatsby-build:
 
 # Job name must be 'pages' in order for GitLab to deploy to static site
 pages:
+  stage: build
+  tags:
+    - docker
   needs: [gatsby-build]
   only: # Only run for these branches
   - develop
   - main
+
+  script:
+    - ls -la public # Dummy command as required by Gitlab linter
   artifacts:  # Use by GitLab pages
     paths:
     - public
