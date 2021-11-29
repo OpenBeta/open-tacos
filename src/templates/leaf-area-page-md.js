@@ -49,6 +49,7 @@ export default function LeafAreaPage({
       <MDXProvider components={shortcodes}>
         <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
       </MDXProvider>
+      {/* sm: prefix is setting the break point to 640 or less */}
       <div className="sm:grid grid-cols-3 gap-x-3">
         {childAreas.edges.map(({ node }) => {
           const { frontmatter } = node;
