@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ReactPlaceholder from "react-placeholder";
-import {
-  TextBlock,
-  TextRow,
-} from "react-placeholder/lib/placeholders";
+import { TextBlock, TextRow } from "react-placeholder/lib/placeholders";
 
 import { GithubClient } from "../js/GithubClient";
+import RTable from "../components/RTable";
 import { Commit, transform } from "../components/dashboard/EditHistory";
 import SEO from "../components/seo";
 import Layout from "../components/layout";
@@ -28,6 +26,25 @@ const History = (props) => {
     git_api_async();
   }, []);
 
+  const labels = [
+    {
+      label: "Age"
+    },
+    {
+      label: "Description",
+      data: (row) => row['message'],
+    },
+    {
+      label: "Author",
+      data: (row => row['name'])
+    },
+    {
+      label: "Detail",
+      data: ()=> 'Github',
+      url: (row) => row['html_url']
+    }
+  ]
+
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -36,8 +53,10 @@ const History = (props) => {
         title="History"
       />
 
+
       <div className="mt-12">
         <div className="md-h1">Recent edits</div>
+        <RTable labels={labels} list={commits} />
         <table className="w-full history-table table-auto">
           <thead>
             <tr className="border-b-2 border-gray-900">

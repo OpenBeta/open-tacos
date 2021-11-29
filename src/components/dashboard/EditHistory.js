@@ -53,7 +53,7 @@ function EditHistory() {
           >
             {commits.length === 0 && !loading && "None"}
             {commits.map((entry, index) => (
-              <Commit key={entry.sha} index={index+1} {...entry} />
+              <Commit key={entry.sha} index={index + 1} {...entry} />
             ))}
           </ReactPlaceholder>
         </tbody>
@@ -69,6 +69,7 @@ export const Commit = ({ index, sha, html_url, name, date, message }) => {
       <td className="font-light">{dayjs(date).fromNow()}</td>
       <td>
         <a
+          href={html_url}
           className="cursor-pointer hover:text-custom-secondary hover:underline "
           target="_blank"
           rel="noreferrer noopener"
@@ -91,7 +92,7 @@ export const transform = (list) => {
   const newList = list.map(({ sha, html_url, commit }) => {
     const { author, message } = commit;
     const { date, name } = author;
-    return { sha, html_url, date, message, name };
+    return { sha, html_url, date, age: dayjs(date).fromNow(), message, name };
   });
   return newList;
 };
