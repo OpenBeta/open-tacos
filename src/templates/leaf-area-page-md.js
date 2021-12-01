@@ -13,6 +13,8 @@ import AreaStatistics from "../components/AreaStatistics";
 import ClimbDetail from "../components/graphql/ClimbDetail";
 import AreaDetail from "../components/graphql/AreaDetail";
 
+// testing Greg
+
 /**
  * Templage for generating individual Area page
  */
