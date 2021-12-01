@@ -50,6 +50,7 @@ export default function LeafAreaPage({ data: { area } }) {
       {parent.wordCount.words < 20 && (
         <Cta isEmpty={parent.wordCount.words === 1} rawPath={rawPath}/>
       )}
+      {/* sm: will set break point to 640 */}
       {hasChildAreas && (
         <div className="sm:grid grid-cols-3 gap-x-3">
           {children.map((node) => {
