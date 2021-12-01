@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
-import ReactPlaceholder from "react-placeholder";
-import {
-  TextBlock,
-  TextRow,
-} from "react-placeholder/lib/placeholders";
 
 import { GithubClient } from "../js/GithubClient";
-import { Commit, transform } from "../components/dashboard/EditHistory";
+import { transform } from "../components/dashboard/EditHistory";
 import SEO from "../components/seo";
 import Layout from "../components/layout";
+import ChangeHistory from "../components/ChangeHistory";
 
 /**
  * Show recent edits
@@ -21,63 +17,31 @@ const History = (props) => {
     const git_api_async = async () => {
       setLoading(true);
       const github = new GithubClient({});
-      const list = await github.getAllCommits();
-      setLoading(false);
-      setCommits(transform(list));
+      try {
+        const list = await github.getAllCommits();
+        setLoading(false);
+        setCommits(transform(list));
+      } catch (e) {
+        setLoading(false);
+        console.log("# Network error", e);
+      }
     };
     git_api_async();
   }, []);
 
   return (
-    <Layout>
+    <Layout >
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO
         keywords={[`openbeta`, `rock climbing`, `climbing api`]}
         title="History"
       />
-
-      <div className="mt-12">
+      <div>
         <div className="md-h1">Recent edits</div>
-        <table className="w-full history-table table-auto">
-          <thead>
-            <tr className="border-b-2 border-gray-900">
-              <th className="w-16">No.</th>
-              <th>Age</th>
-              <th>Description</th>
-              <th>Author</th>
-            </tr>
-          </thead>
-          <tbody>
-            <ReactPlaceholder
-              ready={!loading}
-              customPlaceholder={<RowPlaceholder />}
-            >
-              {commits.map((entry, index) => (
-                <Commit key={entry.sha} index={index + 1} {...entry} />
-              ))}
-            </ReactPlaceholder>
-          </tbody>
-        </table>
+        <ChangeHistory commits={commits} loading={loading}/>
       </div>
     </Layout>
   );
 };
-
-export const RowPlaceholder = (props) => (
-  <tr>
-    <td>
-      <TextRow color="#f2f2f2" />
-    </td>
-    <td>
-      <TextBlock rows={2} color="#f2f2f2" />
-    </td>
-    <td>
-      <TextBlock rows={4} color="#f2f2f2" />
-    </td>
-    <td>
-      <TextRow color="#f2f2f2" />
-    </td>
-  </tr>
-);
 
 export default History;

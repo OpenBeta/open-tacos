@@ -96,12 +96,14 @@ body, html {
 /* bg-gradient-to-r from-blue-100 to-indigo-200 */
 
 .main-container {
-  @apply font-sans text-base pt-12 text-gray-900 bg-white;
+  @apply flex flex-col w-full font-sans text-base pt-12 text-gray-900 bg-white;
 }
 
 .default-layout {
   @apply w-full max-w-4xl mx-auto px-4 my-20 md:px-8 lg:px-24
 }
+
+
 
 .layout-edit {
   @apply bg-white  max-w-4xl  2xl:max-w-screen-2xl mx-auto px-4 py-8 mt-8 mb-16 rounded-lg
@@ -115,7 +117,10 @@ body, html {
 @responsive {
   .layout-edit-wide {
     /* On wide screen put 2 forms side by side */
-    @apply max-w-full  flex flex-row justify-center gap-x-4 gap-y-0;
+    @apply max-w-full flex flex-row justify-center gap-x-4 gap-y-0;
+  }
+  .layout-wide {
+    @apply flex-grow max-w-screen-2xl w-full mx-auto px-4 my-20 lg:px-8 xl:px-24
   }
 }
 .md-h1 {
