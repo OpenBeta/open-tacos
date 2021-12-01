@@ -52,7 +52,7 @@ export default function LeafAreaPage({ data: { area } }) {
         <Cta isEmpty={parent.wordCount.words === 1} rawPath={rawPath}/>
       )}
       {hasChildAreas && (
-        <div className="grid grid-cols-3 gap-x-3">
+        <div className="sm:grid grid-cols-3 gap-x-3">
           {children.map((node) => {
             const { frontmatter, slug } = node;
             const { area_name, metadata } = frontmatter;
@@ -66,7 +66,7 @@ export default function LeafAreaPage({ data: { area } }) {
           })}
         </div>
       )}
-      <div className="grid grid-cols-3 gap-x-3">
+      <div className="sm:grid grid-cols-3 gap-x-3">
         {!hasChildAreas &&
           children.map((node) => {
             const { frontmatter, slug } = node;
