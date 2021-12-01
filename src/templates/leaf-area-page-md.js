@@ -12,9 +12,6 @@ import { template_h1_css } from "../js/styles";
 import AreaStatistics from "../components/AreaStatistics";
 import ClimbDetail from "../components/graphql/ClimbDetail";
 import AreaDetail from "../components/graphql/AreaDetail";
-
-// testing Greg
-
 /**
  * Templage for generating individual Area page
  */
@@ -54,7 +51,7 @@ export default function LeafAreaPage({ data: { area } }) {
         <Cta isEmpty={parent.wordCount.words === 1} rawPath={rawPath}/>
       )}
       {hasChildAreas && (
-        <div className="grid grid-cols-3 gap-x-3">
+        <div className="sm:grid grid-cols-3 gap-x-3">
           {children.map((node) => {
             const { frontmatter, slug } = node;
             const { area_name, metadata } = frontmatter;
@@ -68,7 +65,7 @@ export default function LeafAreaPage({ data: { area } }) {
           })}
         </div>
       )}
-      <div className="grid grid-cols-3 gap-x-3">
+      <div className="sm:grid grid-cols-3 gap-x-3">
         {!hasChildAreas &&
           children.map((node) => {
             const { frontmatter, slug } = node;
