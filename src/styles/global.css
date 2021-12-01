@@ -96,11 +96,15 @@ body, html {
 /* bg-gradient-to-r from-blue-100 to-indigo-200 */
 
 .main-container {
-  @apply font-sans text-base pt-12 text-gray-900 bg-white;
+  @apply w-full font-sans text-base pt-12 text-gray-900 bg-white;
 }
 
 .default-layout {
   @apply w-full max-w-4xl mx-auto px-4 my-20 md:px-8 lg:px-24
+}
+
+.layout-wide {
+  @apply max-w-screen-2xl	 mx-auto px-4 my-20 lg:px-8 xl:px-24
 }
 
 .layout-edit {

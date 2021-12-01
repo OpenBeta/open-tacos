@@ -8,7 +8,7 @@ function Header() {
 
   return (
     <header className="fixed top-0 z-50 w-full bg-white border-b z-50">
-      <div className="flex flex-nowrap items-center justify-between max-w-4xl mx-auto md:p-2">
+      <div className="flex flex-nowrap items-center justify-between max-w-screen-2xl mx-auto p-4 md:px-8">
         <div className="flex flex-nowrap items-center">
           <Link to="/">
             <TacoIcon className="animate-pulse" />
