@@ -29,15 +29,14 @@ const History = (props) => {
     git_api_async();
   }, []);
 
-
   return (
-    <Layout layoutClz="layout-wide">
+    <Layout >
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO
         keywords={[`openbeta`, `rock climbing`, `climbing api`]}
         title="History"
       />
-      <div className="mt-12">
+      <div>
         <div className="md-h1">Recent edits</div>
         <ChangeHistory commits={commits} loading={loading}/>
       </div>

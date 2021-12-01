@@ -26,10 +26,10 @@ const Row = ({ row, rowIndex }) => {
   return (
     <div
       key={sha}
-      className="flex flex-row justify-between  gap-x-4 px-4 py-8 md:py-4 hover:bg-gray-100"
+      className="flex flex-row justify-between gap-x-4 px-4 py-8 md:py-4 hover:bg-gray-100"
     >
       <div className="flex-none pt-0.5 text-gray-500">{rowIndex}</div>
-      <div className="flex-grow w-full">
+      <div className="flex-grow">
         <div className="font-semibold text-lg md:max-w-prose">
           <a
             href={html_url}
@@ -44,7 +44,7 @@ const Row = ({ row, rowIndex }) => {
           {age} by {name}
         </div>
       </div>
-      <div className="hidden lg:block">
+      <div className="hidden lg:flex-none lg:inline">
         <a href={html_url} target="_blank" rel="noreferrer noopener">
           <HorizontalMore className="w-6 h-6 text-custom-secondary" />
         </a>
