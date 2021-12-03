@@ -41,6 +41,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rytheranderson",
+      "name": "rytheranderson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43506100?v=4",
+      "profile": "https://github.com/rytheranderson",
+      "contributions": [
+        "code",
+        "content"
+      ]
     }
   ],
   "contributorsPerLine": 7,
