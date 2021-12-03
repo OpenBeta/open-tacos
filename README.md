@@ -47,10 +47,11 @@ yarn install
 ```
 
 4.  Run the app
-Since we are using Auth0 for authenticating users, development server needs to run in https mode. 
-You will prompted to install additional components on the first runl
+Since we are using Auth0 for authenticating users, local development server needs to run in https mode. 
+You will ve prompted to install additional components on the first run.
+
 ```
-npm run develop -- --https
+gatsby develop -S
 ```
 
 The application is now available at `https://localhost:8000`
@@ -59,6 +60,18 @@ The application is now available at `https://localhost:8000`
 
 See [How to contribute guide](CONTRIBUTING.md) for more details.
 
+## Contributors
+
+Thanks goes to these wonderful people:
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome.
 
 ## License
 AGPL
