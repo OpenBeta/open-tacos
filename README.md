@@ -48,7 +48,7 @@ yarn install
 
 4.  Run the app
 Since we are using Auth0 for authenticating users, development server needs to run in https mode. 
-You will prompted to install additional components on the first runl
+You will be prompted to install additional components on the first run.
 ```
 npm run develop -- --https
 ```
