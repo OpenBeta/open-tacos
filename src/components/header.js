@@ -49,6 +49,10 @@ function Header() {
               route: `/history`,
               title: `History`,
             },
+            {
+              route: `/export`,
+              title: `Export`,
+            },
           ].map((link) => (
             <Link
               className="block no-underline lg:py-4 lg:inline-block lg:px-4 py-4 lg:py-0"

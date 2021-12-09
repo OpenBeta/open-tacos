@@ -261,11 +261,18 @@ input:checked + label {
   @apply underline;
 }
 
-.history-table td {
-  padding: 15px;
+.markdown table {
+   @apply table-auto w-full;
 }
 
-.history-table th {
-  padding: 15px;
-  @apply text-left;
+.markdown table thead {
+  @apply bg-custom-green bg-opacity-50;
+}
+
+.markdown table th {
+  @apply p-2;
+}
+
+.markdown table td {
+  @apply p-2;
 }
