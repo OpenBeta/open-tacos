@@ -26,6 +26,10 @@ export default function LeafAreaPage({ data: { area } }) {
   const hasChildAreas =
     children.length > 0 && children[0].frontmatter.area_name ? true : false;
   const githubLink = pathOrParentIdToGitHubLink(rawPath, "index");
+
+  // when to show large edit CTA
+  const showEditCTA = parent.wordCount.words < 20;
+
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -44,12 +48,17 @@ export default function LeafAreaPage({ data: { area } }) {
         </a>
       </span>
       {!hasChildAreas && <AreaStatistics climbs={children}></AreaStatistics>}
+      {!showEditCTA && (
+        <div className="flex justify-end">
+          <EditButton label="Improve this page" rawPath={rawPath} />
+        </div>
+      )}
       <div
         className="markdown"
         dangerouslySetInnerHTML={{ __html: parent.html }}
       ></div>
-      {parent.wordCount.words < 20 && (
-        <Cta isEmpty={parent.wordCount.words === 1} rawPath={rawPath}/>
+      {showEditCTA && (
+        <Cta isEmpty={parent.wordCount.words === 1} rawPath={rawPath} />
       )}
       {hasChildAreas && (
         <div className="grid grid-cols-3 gap-x-3">
@@ -91,6 +100,15 @@ export default function LeafAreaPage({ data: { area } }) {
   );
 }
 
+const EditButton = ({ label, classes, rawPath }) => (
+  <button
+    className={`btn whitespace-nowrap ${classes || "btn-secondary"}`}
+    onClick={() => navigate(`/edit?file=${rawPath}/index.md`)}
+  >
+    {label}
+  </button>
+);
+
 const Cta = ({ isEmpty, rawPath }) => (
   <div className="rounded border-2 p-4 border-gray-700 flex flex-col flex-nowrap gap-y-4 md:gap-x-4 md:flex-row  items-center justify-center ">
     <div className="text-center">
@@ -99,12 +117,11 @@ const Cta = ({ isEmpty, rawPath }) => (
         : `Help us improve this page`}
     </div>
     <div>
-      <button
-        className="btn btn-primary"
-        onClick={() => navigate(`/edit?file=${rawPath}/index.md`)}
-      >
-        Edit
-      </button>
+      <EditButton
+        label="Add Description"
+        classes="btn-primary"
+        rawPath={rawPath}
+      />
     </div>
   </div>
 );
