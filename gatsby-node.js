@@ -34,13 +34,25 @@ const sanitize_name = (s) =>
  * structure representing each .md file.
  * The main purpose of this function is to create an 'Area' node for each index.md and 'Climb' nodes for other .md files.
  */
-exports.onCreateNode = ({
+exports.onCreateNode = async ({
   node,
   getNode,
   actions,
   createNodeId,
   createContentDigest,
+  loadNodeContent,
 }) => {
+  const { createNode, createNodeField } = actions;
+
+  if (node.base === "boundary.geojson") {
+    console.log("# node ", node)
+    createNodeField({
+      node,
+      name: `geojson`,
+      value: await loadNodeContent(node),
+    });
+    return;
+  }
   if (node.internal.type !== "MarkdownRemark") return;
 
   // Mdx plugin creates a child node for each .md/mdx file
@@ -50,7 +62,6 @@ exports.onCreateNode = ({
   // Mdx node for markdown content.
 
   const fileNode = getNode(node["parent"]);
-  const { createNode, createNodeField } = actions;
 
   if (fileNode["sourceInstanceName"] === "regular-md") {
     const relativeFilePath = createFilePath({
@@ -161,6 +172,7 @@ exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
             id
             slug
             pathTokens
+            rawPath
           }
         }
       }
@@ -195,6 +207,7 @@ exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
       component: path.resolve(`./src/templates/leaf-area-page-md.js`),
       context: {
         node_id: node.id,
+        rawPath: node.rawPath
       },
     });
   });

@@ -18,7 +18,7 @@ function Layout({ layoutClz = "default-layout", customClz = "", children }) {
 
       <main className={layoutClz}>{children}</main>
 
-      <footer className="bg-custom-green">
+      {/* <footer className="bg-custom-green">
         <nav className="flex justify-between max-w-4xl p-4 mx-auto text-sm md:p-8">
           <p className="text-white">
             A project by {` `}
@@ -43,7 +43,7 @@ function Layout({ layoutClz = "default-layout", customClz = "", children }) {
             </a>
           </p>
         </nav>
-      </footer>
+      </footer> */}
     </div>
   );
 }

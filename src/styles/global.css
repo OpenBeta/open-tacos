@@ -94,16 +94,10 @@ body, html {
 }
 
 /* bg-gradient-to-r from-blue-100 to-indigo-200 */
-
+/* flex flex-col */
 .main-container {
-  @apply flex flex-col w-full font-sans text-base pt-12 text-gray-900 bg-white;
+  @apply  w-full font-sans text-base text-gray-900 bg-white;
 }
-
-.default-layout {
-  @apply w-full max-w-4xl mx-auto px-4 my-20 md:px-8 lg:px-24
-}
-
-
 
 .layout-edit {
   @apply bg-white  max-w-4xl  2xl:max-w-screen-2xl mx-auto px-4 py-8 mt-8 mb-16 rounded-lg
@@ -115,17 +109,25 @@ body, html {
 }
 
 @responsive {
+  .default-layout {
+    @apply max-w-screen-lg xl:max-w-full	xl:w-screen flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0
+  }
+
+  .layout-wide {
+    @apply w-full max-w-4xl mx-auto px-4 my-20 md:px-8 lg:px-24
+  }
+
   .layout-edit-wide {
     /* On wide screen put 2 forms side by side */
     @apply max-w-full flex flex-row justify-center gap-x-4 gap-y-0;
   }
-  .layout-wide {
-    @apply flex-grow max-w-screen-2xl w-full mx-auto px-4 my-20 lg:px-8 xl:px-24
-  }
+
 }
 .md-h1 {
   @apply text-3xl font-medium tracking-tight mt-14 mb-4 !important;
 }
+
+
 
 .md-h2 {
   @apply text-2xl font-bold mt-4 mb-1 !important;
@@ -232,6 +234,10 @@ input:checked + label {
   @apply md-h1
 }
 
+.markdown h1:first-child {
+  @apply mt-0 !important;
+}
+
 .markdown h2 {
   @apply md-h2
 }
@@ -276,3 +282,11 @@ input:checked + label {
 .markdown table td {
   @apply p-2;
 }
+
+/* #my-area-map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+} */
