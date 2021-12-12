@@ -6,19 +6,23 @@ export const DEFAULT_INITIAL_VIEWSTATE = {
   width: 300,
   height: 400,
   bearing: 0,
-  zoom: 8,
+  zoom: 7,
   pitch: 15,
   transitionDuration: 1000,
   latitude: 44.968,
   longitude: -103.77154,
 };
 
-const BaseMap = ({ layers, disableController, initialViewState }) => {
-  const vs = { DEFAULT_INITIAL_VIEWSTATE, ...initialViewState };
+const BaseMap = ({
+  layers,
+  disableController,
+  initialViewState,
+  viewstate,
+  onViewStateChange,
+}) => {
   return (
     <DeckGL
-      initialViewState={vs}
-      //viewState={viewState}
+      viewState={viewstate}
       layers={layers}
       controller={
         !disableController
@@ -30,6 +34,7 @@ const BaseMap = ({ layers, disableController, initialViewState }) => {
             }
           : null
       }
+      onViewStateChange={onViewStateChange}
     >
       <StaticMap
         reuseMaps

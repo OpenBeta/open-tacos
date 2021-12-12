@@ -37,7 +37,7 @@ const History = (props) => {
         title="History"
       />
       <div>
-        <div className="md-h1">Recent edits</div>
+        <div className="mt-8 h1">Recent edits</div>
         <ChangeHistory commits={commits} loading={loading}/>
       </div>
     </Layout>

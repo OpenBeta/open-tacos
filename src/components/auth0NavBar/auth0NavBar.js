@@ -6,7 +6,7 @@ import LoginMessage from "./LoginMessage";
 
 const Auth0NavBar = () => {
   return (
-    <div className="flex justify-between items-center">
+    <div className="mt-8 flex justify-between items-center">
       <Auth0Profile/>
       <LoginMessage/>
       <div>

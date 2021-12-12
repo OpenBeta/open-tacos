@@ -35,11 +35,11 @@ export default function LeafAreaPage({ data: { area, geojson } }) {
   const showEditCTA = parent.wordCount.words < 20;
 
   return (
-    <Layout>
+    <Layout layoutClz="layout-wide">
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[area_name]} title={area_name} />
       <div className="overflow-y">
-        <div className="mt-16 xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch">
+        <div className="xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch">
           <div className="xl:flex-none xl:max-w-screen-md">
             <BreadCrumbs pathTokens={pathTokens} />
             <h1 className={template_h1_css}>{area_name}</h1>
@@ -105,8 +105,7 @@ export default function LeafAreaPage({ data: { area, geojson } }) {
                 })}
             </div>
           </div>
-          {/* flex items-stretch  */}
-          <div className="w-full relative bg-blue-50">
+          <div className="w-full relative mt-8 xl:mt-0">
             {geojson && <Heatmap geojson={boundariesGeojson} />}
           </div>
         </div>

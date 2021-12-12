@@ -109,12 +109,13 @@ body, html {
 }
 
 @responsive {
-  .default-layout {
-    @apply max-w-screen-lg xl:max-w-full	xl:w-screen flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0
+  /*  For larger screen, split into 2 columns */
+  .layout-wide {
+    @apply mt-16 max-w-screen-lg xl:max-w-full	xl:w-screen flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0
   }
 
-  .layout-wide {
-    @apply w-full max-w-4xl mx-auto px-4 my-20 md:px-8 lg:px-24
+  .layout-default {
+    @apply mt-16 w-full max-w-screen-md flex flex-col px-4 mx-auto
   }
 
   .layout-edit-wide {
@@ -123,14 +124,18 @@ body, html {
   }
 
 }
+.h1 {
+  @apply text-gray-700 text-2xl font-medium tracking-tight mb-4 !important;
+}
+
 .md-h1 {
-  @apply text-3xl font-medium tracking-tight mt-14 mb-4 !important;
+  @apply h1 mt-14;
 }
 
 
 
 .md-h2 {
-  @apply text-2xl font-bold mt-4 mb-1 !important;
+  @apply text-xl font-bold mt-4 mb-1 !important;
 }
 
 .md-code {
