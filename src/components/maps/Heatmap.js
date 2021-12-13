@@ -18,18 +18,27 @@ const Color_Range = [
 const NAV_BAR_OFFSET = 66;
 
 export default function Heatmap({ geojson }) {
-  const [[width, height], setWH] = useState([400, window.innerHeight - NAV_BAR_OFFSET]);
+  const [[width, height], setWH] = useState([400, 400]);
   const [viewstate, setViewState] = useState(DEFAULT_INITIAL_VIEWSTATE);
 
   useEffect(() => {
+    if (!geojson) return;
+
+    updateDimensions();
+
     window.addEventListener("resize", updateDimensions);
     const bbox = bboxFromGeoJson(geojson);
     const vs = bbox2Viewport(bbox, width, height);
-    setViewState(vs);
+
+    if (geojson.geometry && geojson.geometry.type.toUpperCase() === "POINT") {
+      setViewState({ ...vs, zoom: 10 });
+    } else {
+      setViewState(vs);
+    }
     return () => {
       window.removeEventListener("resize", updateDimensions);
     };
-  }, []);
+  }, [geojson]);
 
   const onViewStateChange = useCallback(({ viewState }) => {
     setViewState(viewState);
@@ -71,11 +80,10 @@ export default function Heatmap({ geojson }) {
       colorRange: Color_Range,
     }),
   ];
-
   return (
     <div
       id="my-area-map"
-      className="w-full xl:sticky xl:top-16 z-9 bg-blue-50"
+      className="w-full xl:sticky xl:top-16 z-9 xl:m-0 xl:p-0"
       style={{ height }}
     >
       <BaseMap
@@ -92,7 +100,6 @@ const getMapDivDimensions = (id) => {
   const div = document.getElementById(id);
   let width = 200;
   if (div) {
-    console.log(div);
     width = div.clientWidth;
   }
   const height = window.innerHeight - NAV_BAR_OFFSET;

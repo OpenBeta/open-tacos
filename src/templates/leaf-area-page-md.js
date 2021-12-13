@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { graphql, navigate, Link } from "gatsby";
+import {point} from "@turf/helpers"
+
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Droppin from "../assets/icons/droppin.svg";
@@ -17,12 +19,13 @@ import AreaDetail from "../components/graphql/AreaDetail";
 /**
  * Templage for generating individual Area page
  */
-export default function LeafAreaPage({ data: { area, geojson } }) {
-  const boundariesGeojson = geojson
-    ? JSON.parse(geojson.internal.content)
-    : undefined;
+export default function LeafAreaPage({ data: { area, gisBoundary } }) {
   const { area_name, metadata } = area.frontmatter;
   const { pathTokens, rawPath, parent, children } = area;
+
+  const boundariesGeojson = gisBoundary
+  ? JSON.parse(gisBoundary.rawGeojson)
+  : point([metadata.lng, metadata.lat]);
 
   //return (<div>{JSON.stringify(area)}</div>)
   // Area.children[] can contain either sub-Areas or Climbs, but not both.
@@ -40,7 +43,7 @@ export default function LeafAreaPage({ data: { area, geojson } }) {
       <SEO keywords={[area_name]} title={area_name} />
       <div className="overflow-y">
         <div className="xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch">
-          <div className="xl:flex-none xl:max-w-screen-md">
+          <div className="xl:flex-none xl:max-w-screen-md xl:w-full">
             <BreadCrumbs pathTokens={pathTokens} />
             <h1 className={template_h1_css}>{area_name}</h1>
             <span className="flex items-center flex-shrink text-gray-500 text-xs gap-x-1">
@@ -105,8 +108,8 @@ export default function LeafAreaPage({ data: { area, geojson } }) {
                 })}
             </div>
           </div>
-          <div className="w-full relative mt-8 xl:mt-0">
-            {geojson && <Heatmap geojson={boundariesGeojson} />}
+          <div className="w-full relative mt-8 flex bg-blue-50 xl:mt-0">
+            {boundariesGeojson && <Heatmap geojson={boundariesGeojson} />}
           </div>
         </div>
       </div>
@@ -141,19 +144,6 @@ const Cta = ({ isEmpty, rawPath }) => (
   </div>
 );
 
-const getMapDivDimensions = (id) => {
-  const div = document.getElementById(id);
-  let width = 500;
-  //let height = 250;
-  if (div) {
-    width = div.clientWidth;
-    //height = div.clientHeight;
-  }
-  const height = window.innerHeight;
-  //console.log("#mapDivDimensions", width, height);
-  return { width, height };
-};
-
 export const query = graphql`
   query ($node_id: String!, $rawPath: String!) {
     area: area(id: { eq: $node_id }) {
@@ -171,14 +161,10 @@ export const query = graphql`
         ...ClimbDetailFragment
       }
     }
-    geojson: file(
-      relativeDirectory: { eq: $rawPath }
-      base: { eq: "boundary.geojson" }
+    gisBoundary: geojsonArea(
+      rawPath: { eq: $rawPath }
     ) {
-      relativeDirectory
-      internal {
-        content
-      }
+      rawGeojson
     }
   }
 `;

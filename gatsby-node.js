@@ -45,12 +45,28 @@ exports.onCreateNode = async ({
   const { createNode, createNodeField } = actions;
 
   if (node.base === "boundary.geojson") {
-    console.log("# node ", node)
-    createNodeField({
-      node,
-      name: `geojson`,
-      value: await loadNodeContent(node),
+    const rawPath = convertPathToPOSIX(node.relativeDirectory);
+    const pathTokens = rawPath.split("/");
+    const areaNodeId = createNodeId(`${pathTokens.join("-")}-boundary`);
+    const content = await loadNodeContent(node)
+    const fieldData = {
+      rawPath,
+      rawGeojson: content
+    };
+
+    createNode({
+      ...fieldData,
+      // Required fields
+      id: areaNodeId,
+      parent: node.id,
+      children: [],
+      internal: {
+        type: `GeojsonArea`,
+        contentDigest: createContentDigest(content),
+        description: `GIS boundaries`,
+      },
     });
+   
     return;
   }
   if (node.internal.type !== "MarkdownRemark") return;
@@ -279,10 +295,11 @@ exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
 };
 
 /**
+ * Add Webpack overriding here
  * Webpack no longer includes path-browserify.  Adding this
  * function to make 'path' library available to client-side code.
  */
-exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = ({ actions, loaders }) => {
   actions.setWebpackConfig({
     resolve: {
       fallback: {
@@ -290,6 +307,11 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         assert: false,
         stream: false,
       },
+      alias: {
+        // Replace mapgox-gl with maplibre-gl
+        // More ifo https://visgl.github.io/react-map-gl/docs/get-started/get-started#using-with-a-mapbox-gl-fork
+        'mapbox-gl': 'maplibre-gl'
+      }
     },
   });
 };

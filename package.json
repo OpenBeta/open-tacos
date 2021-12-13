@@ -9,7 +9,6 @@
     "@deck.gl/aggregation-layers": "^8.6.5",
     "@deck.gl/core": "^8.6.5",
     "@deck.gl/layers": "^8.6.5",
-    "@deck.gl/mapbox": "^8.6.5",
     "@deck.gl/react": "^8.6.5",
     "@headlessui/react": "^1.4.1",
     "@math.gl/web-mercator": "^3.5.6",
@@ -39,7 +38,7 @@
     "dayjs": "^1.10.6",
     "formik": "^2.2.9",
     "front-matter": "^4.0.2",
-    "gatsby": "^4.0.1",
+    "gatsby": "^4.3.0",
     "gatsby-plugin-image": "^2.0.0",
     "gatsby-plugin-manifest": "^4.0.0",
     "gatsby-plugin-offline": "5.0.0",
@@ -53,6 +52,7 @@
     "gatsby-transformer-sharp": "^4.0.0",
     "js-yaml": "^4.1.0",
     "lmdb-store": "^1.6.8",
+    "maplibre-gl": "^1.15.2",
     "path-browserify": "^1.0.1",
     "query-string": "^7.0.1",
     "react": "^17.0.2",
@@ -123,8 +123,19 @@
       "[/\\\\]node_modules[/\\\\](?!unified).+\\.(js|jsx)$"
     ]
   },
-  "browserslist": [
-    ">0.25%",
-    "not dead"
-  ]
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "not chrome < 51",
+      "not safari < 10",
+      "not ie < 11"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }

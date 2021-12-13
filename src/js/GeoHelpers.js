@@ -16,15 +16,6 @@ export const bboxFromGeoJson = (geojson) => {
   return [_bbox[0], _bbox[1], _bbox[2], _bbox[3]];
 };
 
-// export const fitbound = (viewport, bbox) => {
-//   const vp = new ViewportUtils.WebMercatorViewport(viewport);
-//   console.log("#vp", bbox, vp);
-//   return vp.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], {
-//     padding: 40
-//   });
-
-// }
-
 export const bbox2Viewport = (bbox, width, height) => {
   return fitBounds({
     width: width,

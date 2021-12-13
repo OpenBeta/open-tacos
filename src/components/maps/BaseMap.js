@@ -6,7 +6,7 @@ export const DEFAULT_INITIAL_VIEWSTATE = {
   width: 300,
   height: 400,
   bearing: 0,
-  zoom: 7,
+  zoom: 5,
   pitch: 15,
   transitionDuration: 1000,
   latitude: 44.968,
