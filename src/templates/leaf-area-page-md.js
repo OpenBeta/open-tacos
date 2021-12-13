@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { graphql, navigate, Link } from "gatsby";
-import {point} from "@turf/helpers"
+import { point } from "@turf/helpers";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
@@ -23,9 +23,9 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
   const { area_name, metadata } = area.frontmatter;
   const { pathTokens, rawPath, parent, children } = area;
 
-  const boundariesGeojson = gisBoundary
-  ? JSON.parse(gisBoundary.rawGeojson)
-  : point([metadata.lng, metadata.lat]);
+  const boundaryOrPoint = gisBoundary
+    ? JSON.parse(gisBoundary.rawGeojson)
+    : point([metadata.lng, metadata.lat]);
 
   //return (<div>{JSON.stringify(area)}</div>)
   // Area.children[] can contain either sub-Areas or Climbs, but not both.
@@ -73,7 +73,7 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
               <Cta isEmpty={parent.wordCount.words === 1} rawPath={rawPath} />
             )}
             {hasChildAreas && (
-              <div className="grid grid-cols-3 gap-x-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-3">
                 {children.map((node) => {
                   const { frontmatter, slug } = node;
                   const { area_name, metadata } = frontmatter;
@@ -87,7 +87,7 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
                 })}
               </div>
             )}
-            <div className="grid grid-cols-3 gap-x-3">
+            <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-3">
               {!hasChildAreas &&
                 children.map((node) => {
                   const { frontmatter, slug } = node;
@@ -109,7 +109,7 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
             </div>
           </div>
           <div className="w-full relative mt-8 flex bg-blue-50 xl:mt-0">
-            {boundariesGeojson && <Heatmap geojson={boundariesGeojson} />}
+            <Heatmap geojson={boundaryOrPoint} />
           </div>
         </div>
       </div>
@@ -161,9 +161,7 @@ export const query = graphql`
         ...ClimbDetailFragment
       }
     }
-    gisBoundary: geojsonArea(
-      rawPath: { eq: $rawPath }
-    ) {
+    gisBoundary: geojsonArea(rawPath: { eq: $rawPath }) {
       rawGeojson
     }
   }

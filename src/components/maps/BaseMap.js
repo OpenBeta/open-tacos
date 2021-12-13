@@ -16,7 +16,6 @@ export const DEFAULT_INITIAL_VIEWSTATE = {
 const BaseMap = ({
   layers,
   disableController,
-  initialViewState,
   viewstate,
   onViewStateChange,
 }) => {
@@ -37,9 +36,9 @@ const BaseMap = ({
       onViewStateChange={onViewStateChange}
     >
       <StaticMap
-        reuseMaps
+        reuseMaps={true}
+        preventStyleDiffing={false}
         mapStyle="mapbox://styles/mappandas/ckx1h60kg18rj14nqyup4lzxi"
-        preventStyleDiffing={true}
         mapboxApiAccessToken="pk.eyJ1IjoibWFwcGFuZGFzIiwiYSI6ImNqcDdzbW12aTBvOHAzcW82MGg0ZTRrd3MifQ.MYiNJHklgMkRzapAKuTQNg"
       />
     </DeckGL>
