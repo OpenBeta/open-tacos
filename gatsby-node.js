@@ -34,13 +34,41 @@ const sanitize_name = (s) =>
  * structure representing each .md file.
  * The main purpose of this function is to create an 'Area' node for each index.md and 'Climb' nodes for other .md files.
  */
-exports.onCreateNode = ({
+exports.onCreateNode = async ({
   node,
   getNode,
   actions,
   createNodeId,
   createContentDigest,
+  loadNodeContent,
 }) => {
+  const { createNode, createNodeField } = actions;
+
+  if (node.base === "boundary.geojson") {
+    const rawPath = convertPathToPOSIX(node.relativeDirectory);
+    const pathTokens = rawPath.split("/");
+    const areaNodeId = createNodeId(`${pathTokens.join("-")}-boundary`);
+    const content = await loadNodeContent(node)
+    const fieldData = {
+      rawPath,
+      rawGeojson: content
+    };
+
+    createNode({
+      ...fieldData,
+      // Required fields
+      id: areaNodeId,
+      parent: node.id,
+      children: [],
+      internal: {
+        type: `GeojsonArea`,
+        contentDigest: createContentDigest(content),
+        description: `GIS boundaries`,
+      },
+    });
+   
+    return;
+  }
   if (node.internal.type !== "MarkdownRemark") return;
 
   // Mdx plugin creates a child node for each .md/mdx file
@@ -50,7 +78,6 @@ exports.onCreateNode = ({
   // Mdx node for markdown content.
 
   const fileNode = getNode(node["parent"]);
-  const { createNode, createNodeField } = actions;
 
   if (fileNode["sourceInstanceName"] === "regular-md") {
     const relativeFilePath = createFilePath({
@@ -161,6 +188,7 @@ exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
             id
             slug
             pathTokens
+            rawPath
           }
         }
       }
@@ -195,6 +223,7 @@ exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
       component: path.resolve(`./src/templates/leaf-area-page-md.js`),
       context: {
         node_id: node.id,
+        rawPath: node.rawPath
       },
     });
   });
@@ -266,10 +295,11 @@ exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
 };
 
 /**
+ * Add Webpack overriding here
  * Webpack no longer includes path-browserify.  Adding this
  * function to make 'path' library available to client-side code.
  */
-exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = ({ actions, loaders }) => {
   actions.setWebpackConfig({
     resolve: {
       fallback: {
@@ -277,6 +307,11 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         assert: false,
         stream: false,
       },
+      alias: {
+        // Replace mapgox-gl with maplibre-gl
+        // More ifo https://visgl.github.io/react-map-gl/docs/get-started/get-started#using-with-a-mapbox-gl-fork
+        'mapbox-gl': 'maplibre-gl'
+      }
     },
   });
 };

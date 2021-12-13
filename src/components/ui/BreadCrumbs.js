@@ -21,7 +21,7 @@ function BreadCrumbs({ pathTokens, isClimbPage }) {
     ? pathTokens.slice(0, pathTokens.length - 1)
     : pathTokens;
   return (
-    <div className="pb-8">
+    <div className="mt-4">
       <Link className="hover:underline hover:text-gray-900 text-gray-400 " to="/">
         <b>Home</b>
       </Link>

@@ -21,23 +21,25 @@ export default function ClimbPage({ data: { climb } }) {
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[route_name]} title={route_name} />
-      <BreadCrumbs pathTokens={pathTokens} isClimbPage={true} />
-      <h1 className={template_h1_css}>{route_name}</h1>
-      <RouteGradeChip yds={yds} safety={safety}></RouteGradeChip>
-      <RouteTypeChips type={type}></RouteTypeChips>
-      <div className="pt-4 text-sm text-gray-600 italic">FA: {fa}</div>
-      <div className="float-right">
-        <button
-          className="btn btn-secondary"
-          onClick={() => navigate(`/edit?file=${rawPath}/${filename}.md`)}
-        >
-          Improve this page
-        </button>
+      <div>
+        <BreadCrumbs pathTokens={pathTokens} isClimbPage={true} />
+        <h1 className={template_h1_css}>{route_name}</h1>
+        <RouteGradeChip yds={yds} safety={safety}></RouteGradeChip>
+        <RouteTypeChips type={type}></RouteTypeChips>
+        <div className="pt-4 text-sm text-gray-600 italic">FA: {fa}</div>
+        <div className="float-right">
+          <button
+            className="btn btn-secondary"
+            onClick={() => navigate(`/edit?file=${rawPath}/${filename}.md`)}
+          >
+            Improve this page
+          </button>
+        </div>
+        <div
+          className="markdown"
+          dangerouslySetInnerHTML={{ __html: parent.html }}
+        ></div>
       </div>
-      <div
-        className="markdown"
-        dangerouslySetInnerHTML={{ __html: parent.html }}
-      ></div>
       <LinkToGithub link={githubLink} docType="climbs"></LinkToGithub>
     </Layout>
   );

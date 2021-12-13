@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { graphql, navigate, Link } from "gatsby";
+import { point } from "@turf/helpers";
+
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Droppin from "../assets/icons/droppin.svg";
@@ -10,15 +12,20 @@ import AreaCard from "../components/ui/AreaCard";
 import LinkToGithub from "../components/ui/LinkToGithub";
 import { template_h1_css } from "../js/styles";
 import AreaStatistics from "../components/AreaStatistics";
+import Heatmap from "../components/maps/Heatmap";
 import ClimbDetail from "../components/graphql/ClimbDetail";
 import AreaDetail from "../components/graphql/AreaDetail";
 
 /**
  * Templage for generating individual Area page
  */
-export default function LeafAreaPage({ data: { area } }) {
+export default function LeafAreaPage({ data: { area, gisBoundary } }) {
   const { area_name, metadata } = area.frontmatter;
   const { pathTokens, rawPath, parent, children } = area;
+
+  const boundaryOrPoint = gisBoundary
+    ? JSON.parse(gisBoundary.rawGeojson)
+    : point([metadata.lng, metadata.lat]);
 
   //return (<div>{JSON.stringify(area)}</div>)
   // Area.children[] can contain either sub-Areas or Climbs, but not both.
@@ -31,69 +38,80 @@ export default function LeafAreaPage({ data: { area } }) {
   const showEditCTA = parent.wordCount.words < 20;
 
   return (
-    <Layout>
+    <Layout layoutClz="layout-wide">
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[area_name]} title={area_name} />
-      <BreadCrumbs pathTokens={pathTokens} />
-      <h1 className={template_h1_css}>{area_name}</h1>
-      <span className="flex items-center flex-shrink text-gray-500 text-xs gap-x-1">
-        <Droppin className="stroke-current" />
-        <a
-          className="hover:underline hover:text-gray-800"
-          href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {metadata.lat},{metadata.lng}
-        </a>
-      </span>
-      {!hasChildAreas && <AreaStatistics climbs={children}></AreaStatistics>}
-      {!showEditCTA && (
-        <div className="flex justify-end">
-          <EditButton label="Improve this page" rawPath={rawPath} />
-        </div>
-      )}
-      <div
-        className="markdown"
-        dangerouslySetInnerHTML={{ __html: parent.html }}
-      ></div>
-      {showEditCTA && (
-        <Cta isEmpty={parent.wordCount.words === 1} rawPath={rawPath} />
-      )}
-      {hasChildAreas && (
-        <div className="grid grid-cols-3 gap-x-3">
-          {children.map((node) => {
-            const { frontmatter, slug } = node;
-            const { area_name, metadata } = frontmatter;
-            return (
-              <div className="pt-6 max-h-96" key={metadata.area_id}>
-                <Link to={slug}>
-                  <AreaCard area_name={area_name}></AreaCard>
-                </Link>
+      <div className="overflow-y">
+        <div className="xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch">
+          <div className="xl:flex-none xl:max-w-screen-md xl:w-full">
+            <BreadCrumbs pathTokens={pathTokens} />
+            <h1 className={template_h1_css}>{area_name}</h1>
+            <span className="flex items-center flex-shrink text-gray-500 text-xs gap-x-1">
+              <Droppin className="stroke-current" />
+              <a
+                className="hover:underline hover:text-gray-800"
+                href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {metadata.lat},{metadata.lng}
+              </a>
+            </span>
+            {!hasChildAreas && (
+              <AreaStatistics climbs={children}></AreaStatistics>
+            )}
+            {!showEditCTA && (
+              <div className="flex justify-end">
+                <EditButton label="Improve this page" rawPath={rawPath} />
               </div>
-            );
-          })}
-        </div>
-      )}
-      <div className="grid grid-cols-3 gap-x-3">
-        {!hasChildAreas &&
-          children.map((node) => {
-            const { frontmatter, slug } = node;
-            const { yds, route_name, metadata, type } = frontmatter;
-            return (
-              <div className="pt-6 max-h-96" key={metadata.climb_id}>
-                <Link to={slug}>
-                  <RouteCard
-                    route_name={route_name}
-                    climb_id={metadata.climb_id}
-                    YDS={yds}
-                    // safety="{}" TODO: Find out what routes have this value?
-                    type={type}
-                  ></RouteCard>
-                </Link>
+            )}
+            <div
+              className="mt-8 markdown"
+              dangerouslySetInnerHTML={{ __html: parent.html }}
+            ></div>
+            {showEditCTA && (
+              <Cta isEmpty={parent.wordCount.words === 1} rawPath={rawPath} />
+            )}
+            {hasChildAreas && (
+              <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-3">
+                {children.map((node) => {
+                  const { frontmatter, slug } = node;
+                  const { area_name, metadata } = frontmatter;
+                  return (
+                    <div className="pt-6 max-h-96" key={metadata.area_id}>
+                      <Link to={slug}>
+                        <AreaCard area_name={area_name}></AreaCard>
+                      </Link>
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-3">
+              {!hasChildAreas &&
+                children.map((node) => {
+                  const { frontmatter, slug } = node;
+                  const { yds, route_name, metadata, type } = frontmatter;
+                  return (
+                    <div className="pt-6 max-h-96" key={metadata.climb_id}>
+                      <Link to={slug}>
+                        <RouteCard
+                          route_name={route_name}
+                          climb_id={metadata.climb_id}
+                          YDS={yds}
+                          // safety="{}" TODO: Find out what routes have this value?
+                          type={type}
+                        ></RouteCard>
+                      </Link>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+          <div className="w-full relative mt-8 flex bg-blue-50 xl:mt-0">
+            <Heatmap geojson={boundaryOrPoint} />
+          </div>
+        </div>
       </div>
       <LinkToGithub link={githubLink} docType="areas"></LinkToGithub>
     </Layout>
@@ -127,7 +145,7 @@ const Cta = ({ isEmpty, rawPath }) => (
 );
 
 export const query = graphql`
-  query ($node_id: String!) {
+  query ($node_id: String!, $rawPath: String!) {
     area: area(id: { eq: $node_id }) {
       ...AreaDetailFragment
       parent {
@@ -142,6 +160,9 @@ export const query = graphql`
         ...AreaDetailFragment
         ...ClimbDetailFragment
       }
+    }
+    gisBoundary: geojsonArea(rawPath: { eq: $rawPath }) {
+      rawGeojson
     }
   }
 `;
