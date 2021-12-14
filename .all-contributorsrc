@@ -51,6 +51,16 @@
         "code",
         "content"
       ]
+    },
+    {
+      "login": "ygingras",
+      "name": "Yannick Gingras",
+      "avatar_url": "https://avatars.githubusercontent.com/u/169930?v=4",
+      "profile": "http://ygingras.net",
+      "contributions": [
+        "ideas",
+        "content"
+      ]
     }
   ],
   "contributorsPerLine": 7,
