@@ -56,6 +56,21 @@ gatsby develop -S
 
 The application is now available at `https://localhost:8000`
 
+## Troubleshooting
+
+Windows development + [opentacos-content](https://github.com/OpenBeta/opentacos-content)
+1. Filename too long
+
+> fatal: cannot create directory at 'content/USA/Washington/Central-East Cascades, Wenatchee,  Leavenworth/Leavenworth/Tumwater Canyon/Bouldering in Tumwater Canyon/Beach and Forest Area, The/Beach Parking Boulders, The/Grasshopper, The': Filename too long
+
+```
+# Solution
+git config --system core.longpaths true
+```
+
+Some versions of Git installed on Windows use a different file API that limits the filename path length. 
+
+
 ## How to contribute
 
 See [How to contribute guide](CONTRIBUTING.md) for more details.
