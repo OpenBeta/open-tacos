@@ -5,6 +5,7 @@ import { point } from "@turf/helpers";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Droppin from "../assets/icons/droppin.svg";
+import Pencil from "../assets/icons/pencil-sm.svg";
 import RouteCard from "../components/ui/RouteCard";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
 import { pathOrParentIdToGitHubLink } from "../js/utils";
@@ -35,7 +36,7 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
   const githubLink = pathOrParentIdToGitHubLink(rawPath, "index");
 
   // when to show large edit CTA
-  const showEditCTA = parent.wordCount.words < 20;
+  const showEditCTA = parent.wordCount.words < 40;
 
   return (
     <Layout layoutClz="layout-wide">
@@ -65,20 +66,22 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
                 <EditButton label="Improve this page" rawPath={rawPath} />
               </div>
             )}
-            <div
-              className="mt-8 markdown"
-              dangerouslySetInnerHTML={{ __html: parent.html }}
-            ></div>
             {showEditCTA && (
               <Cta isEmpty={parent.wordCount.words === 1} rawPath={rawPath} />
             )}
+            <div
+              className="markdown"
+              dangerouslySetInnerHTML={{ __html: parent.html }}
+            ></div>
+            <hr className="my-8" />{" "}
+            <div className="divide-x markdown h1">Subareas</div>
             {hasChildAreas && (
-              <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3">
                 {children.map((node) => {
                   const { frontmatter, slug } = node;
                   const { area_name, metadata } = frontmatter;
                   return (
-                    <div className="pt-6 max-h-96" key={metadata.area_id}>
+                    <div className="max-h-96" key={metadata.area_id}>
                       <Link to={slug}>
                         <AreaCard area_name={area_name}></AreaCard>
                       </Link>
@@ -118,17 +121,20 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
   );
 }
 
-const EditButton = ({ label, classes, rawPath }) => (
+const EditButton = ({ icon, label, classes, rawPath }) => (
   <button
-    className={`btn whitespace-nowrap ${classes || "btn-secondary"}`}
+    className={`btn whitespace-nowrap ${classes || "btn-secondary"} ${
+      icon && "px-4"
+    }`}
     onClick={() => navigate(`/edit?file=${rawPath}/index.md`)}
   >
+    <span className="mr-2">{icon}</span>
     {label}
   </button>
 );
 
 const Cta = ({ isEmpty, rawPath }) => (
-  <div className="rounded border-2 p-4 border-gray-700 flex flex-col flex-nowrap gap-y-4 md:gap-x-4 md:flex-row  items-center justify-center ">
+  <div className="my-8 rounded border-2 p-4 border-gray-600 flex flex-col flex-nowrap gap-y-4 md:gap-x-4 md:flex-row  items-center justify-center ">
     <div className="text-center">
       {isEmpty
         ? `This area description is empty. Be the first to contribute!`
@@ -136,7 +142,8 @@ const Cta = ({ isEmpty, rawPath }) => (
     </div>
     <div>
       <EditButton
-        label="Add Description"
+        icon={<Pencil className="inline w-4 h-4" />}
+        label="Edit"
         classes="btn-primary"
         rawPath={rawPath}
       />

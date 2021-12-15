@@ -21,7 +21,7 @@ then
   pushd opentacos-content/content
   export target="../../content"
   # Copy only the first and 2nd level index.md for each state 
-  find . -mindepth 2 -maxdepth 4  -name "index*"  -exec rsync -aR "{}" $target \;
+  find . -mindepth 2 -maxdepth 4 -type f -name "*.geojson" -o -name "index.md"  -exec rsync -aR "{}" $target \;
 
   # Copy only a few specific areas
   rsync -aR ./USA/Oregon/Mt.\ Hood $target
