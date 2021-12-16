@@ -1,0 +1,15 @@
+version: "3"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/myapp/src # Links the source files to the running container
+    ports:
+      - "8000:8000"
+      - "9929:9929"
+      - "9230:9230"
+    environment:
+      - NODE_ENV=development
+      - GATSBY_WEBPACK_PUBLICPATH=/
