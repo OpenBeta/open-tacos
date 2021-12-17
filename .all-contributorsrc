@@ -5,10 +5,20 @@
   "imageSize": 100,
   "commit": false,
   "contributors": [
+    {
+      "login": "gibboj",
+      "name": "Kendra Gibbons",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2992272?v=4",
+      "profile": "https://github.com/gibboj",
+      "contributions": [
+        "code"
+      ]
+    }
   ],
   "contributorsPerLine": 7,
-  "projectName": "gatsby-starter-tailwind",
-  "projectOwner": "taylorbryant",
+  "projectName": "open-tacos",
+  "projectOwner": "OpenBeta",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }
