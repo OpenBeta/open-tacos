@@ -5,10 +5,68 @@
   "imageSize": 100,
   "commit": false,
   "contributors": [
+    {
+      "login": "vnugent",
+      "name": "Viet Nguyen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3805254?v=4",
+      "profile": "http://openbeta.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "catman237",
+      "name": "Greg Hughes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58540291?v=4",
+      "profile": "https://github.com/catman237",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "on3iropolos",
+      "name": "on3iropolos",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7380236?v=4",
+      "profile": "https://github.com/on3iropolos",
+      "contributions": [
+        "ideas",
+        "financial"
+      ]
+    },
+    {
+      "login": "nadr0",
+      "name": "Kevin Nadro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1581329?v=4",
+      "profile": "http://kevinnadro.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rytheranderson",
+      "name": "rytheranderson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43506100?v=4",
+      "profile": "https://github.com/rytheranderson",
+      "contributions": [
+        "code",
+        "content"
+      ]
+    },
+    {
+      "login": "ygingras",
+      "name": "Yannick Gingras",
+      "avatar_url": "https://avatars.githubusercontent.com/u/169930?v=4",
+      "profile": "http://ygingras.net",
+      "contributions": [
+        "ideas",
+        "content"
+      ]
+    }
   ],
   "contributorsPerLine": 7,
-  "projectName": "gatsby-starter-tailwind",
-  "projectOwner": "taylorbryant",
+  "projectName": "open-tacos",
+  "projectOwner": "OpenBeta",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }
