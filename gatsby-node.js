@@ -48,10 +48,10 @@ exports.onCreateNode = async ({
     const rawPath = convertPathToPOSIX(node.relativeDirectory);
     const pathTokens = rawPath.split("/");
     const areaNodeId = createNodeId(`${pathTokens.join("-")}-boundary`);
-    const content = await loadNodeContent(node)
+    const content = await loadNodeContent(node);
     const fieldData = {
       rawPath,
-      rawGeojson: content
+      rawGeojson: content,
     };
 
     createNode({
@@ -66,7 +66,7 @@ exports.onCreateNode = async ({
         description: `GIS boundaries`,
       },
     });
-   
+
     return;
   }
   if (node.internal.type !== "MarkdownRemark") return;
@@ -223,7 +223,7 @@ exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
       component: path.resolve(`./src/templates/leaf-area-page-md.js`),
       context: {
         node_id: node.id,
-        rawPath: node.rawPath
+        rawPath: node.rawPath,
       },
     });
   });
@@ -310,8 +310,8 @@ exports.onCreateWebpackConfig = ({ actions, loaders }) => {
       alias: {
         // Replace mapgox-gl with maplibre-gl
         // More ifo https://visgl.github.io/react-map-gl/docs/get-started/get-started#using-with-a-mapbox-gl-fork
-        'mapbox-gl': 'maplibre-gl'
-      }
+        "mapbox-gl": "maplibre-gl",
+      },
     },
   });
 };
