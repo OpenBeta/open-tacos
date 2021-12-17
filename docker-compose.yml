@@ -5,7 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./src:/myapp/src # Links the source files to the running container
+      - ./src:/app/src # Links the source files to the running container
+      - ./node_modules:/app/node_modules
     ports:
       - "8000:8000"
       - "9929:9929"
