@@ -73,22 +73,24 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
               className="markdown"
               dangerouslySetInnerHTML={{ __html: parent.html }}
             ></div>
-            <hr className="my-8" />{" "}
-            <div className="divide-x markdown h1">Subareas</div>
+            <hr className="my-8" />
             {hasChildAreas && (
-              <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3">
-                {children.map((node) => {
-                  const { frontmatter, slug } = node;
-                  const { area_name, metadata } = frontmatter;
-                  return (
-                    <div className="max-h-96" key={metadata.area_id}>
-                      <Link to={slug}>
-                        <AreaCard area_name={area_name}></AreaCard>
-                      </Link>
-                    </div>
-                  );
-                })}
-              </div>
+              <>
+                <div className="divide-x markdown h1">Subareas</div>
+                <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3">
+                  {children.map((node) => {
+                    const { frontmatter, slug } = node;
+                    const { area_name, metadata } = frontmatter;
+                    return (
+                      <div className="max-h-96" key={metadata.area_id}>
+                        <Link to={slug}>
+                          <AreaCard area_name={area_name}></AreaCard>
+                        </Link>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
             )}
             <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-3">
               {!hasChildAreas &&
