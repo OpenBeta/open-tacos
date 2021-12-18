@@ -61,6 +61,15 @@
         "ideas",
         "content"
       ]
+    },
+    {
+      "login": "gibboj",
+      "name": "Kendra Gibbons",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2992272?v=4",
+      "profile": "https://github.com/gibboj",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
