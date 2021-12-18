@@ -10,7 +10,6 @@ function DashboardIndex() {
   return (
     <Layout
       customClz="flex flex-col justify-between h-screen"
-      layoutClz="default-layout flex-grow"
     >
       <SEO keywords={[]} title="Dashboard" />
       <Auth0NavBar />

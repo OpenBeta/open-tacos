@@ -1,5 +1,6 @@
 const path = require("path");
 const slugify = require("slugify");
+const { createFilePath } = require(`gatsby-source-filesystem`);
 
 /**
  * Converts the relativePath to a POSIX path.
@@ -12,196 +13,231 @@ const convertPathToPOSIX = (relativePath) => {
 };
 
 /**
- * Remove project's content base dir (__dirname +"/content") from full path and split the rest with String.split("/").
- * The output is used for generating page slug and breadcrumbs.
- *
- * Example:
- * ```
- * pathTokenizer("/Users/bob/projects/foo/content/usa/washington/seattle/index.md")
- * => ["usa", "washington", "seattle"].
- *
- * Note that the file name 'index.md' is not included.
- * ```
- * @param {String} absolutePath
- */
-const pathTokenizer = (absolutePath) => {
-  return path
-    .dirname(absolutePath.replace(__dirname + "/content/", ""))
-    .split("/");
-};
-
-/**
  * Slugify each element of `pathTokens` and join them together.
  * ```
- * slugify_path(["USA", "This has space"]) => 'usa/this-has-space'
+ * slugify_path(["USA", "Oregon", "This has space"]) => 'usa/oregon/this-has-space'
  * ```
  * @param {string[]} pathTokens
  */
-const slugify_path = (pathTokens) => {
-  return pathTokens
-    .map((s) => slugify(s, { lower: true, strict: true }))
-    .join("/");
-};
+const slugify_path = (pathTokens) =>
+  pathTokens.map((s) => slugify(s, { lower: true, strict: true })).join("/");
 
-exports.onCreateNode = ({ node, getNode, actions }) => {
-  if (node.internal.type === "Mdx") {
-    const { createNodeField } = actions;
-    const parent = getNode(node["parent"]);
-    const nodeType = parent["sourceInstanceName"];
-    const markdownFileName = path.posix.parse(parent.relativePath).name;
-    if (nodeType === "climbing-routes") {
-      // Computed on the fly based off relative path of the current file
-      // climbing routes's parent id is the current directory.
-      const parentId = convertPathToPOSIX(
-        path.join(path.dirname(parent.relativePath))
-      );
-      const pathTokens = pathTokenizer(node.fileAbsolutePath);
-      pathTokens.push(markdownFileName);
+/**
+ * Remove leading (6), (aa) or '04-' from an area or climb name.
+ * @param {String} s
+ */
+const sanitize_name = (s) =>
+  s.replace(/^(\(.{1,3}\) *)|((\d?[1-9]|[1-9]0)-)/, "");
 
-      createNodeField({
-        node,
-        name: `slug`,
-        value: `/${slugify_path(pathTokens)}`,
-      });
-      createNodeField({
-        node,
-        name: `filename`,
-        value: markdownFileName,
-      });
-      createNodeField({
-        node,
-        name: `collection`,
-        value: nodeType,
-      });
-      createNodeField({
-        node,
-        name: `parentId`,
-        value: parentId,
-      });
-      createNodeField({
-        node,
-        name: `pathTokens`,
-        value: pathTokens,
-      });
-    } else if (nodeType === "area-indices") {
-      // Computed on the fly based off relative path of the current file
-      // If you looking at an index.md for an area the parent would be the
-      // index.md of 1 directory level up.
-      // i.g. Take current path, go up one directory.
-      const parentId = convertPathToPOSIX(
-        path.join(path.dirname(parent.relativePath), "..")
-      );
+/**
+ * This is Gatsby's special callback that allows us to extend the existing data
+ * structure representing each .md file.
+ * The main purpose of this function is to create an 'Area' node for each index.md and 'Climb' nodes for other .md files.
+ */
+exports.onCreateNode = async ({
+  node,
+  getNode,
+  actions,
+  createNodeId,
+  createContentDigest,
+  loadNodeContent,
+}) => {
+  const { createNode, createNodeField } = actions;
 
-      const pathTokens = pathTokenizer(node.fileAbsolutePath);
+  if (node.base === "boundary.geojson") {
+    const rawPath = convertPathToPOSIX(node.relativeDirectory);
+    const pathTokens = rawPath.split("/");
+    const areaNodeId = createNodeId(`${pathTokens.join("-")}-boundary`);
+    const content = await loadNodeContent(node);
+    const fieldData = {
+      rawPath,
+      rawGeojson: content,
+    };
 
-      const pathId = convertPathToPOSIX(
-        path.join(path.dirname(parent.relativePath))
-      );
-      createNodeField({
-        node,
-        name: `slug`,
-        value: `/${slugify_path(pathTokens)}`,
-      });
-      createNodeField({
-        node,
-        name: `filename`,
-        value: markdownFileName,
-      });
-      createNodeField({
-        node,
-        name: `collection`,
-        value: nodeType,
-      });
-      createNodeField({
-        node,
-        name: `parentId`,
-        value: parentId,
-      });
-      createNodeField({
-        node,
-        name: `pathId`,
-        value: pathId,
-      });
-      createNodeField({
-        node,
-        name: `pathTokens`,
-        value: pathTokens,
-      });
-    }
+    createNode({
+      ...fieldData,
+      // Required fields
+      id: areaNodeId,
+      parent: node.id,
+      children: [],
+      internal: {
+        type: `GeojsonArea`,
+        contentDigest: createContentDigest(content),
+        description: `GIS boundaries`,
+      },
+    });
+
+    return;
+  }
+  if (node.internal.type !== "MarkdownRemark") return;
+
+  // Mdx plugin creates a child node for each .md/mdx file
+  // with the parent node being the file node
+  // ie: [File node] -> [Mdx node]
+  // Use File node to get information about the underlying file,
+  // Mdx node for markdown content.
+
+  const fileNode = getNode(node["parent"]);
+
+  if (fileNode["sourceInstanceName"] === "regular-md") {
+    const relativeFilePath = createFilePath({
+      node,
+      getNode,
+    });
+    createNodeField({
+      node,
+      name: `slug`,
+      value: `/${slugify(relativeFilePath, { lower: true, strict: true })}`,
+    });
+    return;
+  }
+  if (!fileNode["sourceInstanceName"].startsWith("areas-routes")) return;
+
+  const rawPath = convertPathToPOSIX(fileNode.relativeDirectory);
+  const markdownFileName = fileNode.name; // filename without extension
+  // index.md: special file describing the area
+  // Create an Area node [File node] -> [Mdx node] -> [Area node]
+  if (markdownFileName === "index") {
+    const pathTokens = rawPath.split("/");
+    const areaNodeId = createNodeId(pathTokens.join("-"));
+    const slug = `/${slugify_path(pathTokens)}`;
+
+    const fieldData = {
+      slug,
+      frontmatter: {
+        ...node.frontmatter,
+        area_name: sanitize_name(node.frontmatter.area_name),
+      },
+      rawPath,
+      filename: markdownFileName,
+      pathTokens,
+    };
+
+    // Calculate parent area by going up 1 level, ie. dropping the last elment.
+    // [] parent means this has no parent. It's a Country node.
+    // const _parentAreaPath = pathTokens.slice(0, pathTokens.length - 1);
+
+    createNode({
+      ...fieldData,
+      // Required fields
+      id: areaNodeId,
+      parent: node.id,
+      // parent_area___NODE:
+      //   _parentAreaPath.length === 0
+      //     ? null // no parent
+      //     : createNodeId(_parentAreaPath.join("-")),
+      children: [],
+      internal: {
+        type: `Area`,
+        contentDigest: createContentDigest(node.internal.content),
+        description: `OpenBeta area for climb`,
+      },
+    });
+  } else {
+    // Sample data:
+    // - rawPath: /USA/Oregon/Portland/Broughton Bluff/Hanging Gardens
+    // - markdownFileName: giants-staircase (without .md)
+    // Derived data:
+    //  - pathTokens: ["USA", "Oregon", "Portland", "Broughton Bluff", "Hanging Gardens"]
+    //  - slug: /usa-oregon-portland-broughton-bluff-hanging-gardens-giants-staircase
+    //  -  parentAreaId = <some uuid generated from rawPath>
+    //      (we use the parent Id as a way to link this Climb node with Area node)
+
+    const rawPath = convertPathToPOSIX(fileNode.relativeDirectory);
+    const pathTokens = rawPath.split("/");
+    // const parentAreaId = createNodeId(pathTokens.join("-"));
+    // include the climb.md file name (without .md)
+    pathTokens.push(markdownFileName);
+
+    const slug = `/${slugify_path(pathTokens)}`;
+
+    const fieldData = {
+      slug,
+      frontmatter: {
+        ...node.frontmatter,
+        yds: `${node.frontmatter.yds}`,
+        route_name: sanitize_name(node.frontmatter.route_name),
+      },
+      rawPath,
+      filename: markdownFileName,
+      pathTokens,
+      // area___NODE: parentAreaId,
+    };
+
+    createNode({
+      ...fieldData,
+      // Required fields
+      id: createNodeId(pathTokens.join("-")),
+      parent: node.id,
+      children: [],
+      internal: {
+        type: `Climb`,
+        contentDigest: createContentDigest(node.internal.content),
+        description: `OpenBeta node for climb`,
+      },
+    });
   }
 };
 
-exports.createPages = async ({ graphql, actions }) => {
-  // Query all leaf area index documents
+exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
   var result = await graphql(`
     query {
-      allMdx(filter: { fields: { collection: { eq: "area-indices" } } }) {
+      allArea(sort: { fields: frontmatter___area_name }) {
         edges {
           node {
-            fields {
-              slug
-              pathId
-              parentId
-            }
-            frontmatter {
-              metadata {
-                legacy_id
-              }
-            }
+            id
+            slug
+            pathTokens
+            rawPath
           }
         }
       }
     }
   `);
 
-  // For every node in "area-indices" create a parentId to child Ids look up
-  // data structure
-  const childAreas = {};
-  result.data.allMdx.edges.map(({ node }) => {
-    const parentId = node.fields.parentId;
-    const pathId = node.fields.pathId;
+  // Create an index page for each area
+  const { createPage, createParentChildLink } = actions;
+  result.data.allArea.edges.forEach(({ node }) => {
+    const _parentAreaPath = node.pathTokens.slice(
+      0,
+      node.pathTokens.length - 1
+    );
 
-    if (childAreas[parentId]) {
-      childAreas[parentId].push(pathId);
-      childAreas[parentId] = [...new Set(childAreas[parentId])];
-    } else {
-      childAreas[parentId] = [pathId];
+    const parent_area_node =
+      _parentAreaPath.length === 0
+        ? null // no parent
+        : getNode(createNodeId(_parentAreaPath.join("-")));
+
+    // Add children areas here instead of onCreateNode() because
+    // gatsby-filesystem-plugin process Mdx files in a random order;
+    // sometimes child areas are created before the parent.
+    if (parent_area_node) {
+      createParentChildLink({
+        parent: parent_area_node,
+        child: node,
+      });
     }
-  });
 
-  // Create each index page for each leaf area
-  const { createPage } = actions;
-  for (const { node } of result.data.allMdx.edges) {
-    // For a given area indices, list out all the possible path strings for
-    // the children areas
-    const childAreaPathIds = childAreas[node.fields.pathId]
-      ? childAreas[node.fields.pathId]
-      : [];
     createPage({
-      path: node.fields.slug,
+      path: node.slug,
       component: path.resolve(`./src/templates/leaf-area-page-md.js`),
       context: {
-        legacy_id: node.frontmatter.metadata.legacy_id,
-        pathId: node.fields.pathId,
-        childAreaPathIds: childAreaPathIds,
+        node_id: node.id,
+        rawPath: node.rawPath,
       },
     });
-  }
+  });
 
   //  Query all route .md documents
-  result = await graphql(`
+  var result = await graphql(`
     query {
-      allMdx(filter: { fields: { collection: { eq: "climbing-routes" } } }) {
+      allClimb(sort: { fields: rawPath }) {
         edges {
           node {
-            fields {
-              slug
-            }
-            frontmatter {
-              metadata {
-                legacy_id
-              }
-            }
+            id
+            slug
+            rawPath
+            pathTokens
           }
         }
       }
@@ -209,28 +245,72 @@ exports.createPages = async ({ graphql, actions }) => {
   `);
 
   // Create a single page for each climb
-  result.data.allMdx.edges.forEach(({ node }) => {
+  result.data.allClimb.edges.forEach(({ node }) => {
+    const _parentAreaPath = node.pathTokens.slice(
+      0,
+      node.pathTokens.length - 1
+    );
+    const parentArea = getNode(createNodeId(_parentAreaPath.join("-")));
+    if (parentArea) {
+      createParentChildLink({
+        parent: parentArea,
+        child: node,
+      });
+    } else {
+      console.log("# without area ", node);
+    }
     createPage({
-      path: node.fields.slug,
+      path: node.slug,
       component: path.resolve(`./src/templates/climb-page-md.js`),
       context: {
-        legacy_id: node.frontmatter.metadata.legacy_id,
+        node_id: node.id,
+      },
+    });
+  });
+
+  //  Query all route .md documents
+  var result = await graphql(`
+    query {
+      allMarkdownRemark(filter: { fileAbsolutePath: { regex: "/.*pages/" } }) {
+        edges {
+          node {
+            id
+            fields {
+              slug
+            }
+          }
+        }
+      }
+    }
+  `);
+  result.data.allMarkdownRemark.edges.forEach(({ node }) => {
+    createPage({
+      path: node.fields.slug,
+      component: path.resolve(`./src/templates/general-page-md.js`),
+      context: {
+        node_id: node.id,
       },
     });
   });
 };
 
 /**
+ * Add Webpack overriding here
  * Webpack no longer includes path-browserify.  Adding this
  * function to make 'path' library available to client-side code.
  */
-exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = ({ actions, loaders }) => {
   actions.setWebpackConfig({
     resolve: {
       fallback: {
         path: require.resolve("path-browserify"),
         assert: false,
         stream: false,
+      },
+      alias: {
+        // Replace mapgox-gl with maplibre-gl
+        // More ifo https://visgl.github.io/react-map-gl/docs/get-started/get-started#using-with-a-mapbox-gl-fork
+        "mapbox-gl": "maplibre-gl",
       },
     },
   });

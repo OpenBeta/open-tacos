@@ -1,6 +1,6 @@
 import { unified } from "unified";
 import markdown from "remark-parse";
-import slate, { defaultNodeTypes, serialize } from "remark-slate";
+import slate, { defaultNodeTypes, serialize } from "@openbeta/remark-slate";
 import yaml from "js-yaml";
 
 import { simplify_climb_type_json } from "../../js/utils";
@@ -20,8 +20,10 @@ const DESERIALIZE_OPTS = {
     paragraph: "p",
     heading: { ...DEFAULT_HEADINGS },
     link: "a",
+    image: "img",
   },
   linkDestinationKey: "url",
+  imageSourceKey: "url",
 };
 
 const SERIALIZE_OPTS = {
@@ -29,6 +31,7 @@ const SERIALIZE_OPTS = {
     ...defaultNodeTypes,
     paragraph: "p",
     link: "a",
+    image: "img",
     heading: { ...DEFAULT_HEADINGS },
   },
 };
@@ -42,7 +45,7 @@ export const md_to_slate = (md_str) => {
     return null;
   }
   const processor = unified().use(markdown).use(slate, DESERIALIZE_OPTS);
-  return processor.processSync(md_str).result;
+  return top_images(processor.processSync(md_str).result);
 };
 
 /**
@@ -50,7 +53,36 @@ export const md_to_slate = (md_str) => {
  * @param  ast
  */
 export const slate_to_md = (ast) => {
-  return ast ? ast.map((v) => serialize(v, SERIALIZE_OPTS)).join("") : "";
+  return ast ? ast.map((v) => serialize(v, SERIALIZE_OPTS)).join("\n") : "";
+};
+
+/**
+ * Move image nodes to top-level
+ * @param  {Object} ast Slate AST
+ */
+export const top_images = (ast) => {
+  return ast.reduce((acc, cur) => {
+    const processedNode = cur;
+    // Extract images from wrapping node while preserving any other children
+    if (processedNode.children && processedNode.type === "p") {
+      const images = [];
+      const children = [];
+      processedNode.children.forEach((node) => {
+        if (node.type === "img") {
+          images.push(node);
+        } else {
+          children.push(node);
+        }
+      });
+      if (children.length > 0) {
+        return acc.concat({ ...processedNode, children }, images);
+      } else {
+        return acc.concat(images);
+      }
+    } else {
+      return acc.concat(processedNode);
+    }
+  }, []);
 };
 
 /**

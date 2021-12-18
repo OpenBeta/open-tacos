@@ -21,14 +21,13 @@ then
   pushd opentacos-content/content
   export target="../../content"
   # Copy only the first and 2nd level index.md for each state 
-  find . -mindepth 2 -maxdepth 4  -name "index*"  -exec rsync -aR "{}" $target \;
+  find . -mindepth 2 -maxdepth 4 -type f -name "*.geojson" -o -name "index.md"  -exec rsync -aR "{}" $target \;
 
   # Copy only a few specific areas
-  rsync -aR ./USA/Oregon/Mt.\ Hood/Petes\ Pile $target
+  rsync -aR ./USA/Oregon/Mt.\ Hood $target
   rsync -aR ./USA/Oregon/Central\ Oregon/Smith\ Rock $target
-  rsync -aR ./USA/Nevada/Southern\ Nevada/Red\ Rock $target
   popd
 else
-  echo "Creating a symlink to entire content repo"
-  ln -s opentacos-content/content content
+  echo "Make entire repo available to build"
+  mv opentacos-content/content content
 fi

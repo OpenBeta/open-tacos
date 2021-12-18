@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ReactPlaceholder from "react-placeholder";
+import { createPlateComponents, createPlateOptions } from "@udecode/plate";
 import {
   Plate,
-  createBasicElementPlugins, // h1, h2, blockquote, codeblock and p
   createReactPlugin,
   createHistoryPlugin,
-  createBasicMarkPlugins, // bold, italic, underline
-  createPlateComponents,
-  createPlateOptions,
-  createLinkPlugin,
-  createDeserializeMDPlugin,
-} from "@udecode/plate";
+} from "@udecode/plate-core";
+import { createNormalizeTypesPlugin } from "@udecode/plate-normalizers";
+import { createTrailingBlockPlugin } from "@udecode/plate-trailing-block";
+import { createBasicMarkPlugins } from "@udecode/plate-basic-marks"; // bold, italic, underline
+import { createBasicElementPlugins } from "@udecode/plate-basic-elements"; // blockquote, codeblock and p
+import { ELEMENT_PARAGRAPH } from "@udecode/plate-paragraph";
+import { ELEMENT_H1 } from "@udecode/plate-heading"; //h1, h2
+import { createLinkPlugin } from "@udecode/plate-link";
+import { createImagePlugin } from "@udecode/plate-image";
 import FormatToolbar from "./FormatToolbar";
-import { md_to_slate, slate_to_md } from "./md-utils";
+import { createCustomNormalizingPlugin } from "./createCustomNormalizingPlugin";
+import { md_to_slate } from "./md-utils";
 
 // customize the editor inner container
 const editableProps = {
@@ -31,33 +35,48 @@ const PlateEditor = ({ markdown, onSubmit, debug }) => {
     createReactPlugin(),
     createHistoryPlugin(),
     createLinkPlugin(),
+    createImagePlugin(),
     ...createBasicElementPlugins(),
     ...createBasicMarkPlugins(),
+    createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
+    createNormalizeTypesPlugin({
+      rules: [{ path: [0], strictType: ELEMENT_H1 }],
+    }),
+    createCustomNormalizingPlugin(),
   ];
 
-  plugins.push(...[createDeserializeMDPlugin({ plugins })]);
+  const [value, setValue] = useState();
 
+  const onChange = (props) => debug && setValue(props);
+
+  const ast = md_to_slate(markdown);
   return (
-      <div className="flex-grow 2xl:w-2/3 2xl:max-w-5xl border-gray-300 border rounded-lg shadow-sm">
-        <FormatToolbar />
-        <ReactPlaceholder
-          className="p-8 mt-12"
-          type="text"
-          ready={markdown !== null}
-          rows={16}
-          color="#F4F6F6"
-        >
-          <div className="transition duration-850 opacity-100">
-            <Plate
-              editableProps={editableProps}
-              plugins={plugins}
-              components={components}
-              options={options}
-              initialValue={md_to_slate(markdown)}
-            ></Plate>
-          </div>
-        </ReactPlaceholder>
-      </div>
+    <div className="flex-grow 2xl:w-2/3 2xl:max-w-5xl border-gray-300 border rounded-lg shadow-sm">
+      <FormatToolbar />
+      <ReactPlaceholder
+        className="p-8 mt-12"
+        type="text"
+        ready={markdown !== null}
+        rows={16}
+        color="#F4F6F6"
+      >
+        <div className="transition duration-850 opacity-100">
+          <Plate
+            editableProps={editableProps}
+            plugins={plugins}
+            components={components}
+            options={options}
+            initialValue={ast}
+            onChange={onChange}
+          ></Plate>
+        </div>
+      </ReactPlaceholder>
+      {debug && (
+        <div className="break-all">
+          <pre>{JSON.stringify(value, null, 2)}</pre>
+        </div>
+      )}
+    </div>
   );
 };
 

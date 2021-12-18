@@ -15,13 +15,11 @@ function getRandomInt(min, max) {
 function IndexPage() {
   let allClimbingRoutes = useStaticQuery(graphql`
     query {
-      allMdx(filter: { fields: { collection: { eq: "climbing-routes" } } }) {
+      allClimb {
         edges {
           node {
-            fields {
-              parentId
-              slug
-            }
+            slug
+            pathTokens
             frontmatter {
               route_name
               yds
@@ -32,7 +30,7 @@ function IndexPage() {
                 boulder
               }
               metadata {
-                legacy_id
+                climb_id
               }
             }
           }
@@ -40,25 +38,26 @@ function IndexPage() {
       }
     }
   `);
+
   const min = 0;
-  const max = allClimbingRoutes.allMdx.edges.length;
+  const max = allClimbingRoutes.allClimb.edges.length;
   const randomIndex = getRandomInt(min, max);
   let randomClimb = null;
-  if (allClimbingRoutes.allMdx.edges.length > 0) {
-    randomClimb = allClimbingRoutes.allMdx.edges[randomIndex].node;
+  if (allClimbingRoutes.allClimb.edges.length > 0) {
+    randomClimb = allClimbingRoutes.allClimb.edges[randomIndex].node;
   }
   allClimbingRoutes = [];
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO
-        keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
+        keywords={[`openbeta`, `rock climbing`, `climbing api`]}
         title="Home"
       />
 
       <USToc />
 
-      <h2 className="text-xl font-medium mt-12 mb-4">
+      <h2 className="text-xl font-bold mt-8">
         Randomly Featured Route
       </h2>
       <div className="flex">

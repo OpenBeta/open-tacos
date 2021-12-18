@@ -1,210 +1,177 @@
-import React from "react";
-import { graphql, navigate } from "gatsby";
+import React, { useEffect, useState } from "react";
+import { graphql, navigate, Link } from "gatsby";
+import { point } from "@turf/helpers";
+
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import { MDXProvider } from "@mdx-js/react";
-import { MDXRenderer } from "gatsby-plugin-mdx";
+import Droppin from "../assets/icons/droppin.svg";
+import Pencil from "../assets/icons/pencil-sm.svg";
 import RouteCard from "../components/ui/RouteCard";
 import BreadCrumbs from "../components/ui/BreadCrumbs";
 import { pathOrParentIdToGitHubLink } from "../js/utils";
 import AreaCard from "../components/ui/AreaCard";
 import LinkToGithub from "../components/ui/LinkToGithub";
-import { h1, h2, p } from "../components/ui/shortcodes.js";
 import { template_h1_css } from "../js/styles";
 import AreaStatistics from "../components/AreaStatistics";
-import { computeStatsBarPercentPerAreaFromClimbs } from "../js/utils";
-
-const shortcodes = {
-  h1,
-  h2,
-  p,
-};
+import Heatmap from "../components/maps/Heatmap";
+import ClimbDetail from "../components/graphql/ClimbDetail";
+import AreaDetail from "../components/graphql/AreaDetail";
 
 /**
  * Templage for generating individual Area page
  */
-export default function LeafAreaPage({
-  data: { mdx, climbs, childAreas, climbsPerChildArea },
-}) {
-  const { area_name } = mdx.frontmatter;
-  const { pathTokens, pathId, filename } = mdx.fields;
-  const githubLink = pathOrParentIdToGitHubLink(pathId, filename);
-  const areasToStatsBar =
-    computeStatsBarPercentPerAreaFromClimbs(climbsPerChildArea);
+export default function LeafAreaPage({ data: { area, gisBoundary } }) {
+  const { area_name, metadata } = area.frontmatter;
+  const { pathTokens, rawPath, parent, children } = area;
+
+  const boundaryOrPoint = gisBoundary
+    ? JSON.parse(gisBoundary.rawGeojson)
+    : point([metadata.lng, metadata.lat]);
+
+  //return (<div>{JSON.stringify(area)}</div>)
+  // Area.children[] can contain either sub-Areas or Climbs, but not both.
+  // 'hasChildAreas' is a simple test to determine what we have.
+  const hasChildAreas =
+    children.length > 0 && children[0].frontmatter.area_name ? true : false;
+  const githubLink = pathOrParentIdToGitHubLink(rawPath, "index");
+
+  // when to show large edit CTA
+  const showEditCTA = parent.wordCount.words < 40;
+
   return (
-    <Layout>
+    <Layout layoutClz="layout-wide">
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO keywords={[area_name]} title={area_name} />
-      <BreadCrumbs pathTokens={pathTokens} />
-      <h1 className={template_h1_css}>{area_name}</h1>
-      <div className="float-right">
-        <button
-          className="btn btn-primary"
-          onClick={() => navigate(`/edit?file=${pathId}/${filename}.md`)}
-        >
-          Edit
-        </button>
-      </div>
-      <AreaStatistics climbs={climbs}></AreaStatistics>
-      <MDXProvider components={shortcodes}>
-        <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
-      </MDXProvider>
-      <div className="grid grid-cols-3 gap-x-3">
-        {childAreas.edges.map(({ node }) => {
-          const { frontmatter } = node;
-          const { area_name, metadata } = frontmatter;
-          const { slug, pathId } = node.fields;
-          const stats = areasToStatsBar[pathId];
-          return (
-            <div className="pt-6 max-h-96" key={metadata.legacy_id}>
-              <div>
-                <AreaCard
-                  onPress={() => {
-                    navigate(slug);
-                  }}
-                  area_name={area_name}
-                  stats={stats}
-                ></AreaCard>
+      <div className="overflow-y">
+        <div className="xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch">
+          <div className="xl:flex-none xl:max-w-screen-md xl:w-full">
+            <BreadCrumbs pathTokens={pathTokens} />
+            <h1 className={template_h1_css}>{area_name}</h1>
+            <span className="flex items-center flex-shrink text-gray-500 text-xs gap-x-1">
+              <Droppin className="stroke-current" />
+              <a
+                className="hover:underline hover:text-gray-800"
+                href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {metadata.lat},{metadata.lng}
+              </a>
+            </span>
+            {!hasChildAreas && (
+              <AreaStatistics climbs={children}></AreaStatistics>
+            )}
+            {!showEditCTA && (
+              <div className="flex justify-end">
+                <EditButton label="Improve this page" rawPath={rawPath} />
               </div>
+            )}
+            {showEditCTA && (
+              <Cta isEmpty={parent.wordCount.words === 1} rawPath={rawPath} />
+            )}
+            <div
+              className="markdown"
+              dangerouslySetInnerHTML={{ __html: parent.html }}
+            ></div>
+            <hr className="my-8" />
+            {hasChildAreas && (
+              <>
+                <div className="divide-x markdown h1">Subareas</div>
+                <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3">
+                  {children.map((node) => {
+                    const { frontmatter, slug } = node;
+                    const { area_name, metadata } = frontmatter;
+                    return (
+                      <div className="max-h-96" key={metadata.area_id}>
+                        <Link to={slug}>
+                          <AreaCard area_name={area_name}></AreaCard>
+                        </Link>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-3">
+              {!hasChildAreas &&
+                children.map((node) => {
+                  const { frontmatter, slug } = node;
+                  const { yds, route_name, metadata, type } = frontmatter;
+                  return (
+                    <div className="pt-6 max-h-96" key={metadata.climb_id}>
+                      <Link to={slug}>
+                        <RouteCard
+                          route_name={route_name}
+                          climb_id={metadata.climb_id}
+                          YDS={yds}
+                          // safety="{}" TODO: Find out what routes have this value?
+                          type={type}
+                        ></RouteCard>
+                      </Link>
+                    </div>
+                  );
+                })}
             </div>
-          );
-        })}
+          </div>
+          <div className="w-full relative mt-8 flex bg-blue-50 xl:mt-0">
+            <Heatmap geojson={boundaryOrPoint} />
+          </div>
+        </div>
       </div>
-      <div className="grid grid-cols-3 gap-x-3">
-        {climbs.edges.map(({ node }) => {
-          const { frontmatter } = node;
-          const { yds, route_name, metadata, type } = frontmatter;
-          const { slug } = node.fields;
-          return (
-            <div className="pt-6 max-h-96" key={metadata.legacy_id}>
-              <RouteCard
-                //                  onPress={()=>{navigate(`/climbs/${metadata.legacy_id}/${slugify(route_name,{lower:true})}`)}}
-                onPress={() => {
-                  navigate(slug);
-                }}
-                route_name={route_name}
-                legacy_id={metadata.legacy_id}
-                YDS={yds}
-                // safety="{}" TODO: Find out what routes have this value?
-                type={type}
-              ></RouteCard>
-            </div>
-          );
-        })}
-      </div>
-      <LinkToGithub link={githubLink} docType="area"></LinkToGithub>
+      <LinkToGithub link={githubLink} docType="areas"></LinkToGithub>
     </Layout>
   );
 }
 
+const EditButton = ({ icon, label, classes, rawPath }) => (
+  <button
+    className={`btn whitespace-nowrap ${classes || "btn-secondary"} ${
+      icon && "px-4"
+    }`}
+    onClick={() => navigate(`/edit?file=${rawPath}/index.md`)}
+  >
+    <span className="mr-2">{icon}</span>
+    {label}
+  </button>
+);
+
+const Cta = ({ isEmpty, rawPath }) => (
+  <div className="my-8 rounded border-2 p-4 border-gray-600 flex flex-col flex-nowrap gap-y-4 md:gap-x-4 md:flex-row  items-center justify-center ">
+    <div className="text-center">
+      {isEmpty
+        ? `This area description is empty. Be the first to contribute!`
+        : `Help us improve this page`}
+    </div>
+    <div>
+      <EditButton
+        icon={<Pencil className="inline w-4 h-4" />}
+        label="Edit"
+        classes="btn-primary"
+        rawPath={rawPath}
+      />
+    </div>
+  </div>
+);
+
 export const query = graphql`
-  query ($legacy_id: String!, $pathId: String, $childAreaPathIds: [String]) {
-    mdx: mdx(
-      fields: { collection: { eq: "area-indices" } }
-      frontmatter: { metadata: { legacy_id: { eq: $legacy_id } } }
-    ) {
-      id
-      fields {
-        parentId
-        pathId
-        filename
-        pathTokens
-      }
-      frontmatter {
-        area_name
-        metadata {
-          legacy_id
-          lng
-          lat
-        }
-      }
-      body
-    }
-    climbs: allMdx(
-      filter: {
-        fields: {
-          collection: { eq: "climbing-routes" }
-          parentId: { eq: $pathId }
-        }
-      }
-    ) {
-      totalCount
-      edges {
-        node {
-          fields {
-            parentId
-            slug
-          }
-          frontmatter {
-            route_name
-            yds
-            type {
-              tr
-              trad
-              sport
-              boulder
-            }
-            metadata {
-              legacy_id
-            }
+  query ($node_id: String!, $rawPath: String!) {
+    area: area(id: { eq: $node_id }) {
+      ...AreaDetailFragment
+      parent {
+        ... on MarkdownRemark {
+          html
+          wordCount {
+            words
           }
         }
+      }
+      children {
+        ...AreaDetailFragment
+        ...ClimbDetailFragment
       }
     }
-    climbsPerChildArea: allMdx(
-      filter: {
-        fields: {
-          collection: { eq: "climbing-routes" }
-          parentId: { in: $childAreaPathIds }
-        }
-      }
-    ) {
-      totalCount
-      edges {
-        node {
-          fields {
-            parentId
-            slug
-          }
-          frontmatter {
-            route_name
-            yds
-            type {
-              tr
-              trad
-              sport
-              boulder
-            }
-            metadata {
-              legacy_id
-            }
-          }
-        }
-      }
-    }
-    childAreas: allMdx(
-      filter: {
-        fields: {
-          collection: { eq: "area-indices" }
-          parentId: { eq: $pathId }
-        }
-      }
-    ) {
-      totalCount
-      edges {
-        node {
-          fields {
-            pathId
-            slug
-          }
-          frontmatter {
-            area_name
-            metadata {
-              legacy_id
-            }
-          }
-        }
-      }
+    gisBoundary: geojsonArea(rawPath: { eq: $rawPath }) {
+      rawGeojson
     }
   }
 `;

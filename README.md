@@ -1,6 +1,7 @@
-[![Build Status](https://www.travis-ci.com/OpenBeta/open-tacos.svg?branch=develop)](https://www.travis-ci.com/OpenBeta/open-tacos)  [![License](https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square)](./LICENSE)
+[![Build Status](https://www.travis-ci.com/OpenBeta/open-tacos.svg?branch=develop)](https://www.travis-ci.com/OpenBeta/open-tacos) [![License](https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square)](./LICENSE)
 
 # OpenTacos
+
 OpenTacos is a proof-of-concept/MVP showing it's possible to build a collaborative climbing route catalog.
 
 [Live demo](https://tacos.openbeta.io) 🚀
@@ -8,50 +9,74 @@ OpenTacos is a proof-of-concept/MVP showing it's possible to build a collaborati
 ## Tech stack
 
 1. Data: (see [opentacos-content](https://github.com/OpenBeta/opentacos-content))
+
 - Climbing route data such as name, grade, FA, etc are stored in human-readable text files (markdown syntax)
 - Take advantage of folder and file structure to organize crag/area and climb relationship.
 - Git-based CMS: Use Git for user management, access control, content review.
 
 2. Frontend: (this repo)
+
 - Gatsby.js, React.js, TailwindCSS
 
 Learn more about [Jamstack](https://jamstack.org)
 
 ## How to build
+
 Make sure you have the following tools installed on your computer
+
 - [Git](https://github.com/git-guides/install-git)
 - [Node](https://nodejs.org)
 - [npm](https://www.npmjs.com/get-npm)
 - [yarn](https://classic.yarnpkg.com/en/docs/install)
 
-0. Install Gatsby CLI 
+0. Install Gatsby CLI
+
 ```
 npm install -g gatsby-cli
 ```
 
 1.  Download the repo to your local machine
+
 ```
 git clone git@github.com:OpenBeta/open-tacos.git
 ```
 
 2.  Build the code
+
 ```
 cd open-tacos
 yarn install
 ```
 
 3.  Download climb data to local cache
+
 ```
 # Note: run this script as needed
 ./prebuild.sh
 ```
 
 4.  Run the app
-Since we are using Auth0 for authenticating users, local development server needs to run in https mode. 
-You will ve prompted to install additional components on the first run.
+
+Since we are using Auth0 for authenticating users, development server needs to run in https mode.
+You will be prompted to install additional components on the first run.
 
 ```
 gatsby develop -S
+```
+
+5. Optional: Run the app in docker
+   Requirements:
+   [Docker](https://docs.docker.com/get-docker/)
+
+```
+docker compose up
+```
+
+Changes in your local ./src file will be available on localhost:8000
+If you install new packages you will need to rebuild the docker image with
+
+```
+docker compose up --build
 ```
 
 The application is now available at `https://localhost:8000`
@@ -90,6 +115,7 @@ Thanks goes to these wonderful people:
     <td align="center"><a href="http://kevinnadro.com"><img src="https://avatars.githubusercontent.com/u/1581329?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kevin Nadro</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=nadr0" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/rytheranderson"><img src="https://avatars.githubusercontent.com/u/43506100?v=4?s=100" width="100px;" alt=""/><br /><sub><b>rytheranderson</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=rytheranderson" title="Code">💻</a> <a href="#content-rytheranderson" title="Content">🖋</a></td>
     <td align="center"><a href="http://ygingras.net"><img src="https://avatars.githubusercontent.com/u/169930?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Yannick Gingras</b></sub></a><br /><a href="#ideas-ygingras" title="Ideas, Planning, & Feedback">🤔</a> <a href="#content-ygingras" title="Content">🖋</a></td>
+    <td align="center"><a href="https://github.com/gibboj"><img src="https://avatars.githubusercontent.com/u/2992272?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kendra Gibbons</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=gibboj" title="Code">💻</a></td>
   </tr>
 </table>
 
@@ -101,4 +127,5 @@ Thanks goes to these wonderful people:
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome.
 
 ## License
+
 AGPL

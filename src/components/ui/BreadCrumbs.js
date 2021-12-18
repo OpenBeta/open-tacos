@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "gatsby";
 const slugify = require("slugify");
+import { sanitize_name } from "../../js/utils";
 
 /**
  * Turn each element of `pathTokens` to a gatsby-link.
@@ -19,9 +20,8 @@ function BreadCrumbs({ pathTokens, isClimbPage }) {
   const tokens = isClimbPage
     ? pathTokens.slice(0, pathTokens.length - 1)
     : pathTokens;
-  // tokens.unshift("Home"); // Append 'Home' to the front
   return (
-    <div>
+    <div className="mt-4">
       <Link className="hover:underline hover:text-gray-900 text-gray-400 " to="/">
         <b>Home</b>
       </Link>
@@ -32,11 +32,11 @@ function BreadCrumbs({ pathTokens, isClimbPage }) {
           <span key={index}>
             <span className="text-gray-400 mx-1.5">/</span>
             {isLastElement && !isClimbPage ? (
-              <span className="">{place}</span>
+              <span className="">{sanitize_name(place)}</span>
             ) : (
               <span className="text-gray-400">
                 <Link className="hover:underline hover:text-gray-900" to={url}>
-                  {place}
+                  {sanitize_name(place)}
                 </Link>
               </span>
             )}

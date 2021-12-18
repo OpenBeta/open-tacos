@@ -15,14 +15,12 @@ export default function SearchBar({ className }) {
   }, []);
 
   const detect_scroll = () => {
-    console.log("# init detect_scroll()");
     window.addEventListener(
       "scroll",
       function () {
         if (!activated) return;
         // or window.addEventListener("scroll"....
         var st = window.pageYOffset || document.documentElement.scrollTop; // Credits: "https://github.com/qeremy/so/blob/master/so.dom.js#L426"
-        console.log(st)
         if (st > 200) {
           //setTop(false);
           setActivated(false);
