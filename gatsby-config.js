@@ -38,14 +38,6 @@ module.exports = {
     `gatsby-plugin-image`,
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
-    // {
-    //   resolve: `gatsby-source-filesystem`,
-    //   options: {
-    //     name: `areas-routes-wa`,
-    //     path: `${__dirname}/content`,
-    //     ignore: [`**/Nevada`, `**/Oregon`],
-    //   },
-    // },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -54,14 +46,6 @@ module.exports = {
         ignore: [`**/Washington`, `**/Nevada`],
       },
     },
-    // {
-    //   resolve: `gatsby-source-filesystem`,
-    //   options: {
-    //     name: `areas-routes-nv`,
-    //     path: `${__dirname}/content`,
-    //     ignore: [`**/Washington`, `**/Oregon`],
-    //   },
-    // },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
