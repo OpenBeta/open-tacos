@@ -47,14 +47,8 @@ yarn install
 ```
 
 4.  Run the app
-<<<<<<< HEAD
 Since we are using Auth0 for authenticating users, development server needs to run in https mode. 
 You will be prompted to install additional components on the first run.
-=======
-Since we are using Auth0 for authenticating users, local development server needs to run in https mode. 
-You will ve prompted to install additional components on the first run.
-
->>>>>>> main
 ```
 gatsby develop -S
 ```
