@@ -106,3 +106,32 @@ export const simplify_climb_type_json = (type) => {
   }
   return type;
 };
+
+/**
+ * Temporary grade sort until helper lib is available.
+ *
+ * Calculate a number score for the YDS scale to make it easier to sort
+ * 10x number + 2 for each letter + 1 for a slash grade or +
+ *
+ * 5.11a = 112 // 110 for 11, 2 for "a"
+ * 5.11b/c = 113 // 110 for 11, 4 for "b", 1 for "/b"
+ * 5.9+ = 91 // 90 for 9, 0 for the letter & 1 for "+"
+ * @param {string} yds
+ * @returns
+ */
+export const getScoreForYdsGrade = (yds) => {
+  const regex = /^5\.([0-9]{1,2})([a-zA-Z])?([\/\+])?([a-zA-Z]?)/;
+  const [match, num, firstLetter, plusOrSlash] = yds.match(regex);
+
+  // If there isn't a match sort it to the bottom
+  if (!match) {
+    console.warning(`Unexpected yds format: ${yds}`);
+    return 0;
+  }
+
+  let letterScore = firstLetter
+    ? (firstLetter.toLowerCase().charCodeAt(0) - 96) * 2
+    : 0;
+  let plusSlash = plusOrSlash === undefined ? 0 : 1;
+  return num * 10 + letterScore + plusSlash;
+};
