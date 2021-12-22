@@ -11,6 +11,7 @@ export const query = graphql`
       metadata {
         climb_id
         mp_id
+        left_right_index
       }
       fa
       yds
