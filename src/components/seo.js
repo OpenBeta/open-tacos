@@ -2,7 +2,7 @@ import { useStaticQuery, graphql } from "gatsby";
 import React from "react";
 import { Helmet } from "react-helmet";
 
-function SEO({ description, meta = [], keywords = [], title }) {
+function SEO({ description, meta = [], keywords = [], title, image }) {
   const { site } = useStaticQuery(graphql`
     query DefaultSEOQuery {
       site {
@@ -17,6 +17,10 @@ function SEO({ description, meta = [], keywords = [], title }) {
 
   const metaDescription = description || site.siteMetadata.description;
   const metaTitle = title || site.siteMetadata.title;
+  const metaImage =
+    image ||
+    "https://res.cloudinary.com/openbeta-prod/image/upload/v1639562113/open-tacos/nc9dsf6aoitrnehe1cwo.jpg";
+
   return (
     <Helmet
       htmlAttributes={{
@@ -40,6 +44,10 @@ function SEO({ description, meta = [], keywords = [], title }) {
           content: `website`,
         },
         {
+          property: `og:image`,
+          content: metaImage,
+        },
+        {
           name: `twitter:card`,
           content: `summary`,
         },
@@ -54,6 +62,10 @@ function SEO({ description, meta = [], keywords = [], title }) {
         {
           name: `twitter:description`,
           content: metaDescription,
+        },
+        {
+          property: `twitter:image`,
+          content: metaImage,
         },
       ]
         .concat(

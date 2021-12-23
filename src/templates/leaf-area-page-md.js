@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { graphql, navigate, Link } from "gatsby";
 import { point } from "@turf/helpers";
 
@@ -41,7 +41,11 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
   return (
     <Layout layoutClz="layout-wide">
       {/* eslint-disable react/jsx-pascal-case */}
-      <SEO keywords={[area_name]} title={area_name} />
+      <SEO
+        keywords={[area_name]}
+        title={area_name}
+        description={buildMetaDescription(children, pathTokens, hasChildAreas)}
+      />
       <div className="overflow-y">
         <div className="xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch">
           <div className="xl:flex-none xl:max-w-screen-md xl:w-full">
@@ -121,6 +125,12 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
       <LinkToGithub link={githubLink} docType="areas"></LinkToGithub>
     </Layout>
   );
+}
+
+function buildMetaDescription(children, pathTokens, hasChildAreas) {
+  const seoArea = [...pathTokens].reverse().join(", ");
+  const seoAreaNoun = hasChildAreas ? "subareas" : "climbs";
+  return `${children.length} ${seoAreaNoun} in ${seoArea}`;
 }
 
 const EditButton = ({ icon, label, classes, rawPath }) => (

@@ -17,10 +17,15 @@ export default function ClimbPage({ data: { climb } }) {
   const { route_name, yds, type, safety, fa } = climb.frontmatter;
   const { rawPath, filename, pathTokens, parent } = climb;
   const githubLink = pathOrParentIdToGitHubLink(rawPath, filename);
+
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
-      <SEO keywords={[route_name]} title={route_name} />
+      <SEO
+        keywords={[route_name]}
+        title={route_name}
+        description={buildMetaDescription(pathTokens, fa, yds)}
+      />
       <div>
         <BreadCrumbs pathTokens={pathTokens} isClimbPage={true} />
         <h1 className={template_h1_css}>{route_name}</h1>
@@ -43,6 +48,15 @@ export default function ClimbPage({ data: { climb } }) {
       <LinkToGithub link={githubLink} docType="climbs"></LinkToGithub>
     </Layout>
   );
+}
+
+function buildMetaDescription(pathTokens, fa, yds) {
+  const pathLength = pathTokens.length;
+  const area = `${pathTokens[pathLength - 2]} at ${
+    pathTokens[pathLength - 3]
+  } `;
+  const firstAscent = fa ? `First ascent by ${fa} - ` : "";
+  return `${firstAscent}${yds} - Located in ${area}`;
 }
 
 export const query = graphql`
