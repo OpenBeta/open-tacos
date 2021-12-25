@@ -5,6 +5,14 @@ export const query = graphql`
     slug
     rawPath
     pathTokens
+    gradeCount {
+      grade
+      count
+    }
+    typeCount {
+      type
+      count
+    }
     frontmatter {
       area_name
       metadata {

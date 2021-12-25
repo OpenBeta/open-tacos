@@ -143,7 +143,11 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
             </div>
           </div>
           <div className="w-full relative mt-8 flex bg-blue-50 xl:mt-0">
-            <Heatmap geojson={boundaryOrPoint} />
+            <Heatmap
+              geojson={boundaryOrPoint}
+              children={hasChildAreas ? children : []}
+              getTooltip={getMapTooltip}
+            />
           </div>
         </div>
       </div>
@@ -151,6 +155,16 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
     </Layout>
   );
 }
+
+const getMapTooltip = ({ object }) =>
+  object && {
+    text: `${
+      object.frontmatter.area_name
+    }\nTotal Climbs: ${object.typeCount.reduce((acc, c) => acc + c.count, 0)}`,
+    className: "bg-black rounded text-white",
+    style: { color: "", "background-color": "" },
+  };
+
 const sortRoutes = (routes, sortType) => {
   switch (sortType.value) {
     case "leftToRight": {

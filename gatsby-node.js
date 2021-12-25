@@ -122,6 +122,7 @@ exports.onCreateNode = async ({
       // Required fields
       id: areaNodeId,
       parent: node.id,
+
       // parent_area___NODE:
       //   _parentAreaPath.length === 0
       //     ? null // no parent
@@ -189,6 +190,14 @@ exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
             slug
             pathTokens
             rawPath
+            gradeCount {
+              grade
+              count
+            }
+            typeCount {
+              type
+              count
+            }
           }
         }
       }
@@ -283,6 +292,7 @@ exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
       }
     }
   `);
+
   result.data.allMarkdownRemark.edges.forEach(({ node }) => {
     createPage({
       path: node.fields.slug,
@@ -326,4 +336,73 @@ exports.onCreatePage = async ({ page, actions }) => {
     // Update the page
     createPage(page);
   }
+};
+
+exports.createSchemaCustomization = ({ actions }) => {
+  const { createTypes } = actions;
+  const typeDefs = `
+    type GradeCount {
+      grade: String
+      count: Int
+    }
+
+    type TypeCount {
+      type: String
+      count: Int
+    }
+
+    
+  `;
+  createTypes(typeDefs);
+};
+
+exports.createResolvers = ({ createResolvers }) => {
+  const resolvers = {
+    Area: {
+      gradeCount: {
+        type: [`GradeCount`],
+        resolve: async (source, args, context, info) => {
+          const { entries } = await context.nodeModel.findAll({
+            type: "Climb",
+          });
+          const climbs = entries.filter((climb) =>
+            climb.slug.includes(source.slug)
+          );
+          const list = Array.from(climbs).reduce((byYds, climb) => {
+            const index = climb.frontmatter.yds;
+            const entry = byYds[index] || { grade: index, count: 0 };
+            entry.count = entry.count + 1;
+            byYds[index] = entry;
+            return byYds;
+          }, {});
+          return Object.values(list);
+        },
+      },
+      typeCount: {
+        type: [`TypeCount`],
+        resolve: async (source, args, context, info) => {
+          const { entries } = await context.nodeModel.findAll({
+            type: "Climb",
+          });
+          const climbs = entries.filter((climb) =>
+            climb.slug.includes(source.slug)
+          );
+          const list = Array.from(climbs).reduce(
+            (byType, { frontmatter: { type } }) => {
+              for (t in type) {
+                if (type[t]) {
+                  const entry = byType[t] || { type: t, count: 0 };
+                  byType[t] = Object.assign(entry, { count: entry.count + 1 });
+                }
+                return byType;
+              }
+            },
+            {}
+          );
+          return Object.values(list);
+        },
+      },
+    },
+  };
+  createResolvers(resolvers);
 };

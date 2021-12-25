@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { HeatmapLayer } from "@deck.gl/aggregation-layers";
-import { GeoJsonLayer } from "@deck.gl/layers";
-
+import { GeoJsonLayer, IconLayer } from "@deck.gl/layers";
+import { Popup } from "react-map-gl";
 import usaHeatMapData from "../../assets/usa-heatmap.json";
 import BaseMap, { DEFAULT_INITIAL_VIEWSTATE } from "./BaseMap";
 import { bboxFromGeoJson, bbox2Viewport } from "../../js/GeoHelpers";
@@ -17,7 +17,7 @@ const Color_Range = [
 
 const NAV_BAR_OFFSET = 66;
 
-export default function Heatmap({ geojson }) {
+export default function Heatmap({ geojson, children, getTooltip }) {
   const [[width, height], setWH] = useState([400, 400]);
   const [viewstate, setViewState] = useState(DEFAULT_INITIAL_VIEWSTATE);
 
@@ -49,6 +49,10 @@ export default function Heatmap({ geojson }) {
     setWH([width, height]);
   });
 
+  const ICON_MAPPING = {
+    marker: { x: 0, y: 0, width: 128, height: 128, mask: true },
+  };
+
   const layers = [
     new GeoJsonLayer({
       id: "geojson-layer",
@@ -79,7 +83,25 @@ export default function Heatmap({ geojson }) {
       opacity: 0.65,
       colorRange: Color_Range,
     }),
+    new IconLayer({
+      id: "icon-layer",
+      data: children,
+      pickable: true,
+      iconAtlas:
+        "https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png",
+      iconMapping: ICON_MAPPING,
+      getIcon: (d) => "marker",
+      sizeScale: 15,
+      getPosition: (d) => [
+        d.frontmatter.metadata.lng,
+        d.frontmatter.metadata.lat,
+        12,
+      ],
+      getSize: (d) => 2,
+      getColor: (d) => [231, 129, 29],
+    }),
   ];
+
   return (
     <div
       id="my-area-map"
@@ -87,6 +109,7 @@ export default function Heatmap({ geojson }) {
       style={{ height }}
     >
       <BaseMap
+        getTooltip={getTooltip}
         layers={layers}
         initialViewState={viewstate}
         viewstate={viewstate}
