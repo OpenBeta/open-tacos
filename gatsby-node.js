@@ -394,8 +394,8 @@ exports.createResolvers = ({ createResolvers }) => {
                   const entry = byType[t] || { type: t, count: 0 };
                   byType[t] = Object.assign(entry, { count: entry.count + 1 });
                 }
-                return byType;
               }
+              return byType;
             },
             {}
           );
