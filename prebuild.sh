@@ -11,7 +11,7 @@ rm -rf content
 
 rm -rf opentacos-content
 
-git clone --depth 1 --branch develop \
+git clone --depth 1 --branch develop --quiet \
   https://github.com/OpenBeta/opentacos-content.git 
 
 if [ "$1" != "full" ];
