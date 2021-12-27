@@ -1,4 +1,4 @@
-[![Build Status](https://www.travis-ci.com/OpenBeta/open-tacos.svg?branch=develop)](https://www.travis-ci.com/OpenBeta/open-tacos) [![License](https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square)](./LICENSE)
+![Dev branch](https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=develop) [![License](https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square)](./LICENSE)
 
 # OpenTacos
 
@@ -19,6 +19,13 @@ OpenTacos is a proof-of-concept/MVP showing it's possible to build a collaborati
 - Gatsby.js, React.js, TailwindCSS
 
 Learn more about [Jamstack](https://jamstack.org)
+
+## Live instances
+
+| Env     | Link                          | Branch  | Content | Build                                                                                                                                                                                                                                     |
+|---------|-------------------------------|---------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Staging | https://tacos-dev.openbeta.io | develop | Partial | [![Build](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos?branch=develop&flat-square)](https://gitlab.com/openbeta/opentacos/-/pipelines?page=1&scope=branches&ref=develop)                                              |
+| Prod    | https://tacos.openbeta.io     | develop | Full    | [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos-content-ci?branch=develop&style=flat-square)](https://gitlab.com/openbeta/opentacos-content-ci/-/pipelines?page=1&scope=branches&ref=develop) |
 
 ## How to build
 
