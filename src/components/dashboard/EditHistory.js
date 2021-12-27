@@ -35,7 +35,7 @@ function EditHistory() {
 
   return (
     <div className="mt-16">
-      <div className="md-h1">My Recent edits</div>
+      <div className="md-h1">My Recent Edits</div>
       <ChangeHistory commits={commits} loading={loading} />
     </div>
   );

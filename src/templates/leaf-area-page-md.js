@@ -46,7 +46,11 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
   return (
     <Layout layoutClz="layout-wide">
       {/* eslint-disable react/jsx-pascal-case */}
-      <SEO keywords={[area_name]} title={area_name} />
+      <SEO
+        keywords={[area_name]}
+        title={area_name}
+        description={buildMetaDescription(children, pathTokens, hasChildAreas)}
+      />
       <div className="overflow-y">
         <div className="xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch">
           <div className="xl:flex-none xl:max-w-screen-md xl:w-full">
@@ -171,6 +175,12 @@ const sortRoutes = (routes, sortType) => {
       return routes;
   }
 };
+
+function buildMetaDescription(children, pathTokens, hasChildAreas) {
+  const seoArea = [...pathTokens].reverse().join(", ");
+  const seoAreaNoun = hasChildAreas ? "subareas" : "climbs";
+  return `${children.length} ${seoAreaNoun} in ${seoArea}`;
+}
 
 const EditButton = ({ icon, label, classes, rawPath }) => (
   <button
