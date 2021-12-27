@@ -1,0 +1,27 @@
+name: 'tests'
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.5.0
+        with:
+          node-version: '16'
+
+      - name: 'Checkout Project'
+        uses: 'actions/checkout@v2'
+        with:
+          fetch-depth: 1
+
+      - name: Copy a subset of climbing content files
+        run: ./prebuilds.sh
+
+      - name: Install Dependencies
+        run: yarn install --no-progress
+
+      - name: Lint and build
+        run: yarn build
