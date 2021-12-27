@@ -24,7 +24,7 @@ export const get_raw_content = async (path, branch, authToken) => {
  * @param authToken
  */
 export const get_markdown_file = async (authToken) => {
-  const parsed = queryString.parse(location.search);
+  const parsed = queryString.parse(window.location.search);
   if (parsed.file) {
     const _path = `${CONTENT_BASEDIR}/${parsed.file}`;
     const data = await get_raw_content(_path, CONTENT_BRANCH, authToken);
