@@ -19,8 +19,6 @@ module.exports = {
     FAST_DEV: true,
     PRESERVE_FILE_DOWNLOAD_CACHE: true,
     PARALLEL_SOURCING: true,
-    LMDB_STORE: process.env.LMDB_STORE === "true",
-    PARALLEL_QUERY_RUNNING: process.env.PARALLEL_QUERY_RUNNING === "true",
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -87,5 +85,13 @@ module.exports = {
         },
       },
     },
+    {
+      resolve: `gatsby-plugin-typescript`,
+      options: {
+        isTSX: true, 
+        jsxPragma: `jsx`, 
+        allExtensions: true, // defaults to false
+    },
+  }
   ],
 };

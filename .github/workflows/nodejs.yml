@@ -17,11 +17,14 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Copy a subset of climbing content files
-        run: ./prebuild.sh
-
-      - name: Install Dependencies
+      - name: Install dependencies
         run: yarn install --no-progress
 
-      - name: Lint and build
+      - name: Lint code
+        run: yarn lint
+
+      - name: Copy a subset of content files
+        run: ./prebuild.sh
+
+      - name: Test build
         run: yarn build
