@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 1
 
       - name: Copy a subset of climbing content files
-        run: ./prebuilds.sh
+        run: ./prebuild.sh
 
       - name: Install Dependencies
         run: yarn install --no-progress
