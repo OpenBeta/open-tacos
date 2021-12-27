@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "gatsby";
-const slugify = require("slugify");
 import { sanitize_name } from "../../js/utils";
+const slugify = require("slugify");
 
 /**
  * Turn each element of `pathTokens` to a gatsby-link.

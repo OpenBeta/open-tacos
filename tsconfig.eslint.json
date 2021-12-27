@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "target": "esnext",
+      "module": "commonjs",
+      "esModuleInterop": true,
+      "moduleResolution": "node",
+      "rootDir": "./src",
+      "outDir": "pubblic",
+      "sourceMap": true,
+      "strictNullChecks": true
+    },
+    "lib": ["es2015"],
+  }
