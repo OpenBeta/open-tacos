@@ -36,7 +36,6 @@
     "buffer": "^6.0.3",
     "cross-env": "^7.0.3",
     "dayjs": "^1.10.6",
-    "eslint-plugin-jest": "^25.3.2",
     "formik": "^2.2.9",
     "front-matter": "^4.0.2",
     "gatsby": "^4.4.0",
@@ -88,10 +87,12 @@
     "start": "gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.3.4",
+    "eslint-plugin-jest": "^25.3.2",
     "autoprefixer": "^10.3.7",
     "babel-jest": "^27.0.2",
     "babel-preset-gatsby": "^2.0.0",
@@ -99,6 +100,7 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "gatsby-plugin-postcss": "^5.0.0",
+    "husky": "^7.0.4",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.0.4",
     "postcss": "^8.3.9",
@@ -151,8 +153,12 @@
     "envs": {
       "browser": true,
       "es2021": true,
-      "jest/globals":true
+      "jest/globals": true
     },
-    "files": ["src/**/*.js", "src/**/*.ts", "src/**/*.tsx"]
+    "files": [
+      "src/**/*.js",
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ]
   }
 }
