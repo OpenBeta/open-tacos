@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import { sanitize_name } from '../../js/utils'
+import { sanitizeName } from '../../js/utils'
 const slugify = require('slugify')
 
 /**
@@ -27,18 +27,18 @@ function BreadCrumbs ({ pathTokens, isClimbPage }) {
       </Link>
       {tokens.map((place, index, array) => {
         const isLastElement = array.length - 1 === index
-        const url = '/' + slugify_path(array.slice(0, index + 1))
+        const url = '/' + slugifyPath(array.slice(0, index + 1))
         return (
           <span key={index}>
             <span className='text-gray-400 mx-1.5'>/</span>
             {isLastElement && !isClimbPage
               ? (
-                <span className=''>{sanitize_name(place)}</span>
+                <span className=''>{sanitizeName(place)}</span>
                 )
               : (
                 <span className='text-gray-400'>
                   <Link className='hover:underline hover:text-gray-900' to={url}>
-                    {sanitize_name(place)}
+                    {sanitizeName(place)}
                   </Link>
                 </span>
                 )}
@@ -50,7 +50,7 @@ function BreadCrumbs ({ pathTokens, isClimbPage }) {
   )
 }
 
-const slugify_path = (pathTokens) =>
+const slugifyPath = (pathTokens) =>
   pathTokens.map((s) => slugify(s, { lower: true, strict: true })).join('/')
 
 export default BreadCrumbs

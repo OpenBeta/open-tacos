@@ -36,6 +36,7 @@
     "buffer": "^6.0.3",
     "cross-env": "^7.0.3",
     "dayjs": "^1.10.6",
+    "eslint-plugin-jest": "^25.3.2",
     "formik": "^2.2.9",
     "front-matter": "^4.0.2",
     "gatsby": "^4.4.0",
@@ -81,7 +82,7 @@
   ],
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "lint": "yarn run ts-standard",
+    "lint": "yarn run ts-standard ./",
     "build": "gatsby build",
     "develop": "gatsby develop",
     "start": "gatsby develop",
@@ -141,6 +142,17 @@
     "ignore": [
       "build"
     ],
+    "plugins": [
+      "jest"
+    ],
+    "globals": [
+      "jest"
+    ],
+    "envs": {
+      "browser": true,
+      "es2021": true,
+      "jest/globals":true
+    },
     "files": "src/**/*.tsx"
   }
 }

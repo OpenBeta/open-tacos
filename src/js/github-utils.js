@@ -9,7 +9,7 @@ export const CONTENT_BASEDIR = 'content'
 /**
  * Get a raw file
  */
-export const get_raw_content = async (path, branch, authToken) => {
+export const getRawContent = async (path, branch, authToken) => {
   const github = new GithubClient({
     authToken,
     baseBranch: branch
@@ -23,11 +23,11 @@ export const get_raw_content = async (path, branch, authToken) => {
  * Frontmatter is converted to json object.
  * @param authToken
  */
-export const get_markdown_file = async (authToken) => {
+export const getMarkdownFile = async (authToken) => {
   const parsed = queryString.parse(window.location.search)
   if (parsed.file) {
     const _path = `${CONTENT_BASEDIR}/${parsed.file}`
-    const data = await get_raw_content(_path, CONTENT_BRANCH, authToken)
+    const data = await getRawContent(_path, CONTENT_BRANCH, authToken)
     data.content = fm(data.content)
     return data
   }
@@ -43,7 +43,7 @@ export const get_markdown_file = async (authToken) => {
  * @param {Object} committer Committer object
  * @param {string} authToken Auth0 token
  */
-export const write_markdown_file = async (
+export const writeMarkdownFile = async (
   str,
   path,
   sha,

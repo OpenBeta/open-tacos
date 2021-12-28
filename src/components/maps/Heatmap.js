@@ -6,7 +6,7 @@ import usaHeatMapData from '../../assets/usa-heatmap.json'
 import BaseMap, { DEFAULT_INITIAL_VIEWSTATE } from './BaseMap'
 import { bboxFromGeoJson, bbox2Viewport } from '../../js/GeoHelpers'
 
-const Color_Range = [
+const COLOR_RANGE = [
   [1, 152, 189],
   [73, 227, 206],
   [216, 254, 181],
@@ -77,7 +77,7 @@ export default function Heatmap ({ geojson }) {
       intensity: 1,
       threshold: 0.03,
       opacity: 0.65,
-      colorRange: Color_Range
+      colorRange: COLOR_RANGE
     })
   ]
   return (

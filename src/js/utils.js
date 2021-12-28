@@ -60,7 +60,7 @@ export const computeStatsBarPercentPerAreaFromClimbs = (climbs) => {
   const areasToPercentAndColors = {}
 
   // map each climb to the area
-  climbs.edges.map(({ node }) => {
+  climbs.edges.forEach(({ node }) => {
     const parentId = node.fields.parentId
     if (areasToClimbs[parentId]) {
       areasToClimbs[parentId].push(node.frontmatter)
@@ -71,7 +71,7 @@ export const computeStatsBarPercentPerAreaFromClimbs = (climbs) => {
 
   // compute the stats and percent per area
   // do a little formatting to  reuse the helper function
-  Object.keys(areasToClimbs).map((key) => {
+  Object.keys(areasToClimbs).forEach((key) => {
     const formatted = areasToClimbs[key].map((c) => {
       return {
         node: {
@@ -89,7 +89,7 @@ export const computeStatsBarPercentPerAreaFromClimbs = (climbs) => {
  * Remove leading (6) or (aa) from an area or climb name
  * @param {String} s
  */
-export const sanitize_name = (s) =>
+export const sanitizeName = (s) =>
   s.replace(/^(\(.{1,3}\) *)|((\d?[1-9]|[1-9]0)-)/, '')
 
 /**
@@ -97,7 +97,7 @@ export const sanitize_name = (s) =>
  * @example {sport: true, boulder: false, trad: false} => {sport: true}
  * @param  type Climb type key-value dictionary
  */
-export const simplify_climb_type_json = (type) => {
+export const simplifyClimbTypeJson = (type) => {
   if (!type) return {}
   for (const key in type) {
     if (type[key] === false) {
@@ -120,7 +120,7 @@ export const simplify_climb_type_json = (type) => {
  * @returns
  */
 export const getScoreForYdsGrade = (yds) => {
-  const regex = /^5\.([0-9]{1,2})([a-zA-Z])?([\/\+])?([a-zA-Z]?)/
+  const regex = /^5\.([0-9]{1,2})([a-zA-Z])?([/+])?([a-zA-Z]?)/
   const [match, num, firstLetter, plusOrSlash] = yds.match(regex)
 
   // If there isn't a match sort it to the bottom

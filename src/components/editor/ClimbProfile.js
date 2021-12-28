@@ -41,9 +41,9 @@ const ClimbProfile = ({ frontmatter, formikRef }) => {
   }
 
   if (frontmatter) {
-    const { route_name, yds, fa, safety, type, metadata } = frontmatter
+    const { route_name: routeName, yds, fa, safety, type, metadata } = frontmatter
     initialValues = {
-      route_name,
+      route_name: routeName,
       fa: fa,
       yds: yds,
       type: { ...ROPE_CLIMB_TYPE_DEFAULTS, ...type },

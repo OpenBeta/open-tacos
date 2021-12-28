@@ -6,7 +6,7 @@ import { Link } from 'gatsby'
 // import LinkIcon from "../..//assets/icons/link.svg";
 const slugify = require('slugify')
 
-export default function Card ({
+export default function Route ({
   isGrid,
   isStandalone,
   fa,
@@ -14,15 +14,15 @@ export default function Card ({
   protection,
   YDS,
   location,
-  route_name,
+  routeName,
   type,
   safety,
   metadata,
-  parent_slug
+  parentSlug
 }) {
-  const { parent_sector } = metadata
+  const { parent_sector: parentSector } = metadata
 
-  const singleUrl = `/climbs/${metadata.mp_route_id}/${slugify(route_name, {
+  const singleUrl = `/climbs/${metadata.mp_route_id}/${slugify(routeName, {
     lower: true
   })}`
   return (
@@ -35,10 +35,10 @@ export default function Card ({
         {!isGrid && (
           <div className='flex justify-between items-center'>
             <div>
-              {parent_slug && (
+              {parentSlug && (
                 <span className='bg-gray-50 font-light text-sm text-gray-500 -ml-5 pl-2 pr-2 py-1'>
-                  <Link to={parent_slug} className='underline'>
-                    {parent_sector}
+                  <Link to={parentSlug} className='underline'>
+                    {parentSector}
                   </Link>
                   &nbsp;&rarr;
                 </span>
@@ -52,7 +52,7 @@ export default function Card ({
             isGrid ? 'text-base truncate' : 'text-xl'
           }`}
         >
-          {route_name}
+          {routeName}
         </h2>
         <div className='mt-4 flex justify-between items-center'>
           <div>

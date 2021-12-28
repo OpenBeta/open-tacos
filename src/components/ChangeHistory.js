@@ -22,7 +22,7 @@ const ChangeHistory = ({ commits, loading }) => {
 }
 
 const Row = ({ row, rowIndex }) => {
-  const { sha, html_url, name, date, age, message } = row
+  const { sha, html_url: htmlUrl, name, age, message } = row
   return (
     <div
       key={sha}
@@ -32,7 +32,7 @@ const Row = ({ row, rowIndex }) => {
       <div className='flex-grow'>
         <div className='font-semibold text-lg md:max-w-prose'>
           <a
-            href={html_url}
+            href={htmlUrl}
             className='hover:underline hover:text-custom-secondary'
             target='_blank'
             rel='noreferrer noopener'
@@ -45,7 +45,7 @@ const Row = ({ row, rowIndex }) => {
         </div>
       </div>
       <div className='hidden lg:flex-none lg:inline'>
-        <a href={html_url} target='_blank' rel='noreferrer noopener'>
+        <a href={htmlUrl} target='_blank' rel='noreferrer noopener'>
           <HorizontalMore className='w-6 h-6 text-custom-secondary' />
         </a>
       </div>

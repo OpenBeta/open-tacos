@@ -8,7 +8,7 @@ const Auth0Profile = () => {
   /**
    * Allows us to fetch the accessToken that we will need for git gateway.
    */
-  const callApi = async () => {
+  const callApi = async () => { // eslint-disable-line no-unused-vars
     const domain = Auth0Config.domain
     try {
       const accessToken = await getAccessTokenSilently({

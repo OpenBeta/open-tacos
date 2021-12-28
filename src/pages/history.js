@@ -2,19 +2,19 @@ import React, { useEffect, useState } from 'react'
 
 import { GithubClient } from '../js/GithubClient'
 import { transform } from '../components/dashboard/EditHistory'
-import SEO from '../components/seo'
+import SEOMeta from '../components/seo'
 import Layout from '../components/layout'
 import ChangeHistory from '../components/ChangeHistory'
 
 /**
  * Show recent edits
  */
-const History = (props) => {
+const History = () => {
   const [commits, setCommits] = useState([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const git_api_async = async () => {
+    const gitApiAsync = async () => {
       setLoading(true)
       const github = new GithubClient({})
       try {
@@ -26,13 +26,12 @@ const History = (props) => {
         console.log('# Network error', e)
       }
     }
-    git_api_async()
+    gitApiAsync()
   }, [])
 
   return (
     <Layout>
-      {/* eslint-disable react/jsx-pascal-case */}
-      <SEO
+      <SEOMeta
         keywords={['openbeta', 'rock climbing', 'climbing api']}
         title='History'
       />

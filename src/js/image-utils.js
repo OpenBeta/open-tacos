@@ -4,7 +4,7 @@ const client = axios.create({
   baseURL: 'https://api.cloudinary.com/v1_1/openbeta-prod'
 })
 
-export const upload_image = async (imageData, options) => {
+export const uploadImage = async (imageData, options) => {
   const payload = new FormData()
   payload.append('file', imageData)
   payload.append('upload_preset', 'mochigome')
@@ -15,14 +15,14 @@ export const upload_image = async (imageData, options) => {
 
   const res = await client.post('/image/upload', payload)
   if (res.status === 200) return res.data.secure_url
-  return Promise.reject('Error uploading image')
+  return Promise.reject(new Error('Error uploading image'))
 }
 
 /**
  *  convert object to key=value separated by |
  * @param context cloudinary context object (key:value)
  */
-const object2context = (context) => {
+const object2context = (context) => { // eslint-disable-line no-unused-vars
   return context
     ? Object.keys(context)
       .map((key) => key + '=' + context[key])

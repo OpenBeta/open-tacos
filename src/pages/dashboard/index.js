@@ -2,7 +2,7 @@ import React from 'react'
 import { withAuthenticationRequired } from '@auth0/auth0-react'
 
 import Layout from '../../components/layout'
-import SEO from '../../components/seo'
+import SEOMeta from '../../components/seo'
 import Auth0NavBar from '../../components/auth0NavBar/auth0NavBar'
 import EditHistory from '../../components/dashboard/EditHistory'
 
@@ -11,7 +11,7 @@ function DashboardIndex () {
     <Layout
       customClz='flex flex-col justify-between h-screen'
     >
-      <SEO keywords={[]} title='Dashboard' />
+      <SEOMeta keywords={[]} title='Dashboard' />
       <Auth0NavBar />
       <EditHistory />
     </Layout>

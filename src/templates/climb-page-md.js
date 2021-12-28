@@ -5,16 +5,15 @@ import SEO from '../components/seo'
 import BreadCrumbs from '../components/ui/BreadCrumbs'
 import { pathOrParentIdToGitHubLink } from '../js/utils'
 import LinkToGithub from '../components/ui/LinkToGithub'
-import { template_h1_css } from '../js/styles'
+import { templateH1Css } from '../js/styles'
 import RouteGradeChip from '../components/ui/RouteGradeChip'
 import RouteTypeChips from '../components/ui/RouteTypeChips'
-import ClimbDetail from '../components/graphql/ClimbDetail'
 
 /**
  * Templage for generating individual page for the climb
  */
 export default function ClimbPage ({ data: { climb } }) {
-  const { route_name, yds, type, safety, fa } = climb.frontmatter
+  const { route_name: routeName, yds, type, safety, fa } = climb.frontmatter
   const { rawPath, filename, pathTokens, parent } = climb
   const githubLink = pathOrParentIdToGitHubLink(rawPath, filename)
 
@@ -22,13 +21,13 @@ export default function ClimbPage ({ data: { climb } }) {
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO
-        keywords={[route_name]}
-        title={route_name}
+        keywords={[routeName]}
+        title={routeName}
         description={buildMetaDescription(pathTokens, fa, yds)}
       />
       <div>
         <BreadCrumbs pathTokens={pathTokens} isClimbPage />
-        <h1 className={template_h1_css}>{route_name}</h1>
+        <h1 className={templateH1Css}>{routeName}</h1>
         <RouteGradeChip yds={yds} safety={safety} />
         <RouteTypeChips type={type} />
         <div className='pt-4 text-sm text-gray-600 italic'>FA: {fa}</div>

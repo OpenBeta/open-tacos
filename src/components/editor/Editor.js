@@ -12,7 +12,7 @@ import ProfilePlaceholder from './ProfilePlaceholder'
 import PageHeader from './PageHeader'
 import ErrorMessage from './ErrorMessage'
 import { stringify } from './md-utils'
-import { get_markdown_file, write_markdown_file } from '../../js/github-utils'
+import { getMarkdownFile, writeMarkdownFile } from '../../js/github-utils'
 
 // Main state of this component.  Mirror essential fields from the response object
 // returned from GitHub Rest API.
@@ -21,7 +21,7 @@ import { get_markdown_file, write_markdown_file } from '../../js/github-utils'
 // We can add more fields to local state as needed.
 // Note: Frontmatter and markdown states are maintained internally
 // by Formik and Plate editor respectively.
-const initial_state = {
+const initialState = {
   sha: null,
   path: null,
   content: {
@@ -63,22 +63,22 @@ export const Editor = () => {
 
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(ERROR.NO_ERROR)
-  const [fileObj, setFileObject] = useState(initial_state)
+  const [fileObj, setFileObject] = useState(initialState)
 
   useEffect(() => {
-    const get_file_from_github = async () => {
+    const getFileFromGithub = async () => {
       try {
         const authToken = await getAccessTokenSilently({
           audience: 'https://git-gateway'
         })
-        const { sha, path, content } = await get_markdown_file(authToken)
+        const { sha, path, content } = await getMarkdownFile(authToken)
         setFileObject({ sha, path, content })
       } catch (e) {
         console.log(e)
         setError(ERROR.FILE_LOAD_ERROR)
       }
     }
-    get_file_from_github()
+    getFileFromGithub()
   }, [])
 
   const onSubmit = async () => {
@@ -94,7 +94,7 @@ export const Editor = () => {
       })
       const str = stringify({
         frontmatter: formikRef.current.values,
-        body_ast: plateValue
+        bodyAst: plateValue
       })
       const committer = {
         name: user['https://tacos.openbeta.io/username'],
@@ -103,7 +103,7 @@ export const Editor = () => {
 
       setSubmitting(true)
       const { path, sha } = fileObj
-      const res = await write_markdown_file(
+      await writeMarkdownFile(
         str,
         path,
         sha,
@@ -119,6 +119,8 @@ export const Editor = () => {
           break
         case 422:
           console.log('GitHub commit error', e)
+          setError(ERROR.FILE_WRITE_ERROR)
+          break
         default:
           setError(ERROR.FILE_WRITE_ERROR)
           break
@@ -129,7 +131,7 @@ export const Editor = () => {
   }
 
   const { attributes, body } = fileObj.content
-  const editType = get_type(attributes)
+  const editType = getType(attributes)
   return (
     <>
       <ErrorMessage {...error} setError={setError} />
@@ -162,7 +164,7 @@ export const Editor = () => {
  * Determine if we're editing a climb, a boulder problem or an area
  * @param fm  frontmatter object
  */
-const get_type = (fm) => {
+const getType = (fm) => {
   if (fm) {
     if (fm.route_name) return 'climb'
     if (fm.area_name) return 'area'

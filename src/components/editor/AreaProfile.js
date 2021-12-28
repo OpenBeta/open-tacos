@@ -17,9 +17,9 @@ const AreaProfile = ({ frontmatter, formikRef }) => {
   }
 
   if (frontmatter) {
-    const { area_name, metadata } = frontmatter
+    const { area_name: areaName, metadata } = frontmatter
     initialValues = {
-      area_name: area_name,
+      area_name: areaName,
       metadata // while we're not editing metadata yet we still need give it to Formik so that it can be retrieved later onSubmit
     }
   }

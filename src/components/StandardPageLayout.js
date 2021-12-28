@@ -1,7 +1,7 @@
 import React from 'react'
 import { MDXProvider } from '@mdx-js/react'
 import Layout from '../components/layout'
-import SEO from '../components/seo'
+import SEOTags from '../components/seo'
 import { Header, h1, h2, p, a, ol, ul, pre, blockquote } from '../components/ui/shortcodes'
 
 const shortcodes = { Header, h1, h2, p, a, ol, ul, pre, blockquote }
@@ -11,7 +11,7 @@ export default ({ pageContext, children }) => {
   const { title, keywords } = frontmatter
   return (
     <Layout>
-      <SEO keywords={keywords} title={title} />
+      <SEOTags keywords={keywords} title={title} />
       <MDXProvider components={shortcodes}>{children}</MDXProvider>
     </Layout>
   )

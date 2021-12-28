@@ -16,7 +16,7 @@ import { createLinkPlugin } from '@udecode/plate-link'
 import { createImagePlugin } from '@udecode/plate-image'
 import FormatToolbar from './FormatToolbar'
 import { createCustomNormalizingPlugin } from './createCustomNormalizingPlugin'
-import { md_to_slate } from './md-utils'
+import { mdToSlate } from './md-utils'
 
 // customize the editor inner container
 const editableProps = {
@@ -49,7 +49,7 @@ const PlateEditor = ({ markdown, onSubmit, debug }) => {
 
   const onChange = (props) => debug && setValue(props)
 
-  const ast = md_to_slate(markdown)
+  const ast = mdToSlate(markdown)
   return (
     <div className='flex-grow 2xl:w-2/3 2xl:max-w-5xl border-gray-300 border rounded-lg shadow-sm'>
       <FormatToolbar />

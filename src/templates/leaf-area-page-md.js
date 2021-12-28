@@ -10,18 +10,16 @@ import BreadCrumbs from '../components/ui/BreadCrumbs'
 import { getScoreForYdsGrade, pathOrParentIdToGitHubLink } from '../js/utils'
 import AreaCard from '../components/ui/AreaCard'
 import LinkToGithub from '../components/ui/LinkToGithub'
-import { template_h1_css } from '../js/styles'
+import { templateH1Css } from '../js/styles'
 import AreaStatistics from '../components/AreaStatistics'
 import Heatmap from '../components/maps/Heatmap'
 import ButtonGroup from '../components/ui/ButtonGroup'
 import { Button } from '../components/ui/Button'
-import ClimbDetail from '../components/graphql/ClimbDetail'
-import AreaDetail from '../components/graphql/AreaDetail'
 /**
  * Templage for generating individual Area page
  */
 export default function LeafAreaPage ({ data: { area, gisBoundary } }) {
-  const { area_name, metadata } = area.frontmatter
+  const { area_name: areaName, metadata } = area.frontmatter
   const { pathTokens, rawPath, parent, children } = area
 
   const [selectedClimbSort, setSelectedClimbSort] = useState(0)
@@ -47,15 +45,15 @@ export default function LeafAreaPage ({ data: { area, gisBoundary } }) {
     <Layout layoutClz='layout-wide'>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO
-        keywords={[area_name]}
-        title={area_name}
+        keywords={[areaName]}
+        title={areaName}
         description={buildMetaDescription(children, pathTokens, hasChildAreas)}
       />
       <div className='overflow-y'>
         <div className='xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch'>
           <div className='xl:flex-none xl:max-w-screen-md xl:w-full'>
             <BreadCrumbs pathTokens={pathTokens} />
-            <h1 className={template_h1_css}>{area_name}</h1>
+            <h1 className={templateH1Css}>{areaName}</h1>
             <span className='flex items-center flex-shrink text-gray-500 text-xs gap-x-1'>
               <Droppin className='stroke-current' />
               <a
@@ -90,11 +88,11 @@ export default function LeafAreaPage ({ data: { area, gisBoundary } }) {
                 <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
                   {children.map((node) => {
                     const { frontmatter, slug } = node
-                    const { area_name, metadata } = frontmatter
+                    const { area_name: areaName, metadata } = frontmatter
                     return (
                       <div className='max-h-96' key={metadata.area_id}>
                         <Link to={slug}>
-                          <AreaCard area_name={area_name} />
+                          <AreaCard areaName={areaName} />
                         </Link>
                       </div>
                     )
@@ -128,13 +126,13 @@ export default function LeafAreaPage ({ data: { area, gisBoundary } }) {
                 sortRoutes(children, climbSortByOptions[selectedClimbSort]).map(
                   (node) => {
                     const { frontmatter, slug } = node
-                    const { yds, route_name, metadata, type } = frontmatter
+                    const { yds, route_name: routeName, metadata, type } = frontmatter
                     return (
                       <div className='pt-6 max-h-96' key={metadata.climb_id}>
                         <Link to={slug}>
                           <RouteCard
-                            route_name={route_name}
-                            climb_id={metadata.climb_id}
+                            routeName={routeName}
+                            // climbId={metadata.climb_id} not actually used
                             YDS={yds}
                             // safety="{}" TODO: Find out what routes have this value?
                             type={type}

@@ -3,7 +3,7 @@ import Card from './card'
 import RouteTypeChips from './RouteTypeChips'
 import RouteGradeGip from './RouteGradeChip'
 
-function RouteCard ({ route_name, type, safety, YDS, onPress }) {
+function RouteCard ({ routeName, type, safety, YDS, onPress }) {
   return (
     <Card
       onPress={onPress}
@@ -11,7 +11,7 @@ function RouteCard ({ route_name, type, safety, YDS, onPress }) {
       <h2
         className='font-medium font-sans my-4 text-base truncate'
       >
-        {route_name}
+        {routeName}
       </h2>
       <div className='mt-4 flex justify-between items-center'>
         <div>

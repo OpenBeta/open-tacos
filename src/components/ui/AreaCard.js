@@ -8,7 +8,7 @@ import BarPercent from './BarPercent'
  * stats - {percent, colors} an object that contains the data for the BarPercent
  *   component
  */
-function AreaCard ({ area_name, onPress, stats }) {
+function AreaCard ({ areaName, onPress, stats }) {
   return (
     <Card
       onPress={onPress}
@@ -20,7 +20,7 @@ function AreaCard ({ area_name, onPress, stats }) {
       <h2
         className='font-medium font-sans my-4 text-base truncate'
       >
-        {area_name}
+        {areaName}
       </h2>
     </Card>
   )

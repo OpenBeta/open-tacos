@@ -5,14 +5,14 @@ export const client = axios.create({
   baseURL: 'https://climb-api.openbeta.io/geocode/v1'
 })
 
-const debounced_api_get = AwesomeDebouncePromise(client.get, 200)
+const debouncedApiGet = AwesomeDebouncePromise(client.get, 200)
 
-export const search_climbs_by_name = async (name) => {
-  return await _api(debounced_api_get, [`/climbs?name=${name}`])
+export const searchClimbsByName = async (name) => {
+  return await _api(debouncedApiGet, [`/climbs?name=${name}`])
 }
 
-export const search_climbs_by_fa = async (fa_name) => {
-  return await _api(debounced_api_get, [`/climbs?fa=${fa_name}`])
+export const searchClimbsByFa = async (faName) => {
+  return await _api(debouncedApiGet, [`/climbs?fa=${faName}`])
 }
 
 /**

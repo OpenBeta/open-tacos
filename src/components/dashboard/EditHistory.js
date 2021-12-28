@@ -48,10 +48,10 @@ function EditHistory () {
  */
 export const transform = (list) => {
   if (!list) return []
-  const newList = list.map(({ sha, html_url, commit }) => {
+  const newList = list.map(({ sha, html_url: htmlUrl, commit }) => {
     const { author, message } = commit
     const { date, name } = author
-    return { sha, html_url, date, age: dayjs(date).fromNow(), message, name }
+    return { sha, html_url: htmlUrl, date, age: dayjs(date).fromNow(), message, name }
   })
   return newList
 }

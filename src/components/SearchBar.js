@@ -5,16 +5,14 @@ import ClimbSearch from './ClimbSearch'
 import { IconButton } from './ui/Button'
 import SearchIcon from '../assets/icons/search.svg'
 
-const slugify = require('slugify')
-
 export default function SearchBar ({ className }) {
   const [activated, setActivated] = useState(false)
   // const [isTop, setTop] = useState(false);
   useEffect(() => {
-    detect_scroll()
+    detectScroll()
   }, [])
 
-  const detect_scroll = () => {
+  const detectScroll = () => {
     window.addEventListener(
       'scroll',
       function () {
@@ -54,10 +52,10 @@ export default function SearchBar ({ className }) {
 }
 
 const navigateTo = (data) => {
-  const { meta_mp_route_id } = data
-  navigate(build_url(meta_mp_route_id))
+  const { meta_mp_route_id: metaMpRouteId } = data
+  navigate(buildUrl(metaMpRouteId))
 }
 
-const build_url = (meta_mp_route_id) => {
-  return `/climbs/${meta_mp_route_id}`
+const buildUrl = (metaMpRouteId) => {
+  return `/climbs/${metaMpRouteId}`
 }

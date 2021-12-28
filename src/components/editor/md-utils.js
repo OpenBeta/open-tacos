@@ -1,9 +1,8 @@
 import { unified } from 'unified'
-import markdown from 'remark-parse'
 import slate, { defaultNodeTypes, serialize } from '@openbeta/remark-slate'
 import yaml from 'js-yaml'
 
-import { simplify_climb_type_json } from '../../js/utils'
+import { simplifyClimbTypeJson } from '../../js/utils'
 
 const DEFAULT_HEADINGS = {
   1: 'h1',
@@ -38,21 +37,21 @@ const SERIALIZE_OPTS = {
 
 /**
  * Convert markdown string to Slate AST
- * @param md_str markdown string
+ * @param markdown markdown string
  */
-export const md_to_slate = (md_str) => {
-  if (!md_str) {
+export const mdToSlate = (markdown) => {
+  if (!markdown) {
     return null
   }
   const processor = unified().use(markdown).use(slate, DESERIALIZE_OPTS)
-  return top_images(processor.processSync(md_str).result)
+  return topImages(processor.processSync(markdown).result)
 }
 
 /**
  * Convert Slate AST to markdown string
  * @param  ast
  */
-export const slate_to_md = (ast) => {
+export const slateToMarkdown = (ast) => {
   return ast ? ast.map((v) => serialize(v, SERIALIZE_OPTS)).join('\n') : ''
 }
 
@@ -60,7 +59,7 @@ export const slate_to_md = (ast) => {
  * Move image nodes to top-level
  * @param  {Object} ast Slate AST
  */
-export const top_images = (ast) => {
+export const topImages = (ast) => {
   return ast.reduce((acc, cur) => {
     const processedNode = cur
     // Extract images from wrapping node while preserving any other children
@@ -92,9 +91,9 @@ export const top_images = (ast) => {
  * @param {Object} Data.body_ast Content AST from Slate editor
  * @returns {string} markdown string
  */
-export const stringify = ({ frontmatter, body_ast }) => {
+export const stringify = ({ frontmatter, bodyAst }) => {
   if (frontmatter.type) {
-    frontmatter.type = simplify_climb_type_json(frontmatter.type)
+    frontmatter.type = simplifyClimbTypeJson(frontmatter.type)
   }
-  return '---\n' + yaml.dump(frontmatter) + '---\n' + slate_to_md(body_ast)
+  return '---\n' + yaml.dump(frontmatter) + '---\n' + slateToMarkdown(bodyAst)
 }

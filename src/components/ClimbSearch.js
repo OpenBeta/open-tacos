@@ -7,8 +7,8 @@ import Toggle from '../components/ui/Toggle'
 
 import XIcon from '../assets/icons/xcircle.svg'
 import {
-  search_climbs_by_name,
-  search_climbs_by_fa
+  searchClimbsByName,
+  searchClimbsByFa
 } from '../openbeta-api-utils'
 
 export default function ClimbSearch ({ onClimbNameChange }) {
@@ -35,8 +35,8 @@ export default function ClimbSearch ({ onClimbNameChange }) {
     }
 
     const rs = fa
-      ? await search_climbs_by_fa(value)
-      : await search_climbs_by_name(value)
+      ? await searchClimbsByFa(value)
+      : await searchClimbsByName(value)
     rs && setSuggestions(rs)
   }
 
