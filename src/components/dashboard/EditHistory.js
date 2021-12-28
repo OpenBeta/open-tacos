@@ -1,44 +1,44 @@
-import React, { useEffect, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import React, { useEffect, useState } from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
 
-import ChangeHistory from "../../components/ChangeHistory";
-import { GithubClient } from "../../js/GithubClient";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
+import ChangeHistory from '../../components/ChangeHistory'
+import { GithubClient } from '../../js/GithubClient'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 
-dayjs.extend(relativeTime);
+dayjs.extend(relativeTime)
 
-function EditHistory() {
-  const { getAccessTokenSilently, user } = useAuth0();
-  const [commits, setCommits] = useState([]);
-  const [loading, setLoading] = useState(false);
+function EditHistory () {
+  const { getAccessTokenSilently, user } = useAuth0()
+  const [commits, setCommits] = useState([])
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     const getAuth0Token = async () => {
-      setLoading(true);
+      setLoading(true)
       const authToken = await getAccessTokenSilently({
-        audience: "https://git-gateway",
-      });
+        audience: 'https://git-gateway'
+      })
 
       const author = {
-        name: user["https://tacos.openbeta.io/username"],
-        email: user["https://tacos.openbeta.io/username"] + "@noreply",
-      };
+        name: user['https://tacos.openbeta.io/username'],
+        email: user['https://tacos.openbeta.io/username'] + '@noreply'
+      }
 
-      const github = new GithubClient({ authToken });
-      const list = await github.getAllCommits(author.email);
-      setLoading(false);
-      setCommits(transform(list));
-    };
+      const github = new GithubClient({ authToken })
+      const list = await github.getAllCommits(author.email)
+      setLoading(false)
+      setCommits(transform(list))
+    }
 
-    getAuth0Token();
-  }, [getAccessTokenSilently, user]);
+    getAuth0Token()
+  }, [getAccessTokenSilently, user])
 
   return (
-    <div className="mt-16">
-      <div className="md-h1">My Recent Edits</div>
+    <div className='mt-16'>
+      <div className='md-h1'>My Recent Edits</div>
       <ChangeHistory commits={commits} loading={loading} />
     </div>
-  );
+  )
 }
 
 /**
@@ -47,13 +47,13 @@ function EditHistory() {
  * @param {Array} list
  */
 export const transform = (list) => {
-  if (!list) return [];
-  const newList = list.map(({ sha, html_url, commit }) => {
-    const { author, message } = commit;
-    const { date, name } = author;
-    return { sha, html_url, date, age: dayjs(date).fromNow(), message, name };
-  });
-  return newList;
-};
+  if (!list) return []
+  const newList = list.map(({ sha, html_url: htmlUrl, commit }) => {
+    const { author, message } = commit
+    const { date, name } = author
+    return { sha, html_url: htmlUrl, date, age: dayjs(date).fromNow(), message, name }
+  })
+  return newList
+}
 
-export default EditHistory;
+export default EditHistory

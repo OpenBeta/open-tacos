@@ -1,20 +1,20 @@
-import React from "react";
-import LoginButton from "./LoginButton";
-import LogoutButton from "./LogoutButton";
-import Auth0Profile from "./Auth0Profile";
-import LoginMessage from "./LoginMessage";
+import React from 'react'
+import LoginButton from './LoginButton'
+import LogoutButton from './LogoutButton'
+import Auth0Profile from './Auth0Profile'
+import LoginMessage from './LoginMessage'
 
 const Auth0NavBar = () => {
   return (
-    <div className="mt-8 flex justify-between items-center">
-      <Auth0Profile/>
-      <LoginMessage/>
+    <div className='mt-8 flex justify-between items-center'>
+      <Auth0Profile />
+      <LoginMessage />
       <div>
-        <LoginButton/>
-        <LogoutButton/>
+        <LoginButton />
+        <LogoutButton />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Auth0NavBar;
+export default Auth0NavBar

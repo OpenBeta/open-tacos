@@ -1,8 +1,8 @@
-import React from "react";
-import { useStaticQuery, graphql, navigate, Link } from "gatsby";
+import React from 'react'
+import { useStaticQuery, graphql, navigate, Link } from 'gatsby'
 
-function Climbs({ id }) {
-  let allClimbingRoutes = useStaticQuery(graphql`
+function Climbs ({ id }) {
+  const allClimbingRoutes = useStaticQuery(graphql`
     query {
       allClimb(sort: { fields: frontmatter___metadata___mp_id }) {
         edges {
@@ -17,27 +17,27 @@ function Climbs({ id }) {
         }
       }
     }
-  `);
+  `)
 
-  const list = allClimbingRoutes.allClimb.edges;
+  const list = allClimbingRoutes.allClimb.edges
 
   const foundNode = list.find(
     ({ node }) => id === node.frontmatter.metadata.mp_id
-  );
+  )
 
   if (foundNode) {
-    const { node } = foundNode;
-    navigate(node.slug);
+    const { node } = foundNode
+    navigate(node.slug)
   }
 
   return (
-    <div className="mt-12">
-      Climb not found.{" "}
-      <Link className="btn btn-text" to="/">
+    <div className='mt-12'>
+      Climb not found.{' '}
+      <Link className='btn btn-text' to='/'>
         Continue
       </Link>
     </div>
-  );
+  )
 }
 
-export default Climbs;
+export default Climbs

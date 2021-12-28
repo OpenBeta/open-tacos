@@ -1,4 +1,4 @@
-import { graphql } from "gatsby";
+import { graphql } from 'gatsby'
 export const query = graphql`
   fragment ClimbDetailFragment on Climb {
     id
@@ -27,4 +27,4 @@ export const query = graphql`
       }
     }
   }
-`;
+`
