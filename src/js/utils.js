@@ -1,4 +1,4 @@
-import { ClimbTypeToColor } from "./constants";
+import { ClimbTypeToColor } from './constants'
 
 /**
  * Given a path or parent id and the type of the page generate the GitHub URL
@@ -7,9 +7,9 @@ import { ClimbTypeToColor } from "./constants";
  */
 export const pathOrParentIdToGitHubLink = (pathOrParentId, fileName) => {
   const baseUrl =
-    "https://github.com/OpenBeta/opentacos-content/blob/develop/content/";
-  return baseUrl + pathOrParentId + `/${fileName}.md`;
-};
+    'https://github.com/OpenBeta/opentacos-content/blob/develop/content/'
+  return baseUrl + pathOrParentId + `/${fileName}.md`
+}
 
 /**
  * Given an array of objects that are climbs, generate the percents
@@ -19,34 +19,34 @@ export const pathOrParentIdToGitHubLink = (pathOrParentId, fileName) => {
  * @returns {percents: [], colors:[]}
  */
 export const computeClimbingPercentsAndColors = (climbs) => {
-  const typeToCount = {};
+  const typeToCount = {}
   climbs.forEach((climb) => {
-    const { type } = climb.frontmatter;
-    const types = Object.keys(type);
+    const { type } = climb.frontmatter
+    const types = Object.keys(type)
     types.forEach((key) => {
-      const isType = type[key];
-      if (!isType) return;
+      const isType = type[key]
+      if (!isType) return
       if (typeToCount[key]) {
-        typeToCount[key] = typeToCount[key] + 1;
+        typeToCount[key] = typeToCount[key] + 1
       } else {
-        typeToCount[key] = 1;
+        typeToCount[key] = 1
       }
-    });
-  });
-  const counts = Object.values(typeToCount) || [];
-  const reducer = (accumulator, currentValue) => accumulator + currentValue;
-  const totalClimbs = counts.reduce(reducer, 0);
+    })
+  })
+  const counts = Object.values(typeToCount) || []
+  const reducer = (accumulator, currentValue) => accumulator + currentValue
+  const totalClimbs = counts.reduce(reducer, 0)
   const percents = counts.map((count) => {
-    return (count / totalClimbs) * 100;
-  });
+    return (count / totalClimbs) * 100
+  })
   const colors = Object.keys(typeToCount).map((key) => {
-    return ClimbTypeToColor[key];
-  });
+    return ClimbTypeToColor[key]
+  })
   return {
     percents,
-    colors,
-  };
-};
+    colors
+  }
+}
 
 /**
  * Given a set of climbs, map them back to their parent areas. For each
@@ -56,18 +56,18 @@ export const computeClimbingPercentsAndColors = (climbs) => {
  * @returns Object
  */
 export const computeStatsBarPercentPerAreaFromClimbs = (climbs) => {
-  const areasToClimbs = {};
-  const areasToPercentAndColors = {};
+  const areasToClimbs = {}
+  const areasToPercentAndColors = {}
 
   // map each climb to the area
   climbs.edges.map(({ node }) => {
-    const parentId = node.fields.parentId;
+    const parentId = node.fields.parentId
     if (areasToClimbs[parentId]) {
-      areasToClimbs[parentId].push(node.frontmatter);
+      areasToClimbs[parentId].push(node.frontmatter)
     } else {
-      areasToClimbs[parentId] = [node.frontmatter];
+      areasToClimbs[parentId] = [node.frontmatter]
     }
-  });
+  })
 
   // compute the stats and percent per area
   // do a little formatting to  reuse the helper function
@@ -75,22 +75,22 @@ export const computeStatsBarPercentPerAreaFromClimbs = (climbs) => {
     const formatted = areasToClimbs[key].map((c) => {
       return {
         node: {
-          frontmatter: c,
-        },
-      };
-    });
-    areasToPercentAndColors[key] = computeClimbingPercentsAndColors(formatted);
-  });
+          frontmatter: c
+        }
+      }
+    })
+    areasToPercentAndColors[key] = computeClimbingPercentsAndColors(formatted)
+  })
 
-  return areasToPercentAndColors;
-};
+  return areasToPercentAndColors
+}
 
 /**
  * Remove leading (6) or (aa) from an area or climb name
  * @param {String} s
  */
 export const sanitize_name = (s) =>
-  s.replace(/^(\(.{1,3}\) *)|((\d?[1-9]|[1-9]0)-)/, "");
+  s.replace(/^(\(.{1,3}\) *)|((\d?[1-9]|[1-9]0)-)/, '')
 
 /**
  * Simplify climb 'type' dictionary to contain only 'true' key-value pair.
@@ -98,14 +98,14 @@ export const sanitize_name = (s) =>
  * @param  type Climb type key-value dictionary
  */
 export const simplify_climb_type_json = (type) => {
-  if (!type) return {};
+  if (!type) return {}
   for (const key in type) {
     if (type[key] === false) {
-      delete type[key];
+      delete type[key]
     }
   }
-  return type;
-};
+  return type
+}
 
 /**
  * Temporary grade sort until helper lib is available.
@@ -120,18 +120,18 @@ export const simplify_climb_type_json = (type) => {
  * @returns
  */
 export const getScoreForYdsGrade = (yds) => {
-  const regex = /^5\.([0-9]{1,2})([a-zA-Z])?([\/\+])?([a-zA-Z]?)/;
-  const [match, num, firstLetter, plusOrSlash] = yds.match(regex);
+  const regex = /^5\.([0-9]{1,2})([a-zA-Z])?([\/\+])?([a-zA-Z]?)/
+  const [match, num, firstLetter, plusOrSlash] = yds.match(regex)
 
   // If there isn't a match sort it to the bottom
   if (!match) {
-    console.warning(`Unexpected yds format: ${yds}`);
-    return 0;
+    console.warning(`Unexpected yds format: ${yds}`)
+    return 0
   }
 
-  let letterScore = firstLetter
+  const letterScore = firstLetter
     ? (firstLetter.toLowerCase().charCodeAt(0) - 96) * 2
-    : 0;
-  let plusSlash = plusOrSlash === undefined ? 0 : 1;
-  return num * 10 + letterScore + plusSlash;
-};
+    : 0
+  const plusSlash = plusOrSlash === undefined ? 0 : 1
+  return num * 10 + letterScore + plusSlash
+}

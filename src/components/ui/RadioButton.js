@@ -1,5 +1,5 @@
-import React from "react";
-import { Field } from "formik";
+import React from 'react'
+import { Field } from 'formik'
 
 /**
  * Formik-radio button
@@ -9,25 +9,25 @@ import { Field } from "formik";
  * @param label text label
  */
 const RadioButton = ({ id, groupName, value, label }) => {
-  const idStr = `${groupName}${id}`;
+  const idStr = `${groupName}${id}`
   return (
     <div>
       <Field
-        className="hidden"
+        className='hidden'
         id={idStr}
-        type="radio"
+        type='radio'
         name={groupName}
         value={value}
       />
       <label
-        className="pill flex flex-col border border-gray-200 cursor-pointer"
+        className='pill flex flex-col border border-gray-200 cursor-pointer'
         htmlFor={idStr}
       >
-        <span className="text-sm font-semibold whitespace-nowrap">
+        <span className='text-sm font-semibold whitespace-nowrap'>
           {label}
         </span>
       </label>
     </div>
-  );
-};
-export default RadioButton;
+  )
+}
+export default RadioButton

@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
+import React, { useState, useEffect } from 'react'
+import { Formik, Form } from 'formik'
+import * as Yup from 'yup'
 
-import TextField from "../ui/TextField";
+import TextField from '../ui/TextField'
 
 const CommitSubjectSchema = Yup.object().shape({
   message: Yup.string()
-    .min(10, "Too short!")
-    .max(50, "Too Long!")
-    .required("Required"),
-});
+    .min(10, 'Too short!')
+    .max(50, 'Too Long!')
+    .required('Required')
+})
 
 const initialValues = {
-    message: "",
-  };
+  message: ''
+}
 
-function CommitSubject({formikRef}) {
+function CommitSubject ({ formikRef }) {
   return (
     <Formik
       innerRef={formikRef}
       initialValues={initialValues}
       validationSchema={CommitSubjectSchema}
-      validateOnMount={true}
+      validateOnMount
     >
-      <TextField name="message" label="Change summary" />
+      <TextField name='message' label='Change summary' />
     </Formik>
-  );
+  )
 }
-export default CommitSubject;
+export default CommitSubject

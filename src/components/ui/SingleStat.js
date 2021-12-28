@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react'
 
-function SingleStat ({number, className}) {
+function SingleStat ({ number, className }) {
   return (
     <div
       className={`h-12 flex place-items-center font-mono text-xl rounded-lg 
@@ -8,7 +8,7 @@ function SingleStat ({number, className}) {
     >
       {number}
     </div>
-  );
+  )
 }
 
-export default SingleStat;
+export default SingleStat
