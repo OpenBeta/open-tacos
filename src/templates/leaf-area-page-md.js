@@ -1,115 +1,113 @@
-import React, { useState } from "react";
-import { graphql, navigate, Link } from "gatsby";
-import { point } from "@turf/helpers";
-import Layout from "../components/layout";
-import SEO from "../components/seo";
-import Droppin from "../assets/icons/droppin.svg";
-import Pencil from "../assets/icons/pencil-sm.svg";
-import RouteCard from "../components/ui/RouteCard";
-import BreadCrumbs from "../components/ui/BreadCrumbs";
-import { getScoreForYdsGrade, pathOrParentIdToGitHubLink } from "../js/utils";
-import AreaCard from "../components/ui/AreaCard";
-import LinkToGithub from "../components/ui/LinkToGithub";
-import { template_h1_css } from "../js/styles";
-import AreaStatistics from "../components/AreaStatistics";
-import Heatmap from "../components/maps/Heatmap";
-import ButtonGroup from "../components/ui/ButtonGroup";
-import { Button } from "../components/ui/Button";
-import ClimbDetail from "../components/graphql/ClimbDetail";
-import AreaDetail from "../components/graphql/AreaDetail";
+import React, { useState } from 'react'
+import { graphql, navigate, Link } from 'gatsby'
+import { point } from '@turf/helpers'
+import Layout from '../components/layout'
+import SEO from '../components/seo'
+import Droppin from '../assets/icons/droppin.svg'
+import Pencil from '../assets/icons/pencil-sm.svg'
+import RouteCard from '../components/ui/RouteCard'
+import BreadCrumbs from '../components/ui/BreadCrumbs'
+import { getScoreForYdsGrade, pathOrParentIdToGitHubLink } from '../js/utils'
+import AreaCard from '../components/ui/AreaCard'
+import LinkToGithub from '../components/ui/LinkToGithub'
+import { templateH1Css } from '../js/styles'
+import AreaStatistics from '../components/AreaStatistics'
+import Heatmap from '../components/maps/Heatmap'
+import ButtonGroup from '../components/ui/ButtonGroup'
+import { Button } from '../components/ui/Button'
 /**
  * Templage for generating individual Area page
  */
-export default function LeafAreaPage({ data: { area, gisBoundary } }) {
-  const { area_name, metadata } = area.frontmatter;
-  const { pathTokens, rawPath, parent, children } = area;
+export default function LeafAreaPage ({ data: { area, gisBoundary } }) {
+  const { area_name: areaName, metadata } = area.frontmatter
+  const { pathTokens, rawPath, parent, children } = area
 
-  const [selectedClimbSort, setSelectedClimbSort] = useState(0);
+  const [selectedClimbSort, setSelectedClimbSort] = useState(0)
 
   const boundaryOrPoint = gisBoundary
     ? JSON.parse(gisBoundary.rawGeojson)
-    : point([metadata.lng, metadata.lat]);
+    : point([metadata.lng, metadata.lat])
 
-  //return (<div>{JSON.stringify(area)}</div>)
+  // return (<div>{JSON.stringify(area)}</div>)
   // Area.children[] can contain either sub-Areas or Climbs, but not both.
   // 'hasChildAreas' is a simple test to determine what we have.
   const hasChildAreas =
-    children.length > 0 && children[0].frontmatter.area_name ? true : false;
-  const githubLink = pathOrParentIdToGitHubLink(rawPath, "index");
+    !!(children.length > 0 && children[0].frontmatter.area_name)
+  const githubLink = pathOrParentIdToGitHubLink(rawPath, 'index')
 
   // when to show large edit CTA
-  const showEditCTA = parent.wordCount.words < 40;
+  const showEditCTA = parent.wordCount.words < 40
   const climbSortByOptions = [
-    { value: "leftToRight", text: "Left To Right" },
-    { value: "grade", text: "Grade" },
-  ];
+    { value: 'leftToRight', text: 'Left To Right' },
+    { value: 'grade', text: 'Grade' }
+  ]
   return (
-    <Layout layoutClz="layout-wide">
+    <Layout layoutClz='layout-wide'>
       {/* eslint-disable react/jsx-pascal-case */}
       <SEO
-        keywords={[area_name]}
-        title={area_name}
+        keywords={[areaName]}
+        title={areaName}
         description={buildMetaDescription(children, pathTokens, hasChildAreas)}
       />
-      <div className="overflow-y">
-        <div className="xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch">
-          <div className="xl:flex-none xl:max-w-screen-md xl:w-full">
+      <div className='overflow-y'>
+        <div className='xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch'>
+          <div className='xl:flex-none xl:max-w-screen-md xl:w-full'>
             <BreadCrumbs pathTokens={pathTokens} />
-            <h1 className={template_h1_css}>{area_name}</h1>
-            <span className="flex items-center flex-shrink text-gray-500 text-xs gap-x-1">
-              <Droppin className="stroke-current" />
+            <h1 className={templateH1Css}>{areaName}</h1>
+            <span className='flex items-center flex-shrink text-gray-500 text-xs gap-x-1'>
+              <Droppin className='stroke-current' />
               <a
-                className="hover:underline hover:text-gray-800"
+                className='hover:underline hover:text-gray-800'
                 href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
-                target="_blank"
-                rel="noopener noreferrer"
+                target='_blank'
+                rel='noopener noreferrer'
               >
                 {metadata.lat},{metadata.lng}
               </a>
             </span>
             {!hasChildAreas && (
-              <AreaStatistics climbs={children}></AreaStatistics>
+              <AreaStatistics climbs={children} />
             )}
             {!showEditCTA && (
-              <div className="flex justify-end">
-                <EditButton label="Improve this page" rawPath={rawPath} />
+              <div className='flex justify-end'>
+                <EditButton label='Improve this page' rawPath={rawPath} />
               </div>
             )}
             {showEditCTA && (
               <Cta isEmpty={parent.wordCount.words === 1} rawPath={rawPath} />
             )}
             <div
-              className="markdown"
+              className='markdown'
               dangerouslySetInnerHTML={{ __html: parent.html }}
-            ></div>
-            <hr className="my-8" />
+            />
+            <hr className='my-8' />
 
             {hasChildAreas && (
               <>
-                <div className="divide-x markdown h1">Subareas</div>
-                <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3">
+                <div className='divide-x markdown h1'>Subareas</div>
+                <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
                   {children.map((node) => {
-                    const { frontmatter, slug } = node;
-                    const { area_name, metadata } = frontmatter;
+                    const { frontmatter, slug } = node
+                    const { area_name: areaName, metadata } = frontmatter
                     return (
-                      <div className="max-h-96" key={metadata.area_id}>
+                      <div className='max-h-96' key={metadata.area_id}>
                         <Link to={slug}>
-                          <AreaCard area_name={area_name}></AreaCard>
+                          <AreaCard areaName={areaName} />
                         </Link>
                       </div>
-                    );
+                    )
                   })}
                 </div>
               </>
             )}
             {!hasChildAreas && children.length > 1 && (
               <ButtonGroup
-                id="sortByOptions"
+                id='sortByOptions'
                 selected={[selectedClimbSort]}
                 onClick={(_, index) => {
-                  setSelectedClimbSort(index);
+                  setSelectedClimbSort(index)
                 }}
-                className="text-right"
+                className='text-right'
               >
                 {climbSortByOptions.map(({ text }, index) => {
                   return (
@@ -119,98 +117,98 @@ export default function LeafAreaPage({ data: { area, gisBoundary } }) {
                       label={text}
                       active={selectedClimbSort === index}
                     />
-                  );
+                  )
                 })}
               </ButtonGroup>
             )}
-            <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-3">
+            <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3'>
               {!hasChildAreas &&
                 sortRoutes(children, climbSortByOptions[selectedClimbSort]).map(
                   (node) => {
-                    const { frontmatter, slug } = node;
-                    const { yds, route_name, metadata, type } = frontmatter;
+                    const { frontmatter, slug } = node
+                    const { yds, route_name: routeName, metadata, type } = frontmatter
                     return (
-                      <div className="pt-6 max-h-96" key={metadata.climb_id}>
+                      <div className='pt-6 max-h-96' key={metadata.climb_id}>
                         <Link to={slug}>
                           <RouteCard
-                            route_name={route_name}
-                            climb_id={metadata.climb_id}
+                            routeName={routeName}
+                            // climbId={metadata.climb_id} not actually used
                             YDS={yds}
                             // safety="{}" TODO: Find out what routes have this value?
                             type={type}
-                          ></RouteCard>
+                          />
                         </Link>
                       </div>
-                    );
+                    )
                   }
                 )}
             </div>
           </div>
-          <div className="w-full relative mt-8 flex bg-blue-50 xl:mt-0">
+          <div className='w-full relative mt-8 flex bg-blue-50 xl:mt-0'>
             <Heatmap geojson={boundaryOrPoint} />
           </div>
         </div>
       </div>
-      <LinkToGithub link={githubLink} docType="areas"></LinkToGithub>
+      <LinkToGithub link={githubLink} docType='areas' />
     </Layout>
-  );
+  )
 }
 const sortRoutes = (routes, sortType) => {
   switch (sortType.value) {
-    case "leftToRight": {
+    case 'leftToRight': {
       return routes.sort(
         (a, b) =>
           parseInt(a.frontmatter.metadata.left_right_index, 10) -
           parseInt(b.frontmatter.metadata.left_right_index, 10)
-      );
+      )
     }
-    case "grade": {
+    case 'grade': {
       return routes.sort(
         (a, b) =>
           getScoreForYdsGrade(a.frontmatter.yds) -
           getScoreForYdsGrade(b.frontmatter.yds)
-      );
+      )
     }
     default:
-      return routes;
+      return routes
   }
-};
+}
 
-function buildMetaDescription(children, pathTokens, hasChildAreas) {
-  const seoArea = [...pathTokens].reverse().join(", ");
-  const seoAreaNoun = hasChildAreas ? "subareas" : "climbs";
-  return `${children.length} ${seoAreaNoun} in ${seoArea}`;
+function buildMetaDescription (children, pathTokens, hasChildAreas) {
+  const seoArea = [...pathTokens].reverse().join(', ')
+  const seoAreaNoun = hasChildAreas ? 'subareas' : 'climbs'
+  return `${children.length} ${seoAreaNoun} in ${seoArea}`
 }
 
 const EditButton = ({ icon, label, classes, rawPath }) => (
   <button
-    className={`btn whitespace-nowrap ${classes || "btn-secondary"} ${
-      icon && "px-4"
+    className={`btn whitespace-nowrap ${classes || 'btn-secondary'} ${
+      icon && 'px-4'
     }`}
     onClick={() => navigate(`/edit?file=${rawPath}/index.md`)}
   >
-    <span className="mr-2">{icon}</span>
+    <span className='mr-2'>{icon}</span>
     {label}
   </button>
-);
+)
 
 const Cta = ({ isEmpty, rawPath }) => (
-  <div className="my-8 rounded border-2 p-4 border-gray-600 flex flex-col flex-nowrap gap-y-4 md:gap-x-4 md:flex-row  items-center justify-center ">
-    <div className="text-center">
+  <div className='my-8 rounded border-2 p-4 border-gray-600 flex flex-col flex-nowrap gap-y-4 md:gap-x-4 md:flex-row  items-center justify-center '>
+    <div className='text-center'>
       {isEmpty
-        ? `This area description is empty. Be the first to contribute!`
-        : `Help us improve this page`}
+        ? 'This area description is empty. Be the first to contribute!'
+        : 'Help us improve this page'}
     </div>
     <div>
       <EditButton
-        icon={<Pencil className="inline w-4 h-4" />}
-        label="Edit"
-        classes="btn-primary"
+        icon={<Pencil className='inline w-4 h-4' />}
+        label='Edit'
+        classes='btn-primary'
         rawPath={rawPath}
       />
     </div>
   </div>
-);
+)
 
 export const query = graphql`
   query ($node_id: String!, $rawPath: String!) {
@@ -233,4 +231,4 @@ export const query = graphql`
       rawGeojson
     }
   }
-`;
+`

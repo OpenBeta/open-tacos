@@ -1,6 +1,6 @@
-import React from "react";
-import DeckGL from "@deck.gl/react";
-import { StaticMap } from "react-map-gl";
+import React from 'react'
+import DeckGL from '@deck.gl/react'
+import { StaticMap } from 'react-map-gl'
 
 export const DEFAULT_INITIAL_VIEWSTATE = {
   width: 300,
@@ -10,14 +10,14 @@ export const DEFAULT_INITIAL_VIEWSTATE = {
   pitch: 15,
   transitionDuration: 1000,
   latitude: 44.968,
-  longitude: -103.77154,
-};
+  longitude: -103.77154
+}
 
 const BaseMap = ({
   layers,
   disableController,
   viewstate,
-  onViewStateChange,
+  onViewStateChange
 }) => {
   return (
     <DeckGL
@@ -29,20 +29,20 @@ const BaseMap = ({
               dragRotate: true,
               doubleClickZoom: true,
               keyboard: false,
-              scrollZoom: true,
+              scrollZoom: true
             }
           : null
       }
       onViewStateChange={onViewStateChange}
     >
       <StaticMap
-        reuseMaps={true}
+        reuseMaps
         preventStyleDiffing={false}
-        mapStyle="mapbox://styles/mappandas/ckx1h60kg18rj14nqyup4lzxi"
-        mapboxApiAccessToken="pk.eyJ1IjoibWFwcGFuZGFzIiwiYSI6ImNqcDdzbW12aTBvOHAzcW82MGg0ZTRrd3MifQ.MYiNJHklgMkRzapAKuTQNg"
+        mapStyle='mapbox://styles/mappandas/ckx1h60kg18rj14nqyup4lzxi'
+        mapboxApiAccessToken='pk.eyJ1IjoibWFwcGFuZGFzIiwiYSI6ImNqcDdzbW12aTBvOHAzcW82MGg0ZTRrd3MifQ.MYiNJHklgMkRzapAKuTQNg'
       />
     </DeckGL>
-  );
-};
+  )
+}
 
-export default BaseMap;
+export default BaseMap

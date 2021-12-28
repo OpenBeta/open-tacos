@@ -11,19 +11,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const btoa = require("btoa");
+const btoa = require('btoa')
 
-export function b64EncodeUnicode(str) {
+export function b64EncodeUnicode (str) {
   if (window.btoa) {
     return window.btoa(
       encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-        return String.fromCharCode("0x" + p1);
+        return String.fromCharCode('0x' + p1)
       })
-    );
+    )
   }
   return btoa(
     encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-      return String.fromCharCode("0x" + p1);
+      return String.fromCharCode('0x' + p1)
     })
-  );
+  )
 }
