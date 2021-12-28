@@ -82,7 +82,7 @@
   ],
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "lint": "yarn run ts-standard ./",
+    "lint": "yarn run ts-standard",
     "build": "gatsby build",
     "develop": "gatsby develop",
     "start": "gatsby develop",
@@ -153,6 +153,6 @@
       "es2021": true,
       "jest/globals":true
     },
-    "files": "src/**/*.tsx"
+    "files": ["src/**/*.js", "src/**/*.ts", "src/**/*.tsx"]
   }
 }
