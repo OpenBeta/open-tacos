@@ -49,6 +49,7 @@
     "gatsby-plugin-web-font-loader": "^1.0.4",
     "gatsby-remark-images": "^6.4.0",
     "gatsby-source-filesystem": "^4.4.0",
+    "gatsby-source-graphql": "^4.4.0",
     "gatsby-transformer-remark": "^5.4.0",
     "gatsby-transformer-sharp": "^4.4.0",
     "js-yaml": "^4.1.0",

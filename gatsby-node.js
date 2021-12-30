@@ -180,9 +180,55 @@ exports.onCreateNode = async ({
 }
 
 exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
+
+
+  // Create an index page for each area
+
+  // Create an index page for each area
+  const { createPage, createParentChildLink } = actions
+  const newResult = await graphql(`
+    query {
+      openTaco {
+        areas({sort: {area_name: 1}, filter: {area_name:{match: }} ){
+          id
+          pathHash
+          area_name
+          metadata {
+            isLeaf
+            lat
+            lng
+            left_right_index
+            mp_id
+            area_id
+          }
+          content {
+            description
+          }
+          children {
+            area_name
+            metadata {
+              area_id
+            }
+          }
+        }
+      }
+    }
+  `)
+
+  newResult.data.openTaco.areas.forEach((node) => {
+
+    createPage({
+      path: node.pathHash,
+      component: path.resolve('./src/templates/area-page-md.js'),
+      context: {
+        areaId: node.id
+      }
+    })
+  })
+
   const result = await graphql(`
     query {
-      allArea(sort: { fields: frontmatter___area_name }) {
+      allOldArea(sort: { fields: frontmatter___area_name }) {
         edges {
           node {
             id
@@ -195,9 +241,7 @@ exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
     }
   `)
 
-  // Create an index page for each area
-  const { createPage, createParentChildLink } = actions
-  result.data.allArea.edges.forEach(({ node }) => {
+  result.data.allOldArea.edges.forEach(({ node }) => {
     const _parentAreaPath = node.pathTokens.slice(
       0,
       node.pathTokens.length - 1

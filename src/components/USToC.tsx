@@ -9,7 +9,7 @@ interface StateType {
 function USToC (): JSX.Element {
   const states = useStaticQuery(graphql`
     query myquery {
-      allArea(
+      allOldArea(
         filter: { rawPath: {regex: "/^USA\/[a-zA-Z]+[^\/]$/" }}
         sort: { fields: frontmatter___area_name }
       ) {
@@ -29,7 +29,7 @@ function USToC (): JSX.Element {
     <section>
       <h2 className='text-xl font-bold mt-6'>Explore by State</h2>
       <div className='flex space-x-4'>
-        {states.allArea.edges.map(({ node }) => {
+        {states.allOldArea.edges.map(({ node }) => {
           const { frontmatter, slug } = node
           return (
             <div key={slug}>

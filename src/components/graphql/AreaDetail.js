@@ -1,6 +1,6 @@
 import { graphql } from 'gatsby'
 export const query = graphql`
-  fragment AreaDetailFragment on Area {
+  fragment OldAreaDetailFragment on OldArea {
     id
     slug
     rawPath

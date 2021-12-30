@@ -18,7 +18,7 @@ import { Button } from '../components/ui/Button'
 /**
  * Templage for generating individual Area page
  */
-export default function LeafAreaPage ({ data: { area, gisBoundary } }) {
+export default function LeafAreaPage ({ data: { oldArea: area, gisBoundary } }) {
   const { area_name: areaName, metadata } = area.frontmatter
   const { pathTokens, rawPath, parent, children } = area
 
@@ -182,9 +182,8 @@ function buildMetaDescription (children, pathTokens, hasChildAreas) {
 
 const EditButton = ({ icon, label, classes, rawPath }) => (
   <button
-    className={`btn whitespace-nowrap ${classes || 'btn-secondary'} ${
-      icon && 'px-4'
-    }`}
+    className={`btn whitespace-nowrap ${classes || 'btn-secondary'} ${icon && 'px-4'
+      }`}
     onClick={() => navigate(`/edit?file=${rawPath}/index.md`)}
   >
     <span className='mr-2'>{icon}</span>
@@ -212,8 +211,8 @@ const Cta = ({ isEmpty, rawPath }) => (
 
 export const query = graphql`
   query ($node_id: String!, $rawPath: String!) {
-    area: area(id: { eq: $node_id }) {
-      ...AreaDetailFragment
+    oldArea: oldArea(id: { eq: $node_id }) {
+      ...OldAreaDetailFragment
       parent {
         ... on MarkdownRemark {
           html
@@ -223,7 +222,7 @@ export const query = graphql`
         }
       }
       children {
-        ...AreaDetailFragment
+        ...OldAreaDetailFragment
         ...ClimbDetailFragment
       }
     }

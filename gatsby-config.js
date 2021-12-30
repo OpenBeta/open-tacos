@@ -25,6 +25,19 @@ module.exports = {
   plugins: [
     'gatsby-plugin-react-helmet',
     {
+      resolve: `gatsby-source-graphql`,
+      options: {
+        // This type will contain remote schema Query type
+        typeName: `OpenTaco`,
+        // This is the field under which it's accessible
+        fieldName: `openTaco`,
+        // URL to query from
+        // TODO: DO NOT COMMIT THIS @gibboj
+        url: `http://localhost:4000`,
+      },
+    },
+
+    {
       resolve: 'gatsby-plugin-manifest',
       options: {
         name: 'openbeta-rock-climbing-platform',
