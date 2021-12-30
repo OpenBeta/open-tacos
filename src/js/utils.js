@@ -116,22 +116,62 @@ export const simplifyClimbTypeJson = (type) => {
  * 5.11a = 112 // 110 for 11, 2 for "a"
  * 5.11b/c = 113 // 110 for 11, 4 for "b", 1 for "/b"
  * 5.9+ = 91 // 90 for 9, 0 for the letter & 1 for "+"
+ *
+ * Bouldering starts at 1000
+ * V-easy = 1000
+ * V0 = 1012 // 1000
+ *
  * @param {string} yds
  * @returns
  */
-export const getScoreForYdsGrade = (yds) => {
-  const regex = /^5\.([0-9]{1,2})([a-zA-Z])?([/+])?([a-zA-Z]?)/
-  const [match, num, firstLetter, plusOrSlash] = yds.match(regex)
+export const getScoreForGrade = (grade) => {
+  const ypsRegex = /^5\.([0-9]{1,2})([a-zA-Z])?([/+])?([/-])?([a-zA-Z]?)/
+  const vGradeRegex = /^V([0-9]{1,2})([/+])?([/-])?([0-9]{1,2})?/
+  const vGradeIrregular = /^V-([a-zA-Z]*)/
+  const isYds = grade.match(ypsRegex)
+  const isVGrade = grade.match(vGradeRegex) || grade.match(vGradeIrregular)
 
   // If there isn't a match sort it to the bottom
-  if (!match) {
-    console.warning(`Unexpected yds format: ${yds}`)
+  if (!isVGrade && !isYds) {
+    console.warn(`Unexpected grade format: ${grade}`)
     return 0
   }
+  if (isYds) {
+    return getScoreForYdsGrade(isYds)
+  }
+  if (isVGrade) {
+    return getScoreForVGrade(grade.match(vGradeRegex), grade.match(vGradeIrregular))
+  }
+}
 
+const getScoreForVGrade = (match, irregularMatch) => {
+  let score = 0
+  if (match) {
+    const [_, num, hasPlus, hasMinus, secondNumber] = match // eslint-disable-line no-unused-vars
+    const minus = (hasMinus && !secondNumber) ? -1 : 0 // check minus is not a V1-2
+    const plus = (hasMinus && secondNumber) || hasPlus ? 1 : 0 // grade V1+ the same as V1-2
+    score = (parseInt(num, 10) + 1) * 10 + minus + plus // V0 = 10, leave room for V-easy to be below 0
+  } else if (irregularMatch) {
+    const [_, group] = irregularMatch // eslint-disable-line no-unused-vars
+    switch (group) {
+      case 'easy':
+        score = 1
+        break
+      default:
+        score = 0
+        break
+    }
+  }
+  return score + 1000
+}
+
+const getScoreForYdsGrade = (match) => {
+  const [_, num, firstLetter, plusOrSlash, hasMinus] = match // eslint-disable-line no-unused-vars
   const letterScore = firstLetter
     ? (firstLetter.toLowerCase().charCodeAt(0) - 96) * 2
     : 0
   const plusSlash = plusOrSlash === undefined ? 0 : 1
-  return num * 10 + letterScore + plusSlash
+  const minus = hasMinus ? -1 : 0
+
+  return parseInt(num, 10) * 10 + letterScore + plusSlash + minus
 }

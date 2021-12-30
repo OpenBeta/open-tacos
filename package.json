@@ -82,6 +82,7 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "lint": "yarn run ts-standard",
+    "fix": "yarn run ts-standard --fix",
     "build": "gatsby build",
     "develop": "gatsby develop",
     "start": "gatsby develop",
