@@ -1,12 +1,11 @@
 import React from 'react'
-import { StaticImage } from 'gatsby-plugin-image'
 
 import { TextButton } from './Button'
 
 export default function LandingHero () {
   return (
     <div style={{ display: 'grid' }}>
-      <StaticImage
+      {/* <StaticImage
         src='../../images/landing-hero-v1.jpg'
         alt='Indian Creek at sunset'
         layout='fullWidth'
@@ -15,7 +14,7 @@ export default function LandingHero () {
         style={{
           gridArea: '1/1'
         }}
-      />
+      /> */}
       <div
         style={{
           // By using the same grid area for both, they are stacked on top of each other

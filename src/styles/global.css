@@ -108,7 +108,7 @@ body, html {
   @apply max-w-4xl mx-auto flex flex-col gap-y-8;
 }
 
-@responsive {
+@layer utilities {
   /*  For larger screen, split into 2 columns */
   .layout-wide {
     @apply mt-16 max-w-screen-lg xl:max-w-full	xl:w-screen flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0
@@ -287,11 +287,3 @@ input:checked + label {
 .markdown table td {
   @apply p-2;
 }
-
-/* #my-area-map {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-} */

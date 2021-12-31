@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'gatsby'
 
 /**
  *  TODO: Create MaterialUI-like button with standard styles such as
@@ -22,7 +21,7 @@ export function IconButton ({ onClick, children, active, text, className }) {
 export function TextButton ({ label, to }) {
   return (
     <button className='border rounded-lg bg-gray-200 text-xs py-1 px-2'>
-      <Link to={to}>{label}</Link>
+      <a href={to}>{label}</a>
     </button>
   )
 }
