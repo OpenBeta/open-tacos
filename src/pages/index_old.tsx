@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from '../components/layout'
-import SEO from '../components/seo'
+import SeoTags from '../components/SeoTags'
 import USToc from '../components/USToC'
 import RandomRouteCard from '../components/RandomRouteCard'
 
@@ -49,7 +49,7 @@ function IndexPage (): JSX.Element {
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
-      {/* <SEO
+      {/* <SeoTags
         keywords={['openbeta', 'rock climbing', 'climbing api']}
         description='Climbing route catalog'
         title='Home'

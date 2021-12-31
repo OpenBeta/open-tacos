@@ -8,12 +8,23 @@ import BarPercent from './BarPercent'
  * stats - {percent, colors} an object that contains the data for the BarPercent
  *   component
  */
-function AreaCard ({ areaName, onPress, stats }) {
+interface AreaStatistics {
+  percents: number[]
+  colors: string[]
+}
+
+interface AreaCardProps {
+  areaName: string
+  onPress?: () => {}
+  stats?: AreaStatistics
+}
+
+function AreaCard ({ areaName, onPress, stats }: AreaCardProps): JSX.Element {
   return (
     <Card
       onPress={onPress}
       footer={
-        stats &&
+        (stats != null) &&
           <BarPercent styles='-mt-2' percents={stats.percents} colors={stats.colors} />
       }
     >

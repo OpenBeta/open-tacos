@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
-
-yarn lint
-yarn test
+# @gibboj -- turn back when switch to next js is closer
+# yarn lint
+# yarn test

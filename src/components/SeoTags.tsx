@@ -1,7 +1,13 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
+interface SEOProps {
+  title: string
+  description?: string
+  keywords?: string[]
+  image?: string
+}
 
-function SEO ({ description, meta = [], keywords = [], title, image }) {
+function SeoTags({ description = '', keywords = [], title, image = '' }: SEOProps): JSX.Element {
   const site = {
     siteMetadata: {
       title: 'OpenTacos',
@@ -78,16 +84,15 @@ function SEO ({ description, meta = [], keywords = [], title, image }) {
         .concat(
           keywords.length > 0
             ? {
-                name: 'keywords',
-                content: keywords.join(', ')
-              }
+              name: 'keywords',
+              content: keywords.join(', ')
+            }
             : []
-        )
-        .concat(meta)}
+        )}
       title={metaTitle}
       titleTemplate={`%s | ${site.siteMetadata.title}`}
     />
   )
 }
 
-export default SEO
+export default SeoTags
