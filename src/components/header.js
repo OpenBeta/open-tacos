@@ -1,7 +1,6 @@
-import { Link } from 'gatsby'
 import React, { useState } from 'react'
 import TacoIcon from '../assets/icons/taco.svg'
-import SearchBar from '../components/SearchBar'
+// import SearchBar from '../components/SearchBar'
 
 function Header () {
   const [isExpanded, toggleExpansion] = useState(false)
@@ -13,10 +12,10 @@ function Header () {
     >
       <div className='flex flex-wrap items-center justify-between max-w-screen-2xl p-4 lg:py-2 mx-auto'>
         <div className='flex flex-nowrap items-center'>
-          <Link to='/'>
+          <a href='/'>
             <TacoIcon className='animate-pulse' />
-          </Link>
-          <SearchBar className='ml-4' />
+          </a>
+          {/* <SearchBar className='ml-4' /> */}
         </div>
         <button
           className='items-center block px-3 py-2 text-black border border-white rounded lg:hidden'
@@ -54,13 +53,13 @@ function Header () {
               title: 'Export'
             }
           ].map((link) => (
-            <Link
+            <a
               className='block no-underline lg:py-4 lg:inline-block lg:px-4 py-4 lg:py-0'
               key={link.title}
-              to={link.route}
+              href={link.route}
             >
               {link.title}
-            </Link>
+            </a>
           ))}
         </nav>
       </div>

@@ -1,9 +1,7 @@
-import PropTypes from 'prop-types'
 import React from 'react'
-import { Location } from '@reach/router'
 
 import Header from './header'
-import LandingHero from './ui/LandingHero'
+// import LandingHero from './ui/LandingHero'
 
 function Layout ({ layoutClz = 'layout-default', customClz = '', children }) {
   return (
@@ -12,9 +10,9 @@ function Layout ({ layoutClz = 'layout-default', customClz = '', children }) {
 
       {/* Only show hero on index page. We place it here instead of index.js
       in order to fill the whole screen (escaping main container's width). */}
-      <Location>
+      {/* <Location>
         {({ location }) => location.pathname === '/' && <LandingHero />}
-      </Location>
+      </Location> */}
 
       <main className={layoutClz}>{children}</main>
 
@@ -46,10 +44,6 @@ function Layout ({ layoutClz = 'layout-default', customClz = '', children }) {
       </footer>
     </div>
   )
-}
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired
 }
 
 export default Layout

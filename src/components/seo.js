@@ -1,19 +1,26 @@
-import { useStaticQuery, graphql } from 'gatsby'
 import React from 'react'
 import { Helmet } from 'react-helmet'
 
 function SEO ({ description, meta = [], keywords = [], title, image }) {
-  const { site } = useStaticQuery(graphql`
-    query DefaultSEOQuery {
-      site {
-        siteMetadata {
-          title
-          description
-          author
-        }
-      }
+  const site = {
+    siteMetadata: {
+      title: 'OpenTacos',
+      description: 'Open collaboration climbing platform',
+      author: 'hello@openbeta.io',
+      content_edit_branch: 'edit-test'
     }
-  `)
+  }
+  // const { site } = useStaticQuery(graphql`
+  //   query DefaultSEOQuery {
+  //     site {
+  //       siteMetadata {
+  //         title
+  //         description
+  //         author
+  //       }
+  //     }
+  //   }
+  // `)
 
   const metaDescription = description || site.siteMetadata.description
   const metaTitle = title || site.siteMetadata.title

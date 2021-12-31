@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { navigate } from 'gatsby'
+// import { navigate } from 'gatsby'
 
 import ClimbSearch from './ClimbSearch'
 import { IconButton } from './ui/Button'
