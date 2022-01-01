@@ -23,6 +23,9 @@ jobs:
       - name: Lint code
         run: yarn lint
 
+      - name: Run unit tests
+        run: yarn test
+
       - name: Copy a subset of content files
         run: ./prebuild.sh
 

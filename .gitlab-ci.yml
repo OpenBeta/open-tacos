@@ -12,6 +12,9 @@ variables:
 
 gatsby-build:
   stage: build
+  only: # Only run for these branches
+  - develop
+  - main
 
   tags:
   - docker

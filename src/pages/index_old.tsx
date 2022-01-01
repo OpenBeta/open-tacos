@@ -1,42 +1,39 @@
 import React from 'react'
 import Layout from '../components/layout'
-import SEO from '../components/seo'
-import USToc from '../components/USToC'
-import RandomRouteCard from '../components/RandomRouteCard'
 
-function getRandomInt (min: number, max: number): number {
-  min = Math.ceil(min)
-  max = Math.floor(max)
-  // The maximum is exclusive and the minimum is inclusive
-  return Math.floor(Math.random() * (max - min) + min)
-}
+// function getRandomInt (min: number, max: number): number {
+//   min = Math.ceil(min)
+//   max = Math.floor(max)
+//   // The maximum is exclusive and the minimum is inclusive
+//   return Math.floor(Math.random() * (max - min) + min)
+// }
 
 function IndexPage (): JSX.Element {
-  const allClimbingRoutes = useStaticQuery(graphql`
-    query {
-      allClimb {
-        edges {
-          node {
-            slug
-            pathTokens
-            frontmatter {
-              route_name
-              yds
-              type {
-                tr
-                trad
-                sport
-                boulder
-              }
-              metadata {
-                climb_id
-              }
-            }
-          }
-        }
-      }
-    }
-  `)
+  // const allClimbingRoutes = useStaticQuery(graphql`
+  //   query {
+  //     allClimb {
+  //       edges {
+  //         node {
+  //           slug
+  //           pathTokens
+  //           frontmatter {
+  //             route_name
+  //             yds
+  //             type {
+  //               tr
+  //               trad
+  //               sport
+  //               boulder
+  //             }
+  //             metadata {
+  //               climb_id
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // `)
 
   // const min = 0
   // const max: number = allClimbingRoutes.allClimb.edges.length

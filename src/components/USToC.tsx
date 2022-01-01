@@ -1,5 +1,5 @@
 import React from 'react'
-import { graphql, useStaticQuery, Link } from 'gatsby'
+import Link from 'next/link'
 
 interface StateType {
   areaName: string
@@ -7,29 +7,13 @@ interface StateType {
 }
 
 function USToC (): JSX.Element {
-  const states = useStaticQuery(graphql`
-    query myquery {
-      allArea(
-        filter: { rawPath: {regex: "/^USA\/[a-zA-Z]+[^\/]$/" }}
-        sort: { fields: frontmatter___area_name }
-      ) {
-        edges {
-          node {
-            frontmatter {
-              area_name
-            }
-            slug
-          }
-        }
-      }
-    }
-  `)
+  const states = []
 
   return (
     <section>
       <h2 className='text-xl font-bold mt-6'>Explore by State</h2>
       <div className='flex space-x-4'>
-        {states.allArea.edges.map(({ node }) => {
+        {states.map(({ node }) => {
           const { frontmatter, slug } = node
           return (
             <div key={slug}>
@@ -43,7 +27,7 @@ function USToC (): JSX.Element {
 }
 
 function State ({ areaName, slug }: StateType): JSX.Element {
-  return <Link to={slug}>{areaName}</Link>
+  return <Link href={slug}>{areaName}</Link>
 }
 
 export default USToC
