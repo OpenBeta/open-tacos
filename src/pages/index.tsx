@@ -1,24 +1,55 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Layout from '../components/layout'
+import SeoTags from '../components/SeoTags'
+import USToC from '../components/USToC'
 
-const Home: NextPage = () => {
+import { gql } from '@apollo/client'
+import { graphqlClient } from '../js/graphql/Client'
+import { GetStaticProps } from 'next'
+import { ResponseType } from '../js/types'
+const Home: NextPage<ResponseType> = ({ areas }) => {
   return (
-    <div>
+    <>
       <Head>
         <title>Climbing Route Catalog</title>
         <meta name='description' content='Open license climbing route catalog' />
         <link rel='icon' href='/favicon.ico' />
+        <SeoTags
+          keywords={['openbeta', 'rock climbing', 'climbing api']}
+          description='Climbing route catalog'
+          title='Home'
+        />
       </Head>
 
-      <main>
-        <h1 className='text-2xl font-bold underline'>Welcome</h1>
-      </main>
-
-      <footer>
-        <p>footer</p>
-      </footer>
-    </div>
+      <Layout>
+        <USToC areas={areas} />
+      </Layout>
+    </>
   )
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const query = gql`query UsaAreas($filter: Filter) {
+    areas(filter: $filter) {
+      area_name
+      metadata {
+       area_id
+      }
+    }
+  }`
+
+  const rs = await graphqlClient.query<ResponseType>({
+    query,
+    variables: {
+      filter: {
+        path_tokens: { tokens: ['USA'], exactMatch: true }
+      }
+    }
+  })
+
+  // Pass post data to the page via props
+  return { props: rs.data }
 }
 
 export default Home

@@ -12,48 +12,7 @@ import Cta from '../../components/ui/Cta'
 import AreaCard from '../../components/ui/AreaCard'
 import Icon from '../../components/Icon'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
-
-interface AreaMetadataType {
-  isLeaf: boolean
-  lat: number
-  lng: number
-  left_right_index: number
-  mp_id: string
-  area_id: string
-}
-
-interface ClimbMetadataType {
-  lat: number
-  lng: number
-  left_right_index: number
-  mp_id: string
-  climb_id: string
-}
-
-interface Climb {
-  name: string
-  fa: string
-  yds: string
-  metadata: ClimbMetadataType
-  content: {
-    description: string
-    location: string
-    protection: string
-  }
-}
-
-interface AreaType {
-  area_name: string
-  metadata: AreaMetadataType
-  content: {
-    description: string
-  }
-  climbs: Climb
-}
-
-interface ResponseType {
-  areas: AreaType[]
-}
+import { AreaType, ResponseType } from '../../js/types'
 
 const Area = ({ area }): JSX.Element => {
   const { area_name: areaName, climbs, metadata, content, pathTokens } = area
