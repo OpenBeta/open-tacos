@@ -1,5 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
+
 interface SEOProps {
   title: string
   description?: string
@@ -7,7 +8,7 @@ interface SEOProps {
   image?: string
 }
 
-function SeoTags({ description = '', keywords = [], title, image = '' }: SEOProps): JSX.Element {
+function SeoTags ({ description = '', keywords = [], title, image = '' }: SEOProps): JSX.Element {
   const site = {
     siteMetadata: {
       title: 'OpenTacos',
@@ -84,9 +85,9 @@ function SeoTags({ description = '', keywords = [], title, image = '' }: SEOProp
         .concat(
           keywords.length > 0
             ? {
-              name: 'keywords',
-              content: keywords.join(', ')
-            }
+                name: 'keywords',
+                content: keywords.join(', ')
+              }
             : []
         )}
       title={metaTitle}

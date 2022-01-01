@@ -11,6 +11,7 @@ import EditButton from '../../components/ui/EditButton'
 import Cta from '../../components/ui/Cta'
 import AreaCard from '../../components/ui/AreaCard'
 import Icon from '../../components/Icon'
+import BreadCrumbs from '../../components/ui/BreadCrumbs'
 
 interface AreaMetadataType {
   isLeaf: boolean
@@ -55,7 +56,7 @@ interface ResponseType {
 }
 
 const Area = ({ area }): JSX.Element => {
-  const { area_name: areaName, climbs, metadata, content } = area
+  const { area_name: areaName, climbs, metadata, content, pathTokens } = area
 
   const rawPath = '/'
   const showEditCTA = content.description.length < 40
@@ -70,7 +71,7 @@ const Area = ({ area }): JSX.Element => {
       <div className='overflow-y'>
         <div className='xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch'>
           <div className='xl:flex-none xl:max-w-screen-md xl:w-full'>
-            {/* <BreadCrumbs pathTokens={pathTokens} /> */}
+            <BreadCrumbs pathTokens={pathTokens} />
             <h1 className={templateH1Css}>{areaName}</h1>
             <span className='flex items-center flex-shrink text-gray-500 text-xs gap-x-1'>
               <Icon type='droppin' />
@@ -148,7 +149,6 @@ export async function getStaticPaths(): Promise<any> {
 // This also gets called at build time
 // Query graphql api for area by id
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-
   const query = gql`query AreaByUUID($uuid: String) {
     area(uuid: $uuid) {
       area_name
@@ -157,6 +157,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         lat
         lng 
       }
+      pathTokens
       climbs {
         name
         fa
