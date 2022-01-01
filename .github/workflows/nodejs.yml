@@ -26,8 +26,5 @@ jobs:
       - name: Run unit tests
         run: yarn test
 
-      - name: Copy a subset of content files
-        run: ./prebuild.sh
-
       - name: Test build
         run: yarn build
