@@ -9,7 +9,7 @@ const Icon = ({ width = 20, height = 20, type, className }: IconProps): JSX.Elem
   const path = icons[type]
   return (
     <svg className={className} xmlns='http://www.w3.org/2000/svg' width={width} height={height} viewBox='0 0 24 24' stroke='currentColor' fill='currentColor'>
-      <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d={path} />
+      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d={path} />
     </svg>
   )
 }

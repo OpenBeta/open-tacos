@@ -11,6 +11,7 @@ import EditButton from '../../components/ui/EditButton'
 import Cta from '../../components/ui/Cta'
 import AreaCard from '../../components/ui/AreaCard'
 import Icon from '../../components/Icon'
+
 interface AreaMetadataType {
   isLeaf: boolean
   lat: number
@@ -20,18 +21,33 @@ interface AreaMetadataType {
   area_id: string
 }
 
+interface ClimbMetadataType {
+  lat: number
+  lng: number
+  left_right_index: number
+  mp_id: string
+  climb_id: string
+}
+
+interface Climb {
+  name: string
+  fa: string
+  yds: string
+  metadata: ClimbMetadataType
+  content: {
+    description: string
+    location: string
+    protection: string
+  }
+}
+
 interface AreaType {
   area_name: string
+  metadata: AreaMetadataType
   content: {
     description: string
   }
-  metadata: AreaMetadataType
-  children: {
-    area_name: string
-    metadata: {
-      area_id: string
-    }
-  }
+  climbs: Climb
 }
 
 interface ResponseType {
@@ -39,11 +55,8 @@ interface ResponseType {
 }
 
 const Area = ({ area }): JSX.Element => {
-  const router = useRouter()
-  const { id } = router.query
-  console.log('DATA', area)
-  const { area_name: areaName, metadata, content } = area
-  const children = []
+  const { area_name: areaName, climbs, metadata, content } = area
+
   const rawPath = '/'
   const showEditCTA = content.description.length < 40
   return (
@@ -76,7 +89,7 @@ const Area = ({ area }): JSX.Element => {
               </div>
             )}
             {showEditCTA && (
-              <Cta isEmpty={content.description.words === 1} rawPath={rawPath} />
+              <Cta isEmpty={content.description.length === 1} rawPath={rawPath} />
             )}
             <div
               className='markdown'
@@ -86,12 +99,12 @@ const Area = ({ area }): JSX.Element => {
             <>
               <div className='divide-x markdown h1'>Subareas</div>
               <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
-                {children.map((node) => {
-                  const { area_name: areaName, metadata, pathHash } = node
+                {climbs.map((node) => {
+                  const { name, metadata } = node
                   return (
-                    <div className='max-h-96' key={metadata.area_id}>
-                      <Link href={pathHash}>
-                        <AreaCard areaName={areaName} />
+                    <div className='max-h-96' key={metadata.climb_id}>
+                      <Link href={metadata.climb_id}>
+                        <AreaCard areaName={name} />
                       </Link>
                     </div>
                   )
@@ -107,22 +120,13 @@ const Area = ({ area }): JSX.Element => {
 
 // This function gets called at build time.
 // Nextjs uses the result to decide which paths will get pre-rendered at build time
-export async function getStaticPaths (): Promise<any> {
-  console.log('get static path')
+export async function getStaticPaths(): Promise<any> {
   const rs = await graphqlClient.query<ResponseType>({
     query: gql`query LeafAreasQuery {
-    areas(isLeaf: true) {
+    areas {
+      area_name
       metadata {
         area_id
-      }
-      children {
-        area_name
-        metadata {
-          area_id
-        }
-      }
-      content {
-        description 
       }
     }
   }`
@@ -132,7 +136,7 @@ export async function getStaticPaths (): Promise<any> {
   const paths = rs.data.areas.map((area: AreaType) => ({
     params: { id: area.metadata.area_id }
   }))
-  console.log('RS', paths)
+
   // We'll pre-render only these paths at build time.
   // { fallback: true } means render on first reques for those that are not in `paths`
   return {
@@ -144,24 +148,29 @@ export async function getStaticPaths (): Promise<any> {
 // This also gets called at build time
 // Query graphql api for area by id
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+
   const query = gql`query AreaByUUID($uuid: String) {
-        area(uuid: $uuid) {
-          area_name
-          metadata {
-            lat
-            lng
-          }
-          children {
-            area_name
-            metadata {
-              area_id
-            }
-          }
-          content {
-            description
-          }
+    area(uuid: $uuid) {
+      area_name
+      metadata {
+        area_id
+        lat
+        lng 
+      }
+      climbs {
+        name
+        fa
+        yds
+        safety
+        metadata {
+          climb_id
         }
-      }`
+      }
+      content {
+        description 
+      } 
+    }
+  }`
 
   const rs = await graphqlClient.query<AreaType>({
     query,
