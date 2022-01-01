@@ -1,6 +1,6 @@
 
 export interface AreaMetadataType {
-  isLeaf: boolean
+  leaf: boolean
   lat: number
   lng: number
   left_right_index: number
@@ -11,16 +11,24 @@ export interface AreaMetadataType {
 export interface ClimbMetadataType {
   lat: number
   lng: number
-  left_right_index: number
+  left_right_index: string
   mp_id: string
   climb_id: string
 }
-
+export interface ClimbType {
+  boulder: boolean
+  alpine: boolean
+  tr: boolean
+  ice: boolean
+  trad: boolean
+  mixed: boolean
+}
 export interface Climb {
   name: string
   fa: string
   yds: string
   metadata: ClimbMetadataType
+  type: ClimbType
   content: {
     description: string
     location: string
@@ -30,11 +38,13 @@ export interface Climb {
 
 export interface AreaType {
   area_name: string
+  pathTokens: string[]
   metadata: AreaMetadataType
   content: {
     description: string
   }
-  climbs: Climb
+  children: AreaType[]
+  climbs: Climb[]
 }
 
 export interface ResponseType {

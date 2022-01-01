@@ -2,10 +2,18 @@ import React from 'react'
 import Card from './card'
 import RouteTypeChips from './RouteTypeChips'
 import RouteGradeGip from './RouteGradeChip'
+import { ClimbType } from '../../js/types'
 
-function RouteCard ({ routeName, type, safety, YDS, onPress }) {
+interface RouteCardProps {
+  routeName: string,
+  type: ClimbType,
+  safety: unknown, YDS: string, onPress: (e) => void
+}
+ 
+function RouteCard({ routeName, type, safety, YDS, onPress }: RouteCardProps):JSX.Element {
   return (
     <Card
+      footer=""
       onPress={onPress}
     >
       <h2

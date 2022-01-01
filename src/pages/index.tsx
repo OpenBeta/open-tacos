@@ -8,6 +8,7 @@ import { gql } from '@apollo/client'
 import { graphqlClient } from '../js/graphql/Client'
 import { GetStaticProps } from 'next'
 import { ResponseType } from '../js/types'
+
 const Home: NextPage<ResponseType> = ({ areas }) => {
   return (
     <>
@@ -33,8 +34,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = gql`query UsaAreas($filter: Filter) {
     areas(filter: $filter) {
       area_name
+      
       metadata {
        area_id
+       leaf
       }
     }
   }`
