@@ -15,7 +15,7 @@ export interface ClimbMetadataType {
   mp_id: string
   climb_id: string
 }
-export interface ClimbType {
+export interface ClimbDiscipline {
   boulder: boolean
   alpine: boolean
   tr: boolean
@@ -23,12 +23,13 @@ export interface ClimbType {
   trad: boolean
   mixed: boolean
 }
+
 export interface Climb {
   name: string
   fa: string
   yds: string
   metadata: ClimbMetadataType
-  type: ClimbType
+  type: ClimbDiscipline
   content: {
     description: string
     location: string
@@ -47,6 +48,10 @@ export interface AreaType {
   climbs: Climb[]
 }
 
-export interface ResponseType {
+export interface AreaResponseType {
   areas: AreaType[]
+}
+
+export interface ClimbResponseType {
+  climbs: Climb[]
 }

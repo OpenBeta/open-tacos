@@ -7,9 +7,9 @@ import USToC from '../components/USToC'
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../js/graphql/Client'
 import { GetStaticProps } from 'next'
-import { ResponseType } from '../js/types'
+import { AreaResponseType } from '../js/types'
 
-const Home: NextPage<ResponseType> = ({ areas }) => {
+const Home: NextPage<AreaResponseType> = ({ areas }) => {
   return (
     <>
       <Head>
@@ -42,7 +42,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }`
 
-  const rs = await graphqlClient.query<ResponseType>({
+  const rs = await graphqlClient.query<AreaResponseType>({
     query,
     variables: {
       filter: {

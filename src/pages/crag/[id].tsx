@@ -12,16 +12,19 @@ import EditButton from '../../components/ui/EditButton'
 import Cta from '../../components/ui/Cta'
 import Icon from '../../components/Icon'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
-import { AreaType, Climb, ResponseType } from '../../js/types'
+import { AreaType, Climb, AreaResponseType } from '../../js/types'
 import { getScoreForYdsGrade } from '../../js/utils'
 import RouteCard from '../../components/ui/RouteCard'
+
 interface CragProps {
   area: AreaType
 }
+
 interface CragSortType {
   value: string
   text: string
 }
+
 const Crag = ({ area }: CragProps): JSX.Element => {
   const { area_name: areaName, climbs, metadata, content, pathTokens } = area
 
@@ -98,14 +101,16 @@ const Crag = ({ area }: CragProps): JSX.Element => {
                     return (
                       <div className='pt-6 max-h-96' key={metadata.climb_id}>
                         <Link href={`/climbs/${metadata.climb_id}`}>
-                          <RouteCard
-                            routeName={name}
+                          <a>
+                            <RouteCard
+                              routeName={name}
                             // climbId={metadata.climb_id} not actually used
-                            YDS={yds}
-                            onPress={null}
-                            safety={null} /// TODO: Find out what routes have this value?
-                            type={type}
-                          />
+                              YDS={yds}
+                              onPress={null}
+                              safety={null} /// TODO: Find out what routes have this value?
+                              type={type}
+                            />
+                          </a>
                         </Link>
                       </div>
                     )
@@ -140,10 +145,9 @@ const sortRoutes = (routes: Climb[], sortType: CragSortType): Climb[] => {
       return routes
   }
 }
-// This function gets called at build time.
-// Nextjs uses the result to decide which paths will get pre-rendered at build time
+
 export async function getStaticPaths (): Promise<any> {
-  const rs = await graphqlClient.query<ResponseType>({
+  const rs = await graphqlClient.query<AreaResponseType>({
     query: gql`query EdgeAreasQuery($filter: Filter) {
     areas(filter: $filter) {
       area_name
@@ -156,21 +160,17 @@ export async function getStaticPaths (): Promise<any> {
       filter: { leaf_status: { isLeaf: true } }
     }
   })
-  // Get the paths we want to pre-render based on posts
+
   const paths = rs.data.areas.map((area: AreaType) => ({
     params: { id: area.metadata.area_id }
   }))
 
-  // We'll pre-render only these paths at build time.
-  // { fallback: true } means render on first reques for those that are not in `paths`
   return {
     paths,
     fallback: true
   }
 }
 
-// This also gets called at build time
-// Query graphql api for area by id
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = gql`query AreaByUUID($uuid: String) {
     area(uuid: $uuid) {

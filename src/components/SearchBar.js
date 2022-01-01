@@ -5,7 +5,7 @@ import ClimbSearch from './ClimbSearch'
 import { IconButton } from './ui/Button'
 import SearchIcon from '../assets/icons/search.svg'
 
-export default function SearchBar({ className }) {
+export default function SearchBar ({ className }) {
   const [activated, setActivated] = useState(false)
   // const [isTop, setTop] = useState(false);
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function SearchBar({ className }) {
       {activated
         ? (
           <ClimbSearch onClimbNameChange={navigateTo} />
-        )
+          )
         : (
           <div
             className='cursor-pointer flex items-center rounded-3xl border-2 h-8'
@@ -46,7 +46,7 @@ export default function SearchBar({ className }) {
               <SearchIcon className='text-white' />
             </IconButton>
           </div>
-        )}
+          )}
     </div>
   )
 }

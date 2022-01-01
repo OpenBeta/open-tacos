@@ -20,7 +20,7 @@ interface BreakCrumbsProps {
   pathTokens: string[]
   isClimbPage?: boolean
 }
-function BreadCrumbs({ pathTokens, isClimbPage = false }: BreakCrumbsProps): JSX.Element {
+function BreadCrumbs ({ pathTokens, isClimbPage = false }: BreakCrumbsProps): JSX.Element {
   const tokens = isClimbPage
     ? pathTokens.slice(0, pathTokens.length - 1)
     : pathTokens
@@ -38,14 +38,14 @@ function BreadCrumbs({ pathTokens, isClimbPage = false }: BreakCrumbsProps): JSX
             {isLastElement && !isClimbPage
               ? (
                 <span className=''>{sanitizeName(place)}</span>
-              )
+                )
               : (
                 <span className='text-gray-400'>
                   <Link href={url}>
                     <a className='hover:underline hover:text-gray-900'>{sanitizeName(place)}</a>
                   </Link>
                 </span>
-              )}
+                )}
             {/* {!isLastElement && <span className="text-gray-400 mx-1.5">/</span>} */}
           </span>
         )

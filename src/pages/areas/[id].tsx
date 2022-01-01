@@ -12,7 +12,7 @@ import Cta from '../../components/ui/Cta'
 import AreaCard from '../../components/ui/AreaCard'
 import Icon from '../../components/Icon'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
-import { AreaType, ResponseType } from '../../js/types'
+import { AreaType, AreaResponseType } from '../../js/types'
 import { getSlug } from '../../js/utils'
 
 const Area = ({ area }): JSX.Element => {
@@ -85,7 +85,7 @@ const Area = ({ area }): JSX.Element => {
 // This function gets called at build time.
 // Nextjs uses the result to decide which paths will get pre-rendered at build time
 export async function getStaticPaths (): Promise<any> {
-  const rs = await graphqlClient.query<ResponseType>({
+  const rs = await graphqlClient.query<AreaResponseType>({
     query: gql`query EdgeAreasQuery($filter:Filter) {
     areas(filter: $filter) {
       area_name

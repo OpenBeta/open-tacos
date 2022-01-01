@@ -5,15 +5,15 @@ import RouteGradeGip from './RouteGradeChip'
 import { ClimbType } from '../../js/types'
 
 interface RouteCardProps {
-  routeName: string,
-  type: ClimbType,
+  routeName: string
+  type: ClimbType
   safety: unknown, YDS: string, onPress: (e) => void
 }
- 
-function RouteCard({ routeName, type, safety, YDS, onPress }: RouteCardProps):JSX.Element {
+
+function RouteCard ({ routeName, type, safety, YDS, onPress }: RouteCardProps): JSX.Element {
   return (
     <Card
-      footer=""
+      footer=''
       onPress={onPress}
     >
       <h2
