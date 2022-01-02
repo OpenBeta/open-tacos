@@ -13,7 +13,7 @@ import Cta from '../../components/ui/Cta'
 import Icon from '../../components/Icon'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import { AreaType, Climb, AreaResponseType } from '../../js/types'
-import { getScoreForYdsGrade } from '../../js/utils'
+import { getScoreForGrade } from '../../js/utils'
 import RouteCard from '../../components/ui/RouteCard'
 
 interface CragProps {
@@ -137,8 +137,8 @@ const sortRoutes = (routes: Climb[], sortType: CragSortType): Climb[] => {
     case 'grade': {
       return routes.sort(
         (a, b) =>
-          getScoreForYdsGrade(a.yds) -
-          getScoreForYdsGrade(b.yds)
+          getScoreForGrade(a.yds) -
+          getScoreForGrade(b.yds)
       )
     }
     default:

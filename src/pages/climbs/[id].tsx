@@ -88,7 +88,6 @@ export async function getStaticPaths (): Promise<any> {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  console.log(params)
   const query = gql`query ClimbByUUID($uuid: String) {
     climb(uuid: $uuid) {
       name
