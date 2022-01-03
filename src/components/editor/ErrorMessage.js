@@ -1,10 +1,12 @@
 import React from 'react'
-import { navigate } from 'gatsby'
+import { useRouter } from 'next/router'
+
 import Modal from '../ui/Modal'
 import RainIcon from '../../assets/icons/rain.svg'
 import { ERROR } from './Editor'
 
 export default function ErrorMessage ({ code, msg, setError }) {
+  const router = useRouter()
   const actionOk = {
     text: 'OK',
     action: function () {
@@ -14,7 +16,7 @@ export default function ErrorMessage ({ code, msg, setError }) {
   const actionDashboard = {
     text: 'Go to Dashboard',
     action: function () {
-      navigate('/dashboard') // direct user to dashboard because there's nothing user can do
+      router.push('/dashboard') // direct user to dashboard because there's nothing user can do
     }
   }
 

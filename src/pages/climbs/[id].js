@@ -1,5 +1,4 @@
 import React from 'react'
-import { useStaticQuery, graphql, navigate, Link } from 'gatsby'
 
 function Climbs ({ id }) {
   const allClimbingRoutes = useStaticQuery(graphql`

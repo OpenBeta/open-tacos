@@ -1,7 +1,8 @@
 import React from 'react'
-import { navigate } from 'gatsby'
+import { useRouter } from 'next/router'
 
 const PageHeader = ({ onSubmit, editType, submitting, children }) => {
+  const router = useRouter()
   return (
     <div className='flex justify-between mb-8'>
       <div className=''>
@@ -15,7 +16,7 @@ const PageHeader = ({ onSubmit, editType, submitting, children }) => {
         <div>
           <button
             className='btn btn-text mr-4'
-            onClick={() => navigate(-1)}
+            onClick={() => router.back()}
           >
             Cancel
           </button>
