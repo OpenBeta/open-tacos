@@ -8,6 +8,14 @@ export interface AreaMetadataType {
   area_id: string
 }
 
+export enum SafetyType {
+  UNSPECIFIED = 'UNSPECIFIED',
+  PG = 'PG',
+  PG13 = 'PG13',
+  R = 'R',
+  X = 'X',
+}
+
 export interface ClimbMetadataType {
   lat: number
   lng: number
@@ -15,21 +23,17 @@ export interface ClimbMetadataType {
   mp_id: string
   climb_id: string
 }
-export interface ClimbDiscipline {
-  boulder: boolean
-  alpine: boolean
-  tr: boolean
-  ice: boolean
-  trad: boolean
-  mixed: boolean
-}
+
+type ClimbDiscipline = 'boulder' | 'alpine' | 'tr' | 'ice' | 'trad' | 'mixed'
+
+export type ClimbDisciplineRecord = Record<ClimbDiscipline, boolean>
 
 export interface Climb {
   name: string
   fa: string
   yds: string
   metadata: ClimbMetadataType
-  type: ClimbDiscipline
+  type: ClimbDisciplineRecord
   content: {
     description: string
     location: string
@@ -41,6 +45,7 @@ export interface AreaType {
   area_name: string
   pathTokens: string[]
   metadata: AreaMetadataType
+  ancestors: string[]
   content: {
     description: string
   }

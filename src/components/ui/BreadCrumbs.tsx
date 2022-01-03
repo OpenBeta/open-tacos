@@ -2,7 +2,6 @@ import React from 'react'
 import Link from 'next/link'
 import { sanitizeName } from '../../js/utils'
 import slugify from 'slugify'
-
 /**
  * Turn each element of `pathTokens` to a gatsby-link.
  *
@@ -18,20 +17,25 @@ import slugify from 'slugify'
  */
 interface BreakCrumbsProps {
   pathTokens: string[]
+  ancestors: string[]
+
   isClimbPage?: boolean
 }
-function BreadCrumbs ({ pathTokens, isClimbPage = false }: BreakCrumbsProps): JSX.Element {
+function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumbsProps): JSX.Element {
   const tokens = isClimbPage
     ? pathTokens.slice(0, pathTokens.length - 1)
     : pathTokens
+
   return (
     <div className='mt-4'>
       <Link href='/'>
         <a className='hover:underline hover:text-gray-900 text-gray-400 '>Home</a>
       </Link>
+
       {tokens.map((place, index, array) => {
         const isLastElement = array.length - 1 === index
-        const url = `/${slugifyPath(array.slice(0, index + 1))}`
+        const path = ancestors[index]
+        const url = `/areas/${path}`
         return (
           <span key={index}>
             <span className='text-gray-400 mx-1.5'>/</span>
@@ -53,8 +57,5 @@ function BreadCrumbs ({ pathTokens, isClimbPage = false }: BreakCrumbsProps): JS
     </div>
   )
 }
-
-const slugifyPath = (pathTokens): string =>
-  pathTokens.map((s: string) => slugify(s, { lower: true, strict: true })).join('/')
 
 export default BreadCrumbs
