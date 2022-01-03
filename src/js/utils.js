@@ -135,3 +135,8 @@ export const getScoreForYdsGrade = (yds) => {
   const plusSlash = plusOrSlash === undefined ? 0 : 1
   return num * 10 + letterScore + plusSlash
 }
+
+export const getSlug = (areaId, isLeaf) => {
+  const type = isLeaf ? 'crag' : 'areas'
+  return `/${type}/${areaId}`
+}

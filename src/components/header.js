@@ -1,19 +1,18 @@
 import React, { useState } from 'react'
-import TacoIcon from '../assets/icons/taco.svg'
+import TacoIcon from './ui/TacoIcon'
 // import SearchBar from '../components/SearchBar'
 
 function Header () {
   const [isExpanded, toggleExpansion] = useState(false)
   return (
     <header
-      className={`fixed top-0 z-50 border-b w-full ${
-        isExpanded ? 'bg-gray-50 border-b-2 border-black filter drop-shadow-md' : 'bg-white'
-      }`}
+      className={`fixed top-0 z-50 border-b w-full ${isExpanded ? 'bg-gray-50 border-b-2 border-black filter drop-shadow-md' : 'bg-white'
+        }`}
     >
       <div className='flex flex-wrap items-center justify-between max-w-screen-2xl p-4 lg:py-2 mx-auto'>
         <div className='flex flex-nowrap items-center'>
           <a href='/'>
-            <TacoIcon className='animate-pulse' />
+            <TacoIcon width={28} height={28} className='animate-pulse' />
           </a>
           {/* <SearchBar className='ml-4' /> */}
         </div>
@@ -31,9 +30,8 @@ function Header () {
           </svg>
         </button>
         <nav
-          className={`text-2xl lg:text-sm ${
-            isExpanded ? 'block mt-4 divide-y' : 'hidden'
-          } lg:flex lg:justify-end w-full lg:w-auto`}
+          className={`text-2xl lg:text-sm ${isExpanded ? 'block mt-4 divide-y' : 'hidden'
+            } lg:flex lg:justify-end w-full lg:w-auto`}
         >
           {[
             {
