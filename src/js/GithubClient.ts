@@ -16,9 +16,9 @@ import axios, { AxiosInstance } from 'axios'
 import { b64EncodeUnicode } from './base64'
 
 interface GithubClientProps {
-  baseBranch: string
-  defaultCommitMessage: string
   authToken: string
+  baseBranch?: string
+  defaultCommitMessage?: string
 }
 
 export class GithubClient {

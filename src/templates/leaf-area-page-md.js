@@ -7,7 +7,7 @@ import Droppin from '../assets/icons/droppin.svg'
 import Pencil from '../assets/icons/pencil-sm.svg'
 import RouteCard from '../components/ui/RouteCard'
 import BreadCrumbs from '../components/ui/BreadCrumbs'
-import { getScoreForYdsGrade, pathOrParentIdToGitHubLink } from '../js/utils'
+import { getScoreForGrade, pathOrParentIdToGitHubLink } from '../js/utils'
 import AreaCard from '../components/ui/AreaCard'
 import LinkToGithub from '../components/ui/LinkToGithub'
 import { templateH1Css } from '../js/styles'
@@ -165,8 +165,8 @@ const sortRoutes = (routes, sortType) => {
     case 'grade': {
       return routes.sort(
         (a, b) =>
-          getScoreForYdsGrade(a.frontmatter.yds) -
-          getScoreForYdsGrade(b.frontmatter.yds)
+          getScoreForGrade(a.frontmatter.yds) -
+          getScoreForGrade(b.frontmatter.yds)
       )
     }
     default:
