@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { GetStaticProps } from 'next'
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../../js/graphql/Client'
@@ -38,6 +37,7 @@ const Area = ({ area }): JSX.Element => {
               <Icon type='droppin' />
               <a
                 className='hover:underline hover:text-gray-800'
+                /* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */
                 href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
                 target='_blank'
                 rel='noopener noreferrer'

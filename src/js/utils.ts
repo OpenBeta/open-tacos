@@ -6,7 +6,7 @@ import { Climb, ClimbDisciplineRecord } from './types'
  * @param {String} pathOrParentId from createNodeField in gatsby-node.js
  * @param {String} fileName the file name of the markdown file without extension
  */
-export const pathOrParentIdToGitHubLink = (pathOrParentId: string, fileName: string) => {
+export const pathOrParentIdToGitHubLink = (pathOrParentId: string, fileName: string): string => {
   const baseUrl =
     'https://github.com/OpenBeta/opentacos-content/blob/develop/content/'
   return `${baseUrl}${pathOrParentId}/${fileName}.md`
@@ -24,12 +24,12 @@ interface PercentAndColor {
  * @returns {percents: [], colors:[]}
  */
 export const computeClimbingPercentsAndColors = (climbs: Climb[]): PercentAndColor => {
-  const typeToCount = {}
+  const typeToCount: {[key: string]: number} = {}
   climbs.forEach((climb) => {
     const { type } = climb
 
     Object.entries(type).reduce<Record<string, number>>(
-      (acc, [key, discipline]) => {
+      (acc: {[key: string]: number}, [key, discipline]: [string, boolean]) => {
         if (!discipline) return acc
         if (acc[key] !== undefined) {
           acc[key] = acc[key] + 1
@@ -95,7 +95,7 @@ export const computeClimbingPercentsAndColors = (climbs: Climb[]): PercentAndCol
  * Remove leading (6) or (aa) from an area or climb name
  * @param {String} s
  */
-export const sanitizeName = (s) =>
+export const sanitizeName = (s: string): string =>
   s.replace(/^(\(.{1,3}\) *)|((\d?[1-9]|[1-9]0)-)/, '')
 
 /**
@@ -103,10 +103,11 @@ export const sanitizeName = (s) =>
  * @example {sport: true, boulder: false, trad: false} => {sport: true}
  * @param  type Climb type key-value dictionary
  */
-export const simplifyClimbTypeJson = (type?: ClimbDisciplineRecord) => {
+export const simplifyClimbTypeJson = (type?: ClimbDisciplineRecord): {[key: string]: boolean} => {
   if (type === undefined) return {}
   for (const key in type) {
     if (type[key] === false) {
+      /* eslint-disable @typescript-eslint/no-dynamic-delete */
       delete type[key]
     }
   }
@@ -130,35 +131,37 @@ export const simplifyClimbTypeJson = (type?: ClimbDisciplineRecord) => {
  * @param {string} yds
  * @returns
  */
-export const getScoreForGrade = (grade) => {
+export const getScoreForGrade = (grade: string): number => {
   const ypsRegex = /^5\.([0-9]{1,2})([a-zA-Z])?([/+])?([/-])?([a-zA-Z]?)/
   const vGradeRegex = /^V([0-9]{1,2})([/+])?([/-])?([0-9]{1,2})?/
   const vGradeIrregular = /^V-([a-zA-Z]*)/
   const isYds = grade.match(ypsRegex)
-  const isVGrade = grade.match(vGradeRegex) || grade.match(vGradeIrregular)
+  const isVGrade = (grade.match(vGradeRegex) !== null) || grade.match(vGradeIrregular)
 
   // If there isn't a match sort it to the bottom
-  if (!isVGrade && !isYds) {
+  if ((isVGrade === null) && (isYds === null)) {
     console.warn(`Unexpected grade format: ${grade}`)
     return 0
   }
-  if (isYds) {
+  if (isYds !== null) {
     return getScoreForYdsGrade(isYds)
   }
-  if (isVGrade) {
+  if (isVGrade !== null) {
     return getScoreForVGrade(grade.match(vGradeRegex), grade.match(vGradeIrregular))
   }
 }
 
-const getScoreForVGrade = (match, irregularMatch) => {
+const getScoreForVGrade = (match: RegExpMatchArray, irregularMatch: RegExpMatchArray): number => {
   let score = 0
-  if (match) {
-    const [_, num, hasPlus, hasMinus, secondNumber] = match // eslint-disable-line no-unused-vars
-    const minus = (hasMinus && !secondNumber) ? -1 : 0 // check minus is not a V1-2
-    const plus = (hasMinus && secondNumber) || hasPlus ? 1 : 0 // grade V1+ the same as V1-2
+  if (match !== null) {
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+    const [_, num, hasPlus, hasMinus, secondNumber] = match
+    const minus = (hasMinus !== undefined && secondNumber === undefined) ? -1 : 0 // check minus is not a V1-2
+    const plus = (hasMinus !== undefined && secondNumber !== undefined) || (hasPlus !== undefined) ? 1 : 0 // grade V1+ the same as V1-2
     score = (parseInt(num, 10) + 1) * 10 + minus + plus // V0 = 10, leave room for V-easy to be below 0
-  } else if (irregularMatch) {
-    const [_, group] = irregularMatch // eslint-disable-line no-unused-vars
+  } else if (irregularMatch !== null) {
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+    const [_, group] = irregularMatch
     switch (group) {
       case 'easy':
         score = 1
@@ -171,18 +174,19 @@ const getScoreForVGrade = (match, irregularMatch) => {
   return score + 1000
 }
 
-const getScoreForYdsGrade = (match) => {
-  const [_, num, firstLetter, plusOrSlash, hasMinus] = match // eslint-disable-line no-unused-vars
-  const letterScore = firstLetter
+const getScoreForYdsGrade = (match: RegExpMatchArray): number => {
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  const [_, num, firstLetter, plusOrSlash, hasMinus] = match
+  const letterScore = firstLetter !== undefined
     ? (firstLetter.toLowerCase().charCodeAt(0) - 96) * 2
     : 0
   const plusSlash = plusOrSlash === undefined ? 0 : 1
-  const minus = hasMinus ? -1 : 0
+  const minus = hasMinus !== undefined ? -1 : 0
 
   return parseInt(num, 10) * 10 + letterScore + plusSlash + minus
 }
 
-export const getSlug = (areaId, isLeaf) => {
+export const getSlug = (areaId: string, isLeaf: boolean): string => {
   const type = isLeaf ? 'crag' : 'areas'
   return `/${type}/${areaId}`
 }

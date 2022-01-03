@@ -23,10 +23,10 @@ export const uploadImage = async (imageData: string | Blob): Promise<string> => 
  * @param context cloudinary context object (key:value)
  */
 // eslint-disable-next-line no-unused-vars
-const object2context = (context?: Record<string, string>): string => {
-  return context !== undefined
-    ? Object.keys(context)
-      .map((key) => `${key}=${context[key]}`)
-      .join('|')
-    : ''
-}
+// const object2context = (context?: Record<string, string>): string => {
+//   return context !== undefined
+//     ? Object.keys(context)
+//       .map((key) => `${key}=${context[key]}`)
+//       .join('|')
+//     : ''
+// }

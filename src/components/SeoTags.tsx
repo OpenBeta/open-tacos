@@ -17,22 +17,11 @@ function SeoTags ({ description = '', keywords = [], title, image = '' }: SEOPro
       content_edit_branch: 'edit-test'
     }
   }
-  // const { site } = useStaticQuery(graphql`
-  //   query DefaultSEOQuery {
-  //     site {
-  //       siteMetadata {
-  //         title
-  //         description
-  //         author
-  //       }
-  //     }
-  //   }
-  // `)
 
-  const metaDescription = description || site.siteMetadata.description
-  const metaTitle = title || site.siteMetadata.title
+  const metaDescription = description ?? site.siteMetadata.description
+  const metaTitle = title ?? site.siteMetadata.title
   const metaImage =
-    image ||
+    image ??
     'https://res.cloudinary.com/openbeta-prod/image/upload/v1639562113/open-tacos/nc9dsf6aoitrnehe1cwo.jpg'
 
   return (

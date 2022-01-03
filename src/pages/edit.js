@@ -2,7 +2,7 @@ import React from 'react'
 import { withAuthenticationRequired } from '@auth0/auth0-react'
 
 import Layout from '../components/layout'
-import SeoTags from '../components/seo'
+import SeoTags from '../components/SeoTags'
 import Editor from '../components/editor/Editor'
 
 const edit = () => {

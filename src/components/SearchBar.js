@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-// import { navigate } from 'gatsby'
+import { useRouter } from 'next/router'
 
 import ClimbSearch from './ClimbSearch'
 import { IconButton } from './ui/Button'
@@ -30,11 +30,14 @@ export default function SearchBar ({ className }) {
       false
     )
   }
+
+  const router = useRouter()
+
   return (
     <div className={className}>
       {activated
         ? (
-          <ClimbSearch onClimbNameChange={navigateTo} />
+          <ClimbSearch onClimbNameChange={({ meta_mp_route_id: metaMpRouteId }) => router.push(`/climbs/${metaMpRouteId}`)} />
           )
         : (
           <div
@@ -49,13 +52,4 @@ export default function SearchBar ({ className }) {
           )}
     </div>
   )
-}
-
-const navigateTo = (data) => {
-  const { meta_mp_route_id: metaMpRouteId } = data
-  navigate(buildUrl(metaMpRouteId))
-}
-
-const buildUrl = (metaMpRouteId) => {
-  return `/climbs/${metaMpRouteId}`
 }

@@ -1,17 +1,16 @@
 import React from 'react'
-import { Link } from 'gatsby'
-import Card from './ui/card'
+import Link from 'next/link'
+import Card from './ui/Card'
 import RouteTypeChips from './ui/RouteTypeChips'
 import RouteGradeChip from './ui/RouteGradeChip'
 import { sanitizeName } from '../js/utils'
 
-function RandomRouteCard ({ climb }) {
-  if (!climb) return null
+function RandomRouteCard ({ climb }): JSX.Element {
+  if (climb === null) return null
   const { slug, pathTokens } = climb
   const { type, route_name: routeName, safety, yds } = climb.frontmatter
-
   return (
-    <Link to={slug}>
+    <Link href={slug}>
       <Card>
         <div className='text-left'>
           <h2 className='font-medium font-semigole font-sans text-base truncate'>
