@@ -136,17 +136,17 @@ export const getScoreForGrade = (grade: string): number => {
   const vGradeRegex = /^V([0-9]{1,2})([/+])?([/-])?([0-9]{1,2})?/
   const vGradeIrregular = /^V-([a-zA-Z]*)/
   const isYds = grade.match(ypsRegex)
-  const isVGrade = (grade.match(vGradeRegex) != null) || grade.match(vGradeIrregular)
+  const isVGrade = (grade.match(vGradeRegex) !== null) || grade.match(vGradeIrregular)
 
   // If there isn't a match sort it to the bottom
-  if ((isVGrade == null) && (isYds == null)) {
+  if ((isVGrade === null) && (isYds === null)) {
     console.warn(`Unexpected grade format: ${grade}`)
     return 0
   }
-  if (isYds != null) {
+  if (isYds !== null) {
     return getScoreForYdsGrade(isYds)
   }
-  if (isVGrade != null) {
+  if (isVGrade !== null) {
     return getScoreForVGrade(grade.match(vGradeRegex), grade.match(vGradeIrregular))
   }
 }
@@ -156,8 +156,8 @@ const getScoreForVGrade = (match: RegExpMatchArray, irregularMatch: RegExpMatchA
   if (match !== null) {
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     const [_, num, hasPlus, hasMinus, secondNumber] = match
-    const minus = (hasMinus !== null && secondNumber === null) ? -1 : 0 // check minus is not a V1-2
-    const plus = (hasMinus !== null && secondNumber !== null) || (hasPlus !== null) ? 1 : 0 // grade V1+ the same as V1-2
+    const minus = (hasMinus !== undefined && secondNumber === undefined) ? -1 : 0 // check minus is not a V1-2
+    const plus = (hasMinus !== undefined && secondNumber !== undefined) || (hasPlus !== undefined) ? 1 : 0 // grade V1+ the same as V1-2
     score = (parseInt(num, 10) + 1) * 10 + minus + plus // V0 = 10, leave room for V-easy to be below 0
   } else if (irregularMatch !== null) {
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -177,11 +177,11 @@ const getScoreForVGrade = (match: RegExpMatchArray, irregularMatch: RegExpMatchA
 const getScoreForYdsGrade = (match: RegExpMatchArray): number => {
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const [_, num, firstLetter, plusOrSlash, hasMinus] = match
-  const letterScore = firstLetter !== null
+  const letterScore = firstLetter !== undefined
     ? (firstLetter.toLowerCase().charCodeAt(0) - 96) * 2
     : 0
   const plusSlash = plusOrSlash === undefined ? 0 : 1
-  const minus = hasMinus !== null ? -1 : 0
+  const minus = hasMinus !== undefined ? -1 : 0
 
   return parseInt(num, 10) * 10 + letterScore + plusSlash + minus
 }
