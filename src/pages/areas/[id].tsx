@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { GetStaticProps } from 'next'
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../../js/graphql/Client'
@@ -16,7 +15,7 @@ import { AreaType, AreaResponseType } from '../../js/types'
 import { getSlug } from '../../js/utils'
 
 const Area = ({ area }): JSX.Element => {
-  const { area_name: areaName, children, metadata, content, pathTokens } = area
+  const { area_name: areaName, children, metadata, content, pathTokens, ancestors } = area
 
   const rawPath = '/'
   const showEditCTA = content.description.length < 40
@@ -32,12 +31,13 @@ const Area = ({ area }): JSX.Element => {
       <div className='overflow-y'>
         <div className='xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch'>
           <div className='xl:flex-none xl:max-w-screen-md xl:w-full'>
-            <BreadCrumbs pathTokens={pathTokens} />
+            <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
             <h1 className={templateH1Css}>{areaName}</h1>
             <span className='flex items-center flex-shrink text-gray-500 text-xs gap-x-1'>
               <Icon type='droppin' />
               <a
                 className='hover:underline hover:text-gray-800'
+                /* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */
                 href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -124,6 +124,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         lng 
         leaf
       }
+      ancestors
       pathTokens
       children {
         area_name
