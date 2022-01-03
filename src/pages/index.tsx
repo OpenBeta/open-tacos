@@ -41,19 +41,23 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }`
 
-  const rs = await graphqlClient.query<AreaResponseType>({
-    query,
-    variables: {
-      filter: {
-        path_tokens: { tokens: ['USA'], exactMatch: true }
+  let rs
+  try {
+    rs = await graphqlClient.query<AreaResponseType>({
+      query,
+      variables: {
+        filter: {
+          path_tokens: { tokens: ['USA'], exactMatch: true }
+        }
       }
-    }
-  })
+    })
 
-  console.log('static props', JSON.stringify(rs.data, null, 2))
-
+    console.log('static props', JSON.stringify(rs.data, null, 2))
+  } catch (e) {
+    console.log('# api error', e)
+  }
   // Pass post data to the page via props
-  return { props: rs.data }
+  return { props: rs.data ?? [] }
 }
 
 export default Home
