@@ -1,14 +1,19 @@
 import { ClimbTypeToColor } from './constants'
+import { Climb, ClimbDisciplineRecord } from './types'
 
 /**
  * Given a path or parent id and the type of the page generate the GitHub URL
  * @param {String} pathOrParentId from createNodeField in gatsby-node.js
  * @param {String} fileName the file name of the markdown file without extension
  */
-export const pathOrParentIdToGitHubLink = (pathOrParentId, fileName) => {
+export const pathOrParentIdToGitHubLink = (pathOrParentId: string, fileName: string) => {
   const baseUrl =
     'https://github.com/OpenBeta/opentacos-content/blob/develop/content/'
-  return baseUrl + pathOrParentId + `/${fileName}.md`
+  return `${baseUrl}${pathOrParentId}/${fileName}.md`
+}
+interface PercentAndColor {
+  percents: number[]
+  colors: string[]
 }
 
 /**
@@ -18,23 +23,24 @@ export const pathOrParentIdToGitHubLink = (pathOrParentId, fileName) => {
  * @param {Object[]} climbs, these are the nodes {frontmatter, fields} format
  * @returns {percents: [], colors:[]}
  */
-export const computeClimbingPercentsAndColors = (climbs) => {
+export const computeClimbingPercentsAndColors = (climbs: Climb[]): PercentAndColor => {
   const typeToCount = {}
   climbs.forEach((climb) => {
-    const { type } = climb.frontmatter
-    const types = Object.keys(type)
-    types.forEach((key) => {
-      const isType = type[key]
-      if (!isType) return
-      if (typeToCount[key]) {
-        typeToCount[key] = typeToCount[key] + 1
-      } else {
-        typeToCount[key] = 1
-      }
-    })
+    const { type } = climb
+
+    Object.entries(type).reduce<Record<string, number>>(
+      (acc, [key, discipline]) => {
+        if (!discipline) return acc
+        if (acc[key] !== undefined) {
+          acc[key] = acc[key] + 1
+        } else {
+          acc[key] = 1
+        }
+        return acc
+      }, typeToCount)
   })
-  const counts = Object.values(typeToCount) || []
-  const reducer = (accumulator, currentValue) => accumulator + currentValue
+  const counts: number[] = Object.values(typeToCount)
+  const reducer = (accumulator: number, currentValue: number): number => accumulator + currentValue
   const totalClimbs = counts.reduce(reducer, 0)
   const percents = counts.map((count) => {
     return (count / totalClimbs) * 100
@@ -54,36 +60,36 @@ export const computeClimbingPercentsAndColors = (climbs) => {
  * within the area.
  * @param {Object[]} climbs - These are the values within the frontmatter object
  * @returns Object
- */
-export const computeStatsBarPercentPerAreaFromClimbs = (climbs) => {
-  const areasToClimbs = {}
-  const areasToPercentAndColors = {}
+//  */
+// export const computeStatsBarPercentPerAreaFromClimbs = (climbs: Climb[]):Record<string, PercentAndColor> => {
+//   const areasToClimbs = {}
+//   const areasToPercentAndColors = {}
 
-  // map each climb to the area
-  climbs.edges.forEach(({ node }) => {
-    const parentId = node.fields.parentId
-    if (areasToClimbs[parentId]) {
-      areasToClimbs[parentId].push(node.frontmatter)
-    } else {
-      areasToClimbs[parentId] = [node.frontmatter]
-    }
-  })
+//   // map each climb to the area
+//   climbs.forEach( climb => {
+//     const parentId = climb.parent
+//     if (areasToClimbs[parentId] !== undefined) {
+//       areasToClimbs[parentId].push(node.frontmatter)
+//     } else {
+//       areasToClimbs[parentId] = [node.frontmatter]
+//     }
+//   })
 
-  // compute the stats and percent per area
-  // do a little formatting to  reuse the helper function
-  Object.keys(areasToClimbs).forEach((key) => {
-    const formatted = areasToClimbs[key].map((c) => {
-      return {
-        node: {
-          frontmatter: c
-        }
-      }
-    })
-    areasToPercentAndColors[key] = computeClimbingPercentsAndColors(formatted)
-  })
+//   // compute the stats and percent per area
+//   // do a little formatting to  reuse the helper function
+//   Object.keys(areasToClimbs).forEach((key) => {
+//     const formatted = areasToClimbs[key].map((c) => {
+//       return {
+//         node: {
+//           frontmatter: c
+//         }
+//       }
+//     })
+//     areasToPercentAndColors[key] = computeClimbingPercentsAndColors(formatted)
+//   })
 
-  return areasToPercentAndColors
-}
+//   return areasToPercentAndColors
+// }
 
 /**
  * Remove leading (6) or (aa) from an area or climb name
@@ -97,8 +103,8 @@ export const sanitizeName = (s) =>
  * @example {sport: true, boulder: false, trad: false} => {sport: true}
  * @param  type Climb type key-value dictionary
  */
-export const simplifyClimbTypeJson = (type) => {
-  if (!type) return {}
+export const simplifyClimbTypeJson = (type?: ClimbDisciplineRecord) => {
+  if (type === undefined) return {}
   for (const key in type) {
     if (type[key] === false) {
       delete type[key]
