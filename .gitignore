@@ -73,3 +73,5 @@ yarn-error.log
 opentacos-content
 content
 
+# Env files
+.env.local
