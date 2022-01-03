@@ -88,6 +88,12 @@ docker compose up --build
 
 The application is now available at `https://localhost:8000`
 
+### Tips
+
+1.  Overriding environment variables
+
+Default variables are defined in [.env](./.env).  You can override default values, eg. pointing the frontend to a different API_SERVER, by defining them in `.env.local`.
+
 ## Troubleshooting
 
 Windows development + [opentacos-content](https://github.com/OpenBeta/opentacos-content)
