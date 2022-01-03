@@ -3,7 +3,7 @@ import { GetStaticProps } from 'next'
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { Climb, ClimbResponseType } from '../../js/types'
+import { Climb } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
@@ -66,24 +66,26 @@ function buildMetaDescription ({ pathTokens, fa, yds }: MetaType): string {
 }
 
 export async function getStaticPaths (): Promise<any> {
-  const rs = await graphqlClient.query<ClimbResponseType>({
-    query: gql`query {
-    climbs {
-      name
-      metadata {
-        climb_id
-      }
-    }
-  }`
-  })
+  // Temporarily disable pre-rendering
+  // https://github.com/OpenBeta/openbeta-graphql/issues/26
+  // const rs = await graphqlClient.query<ClimbResponseType>({
+  //   query: gql`query {
+  //   climbs {
+  //     name
+  //     metadata {
+  //       climb_id
+  //     }
+  //   }
+  // }`
+  // })
 
-  const paths = rs.data.climbs.map((area: Climb) => ({
-    params: { id: area.metadata.climb_id }
-  }))
+  // const paths = rs.data.climbs.map((area: Climb) => ({
+  //   params: { id: area.metadata.climb_id }
+  // }))
 
   return {
-    paths,
-    fallback: true
+    paths: [],
+    fallback: 'blocking'
   }
 }
 

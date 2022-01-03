@@ -11,7 +11,7 @@ import Cta from '../../components/ui/Cta'
 import AreaCard from '../../components/ui/AreaCard'
 import Icon from '../../components/Icon'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
-import { AreaType, AreaResponseType } from '../../js/types'
+import { AreaType } from '../../js/types'
 import { getSlug } from '../../js/utils'
 
 const Area = ({ area }): JSX.Element => {
@@ -85,30 +85,32 @@ const Area = ({ area }): JSX.Element => {
 // This function gets called at build time.
 // Nextjs uses the result to decide which paths will get pre-rendered at build time
 export async function getStaticPaths (): Promise<any> {
-  const rs = await graphqlClient.query<AreaResponseType>({
-    query: gql`query EdgeAreasQuery($filter:Filter) {
-    areas(filter: $filter) {
-      area_name
-      metadata {
-        area_id
-      }
-    }
-  }`,
-    variables: {
-      filter: { leaf_status: { isLeaf: false } }
-    }
-  })
+  // Temporarily disable pre-rendering
+  // https://github.com/OpenBeta/openbeta-graphql/issues/26
+  // const rs = await graphqlClient.query<AreaResponseType>({
+  //   query: gql`query EdgeAreasQuery($filter:Filter) {
+  //   areas(filter: $filter) {
+  //     area_name
+  //     metadata {
+  //       area_id
+  //     }
+  //   }
+  // }`,
+  //   variables: {
+  //     filter: { leaf_status: { isLeaf: false } }
+  //   }
+  // })
 
-  // Get the paths we want to pre-render based on posts
-  const paths = rs.data.areas.map((area: AreaType) => ({
-    params: { id: area.metadata.area_id }
-  }))
+  // // Get the paths we want to pre-render based on posts
+  // const paths = rs.data.areas.map((area: AreaType) => ({
+  //   params: { id: area.metadata.area_id }
+  // }))
 
   // We'll pre-render only these paths at build time.
   // { fallback: true } means render on first reques for those that are not in `paths`
   return {
-    paths,
-    fallback: true
+    paths: [],
+    fallback: 'blocking'
   }
 }
 
