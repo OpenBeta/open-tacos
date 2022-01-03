@@ -1,7 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
 import { sanitizeName } from '../../js/utils'
-import slugify from 'slugify'
 /**
  * Turn each element of `pathTokens` to a gatsby-link.
  *

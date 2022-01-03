@@ -18,7 +18,7 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
   const { name, fa, yds, type, content } = climb
   const pathTokens = []
   const ancestors = []
-  const safety = undefined;
+  const safety = undefined
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -61,7 +61,7 @@ function buildMetaDescription ({ pathTokens, fa, yds }: MetaType): string {
   const area = `${pathTokens[pathLength - 2]} at ${
     pathTokens[pathLength - 3]
   } `
-  const firstAscent = fa === undefined ? `First ascent by ${fa} - ` : ''
+  const firstAscent = fa !== undefined ? `First ascent by ${fa} - ` : ''
   return `${firstAscent}${yds} - Located in ${area}`
 }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import Card from './card'
+import Card from './Card'
 import BarPercent from './BarPercent'
 
 /**
@@ -15,14 +15,12 @@ interface AreaStatistics {
 
 interface AreaCardProps {
   areaName: string
-  onPress?: () => {}
   stats?: AreaStatistics
 }
 
-function AreaCard ({ areaName, onPress, stats }: AreaCardProps): JSX.Element {
+function AreaCard ({ areaName, stats }: AreaCardProps): JSX.Element {
   return (
     <Card
-      onPress={onPress}
       footer={
         (stats != null) &&
           <BarPercent styles='-mt-2' percents={stats.percents} colors={stats.colors} />

@@ -1,5 +1,5 @@
 import React from 'react'
-import Card from './card'
+import Card from './Card'
 import RouteTypeChips from './RouteTypeChips'
 import RouteGradeGip from './RouteGradeChip'
 import { ClimbDisciplineRecord, SafetyType } from '../../js/types'
@@ -9,15 +9,11 @@ interface RouteCardProps {
   type: ClimbDisciplineRecord
   safety?: SafetyType
   yds: string
-  onPress: (e) => void
 }
 
-function RouteCard ({ routeName, type, safety, yds, onPress }: RouteCardProps): JSX.Element {
+function RouteCard ({ routeName, type, safety, yds }: RouteCardProps): JSX.Element {
   return (
-    <Card
-      footer=''
-      onPress={onPress}
-    >
+    <Card>
       <h2
         className='font-medium font-sans my-4 text-base truncate'
       >

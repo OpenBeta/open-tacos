@@ -106,7 +106,6 @@ const Crag = ({ area }: CragProps): JSX.Element => {
                               routeName={name}
                             // climbId={metadata.climb_id} not actually used
                               yds={yds}
-                              onPress={null}
                               safety={undefined} /// TODO: Find out what routes have this value?
                               type={type}
                             />

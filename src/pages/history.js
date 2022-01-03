@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { GithubClient } from '../js/GithubClient'
 import { transform } from '../components/dashboard/EditHistory'
-import SeoTags from '../components/seo'
+import SeoTags from '../components/SeoTags'
 import Layout from '../components/layout'
 import ChangeHistory from '../components/ChangeHistory'
 

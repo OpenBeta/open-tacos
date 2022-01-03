@@ -50,7 +50,7 @@ export const writeMarkdownFile = async (
   committer: string,
   message: string,
   authToken: string
-) => {
+): Promise<any> => {
   const github = new GithubClient({
     authToken,
     baseBranch: CONTENT_BRANCH
