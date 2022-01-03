@@ -1,5 +1,8 @@
 import React from 'react'
 import Layout from '../components/layout'
+import SeoTags from '../components/SeoTags'
+import USToc from '../components/USToC'
+import RandomRouteCard from '../components/RandomRouteCard'
 
 // function getRandomInt (min: number, max: number): number {
 //   min = Math.ceil(min)
@@ -46,7 +49,7 @@ function IndexPage (): JSX.Element {
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
-      {/* <SEO
+      {/* <SeoTags
         keywords={['openbeta', 'rock climbing', 'climbing api']}
         description='Climbing route catalog'
         title='Home'
