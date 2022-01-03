@@ -26,7 +26,7 @@ interface CragSortType {
 }
 
 const Crag = ({ area }: CragProps): JSX.Element => {
-  const { area_name: areaName, climbs, metadata, content, pathTokens } = area
+  const { area_name: areaName, climbs, metadata, content, ancestors, pathTokens } = area
 
   const [selectedClimbSort, setSelectedClimbSort] = useState(0)
   const climbSortByOptions: CragSortType[] = [
@@ -47,7 +47,7 @@ const Crag = ({ area }: CragProps): JSX.Element => {
       <div className='overflow-y'>
         <div className='xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch'>
           <div className='xl:flex-none xl:max-w-screen-md xl:w-full'>
-            <BreadCrumbs pathTokens={pathTokens} />
+            <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
             <h1 className={templateH1Css}>{areaName}</h1>
             <span className='flex items-center flex-shrink text-gray-500 text-xs gap-x-1'>
               <Icon type='droppin' />
@@ -105,9 +105,9 @@ const Crag = ({ area }: CragProps): JSX.Element => {
                             <RouteCard
                               routeName={name}
                             // climbId={metadata.climb_id} not actually used
-                              YDS={yds}
+                              yds={yds}
                               onPress={null}
-                              safety={null} /// TODO: Find out what routes have this value?
+                              safety={undefined} /// TODO: Find out what routes have this value?
                               type={type}
                             />
                           </a>
@@ -182,6 +182,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         left_right_index
       }
       pathTokens
+      ancestors
       climbs {
         name
         fa

@@ -1,5 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
 import { GetStaticProps } from 'next'
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../../js/graphql/Client'
@@ -18,7 +17,8 @@ interface ClimbProps {
 function Climbs ({ climb }: ClimbProps): JSX.Element {
   const { name, fa, yds, type, content } = climb
   const pathTokens = []
-  const safety = {}
+  const ancestors = []
+  const safety = undefined;
   return (
     <Layout>
       {/* eslint-disable react/jsx-pascal-case */}
@@ -28,7 +28,7 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
         description={buildMetaDescription({ pathTokens, fa, yds })}
       />
       <div>
-        <BreadCrumbs pathTokens={pathTokens} isClimbPage />
+        <BreadCrumbs pathTokens={pathTokens} ancestors={ancestors} isClimbPage />
         <h1 className={templateH1Css}>{name}</h1>
         <RouteGradeChip yds={yds} safety={safety} />
         <RouteTypeChips type={type} />
