@@ -34,7 +34,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = gql`query UsaAreas($filter: Filter) {
     areas(filter: $filter) {
       area_name
-      
       metadata {
        area_id
        leaf
@@ -50,6 +49,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       }
     }
   })
+
+  console.log('static props', JSON.stringify(rs.data, null, 2))
 
   // Pass post data to the page via props
   return { props: rs.data }
