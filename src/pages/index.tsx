@@ -52,7 +52,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   })
 
   // Pass post data to the page via props
-  return { props: rs.data }
+  return { props: rs.data ?? { areas: [] } }
 }
 
 export default Home
