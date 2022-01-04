@@ -9,6 +9,7 @@ import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
 import { templateH1Css } from '../../js/styles'
+import InlineEditor from '../../components/editor/InlineEditor'
 
 interface ClimbProps {
   climb: Climb
@@ -19,9 +20,12 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
   const pathTokens = []
   const ancestors = []
   const safety = undefined
+
+  /* eslint-disable-next-line */
+  console.log('# desc', JSON.stringify(content, null, 2))
+
   return (
     <Layout>
-      {/* eslint-disable react/jsx-pascal-case */}
       <SeoTags
         keywords={[name]}
         title={name}
@@ -43,8 +47,14 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
         </div>
         <div
           className='markdown'
-          dangerouslySetInnerHTML={{ __html: content.description }}
-        />
+        >
+          <h1>Description</h1>
+          <InlineEditor id='1' markdown={content.description} readOnly />
+          <h1>Location</h1>
+          <InlineEditor id='2' markdown={content.location} readOnly />
+          <h1>Protection</h1>
+          <InlineEditor id='3' markdown={content.protection} readOnly />
+        </div>
       </div>
 
     </Layout>
@@ -100,6 +110,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       }
       content {
         description
+        location
+        protection
       }
     }
   }`
