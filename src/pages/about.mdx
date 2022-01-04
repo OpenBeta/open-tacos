@@ -1,9 +1,12 @@
----
-title: About the project
-keywords:
- - OpenBeta
- - rock climbing
----
+import  StandardPageLayout  from '../components/StandardPageLayout'
+
+export const meta = {
+  title: 'About the project',
+  keywords: ['OpenBeta', 'rock climbing']
+}
+
+<StandardPageLayout meta={meta}>
+
 # Welcome! 👋
 
 OpenBeta is a grassroots initiative that brings climbers together for one common goal — to keep rock climbing information free and open for everyone.
@@ -72,3 +75,5 @@ OpenBeta is a volunteer effort. We encourage you to pitch in and join the team!
 Thanks! ❤️ ❤️ ❤️
 
 OpenBeta Team
+
+</StandardPageLayout>
