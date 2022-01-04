@@ -8,13 +8,12 @@ import SeoTags from '../../components/SeoTags'
 import { templateH1Css } from '../../js/styles'
 import ButtonGroup from '../../components/ui/ButtonGroup'
 import { Button } from '../../components/ui/Button'
-import EditButton from '../../components/ui/EditButton'
-import Cta from '../../components/ui/Cta'
 import Icon from '../../components/Icon'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import { AreaType, Climb } from '../../js/types'
 import { getScoreForGrade } from '../../js/utils'
 import RouteCard from '../../components/ui/RouteCard'
+import InlineEditor from '../../components/editor/InlineEditor'
 
 interface CragProps {
   area: AreaType
@@ -34,8 +33,6 @@ const Crag = ({ area }: CragProps): JSX.Element => {
     { value: 'grade', text: 'Grade' }
   ]
 
-  const rawPath = '/'
-  const showEditCTA = content.description.length < 40
   return (
     <Layout layoutClz='layout-wide'>
       <SeoTags
@@ -60,18 +57,12 @@ const Crag = ({ area }: CragProps): JSX.Element => {
                 {metadata.lat},{metadata.lng}
               </a>
             </span>
-            {!showEditCTA && (
-              <div className='flex justify-end'>
-                <EditButton label='Improve this page' rawPath={rawPath} />
-              </div>
-            )}
-            {showEditCTA && (
-              <Cta isEmpty={content.description.length === 1} rawPath={rawPath} />
-            )}
             <div
-              className='markdown'
-              dangerouslySetInnerHTML={{ __html: content.description }}
-            />
+              className='pt-4 markdown'
+            >
+              <h2>Description</h2>
+              <InlineEditor id='crag-1' markdown={content.description} readOnly />
+            </div>
             <hr className='my-8' />
             <>
               <div className='divide-x markdown h1'>Climbs</div>
