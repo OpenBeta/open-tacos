@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import TacoIcon from './ui/TacoIcon'
+import Image from 'next/image'
 // import SearchBar from '../components/SearchBar'
 
 function Header () {
@@ -12,7 +12,7 @@ function Header () {
       <div className='flex flex-wrap items-center justify-between max-w-screen-2xl p-4 lg:py-2 mx-auto'>
         <div className='flex flex-nowrap items-center'>
           <a href='/'>
-            <TacoIcon width={28} height={28} className='animate-pulse' />
+            <Image className='cursor-pointer' src='/tortilla.png' height={32} width={32} />
           </a>
           {/* <SearchBar className='ml-4' /> */}
         </div>

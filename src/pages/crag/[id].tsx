@@ -12,7 +12,7 @@ import EditButton from '../../components/ui/EditButton'
 import Cta from '../../components/ui/Cta'
 import Icon from '../../components/Icon'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
-import { AreaType, Climb, AreaResponseType } from '../../js/types'
+import { AreaType, Climb } from '../../js/types'
 import { getScoreForGrade } from '../../js/utils'
 import RouteCard from '../../components/ui/RouteCard'
 
@@ -100,7 +100,7 @@ const Crag = ({ area }: CragProps): JSX.Element => {
                     const { yds, name, metadata, type } = climb
                     return (
                       <div className='pt-6 max-h-96' key={metadata.climb_id}>
-                        <Link href={`/climbs/${metadata.climb_id}`}>
+                        <Link href={`/climbs/${metadata.climb_id}`} passHref>
                           <a>
                             <RouteCard
                               routeName={name}
@@ -146,27 +146,29 @@ const sortRoutes = (routes: Climb[], sortType: CragSortType): Climb[] => {
 }
 
 export async function getStaticPaths (): Promise<any> {
-  const rs = await graphqlClient.query<AreaResponseType>({
-    query: gql`query EdgeAreasQuery($filter: Filter) {
-    areas(filter: $filter) {
-      area_name
-      metadata {
-        area_id
-      }
-    }
-  }`,
-    variables: {
-      filter: { leaf_status: { isLeaf: true } }
-    }
-  })
+  // Temporarily disable pre-rendering
+  // https://github.com/OpenBeta/openbeta-graphql/issues/26
+  // const rs = await graphqlClient.query<AreaResponseType>({
+  //   query: gql`query EdgeAreasQuery($filter: Filter) {
+  //   areas(filter: $filter) {
+  //     area_name
+  //     metadata {
+  //       area_id
+  //     }
+  //   }
+  // }`,
+  //   variables: {
+  //     filter: { leaf_status: { isLeaf: true } }
+  //   }
+  // })
 
-  const paths = rs.data.areas.map((area: AreaType) => ({
-    params: { id: area.metadata.area_id }
-  }))
+  // const paths = rs.data.areas.map((area: AreaType) => ({
+  //   params: { id: area.metadata.area_id }
+  // }))
 
   return {
-    paths,
-    fallback: true
+    paths: [],
+    fallback: 'blocking'
   }
 }
 
