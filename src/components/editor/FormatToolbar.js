@@ -1,21 +1,19 @@
 import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-import { usePlateEditorRef, getPlatePluginType } from '@udecode/plate-core'
-import { ELEMENT_H1, ELEMENT_H2 } from '@udecode/plate-heading'
-import { MARK_BOLD, MARK_CODE, MARK_ITALIC } from '@udecode/plate-basic-marks'
+import { usePlateEditorRef } from '@udecode/plate-core'
 
-import { MarkToolbarButton, BlockToolbarButton } from '@udecode/plate-toolbar'
+// import { MarkToolbarButton, BlockToolbarButton } from '@udecode/plate-toolbar'
 import { insertImage } from '@udecode/plate-image'
 
-import {
-  IconBold,
-  IconItalic,
-  IconCode,
-  IconH1,
-  IconH2,
-  IconPhoto
-} from './ToolbarIcons'
+// import {
+//   IconBold,
+//   IconItalic,
+//   IconCode,
+//   IconH1,
+//   IconH2,
+//   IconPhoto
+// } from './ToolbarIcons'
 
 import PhotoUploadProgress from './PhotoUploadProgress'
 import { uploadImage } from '../../js/image-utils'
@@ -62,7 +60,7 @@ const FormatToolbar = () => {
     <>
       <PhotoUploadProgress open={uploading} />
       <div className='max-w-full flex nowrap items-center pt-1.5 gap-x-4 border-b px-4 bg-gray-100 rounded-t-lg'>
-        <MarkToolbarButton
+        {/* <MarkToolbarButton
           type={getPlatePluginType(editor, MARK_BOLD)}
           icon={<IconBold />}
         />
@@ -81,13 +79,13 @@ const FormatToolbar = () => {
         <BlockToolbarButton
           type={getPlatePluginType(editor, ELEMENT_H2)}
           icon={<IconH2 />}
-        />
+        /> */}
         <div {...getRootProps()}>
           <input {...getInputProps()} />
-          <BlockToolbarButton
+          {/* <BlockToolbarButton
             // type={getPlatePluginType(editor, ELEMENT_H2)}
             icon={<IconPhoto />}
-          />
+          /> */}
         </div>
         {/* Comment out due to https://github.com/udecode/plate/issues/938
        <ToolbarLink icon={<IconURL />} /> */}
