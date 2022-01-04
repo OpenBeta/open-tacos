@@ -125,17 +125,15 @@ body, html {
 
 }
 .h1 {
-  @apply text-gray-700 text-2xl font-medium tracking-tight mb-4 !important;
+  @apply text-gray-700 text-3xl font-medium tracking-tight mb-4 !important;
 }
 
 .md-h1 {
   @apply h1 mt-14;
 }
 
-
-
 .md-h2 {
-  @apply text-xl font-bold mt-4 mb-1 !important;
+  @apply text-2xl font-bold text-slate-700 tracking-tight leading-loose !important;
 }
 
 .md-code {
@@ -143,7 +141,7 @@ body, html {
 }
 
 .md-p {
-  @apply text-base mt-4 mb-8 leading-8 !important;
+  @apply block mb-4 text-base text-slate-900 leading-relaxed !important;
 }
 
 .editor-profile-container {
@@ -233,6 +231,10 @@ body, html {
 input:checked + label {
   @apply text-white;
   @apply bg-gray-700;
+}
+
+.markdown {
+  @apply font-sans
 }
 
 .markdown h1 {

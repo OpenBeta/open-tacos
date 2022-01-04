@@ -1,4 +1,5 @@
 import { unified } from 'unified'
+import markdown from 'remark-parse'
 import slate, { defaultNodeTypes, serialize } from '@openbeta/remark-slate'
 import yaml from 'js-yaml'
 
@@ -39,31 +40,31 @@ const SERIALIZE_OPTS = {
  * Convert markdown string to Slate AST
  * @param markdown markdown string
  */
-export const mdToSlate = (markdown) => {
-  if (!markdown) {
+export const mdToSlate = (mdStr: string): any => {
+  if (mdStr === null) {
     return null
   }
   const processor = unified().use(markdown).use(slate, DESERIALIZE_OPTS)
-  return topImages(processor.processSync(markdown).result)
+  return topImages(processor.processSync(mdStr).result)
 }
 
 /**
  * Convert Slate AST to markdown string
  * @param  ast
  */
-export const slateToMarkdown = (ast) => {
-  return ast ? ast.map((v) => serialize(v, SERIALIZE_OPTS)).join('\n') : ''
+export const slateToMarkdown = (ast: any[]): string => {
+  return ast !== null ? ast.map((v) => serialize(v, SERIALIZE_OPTS)).join('\n') : ''
 }
 
 /**
  * Move image nodes to top-level
  * @param  {Object} ast Slate AST
  */
-export const topImages = (ast) => {
+export const topImages = (ast): any => {
   return ast.reduce((acc, cur) => {
     const processedNode = cur
     // Extract images from wrapping node while preserving any other children
-    if (processedNode.children && processedNode.type === 'p') {
+    if (processedNode.children !== null && processedNode.type === 'p') {
       const images = []
       const children = []
       processedNode.children.forEach((node) => {
@@ -91,9 +92,10 @@ export const topImages = (ast) => {
  * @param {Object} Data.body_ast Content AST from Slate editor
  * @returns {string} markdown string
  */
-export const stringify = ({ frontmatter, bodyAst }) => {
-  if (frontmatter.type) {
+export const stringify = ({ frontmatter, bodyAst }): string => {
+  if (frontmatter.type !== null) {
     frontmatter.type = simplifyClimbTypeJson(frontmatter.type)
   }
-  return '---\n' + yaml.dump(frontmatter) + '---\n' + slateToMarkdown(bodyAst)
+  /* eslint-disable-next-line */
+  return `---\n ${yaml.dump(frontmatter)} \n---\n${slateToMarkdown(bodyAst)}`
 }

@@ -9,19 +9,19 @@ import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
 import { templateH1Css } from '../../js/styles'
+import InlineEditor from '../../components/editor/InlineEditor'
 
 interface ClimbProps {
   climb: Climb
 }
 
 function Climbs ({ climb }: ClimbProps): JSX.Element {
-  const { name, fa, yds, type, content } = climb
+  const { name, fa, yds, type, content, metadata } = climb
   const pathTokens = []
   const ancestors = []
   const safety = undefined
   return (
     <Layout>
-      {/* eslint-disable react/jsx-pascal-case */}
       <SeoTags
         keywords={[name]}
         title={name}
@@ -33,18 +33,16 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
         <RouteGradeChip yds={yds} safety={safety} />
         <RouteTypeChips type={type} />
         <div className='pt-4 text-sm text-gray-600 italic'>FA: {fa}</div>
-        <div className='float-right'>
-          <button
-            className='btn btn-secondary'
-            onClick={() => {}} // navigate(`/edit?file=${rawPath}/${filename}.md`)
-          >
-            Improve this page
-          </button>
-        </div>
         <div
-          className='markdown'
-          dangerouslySetInnerHTML={{ __html: content.description }}
-        />
+          className='pt-4 markdown'
+        >
+          <h2>Description</h2>
+          <InlineEditor id={`climb-desc-${metadata.climb_id}`} markdown={content.description} readOnly />
+          <h2>Location</h2>
+          <InlineEditor id={`climb-loc-${metadata.climb_id}`} markdown={content.location} readOnly />
+          <h2>Protection</h2>
+          <InlineEditor id={`climb-pro-${metadata.climb_id}`} markdown={content.protection} readOnly />
+        </div>
       </div>
 
     </Layout>
@@ -100,6 +98,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       }
       content {
         description
+        location
+        protection
       }
     }
   }`
