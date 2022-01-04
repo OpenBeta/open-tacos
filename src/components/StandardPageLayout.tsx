@@ -44,6 +44,7 @@ const StandardPageLayout = ({ meta, children, hero }): JSX.Element => {
         <SEOTags keywords={keywords} title={title} />
         <MDXProvider>
           <div className='mt-8'>
+
             {children}
           </div>
         </MDXProvider>
@@ -51,5 +52,6 @@ const StandardPageLayout = ({ meta, children, hero }): JSX.Element => {
     </Layout>
   )
 }
+
 
 export default StandardPageLayout
