@@ -52,8 +52,8 @@ export const mdToSlate = (mdStr: string): any => {
  * Convert Slate AST to markdown string
  * @param  ast
  */
-export const slateToMarkdown = (ast: any): string => {
-  return ast ? ast.map((v) => serialize(v, SERIALIZE_OPTS)).join('\n') : ''
+export const slateToMarkdown = (ast: any[]): string => {
+  return ast !== null ? ast.map((v) => serialize(v, SERIALIZE_OPTS)).join('\n') : ''
 }
 
 /**
@@ -96,5 +96,6 @@ export const stringify = ({ frontmatter, bodyAst }): string => {
   if (frontmatter.type !== null) {
     frontmatter.type = simplifyClimbTypeJson(frontmatter.type)
   }
+  /* eslint-disable-next-line */
   return `---\n ${yaml.dump(frontmatter)} \n---\n${slateToMarkdown(bodyAst)}`
 }

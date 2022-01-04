@@ -1,4 +1,6 @@
 import '../styles/global.css'
+import '../../public/fonts/fonts.css'
+
 import type { AppProps } from 'next/app'
 import fetch from 'node-fetch'
 import { abortableFetch } from 'abortcontroller-polyfill/dist/cjs-ponyfill'

@@ -5,21 +5,19 @@ import Link from 'next/link'
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import { templateH1Css } from '../../js/styles'
-
-import EditButton from '../../components/ui/EditButton'
-import Cta from '../../components/ui/Cta'
 import AreaCard from '../../components/ui/AreaCard'
 import Icon from '../../components/Icon'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import { AreaType } from '../../js/types'
 import { getSlug } from '../../js/utils'
+import InlineEditor from '../../components/editor/InlineEditor'
 
-const Area = ({ area }): JSX.Element => {
+interface AreaProps {
+  area: AreaType
+}
+
+const Area = ({ area }: AreaProps): JSX.Element => {
   const { area_name: areaName, children, metadata, content, pathTokens, ancestors } = area
-
-  const rawPath = '/'
-  const showEditCTA = content.description.length < 40
-
   return (
     <Layout layoutClz='layout-wide'>
       <SeoTags
@@ -45,18 +43,12 @@ const Area = ({ area }): JSX.Element => {
                 {metadata.lat},{metadata.lng}
               </a>
             </span>
-            {!showEditCTA && (
-              <div className='flex justify-end'>
-                <EditButton label='Improve this page' rawPath={rawPath} />
-              </div>
-            )}
-            {showEditCTA && (
-              <Cta isEmpty={content.description.length === 1} rawPath={rawPath} />
-            )}
             <div
-              className='markdown'
-              dangerouslySetInnerHTML={{ __html: content.description }}
-            />
+              className='pt-4 markdown'
+            >
+              <h2>Description</h2>
+              <InlineEditor id={`area-${metadata.area_id}`} markdown={content.description} readOnly />
+            </div>
             <hr className='my-8' />
             <>
               <div className='divide-x markdown h1'>Subareas</div>

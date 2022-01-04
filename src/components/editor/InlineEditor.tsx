@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Plate, createParagraphPlugin, createListPlugin, createPlugins, createPlateUI } from '@udecode/plate'
+import { Plate, createParagraphPlugin, createListPlugin, createImagePlugin, createPlugins, createPlateUI } from '@udecode/plate'
 
 import { mdToSlate } from './md-utils'
 
@@ -14,25 +14,19 @@ const editableProps = {
 const InlineEditor = ({ markdown, readOnly, id }): JSX.Element => {
   const plugins = createPlugins([
     createParagraphPlugin(),
+    createImagePlugin(),
     createListPlugin()
-
   ], {
     components: createPlateUI()
   })
-
   const ast = mdToSlate(markdown)
-  console.log(ast)
   return (
-    <div className='plate'>
-      <Plate
-        id={id}
-        editableProps={editableProps}
-        plugins={plugins}
-        // components={components}
-        // options={options}
-        initialValue={ast}
-      />
-    </div>
+    <Plate
+      id={id}
+      editableProps={editableProps}
+      plugins={plugins}
+      initialValue={ast}
+    />
   )
 }
 

@@ -16,14 +16,10 @@ interface ClimbProps {
 }
 
 function Climbs ({ climb }: ClimbProps): JSX.Element {
-  const { name, fa, yds, type, content } = climb
+  const { name, fa, yds, type, content, metadata } = climb
   const pathTokens = []
   const ancestors = []
   const safety = undefined
-
-  /* eslint-disable-next-line */
-  console.log('# desc', JSON.stringify(content, null, 2))
-
   return (
     <Layout>
       <SeoTags
@@ -37,23 +33,15 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
         <RouteGradeChip yds={yds} safety={safety} />
         <RouteTypeChips type={type} />
         <div className='pt-4 text-sm text-gray-600 italic'>FA: {fa}</div>
-        <div className='float-right'>
-          <button
-            className='btn btn-secondary'
-            onClick={() => {}} // navigate(`/edit?file=${rawPath}/${filename}.md`)
-          >
-            Improve this page
-          </button>
-        </div>
         <div
-          className='markdown'
+          className='pt-4 markdown'
         >
-          <h1>Description</h1>
-          <InlineEditor id='1' markdown={content.description} readOnly />
-          <h1>Location</h1>
-          <InlineEditor id='2' markdown={content.location} readOnly />
-          <h1>Protection</h1>
-          <InlineEditor id='3' markdown={content.protection} readOnly />
+          <h2>Description</h2>
+          <InlineEditor id={`climb-desc-${metadata.climb_id}`} markdown={content.description} readOnly />
+          <h2>Location</h2>
+          <InlineEditor id={`climb-loc-${metadata.climb_id}`} markdown={content.location} readOnly />
+          <h2>Protection</h2>
+          <InlineEditor id={`climb-pro-${metadata.climb_id}`} markdown={content.protection} readOnly />
         </div>
       </div>
 
