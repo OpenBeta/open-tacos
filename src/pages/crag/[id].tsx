@@ -100,7 +100,7 @@ const Crag = ({ area }: CragProps): JSX.Element => {
                     const { yds, name, metadata, type } = climb
                     return (
                       <div className='pt-6 max-h-96' key={metadata.climb_id}>
-                        <Link href={`/climbs/${metadata.climb_id}`}>
+                        <Link href={`/climbs/${metadata.climb_id}`} passHref>
                           <a>
                             <RouteCard
                               routeName={name}

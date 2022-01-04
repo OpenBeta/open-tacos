@@ -10,21 +10,23 @@ function RandomRouteCard ({ climb }): JSX.Element {
   const { slug, pathTokens } = climb
   const { type, route_name: routeName, safety, yds } = climb.frontmatter
   return (
-    <Link href={slug}>
-      <Card>
-        <div className='text-left'>
-          <h2 className='font-medium font-semigole font-sans text-base truncate'>
-            {routeName}
-          </h2>
-          <div className='italic truncate text-xs text-gray-600'>
-            {sanitizeName(pathTokens[pathTokens.length - 2])}
+    <Link href={slug} passHref>
+      <a>
+        <Card>
+          <div className='text-left'>
+            <h2 className='font-medium font-semigole font-sans text-base truncate'>
+              {routeName}
+            </h2>
+            <div className='italic truncate text-xs text-gray-600'>
+              {sanitizeName(pathTokens[pathTokens.length - 2])}
+            </div>
+            <div className='my-2'>
+              <RouteGradeChip yds={yds} safety={safety} />
+              <RouteTypeChips type={type} />
+            </div>
           </div>
-          <div className='my-2'>
-            <RouteGradeChip yds={yds} safety={safety} />
-            <RouteTypeChips type={type} />
-          </div>
-        </div>
-      </Card>
+        </Card>
+      </a>
     </Link>
   )
 }

@@ -65,7 +65,7 @@ const Area = ({ area }): JSX.Element => {
                   const { area_name: areaName, metadata } = child
                   return (
                     <div className='max-h-96' key={metadata.area_id}>
-                      <Link href={getSlug(metadata.area_id, metadata.leaf)}>
+                      <Link href={getSlug(metadata.area_id, metadata.leaf)} passHref>
                         <a>
                           <AreaCard areaName={areaName} />
                         </a>
