@@ -27,7 +27,7 @@ function USToC ({ areas }): JSX.Element {
 
 function State ({ areaName, slug }: StateType): JSX.Element {
   return (
-    <Link href={slug}>
+    <Link href={slug} passHref>
       <a>{areaName}</a>
     </Link>
   )
