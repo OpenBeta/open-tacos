@@ -7,9 +7,9 @@ import USToC from '../components/USToC'
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../js/graphql/Client'
 import { GetStaticProps } from 'next'
-import { AreaResponseType } from '../js/types'
+import { IndexResponseType } from '../js/types'
 
-const Home: NextPage<AreaResponseType> = ({ areas }) => {
+const Home: NextPage<IndexResponseType> = ({ areas, area }) => {
   return (
     <>
       <Head>
@@ -23,31 +23,39 @@ const Home: NextPage<AreaResponseType> = ({ areas }) => {
         />
       </Head>
 
-      <Layout>
-        <USToC areas={areas} />
+      <Layout layoutClz='layout-wide'>
+        <USToC areas={area.children} />
       </Layout>
     </>
   )
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const query = gql`query UsaAreas($filter: Filter) {
-    areas(filter: $filter) {
+  const query = gql`query UsaAreas( $uuid: String) {
+    area(uuid: $uuid) {
       area_name
-      
       metadata {
-       area_id
-       leaf
+        lat
+        lng
+        area_id
+        leaf
+      }
+      children {
+        area_name
+        metadata {
+          lat
+          lng
+          area_id
+          leaf
+        }
       }
     }
   }`
 
-  const rs = await graphqlClient.query<AreaResponseType>({
+  const rs = await graphqlClient.query<IndexResponseType>({
     query,
     variables: {
-      filter: {
-        path_tokens: { tokens: ['USA'], exactMatch: true }
-      }
+      uuid: 'd5599113-a4cb-4a68-b588-bd2c1185d131'
     }
   })
 

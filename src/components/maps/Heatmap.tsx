@@ -5,8 +5,10 @@ import { GeoJsonLayer } from '@deck.gl/layers'
 import usaHeatMapData from '../../assets/usa-heatmap.json'
 import BaseMap, { DEFAULT_INITIAL_VIEWSTATE } from './BaseMap'
 import { bboxFromGeoJson, bbox2Viewport } from '../../js/GeoHelpers'
+import { InitialViewStateProps } from '@deck.gl/core/lib/deck'
+import { ColorRange } from '@deck.gl/core/utils/color'
 
-const COLOR_RANGE = [
+const COLOR_RANGE: ColorRange = [
   [1, 152, 189],
   [73, 227, 206],
   [216, 254, 181],
@@ -17,12 +19,18 @@ const COLOR_RANGE = [
 
 const NAV_BAR_OFFSET = 66
 
-export default function Heatmap ({ geojson }) {
+interface HeatmapProps {
+  geojson?: { geometry: { type: string } }
+  children?: JSX.Element
+  getTooltip: (obj: unknown) => void
+}
+
+export default function Heatmap ({ geojson }: HeatmapProps): JSX.Element {
   const [[width, height], setWH] = useState([400, 400])
-  const [viewstate, setViewState] = useState(DEFAULT_INITIAL_VIEWSTATE)
+  const [viewstate, setViewState] = useState<InitialViewStateProps>(DEFAULT_INITIAL_VIEWSTATE)
 
   useEffect(() => {
-    if (!geojson) return
+    if (geojson == null) return
 
     updateDimensions()
 
@@ -30,7 +38,7 @@ export default function Heatmap ({ geojson }) {
     const bbox = bboxFromGeoJson(geojson)
     const vs = bbox2Viewport(bbox, width, height)
 
-    if (geojson.geometry && geojson.geometry.type.toUpperCase() === 'POINT') {
+    if (geojson.geometry !== undefined && geojson.geometry.type.toUpperCase() === 'POINT') {
       setViewState({ ...vs, zoom: 10 })
     } else {
       setViewState(vs)
@@ -42,17 +50,17 @@ export default function Heatmap ({ geojson }) {
 
   const onViewStateChange = useCallback(({ viewState }) => {
     setViewState(viewState)
-  })
+  }, [])
 
   const updateDimensions = useCallback(() => {
     const { width, height } = getMapDivDimensions('my-area-map')
     setWH([width, height])
-  })
+  }, [width, height])
 
   const layers = [
     new GeoJsonLayer({
       id: 'geojson-layer',
-      data: geojson || [],
+      data: (geojson != null) || [],
       pickable: false,
       stroked: true,
       filled: viewstate.zoom < 8,
@@ -72,7 +80,7 @@ export default function Heatmap ({ geojson }) {
       id: 'heatmp-layer',
       pickable: false,
       getPosition: (d) => [d.lon, d.lat, 10],
-      getWeight: 1,
+      getWeight: () => 1,
       radiusPixels: 20,
       intensity: 1,
       threshold: 0.03,
@@ -96,10 +104,10 @@ export default function Heatmap ({ geojson }) {
   )
 }
 
-const getMapDivDimensions = (id) => {
+const getMapDivDimensions = (id: string): { width: number, height: number } => {
   const div = document.getElementById(id)
   let width = 200
-  if (div) {
+  if (div != null) {
     width = div.clientWidth
   }
   const height = window.innerHeight - NAV_BAR_OFFSET

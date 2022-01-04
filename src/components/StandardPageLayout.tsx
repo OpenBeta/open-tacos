@@ -53,5 +53,4 @@ const StandardPageLayout = ({ meta, children, hero }): JSX.Element => {
   )
 }
 
-
 export default StandardPageLayout
