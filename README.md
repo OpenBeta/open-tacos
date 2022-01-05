@@ -8,6 +8,13 @@ OpenTacos is a proof-of-concept/MVP showing it's possible to build a collaborati
 
 ## Tech stack
 
+### Important news:
+
+- As of Jan 2022 we've replaced Gatsby.js with Next.js.  
+- Active development is on [`nextjs`](https://github.com/openbeta/open-tacos/tree/nextjs) branch for the time being.
+
+---
+
 1. Data: (see [opentacos-content](https://github.com/OpenBeta/opentacos-content))
 
 - Climbing route data such as name, grade, FA, etc are stored in human-readable text files (markdown syntax)
@@ -28,11 +35,6 @@ Learn more about [Jamstack](https://jamstack.org)
 | Prod    | https://tacos.openbeta.io     | develop | Full    | [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos-content-ci?branch=develop&style=flat-square)](https://gitlab.com/openbeta/opentacos-content-ci/-/pipelines?page=1&scope=branches&ref=develop) |
 
 ## How to build
-
-### Important news: ***
-
-- As of Jan 2022 we've replaced Gatsby.js with Next.js.  
-- Active development is on [`nextjs`](https://github.com/openbeta/open-tacos/tree/nextjs) branch for the time being.
 
 Make sure you have the following tools installed on your computer
 
