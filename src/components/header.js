@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
-// import SearchBar from '../components/SearchBar'
+import AlgoliaSearch from '../components/AlgoliaSearch'
 
 function Header () {
   const [isExpanded, toggleExpansion] = useState(false)
@@ -14,8 +14,8 @@ function Header () {
           <a href='/'>
             <Image className='cursor-pointer' src='/tortilla.png' height={32} width={32} />
           </a>
-          {/* <SearchBar className='ml-4' /> */}
         </div>
+        <AlgoliaSearch />
         <button
           className='items-center block px-3 py-2 text-black border border-white rounded lg:hidden'
           onClick={() => toggleExpansion(!isExpanded)}

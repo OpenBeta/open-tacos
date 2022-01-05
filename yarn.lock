@@ -2,6 +2,40 @@
 # yarn lockfile v1
 
 
+"@algolia/autocomplete-core@1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-core/-/autocomplete-core-1.5.1.tgz#7c6ecc1a1bb8bce0f7c6f04afe16a82457ea2f12"
+  integrity sha512-18uRUqR0vSmbKSZxUjo8EJcYLdUZlcpA9LiKMUs7c87aABqib3PFKaTnQYMmM7hpI+FduU3GBvN7EOgLTeaa6g==
+  dependencies:
+    "@algolia/autocomplete-shared" "1.5.1"
+
+"@algolia/autocomplete-js@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-js/-/autocomplete-js-1.5.1.tgz#b86eb20b99b94feedf0e5f43d8b65c4d9287322b"
+  integrity sha512-lRYNkHtuUI+SVnSiiryRThRN/3DpwW4KrM5j6oIFbsfsW8nwj5rsd+6x9Z4+MPwzC/8iM/TJEUoalwQBR+ZScA==
+  dependencies:
+    "@algolia/autocomplete-core" "1.5.1"
+    "@algolia/autocomplete-preset-algolia" "1.5.1"
+    "@algolia/autocomplete-shared" "1.5.1"
+    preact "^10.0.0"
+
+"@algolia/autocomplete-preset-algolia@1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-preset-algolia/-/autocomplete-preset-algolia-1.5.1.tgz#6aa30eac79ccf06eb274297e4a23ce45e542eb4f"
+  integrity sha512-0hgoAHk0StMQkT73aiui+IZEKqkexOTapEowKNSQPB55aLeuC2VKGbhVk5mdrw5juP8TjXLihGovLedv1zTjeA==
+  dependencies:
+    "@algolia/autocomplete-shared" "1.5.1"
+
+"@algolia/autocomplete-shared@1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-shared/-/autocomplete-shared-1.5.1.tgz#8f71c9b5c8f590f6c900984a7288452f9fbba290"
+  integrity sha512-sQjSehycUho+DXz/XRCFyfkvS5ks/t9KXSpeI3TrneaWbY8gxSfKmiabyF8UG5rRYFL2k/mLpFCbYmC0WA70mg==
+
+"@algolia/autocomplete-theme-classic@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-theme-classic/-/autocomplete-theme-classic-1.5.1.tgz#8c237de496de4dc78d7fd6d74bed25ef16fa4f35"
+  integrity sha512-0z9wDAFXT+WA2dWNEAj9KcDNcBL+sitnlkKJJeyVIAOhQZjzvY6Qt5VtM1StqPL9nEUBm3Pm0uftWlPqZFy2oQ==
+
 "@apollo/client@^3.5.6":
   version "3.5.6"
   resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.5.6.tgz#911929df073280689efd98e5603047b79e0c39a2"
@@ -6698,6 +6732,11 @@ potpack@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/potpack/-/potpack-1.0.2.tgz#23b99e64eb74f5741ffe7656b5b5c4ddce8dfc14"
   integrity sha512-choctRBIV9EMT9WGAZHn3V7t0Z2pMQyl0EZE6pFc/6ml3ssw7Dlf/oAOvFwjm1HVsqfQN8GfeFyJ+d8tRzqueQ==
+
+preact@^10.0.0:
+  version "10.6.4"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.6.4.tgz#ad12c409ff1b4316158486e0a7b8d43636f7ced8"
+  integrity sha512-WyosM7pxGcndU8hY0OQlLd54tOU+qmG45QXj2dAYrL11HoyU/EzOSTlpJsirbBr1QW7lICxSsVJJmcmUglovHQ==
 
 prelude-ls@^1.2.1:
   version "1.2.1"
