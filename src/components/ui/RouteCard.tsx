@@ -9,16 +9,18 @@ interface RouteCardProps {
   type: ClimbDisciplineRecord
   safety?: SafetyType
   yds: string
+  fa?: string
 }
 
-function RouteCard ({ routeName, type, safety, yds }: RouteCardProps): JSX.Element {
+function RouteCard ({ routeName, type, safety, yds, fa = '' }: RouteCardProps): JSX.Element {
   return (
     <Card>
       <h2
-        className='font-medium font-sans my-4 text-base truncate'
+        className='font-medium font-sans my-2 text-base truncate'
       >
         {routeName}
       </h2>
+      {fa !== null ? (<div className='text-xs font-light text-slate-500'>{fa}</div>) : null}
       <div className='mt-4 flex justify-between items-center'>
         <div>
           <RouteGradeGip yds={yds} safety={safety} />

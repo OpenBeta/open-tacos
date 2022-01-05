@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
-// import SearchBar from '../components/SearchBar'
+import ClimbSearch from './search/ClimbSearch'
 
 function Header () {
   const [isExpanded, toggleExpansion] = useState(false)
@@ -10,11 +10,11 @@ function Header () {
         }`}
     >
       <div className='flex flex-wrap items-center justify-between max-w-screen-2xl p-4 lg:py-2 mx-auto'>
-        <div className='flex flex-nowrap items-center'>
-          <a href='/'>
+        <div className='grow flex flex-nowrap items-center gap-x-4'>
+          <a href='/' className='hidden lg:inline-block'>
             <Image className='cursor-pointer' src='/tortilla.png' height={32} width={32} />
           </a>
-          {/* <SearchBar className='ml-4' /> */}
+          <ClimbSearch />
         </div>
         <button
           className='items-center block px-3 py-2 text-black border border-white rounded lg:hidden'

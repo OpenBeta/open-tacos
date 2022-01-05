@@ -34,6 +34,7 @@ export interface Climb {
   yds: string
   metadata: ClimbMetadataType
   type: ClimbDisciplineRecord
+  safety: SafetyType
   content: {
     description: string
     location: string
