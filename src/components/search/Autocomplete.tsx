@@ -3,7 +3,7 @@ import '@algolia/autocomplete-theme-classic'
 import React, { createElement, Fragment, useEffect, useRef } from 'react'
 import { render } from 'react-dom'
 
-function AlgoliaSearch (props): JSX.Element {
+function Autocomplete (props): JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -25,7 +25,7 @@ function AlgoliaSearch (props): JSX.Element {
     }
   }, [props])
 
-  return <div ref={containerRef} />
+  return <div className='w-full max-w-screen-sm' ref={containerRef} />
 }
 
-export default AlgoliaSearch
+export default Autocomplete
