@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "author": "OpenBeta <hello@openbeta.io>",
   "dependencies": {
+    "@algolia/autocomplete-js": "^1.5.1",
+    "@algolia/autocomplete-preset-algolia": "^1.5.1",
+    "@algolia/autocomplete-theme-classic": "^1.5.1",
     "@apollo/client": "^3.5.6",
     "@auth0/auth0-react": "^1.6.0",
     "@babel/plugin-proposal-decorators": "^7.15.8",
@@ -16,6 +19,7 @@
     "@openbeta/remark-slate": "^1.8.2",
     "@turf/bbox": "^6.5.0",
     "@udecode/plate": "^9.1.2",
+    "algoliasearch": "^4.11.0",
     "assert": "^2.0.0",
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.24.0",

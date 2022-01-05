@@ -289,3 +289,7 @@ input:checked + label {
 .markdown table td {
   @apply p-2;
 }
+
+.aa-Autocomplete {
+  @apply max-w-screen-sm !important;
+}
