@@ -28,16 +28,31 @@
 
 ## Tech stack
 
-1. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql)): Node.js.
+### Important news:
 
-2. Frontend (this repo): React.js, Next.js, TailwindCSS.
+- As of Jan 2022 we've replaced Gatsby.js with Next.js.
+- Active development is on [`nextjs`](https://github.com/openbeta/open-tacos/tree/nextjs) branch for the time being.
+
+---
+
+1. Data: (see [opentacos-content](https://github.com/OpenBeta/opentacos-content))
+
+- Climbing route data such as name, grade, FA, etc are stored in human-readable text files (markdown syntax)
+- Take advantage of folder and file structure to organize crag/area and climb relationship.
+- Git-based CMS: Use Git for user management, access control, content review.
+
+2. Frontend: (this repo)
+
+- Next.js, ~~Gatsby.js,~~ React.js, TailwindCSS
+
+Learn more about [Jamstack](https://jamstack.org)
 
 ## Live instances
 
-| Env     | Link                          | Branch  | Content | Build                                                                                                                                                                                                                                     |
-|---------|-------------------------------|---------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Staging | https://open-tacos.vercel.app | nextjs | Partial | [![Build](https://img.shields.io/github/checks-status/openbeta/open-tacos/nextjs)](https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Anextjs)                                              |
-| Prod (old version)   | https://tacos.openbeta.io     | develop | Full    | [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos-content-ci?branch=develop&style=flat-square)](https://gitlab.com/openbeta/opentacos-content-ci/-/pipelines?page=1&scope=branches&ref=develop) |
+| Env                | Link                          | Branch  | Content | Build                                                                                                                                                                                                                                     |
+| ------------------ | ----------------------------- | ------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Staging            | https://open-tacos.vercel.app | nextjs  | Partial | [![Build](https://img.shields.io/github/checks-status/openbeta/open-tacos/nextjs)](https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Anextjs)                                                             |
+| Prod (old version) | https://tacos.openbeta.io     | develop | Full    | [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos-content-ci?branch=develop&style=flat-square)](https://gitlab.com/openbeta/opentacos-content-ci/-/pipelines?page=1&scope=branches&ref=develop) |
 
 ## How to build
 
@@ -89,7 +104,7 @@ The application is now available at `https://localhost:3000`
 
 1.  Overriding environment variables
 
-Default variables are defined in [.env](./.env).  You can override default values, eg. pointing the frontend to a different API_SERVER, by defining them in `.env.local`.
+Default variables are defined in [.env](./.env). You can override default values, eg. pointing the frontend to a different API_SERVER, by defining them in `.env.local`.
 
 ## How to contribute
 
