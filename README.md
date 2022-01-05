@@ -1,4 +1,4 @@
-![Dev branch](https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=develop) [![License](https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square)](./LICENSE)
+![Dev branch](https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=nextjs) [![License](https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square)](./LICENSE)
 
 # OpenTacos
 
@@ -8,17 +8,19 @@ OpenTacos is a proof-of-concept/MVP showing it's possible to build a collaborati
 
 ## Tech stack
 
-1. Data: (see [opentacos-content](https://github.com/OpenBeta/opentacos-content))
+1. Data: (repo: [opentacos-content](https://github.com/OpenBeta/opentacos-content))
 
 - Climbing route data such as name, grade, FA, etc are stored in human-readable text files (markdown syntax)
 - Take advantage of folder and file structure to organize crag/area and climb relationship.
 - Git-based CMS: Use Git for user management, access control, content review.
 
-2. Frontend: (this repo)
+2. Backend GraphQL API (repo: [openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql))
 
-- Gatsby.js, React.js, TailwindCSS
+3. Frontend: (this repo)
 
-Learn more about [Jamstack](https://jamstack.org)
+- Next.js, React.js, TailwindCSS
+
+> Learn more about [Jamstack](https://jamstack.org/what-is-jamstack/)
 
 ## Live instances
 
@@ -36,12 +38,6 @@ Make sure you have the following tools installed on your computer
 - [npm](https://www.npmjs.com/get-npm)
 - [yarn](https://classic.yarnpkg.com/en/docs/install)
 
-0. Install Gatsby CLI
-
-```
-npm install -g gatsby-cli
-```
-
 1.  Download the repo to your local machine
 
 ```
@@ -52,62 +48,38 @@ git clone git@github.com:OpenBeta/open-tacos.git
 
 ```
 cd open-tacos
+git checkout nextjs
 yarn install
-```
-
-3.  Download climb data to local cache
-
-```
-# Note: run this script as needed
-./prebuild.sh
 ```
 
 4.  Run the app
 
-Since we are using Auth0 for authenticating users, development server needs to run in https mode.
-You will be prompted to install additional components on the first run.
-
 ```
-gatsby develop -S
+yarn dev
 ```
 
 5. Optional: Run the app in docker
-   Requirements:
-   [Docker](https://docs.docker.com/get-docker/)
+
+Requirements: [Docker](https://docs.docker.com/get-docker/)
 
 ```
 docker compose up
 ```
 
-Changes in your local ./src file will be available on localhost:8000
+Changes in your local ./src file will be available on localhost:3000
 If you install new packages you will need to rebuild the docker image with
 
 ```
 docker compose up --build
 ```
 
-The application is now available at `https://localhost:8000`
+The application is now available at `https://localhost:3000`
 
 ### Tips
 
 1.  Overriding environment variables
 
 Default variables are defined in [.env](./.env).  You can override default values, eg. pointing the frontend to a different API_SERVER, by defining them in `.env.local`.
-
-## Troubleshooting
-
-Windows development + [opentacos-content](https://github.com/OpenBeta/opentacos-content)
-1. Filename too long
-
-> fatal: cannot create directory at 'content/USA/Washington/Central-East Cascades, Wenatchee,  Leavenworth/Leavenworth/Tumwater Canyon/Bouldering in Tumwater Canyon/Beach and Forest Area, The/Beach Parking Boulders, The/Grasshopper, The': Filename too long
-
-```
-# Solution
-git config --system core.longpaths true
-```
-
-Some versions of Git installed on Windows use a different file API that limits the filename path length. 
-
 
 ## How to contribute
 
