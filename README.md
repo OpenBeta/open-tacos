@@ -1,4 +1,4 @@
-![Nextjs branch](https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=nextjs) [![License](https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square)](./LICENSE)
+[![Nextjs branch](https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=nextjs)](https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Anextjs) [![License](https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square)](./LICENSE)
 
 # OpenTacos
 
