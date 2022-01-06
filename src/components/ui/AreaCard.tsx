@@ -26,11 +26,9 @@ function AreaCard ({ areaName, stats }: AreaCardProps): JSX.Element {
           <BarPercent styles='-mt-2' percents={stats.percents} colors={stats.colors} />
       }
     >
-      <h2
-        className='font-medium font-sans my-4 text-base truncate'
-      >
+      <h3 className='font-medium font-sans my-4 text-base truncate'>
         {areaName}
-      </h2>
+      </h3>
     </Card>
   )
 }

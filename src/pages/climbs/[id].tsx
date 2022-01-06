@@ -8,7 +8,6 @@ import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
-import { templateH1Css } from '../../js/styles'
 import InlineEditor from '../../components/editor/InlineEditor'
 
 interface ClimbProps {
@@ -29,14 +28,14 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
       />
       <div>
         <BreadCrumbs pathTokens={pathTokens} ancestors={ancestors} isClimbPage />
-        <h1 className={templateH1Css}>{name}</h1>
+        <h1 className='title'>{name}</h1>
         <RouteGradeChip yds={yds} safety={safety} />
         <RouteTypeChips type={type} />
         <div className='pt-4 text-sm text-gray-600 italic'>FA: {fa}</div>
         <div
           className='pt-4 markdown'
         >
-          <h2>Description</h2>
+          <h2 className='h2'>Description</h2>
           <InlineEditor id={`climb-desc-${metadata.climb_id}`} markdown={content.description} readOnly />
           <h2>Location</h2>
           <InlineEditor id={`climb-loc-${metadata.climb_id}`} markdown={content.location} readOnly />
