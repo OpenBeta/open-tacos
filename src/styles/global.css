@@ -62,6 +62,10 @@ body, html {
   }
 
 }
+.title {
+  @apply text-4xl font-bold font-sans my-4 !important;
+}
+
 h1 {
   @apply text-gray-700 text-3xl font-medium tracking-tight mb-4 !important;
 }

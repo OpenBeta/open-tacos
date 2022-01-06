@@ -8,7 +8,6 @@ import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
-import { templateH1Css } from '../../js/styles'
 import InlineEditor from '../../components/editor/InlineEditor'
 
 interface ClimbProps {
@@ -29,7 +28,7 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
       />
       <div>
         <BreadCrumbs pathTokens={pathTokens} ancestors={ancestors} isClimbPage />
-        <h1 className={templateH1Css}>{name}</h1>
+        <h1 className='title'>{name}</h1>
         <RouteGradeChip yds={yds} safety={safety} />
         <RouteTypeChips type={type} />
         <div className='pt-4 text-sm text-gray-600 italic'>FA: {fa}</div>
