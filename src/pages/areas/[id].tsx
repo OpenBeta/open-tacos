@@ -50,23 +50,21 @@ const Area = ({ area }: AreaProps): JSX.Element => {
               <InlineEditor id={`area-${metadata.area_id}`} markdown={content.description} readOnly />
             </div>
             <hr className='my-8' />
-            <>
-              <div className='divide-x markdown h1'>Subareas</div>
-              <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
-                {children.map((child) => {
-                  const { area_name: areaName, metadata } = child
-                  return (
-                    <div className='max-h-96' key={metadata.area_id}>
-                      <Link href={getSlug(metadata.area_id, metadata.leaf)} passHref>
-                        <a>
-                          <AreaCard areaName={areaName} />
-                        </a>
-                      </Link>
-                    </div>
-                  )
-                })}
-              </div>
-            </>
+            <h2>Subareas</h2>
+            <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
+              {children.map((child) => {
+                const { area_name: areaName, metadata } = child
+                return (
+                  <div className='max-h-96' key={metadata.area_id}>
+                    <Link href={getSlug(metadata.area_id, metadata.leaf)} passHref>
+                      <a>
+                        <AreaCard areaName={areaName} />
+                      </a>
+                    </Link>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </div>
       </div>

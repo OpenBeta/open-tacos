@@ -15,11 +15,11 @@ interface RouteCardProps {
 function RouteCard ({ routeName, type, safety, yds, fa = '' }: RouteCardProps): JSX.Element {
   return (
     <Card>
-      <h2
+      <h3
         className='font-medium font-sans my-2 text-base truncate'
       >
         {routeName}
-      </h2>
+      </h3>
       {fa !== null ? (<div className='text-xs font-light text-slate-500'>{fa}</div>) : null}
       <div className='mt-4 flex justify-between items-center'>
         <div>

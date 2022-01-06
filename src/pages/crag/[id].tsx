@@ -65,7 +65,7 @@ const Crag = ({ area }: CragProps): JSX.Element => {
             </div>
             <hr className='my-8' />
             <>
-              <div className='divide-x markdown h1'>Climbs</div>
+              <h2>Climbs</h2>
               <ButtonGroup
                 disabled={false}
                 selected={[selectedClimbSort]}

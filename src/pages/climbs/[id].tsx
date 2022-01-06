@@ -36,7 +36,7 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
         <div
           className='pt-4 markdown'
         >
-          <h2>Description</h2>
+          <h2 className='h2'>Description</h2>
           <InlineEditor id={`climb-desc-${metadata.climb_id}`} markdown={content.description} readOnly />
           <h2>Location</h2>
           <InlineEditor id={`climb-loc-${metadata.climb_id}`} markdown={content.location} readOnly />

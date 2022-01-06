@@ -21,68 +21,6 @@
       box-shadow: none !important; 
   }
 }
-.react-autosuggest__container {
-  position: relative;
-}
-
-.react-autosuggest__input {
-  box-sizing: border-box;
-    width: 200px;
-    height: 30px;
-    padding: 22px 20px;
-    color: #264653;
-    font-family: "Open Sans", sans-serif;
-    font-weight: 400;
-    font-size: 1rem;
-    border-radius: 1.5rem;
-    box-shadow: none !important; 
-    border: 2px solid rgba(229, 231, 235,1);
-    outline: none;
-  }
-  
-.react-autosuggest__input--focused {
-  outline: none;
-  border: 2px solid rgba(229, 231, 235,1) !important;
-  box-shadow: none !important;
-}
-
-
-.react-autosuggest__suggestions-container {
-  display: none;
-}
-
-.react-autosuggest__suggestions-container--open {
-  display: block;
-  position: absolute;
-  top: 66px;
-  width: 422px;
-  border-radius: 1.5rem;
-  border: 2px solid rgba(229, 231, 235,1);
-  background-color: #fff;
-  color: #264653;
-  font-family: "Open Sans", sans-serif;
-  font-weight: 300;
-  font-size: 14px;
-  /* border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px; */
-  z-index: 2;
-}
-
-.react-autosuggest__suggestions-list {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-}
-
-.react-autosuggest__suggestion {
-  cursor: pointer;
-  padding: 10px 20px;
-}
-
-.react-autosuggest__suggestion--highlighted {
-  background-color: #ddd;
-  border-radius:  1.5rem;
-}
 
 body, html {
   height: 100%;
@@ -124,23 +62,19 @@ body, html {
   }
 
 }
-.h1 {
+h1 {
   @apply text-gray-700 text-3xl font-medium tracking-tight mb-4 !important;
 }
 
-.md-h1 {
-  @apply h1 mt-14;
-}
-
-.md-h2 {
+h2 {
   @apply text-2xl font-bold text-slate-700 tracking-tight leading-loose !important;
 }
 
-.md-code {
+code {
   @apply text-sm font-mono bg-green-100 -mx-1.5 px-1.5 py-1.5 rounded !important;
 }
 
-.md-p {
+p {
   @apply block mb-4 text-base text-slate-900 leading-relaxed !important;
 }
 
@@ -211,22 +145,6 @@ body, html {
   }
 }
 
-.slate-h1 {
-  @apply md-h1 ;
-}
-
-.slate-h2 {
-  @apply md-h2;
-}
-
-.slate-p {
-  @apply md-p;
-}
-  
-.slate-code {
-  @apply md-code;
-}
-
 /* for climb profile form */
 input:checked + label {
   @apply text-white;
@@ -235,22 +153,6 @@ input:checked + label {
 
 .markdown {
   @apply font-sans
-}
-
-.markdown h1 {
-  @apply md-h1
-}
-
-.markdown h1:first-child {
-  @apply mt-0 !important;
-}
-
-.markdown h2 {
-  @apply md-h2
-}
-
-.markdown p {
-  @apply md-p
 }
 
 .markdown figure+figure {
@@ -263,7 +165,7 @@ input:checked + label {
 }
 
 .markdown pre {
-  @apply md-code
+  @apply text-sm font-mono bg-green-100 -mx-1.5 px-1.5 py-1.5 rounded !important
 }
 
 .markdown ul {
