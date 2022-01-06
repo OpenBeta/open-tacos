@@ -1,20 +1,20 @@
-![Dev branch](https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=nextjs) [![License](https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square)](./LICENSE)
+![Nextjs branch](https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=nextjs) [![License](https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square)](./LICENSE)
 
 # OpenTacos
 
 OpenTacos is a proof-of-concept/MVP showing it's possible to build a collaborative climbing route catalog.
 
-[Live demo](https://tacos.openbeta.io) 🚀
+[Live demo](https://open-tacos.vercel.app) 🚀
 
 ## Tech stack
 
-1. Data: (repo: [opentacos-content](https://github.com/OpenBeta/opentacos-content))
+1. Data: ([opentacos-content](https://github.com/OpenBeta/opentacos-content))
 
 - Climbing route data such as name, grade, FA, etc are stored in human-readable text files (markdown syntax)
 - Take advantage of folder and file structure to organize crag/area and climb relationship.
 - Git-based CMS: Use Git for user management, access control, content review.
 
-2. Backend GraphQL API (repo: [openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql))
+2. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql))
 
 3. Frontend: (this repo)
 
@@ -26,7 +26,7 @@ OpenTacos is a proof-of-concept/MVP showing it's possible to build a collaborati
 
 | Env     | Link                          | Branch  | Content | Build                                                                                                                                                                                                                                     |
 |---------|-------------------------------|---------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Staging | https://tacos-dev.openbeta.io | develop | Partial | [![Build](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos?branch=develop&flat-square)](https://gitlab.com/openbeta/opentacos/-/pipelines?page=1&scope=branches&ref=develop)                                              |
+| Staging | https://open-tacos.vercel.app | nextjs | Partial | [![Build](https://img.shields.io/github/checks-status/openbeta/open-tacos/nextjs)](https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Anextjs)                                              |
 | Prod    | https://tacos.openbeta.io     | develop | Full    | [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos-content-ci?branch=develop&style=flat-square)](https://gitlab.com/openbeta/opentacos-content-ci/-/pipelines?page=1&scope=branches&ref=develop) |
 
 ## How to build
