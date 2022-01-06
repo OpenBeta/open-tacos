@@ -5,7 +5,6 @@ import { graphqlClient } from '../../js/graphql/Client'
 import Link from 'next/link'
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
-import { templateH1Css } from '../../js/styles'
 import ButtonGroup from '../../components/ui/ButtonGroup'
 import { Button } from '../../components/ui/Button'
 import Icon from '../../components/Icon'
@@ -45,7 +44,7 @@ const Crag = ({ area }: CragProps): JSX.Element => {
         <div className='xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch'>
           <div className='xl:flex-none xl:max-w-screen-md xl:w-full'>
             <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
-            <h1 className={templateH1Css}>{areaName}</h1>
+            <h1 className='title'>{areaName}</h1>
             <span className='flex items-center flex-shrink text-gray-500 text-xs gap-x-1'>
               <Icon type='droppin' />
               <a
@@ -65,7 +64,7 @@ const Crag = ({ area }: CragProps): JSX.Element => {
             </div>
             <hr className='my-8' />
             <>
-              <div className='divide-x markdown h1'>Climbs</div>
+              <h2>Climbs</h2>
               <ButtonGroup
                 disabled={false}
                 selected={[selectedClimbSort]}
