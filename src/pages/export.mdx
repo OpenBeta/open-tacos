@@ -1,9 +1,12 @@
----
-title: OpenTacos data extracts
-keywords:
- - OpenBeta
- - rock climbing api
----
+import  StandardPageLayout  from '../components/StandardPageLayout'
+
+export const meta = {
+  title: 'OpenTacos data extracts',
+  keywords: ['OpenBeta', 'rock climbing api']
+}
+
+<StandardPageLayout meta={meta}>
+
 # OpenTacos Data Extracts 
 
 This page has weekly data extracts from the OpenTacos content catalog.
@@ -19,3 +22,5 @@ OpenTacos content (excluding photos) is licensed under [CreativeCommons Public D
 ## Technical details
 - [Gitlab pipeline](https://gitlab.com/openbeta/exporter/-/pipeline_schedules)
 - [Exporter code](https://github.com/OpenBeta/exporter) 
+
+</StandardPageLayout>
