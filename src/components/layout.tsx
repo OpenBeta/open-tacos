@@ -6,7 +6,7 @@ import SeoTags from '../components/SeoTags'
 interface LayoutProps {
   layoutClz?: string
   customClz?: string
-  children?: JSX.Element
+  children?: JSX.Element | JSX.Element[]
   headerImage?: JSX.Element
 }
 function Layout ({ layoutClz = 'layout-default', customClz = '', children, headerImage }: LayoutProps): JSX.Element {
