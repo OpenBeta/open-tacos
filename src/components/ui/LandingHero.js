@@ -1,20 +1,21 @@
-import React from 'react'
-
-import { TextButton } from './Button'
+import React, { useEffect, useState } from 'react'
+import Image from 'next/image'
+import Topography from '../../assets/topography.svg'
 
 export default function LandingHero () {
+  const [loaded, setLoaded] = useState(false)
+  useEffect(() => {
+    setLoaded(true)
+  }, [])
+  const effectClz = loaded ? 'md:-translate-y-5 opacity-100' : 'md:opacity-0'
+  const clz = `transform transition-all duration-1000 ease-in-out ${effectClz}`
   return (
-    <div style={{ display: 'grid' }}>
-      {/* <StaticImage
-        src='../../images/landing-hero-v1.jpg'
-        alt='Indian Creek at sunset'
-        layout='fullWidth'
-        placeholder='blurred'
-        quality='90'
-        style={{
+    <div className='bg-gray-800 md:h-3/5' style={{ display: 'grid' }}>
+      <Topography
+        className='w-full h-full opacity-20' style={{
           gridArea: '1/1'
         }}
-      /> */}
+      />
       <div
         style={{
           // By using the same grid area for both, they are stacked on top of each other
@@ -25,14 +26,15 @@ export default function LandingHero () {
           display: 'grid'
         }}
       >
-        {/* In order to create full-screen effect this hero component is placed outside
-        of global Layout. Make sure the container's width below is the same Layout's */}
-        <div className='w-full max-w-4xl mx-auto md:px-8 md:py-20 sm:px-4'>
-          <h1 className='text-5xl text-white antialiased tracking-tight leading-tight mt-4 mb-2'>
-            Open collaboration <br /> climbing route catalog
-          </h1>
-          <TextButton label='Learn more' to='/about' />
-        </div>
+        <section className='pt-32 pb-8 md:pb-0 px-8 flex flex-col md:flex-row md:gap-x-16 gap-y-12'>
+          <div className={`delay-75 ${clz} flex flex-col items-center`}>
+            <Image className='' src='/tortilla.png' height={125} width={125} />
+            <div className='mt-6 font-sans text-xl text-white tracking-tight text-custom-primary'>OpenTacos</div>
+          </div>
+          <div className={`delay-500 ${clz} text-white text-center md:text-left`}><h2 className='font-light'>Free & Open Source</h2><div className='text-lg text-custom-green'>$0 to use and 100% open source</div></div>
+          <div className={`delay-700 ${clz} text-white text-center md:text-left`}><h2 className=' font-light'>Respect user privacy</h2><div className='text-lg text-custom-green'>No Ads, No tracking</div></div>
+          <div className={`delay-1000 ${clz} text-white text-center md:text-left`}><h2 className='font-light'>Community over profits</h2><div className='text-lg text-custom-green'>Backed by a nonprofit collective</div></div>
+        </section>
       </div>
     </div>
   )

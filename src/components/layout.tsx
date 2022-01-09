@@ -7,9 +7,9 @@ interface LayoutProps {
   layoutClz?: string
   customClz?: string
   children?: JSX.Element | JSX.Element[]
-  headerImage?: JSX.Element
+  hero?: JSX.Element
 }
-function Layout ({ layoutClz = 'layout-default', customClz = '', children, headerImage }: LayoutProps): JSX.Element {
+function Layout ({ layoutClz = 'layout-default', customClz = '', children, hero = null }: LayoutProps): JSX.Element {
   return (
     <>
       <Head>
@@ -30,7 +30,7 @@ function Layout ({ layoutClz = 'layout-default', customClz = '', children, heade
       <div className={`main-container ${customClz}`}>
         <Header />
 
-        {headerImage !== undefined && headerImage}
+        {hero}
 
         <main className={layoutClz}>{children}</main>
 

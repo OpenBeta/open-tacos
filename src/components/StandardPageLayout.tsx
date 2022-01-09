@@ -35,15 +35,15 @@ export const blockquote = (props): JSX.Element => (<blockquote {...props} classN
 
 export const pre = (props): JSX.Element => (<pre {...props} className='font-mono text-sm rounded-xl bg-yellow-50 p-4' />)
 
-const shortcodes = { Header, h1, h2, p, a, ol, ul, pre, blockquote }
-export default ({ meta, children }): JSX.Element => {
+// const shortcodes = { Header, h1, h2, p, a, ol, ul, pre, blockquote }
+const StandardPageLayout = ({ meta, children, hero }): JSX.Element => {
   const { title, keywords } = meta
   return (
-    <Layout>
+    <Layout hero={hero}>
       <>
         <SEOTags keywords={keywords} title={title} />
-        <MDXProvider components={shortcodes}>
-          <div className='markdown mt-8'>
+        <MDXProvider>
+          <div className='mt-8'>
             {children}
           </div>
         </MDXProvider>
@@ -51,3 +51,5 @@ export default ({ meta, children }): JSX.Element => {
     </Layout>
   )
 }
+
+export default StandardPageLayout
