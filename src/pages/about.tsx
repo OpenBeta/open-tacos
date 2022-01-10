@@ -36,8 +36,8 @@ const About = (props): JSX.Element => {
         <Image src={Watering} width={64} height={64} alt='watering can' />
         <h2 className='mb-2'>Why we need your donations</h2>
         <p className='text-xl text-slate-700'>
-          OpenBeta is not backed by venture capitalists, nor it is supported by ads and abusing of personal data.
-          Fortunately there a small and active group of volunteers donating their time and expertise to keep the project running and develop it further.
+          OpenBeta is not backed by venture capitalists, nor it is supported by ads.
+          Fortunately there is a small and active group of volunteers donating their time and expertise to keep the project running and develop it further.
         </p>
         <p className='text-xl text-slate-700'>
           For the project to survive and continue to evolve, we need your financial support and ask for your donation today.
@@ -47,7 +47,6 @@ const About = (props): JSX.Element => {
           You can become a monthly backer for as little as $3/month.  <strong><a className='underline' href='https://opencollective.com/openbeta'>Donate today</a>!</strong>
         </p>
         <p className='italic text-xl text-slate-700'>OpenBeta is a 501(c)(3) nonprofit collective.  Donations are tax-deductible.</p>
-
       </div>
     </Layout>
   )
