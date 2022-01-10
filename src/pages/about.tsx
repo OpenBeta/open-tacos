@@ -13,9 +13,9 @@ export const meta = {
 const About = (props): JSX.Element => {
   return (
     <Layout hero={<LandingHero />}>
-      <div className='text-center mb-12'>
+      <div className='text-center'>
         <h1>An open source resource for rock climbers</h1>
-        <h3 className='text-3xl'>OpenTacos is a wiki for climbers to research and contribute information about rock climbing.</h3>
+        <h3 className='text-3xl my-12'>OpenTacos is a wiki for climbers to research and contribute information about rock climbing.</h3>
       </div>
       <div className='py-8'>
         <Image className='opacity-80' src={Cairn} width={48} height={48} alt='cairn' />
@@ -34,9 +34,17 @@ const About = (props): JSX.Element => {
       </div>
       <div className='py-8'>
         <Image src={Watering} width={64} height={64} alt='watering can' />
-        <h2 className='mb-2'>Help us sustain the project</h2>
+        <h2 className='mb-2'>Why we need your donations</h2>
         <p className='text-xl text-slate-700'>
-          Become a monthly backer for as little as $3/month.  <a className='underline' href='https://opencollective.com/openbeta'>Donate today</a>.
+          OpenBeta is not backed by venture capitalists, nor it is supported by ads and abusing of personal data.
+          Fortunately there a small and active group of volunteers donating their time and expertise to keep the project running and develop it further.
+        </p>
+        <p className='text-xl text-slate-700'>
+          For the project to survive and continue to evolve, we need your financial support and ask for your donation today.
+          All money donated will go directly to fund OpenBeta infrastructure.
+        </p>
+        <p className='text-xl text-slate-700'>
+          You can become a monthly backer for as little as $3/month.  <strong><a className='underline' href='https://opencollective.com/openbeta'>Donate today</a>!</strong>
         </p>
         <p className='italic text-xl text-slate-700'>OpenBeta is a 501(c)(3) nonprofit collective.  Donations are tax-deductible.</p>
 
