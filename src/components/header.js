@@ -35,10 +35,6 @@ function Header () {
         >
           {[
             {
-              route: '/dashboard',
-              title: 'Dashboard'
-            },
-            {
               route: '/about',
               title: 'About'
             },
