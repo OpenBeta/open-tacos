@@ -34,7 +34,7 @@ body, html {
 /* bg-gradient-to-r from-blue-100 to-indigo-200 */
 /* flex flex-col */
 .main-container {
-  @apply  w-full font-sans text-base text-gray-900 bg-white;
+  @apply w-full font-sans text-base text-gray-900 bg-white h-screen;
 }
 
 .layout-edit {
@@ -61,25 +61,29 @@ body, html {
     @apply max-w-full flex flex-row justify-center gap-x-4 gap-y-0;
   }
 
+  h1 {
+    @apply text-slate-700 text-5xl tracking-tight mb-4;
+  }
+  
+  h2 {
+    @apply text-slate-700 text-xl font-bold tracking-tight leading-loose;
+  }
+
+  h3 {
+    @apply text-2xl font-light tracking-tight text-slate-800
+  }
 }
 .title {
   @apply text-4xl font-bold font-sans my-4 !important;
 }
 
-h1 {
-  @apply text-gray-700 text-3xl font-medium tracking-tight mb-4 !important;
-}
-
-h2 {
-  @apply text-2xl font-bold text-slate-700 tracking-tight leading-loose !important;
-}
 
 code {
   @apply text-sm font-mono bg-green-100 -mx-1.5 px-1.5 py-1.5 rounded !important;
 }
 
 p {
-  @apply block mb-4 text-base text-slate-900 leading-relaxed !important;
+  @apply block mb-4 text-base text-slate-900 leading-relaxed;
 }
 
 .editor-profile-container {

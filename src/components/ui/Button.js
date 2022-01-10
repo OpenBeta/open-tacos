@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 
 /**
  *  TODO: Create MaterialUI-like button with standard styles such as
@@ -20,8 +21,8 @@ export function IconButton ({ onClick, children, active, text, className }) {
 
 export function TextButton ({ label, to }) {
   return (
-    <button className='border rounded-lg bg-gray-200 text-xs py-1 px-2'>
-      <a href={to}>{label}</a>
+    <button className='border rounded-lg py-2 px-6 text-slate-100 text-lg hover:text-custom-green hover:border-custom-green'>
+      <Link href={to} passHref><a>{label}</a></Link>
     </button>
   )
 }
