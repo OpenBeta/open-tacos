@@ -66,11 +66,11 @@ body, html {
   }
   
   h2 {
-    @apply text-slate-700 text-2xl font-bold tracking-tight leading-loose;
+    @apply text-slate-700 text-xl font-bold tracking-tight leading-loose;
   }
 
   h3 {
-    @apply text-2xl font-light tracking-tight text-slate-700
+    @apply text-2xl font-light tracking-tight text-slate-800
   }
 }
 .title {
@@ -162,10 +162,6 @@ input:checked + label {
 .markdown {
   @apply font-sans
 }
-
-/* .markdown h2 {
-  @apply text-gray-600
-} */
 
 .markdown figure+figure {
   @apply mt-12

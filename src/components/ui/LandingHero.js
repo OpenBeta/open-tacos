@@ -32,9 +32,9 @@ export default function LandingHero () {
             <Image className='' src='/tortilla.png' height={125} width={125} />
             <div className='mt-4 font-sans text-xl text-white tracking-tight text-custom-primary'>OpenTacos</div>
           </div>
-          <div className={`delay-300 ${clz} text-white text-center md:text-left`}><h2 className='font-light'>Free & Open Source</h2><div className='text-lg text-custom-green'>$0 to use and 100% open source</div></div>
-          <div className={`delay-500 ${clz} text-white text-center md:text-left`}><h2 className=' font-light'>Respect user privacy</h2><div className='text-lg text-custom-green'>No Ads, No tracking</div></div>
-          <div className={`delay-700 ${clz} text-white text-center md:text-left`}><h2 className='font-light'>Community over profits</h2><div className='text-lg text-custom-green'>Backed by a nonprofit collective</div></div>
+          <div className={`delay-300 ${clz}  text-center md:text-left`}><h3 className='text-white font-light'>Free & Open Source</h3><div className='text-lg text-custom-green'>$0 to use and 100% open source</div></div>
+          <div className={`delay-500 ${clz} text-white text-center md:text-left`}><h3 className='text-white font-light'>Respect user privacy</h3><div className='text-lg text-custom-green'>No Ads, No tracking</div></div>
+          <div className={`delay-700 ${clz} text-white text-center md:text-left`}><h3 className='text-white font-light'>Community over profits</h3><div className='text-lg text-custom-green'>Backed by a nonprofit collective</div></div>
         </section>
         <div className={`pt-16 lg:-mt-24 2xl:-mt-32 delay-1000 ${clz}`}>
           <TextButton label='Explore' to='/' />
