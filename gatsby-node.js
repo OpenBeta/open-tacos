@@ -1,3 +1,4 @@
+const webpack = require('webpack')
 const path = require('path')
 const slugify = require('slugify')
 const { createFilePath } = require('gatsby-source-filesystem')
@@ -301,6 +302,11 @@ exports.createPages = async ({ graphql, actions, getNode, createNodeId }) => {
  */
 exports.onCreateWebpackConfig = ({ actions }) => {
   actions.setWebpackConfig({
+    plugins: [
+      new webpack.ProvidePlugin({
+        Buffer: [require.resolve('buffer'), 'Buffer']
+      })
+    ],
     resolve: {
       fallback: {
         path: require.resolve('path-browserify'),
