@@ -56,6 +56,11 @@ Learn more about [Jamstack](https://jamstack.org)
 
 ## How to build
 
+### Important news: ***
+
+- As of Jan 2022 we've replaced Gatsby.js with Next.js.  
+- Active development is on [`nextjs`](https://github.com/openbeta/open-tacos/tree/nextjs) branch for the time being.
+
 Make sure you have the following tools installed on your computer
 
 - [Git](https://github.com/git-guides/install-git)
