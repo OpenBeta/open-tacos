@@ -12,7 +12,7 @@ limitations under the License.
 */
 
 import axios, { AxiosInstance } from 'axios'
-
+import { Buffer } from 'buffer'
 import { b64EncodeUnicode } from './base64'
 
 interface GithubClientProps {

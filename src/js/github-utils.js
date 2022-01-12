@@ -28,7 +28,7 @@ export const getMarkdownFile = async (authToken) => {
   if (parsed.file) {
     const _path = `${CONTENT_BASEDIR}/${parsed.file}`
     const data = await getRawContent(_path, CONTENT_BRANCH, authToken)
-    data.content = fm(data.content)
+    data.content = fm(data.content.toString())
     return data
   }
 

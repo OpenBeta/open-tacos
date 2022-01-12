@@ -1,4 +1,5 @@
 import { unified } from 'unified'
+import markdown from 'remark-parse'
 import slate, { defaultNodeTypes, serialize } from '@openbeta/remark-slate'
 import yaml from 'js-yaml'
 
@@ -39,12 +40,12 @@ const SERIALIZE_OPTS = {
  * Convert markdown string to Slate AST
  * @param markdown markdown string
  */
-export const mdToSlate = (markdown) => {
-  if (!markdown) {
+export const mdToSlate = (mdStr) => {
+  if (!mdStr) {
     return null
   }
   const processor = unified().use(markdown).use(slate, DESERIALIZE_OPTS)
-  return topImages(processor.processSync(markdown).result)
+  return topImages(processor.processSync(mdStr).result)
 }
 
 /**
