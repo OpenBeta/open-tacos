@@ -173,6 +173,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         left_right_index
       }
       pathTokens
+      
       ancestors
       climbs {
         name

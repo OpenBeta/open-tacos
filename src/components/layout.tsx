@@ -20,6 +20,8 @@ function Layout ({ layoutClz = 'layout-default', customClz = '', children, hero 
           href='/fonts/fonts.css'
           rel='stylesheet'
         />
+
+        <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
         <SeoTags
           keywords={['openbeta', 'rock climbing', 'climbing api']}
           description='Climbing route catalog'
@@ -32,7 +34,9 @@ function Layout ({ layoutClz = 'layout-default', customClz = '', children, hero 
 
         {hero}
 
-        <main className={layoutClz}>{children}</main>
+        <main className={layoutClz}>
+          {children}
+        </main>
 
         <footer className='mt-8 bg-custom-green'>
           <nav className='flex justify-between max-w-4xl p-4 mx-auto text-sm md:p-8'>
