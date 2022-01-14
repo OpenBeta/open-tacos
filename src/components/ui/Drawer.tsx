@@ -21,7 +21,7 @@ const Drawer = ({ areas, className = '' }: DrawerProps): JSX.Element => {
   return (
     <div style={{ width: '250px', height: '400px' }} className={`overflow-hidden overscroll-y-contain overflow-y-scroll p-2 border-2 border-slate-200 border-r-0 ${className}`}>
       {areaElem}
-      {areaElem === undefined &&
+      {areas.length === 0 &&
         <div>Select an area on the map to see more info</div>}
     </div>
   )
