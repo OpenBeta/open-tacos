@@ -1,5 +1,10 @@
 import { GetStaticProps } from 'next'
+import { useState } from 'react'
 import { gql } from '@apollo/client'
+
+import { AreaType } from '../../js/types'
+import ClusterMap from '../../components/maps/ClusterMap'
+import Drawer from '../../components/ui/Drawer'
 import { graphqlClient } from '../../js/graphql/Client'
 import Link from 'next/link'
 import Layout from '../../components/layout'
@@ -7,16 +12,21 @@ import SeoTags from '../../components/SeoTags'
 import AreaCard from '../../components/ui/AreaCard'
 import Icon from '../../components/Icon'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
-import { AreaType } from '../../js/types'
+
 import { getSlug } from '../../js/utils'
 import InlineEditor from '../../components/editor/InlineEditor'
 
-interface AreaProps {
-  area: AreaType
-}
-
-const Area = ({ area }: AreaProps): JSX.Element => {
+const Area = ({ area }: {area: AreaType}): JSX.Element => {
   const { area_name: areaName, children, metadata, content, pathTokens, ancestors } = area
+  const [selectedAreaIds, setSelectedAreaIds] = useState<string[]>([])
+
+  const handleClick = ({ object, objects }: {object: AreaType | any, objects: AreaType[]}): void => {
+    if (objects === undefined || object?.cluster !== true) {
+      setSelectedAreaIds([(object as AreaType).metadata.area_id])
+    } else {
+      setSelectedAreaIds(objects.map(o => { return o.metadata.area_id }))
+    }
+  }
   return (
     <Layout layoutClz='layout-wide'>
       <SeoTags
@@ -42,13 +52,29 @@ const Area = ({ area }: AreaProps): JSX.Element => {
                 {metadata.lat},{metadata.lng}
               </a>
             </span>
-            <div
-              className='pt-4 markdown'
-            >
-              <h2>Description</h2>
-              <InlineEditor id={`area-${metadata.area_id}`} markdown={content.description} readOnly />
+            {content.description !== '' &&
+              <>
+                <div
+                  className='pt-4 markdown'
+                >
+                  <h2>Description</h2>
+                  <InlineEditor id={`area-${metadata.area_id}`} markdown={content.description} readOnly />
+                </div>
+                <hr className='my-8' />
+              </>}
+
+            <div className='w-full relative mt-8 flex  xl:mt-0'>
+              <Drawer
+                className='border border-slate-400'
+                areas={area.children.filter(c =>
+                  selectedAreaIds.includes(c.metadata.area_id)
+                )}
+              />
+              <ClusterMap className='shadow-[-3px_0px_6px_-3px_rgba(0,0,0,0.3)]' onClick={handleClick} bounds={area.aggregate.bounds}>
+                {area.children}
+              </ClusterMap>
             </div>
-            <hr className='my-8' />
+
             <h2>Subareas</h2>
             <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
               {children.map((child) => {
@@ -114,6 +140,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         lat
         lng 
         leaf
+      } 
+      aggregate {
+        bounds {
+          lat
+          lng
+        }
       }
       ancestors
       pathTokens
@@ -122,6 +154,19 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         metadata {
           area_id
           leaf
+          lat
+          lng
+        }
+        aggregate {
+          byGrade {
+            count
+            label
+          }
+          byType {
+            count
+            label
+          }
+          totalClimbs
         }
       }
       content {
@@ -136,7 +181,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       uuid: params.id
     }
   })
-
   // Pass post data to the page via props
   return { props: rs.data }
 }

@@ -42,11 +42,26 @@ export interface Climb {
   }
 }
 
+export interface CountByGroupType {
+  count: number
+  label: string
+}
+export interface Point {
+  lat: number
+  lng: number
+}
+export interface AggregateType {
+  byGrade: CountByGroupType[]
+  byType: CountByGroupType[]
+  bounds: [Point, Point]
+  totalClimbs: number
+}
 export interface AreaType {
   area_name: string
   pathTokens: string[]
   metadata: AreaMetadataType
   ancestors: string[]
+  aggregate: AggregateType
   content: {
     description: string
   }
@@ -56,6 +71,11 @@ export interface AreaType {
 
 export interface AreaResponseType {
   areas: AreaType[]
+}
+
+export interface IndexResponseType {
+  areas: AreaType[]
+  area: AreaType
 }
 
 export interface ClimbResponseType {
