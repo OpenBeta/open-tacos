@@ -93,6 +93,15 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       fa
       yds
       safety
+      type {
+        sport
+        bouldering
+        alpine
+        tr
+        trad
+        mixed
+        aid
+      }
       metadata {
         climb_id
       }

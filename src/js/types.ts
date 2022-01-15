@@ -24,7 +24,7 @@ export interface ClimbMetadataType {
   climb_id: string
 }
 
-type ClimbDiscipline = 'boulder' | 'alpine' | 'tr' | 'ice' | 'trad' | 'mixed'
+export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' | 'mixed' | 'aid'
 
 export type ClimbDisciplineRecord = Record<ClimbDiscipline, boolean>
 
