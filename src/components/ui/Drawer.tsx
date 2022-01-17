@@ -12,10 +12,10 @@ const Drawer = ({ areas, className = '' }: DrawerProps): JSX.Element => {
   const areaElem = areas.map(a => (
     <div key={a.metadata.area_id} className='pb-4'>
       {a.area_name}
-      <div className='text-sm text-gray-600'>{a.aggregate.totalClimbs} climbs</div>
+      <div className='text-sm text-gray-600'>{a.totalClimbs} climbs</div>
       {/* <TypeBar /> */}
-      <GradeGraph grades={a.aggregate.byGrade.filter(g => getScoreForGrade(g.label) < getScoreForGrade('V-easy'))} total={a.aggregate.totalClimbs} bucketType='yds' />
-      <GradeGraph grades={a.aggregate.byGrade.filter(g => getScoreForGrade(g.label) > getScoreForGrade('V-easy'))} total={a.aggregate.totalClimbs} bucketType='v-scale' />
+      <GradeGraph grades={a.aggregate.byGrade.filter(g => getScoreForGrade(g.label) < getScoreForGrade('V-easy'))} total={a.totalClimbs} bucketType='yds' />
+      <GradeGraph grades={a.aggregate.byGrade.filter(g => getScoreForGrade(g.label) > getScoreForGrade('V-easy'))} total={a.totalClimbs} bucketType='v-scale' />
     </div>
   ))
   return (

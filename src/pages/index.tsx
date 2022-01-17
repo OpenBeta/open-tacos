@@ -24,15 +24,15 @@ const Home: NextPage<IndexResponseType> = ({ areas, area }) => {
       </Head>
 
       <Layout layoutClz='layout-wide'>
-        <USToC areas={area.children} />
+        <USToC areas={areas} />
       </Layout>
     </>
   )
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const query = gql`query UsaAreas( $uuid: String) {
-    area(uuid: $uuid) {
+  const query = gql`query UsaAreas( $filter: Filter) {
+    areas(filter: $filter) {
       area_name
       metadata {
         lat
@@ -40,22 +40,23 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         area_id
         leaf
       }
-      children {
-        area_name
-        metadata {
-          lat
-          lng
-          area_id
-          leaf
-        }
-      }
     }
   }`
 
   const rs = await graphqlClient.query<IndexResponseType>({
     query,
     variables: {
-      uuid: 'd5599113-a4cb-4a68-b588-bd2c1185d131'
+      filter: {
+        field_compare: [{
+          field: 'totalClimbs',
+          num: 200,
+          comparison: 'gt'
+        }, {
+          field: 'density',
+          num: 0.03,
+          comparison: 'gt'
+        }]
+      }
     }
   })
 

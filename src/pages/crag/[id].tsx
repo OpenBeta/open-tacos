@@ -88,7 +88,6 @@ const Crag = ({ area }: CragProps): JSX.Element => {
                 {sortRoutes([...climbs], climbSortByOptions[selectedClimbSort]).map(
                   (climb: Climb) => {
                     const { yds, name, metadata, type } = climb
-                    console.log(climb)
                     return (
                       <div className='pt-6 max-h-96' key={metadata.climb_id}>
                         <Link href={`/climbs/${metadata.climb_id}`} passHref>

@@ -71,7 +71,7 @@ const Area = ({ area }: {area: AreaType}): JSX.Element => {
                 className='border border-slate-400'
                 areas={selectedAreas.length === 0 ? area.children : selectedAreas}
               />
-              <ClusterMap className='shadow-[-3px_0px_6px_-3px_rgba(0,0,0,0.3)]' onClick={handleClick} bounds={area.aggregate.bounds}>
+              <ClusterMap className='shadow-[-3px_0px_6px_-3px_rgba(0,0,0,0.3)]' onClick={handleClick} bounds={area.bounds}>
                 {area.children}
               </ClusterMap>
             </div>
@@ -142,16 +142,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         lng 
         leaf
       } 
-      aggregate {
-        bounds {
-          lat
-          lng
-        }
+      bounds {
+        lat
+        lng
       }
       ancestors
       pathTokens
+      content {
+        description 
+      } 
       children {
         area_name
+        totalClimbs
         metadata {
           area_id
           leaf
@@ -167,12 +169,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             count
             label
           }
-          totalClimbs
         }
       }
-      content {
-        description 
-      } 
     }
   }`
 
