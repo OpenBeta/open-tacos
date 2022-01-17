@@ -136,6 +136,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = gql`query AreaByUUID($uuid: String) {
     area(uuid: $uuid) {
       area_name
+      ancestors
+      pathTokens
       metadata {
         area_id
         lat
@@ -146,8 +148,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         lat
         lng
       }
-      ancestors
-      pathTokens
       content {
         description 
       } 

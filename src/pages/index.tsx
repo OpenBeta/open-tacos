@@ -2,12 +2,12 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
-import USToC from '../components/USToC'
 
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../js/graphql/Client'
 import { GetStaticProps } from 'next'
 import { IndexResponseType } from '../js/types'
+import FeatureCard from '../components/ui/FeatureCard'
 
 const Home: NextPage<IndexResponseType> = ({ areas, area }) => {
   return (
@@ -24,7 +24,10 @@ const Home: NextPage<IndexResponseType> = ({ areas, area }) => {
       </Head>
 
       <Layout layoutClz='layout-wide'>
-        <USToC areas={areas} />
+        <h1 className='mt-12'>Explore</h1>
+        <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
+          {areas.map(area => <FeatureCard key={area.metadata.area_id} area={area} />)}
+        </div>
       </Layout>
     </>
   )
@@ -34,11 +37,23 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = gql`query UsaAreas( $filter: Filter) {
     areas(filter: $filter) {
       area_name
+      pathTokens
+      totalClimbs
+      aggregate {
+        byType {
+          label
+          count
+        }
+        byGrade {
+          label
+          count
+        }
+      }
       metadata {
         lat
         lng
         area_id
-        leaf
+        
       }
     }
   }`
