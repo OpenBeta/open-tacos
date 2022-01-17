@@ -3,6 +3,12 @@ import Link from 'next/link'
 import { AreaType } from '../../js/types'
 import { getSlug } from '../../js/utils'
 
+interface OpenverseImage {
+  creator: string
+  url: string
+  attribution: string
+}
+
 const RESULT_LIMIT = 10
 const LICENSES = 'CC0,BY-NC-SA,BY-SA,BY-NC-SA'
 function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
@@ -16,7 +22,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
 
     fetch(url).then(async r => await r.json()).then((data) => {
       if (data?.result_count > 0) {
-        const image = data.results[Math.floor(Math.random() * Math.min(RESULT_LIMIT, data?.result_count))]
+        const image: OpenverseImage = data.results[Math.floor(Math.random() * Math.min(RESULT_LIMIT, data?.result_count))]
         setImage(image.url)
         setAttribution(`Creator: ${image.creator}, ${image.attribution}`)
       } else throw new Error('no image available')
