@@ -70,6 +70,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "galw",
+      "name": "Gal Weinstock",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4284021?v=4",
+      "profile": "https://github.com/galw",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
