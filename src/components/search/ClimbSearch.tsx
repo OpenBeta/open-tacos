@@ -7,7 +7,7 @@ import ResultItem from './ResultItem'
 
 const searchClient = algoliasearch(
   'G7NJXRGX3U',
-  '2ab92f2712962f723f109fa082832c6a'
+  process.env.NEXT_PUBLIC_ALGOLIA_API_KEY
 )
 
 const ClimbSearch = (): JSX.Element => {
