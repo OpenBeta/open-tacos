@@ -53,8 +53,7 @@ export interface Point {
 export interface AggregateType {
   byGrade: CountByGroupType[]
   byType: CountByGroupType[]
-  bounds: [Point, Point]
-  totalClimbs: number
+
 }
 export interface AreaType {
   area_name: string
@@ -62,6 +61,9 @@ export interface AreaType {
   metadata: AreaMetadataType
   ancestors: string[]
   aggregate: AggregateType
+  bounds: [Point, Point]
+  totalClimbs: number
+  density: number
   content: {
     description: string
   }

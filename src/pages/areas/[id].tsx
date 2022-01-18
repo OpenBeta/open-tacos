@@ -27,6 +27,9 @@ const Area = ({ area }: {area: AreaType}): JSX.Element => {
       setSelectedAreaIds(objects.map(o => { return o.metadata.area_id }))
     }
   }
+  const selectedAreas = area.children.filter(c =>
+    selectedAreaIds.includes(c.metadata.area_id)
+  )
   return (
     <Layout layoutClz='layout-wide'>
       <SeoTags
@@ -63,14 +66,12 @@ const Area = ({ area }: {area: AreaType}): JSX.Element => {
                 <hr className='my-8' />
               </>}
 
-            <div className='w-full relative mt-8 flex  xl:mt-0'>
+            <div className='w-full relative mt-8 flex my-8'>
               <Drawer
                 className='border border-slate-400'
-                areas={area.children.filter(c =>
-                  selectedAreaIds.includes(c.metadata.area_id)
-                )}
+                areas={selectedAreas.length === 0 ? area.children : selectedAreas}
               />
-              <ClusterMap className='shadow-[-3px_0px_6px_-3px_rgba(0,0,0,0.3)]' onClick={handleClick} bounds={area.aggregate.bounds}>
+              <ClusterMap className='shadow-[-3px_0px_6px_-3px_rgba(0,0,0,0.3)]' onClick={handleClick} bounds={area.bounds}>
                 {area.children}
               </ClusterMap>
             </div>
@@ -135,22 +136,24 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = gql`query AreaByUUID($uuid: String) {
     area(uuid: $uuid) {
       area_name
+      ancestors
+      pathTokens
       metadata {
         area_id
         lat
         lng 
         leaf
       } 
-      aggregate {
-        bounds {
-          lat
-          lng
-        }
+      bounds {
+        lat
+        lng
       }
-      ancestors
-      pathTokens
+      content {
+        description 
+      } 
       children {
         area_name
+        totalClimbs
         metadata {
           area_id
           leaf
@@ -166,12 +169,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             count
             label
           }
-          totalClimbs
         }
       }
-      content {
-        description 
-      } 
     }
   }`
 
