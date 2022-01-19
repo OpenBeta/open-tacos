@@ -18,7 +18,8 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
 
   useEffect(() => {
     const query = `rock+climb+${areaName.replace(' ', '+')}`
-    const url = `http://api.openverse.engineering/v1/images/?license=${LICENSES}&page_size=${RESULT_LIMIT}&page=1&q=${query}`
+
+    const url = `https://api.openverse.engineering/v1/images/?license=${LICENSES}&page_size=${RESULT_LIMIT}&page=1&q=${query}`
 
     fetch(url).then(async r => await r.json()).then((data) => {
       if (data?.result_count > 0) {
