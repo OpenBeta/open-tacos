@@ -1,33 +1,43 @@
-[![Nextjs branch](https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=nextjs)](https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Anextjs) [![License](https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square)](./LICENSE)
+<p align="center" style="padding-top:1rem">
+  <a href="https://openbeta.io">
+    <img alt="OpenTacos" src="public/tortilla.png" width="60" />
+  </a>
+</p>
+<h1 align="center">
+  OpenTacos v0.2
+</h1>
+<p align="center">
+  <strong>
+    Open source. Rock climbing.  Wiki.
+  </strong>
+</p>
+<p align="center">
+  OpenTacos is a free and open source wiki of rock climbing knowledge.  </br>We are currently in MVP stage looking for feedback from climbers. Chat with the dev team on <a href="https://discord.gg/fY9DbRav8h">Discord</a>.
+</p>
 
-# OpenTacos
+<h2 align="center">
+  <a href="https://open-tacos.vercel.app">Live demo</a> 🚀
+</h2>
 
-OpenTacos is a proof-of-concept/MVP showing it's possible to build a collaborative climbing route catalog.
-
-[Live demo](https://open-tacos.vercel.app) 🚀
+<p align="center">
+  <a href="https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Adevelop"><img src="https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=develop" alt="Develop branch"/>
+  </a>
+  &nbsp;
+  <a href="./LICENSE"><img alt="License" src="https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square"/></a>
+</p>
 
 ## Tech stack
 
-1. Data: ([opentacos-content](https://github.com/OpenBeta/opentacos-content))
+1. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql)): Node.js.
 
-- Climbing route data such as name, grade, FA, etc are stored in human-readable text files (markdown syntax)
-- Take advantage of folder and file structure to organize crag/area and climb relationship.
-- Git-based CMS: Use Git for user management, access control, content review.
-
-2. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql))
-
-3. Frontend: (this repo)
-
-- Next.js, React.js, TailwindCSS
-
-> Learn more about [Jamstack](https://jamstack.org/what-is-jamstack/)
+2. Frontend (this repo): React.js, Next.js, TailwindCSS.
 
 ## Live instances
 
 | Env     | Link                          | Branch  | Content | Build                                                                                                                                                                                                                                     |
 |---------|-------------------------------|---------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Staging | https://open-tacos.vercel.app | nextjs | Partial | [![Build](https://img.shields.io/github/checks-status/openbeta/open-tacos/nextjs)](https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Anextjs)                                              |
-| Prod    | https://tacos.openbeta.io     | develop | Full    | [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos-content-ci?branch=develop&style=flat-square)](https://gitlab.com/openbeta/opentacos-content-ci/-/pipelines?page=1&scope=branches&ref=develop) |
+| Prod (old version)   | https://tacos.openbeta.io     | develop | Full    | [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos-content-ci?branch=develop&style=flat-square)](https://gitlab.com/openbeta/opentacos-content-ci/-/pipelines?page=1&scope=branches&ref=develop) |
 
 ## How to build
 
