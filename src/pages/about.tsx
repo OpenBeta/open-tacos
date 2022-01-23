@@ -15,13 +15,13 @@ const About = (props): JSX.Element => {
     <Layout hero={<LandingHero />}>
       <div className='text-center'>
         <h1>An open source resource for rock climbers</h1>
-        <h3 className='text-3xl my-12'>OpenTacos is a wiki for climbers to research and contribute information about rock climbing.</h3>
+        <h3 className='text-3xl my-12'>OpenTacos is a wiki for climbers to research and contribute information about rock climbing routes.</h3>
       </div>
       <div className='py-8'>
         <Image className='opacity-80' src={Cairn} width={48} height={48} alt='cairn' />
         <h2 className='mb-2'>Climbing data is the building block of knowledge</h2>
         <p className='text-xl text-slate-700'>
-          In climbing we stand on the shoulders of those whose came before us.  We want to ensure the knowledge of these great experiences remain irrevocably accessible to everyone.  Content (excluding photos) is available under Creative Commons Public Domain license.
+          In climbing we stand on the shoulders of those whose came before us.  We want to ensure the knowledge of these great experiences remains irrevocably accessible to everyone.  Content (excluding photos) is available under Creative Commons Public Domain license.
         </p>
       </div>
       <div className='py-8'>
