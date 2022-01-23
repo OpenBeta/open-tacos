@@ -1,4 +1,4 @@
-<p align="center" style="paddingTop:1rem">
+<p align="center" style="padding-top:1rem">
   <a href="https://openbeta.io">
     <img alt="OpenTacos" src="public/tortilla.png" width="60" />
   </a>
@@ -28,7 +28,7 @@
 
 ## Tech stack
 
-1. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql)): Node.js
+1. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql)): Node.js.
 
 2. Frontend (this repo): React.js, Next.js, TailwindCSS.
 
