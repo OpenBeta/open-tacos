@@ -1,38 +1,43 @@
-![Dev branch](https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=develop) [![License](https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square)](./LICENSE)
+<p align="center" style="padding-top:1rem">
+  <a href="https://openbeta.io">
+    <img alt="OpenTacos" src="public/tortilla.png" width="60" />
+  </a>
+</p>
+<h1 align="center">
+  OpenTacos v0.2
+</h1>
+<p align="center">
+  <strong>
+    Open source. Rock climbing.  Wiki.
+  </strong>
+</p>
+<p align="center">
+  OpenTacos is a free and open source wiki of rock climbing knowledge.  </br>We are currently in MVP stage looking for feedback from climbers. Chat with the dev team on <a href="https://discord.gg/fY9DbRav8h">Discord</a>.
+</p>
 
-# OpenTacos
+<h2 align="center">
+  <a href="https://open-tacos.vercel.app">Live demo</a> 🚀
+</h2>
 
-OpenTacos is a proof-of-concept/MVP showing it's possible to build a collaborative climbing route catalog.
-
-[Live demo](https://tacos.openbeta.io) 🚀
+<p align="center">
+  <a href="https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Adevelop"><img src="https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=develop" alt="Develop branch"/>
+  </a>
+  &nbsp;
+  <a href="./LICENSE"><img alt="License" src="https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square"/></a>
+</p>
 
 ## Tech stack
 
-### Important news:
+1. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql)): Node.js.
 
-- As of Jan 2022 we've replaced Gatsby.js with Next.js.  
-- Active development is on [`nextjs`](https://github.com/openbeta/open-tacos/tree/nextjs) branch for the time being.
-
----
-
-1. Data: (see [opentacos-content](https://github.com/OpenBeta/opentacos-content))
-
-- Climbing route data such as name, grade, FA, etc are stored in human-readable text files (markdown syntax)
-- Take advantage of folder and file structure to organize crag/area and climb relationship.
-- Git-based CMS: Use Git for user management, access control, content review.
-
-2. Frontend: (this repo)
-
-- Next.js, ~~Gatsby.js,~~ React.js, TailwindCSS
-
-Learn more about [Jamstack](https://jamstack.org)
+2. Frontend (this repo): React.js, Next.js, TailwindCSS.
 
 ## Live instances
 
 | Env     | Link                          | Branch  | Content | Build                                                                                                                                                                                                                                     |
 |---------|-------------------------------|---------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Staging | https://tacos-dev.openbeta.io | develop | Partial | [![Build](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos?branch=develop&flat-square)](https://gitlab.com/openbeta/opentacos/-/pipelines?page=1&scope=branches&ref=develop)                                              |
-| Prod    | https://tacos.openbeta.io     | develop | Full    | [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos-content-ci?branch=develop&style=flat-square)](https://gitlab.com/openbeta/opentacos-content-ci/-/pipelines?page=1&scope=branches&ref=develop) |
+| Staging | https://open-tacos.vercel.app | nextjs | Partial | [![Build](https://img.shields.io/github/checks-status/openbeta/open-tacos/nextjs)](https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Anextjs)                                              |
+| Prod (old version)   | https://tacos.openbeta.io     | develop | Full    | [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos-content-ci?branch=develop&style=flat-square)](https://gitlab.com/openbeta/opentacos-content-ci/-/pipelines?page=1&scope=branches&ref=develop) |
 
 ## How to build
 
@@ -48,12 +53,6 @@ Make sure you have the following tools installed on your computer
 - [npm](https://www.npmjs.com/get-npm)
 - [yarn](https://classic.yarnpkg.com/en/docs/install)
 
-0. Install Gatsby CLI
-
-```
-npm install -g gatsby-cli
-```
-
 1.  Download the repo to your local machine
 
 ```
@@ -64,56 +63,38 @@ git clone git@github.com:OpenBeta/open-tacos.git
 
 ```
 cd open-tacos
+git checkout nextjs
 yarn install
-```
-
-3.  Download climb data to local cache
-
-```
-# Note: run this script as needed
-./prebuild.sh
 ```
 
 4.  Run the app
 
-Since we are using Auth0 for authenticating users, development server needs to run in https mode.
-You will be prompted to install additional components on the first run.
-
 ```
-gatsby develop -S
+yarn dev
 ```
 
 5. Optional: Run the app in docker
-   Requirements:
-   [Docker](https://docs.docker.com/get-docker/)
+
+Requirements: [Docker](https://docs.docker.com/get-docker/)
 
 ```
 docker compose up
 ```
 
-Changes in your local ./src file will be available on localhost:8000
+Changes in your local ./src file will be available on localhost:3000
 If you install new packages you will need to rebuild the docker image with
 
 ```
 docker compose up --build
 ```
 
-The application is now available at `https://localhost:8000`
+The application is now available at `https://localhost:3000`
 
-## Troubleshooting
+### Tips
 
-Windows development + [opentacos-content](https://github.com/OpenBeta/opentacos-content)
-1. Filename too long
+1.  Overriding environment variables
 
-> fatal: cannot create directory at 'content/USA/Washington/Central-East Cascades, Wenatchee,  Leavenworth/Leavenworth/Tumwater Canyon/Bouldering in Tumwater Canyon/Beach and Forest Area, The/Beach Parking Boulders, The/Grasshopper, The': Filename too long
-
-```
-# Solution
-git config --system core.longpaths true
-```
-
-Some versions of Git installed on Windows use a different file API that limits the filename path length. 
-
+Default variables are defined in [.env](./.env).  You can override default values, eg. pointing the frontend to a different API_SERVER, by defining them in `.env.local`.
 
 ## How to contribute
 

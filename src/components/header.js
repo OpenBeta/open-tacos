@@ -1,22 +1,20 @@
-import { Link } from 'gatsby'
 import React, { useState } from 'react'
-import TacoIcon from '../assets/icons/taco.svg'
-import SearchBar from '../components/SearchBar'
+import Image from 'next/image'
+import ClimbSearch from './search/ClimbSearch'
 
 function Header () {
   const [isExpanded, toggleExpansion] = useState(false)
   return (
     <header
-      className={`fixed top-0 z-50 border-b w-full ${
-        isExpanded ? 'bg-gray-50 border-b-2 border-black filter drop-shadow-md' : 'bg-white'
-      }`}
+      className={`fixed top-0 z-50 border-b w-full ${isExpanded ? 'bg-gray-50 border-b-2 border-black filter drop-shadow-md' : 'bg-white'
+        }`}
     >
       <div className='flex flex-wrap items-center justify-between max-w-screen-2xl p-4 lg:py-2 mx-auto'>
-        <div className='flex flex-nowrap items-center'>
-          <Link to='/'>
-            <TacoIcon className='animate-pulse' />
-          </Link>
-          <SearchBar className='ml-4' />
+        <div className='grow flex flex-nowrap items-center gap-x-4'>
+          <a href='/' className='hidden lg:inline-block'>
+            <Image className='cursor-pointer' src='/tortilla.png' height={32} width={32} />
+          </a>
+          <ClimbSearch />
         </div>
         <button
           className='items-center block px-3 py-2 text-black border border-white rounded lg:hidden'
@@ -32,15 +30,10 @@ function Header () {
           </svg>
         </button>
         <nav
-          className={`text-2xl lg:text-sm ${
-            isExpanded ? 'block mt-4 divide-y' : 'hidden'
-          } lg:flex lg:justify-end w-full lg:w-auto`}
+          className={`text-2xl lg:text-sm ${isExpanded ? 'block mt-4 divide-y' : 'hidden'
+            } lg:flex lg:justify-end w-full lg:w-auto`}
         >
           {[
-            {
-              route: '/dashboard',
-              title: 'Dashboard'
-            },
             {
               route: '/about',
               title: 'About'
@@ -54,13 +47,13 @@ function Header () {
               title: 'Export'
             }
           ].map((link) => (
-            <Link
+            <a
               className='block no-underline lg:py-4 lg:inline-block lg:px-4 py-4 lg:py-0'
               key={link.title}
-              to={link.route}
+              href={link.route}
             >
               {link.title}
-            </Link>
+            </a>
           ))}
         </nav>
       </div>

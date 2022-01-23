@@ -1,73 +1,82 @@
-import React from 'react'
-import { useStaticQuery, graphql } from 'gatsby'
+import type { NextPage } from 'next'
+import Head from 'next/head'
 import Layout from '../components/layout'
-import SEO from '../components/seo'
-import USToc from '../components/USToC'
-import RandomRouteCard from '../components/RandomRouteCard'
+import SeoTags from '../components/SeoTags'
 
-function getRandomInt (min: number, max: number): number {
-  min = Math.ceil(min)
-  max = Math.floor(max)
-  // The maximum is exclusive and the minimum is inclusive
-  return Math.floor(Math.random() * (max - min) + min)
-}
+import { gql } from '@apollo/client'
+import { graphqlClient } from '../js/graphql/Client'
+import { GetStaticProps } from 'next'
+import { IndexResponseType } from '../js/types'
+import FeatureCard from '../components/ui/FeatureCard'
 
-function IndexPage (): JSX.Element {
-  let allClimbingRoutes = useStaticQuery(graphql`
-    query {
-      allClimb {
-        edges {
-          node {
-            slug
-            pathTokens
-            frontmatter {
-              route_name
-              yds
-              type {
-                tr
-                trad
-                sport
-                boulder
-              }
-              metadata {
-                climb_id
-              }
-            }
-          }
-        }
-      }
-    }
-  `)
-
-  const min = 0
-  const max: number = allClimbingRoutes.allClimb.edges.length
-  const randomIndex = getRandomInt(min, max)
-  let randomClimb = null
-  if (allClimbingRoutes.allClimb.edges.length > 0) {
-    randomClimb = allClimbingRoutes.allClimb.edges[randomIndex].node
-  }
-  allClimbingRoutes = []
+const Home: NextPage<IndexResponseType> = ({ areas, area }) => {
   return (
-    <Layout>
-      {/* eslint-disable react/jsx-pascal-case */}
-      <SEO
-        keywords={['openbeta', 'rock climbing', 'climbing api']}
-        description='Climbing route catalog'
-        title='Home'
-      />
+    <>
+      <Head>
+        <title>Climbing Route Catalog</title>
+        <meta name='description' content='Open license climbing route catalog' />
+        <link rel='icon' href='/favicon.ico' />
+        <SeoTags
+          keywords={['openbeta', 'rock climbing', 'climbing api']}
+          description='Climbing route catalog'
+          title='Home'
+        />
+      </Head>
 
-      <USToc />
-
-      <h2 className='text-xl font-bold mt-8'>
-        Randomly Featured Route
-      </h2>
-      <div className='flex'>
-        <div className='w-2/6'>
-          <RandomRouteCard climb={randomClimb} />
+      <Layout layoutClz='layout-wide'>
+        <h1 className='mt-12'>Explore</h1>
+        <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
+          {areas.map(area => <FeatureCard key={area.metadata.area_id} area={area} />)}
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </>
   )
 }
 
-export default IndexPage
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const query = gql`query UsaAreas( $filter: Filter) {
+    areas(filter: $filter) {
+      area_name
+      pathTokens
+      totalClimbs
+      aggregate {
+        byType {
+          label
+          count
+        }
+        byGrade {
+          label
+          count
+        }
+      }
+      metadata {
+        lat
+        lng
+        area_id
+        
+      }
+    }
+  }`
+
+  const rs = await graphqlClient.query<IndexResponseType>({
+    query,
+    variables: {
+      filter: {
+        field_compare: [{
+          field: 'totalClimbs',
+          num: 200,
+          comparison: 'gt'
+        }, {
+          field: 'density',
+          num: 0.03,
+          comparison: 'gt'
+        }]
+      }
+    }
+  })
+
+  // Pass post data to the page via props
+  return { props: rs.data }
+}
+
+export default Home

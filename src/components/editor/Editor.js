@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import ReactPlaceholder from 'react-placeholder'
-import { usePlateValue } from '@udecode/plate-core'
 import { useAuth0 } from '@auth0/auth0-react'
-import { navigate } from 'gatsby'
 
 import PlateEditor from './PlateEditor'
 import FronmatterForm from './ClimbProfile'
@@ -53,13 +52,15 @@ export const ERROR = Object.freeze({
 })
 
 export const Editor = () => {
+  const router = useRouter()
+
   const { getAccessTokenSilently, user } = useAuth0()
   // to get access to commit message
   const commitMsgRef = React.useRef(null)
   // to get access to climb metadata
   const formikRef = React.useRef(null)
   // to get access climb content
-  const plateValue = usePlateValue()
+  // const plateValue = usePlateValue()
 
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(ERROR.NO_ERROR)
@@ -82,7 +83,7 @@ export const Editor = () => {
   }, [])
 
   const onSubmit = async () => {
-    if (!plateValue) return
+    // if (!plateValue) return
 
     if (!areFormsValid([formikRef, commitMsgRef])) {
       return
@@ -93,8 +94,8 @@ export const Editor = () => {
         audience: 'https://git-gateway'
       })
       const str = stringify({
-        frontmatter: formikRef.current.values,
-        bodyAst: plateValue
+        frontmatter: formikRef.current.values
+        // bodyAst: plateValue
       })
       const committer = {
         name: user['https://tacos.openbeta.io/username'],
@@ -111,7 +112,7 @@ export const Editor = () => {
         commitMsgRef.current.values.message,
         authToken
       )
-      navigate('/dashboard')
+      router.push('/dashboard')
     } catch (e) {
       switch (e.httpStatus) {
         case 409:
