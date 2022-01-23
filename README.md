@@ -1,10 +1,27 @@
+<p align="center">
+  <a href="https://openbeta.io">
+    <img alt="OpenTacos" src="public/tortilla.png" width="60" />
+  </a>
+</p>
+<h1 align="center">
+  OpenTacos v0.2
+</h1>
+<p align="center">
+  <strong>
+    Open Source. Rock climbing.  Wiki.
+  </strong>
+</p>
+<p align="center">
+  OpenTacos is a free and open source rock wiki of rock climbing knowledge.  </br>We are currently in MVP stage looking for feedback from climbers. Chat with the dev team on [Discord](https://discord.gg/fY9DbRav8h).
+</p>
+
+<h2 align="center">
+  [Live demo](https://open-tacos.vercel.app) 🚀
+</h2>
+
+<p align="center">
 [![Nextjs branch](https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=nextjs)](https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Anextjs) [![License](https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square)](./LICENSE)
-
-# OpenTacos
-
-OpenTacos is a proof-of-concept/MVP showing it's possible to build a collaborative climbing route catalog.
-
-[Live demo](https://open-tacos.vercel.app) 🚀
+</p>
 
 ## Tech stack
 
