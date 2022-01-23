@@ -1,4 +1,4 @@
-<p align="center" style="marginTop:1rem">
+<p align="center" style="paddingTop:1rem">
   <a href="https://openbeta.io">
     <img alt="OpenTacos" src="public/tortilla.png" width="60" />
   </a>
@@ -8,11 +8,11 @@
 </h1>
 <p align="center">
   <strong>
-    Open Source. Rock climbing.  Wiki.
+    Open source. Rock climbing.  Wiki.
   </strong>
 </p>
 <p align="center">
-  OpenTacos is a free and open source wiki of rock climbing knowledge.  </br>We are currently in MVP stage looking for feedback from climbers. Chat with the dev team on [Discord](https://discord.gg/fY9DbRav8h).
+  OpenTacos is a free and open source wiki of rock climbing knowledge.  </br>We are currently in MVP stage looking for feedback from climbers. Chat with the dev team on <a href="https://discord.gg/fY9DbRav8h">Discord</a>.
 </p>
 
 <h2 align="center">
@@ -28,11 +28,9 @@
 
 ## Tech stack
 
-1. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql))
+1. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql)): Node.js
 
-2. Frontend: (this repo)
-
-React.js, Next.js, TailwindCSS
+2. Frontend (this repo): React.js, Next.js, TailwindCSS.
 
 ## Live instances
 
