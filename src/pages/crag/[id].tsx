@@ -163,8 +163,9 @@ export async function getStaticPaths (): Promise<any> {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const query = gql`query AreaByUUID($uuid: String) {
-    area(uuid: $uuid) {
+  const query = gql`query AreaByID($id: ID) {
+    area(id: $id) {
+      id
       area_name
       metadata {
         area_id
@@ -202,7 +203,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const rs = await graphqlClient.query<AreaType>({
     query,
     variables: {
-      uuid: params.id
+      id: params.id
     }
   })
 
