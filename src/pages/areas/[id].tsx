@@ -177,14 +177,21 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }`
 
-  const rs = await graphqlClient.query<AreaType>({
-    query,
-    variables: {
-      id: params.id
+  try {
+    const rs = await graphqlClient.query<AreaType>({
+      query,
+      variables: {
+        id: params.id
+      }
+    })
+    if (rs.data === null) throw new Error('Area not found')
+    // Pass post data to the page via props
+    return { props: rs.data }
+  } catch (e) {
+    return {
+      notFound: true
     }
-  })
-  // Pass post data to the page via props
-  return { props: rs.data }
+  }
 }
 
 export default Area

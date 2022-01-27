@@ -29,6 +29,7 @@ export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' 
 export type ClimbDisciplineRecord = Record<ClimbDiscipline, boolean>
 
 export interface Climb {
+  id: string
   name: string
   fa: string
   yds: string

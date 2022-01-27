@@ -15,7 +15,7 @@ interface ClimbProps {
 }
 
 function Climbs ({ climb }: ClimbProps): JSX.Element {
-  const { name, fa, yds, type, content, safety, metadata } = climb
+  const { name, fa, yds, type, content, safety, id } = climb
   const pathTokens = []
   const ancestors = []
   // const safety = undefined
@@ -36,11 +36,11 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
           className='pt-4 markdown'
         >
           <h2 className='h2'>Description</h2>
-          <InlineEditor id={`climb-desc-${metadata.climb_id}`} markdown={content.description} readOnly />
+          <InlineEditor id={`climb-desc-${id}`} markdown={content.description} readOnly />
           <h2>Location</h2>
-          <InlineEditor id={`climb-loc-${metadata.climb_id}`} markdown={content.location} readOnly />
+          <InlineEditor id={`climb-loc-${id}`} markdown={content.location} readOnly />
           <h2>Protection</h2>
-          <InlineEditor id={`climb-pro-${metadata.climb_id}`} markdown={content.protection} readOnly />
+          <InlineEditor id={`climb-pro-${id}`} markdown={content.protection} readOnly />
         </div>
       </div>
 
@@ -87,8 +87,8 @@ export async function getStaticPaths (): Promise<any> {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const query = gql`query ClimbByUUID($uuid: String) {
-    climb(uuid: $uuid) {
+  const query = gql`query ClimbByUUID($id: ID) {
+    climb(id: $id) {
       name
       fa
       yds
@@ -102,9 +102,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         mixed
         aid
       }
-      metadata {
-        climb_id
-      }
       content {
         description
         location
@@ -116,7 +113,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const rs = await graphqlClient.query<Climb>({
     query,
     variables: {
-      uuid: params.id
+      id: params.id
     }
   })
 
