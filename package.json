@@ -61,12 +61,11 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "lint": "yarn run ts-standard",
-    "fix": "yarn run ts-standard --fix",
-    "build": "gatsby build",
-    "develop": "gatsby develop",
-    "start": "gatsby develop",
-    "serve": "gatsby serve",
-    "clean": "gatsby clean",
+    "build": "next build",
+    "dev": "next dev",
+    "local": "NEXT_PUBLIC_API_SERVER=http://localhost:4000 node ./src/server.js ",
+    "develop": "next dev",
+    "start": "next start",
     "test": "jest",
     "prepare": "husky install"
   },
