@@ -75,3 +75,5 @@ content
 
 # Env files
 .env.local
+*.pem
+.vscode/launch.json

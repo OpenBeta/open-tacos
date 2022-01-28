@@ -63,7 +63,7 @@
     "lint": "yarn run ts-standard",
     "build": "next build",
     "dev": "next dev",
-    "local": "NEXT_PUBLIC_API_SERVER=http://localhost:4000 next dev ",
+    "local": "NEXT_PUBLIC_API_SERVER=http://localhost:4000 node ./src/server.js ",
     "develop": "next dev",
     "start": "next start",
     "test": "jest",
