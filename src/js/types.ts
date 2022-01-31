@@ -89,3 +89,8 @@ export interface ClimbResponseType {
 
 export type BBoxType = BBox
 export type GeojsonFeatureType = Feature
+
+export interface AlgoliaResultType {
+  objectID: string
+}
+export type ClimbAlgoliaType = Climb & AlgoliaResultType
