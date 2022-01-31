@@ -73,9 +73,9 @@ const Area = ({ area }: AreaPageProps): JSX.Element => {
                 className='border border-slate-400'
                 areas={selectedAreas.length === 0 ? area.children : selectedAreas}
               />
-              {/* <ClusterMap className='shadow-[-3px_0px_6px_-3px_rgba(0,0,0,0.3)]' onClick={handleClick} bounds={area.bounds}>
+              <ClusterMap className='shadow-[-3px_0px_6px_-3px_rgba(0,0,0,0.3)]' onClick={handleClick} bbox={area.metadata.bbox}>
                 {area.children}
-              </ClusterMap> */}
+              </ClusterMap>
             </div>
 
             <h2>Subareas</h2>
@@ -145,11 +145,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         lat
         lng 
         leaf
+        bbox
       } 
-      bounds {
-        lat
-        lng
-      }
       content {
         description 
       } 

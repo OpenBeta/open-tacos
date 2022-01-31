@@ -9,7 +9,7 @@ import { GetStaticProps } from 'next'
 import { IndexResponseType } from '../js/types'
 import FeatureCard from '../components/ui/FeatureCard'
 
-const Home: NextPage<IndexResponseType> = ({ areas, area }) => {
+const Home: NextPage<IndexResponseType> = ({ areas }) => {
   return (
     <>
       <Head>
@@ -26,7 +26,7 @@ const Home: NextPage<IndexResponseType> = ({ areas, area }) => {
       <Layout layoutClz='layout-wide'>
         <h1 className='mt-12'>Explore</h1>
         <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
-          {areas.map(area => <FeatureCard key={area.metadata.area_id} area={area} />)}
+          {areas.map(area => <FeatureCard key={area.id} area={area} />)}
         </div>
       </Layout>
     </>
@@ -36,6 +36,7 @@ const Home: NextPage<IndexResponseType> = ({ areas, area }) => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = gql`query UsaAreas( $filter: Filter) {
     areas(filter: $filter) {
+      id
       area_name
       pathTokens
       totalClimbs
@@ -51,9 +52,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       }
       metadata {
         lat
-        lng
-        area_id
-        
+        lng        
       }
     }
   }`
@@ -68,8 +67,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           comparison: 'gt'
         }, {
           field: 'density',
-          num: 0.03,
-          comparison: 'gt'
+          num: 0.0,
+          comparison: 'eq'
         }]
       }
     }

@@ -2,9 +2,9 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import IconClusterLayer from './layers/IconClusterLayer'
 import BaseMap, { DEFAULT_INITIAL_VIEWSTATE } from './BaseMap'
-import { fitBounds } from '@math.gl/web-mercator'
 import { getPieIcon, getTotal, getTypePieData } from './ui/PieIcon'
-import { CountByGroupType, Point } from '../../js/types'
+import { CountByGroupType, BBoxType } from '../../js/types'
+import { bbox2Viewport } from '../../js/GeoHelpers'
 
 const NAV_BAR_OFFSET = 66
 
@@ -12,12 +12,12 @@ interface HeatmapProps {
   geojson?: string
   children?: any[]
   getTooltip?: any
-  bounds: [Point, Point]
+  bbox: BBoxType
   onClick: (obj: any) => void
   className?: string
 }
 
-export default function ClusterMap ({ onClick, bounds, geojson, children, getTooltip, className = '' }: HeatmapProps): JSX.Element {
+export default function ClusterMap ({ onClick, geojson, bbox, children, getTooltip, className = '' }: HeatmapProps): JSX.Element {
   const [[width, height], setWH] = useState([400, 400])
 
   const [viewstate, setViewState] = useState(DEFAULT_INITIAL_VIEWSTATE)
@@ -38,12 +38,7 @@ export default function ClusterMap ({ onClick, bounds, geojson, children, getToo
   }, [width, height])
 
   useEffect(() => {
-    const vs = fitBounds({
-      width: width,
-      height: height,
-      bounds: [[bounds[0].lng, bounds[0].lat], [bounds[1].lng, bounds[1].lat]],
-      padding: Math.min(width, height) * 0.15
-    })
+    const vs = bbox2Viewport(bbox, width, height)
 
     setViewState({ ...DEFAULT_INITIAL_VIEWSTATE, ...vs })
   }, [children])

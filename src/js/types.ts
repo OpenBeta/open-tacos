@@ -1,8 +1,10 @@
+import { BBox, Feature } from '@turf/helpers'
 
 export interface AreaMetadataType {
   leaf: boolean
   lat: number
   lng: number
+  bbox: [number, number, number, number]
   left_right_index: number
   mp_id: string
   area_id: string
@@ -63,7 +65,6 @@ export interface AreaType {
   metadata: AreaMetadataType
   ancestors: string[]
   aggregate: AggregateType
-  bounds: [Point, Point]
   totalClimbs: number
   density: number
   content: {
@@ -85,3 +86,6 @@ export interface IndexResponseType {
 export interface ClimbResponseType {
   climbs: Climb[]
 }
+
+export type BBoxType = BBox
+export type GeojsonFeatureType = Feature

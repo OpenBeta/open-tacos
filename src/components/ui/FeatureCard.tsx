@@ -12,7 +12,7 @@ interface OpenverseImage {
 const RESULT_LIMIT = 10
 const LICENSES = 'CC0,BY-NC-SA,BY-SA,BY-NC-SA'
 function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
-  const { area_name: areaName, pathTokens, aggregate, metadata, totalClimbs } = area
+  const { id, area_name: areaName, pathTokens, aggregate, metadata, totalClimbs } = area
   const [image, setImage] = React.useState<string>('')
   const [attribution, setAttribution] = React.useState<string>('')
 
@@ -45,7 +45,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
     <div
       className='card rounded-lg cursor-pointer hover:bg-yellow-50 border'
     >
-      <Link href={getSlug(metadata.area_id, metadata.leaf)} passHref>
+      <Link href={getSlug(id, metadata.leaf)} passHref>
         <div className='m-5'>
           <div style={{ height: '250px', backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url('${image}')` }} className='overflow-hidden'>
             <img className='object-cover' alt={attribution} />
