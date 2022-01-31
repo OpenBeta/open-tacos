@@ -15,10 +15,7 @@ interface ClimbProps {
 }
 
 function Climbs ({ climb }: ClimbProps): JSX.Element {
-  const { name, fa, yds, type, content, safety, id } = climb
-  const pathTokens = []
-  const ancestors = []
-  // const safety = undefined
+  const { name, fa, yds, type, content, safety, id, ancestors, pathTokens } = climb
   return (
     <Layout>
       <SeoTags
@@ -107,6 +104,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         location
         protection
       }
+      pathTokens
+      ancestors
     }
   }`
 
