@@ -132,6 +132,7 @@ export const simplifyClimbTypeJson = (type?: ClimbDisciplineRecord): {[key: stri
  * @returns
  */
 export const getScoreForGrade = (grade: string): number => {
+  if (grade === null) { return 0 }
   const ypsRegex = /^5\.([0-9]{1,2})([a-zA-Z])?([/+])?([/-])?([a-zA-Z]?)/
   const vGradeRegex = /^V([0-9]{1,2})([/+])?([/-])?([0-9]{1,2})?/
   const vGradeIrregular = /^V-([a-zA-Z]*)/

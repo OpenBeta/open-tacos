@@ -72,9 +72,9 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
-    "@types/supercluster": "^5.0.3",
     "@types/js-yaml": "^4.0.5",
     "@types/react": "^17.0.38",
+    "@types/supercluster": "^5.0.3",
     "autoprefixer": "^10.4.1",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "eslint-plugin-jest": "^25.3.4",
