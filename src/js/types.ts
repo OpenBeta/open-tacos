@@ -1,8 +1,10 @@
+import { BBox, Feature } from '@turf/helpers'
 
 export interface AreaMetadataType {
   leaf: boolean
   lat: number
   lng: number
+  bbox: [number, number, number, number]
   left_right_index: number
   mp_id: string
   area_id: string
@@ -29,6 +31,7 @@ export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' 
 export type ClimbDisciplineRecord = Record<ClimbDiscipline, boolean>
 
 export interface Climb {
+  id: string
   name: string
   fa: string
   yds: string
@@ -56,12 +59,12 @@ export interface AggregateType {
 
 }
 export interface AreaType {
+  id: string
   area_name: string
   pathTokens: string[]
   metadata: AreaMetadataType
   ancestors: string[]
   aggregate: AggregateType
-  bounds: [Point, Point]
   totalClimbs: number
   density: number
   content: {
@@ -83,3 +86,6 @@ export interface IndexResponseType {
 export interface ClimbResponseType {
   climbs: Climb[]
 }
+
+export type BBoxType = BBox
+export type GeojsonFeatureType = Feature

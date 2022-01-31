@@ -87,10 +87,10 @@ const Crag = ({ area }: CragProps): JSX.Element => {
               <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
                 {sortRoutes([...climbs], climbSortByOptions[selectedClimbSort]).map(
                   (climb: Climb) => {
-                    const { yds, name, metadata, type } = climb
+                    const { id, yds, name, type } = climb
                     return (
-                      <div className='pt-6 max-h-96' key={metadata.climb_id}>
-                        <Link href={`/climbs/${metadata.climb_id}`} passHref>
+                      <div className='pt-6 max-h-96' key={id}>
+                        <Link href={`/climbs/${id}`} passHref>
                           <a>
                             <RouteCard
                               routeName={name}
@@ -163,8 +163,9 @@ export async function getStaticPaths (): Promise<any> {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const query = gql`query AreaByUUID($uuid: String) {
-    area(uuid: $uuid) {
+  const query = gql`query AreaByID($id: ID) {
+    area(id: $id) {
+      id
       area_name
       metadata {
         area_id
@@ -176,6 +177,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       
       ancestors
       climbs {
+        id
         name
         fa
         yds
@@ -202,7 +204,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const rs = await graphqlClient.query<AreaType>({
     query,
     variables: {
-      uuid: params.id
+      id: params.id
     }
   })
 

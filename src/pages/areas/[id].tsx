@@ -15,20 +15,22 @@ import BreadCrumbs from '../../components/ui/BreadCrumbs'
 
 import { getSlug } from '../../js/utils'
 import InlineEditor from '../../components/editor/InlineEditor'
-
-const Area = ({ area }: {area: AreaType}): JSX.Element => {
-  const { area_name: areaName, children, metadata, content, pathTokens, ancestors } = area
+interface AreaPageProps {
+  area: AreaType
+}
+const Area = ({ area }: AreaPageProps): JSX.Element => {
+  const { id, area_name: areaName, children, metadata, content, pathTokens, ancestors } = area
   const [selectedAreaIds, setSelectedAreaIds] = useState<string[]>([])
 
   const handleClick = ({ object, objects }: {object: AreaType | any, objects: AreaType[]}): void => {
     if (objects === undefined || object?.cluster !== true) {
-      setSelectedAreaIds([(object as AreaType).metadata.area_id])
+      setSelectedAreaIds([(object as AreaType).id])
     } else {
-      setSelectedAreaIds(objects.map(o => { return o.metadata.area_id }))
+      setSelectedAreaIds(objects.map(o => { return o.id }))
     }
   }
   const selectedAreas = area.children.filter(c =>
-    selectedAreaIds.includes(c.metadata.area_id)
+    selectedAreaIds.includes(c.id)
   )
   return (
     <Layout layoutClz='layout-wide'>
@@ -61,7 +63,7 @@ const Area = ({ area }: {area: AreaType}): JSX.Element => {
                   className='pt-4 markdown'
                 >
                   <h2>Description</h2>
-                  <InlineEditor id={`area-${metadata.area_id}`} markdown={content.description} readOnly />
+                  <InlineEditor id={`area-${id}`} markdown={content.description} readOnly />
                 </div>
                 <hr className='my-8' />
               </>}
@@ -71,7 +73,7 @@ const Area = ({ area }: {area: AreaType}): JSX.Element => {
                 className='border border-slate-400'
                 areas={selectedAreas.length === 0 ? area.children : selectedAreas}
               />
-              <ClusterMap className='shadow-[-3px_0px_6px_-3px_rgba(0,0,0,0.3)]' onClick={handleClick} bounds={area.bounds}>
+              <ClusterMap className='shadow-[-3px_0px_6px_-3px_rgba(0,0,0,0.3)]' onClick={handleClick} bbox={area.metadata.bbox}>
                 {area.children}
               </ClusterMap>
             </div>
@@ -79,10 +81,10 @@ const Area = ({ area }: {area: AreaType}): JSX.Element => {
             <h2>Subareas</h2>
             <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
               {children.map((child) => {
-                const { area_name: areaName, metadata } = child
+                const { id, area_name: areaName, metadata } = child
                 return (
                   <div className='max-h-96' key={metadata.area_id}>
-                    <Link href={getSlug(metadata.area_id, metadata.leaf)} passHref>
+                    <Link href={getSlug(id, metadata.leaf)} passHref>
                       <a>
                         <AreaCard areaName={areaName} />
                       </a>
@@ -133,25 +135,23 @@ export async function getStaticPaths (): Promise<any> {
 // This also gets called at build time
 // Query graphql api for area by id
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const query = gql`query AreaByUUID($uuid: String) {
-    area(uuid: $uuid) {
+  const query = gql`query getAreaById($id: ID) {
+    area(id: $id) {
+      id
       area_name
       ancestors
       pathTokens
       metadata {
-        area_id
         lat
         lng 
         leaf
+        bbox
       } 
-      bounds {
-        lat
-        lng
-      }
       content {
         description 
       } 
       children {
+        id
         area_name
         totalClimbs
         metadata {
@@ -174,14 +174,21 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }`
 
-  const rs = await graphqlClient.query<AreaType>({
-    query,
-    variables: {
-      uuid: params.id
+  try {
+    const rs = await graphqlClient.query<AreaType>({
+      query,
+      variables: {
+        id: params.id
+      }
+    })
+    if (rs.data === null) throw new Error('Area not found')
+    // Pass post data to the page via props
+    return { props: rs.data }
+  } catch (e) {
+    return {
+      notFound: true
     }
-  })
-  // Pass post data to the page via props
-  return { props: rs.data }
+  }
 }
 
 export default Area
