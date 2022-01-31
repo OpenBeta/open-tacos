@@ -2,7 +2,7 @@ import algoliasearch from 'algoliasearch/lite'
 import { getAlgoliaResults } from '@algolia/autocomplete-preset-algolia'
 import { useRouter } from 'next/router'
 import Autocomplete from './Autocomplete'
-import { Climb } from '../../js/types'
+import { ClimbAlgoliaType } from '../../js/types'
 import ResultItem from './ResultItem'
 
 const searchClient = algoliasearch(
@@ -34,8 +34,8 @@ const ClimbSearch = (): JSX.Element => {
               await router.push(itemUrl)
             }
           },
-          getItemUrl ({ item }: {item: Climb}) {
-            return `/climbs/${item.metadata.climb_id}`
+          getItemUrl ({ item }: {item: ClimbAlgoliaType}) {
+            return `/climbs/${item.objectID}`
           },
 
           templates: {

@@ -17,9 +17,9 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
   const [attribution, setAttribution] = React.useState<string>('')
 
   useEffect(() => {
-    const query = `rock+climb+${areaName.replace(' ', '+')}`
-
-    const url = `https://api.openverse.engineering/v1/images/?license=${LICENSES}&page_size=${RESULT_LIMIT}&page=1&q=${query}`
+    const query = `rock+climbing+${areaName.replace(' ', '+')}`
+    const source = 'wordpress,wikimedia,smithsonian_libraries,flickr'
+    const url = `https://api.openverse.engineering/v1/images/?source=${source}&license=${LICENSES}&page_size=${RESULT_LIMIT}&page=1&q=${query}`
 
     fetch(url).then(async r => await r.json()).then((data) => {
       if (data?.result_count > 0) {
@@ -28,7 +28,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
         setAttribution(`Creator: ${image.creator}, ${image.attribution}`)
       } else throw new Error('no image available')
     }).catch(err => {
-      setImage('/public/tortilla.png')
+      setImage('/tortilla.png')
       console.warn(err)
     })
   }, [])
