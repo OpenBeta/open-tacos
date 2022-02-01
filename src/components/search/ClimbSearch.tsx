@@ -14,7 +14,7 @@ const ClimbSearch = (): JSX.Element => {
   const router = useRouter()
   return (
     <Autocomplete
-      placeholder='Try &ldquo;Nine Gallon Buckets&rdquo;, &ldquo;technical crimpy&rdquo;, or &ldquo;Alan Watts&rdquo;'
+      placeholder='Try &ldquo;Levitation 29&rdquo;, &ldquo;technical crimpy&rdquo;, or &ldquo;Lynn Hill&rdquo;'
       getSources={({ query }) => [
         {
           sourceId: 'climbs',

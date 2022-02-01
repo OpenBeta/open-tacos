@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { AreaType } from '../../js/types'
-import { getSlug } from '../../js/utils'
+import { getSlug, sanitizeName } from '../../js/utils'
 
 interface OpenverseImage {
   creator: string
@@ -54,7 +54,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
           <h3
             className='font-medium font-sans my-2 text-base truncate'
           >
-            <div className='text-lg'>{areaName}</div>
+            <div className='text-lg'>{sanitizeName(areaName)}</div>
             <div>{totalClimbs} Climbs</div>
             <div className='text-sm'>{pathTokens.join(' / ')}</div>
             <div className='text-xs'>{climbTypes}</div>
