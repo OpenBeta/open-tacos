@@ -35,11 +35,12 @@ const Home: NextPage<IndexResponseType> = ({ areas }) => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = gql`query UsaAreas( $filter: Filter) {
-    areas(filter: $filter) {
+    areas(filter: $filter, sort: { totalClimbs: -1 }) {
       id
       area_name
       pathTokens
       totalClimbs
+      density
       aggregate {
         byType {
           label
@@ -67,13 +68,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           comparison: 'gt'
         }, {
           field: 'density',
-          num: 0.0,
-          comparison: 'eq'
+          num: 0.005,
+          comparison: 'gt'
         }]
       }
     }
   })
-
   // Pass post data to the page via props
   return { props: rs.data }
 }
