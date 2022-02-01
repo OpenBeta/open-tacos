@@ -43,6 +43,8 @@ export interface Climb {
     location: string
     protection: string
   }
+  ancestors: string[]
+  pathTokens: string[]
 }
 
 export interface CountByGroupType {
