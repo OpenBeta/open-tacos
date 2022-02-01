@@ -61,16 +61,32 @@ body, html {
     @apply max-w-full flex flex-row justify-center gap-x-4 gap-y-0;
   }
 
+  .horizontal-center {
+    @apply flex flex-col items-center
+  }
+
+  .text-primary {
+    @apply text-slate-700 
+  }
+  .text-secondary {
+    @apply text-slate-500
+  }
+
+  .text-secondary-contrast {
+    @apply text-gray-300
+  }
+
+
   h1 {
-    @apply text-slate-700 text-5xl tracking-tight mb-4;
+    @apply text-primary text-5xl tracking-tight mb-4;
   }
   
   h2 {
-    @apply text-slate-700 text-xl font-bold tracking-tight leading-loose;
+    @apply text-primary text-xl font-bold tracking-tight leading-loose;
   }
 
   h3 {
-    @apply text-2xl font-light tracking-tight text-slate-800
+    @apply text-2xl font-light tracking-tight text-primary
   }
 }
 .title {
