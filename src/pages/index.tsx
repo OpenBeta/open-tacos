@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
+import StatsCounter, { StatsCounterProps } from '../components/StatsCounter'
 
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../js/graphql/Client'
@@ -9,7 +10,12 @@ import { GetStaticProps } from 'next'
 import { IndexResponseType } from '../js/types'
 import FeatureCard from '../components/ui/FeatureCard'
 
-const Home: NextPage<IndexResponseType> = ({ areas }) => {
+interface HomePageType {
+  exploreData: IndexResponseType
+  stats: StatsCounterProps
+}
+const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
+  const { areas } = exploreData
   return (
     <>
       <Head>
@@ -24,7 +30,8 @@ const Home: NextPage<IndexResponseType> = ({ areas }) => {
       </Head>
 
       <Layout layoutClz='layout-wide'>
-        <h1 className='mt-12'>Explore</h1>
+        <div className='horizontal-center pt-24 md:pt-24'><h1>Rock climbing wiki</h1><StatsCounter {...stats} /></div>
+        <h2 className='mt-12 mb-4 text-3xl'>Explore</h2>
         <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
           {areas.map(area => <FeatureCard key={area.id} area={area} />)}
         </div>
@@ -34,7 +41,7 @@ const Home: NextPage<IndexResponseType> = ({ areas }) => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const query = gql`query UsaAreas( $filter: Filter) {
+  let query = gql`query UsaAreas( $filter: Filter) {
     areas(filter: $filter, sort: { totalClimbs: -1 }) {
       id
       area_name
@@ -74,8 +81,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       }
     }
   })
+
+  query = gql`query Stats {
+    stats {
+        totalClimbs
+        totalCrags
+    }
+  }`
+  const rsStats = await graphqlClient.query<StatsCounterProps>({ query })
+
   // Pass post data to the page via props
-  return { props: rs.data }
+  return { props: { exploreData: rs.data, ...rsStats.data } }
 }
 
 export default Home
