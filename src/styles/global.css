@@ -31,6 +31,16 @@ body, html {
   background-image: linear-gradient(to right top, #12bee5, #00b6f4, #1bacff, #58a0ff, #888fff, #ac80f2, #c970e0, #e05ec8, #ee52ad, #f64b91, #f74a75, #f24f5a);
 }
 
+.home-hero {
+  height: 90vh;
+  width: 100vw;
+  background-size: cover;
+  position: relative;
+  margin-top: 10vh;
+  /* background-position: 50% 50%; */
+  background-image: url('/liberty-bell-hero2.jpeg')
+}
+
 /* bg-gradient-to-r from-blue-100 to-indigo-200 */
 /* flex flex-col */
 .main-container {

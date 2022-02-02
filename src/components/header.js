@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import ClimbSearch from './search/ClimbSearch'
 
 function Header () {
+  const router = useRouter()
+  console.log(router)
   const [isExpanded, toggleExpansion] = useState(false)
-
   const [direction, setDirection] = useState('top')
 
   const controlDirection = () => {
@@ -24,29 +26,24 @@ function Header () {
     }
   }, [])
 
-  const [expanded, setExpanded] = useState(direction)
+  const [expanded, setExpanded] = useState(false)
   useEffect(() => {
-    setExpanded(direction === 'top')
+    if (router.pathname === '/') { setExpanded(direction === 'top') }
   }, [direction])
 
   const onClick = () => setExpanded(!expanded)
-  const onBlur = () => {
-    console.log('blur')
-    expanded && setExpanded(false)
-  }
 
-  console.log(direction)
   return (
     <header
-      className={`fixed top-0 z-20 border-b w-full transition-all duration-300 ease-in-out ${expanded ? ' lg:h-36 ' : 'lg:h-16'} ${isExpanded ? 'bg-gray-800 border-b-2 border-black filter drop-shadow-md' : 'bg-gray-800'
+      className={`fixed top-0 z-20 w-full transition-all duration-300 ease-in-out ${expanded ? ' lg:h-36' : 'border-b lg:h-16 opacity-100'} ${isExpanded ? 'bg-gray-800 border-b-2 border-black filter drop-shadow-md' : 'bg-gray-800'
         }`}
     >
-      <div className='flex flex-wrap items-center justify-between max-w-screen-2xl px-4 py-4 mx-auto'>
+      <div className='z-50 flex flex-wrap items-center justify-between max-w-screen-2xl px-4 py-4 mx-auto'>
         <a href='/' className='hidden md:flex flex-nowrap items-center gap-x-2'>
           <div><Image className='cursor-pointer' src='/tortilla.png' height={32} width={32} /></div>
           <span className='font-bold text-custom-primary'>OpenTacos</span>
         </a>
-        <ClimbSearch expanded={expanded} onClick={onClick} onBlur={onBlur} />
+        <ClimbSearch expanded={expanded} onClick={onClick} />
 
         <button
           className='items-center block px-3 py-2 text-black border border-white rounded lg:hidden'

@@ -10,9 +10,9 @@ const Counter = ({ icon, counter, label }: CounterProps): JSX.Element => {
     <div className='flex flex-col items-center p-6'>
       <div>{icon}</div>
       <div>
-        <h3 className='text-white pt-4 text-4xl'>{counter}</h3>
+        <h3 className='text-rose-400 pt-4 text-4xl'>{counter}</h3>
       </div>
-      <div className='text-secondary-contrast'>{label}</div>
+      <div className='text-custom-green'>{label}</div>
     </div>
   )
 }
