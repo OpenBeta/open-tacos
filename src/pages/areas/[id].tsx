@@ -33,7 +33,7 @@ const Area = ({ area }: AreaPageProps): JSX.Element => {
     selectedAreaIds.includes(c.id)
   )
   return (
-    <Layout layoutClz='layout-wide'>
+    <Layout layoutClz='layout-default'>
       <SeoTags
         keywords={[areaName]}
         title={areaName}

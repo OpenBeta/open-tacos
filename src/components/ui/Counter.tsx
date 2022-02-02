@@ -12,7 +12,7 @@ const Counter = ({ icon, counter, label }: CounterProps): JSX.Element => {
       <div>
         <h3 className='text-rose-400 pt-4 text-4xl'>{counter}</h3>
       </div>
-      <div className='text-custom-green'>{label}</div>
+      <div className='text-secondary-contrast'>{label}</div>
     </div>
   )
 }

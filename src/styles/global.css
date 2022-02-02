@@ -32,17 +32,14 @@ body, html {
 }
 
 .home-hero {
-  height: 90vh;
+  height: 86vh;
   width: 100vw;
   background-size: cover;
   position: relative;
-  margin-top: 10vh;
-  /* background-position: 50% 50%; */
-  background-image: url('/liberty-bell-hero2.jpeg')
+  padding-top: 14vh;
+  background-image: url('/liberty-bell-hero2.jpeg');
 }
 
-/* bg-gradient-to-r from-blue-100 to-indigo-200 */
-/* flex flex-col */
 .main-container {
   @apply w-full font-sans text-base text-gray-900 bg-white h-screen;
 }
@@ -59,11 +56,11 @@ body, html {
 @layer utilities {
   /*  For larger screen, split into 2 columns */
   .layout-wide {
-    @apply mt-16 max-w-screen-lg xl:max-w-full	xl:w-screen flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0
+    @apply mt-8 max-w-screen-lg xl:max-w-full	xl:w-screen flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0
   }
 
   .layout-default {
-    @apply mt-16 w-full max-w-screen-md flex flex-col px-4 mx-auto
+    @apply mt-24 w-full max-w-screen-md flex flex-col px-4 mx-auto
   }
 
   .layout-edit-wide {
@@ -231,6 +228,21 @@ input:checked + label {
 
 .aa-Autocomplete {
   @apply max-w-screen-sm !important;
+}
+
+.aa-Form {
+  @apply ring-0 rounded-full !important;
+}
+
+.aa-SubmitButton {
+  @apply rounded-full bg-custom-primary !important;
+}
+.aa-SubmitIcon {
+  @apply text-white !important;
+}
+
+.aa-InputWrapper {
+  @apply ml-4 !important;
 }
 
 .fading-hidden {
