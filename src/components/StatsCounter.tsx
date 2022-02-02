@@ -28,7 +28,7 @@ const StatsCounter = ({ totalClimbs, totalCrags }: StatsCounterProps): JSX.Eleme
   }, [climb, crag])
 
   return (
-    <div className='gap-y-8 flex flex-col md:flex-row md:gap-x-16 bg-gray-800 rounded-md px-16'>
+    <div className='gap-y-8 flex flex-col md:flex-row md:gap-x-16 bg-custom-avery px-16 bg-opacity-20'>
       <Counter icon={<BrainIcon className='w-8 h-8 stroke-white stroke-1' />} counter={climb} label='Climbs' />
       <Counter icon={<PinIcon className='w-8 h-8 stroke-white stroke-1' />} counter={crag} label='Crags' />
     </div>

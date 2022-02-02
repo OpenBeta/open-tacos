@@ -1,19 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { TextButton } from './Button'
 import Image from 'next/image'
 import Topography from '../../assets/topography.svg'
 
 export default function LandingHero () {
-  const [loaded, setLoaded] = useState(false)
-  useEffect(() => {
-    setLoaded(true)
-  }, [])
-  const effectClz = loaded ? 'md:-translate-y-5 opacity-100' : 'md:opacity-0'
-  const clz = `transform transition-all duration-1000 ease-in ${effectClz}`
   return (
     <div className='py-16 md:py-0 bg-gray-800 md:h-3/5' style={{ display: 'grid' }}>
       <Topography
-        className='w-full h-full opacity-30' style={{
+        className='w-full h-full opacity-60' style={{
           gridArea: '1/1'
         }}
       />
@@ -28,15 +22,15 @@ export default function LandingHero () {
         }}
       >
         <section className='pt-32 md:pb-0 px-8 flex flex-col md:flex-row  md:gap-x-16 gap-y-12'>
-          <div className={`delay-75 ${clz} flex flex-col items-center`}>
+          <div className='flex flex-col items-center'>
             <Image className='' src='/tortilla.png' height={125} width={125} />
             <div className='mt-4 font-sans text-xl text-white tracking-tight text-custom-primary'>OpenTacos</div>
           </div>
-          <div className={`delay-300 ${clz}  text-center md:text-left`}><h3 className='text-white font-light'>Free & Open Source</h3><div className='text-lg text-custom-green'>$0 to use and 100% open source</div></div>
-          <div className={`delay-500 ${clz} text-white text-center md:text-left`}><h3 className='text-white font-light'>Respect user privacy</h3><div className='text-lg text-custom-green'>No Ads, No tracking</div></div>
-          <div className={`delay-700 ${clz} text-white text-center md:text-left`}><h3 className='text-white font-light'>Community over profits</h3><div className='text-lg text-custom-green'>Backed by a nonprofit collective</div></div>
+          <div className='text-center md:text-left md:pt-4'><h3 className='text-white font-bold'>Free & Open Source</h3><div className='text-lg text-pink-500'>$0 to use and 100% open source</div></div>
+          <div className='text-center md:text-left md:pt-4'><h3 className='text-white font-bold'>Respect user privacy</h3><div className='text-lg text-pink-500'>No Ads, No tracking</div></div>
+          <div className='text-center md:text-left md:pt-4'><h3 className='text-white font-bold'>Community over profits</h3><div className='text-lg text-pink-500'>Backed by a nonprofit collective</div></div>
         </section>
-        <div className={`pt-16 lg:-mt-24 2xl:-mt-32 delay-1000 ${clz}`}>
+        <div className='pt-16 lg:-mt-24 2xl:-mt-32'>
           <TextButton label='Explore' to='/' />
         </div>
       </div>

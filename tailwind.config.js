@@ -16,6 +16,7 @@ module.exports = {
       },
       colors: {
         'custom-green': '#8BB191',
+        'ob-tertiary': '#8BB191',
         'custom-secondary': '#62cae3',
         'custom-avery': '#a5d9cf',
         'custom-primary': '#e7811d'
