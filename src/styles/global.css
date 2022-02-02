@@ -31,8 +31,15 @@ body, html {
   background-image: linear-gradient(to right top, #12bee5, #00b6f4, #1bacff, #58a0ff, #888fff, #ac80f2, #c970e0, #e05ec8, #ee52ad, #f64b91, #f74a75, #f24f5a);
 }
 
-/* bg-gradient-to-r from-blue-100 to-indigo-200 */
-/* flex flex-col */
+.home-hero {
+  height: 86vh;
+  width: 100vw;
+  background-size: cover;
+  position: relative;
+  padding-top: 14vh;
+  background-image: url('/liberty-bell-hero2.jpeg');
+}
+
 .main-container {
   @apply w-full font-sans text-base text-gray-900 bg-white h-screen;
 }
@@ -49,11 +56,11 @@ body, html {
 @layer utilities {
   /*  For larger screen, split into 2 columns */
   .layout-wide {
-    @apply mt-16 max-w-screen-lg xl:max-w-full	xl:w-screen flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0
+    @apply mt-8 max-w-screen-lg xl:max-w-full	xl:w-screen flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0
   }
 
   .layout-default {
-    @apply mt-16 w-full max-w-screen-md flex flex-col px-4 mx-auto
+    @apply mt-24 w-full max-w-screen-md flex flex-col px-4 mx-auto
   }
 
   .layout-edit-wide {
@@ -72,6 +79,9 @@ body, html {
     @apply text-slate-500
   }
 
+  .text-primary-contrast {
+    @apply text-white
+  }
   .text-secondary-contrast {
     @apply text-gray-300
   }
@@ -218,4 +228,25 @@ input:checked + label {
 
 .aa-Autocomplete {
   @apply max-w-screen-sm !important;
+}
+
+.aa-Form {
+  @apply ring-0 rounded-full !important;
+}
+
+.aa-SubmitButton {
+  @apply rounded-full bg-custom-primary !important;
+}
+.aa-SubmitIcon {
+  @apply text-white !important;
+}
+
+.aa-InputWrapper {
+  @apply ml-4 !important;
+}
+
+.fading-hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 150ms, opacity 100ms linear;
 }

@@ -9,6 +9,7 @@ import { graphqlClient } from '../js/graphql/Client'
 import { GetStaticProps } from 'next'
 import { IndexResponseType } from '../js/types'
 import FeatureCard from '../components/ui/FeatureCard'
+import HomeHero from '../components/ui/HomeHero'
 
 interface HomePageType {
   exploreData: IndexResponseType
@@ -29,9 +30,18 @@ const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
         />
       </Head>
 
-      <Layout layoutClz='layout-wide'>
-        <div className='horizontal-center pt-24 md:pt-24'><h1>Rock climbing wiki</h1><StatsCounter {...stats} /></div>
-        <h2 className='mt-12 mb-4 text-3xl'>Explore</h2>
+      <Layout
+        layoutClz='layout-wide'
+        hero={
+          <HomeHero>
+            <section className='pr-8'>
+              <h1 className='text-white'>Rock climbing wiki</h1>
+              <StatsCounter {...stats} />
+            </section>
+          </HomeHero>
+        }
+      >
+        <h2 className='mb-4 text-3xl'>Explore</h2>
         <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
           {areas.map(area => <FeatureCard key={area.id} area={area} />)}
         </div>

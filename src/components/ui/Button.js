@@ -19,13 +19,21 @@ export function IconButton ({ onClick, children, active, text, className }) {
   )
 }
 
-export function TextButton ({ label, to }) {
+export function TextButton ({ label, to, clz, onClick }) {
   return (
-    <button className='border rounded-lg py-2 px-6 text-slate-100 text-lg hover:text-custom-green hover:border-custom-green'>
-      <Link href={to} passHref><a>{label}</a></Link>
-    </button>
+    <SmartLink url={to} clz={clz}>
+      <MyButton onClick={onClick} label={label} />
+    </SmartLink>
   )
 }
+
+const MyButton = React.forwardRef(({ onClick, label }, ref) =>
+  (
+    <button onClick={onClick} ref={ref} className='border rounded-lg py-2 px-6 text-slate-100 text-lg hover:text-custom-green hover:border-custom-green'>
+      {label}
+    </button>
+  )
+)
 
 export function Button ({ label, onClick, className }) {
   return (
@@ -37,4 +45,16 @@ export function Button ({ label, onClick, className }) {
       {label}
     </button>
   )
+}
+
+/**
+ * Children is simple html.  If passing complex component, must wrap it 'ref'.
+ * See https://nextjs.org/docs/api-reference/next/link#if-the-child-is-a-functional-component
+ * @param {*} url
+ * @param {*} children
+ * @returns
+ */
+export const SmartLink = ({ url, clz = '', children }) => {
+  const regEx = /^http/
+  return regEx.test(url) ? (<Link href={url} className={clz} passHref>{children}</Link>) : (<a href={url} className={clz}>{children}</a>)
 }
