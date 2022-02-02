@@ -72,6 +72,9 @@ body, html {
     @apply text-slate-500
   }
 
+  .text-primary-contrast {
+    @apply text-white
+  }
   .text-secondary-contrast {
     @apply text-gray-300
   }
@@ -218,4 +221,10 @@ input:checked + label {
 
 .aa-Autocomplete {
   @apply max-w-screen-sm !important;
+}
+
+.fading-hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 150ms, opacity 100ms linear;
 }
