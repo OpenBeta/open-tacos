@@ -14,7 +14,7 @@ const Drawer = ({ areas, className = '' }: DrawerProps): JSX.Element => {
       {a.area_name}
       <div className='text-sm text-gray-600'>{a.totalClimbs} climbs</div>
       {/* <TypeBar /> */}
-      <GradeGraph grades={a.aggregate.byGrade.filter(g => !isVScale(g.label))} total={a.totalClimbs} bucketType={GradeScales.Yds} />
+      <GradeGraph grades={a.aggregate.byGrade.filter(g => isVScale(g.label) === false)} total={a.totalClimbs} bucketType={GradeScales.Yds} />
       <GradeGraph
         grades={a.aggregate.byGrade.filter((g): boolean => isVScale(g.label))} total={a.totalClimbs} bucketType={GradeScales.VScale}
       />

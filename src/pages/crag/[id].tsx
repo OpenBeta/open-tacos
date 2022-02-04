@@ -125,9 +125,8 @@ const sortRoutes = (routes: Climb[], sortType: CragSortType): Climb[] => {
     }
     case 'grade': {
       return routes.sort(
-        (a, b) =>
-          getScoreForSort(a.yds, GradeScales.Yds) -
-          getScoreForSort(b.yds, GradeScales.Yds)
+        (a, b) => getScoreForSort(a.yds, GradeScales.Yds) -
+        getScoreForSort(b.yds, GradeScales.Yds)
       )
     }
     default:
