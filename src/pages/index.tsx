@@ -10,6 +10,7 @@ import { GetStaticProps } from 'next'
 import { IndexResponseType } from '../js/types'
 import FeatureCard from '../components/ui/FeatureCard'
 import HomeHero from '../components/ui/HomeHero'
+import CTAEmailSignup from '../components/CTAEmailSignup'
 
 interface HomePageType {
   exploreData: IndexResponseType
@@ -41,10 +42,18 @@ const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
           </HomeHero>
         }
       >
-        <h2 className='mb-4 text-3xl'>Explore</h2>
-        <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
-          {areas.map(area => <FeatureCard key={area.id} area={area} />)}
-        </div>
+        <section>
+          <h2 className='mb-4 text-3xl h-padding-wide'>Explore</h2>
+          <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg:gap-x-3 gap-y-3'>
+            {areas.map(area => <FeatureCard key={area.id} area={area} />)}
+          </div>
+        </section>
+        <section>
+          <h2 className='mt-16 mb-4 text-3xl h-padding-wide'>Follow our progress</h2>
+          <div className='horizontal-center pb-8'>
+            <CTAEmailSignup />
+          </div>
+        </section>
       </Layout>
     </>
   )

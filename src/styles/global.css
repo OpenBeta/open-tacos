@@ -56,7 +56,7 @@ body, html {
 @layer utilities {
   /*  For larger screen, split into 2 columns */
   .layout-wide {
-    @apply mt-8 max-w-screen-lg xl:max-w-full	xl:w-screen flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0
+    @apply mt-8 max-w-screen-2xl mx-auto xl:px-8 md:px-4
   }
 
   .layout-default {
@@ -86,6 +86,10 @@ body, html {
     @apply text-gray-300
   }
 
+  /* Add a small horizontal padding for main section headers */
+  .h-padding-wide {
+    @apply px-4 md:px-0
+  }
 
   h1 {
     @apply text-primary text-5xl tracking-tight mb-4;
