@@ -159,6 +159,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           leaf
           lat
           lng
+          bbox
         }
         aggregate {
           byGrade {
