@@ -2,7 +2,7 @@ import { GetStaticProps } from 'next'
 import { useState } from 'react'
 import { gql } from '@apollo/client'
 
-import { AreaType } from '../../js/types'
+import { AreaMetadataType, AreaType } from '../../js/types'
 import ClusterMap from '../../components/maps/ClusterMap'
 import Drawer from '../../components/ui/Drawer'
 import { graphqlClient } from '../../js/graphql/Client'
@@ -32,6 +32,12 @@ const Area = ({ area }: AreaPageProps): JSX.Element => {
   const selectedAreas = area.children.filter(c =>
     selectedAreaIds.includes(c.id)
   )
+  function getLatLng (metadata: AreaMetadataType): {lat: number, lng: number} {
+    const lng = metadata.lng === 0 ? (metadata.bbox[2] + metadata.bbox[0]) / 2 : metadata.lng
+    const lat = metadata.lat === 0 ? (metadata.bbox[3] + metadata.bbox[1]) / 2 : metadata.lat
+    return { lat, lng }
+  }
+  const latLng = getLatLng(metadata)
   return (
     <Layout layoutClz='layout-default'>
       <SeoTags
@@ -50,11 +56,11 @@ const Area = ({ area }: AreaPageProps): JSX.Element => {
               <a
                 className='hover:underline hover:text-gray-800'
                 /* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */
-                href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
+                href={`https://www.openstreetmap.org/#map=13/${latLng.lat}/${latLng.lng}`}
                 target='_blank'
                 rel='noopener noreferrer'
               >
-                {metadata.lat},{metadata.lng}
+                {latLng.lat}, {latLng.lng}
               </a>
             </span>
             {content.description !== '' &&

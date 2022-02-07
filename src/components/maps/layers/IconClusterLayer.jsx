@@ -31,7 +31,7 @@ export default class IconClusterLayer extends CompositeLayer {
         props.data.map(d => {
           const lng = d.metadata.lng === 0 && d ? (d.metadata.bbox[2] + d.metadata.bbox[0]) / 2 : d.metadata.lng
           const lat = d.metadata.lat === 0 ? (d.metadata.bbox[3] + d.metadata.bbox[1]) / 2 : d.metadata.lat
-          console.log(d.metadata.lat, d.metadata.lng, 'Lat, Lng', lat, lng)
+
           return {
             geometry: {
               coordinates: [

@@ -94,7 +94,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           comparison: 'gt'
         }, {
           field: 'density',
-          num: 0.005,
+          num: 0.5,
           comparison: 'gt'
         }]
       }
