@@ -5,12 +5,15 @@ import { OpenverseImage } from '.'
 
 function LicenseIcons ({ image }: { image: OpenverseImage }): JSX.Element {
   const size = { width: 25, height: 25 }
-  const getIcon = (license: string): JSX.Element => {
+
+  function getIcon (license: string): JSX.Element {
     switch (license.toUpperCase()) {
       case 'BY':
         return (<By {...size} />)
       case 'CC0':
         return (<><Cc {...size} /><Zero {...size} /></>)
+      case 'BY-NC':
+        return (<><By {...size} /><Nc {...size} /></>)
       case 'BY-NC-ND':
         return (<><By {...size} /><Nc {...size} /><Nd {...size} /></>)
       case 'BY-SA':
@@ -21,6 +24,7 @@ function LicenseIcons ({ image }: { image: OpenverseImage }): JSX.Element {
         return null
     }
   }
+
   return (
     <div
       onClick={() => {

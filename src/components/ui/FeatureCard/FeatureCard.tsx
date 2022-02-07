@@ -16,11 +16,12 @@ const DEFAULT_IMAGE = {
 
 const RESULT_LIMIT = 10
 
-const LICENSES = 'CC0,BY,BY-NC-SA,BY-SA,BY-NC-ND'
+const LICENSES = 'CC0,BY,BY-NC-SA,BY-SA,BY-NC-ND,BY-NC'
 
 function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
   const { id, area_name: areaName, pathTokens, aggregate, metadata, totalClimbs } = area
   const [image, setImage] = React.useState<OpenverseImage>(DEFAULT_IMAGE)
+  const [sanitizedName] = React.useState<string>(sanitizeName(areaName))
 
   const mainQuery = ['rock', 'climbing', ...areaName.split(' ')]
   const backupQuery = ['rock', 'mountain', ...areaName.split(' ')]
@@ -72,7 +73,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
           <h3
             className='font-medium whitespace-normal font-sans my-2 text-base truncate'
           >
-            <div className='text-lg'>{sanitizeName(areaName)}</div>
+            <div className='text-lg'>{sanitizedName}</div>
             <div>{totalClimbs} Climbs</div>
             <div className='text-sm'>{pathTokens.join(' / ')}</div>
             <div className='text-xs'>{formatClimbingTypes(aggregate)}</div>
