@@ -10,7 +10,7 @@ import { Button } from '../../components/ui/Button'
 import Icon from '../../components/Icon'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import { AreaType, Climb } from '../../js/types'
-import { getScoreForGrade } from '../../js/utils'
+import { getScoreForSort, GradeScales } from '@openbeta/sandbag'
 import RouteCard from '../../components/ui/RouteCard'
 import InlineEditor from '../../components/editor/InlineEditor'
 
@@ -125,9 +125,8 @@ const sortRoutes = (routes: Climb[], sortType: CragSortType): Climb[] => {
     }
     case 'grade': {
       return routes.sort(
-        (a, b) =>
-          getScoreForGrade(a.yds) -
-          getScoreForGrade(b.yds)
+        (a, b) => getScoreForSort(a.yds, GradeScales.Yds) -
+        getScoreForSort(b.yds, GradeScales.Yds)
       )
     }
     default:

@@ -1384,6 +1384,11 @@
     "@types/escape-html" "^1.0.0"
     escape-html "^1.0.3"
 
+"@openbeta/sandbag@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@openbeta/sandbag/-/sandbag-0.0.8.tgz#bc6ca10f9778e14985b62f8ab94aa3879987a71f"
+  integrity sha512-FsMm0q0VaKChAELiJ1ZNBVhl8ZHZI/RHosydXEGHEb3VtAYbK08LIrgdTZRvcQT1QJhytLj0xprLTyP4nUCJFw==
+
 "@popperjs/core@2.10.2":
   version "2.10.2"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.10.2.tgz#0798c03351f0dea1a5a4cabddf26a55a7cbee590"

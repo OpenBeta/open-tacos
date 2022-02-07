@@ -1,7 +1,6 @@
 
 import { AreaType } from '../../js/types'
-import { getScoreForGrade } from '../../js/utils'
-// import { getScoreForGrade } from '@openbeta/sandbag'
+import { GradeScales, isVScale } from '@openbeta/sandbag'
 import GradeGraph from './Graphs/GradeGraphs'
 
 interface DrawerProps {
@@ -15,8 +14,14 @@ const Drawer = ({ areas, className = '' }: DrawerProps): JSX.Element => {
       {a.area_name}
       <div className='text-sm text-gray-600'>{a.totalClimbs} climbs</div>
       {/* <TypeBar /> */}
-      <GradeGraph grades={a.aggregate.byGrade.filter(g => getScoreForGrade(g.label) < getScoreForGrade('V-easy'))} total={a.totalClimbs} bucketType='yds' />
-      <GradeGraph grades={a.aggregate.byGrade.filter(g => getScoreForGrade(g.label) > getScoreForGrade('V-easy'))} total={a.totalClimbs} bucketType='v-scale' />
+      <GradeGraph
+        grades={a.aggregate.byGrade.filter(g => {
+          return !isVScale(g.label) // eslint-disable-line 
+        })} total={a.totalClimbs} bucketType={GradeScales.Yds}
+      />
+      <GradeGraph
+        grades={a.aggregate.byGrade.filter((g): boolean => isVScale(g.label))} total={a.totalClimbs} bucketType={GradeScales.VScale}
+      />
     </div>
   ))
   return (
