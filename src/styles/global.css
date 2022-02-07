@@ -36,7 +36,7 @@ body, html {
   width: 100vw;
   background-size: cover;
   position: relative;
-  padding-top: 14vh;
+  /* padding-top: 14vh; */
   background-image: url('/liberty-bell-hero2.jpeg');
 }
 
@@ -58,9 +58,10 @@ body, html {
   .layout-wide {
     @apply mt-8 max-w-screen-2xl mx-auto xl:px-8 md:px-4
   }
+  /* //     @apply mt-24 w-full max-w-screen-md flex flex-col px-4 mx-auto */
 
   .layout-default {
-    @apply mt-24 w-full max-w-screen-md flex flex-col px-4 mx-auto
+    @apply mt-48 lg:mt-24 w-full max-w-screen-md mx-auto px-4
   }
 
   .layout-edit-wide {
@@ -124,8 +125,25 @@ p {
   @apply bg-custom-secondary border-custom-secondary border-b py-4 px-4 h-14 bg-gray-100 text-base align-middle rounded-t-lg
 }
 
+@responsive {
+  .btn-small {
+    @apply py-1 px-4
+  }
+
+  .btn-medium {
+    @apply px-6 py-2
+  }
+}
 
 @layer components {
+  .btn-nav-secondary {
+    @apply bg-ob-tertiary text-black hover:scale-110 duration-300 !important
+  }
+
+  .btn-nav {
+    @apply text-white hover:scale-110 duration-300 !important
+  }
+
   .btn {
     @apply no-underline px-6 py-1 text-gray-900 font-medium text-sm drop-shadow-lg rounded-xl;
   }
@@ -231,7 +249,7 @@ input:checked + label {
 }
 
 .aa-Autocomplete {
-  @apply max-w-screen-sm !important;
+  @apply w-full !important;
 }
 
 .aa-Form {

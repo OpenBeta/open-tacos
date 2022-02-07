@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
-import StatsCounter, { StatsCounterProps } from '../components/StatsCounter'
+import StatsPanel, { StatsPanelProps } from '../components/StatsPanel'
 
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../js/graphql/Client'
@@ -14,7 +14,7 @@ import CTAEmailSignup from '../components/CTAEmailSignup'
 
 interface HomePageType {
   exploreData: IndexResponseType
-  stats: StatsCounterProps
+  stats: StatsPanelProps
 }
 const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
   const { areas } = exploreData
@@ -35,9 +35,9 @@ const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
         layoutClz='layout-wide'
         hero={
           <HomeHero>
-            <section className='pr-8'>
+            <section className='md:pr-8 pt-48 md:pt-0'>
               <h1 className='text-white'>Rock climbing wiki</h1>
-              <StatsCounter {...stats} />
+              <StatsPanel {...stats} />
             </section>
           </HomeHero>
         }

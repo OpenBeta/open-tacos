@@ -19,17 +19,23 @@ export function IconButton ({ onClick, children, active, text, className }) {
   )
 }
 
-export function TextButton ({ label, to, clz, onClick }) {
+const BUTTON_SIZE = {
+  small: 'btn-small',
+  medium: 'btn-medium'
+}
+export function TextButton ({ size, label, to, clz, className, onClick }) {
   return (
     <SmartLink url={to} clz={clz}>
-      <MyButton onClick={onClick} label={label} />
+      <MyButton size={size} className={className} onClick={onClick} label={label} />
     </SmartLink>
   )
 }
 
-const MyButton = React.forwardRef(({ onClick, label }, ref) =>
+// py-2 px-6
+
+const MyButton = React.forwardRef(({ className, onClick, label }, ref) =>
   (
-    <button onClick={onClick} ref={ref} className='border rounded-lg py-2 px-6 text-slate-100 text-lg hover:text-custom-green hover:border-custom-green'>
+    <button onClick={onClick} ref={ref} className={`${className} border rounded-lg  text-slate-100 text-lg  border-gray-600 hover:text-custom-green hover:border-custom-green`}>
       {label}
     </button>
   )

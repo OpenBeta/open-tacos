@@ -3,12 +3,12 @@ import Counter from './ui/Counter'
 import BrainIcon from '../assets/icons/brain.svg'
 import PinIcon from '../assets/icons/droppin.svg'
 
-export interface StatsCounterProps {
+export interface StatsPanelProps {
   totalClimbs: number
   totalCrags: number
 }
 
-const StatsCounter = ({ totalClimbs, totalCrags }: StatsCounterProps): JSX.Element => {
+const StatsPanel = ({ totalClimbs, totalCrags }: StatsPanelProps): JSX.Element => {
   const delta = 50
   const [climb, setClimbCounter] = useState(totalClimbs - delta)
   const [crag, setCragCounter] = useState(totalCrags - delta)
@@ -28,11 +28,11 @@ const StatsCounter = ({ totalClimbs, totalCrags }: StatsCounterProps): JSX.Eleme
   }, [climb, crag])
 
   return (
-    <div className='gap-y-8 flex flex-col md:flex-row md:gap-x-16 bg-custom-avery px-16 bg-opacity-20'>
+    <div className='lg:gap-y-8 flex flex-col md:flex-row md:gap-x-16 bg-gray-800 px-16 bg-opacity-80 rounded-lg border-b-4 border-b-gray-800'>
       <Counter icon={<BrainIcon className='w-8 h-8 stroke-white stroke-1' />} counter={climb} label='Climbs' />
       <Counter icon={<PinIcon className='w-8 h-8 stroke-white stroke-1' />} counter={crag} label='Crags' />
     </div>
   )
 }
 
-export default StatsCounter
+export default StatsPanel

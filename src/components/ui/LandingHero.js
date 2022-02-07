@@ -31,7 +31,7 @@ export default function LandingHero () {
           <div className='text-center md:text-left md:pt-4'><h3 className='text-white font-bold'>Community over profits</h3><div className='text-lg text-pink-500'>Backed by a nonprofit collective</div></div>
         </section>
         <div className='pt-16 lg:-mt-24 2xl:-mt-32'>
-          <TextButton label='Explore' to='/' />
+          <TextButton className='btn-nav btn-medium' label='Explore' to='/' />
         </div>
       </div>
     </div>
