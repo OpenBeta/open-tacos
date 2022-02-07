@@ -49,17 +49,12 @@ Learn more about [Jamstack](https://jamstack.org)
 
 ## Live instances
 
-| Env                | Link                          | Branch  | Content | Build                                                                                                                                                                                                                                     |
-| ------------------ | ----------------------------- | ------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Staging            | https://open-tacos.vercel.app | nextjs  | Partial | [![Build](https://img.shields.io/github/checks-status/openbeta/open-tacos/nextjs)](https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Anextjs)                                                             |
-| Prod (old version) | https://tacos.openbeta.io     | develop | Full    | [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos-content-ci?branch=develop&style=flat-square)](https://gitlab.com/openbeta/opentacos-content-ci/-/pipelines?page=1&scope=branches&ref=develop) |
+| Env     | Link                          | Branch  | Content | Build                                                                                                                                                                                                                                     |
+| ------- | ----------------------------- | ------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Staging | https://open-tacos.vercel.app | nextjs  | Partial | [![Build](https://img.shields.io/github/checks-status/openbeta/open-tacos/nextjs)](https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Anextjs)                                                             |
+| Prod    | https://tacos.openbeta.io     | develop | Full    | [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos-content-ci?branch=develop&style=flat-square)](https://gitlab.com/openbeta/opentacos-content-ci/-/pipelines?page=1&scope=branches&ref=develop) |
 
 ## How to build
-
-### Important news: ***
-
-- As of Jan 2022 we've replaced Gatsby.js with Next.js.  
-- Active development is on [`nextjs`](https://github.com/openbeta/open-tacos/tree/nextjs) branch for the time being.
 
 Make sure you have the following tools installed on your computer
 
@@ -78,7 +73,7 @@ git clone git@github.com:OpenBeta/open-tacos.git
 
 ```
 cd open-tacos
-git checkout nextjs
+git checkout develop
 yarn install
 ```
 
@@ -103,7 +98,7 @@ If you install new packages you will need to rebuild the docker image with
 docker compose up --build
 ```
 
-The application is now available at `https://localhost:3000`
+The application is now available at `http://localhost:3000`
 
 ### Tips
 

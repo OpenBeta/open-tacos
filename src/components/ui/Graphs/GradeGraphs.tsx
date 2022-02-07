@@ -1,36 +1,37 @@
 import { CountByGroupType } from '../../../js/types'
-import { getScoreForGrade } from '../../../js/utils'
+import { getScore, GradeScales } from '@openbeta/sandbag'
 import { peach, pink } from '../../colors'
+
 const vColor = peach
 const ydsColor = pink
 const ydsBucket = [
   {
-    score: getScoreForGrade('5.10-'),
+    score: getScore('5.9+', GradeScales.Yds),
     label: '<5.10',
     color: ydsColor[0]
   },
   {
-    score: getScoreForGrade('5.11-'),
+    score: getScore('5.10d', GradeScales.Yds),
     label: '5.10',
     color: ydsColor[1]
   },
   {
-    score: getScoreForGrade('5.12-'),
+    score: getScore('5.11d', GradeScales.Yds),
     label: '5.11',
     color: ydsColor[2]
   },
   {
-    score: getScoreForGrade('5.13-'),
+    score: getScore('5.12d', GradeScales.Yds),
     label: '5.12',
     color: ydsColor[3]
   },
   {
-    score: getScoreForGrade('5.14-'),
+    score: getScore('5.13d', GradeScales.Yds),
     label: '5.13',
     color: ydsColor[4]
   },
   {
-    score: getScoreForGrade('5.20'),
+    score: getScore('5.17a', GradeScales.Yds),
     label: '>5.14',
     color: ydsColor[5]
   }
@@ -38,27 +39,27 @@ const ydsBucket = [
 
 const vScaleBucket = [
   {
-    score: getScoreForGrade('V2'),
+    score: getScore('V2', GradeScales.VScale),
     label: '<V2',
     color: vColor[0]
   },
   {
-    score: getScoreForGrade('V5'),
+    score: getScore('V5', GradeScales.VScale),
     label: 'V2-5',
     color: vColor[1]
   },
   {
-    score: getScoreForGrade('V8'),
+    score: getScore('V8', GradeScales.VScale),
     label: 'V5-8',
     color: vColor[2]
   },
   {
-    score: getScoreForGrade('V12'),
+    score: getScore('V12', GradeScales.VScale),
     label: 'V8-12',
     color: vColor[3]
   },
   {
-    score: getScoreForGrade('V20'),
+    score: getScore('V20', GradeScales.VScale),
     label: '>V12',
     color: vColor[4]
   }
@@ -67,12 +68,10 @@ const vScaleBucket = [
 interface GradeGraphType {
   grades: CountByGroupType[]
   total: number
-  bucketType: BucketType
+  bucketType: GradeScales
   maxHeight?: number
   width?: number
 }
-
-type BucketType = 'v-scale' | 'yds'
 
 const GradeGraph = ({
   grades,
@@ -80,12 +79,12 @@ const GradeGraph = ({
   maxHeight = 30,
   width = 30
 }: GradeGraphType): JSX.Element => {
-  const buckets = bucketType === 'yds' ? ydsBucket : vScaleBucket
+  const buckets = bucketType === GradeScales.Yds ? ydsBucket : vScaleBucket
   let maxBucketSize = 0
   const bars = grades
     .filter(g => !isNaN(g.count) || g.label !== 'NaN') // filter out some bad data
     .reduce((bucketCounts: number[], g: CountByGroupType): number[] => {
-      let index = buckets.findIndex(b => b.score > getScoreForGrade(g.label))
+      let index = buckets.findIndex(b => b.score > getScore(g.label, bucketType))
       // if we dont' find it, it's above the range
       index = index < 0 ? buckets.length - 1 : index
       bucketCounts[index] = bucketCounts[index] !== undefined ? (bucketCounts[index] + g.count) : g.count

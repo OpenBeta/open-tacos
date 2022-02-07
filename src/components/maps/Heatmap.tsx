@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { HeatmapLayer } from '@deck.gl/aggregation-layers'
 import { GeoJsonLayer } from '@deck.gl/layers'
-import { InitialViewStateProps } from '@deck.gl/core/lib/deck'
-import { ColorRange } from '@deck.gl/core/utils/color'
 
 import usaHeatMapData from '../../assets/usa-heatmap.json'
 import BaseMap, { DEFAULT_INITIAL_VIEWSTATE } from './BaseMap'
 import { bboxFromGeoJson, bbox2Viewport } from '../../js/GeoHelpers'
 import { GeojsonFeatureType } from '../../js/types'
+import { InitialViewStateProps } from '@deck.gl/core/lib/deck'
+import { ColorRange } from '@deck.gl/core/utils/color'
 
 const COLOR_RANGE: ColorRange = [
   [1, 152, 189],
