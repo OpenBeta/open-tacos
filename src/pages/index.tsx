@@ -107,7 +107,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         totalCrags
     }
   }`
-  const rsStats = await graphqlClient.query<StatsCounterProps>({ query })
+  const rsStats = await graphqlClient.query<StatsPanelProps>({ query })
 
   // Pass post data to the page via props
   return { props: { exploreData: rs.data, ...rsStats.data } }
