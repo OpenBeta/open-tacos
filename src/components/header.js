@@ -20,7 +20,7 @@ function Header () {
   const [expanded, setExpanded] = useState(false)
 
   const controlDirection = () => {
-    if (window.scrollY > 200) {
+    if (window.scrollY > 280) {
       setDirection('down')
       setExpanded(false)
     } else {
@@ -46,7 +46,7 @@ function Header () {
   const isIndexPage = router.pathname === '/'
   return (
     <header
-      className={`absolute lg:fixed top-0 z-20 w-full px-4 py-4 lg:py-2  mx-auto ${expanded ? ' lg:h-36 bg-opacity-100' : 'lg:border-b lg:border-gray-100'} ${direction === 'down' || !isIndexPage ? 'bg-gray-800' : ''}`}
+      className={`absolute lg:fixed top-0 z-20 w-full px-4 py-8 md:py-2  mx-auto ${expanded ? ' lg:h-36 ' : 'lg:border-b lg:border-gray-100'} ${direction === 'down' || !isIndexPage ? 'bg-gray-800' : ''}`}
     >
       <nav className='z-50 flex items-center justify-between max-w-screen-2xl '>
         <div className='flex flex-rows justify-start items-center md:gap-x-2'>
@@ -64,9 +64,6 @@ function Header () {
           {navList.map(item => <NavItem key={item.title} {...item} />)}
         </div>
       </nav>
-      <div className='pt-12 pb-2 lg:hidden'>
-        <AlgoliaSearchWidget />
-      </div>
       <div className='lg:hidden max-w-screen-md w-full'>
         {direction === 'down' && <div className='fixed top-0 left-0 bg-gray-800 px-2 py-2  w-full '><AlgoliaSearchWidget /></div>}
       </div>

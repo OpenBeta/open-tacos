@@ -29,7 +29,7 @@ export function TextButton ({ label, to, clz, className, onClick }) {
 
 const MyButton = React.forwardRef(({ className, onClick, label }, ref) =>
   (
-    <button onClick={onClick} ref={ref} className={`${className} border rounded-lg  text-slate-100 text-lg  border-gray-600 hover:text-custom-green hover:border-custom-green`}>
+    <button onClick={onClick} ref={ref} className={`border rounded-2xl  text-slate-100 text-lg  border-gray-600 hover:text-custom-green hover:border-custom-green ${className}`}>
       {label}
     </button>
   )

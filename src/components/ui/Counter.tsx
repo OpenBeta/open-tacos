@@ -1,17 +1,15 @@
 import React from 'react'
 export interface CounterProps {
-  icon: JSX.Element
+  icon?: JSX.Element
   counter: number
   label: string
 }
 
-const Counter = ({ icon, counter, label }: CounterProps): JSX.Element => {
+const Counter = ({ icon = null, counter, label }: CounterProps): JSX.Element => {
   return (
-    <div className='flex flex-col items-center p-6'>
-      <div>{icon}</div>
-      <div>
-        <h3 className='text-rose-400 pt-4 text-4xl'>{counter}</h3>
-      </div>
+    <div className='flex flex-col items-center justify-between lg:gap-y-2'>
+      {icon !== null && <div className='py-2'>{icon}</div>}
+      <h3 className='text-rose-400 text-2xl md:text-4xl'>{counter}</h3>
       <div className='text-secondary-contrast'>{label}</div>
     </div>
   )

@@ -39,12 +39,11 @@ export const Autocomplete = (props): JSX.Element => {
   return <div className='w-full' ref={containerRef} />
 }
 
-export const AlgoliaSearchWidget = (props: any): JSX.Element => {
+export const AlgoliaSearchWidget = ({ placeholder = 'Try \'Levitation\', \'technical crimpy\', or \'Lynn Hill\'' }: {placeholder?: string}): JSX.Element => {
   const router = useRouter()
   return (
     <Autocomplete
-      placeholder='Try &ldquo;Levitation 29&rdquo;, &ldquo;technical crimpy&rdquo;, or &ldquo;Lynn Hill&rdquo;'
-      none
+      placeholder={placeholder}
       getSources={({ query }) => [
         {
           sourceId: 'climbs',

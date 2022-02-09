@@ -31,15 +31,6 @@ body, html {
   background-image: linear-gradient(to right top, #12bee5, #00b6f4, #1bacff, #58a0ff, #888fff, #ac80f2, #c970e0, #e05ec8, #ee52ad, #f64b91, #f74a75, #f24f5a);
 }
 
-.home-hero {
-  height: 86vh;
-  width: 100vw;
-  background-size: cover;
-  position: relative;
-  /* padding-top: 14vh; */
-  background-image: url('/liberty-bell-hero2.jpeg');
-}
-
 .main-container {
   @apply w-full font-sans text-base text-gray-900 bg-white h-screen;
 }
@@ -103,6 +94,24 @@ body, html {
   h3 {
     @apply text-2xl font-light tracking-tight text-primary
   }
+
+  .home-hero-bg-img {
+    background-size: cover;
+    background-image: url('/liberty-bell-hero2.jpeg');
+  }
+  
+  .home-hero {
+    min-height: 500px;
+    @apply hidden lg:block bg-gray-800 home-hero-bg-img relative h-screen-85 w-screen
+  }
+  
+  .height-mobile-portrait {
+    height: 600px
+  }
+
+  .home-hero-mobile {
+    @apply lg:hidden h-screen portrait:height-mobile-portrait w-screen  bg-gray-800
+  }
 }
 .title {
   @apply text-4xl font-bold font-sans my-4 !important;
@@ -125,17 +134,15 @@ p {
   @apply bg-custom-secondary border-custom-secondary border-b py-4 px-4 h-14 bg-gray-100 text-base align-middle rounded-t-lg
 }
 
-@responsive {
+@layer components {
   .btn-small {
-    @apply py-1 px-4
+    @apply py-1 px-4 text-base !important
   }
 
   .btn-medium {
-    @apply px-6 py-2
+    @apply px-6 py-2 text-lg !important
   }
-}
 
-@layer components {
   .btn-nav-secondary {
     @apply bg-ob-tertiary text-black hover:scale-110 duration-300 !important
   }
