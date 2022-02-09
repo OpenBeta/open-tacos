@@ -31,15 +31,6 @@ body, html {
   background-image: linear-gradient(to right top, #12bee5, #00b6f4, #1bacff, #58a0ff, #888fff, #ac80f2, #c970e0, #e05ec8, #ee52ad, #f64b91, #f74a75, #f24f5a);
 }
 
-.home-hero {
-  height: 86vh;
-  width: 100vw;
-  background-size: cover;
-  position: relative;
-  padding-top: 14vh;
-  background-image: url('/liberty-bell-hero2.jpeg');
-}
-
 .main-container {
   @apply w-full font-sans text-base text-gray-900 bg-white h-screen;
 }
@@ -48,23 +39,23 @@ body, html {
   @apply bg-white  max-w-4xl  2xl:max-w-screen-2xl mx-auto px-4 py-8 mt-8 mb-16 rounded-lg
 }
 
-/* On smaller screen stack forms */
+/* On smaller screens stack forms */
 .layout-edit-narrow {
   @apply max-w-4xl mx-auto flex flex-col gap-y-8;
 }
 
 @layer utilities {
-  /*  For larger screen, split into 2 columns */
+  /*  For larger screens */
   .layout-wide {
     @apply mt-8 max-w-screen-2xl mx-auto xl:px-8 md:px-4
   }
 
   .layout-default {
-    @apply mt-24 w-full max-w-screen-md flex flex-col px-4 mx-auto
+    @apply mt-24 w-full max-w-screen-md mx-auto px-4
   }
 
   .layout-edit-wide {
-    /* On wide screen put 2 forms side by side */
+    /* On wide screens put 2 forms side by side */
     @apply max-w-full flex flex-row justify-center gap-x-4 gap-y-0;
   }
 
@@ -102,6 +93,24 @@ body, html {
   h3 {
     @apply text-2xl font-light tracking-tight text-primary
   }
+
+  .home-hero-bg-img {
+    background-size: cover;
+    background-image: url('/liberty-bell-hero.jpeg');
+  }
+  
+  .home-hero {
+    min-height: 500px;
+    @apply relative block top-0 left-0 bg-gray-800 home-hero-bg-img h-screen-85 w-screen
+  }
+  
+  .height-mobile-portrait {
+    height: 600px
+  }
+
+  .home-hero-mobile {
+    @apply lg:hidden h-screen portrait:height-mobile-portrait w-screen  bg-gray-800
+  }
 }
 .title {
   @apply text-4xl font-bold font-sans my-4 !important;
@@ -124,8 +133,23 @@ p {
   @apply bg-custom-secondary border-custom-secondary border-b py-4 px-4 h-14 bg-gray-100 text-base align-middle rounded-t-lg
 }
 
-
 @layer components {
+  .btn-small {
+    @apply py-1 px-4 text-base !important
+  }
+
+  .btn-medium {
+    @apply px-6 py-2 text-lg !important
+  }
+
+  .btn-nav-secondary {
+    @apply bg-ob-tertiary text-black hover:scale-110 duration-300 !important
+  }
+
+  .btn-nav {
+    @apply text-white hover:scale-110 duration-300 !important
+  }
+
   .btn {
     @apply no-underline px-6 py-1 text-gray-900 font-medium text-sm drop-shadow-lg rounded-xl;
   }
@@ -231,7 +255,7 @@ input:checked + label {
 }
 
 .aa-Autocomplete {
-  @apply max-w-screen-sm !important;
+  @apply w-full !important;
 }
 
 .aa-Form {
