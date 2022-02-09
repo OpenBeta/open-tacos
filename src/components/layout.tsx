@@ -7,7 +7,7 @@ interface LayoutProps {
   layoutClz?: string
   customClz?: string
   children?: JSX.Element | JSX.Element[]
-  hero?: JSX.Element
+  hero?: JSX.Element | JSX.Element[]
 }
 function Layout ({ layoutClz = 'layout-default', customClz = '', children, hero = null }: LayoutProps): JSX.Element {
   return (

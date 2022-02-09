@@ -20,6 +20,12 @@ module.exports = {
         'custom-secondary': '#62cae3',
         'custom-avery': '#a5d9cf',
         'custom-primary': '#e7811d'
+      },
+      height: {
+        'screen-85': '85vh',
+        'screen-80': '80vh',
+        'screen-20': '20vh',
+        'screen-15': '15vh'
       }
     }
   }

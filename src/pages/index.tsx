@@ -2,19 +2,19 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
-import StatsCounter, { StatsCounterProps } from '../components/StatsCounter'
+import { StatsPanelProps } from '../components/ui/StatsPanel'
 
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../js/graphql/Client'
 import { GetStaticProps } from 'next'
 import { IndexResponseType } from '../js/types'
 import FeatureCard from '../components/ui/FeatureCard'
-import HomeHero from '../components/ui/HomeHero'
+import HomeHero from '../components/HomeHero'
 import CTAEmailSignup from '../components/CTAEmailSignup'
 
 interface HomePageType {
   exploreData: IndexResponseType
-  stats: StatsCounterProps
+  stats: StatsPanelProps
 }
 const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
   const { areas } = exploreData
@@ -33,14 +33,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
 
       <Layout
         layoutClz='layout-wide'
-        hero={
-          <HomeHero>
-            <section className='pr-8'>
-              <h1 className='text-white'>Rock climbing wiki</h1>
-              <StatsCounter {...stats} />
-            </section>
-          </HomeHero>
-        }
+        hero={<HomeHero statsProps={stats} />}
       >
         <section>
           <h2 className='mb-4 text-3xl h-padding-wide'>Explore</h2>
@@ -107,7 +100,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         totalCrags
     }
   }`
-  const rsStats = await graphqlClient.query<StatsCounterProps>({ query })
+  const rsStats = await graphqlClient.query<StatsPanelProps>({ query })
 
   // Pass post data to the page via props
   return { props: { exploreData: rs.data, ...rsStats.data } }
