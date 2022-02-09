@@ -2,14 +2,14 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
-import StatsPanel, { StatsPanelProps } from '../components/ui/StatsPanel'
+import { StatsPanelProps } from '../components/ui/StatsPanel'
 
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../js/graphql/Client'
 import { GetStaticProps } from 'next'
 import { IndexResponseType } from '../js/types'
 import FeatureCard from '../components/ui/FeatureCard'
-import HomeHero, { HomeHeroMobile } from '../components/HomeHero'
+import HomeHero from '../components/HomeHero'
 import CTAEmailSignup from '../components/CTAEmailSignup'
 
 interface HomePageType {
@@ -33,9 +33,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
 
       <Layout
         layoutClz='layout-wide'
-        hero={
-          <HomeHero statsProps={stats} />
-        }
+        hero={<HomeHero statsProps={stats} />}
       >
         <section>
           <h2 className='mb-4 text-3xl h-padding-wide'>Explore</h2>

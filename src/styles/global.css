@@ -39,24 +39,23 @@ body, html {
   @apply bg-white  max-w-4xl  2xl:max-w-screen-2xl mx-auto px-4 py-8 mt-8 mb-16 rounded-lg
 }
 
-/* On smaller screen stack forms */
+/* On smaller screens stack forms */
 .layout-edit-narrow {
   @apply max-w-4xl mx-auto flex flex-col gap-y-8;
 }
 
 @layer utilities {
-  /*  For larger screen, split into 2 columns */
+  /*  For larger screens */
   .layout-wide {
     @apply mt-8 max-w-screen-2xl mx-auto xl:px-8 md:px-4
   }
-  /* //     @apply mt-24 w-full max-w-screen-md flex flex-col px-4 mx-auto */
 
   .layout-default {
-    @apply mt-48 lg:mt-24 w-full max-w-screen-md mx-auto px-4
+    @apply mt-24 w-full max-w-screen-md mx-auto px-4
   }
 
   .layout-edit-wide {
-    /* On wide screen put 2 forms side by side */
+    /* On wide screens put 2 forms side by side */
     @apply max-w-full flex flex-row justify-center gap-x-4 gap-y-0;
   }
 
@@ -97,12 +96,12 @@ body, html {
 
   .home-hero-bg-img {
     background-size: cover;
-    background-image: url('/liberty-bell-hero2.jpeg');
+    background-image: url('/liberty-bell-hero.jpeg');
   }
   
   .home-hero {
     min-height: 500px;
-    @apply hidden lg:block bg-gray-800 home-hero-bg-img relative h-screen-85 w-screen
+    @apply relative block top-0 left-0 bg-gray-800 home-hero-bg-img h-screen-85 w-screen
   }
   
   .height-mobile-portrait {

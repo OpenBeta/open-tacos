@@ -45,27 +45,29 @@ function Header () {
 
   const isIndexPage = router.pathname === '/'
   return (
+    // Mobile: to be scrolled up
+    // Large screens: fixed, collapsed as users scroll page or click outside of navbar
     <header
-      className={`absolute lg:fixed top-0 z-20 w-full px-4 py-8 md:py-2  mx-auto ${expanded ? ' lg:h-36 ' : 'lg:border-b lg:border-gray-100'} ${direction === 'down' || !isIndexPage ? 'bg-gray-800' : ''}`}
+      className={`absolute lg:fixed top-0 z-20 w-full px-4 py-4 lg:py-2  mx-auto ${expanded ? 'h-36 ' : 'border-b border-gray-900 lg:border-gray-300'} ${direction === 'down' || !isIndexPage ? 'bg-gray-800' : ''}`}
     >
       <nav className='z-50 flex items-center justify-between max-w-screen-2xl '>
         <div className='flex flex-rows justify-start items-center md:gap-x-2'>
           <a href='/' className='hidden md:inline-block cursor-pointer'><Image src='/tortilla.png' height={32} width={32} /></a>
           <a href='/' className='inline-block font-semibold text-2xl lg:text-3xl text-custom-primary'>OpenTacos</a>
         </div>
+        {/* Large screens only: show search widget */}
         <ClimbSearch
           expanded={expanded}
           onClick={onClick}
           onClickOutside={onClickOutside}
         />
-        <div
-          className='flex items-center gap-x-4'
-        >
+        <div className='flex items-center gap-x-4'>
           {navList.map(item => <NavItem key={item.title} {...item} />)}
         </div>
       </nav>
+      {/* Mobile only: Sticky search bar to appear as users scroll */}
       <div className='lg:hidden max-w-screen-md w-full'>
-        {direction === 'down' && <div className='fixed top-0 left-0 bg-gray-800 px-2 py-2  w-full '><AlgoliaSearchWidget /></div>}
+        {direction === 'down' && <div className='fixed top-0 left-0 bg-gray-800 px-2 py-2  w-full '><AlgoliaSearchWidget placeholder='"Levitation 29" or "technical crimpy"' /></div>}
       </div>
     </header>
   )
@@ -74,7 +76,7 @@ function Header () {
 const NavItem = ({ route, title, cta }) => {
   return (
     <TextButton
-      className={`btn-small md:btn-medium ${cta ? 'btn-nav-secondary' : 'btn-nav'}`} label={title} to={route}
+      className={`btn-small lg:btn-medium ${cta ? 'btn-nav-secondary' : 'btn-nav'}`} label={title} to={route}
     />
   )
 }
