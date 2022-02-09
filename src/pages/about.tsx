@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Layout from '../components/layout'
-import LandingHero from '../components/ui/LandingHero'
+import AboutHero from '../components/ui/AboutHero'
 import Cairn from '../assets/icons/stones.png'
 import Seed from '../assets/icons/seed.png'
 import Watering from '../assets/icons/watering-can.png'
@@ -12,7 +12,7 @@ export const meta = {
 
 const About = (): JSX.Element => {
   return (
-    <Layout hero={<LandingHero />}>
+    <Layout hero={<AboutHero />}>
       <div className='text-center'>
         <h1>An open source resource for rock climbers</h1>
         <h3 className='text-3xl my-12'>OpenTacos is a wiki for climbers to research and contribute information about rock climbing routes.</h3>
