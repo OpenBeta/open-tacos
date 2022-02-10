@@ -8,3 +8,11 @@ export interface OpenverseImage {
   license: string
   license_url: string
 }
+
+export interface OpenverseResponse {
+  result_count: number
+  page_count: number
+  page_size: number
+  page: number
+  results: OpenverseImage[]
+}
