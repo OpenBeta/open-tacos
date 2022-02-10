@@ -2,8 +2,9 @@ import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { AggregateType, AreaType } from '../../../js/types'
 import { getSlug, sanitizeName } from '../../../js/utils'
-import { OpenverseImage } from '.'
+import { OpenverseImage, OpenverseResponse } from '.'
 import { FeatureImage, DefaultImage } from './FeatureImage'
+import axios from 'axios'
 
 const DEFAULT_IMAGE = {
   url: '/tortilla.png',
@@ -21,39 +22,29 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
   const { id, area_name: areaName, pathTokens, aggregate, metadata, totalClimbs } = area
   const [image, setImage] = React.useState<OpenverseImage>(DEFAULT_IMAGE)
 
+  const mainQuery = ['rock', 'climbing', ...areaName.split(' ')]
+  const backupQuery = ['rock', 'mountain', ...areaName.split(' ')]
+
   useEffect(() => {
-    const main = ['rock', 'climbing', ...areaName.split(' ')]
-    const backup = ['rock', 'mountain', ...areaName.split(' ')]
-    findImage({ queries: [main, backup] }).catch((err) => {
-      console.warn('could not find image for :', areaName, err)
-    })
+    void fetchImages()
   }, [])
 
-  async function findImage ({ queries }: { queries: string[][]}): Promise<void> {
-    const queryString = queries[0].join('+')
-    const backups = queries.slice(1)
-    const source = 'wordpress,wikimedia,smithsonian_libraries,flickr'
-    const url = `https://api.openverse.engineering/v1/images/?source=${source}&license=${LICENSES}&page_size=${RESULT_LIMIT}&page=1&q=${queryString}`
-
-    return await fetch(url)
-      .then(async r => await r.json())
-      .then(processImage)
-      .catch(err => {
-        if (backups.length > 0) {
-          return findImage({ queries: backups })
-        } else {
-          setImage(DEFAULT_IMAGE)
-        }
-        console.warn(err)
-      })
+  const fetchImages = async (): Promise<void> => {
+    let images = await findImages(mainQuery)
+    if (images === null) {
+      images = await findImages(backupQuery)
+    }
+    if (images !== null) {
+      pickOneFrom(images)
+    }
   }
 
-  function processImage (data: any): void {
-    if (data?.result_count > 0) {
-      const randomImage = Math.floor(Math.random() * Math.min(RESULT_LIMIT, data?.result_count))
-      const image: OpenverseImage = data.results[randomImage]
+  const pickOneFrom = (images: OpenverseImage[]): void => {
+    if (images.length > 0) {
+      const randomIndex = Math.floor(Math.random() * Math.min(RESULT_LIMIT, images.length))
+      const image: OpenverseImage = images[randomIndex]
       setImage(image)
-    } else throw new Error('no image available')
+    }
   }
 
   function formatClimbingTypes (aggregateTypes: AggregateType): string {
@@ -96,3 +87,19 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
 }
 
 export default FeatureCard
+
+const findImages = async (query: string[]): Promise<OpenverseImage[]> => {
+  const queryString = query.join('+')
+  const source = 'wordpress,wikimedia,smithsonian_libraries,flickr'
+  const url = `https://api.openverse.engineering/v1/images/?source=${source}&license=${LICENSES}&page_size=${RESULT_LIMIT}&page=1&q=${queryString}`
+
+  try {
+    const response = await axios.get<OpenverseResponse>(url)
+    if (response.status === 200) {
+      return response.data.results
+    }
+  } catch (e) {
+    console.warn(e)
+  }
+  return [DEFAULT_IMAGE]
+}
