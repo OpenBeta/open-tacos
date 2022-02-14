@@ -20,7 +20,6 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
       onClickOutside()
     }
   }
-
   return (
     <div className='hidden lg:fixed top-0 left-0 w-screen lg:horizontal-center pointer-events-none'>
       <div id='searchPanel' className='mt-1 max-w-screen-sm horizontal-center w-full px-8'>

@@ -23,8 +23,8 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
   const [image, setImage] = React.useState<OpenverseImage>(DEFAULT_IMAGE)
   const [sanitizedName] = React.useState<string>(sanitizeName(areaName))
 
-  const mainQuery = ['rock', 'climbing', ...areaName.split(' ')]
-  const backupQuery = ['rock', 'mountain', ...areaName.split(' ')]
+  const mainQuery = ['rock', 'climbing', ...sanitizedName.split(' ')]
+  const backupQuery = ['rock', 'mountain', ...sanitizedName.split(' ')]
 
   useEffect(() => {
     void fetchImages()

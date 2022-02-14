@@ -42,6 +42,7 @@
     "react-helmet": "6.1.0",
     "react-map-gl": "^6.1.18",
     "react-placeholder": "^4.1.0",
+    "react-table": "^7.7.0",
     "recharts": "^2.0.9",
     "remark-parse": "^10.0.0",
     "slate": "^0.72.3",
