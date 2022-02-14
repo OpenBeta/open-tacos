@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Link from 'next/link'
-import { AggregateType, AreaType } from '../../../js/types'
+import { AreaType } from '../../../js/types'
 import { getSlug, sanitizeName } from '../../../js/utils'
 import { OpenverseImage, OpenverseResponse } from '.'
 import { FeatureImage, DefaultImage } from './FeatureImage'
@@ -21,9 +21,10 @@ const LICENSES = 'CC0,BY,BY-NC-SA,BY-SA,BY-NC-ND'
 function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
   const { id, area_name: areaName, pathTokens, aggregate, metadata, totalClimbs } = area
   const [image, setImage] = React.useState<OpenverseImage>(DEFAULT_IMAGE)
+  const [sanitizedName] = React.useState(sanitizeName(areaName))
 
-  const mainQuery = ['rock', 'climbing', ...areaName.split(' ')]
-  const backupQuery = ['rock', 'mountain', ...areaName.split(' ')]
+  const mainQuery = ['rock', 'climbing', ...sanitizedName.split(' ')]
+  const backupQuery = ['rock', ...sanitizedName.split(' ')]
 
   useEffect(() => {
     void fetchImages()
@@ -47,7 +48,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
     }
   }
 
-  function formatClimbingTypes (aggregateTypes: AggregateType): string {
+  function formatClimbingTypes (): string {
     return [...aggregate.byType]
       .sort((a, b) => b.count - a.count)
       .slice(0, 5)
@@ -75,7 +76,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
             <div className='text-lg'>{sanitizeName(areaName)}</div>
             <div>{totalClimbs} Climbs</div>
             <div className='text-sm'>{pathTokens.join(' / ')}</div>
-            <div className='text-xs'>{formatClimbingTypes(aggregate)}</div>
+            <div className='text-xs'>{formatClimbingTypes()}</div>
             {attribution !== '' && <div className='text-xs'>Image By: {attribution}</div>}
           </h3>
 
