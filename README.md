@@ -27,7 +27,10 @@
 </p>
 
 ## Screenshot
-![OpenTacos screenshot1](./opentacos-screenshot.png)
+
+<div style='border-style: solid; border: 10px solid black;'>
+<img alt="OpenTacos screenshot" src="./opentacos-screenshot.png"/>
+</div>
 
 ## Tech stack
 
