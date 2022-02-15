@@ -26,6 +26,9 @@
   <a href="./LICENSE"><img alt="License" src="https://img.shields.io/github/license/openbeta/open-tacos?style=flat-square"/></a>
 </p>
 
+## Screenshot
+![OpenTacos screenshot1](./opentacos-screenshot.png)
+
 ## Tech stack
 
 1. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql)): Node.js.
