@@ -28,9 +28,7 @@
 
 ## Screenshot
 
-<div style='border-style: solid; border: 10px solid black;'>
 <img alt="OpenTacos screenshot" src="./opentacos-screenshot.png"/>
-</div>
 
 ## Tech stack
 
@@ -42,8 +40,7 @@
 
 | Env     | Link                          | Branch  | Content | Build                                                                                                                                                                                                                                     |
 |---------|-------------------------------|---------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Staging | https://open-tacos.vercel.app | nextjs | Partial | [![Build](https://img.shields.io/github/checks-status/openbeta/open-tacos/nextjs)](https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Anextjs)                                              |
-| Prod    | https://tacos.openbeta.io     | develop | Full    | [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline-status/openbeta/opentacos-content-ci?branch=develop&style=flat-square)](https://gitlab.com/openbeta/opentacos-content-ci/-/pipelines?page=1&scope=branches&ref=develop) |
+| Prod    | https://tacos.openbeta.io     | develop | Complete DB    | <a href="https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Adevelop"><img src="https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=develop" alt="Develop branch"/> |
 
 ## How to build
 
