@@ -36,6 +36,10 @@
 
 2. Frontend (this repo): React.js, Next.js, TailwindCSS.
 
+### High level architecture
+![Architecture overview](./OpenBeta-arch1.png)
+
+
 ## Live instances
 
 | Env     | Link                          | Branch  | Content | Build                                                                                                                                                                                                                                     |
