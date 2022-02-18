@@ -51,6 +51,10 @@
 
 Learn more about [Jamstack](https://jamstack.org)
 
+### High level architecture
+![Architecture overview](./OpenBeta-arch1.png)
+
+
 ## Live instances
 
 | Env  | Link                      | Branch  | Content     | Build                                                                                                                                                                                                                               |
