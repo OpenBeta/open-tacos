@@ -20,9 +20,11 @@ function Header () {
   const [expanded, setExpanded] = useState(false)
 
   const controlDirection = () => {
+    if (window.scrollY > 120) {
+      setExpanded(false)
+    }
     if (window.scrollY > 280) {
       setDirection('down')
-      setExpanded(false)
     } else {
       setDirection('top')
     }
@@ -47,14 +49,15 @@ function Header () {
   return (
     // Mobile: to be scrolled up
     // Large screens: fixed, collapsed as users scroll page or click outside of navbar
+    // ${direction === 'down' || !isIndexPage ? 'bg-gray-800' : ''}
     <header
-      className={`absolute lg:fixed top-0 z-20 w-full px-4 py-4 lg:py-2  mx-auto ${expanded ? 'h-36 ' : 'border-b border-gray-900 lg:border-gray-300'} ${direction === 'down' || !isIndexPage ? 'bg-gray-800' : ''}`}
+      className={`lg:fixed top-0 z-20 w-full px-4 py-4 lg:py-2  mx-auto lg:border-b lg:border-gray-300  ${expanded ? 'h-36 ' : ' bg-gray-800'} ${isIndexPage ? '' : 'bg-gray-800'}`}
     >
       <nav className='z-50 flex items-center justify-between max-w-screen-2xl '>
-        <div className='flex flex-rows justify-start items-center md:gap-x-2'>
-          <a href='/' className='hidden md:inline-block cursor-pointer'><Image src='/tortilla.png' height={32} width={32} /></a>
-          <a href='/' className='inline-block font-semibold text-2xl lg:text-3xl text-custom-primary'>OpenTacos</a>
-        </div>
+        <a href='/' className='inline-flex flex-rows justify-start items-center md:gap-x-2'>
+          <Image className='align-middle' src='/tortilla.png' height={32} width={32} />
+          <span className='hidden md:inline-flex items-center font-semibold text-2xl lg:text-3xl text-custom-primary pt-1'>OpenTacos</span>
+        </a>
         {/* Large screens only: show search widget */}
         <ClimbSearch
           expanded={expanded}
@@ -66,8 +69,9 @@ function Header () {
         </div>
       </nav>
       {/* Mobile only: Sticky search bar to appear as users scroll */}
-      <div className='lg:hidden max-w-screen-md w-full'>
-        {direction === 'down' && <div className='fixed top-0 left-0 bg-gray-800 px-2 py-2  w-full '><AlgoliaSearchWidget placeholder='"Levitation 29" or "technical crimpy"' /></div>}
+      <div className='lg:hidden w-full'>
+        {!isIndexPage && <div className='pt-8 w-full'><AlgoliaSearchWidget placeholder='"Levitation 29" or "technical crimpy"' /></div>}
+        {direction === 'down' && <div className='z-50 fixed top-0 left-0 bg-gray-800 px-2 py-2 w-full'><AlgoliaSearchWidget placeholder='"Levitation 29" or "technical crimpy"' /></div>}
       </div>
     </header>
   )
@@ -85,6 +89,10 @@ const navList = [
   {
     route: '/about',
     title: 'About'
+  },
+  {
+    route: 'https://docs.openbeta.io',
+    title: 'Docs'
   },
   {
     route: 'https://discord.gg/2A2F6kUtyh',

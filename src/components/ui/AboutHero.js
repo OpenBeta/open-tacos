@@ -5,7 +5,7 @@ import Topography from '../../assets/topography.svg'
 
 export default function LandingHero () {
   return (
-    <div className='py-16 md:py-0 bg-gray-800 h-screen lg:h-3/5' style={{ display: 'grid', minHeight: '350px' }}>
+    <div className='bg-gray-800 h-screen lg:h-3/5' style={{ display: 'grid', minHeight: '350px' }}>
       <Topography
         className='w-full h-full opacity-60' style={{
           gridArea: '1/1'

@@ -51,7 +51,7 @@ body, html {
   }
 
   .layout-default {
-    @apply mt-24 w-full max-w-screen-md mx-auto px-4
+    @apply mt-0 lg:mt-16 w-full max-w-screen-md mx-auto px-4
   }
 
   .layout-edit-wide {
