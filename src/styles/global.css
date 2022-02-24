@@ -51,7 +51,7 @@ body, html {
   }
 
   .layout-default {
-    @apply mt-24 w-full max-w-screen-md mx-auto px-4
+    @apply my-4 lg:mt-24 lg:mb-8 w-full max-w-screen-md mx-auto px-4
   }
 
   .layout-edit-wide {
@@ -109,7 +109,7 @@ body, html {
   }
 
   .home-hero-mobile {
-    @apply lg:hidden h-screen portrait:height-mobile-portrait w-screen  bg-gray-800
+    @apply lg:hidden h-screen portrait:height-mobile-portrait w-screen bg-gray-800
   }
 }
 .title {
