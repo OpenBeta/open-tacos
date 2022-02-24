@@ -51,7 +51,7 @@ function Header () {
     // Large screens: fixed, collapsed as users scroll page or click outside of navbar
     // ${direction === 'down' || !isIndexPage ? 'bg-gray-800' : ''}
     <header
-      className={`lg:fixed top-0 z-20 w-full px-4 py-4 lg:py-2  mx-auto lg:border-b lg:border-gray-300  ${expanded ? 'h-36 ' : ' bg-gray-800'} ${isIndexPage ? '' : 'bg-gray-800'}`}
+      className={`lg:fixed lg:top-0 z-20 w-full px-4 py-4 lg:py-2  mx-auto lg:border-b lg:border-gray-300 bg-gray-800 ${expanded ? 'h-36 ' : ''} ${!isIndexPage || direction === 'down' ? 'bg-gray-800' : 'lg:bg-transparent'} `}
     >
       <nav className='z-50 flex items-center justify-between max-w-screen-2xl '>
         <a href='/' className='inline-flex flex-rows justify-start items-center md:gap-x-2'>
