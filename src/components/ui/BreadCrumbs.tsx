@@ -26,7 +26,7 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
     : pathTokens
 
   return (
-    <div className='mt-4'>
+    <div>
       <Link href='/'>
         <a className='hover:underline hover:text-gray-900 text-gray-400 '>Home</a>
       </Link>

@@ -83,11 +83,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       filter: {
         field_compare: [{
           field: 'totalClimbs',
-          num: 200,
+          num: 400,
           comparison: 'gt'
         }, {
           field: 'density',
-          num: 0.005,
+          num: 0.5,
           comparison: 'gt'
         }]
       }
