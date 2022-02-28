@@ -20,6 +20,7 @@
       outline: none;
       box-shadow: none !important; 
   }
+
 }
 
 body, html {
@@ -259,18 +260,29 @@ input:checked + label {
 }
 
 .aa-Form {
-  @apply ring-0 rounded-full !important;
+  @apply ring-0 rounded-full bg-white !important;
 }
 
+/*
+  Autocomplete
+*/
 .aa-SubmitButton {
   @apply rounded-full bg-custom-primary !important;
 }
 .aa-SubmitIcon {
   @apply text-white !important;
 }
-
 .aa-InputWrapper {
   @apply ml-4 !important;
+}
+
+.aa-Item[aria-selected='true'] {
+  @apply bg-white !important;
+}
+
+.aa-Panel {
+  z-index: 5000;
+  @apply border-2 border-black;
 }
 
 .fading-hidden {

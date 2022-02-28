@@ -5,7 +5,6 @@ import '@algolia/autocomplete-theme-classic'
 import algoliasearch from 'algoliasearch/lite'
 import { getAlgoliaResults } from '@algolia/autocomplete-preset-algolia'
 import { ClimbAlgoliaType } from '../../js/types'
-import ResultItem from './ResultItem'
 import { useRouter } from 'next/router'
 
 const searchClient = algoliasearch(
@@ -36,7 +35,7 @@ export const Autocomplete = (props): JSX.Element => {
     }
   }, [props])
 
-  return <div className='w-full' ref={containerRef} />
+  return <div className='w-full z-50' ref={containerRef} />
 }
 
 export const AlgoliaSearchWidget = ({ placeholder = 'Try \'Levitation\', \'technical crimpy\', or \'Lynn Hill\'' }: {placeholder?: string}): JSX.Element => {
@@ -69,7 +68,8 @@ export const AlgoliaSearchWidget = ({ placeholder = 'Try \'Levitation\', \'techn
 
           templates: {
             item ({ item, components }) {
-              return <ResultItem router={router} {...item} />
+              return <div>foos</div>
+              // return <ResultItem router={router} {...item} />
             }
           }
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import SearchIcon from '../../assets/icons/search.svg'
-import AlgoliaSearchWidget from './AlgoliaSearchWidget'
+// import AlgoliaSearchWidget from './AlgoliaSearchWidget'
+import { ClimbSearchByName } from './ClimbSearchByName'
 interface ClimbSearchProps {
   expanded: boolean
   onClick: any
@@ -27,7 +28,8 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
         <FakeSearchBox onClick={onClick} expanded={expanded} />
         {expanded && <div className='hidden md:block py-4 text-secondary-contrast pointer-events-auto'>Find climbs by name, style or FA</div>}
         <div className={`pointer-events-auto opacity-100 ${expanded ? 'w-full horizontal-center ' : 'hidden'}`}>
-          <AlgoliaSearchWidget />
+          {/* <AlgoliaSearchWidget /> */}
+          <ClimbSearchByName />
         </div>
       </div>
     </div>

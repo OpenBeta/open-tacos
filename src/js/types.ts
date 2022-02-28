@@ -96,3 +96,13 @@ export interface AlgoliaResultType {
   objectID: string
 }
 export type ClimbAlgoliaType = Climb & AlgoliaResultType
+
+export interface TypesenseDocumentType {
+  climbId: string
+  climbDesc: string
+  climbName: string
+  disciplines: string[]
+  fa: string
+  grade: string
+  safety: SafetyType
+}
