@@ -263,6 +263,9 @@ input:checked + label {
   @apply ring-0 rounded-full bg-white !important;
 }
 
+/*
+  Autocomplete
+*/
 .aa-SubmitButton {
   @apply rounded-full bg-custom-primary !important;
 }
@@ -279,6 +282,7 @@ input:checked + label {
 
 .aa-Panel {
   z-index: 5000;
+  @apply border-2 border-black;
 }
 
 .fading-hidden {

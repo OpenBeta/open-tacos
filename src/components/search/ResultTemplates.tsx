@@ -11,27 +11,37 @@ interface ClimbTemplateType extends TypesenseDocumentType {
 interface SearchByNameTemplateProps {
   groupKey: string []
   hits: any[]
+  router: NextRouter
 }
 /**
  * Template for rendering indiviual search result item
  * @param param0
  * @returns
  */
-export const SearchByNameTemplate = ({ groupKey, hits }: SearchByNameTemplateProps): JSX.Element => {
+export const SearchByNameTemplate = ({ groupKey, hits, router }: SearchByNameTemplateProps): JSX.Element => {
   return (
-    <div className='hover:bg-white'>
-      <div className='uppercase'>{groupKey}</div>
+    <div>
+      <ClimbTypesHeader typeKeys={groupKey} />
       <div>
         {hits.map(
-          ({ document }) => <ClimbTemplate key={document.id} {...document} />
+          ({ document }) => <ClimbTemplate key={document.id} {...document} router={router} />
         )}
       </div>
     </div>
   )
 }
 
+const ClimbTypesHeader = ({ typeKeys }: {typeKeys: string[]}): JSX.Element =>
+  (
+    <div className='border-b-2 border-gray-500'>
+      <div className='flex space-x-2'>{typeKeys.map(item =>
+        (<span key={item} className='uppercase font-bold'>{item}</span>))}
+      </div>
+    </div>)
+
 /**
  * How to render individual climb in search results
+ *
  */
 const ClimbTemplate = (props: ClimbTemplateType): JSX.Element => {
   const { climbName, climbId, fa, disciplines, grade, safety, router } = props
