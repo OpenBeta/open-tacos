@@ -20,6 +20,7 @@
       outline: none;
       box-shadow: none !important; 
   }
+
 }
 
 body, html {
@@ -259,7 +260,7 @@ input:checked + label {
 }
 
 .aa-Form {
-  @apply ring-0 rounded-full !important;
+  @apply ring-0 rounded-full bg-white !important;
 }
 
 .aa-SubmitButton {
@@ -268,9 +269,16 @@ input:checked + label {
 .aa-SubmitIcon {
   @apply text-white !important;
 }
-
 .aa-InputWrapper {
   @apply ml-4 !important;
+}
+
+.aa-Item[aria-selected='true'] {
+  @apply bg-white !important;
+}
+
+.aa-Panel {
+  z-index: 5000;
 }
 
 .fading-hidden {
