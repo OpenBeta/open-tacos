@@ -2,15 +2,6 @@ import React, { createElement, Fragment, useEffect, useRef } from 'react'
 import { render } from 'react-dom'
 import { autocomplete } from '@algolia/autocomplete-js'
 import '@algolia/autocomplete-theme-classic'
-import algoliasearch from 'algoliasearch/lite'
-import { getAlgoliaResults } from '@algolia/autocomplete-preset-algolia'
-import { ClimbAlgoliaType } from '../../js/types'
-import { useRouter } from 'next/router'
-
-const searchClient = algoliasearch(
-  'G7NJXRGX3U',
-  process.env.NEXT_PUBLIC_ALGOLIA_API_KEY
-)
 
 export const Autocomplete = (props): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -21,6 +12,7 @@ export const Autocomplete = (props): JSX.Element => {
     }
 
     const search = autocomplete({
+      defaultActiveItemId: 0,
       container: containerRef.current,
       renderer: { createElement, Fragment },
       detachedMediaQuery: 'none',
@@ -37,45 +29,3 @@ export const Autocomplete = (props): JSX.Element => {
 
   return <div className='w-full z-50' ref={containerRef} />
 }
-
-export const AlgoliaSearchWidget = ({ placeholder = 'Try \'Levitation\', \'technical crimpy\', or \'Lynn Hill\'' }: {placeholder?: string}): JSX.Element => {
-  const router = useRouter()
-  return (
-    <Autocomplete
-      placeholder={placeholder}
-      getSources={({ query }) => [
-        {
-          sourceId: 'climbs',
-          getItems: () => {
-            return getAlgoliaResults({
-              searchClient,
-              queries: [
-                {
-                  indexName: 'climbs',
-                  query
-                }
-              ]
-            })
-          },
-          navigator: {
-            async navigate ({ itemUrl }) {
-              await router.push(itemUrl)
-            }
-          },
-          getItemUrl ({ item }: {item: ClimbAlgoliaType}) {
-            return `/climbs/${item.objectID}`
-          },
-
-          templates: {
-            item ({ item, components }) {
-              return <div>foos</div>
-              // return <ResultItem router={router} {...item} />
-            }
-          }
-
-        }]}
-    />
-  )
-}
-
-export default AlgoliaSearchWidget
