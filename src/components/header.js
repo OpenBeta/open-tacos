@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../tailwind.config.js'
 import ClimbSearch from './search/ClimbSearch'
-import AlgoliaSearchWidget from './search/AlgoliaSearchWidget'
+import { ClimbSearchByName } from './search/ClimbSearchByName'
 import { TextButton } from './ui/Button'
 
 const fullConfig = resolveConfig(tailwindConfig)
@@ -20,7 +20,7 @@ function Header () {
   const [expanded, setExpanded] = useState(false)
 
   const controlDirection = () => {
-    if (window.scrollY > 120) {
+    if (window.scrollY > 80) {
       setExpanded(false)
     }
     if (window.scrollY > 280) {
@@ -51,7 +51,7 @@ function Header () {
     // Large screens: fixed, collapsed as users scroll page or click outside of navbar
     // ${direction === 'down' || !isIndexPage ? 'bg-gray-800' : ''}
     <header
-      className={`lg:fixed lg:top-0 z-20 w-full px-4 py-4 lg:py-2  mx-auto lg:border-b lg:border-gray-300 bg-gray-800 ${expanded ? 'h-36 ' : ''} ${!isIndexPage || direction === 'down' ? 'bg-gray-800' : 'lg:bg-transparent'} `}
+      className={`lg:fixed lg:top-0 z-20 w-full px-4 py-4 lg:py-2  mx-auto lg:border-b lg:border-gray-300 bg-gray-800 transition duration-300 ease-in-out ${expanded ? 'h-36 ' : ''} ${!isIndexPage || direction === 'down' ? 'bg-gray-800' : 'lg:bg-transparent'} `}
     >
       <nav className='z-50 flex items-center justify-between max-w-screen-2xl '>
         <a href='/' className='inline-flex flex-rows justify-start items-center md:gap-x-2'>
@@ -70,8 +70,8 @@ function Header () {
       </nav>
       {/* Mobile only: Sticky search bar to appear as users scroll */}
       <div className='lg:hidden w-full'>
-        {!isIndexPage && <div className='pt-8 w-full'><AlgoliaSearchWidget placeholder='"Levitation 29" or "technical crimpy"' /></div>}
-        {direction === 'down' && <div className='z-50 fixed top-0 left-0 bg-gray-800 px-2 py-2 w-full'><AlgoliaSearchWidget placeholder='"Levitation 29" or "technical crimpy"' /></div>}
+        {!isIndexPage && <div className='pt-8 w-full'><ClimbSearchByName placeholder='"Levitation 29" or "technical crimpy"' /></div>}
+        {direction === 'down' && <div className='z-50 fixed top-0 left-0 bg-gray-800 px-2 py-2 w-full'><ClimbSearchByName placeholder='"Levitation 29" or "technical crimpy"' /></div>}
       </div>
     </header>
   )

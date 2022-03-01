@@ -1,5 +1,5 @@
 import StatsPanel, { StatsPanelProps } from './ui/StatsPanel'
-import AlgoliaSearchWidget from './search/AlgoliaSearchWidget'
+import { ClimbSearchByName } from './search/ClimbSearchByName'
 interface HomeHeroProps {
   statsProps: StatsPanelProps
 }
@@ -37,7 +37,7 @@ const SmallScreen = ({ statsProps }: ResponsiveScreenProps): JSX.Element => {
           Rock Climbing Wiki
         </h1>
         <div className='mb-6 px-4 sm:px-8 md:max-w-screen-sm w-full'>
-          <AlgoliaSearchWidget placeholder='Levitation 29' />
+          <ClimbSearchByName placeholder='Levitation 29' />
         </div>
         <StatsPanel isMobile className='portrait:mt-16 px-16 py-2' {...statsProps} />
       </section>

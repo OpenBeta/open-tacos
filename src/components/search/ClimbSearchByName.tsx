@@ -1,19 +1,36 @@
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { typesenseSearch } from './TypesenseUtils'
 import { Autocomplete } from './AlgoliaSearchWidget'
 import { SearchByNameTemplate } from './ResultTemplates'
 
-export const ClimbSearchByName = ({ placeholder = 'Try \'Levitation\', \'technical crimpy\', or \'Lynn Hill\'' }: {placeholder?: string}): JSX.Element => {
+export const ClimbSearchByName = ({ isMobile = true, placeholder = 'Try \'Levitation 29\', \'technical crimpy\', or \'Lynn Hill\'' }: {isMobile?: boolean, placeholder?: string}): JSX.Element => {
   const router = useRouter()
+  useEffect(() => {
+    if (isMobile) return
+    const inputs = document.getElementsByClassName('aa-Input')
+    for (let i = 0; i < inputs.length; i++) {
+      (inputs[i] as HTMLElement).focus()
+    }
+  })
   return (
     <Autocomplete
-      autoFocus
       placeholder={placeholder}
       getSources={async ({ query }) => {
         const items = await typesenseSearch(query)
         return [{
           sourceId: 'climbs',
           getItems: () => items.grouped_hits,
+          navigator: {
+            async navigate ({ itemUrl }) {
+              await router.push(itemUrl)
+            }
+          },
+          getItemUrl ({ item }) {
+            const { hits } = item
+            /* eslint-disable-next-line */
+            return hits.length > 0 ? `/climbs/${hits[0].document.climbId}` : ''
+          },
           templates: {
             noResults () {
               return 'No results.'

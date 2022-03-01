@@ -17,6 +17,7 @@ export const typesenseSearch = async (query: string): Promise<any> => {
   return await typesenseClient.collections('climbs').documents().search({
     q: query,
     query_by: 'climbName, climbDesc, fa, areaNames',
+    exclude_fields: 'climbDesc',
     facet_by: 'disciplines',
     group_by: 'disciplines'
   })
