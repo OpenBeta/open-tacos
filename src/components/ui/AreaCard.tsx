@@ -1,6 +1,7 @@
 import React from 'react'
 import Card from './Card'
 import BarPercent from './BarPercent'
+import { sanitizeName } from '../../js/utils'
 
 /**
  * area_name - A string of the climbing areas name
@@ -27,7 +28,7 @@ function AreaCard ({ areaName, stats }: AreaCardProps): JSX.Element {
       }
     >
       <h3 className='font-medium font-sans my-4 text-base truncate'>
-        {areaName}
+        {sanitizeName(areaName)}
       </h3>
     </Card>
   )
