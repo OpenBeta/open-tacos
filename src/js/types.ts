@@ -105,4 +105,5 @@ export interface TypesenseDocumentType {
   fa: string
   grade: string
   safety: SafetyType
+  areaNames: string[]
 }

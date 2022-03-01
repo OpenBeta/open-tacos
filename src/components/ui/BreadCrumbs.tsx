@@ -21,39 +21,48 @@ interface BreakCrumbsProps {
   isClimbPage?: boolean
 }
 function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumbsProps): JSX.Element {
-  const tokens = isClimbPage
-    ? pathTokens.slice(0, pathTokens.length - 1)
-    : pathTokens
-
   return (
     <div>
       <Link href='/'>
         <a className='hover:underline hover:text-gray-900 text-gray-400 '>Home</a>
       </Link>
 
-      {tokens.map((place, index, array) => {
+      {pathTokens.map((place, index, array) => {
         const isLastElement = array.length - 1 === index
         const path = ancestors[index]
         const url = `/areas/${path}`
         return (
           <span key={index}>
-            <span className='text-gray-400 mx-1.5'>/</span>
+            <span className='text-secondary mx-1.5'>/</span>
             {isLastElement && !isClimbPage
               ? (
                 <span className=''>{sanitizeName(place)}</span>
                 )
               : (
-                <span className='text-gray-400'>
+                <span className='text-secondary'>
                   <Link href={url}>
                     <a className='hover:underline hover:text-gray-900'>{sanitizeName(place)}</a>
                   </Link>
                 </span>
                 )}
-            {/* {!isLastElement && <span className="text-gray-400 mx-1.5">/</span>} */}
           </span>
         )
       })}
     </div>
+  )
+}
+
+export interface MiniBreadCrumbsProps {
+  pathTokens: string[]
+  end?: number // how many levels of ancestor to disply
+}
+
+const SEPARATOR = ' \u25BB '
+
+export const MiniCrumbs = ({ pathTokens, end = 2 }: MiniBreadCrumbsProps): JSX.Element => {
+  const tokens = [pathTokens.slice(1, 2)[0] + ' ...', ...pathTokens.slice(pathTokens.length - end)].map(sanitizeName)
+  return (
+    <div className='pb-2 font-semibold text-xs text-secondary'>{tokens.join(SEPARATOR)}</div>
   )
 }
 
