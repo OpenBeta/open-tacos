@@ -32,7 +32,7 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
             labels={['Climb search', 'Places to climb']}
             panelCompList={[
               <ClimbSearchByName key={1} isMobile={false} />,
-              (<div className='w-full bg-white rounded-full h-24 flex flex-col items-center justify-center' key={2}><div>🚧 Coming soon 🚧</div></div>)
+              (<div className='w-full bg-white rounded-full h-12 flex flex-col items-center justify-center' key={2}><div>🌱🌱🌱 Coming soon 🌱🌱🌱</div></div>)
             ]}
           />
         </div>
