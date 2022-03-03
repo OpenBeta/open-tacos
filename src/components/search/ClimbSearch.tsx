@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import Tabs from './Tabs'
 import SearchIcon from '../../assets/icons/search.svg'
 import { ClimbSearchByName } from './ClimbSearchByName'
 interface ClimbSearchProps {
@@ -25,9 +26,15 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
     <div className='hidden lg:fixed top-0 left-0 w-screen lg:horizontal-center pointer-events-none'>
       <div id='searchPanel' className='mt-1 max-w-screen-sm horizontal-center w-full px-8'>
         <FakeSearchBox onClick={onClick} expanded={expanded} />
-        {expanded && <div className='hidden md:block py-4 text-secondary-contrast pointer-events-auto'>Find climbs by name, style or FA</div>}
-        <div className={`pointer-events-auto opacity-100 ${expanded ? 'w-full horizontal-center ' : 'hidden'}`}>
-          <ClimbSearchByName isMobile={false} />
+        {/* {expanded && <div className='hidden md:block py-4 text-secondary-contrast pointer-events-auto'>Find climbs by name, style or FA</div>} */}
+        <div className={`pointer-events-auto opacity-100 ${expanded ? 'w-full' : 'hidden'}`}>
+          <Tabs
+            labels={['Climb search', 'Places to climb']}
+            panelCompList={[
+              <ClimbSearchByName key={1} isMobile={false} />,
+              (<div className='w-full bg-white rounded-full h-12 flex flex-col items-center justify-center' key={2}><div>🌱🌱🌱 Coming soon 🌱🌱🌱</div></div>)
+            ]}
+          />
         </div>
       </div>
     </div>
