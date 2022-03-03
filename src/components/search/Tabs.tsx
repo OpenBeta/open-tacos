@@ -19,11 +19,11 @@ const Tabs = ({ labels, panelCompList }: TabsProps): JSX.Element => {
 }
 
 const TabLabel = ({ label }): JSX.Element => (
-  <Tab className='text-lg lg:text-xl text-white underline-offset-8 hover:scale-105  ease-in-out duration-500'>
+  <Tab className='text-lg lg:text-xl text-white underline-offset-8'>
     {({ selected }) => (
       <div
         className={
-        selected ? 'font-medium underline decoration-2' : 'text-gray-400 hover:text-ob-tertiary font-light'
+        selected ? 'font-medium underline decoration-2' : 'font-light text-gray-400 hover:text-ob-tertiary  hover:scale-105  ease-in-out duration-500'
       }
       >
         {label}
