@@ -62,7 +62,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
 
   return (
     <div
-      className='card rounded-lg cursor-pointer hover:bg-ob-tertiary hover:bg-opacity-20 border'
+      className='card rounded-lg cursor-pointer hover:bg-ob-secondary hover:bg-opacity-50 border'
     >
       <Link href={getSlug(id, metadata.leaf)} passHref>
         <div className='m-5'>

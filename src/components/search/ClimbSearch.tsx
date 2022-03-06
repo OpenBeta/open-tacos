@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import Tabs from './Tabs'
 import SearchIcon from '../../assets/icons/search.svg'
 import { ClimbSearchByName } from './ClimbSearchByName'
+import CragFinder from './CragFinder'
 interface ClimbSearchProps {
   expanded: boolean
   onClick: any
@@ -29,10 +30,11 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
         {/* {expanded && <div className='hidden md:block py-4 text-secondary-contrast pointer-events-auto'>Find climbs by name, style or FA</div>} */}
         <div className={`pointer-events-auto opacity-100 ${expanded ? 'w-full' : 'hidden'}`}>
           <Tabs
-            labels={['Climb search', 'Places to climb']}
+            labels={['Places to climb', 'Climb search']}
             panelCompList={[
-              <ClimbSearchByName key={1} isMobile={false} />,
-              (<div className='w-full bg-white rounded-full h-12 flex flex-col items-center justify-center' key={2}><div>🌱🌱🌱 Coming soon 🌱🌱🌱</div></div>)
+              <CragFinder key={2} isMobile={false} />,
+              <ClimbSearchByName key={1} isMobile={false} />
+              // (<div className='w-full bg-white rounded-full h-12 flex flex-col items-center justify-center' key={2}><div>🌱🌱🌱 Coming soon 🌱🌱🌱</div></div>)
             ]}
           />
         </div>

@@ -3,6 +3,11 @@ import { render } from 'react-dom'
 import { autocomplete } from '@algolia/autocomplete-js'
 import '@algolia/autocomplete-theme-classic'
 
+/**
+ * Autocomplete widget based on Algolia Autocomplete
+ * @param props
+ * @returns
+ */
 export const Autocomplete = (props): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
 

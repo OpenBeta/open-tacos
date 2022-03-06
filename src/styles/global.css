@@ -276,14 +276,22 @@ input:checked + label {
   @apply ml-4 !important;
 }
 
-.aa-Item[aria-selected='true'] {
+.name-search-item[aria-selected='true'] {
   @apply bg-white !important;
 }
+
+.crag-finder-item[aria-selected='true'] {
+  @apply bg-ob-secondary bg-opacity-30 !important;}
 
 .aa-Panel {
   z-index: 5000;
   @apply border-2 border-black;
 }
+
+.crag-finder-panelLayout {
+  @apply p-0 !important;
+}
+
 
 .fading-hidden {
   visibility: hidden;
