@@ -7,7 +7,7 @@
     "@algolia/autocomplete-js": "^1.5.1",
     "@algolia/autocomplete-preset-algolia": "^1.5.1",
     "@algolia/autocomplete-theme-classic": "^1.5.1",
-    "@apollo/client": "^3.5.6",
+    "@apollo/client": "^3.5.10",
     "@auth0/auth0-react": "^1.6.0",
     "@babel/plugin-proposal-decorators": "^7.15.8",
     "@babel/runtime": "^7.17.2",

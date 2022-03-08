@@ -12,7 +12,6 @@ export const geocoderLookup = async (
   query: string,
   options = {}
 ): Promise<Feature[]> => {
-  console.log('### NEXT_PUBLIC_MAPBOX_API_KEY', NEXT_PUBLIC_MAPBOX_API_KEY)
   const safeQuery = encodeURI(query)
   const opts = Object.keys(options)
     .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(options[k])}`)

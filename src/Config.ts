@@ -1,5 +1,4 @@
 const checkAndPrintWarning = (name: string, value: string): string => {
-  console.log('# env', process.env)
   if (value === undefined || value === '') {
     console.error(`## Error: '${name}' not defined ##`)
     if (window === undefined) process?.exit(1)

@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import ClientOnly from '../../components/ClientOnly'
+
 import { Autocomplete } from './Autocomplete'
 import { geocoderLookup } from '../../js/mapbox/Client'
 import { PlaceTemplate } from './CragFinderTemplates'
@@ -51,9 +53,10 @@ const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las 
               return 'No results.'
             },
             item ({ item }) {
-              console.log(item)
               return (
-                <PlaceTemplate key={item.id} placeName={item.place_name} center={item.center} router={router} />
+                <ClientOnly>
+                  <PlaceTemplate key={item.id} placeName={item.place_name} center={item.center} router={router} />
+                </ClientOnly>
               )
             }
           }

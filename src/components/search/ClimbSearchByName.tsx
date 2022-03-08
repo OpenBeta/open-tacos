@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { typesenseSearch } from './TypesenseUtils'
+import { typesenseSearch } from '../../js/typesense/TypesenseClient'
 import { Autocomplete } from './Autocomplete'
 import { SearchByNameTemplate } from './ResultTemplates'
 
