@@ -281,7 +281,7 @@ input:checked + label {
 }
 
 .crag-finder-item[aria-selected='true'] {
-  @apply bg-ob-secondary bg-opacity-30 !important;}
+  @apply bg-slate-100 !important;}
 
 .aa-Panel {
   z-index: 5000;

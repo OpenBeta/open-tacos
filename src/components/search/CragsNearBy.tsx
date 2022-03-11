@@ -1,14 +1,13 @@
+import React from 'react'
 import {
   gql,
   useQuery
 } from '@apollo/client'
 import { graphqlClient } from '../../js/graphql/Client'
+import DensityBar from '../ui/Statistics/DensityBar'
 
 const GET_CRAGS_NEAR = gql`query CragsNear($lng: Float, $lat: Float, $maxDistance: Int) {
     cragsNear(lnglat: {lat: $lat, lng: $lng}, maxDistance: $maxDistance) {
-        crags {
-            area_name
-        }
         count
         _id
     }
@@ -27,7 +26,6 @@ const CragsNearBy = ({ center }: {center: [number, number]}): JSX.Element => {
     return null
   }
 
-  // console.log(center, data)
   if (loading) {
     return (
       <div>{loading && 'loading'}</div>
@@ -35,16 +33,18 @@ const CragsNearBy = ({ center }: {center: [number, number]}): JSX.Element => {
   }
 
   return (
-    <div className='mt-4 ml-14 flex flex-col w-full'>
-      <div className='text-sm font-bold'>Distance to crags</div>
-      <div>
-        {
-        data.cragsNear.map(({ _id, count, crags }) => {
-          return (
-            <CragBadge key={_id} label={LABELS[_id].label} width={LABELS[_id].width} count={count} />
-          )
-        })
-      }
+    <div className='mt-4 ml-16 flex flex-col w-full'>
+      <div className='flex items-end space-x-6'>
+        <div className='mb-4 text-sm font-semibold px-4 bg-gray-400 rounded-md'>Crag density</div>
+        {data.cragsNear.slice(0, 2).map(
+          ({ _id, count }: {_id: string, count: number}) => {
+            return (
+              <div key={_id} className='flex flex-col'>
+                <div className='ml-0.5'><DensityBar level={cragDensityLevel(count)} max={4} /></div>
+                <div className='mt-0.5 border-t border-slate-800 text-xs text-secondary'>{LABELS[_id].label}</div>
+              </div>
+            )
+          })}
       </div>
     </div>
   )
@@ -52,38 +52,32 @@ const CragsNearBy = ({ center }: {center: [number, number]}): JSX.Element => {
 
 export default CragsNearBy
 
-const CragBadge = ({ width, label, count }): JSX.Element => {
-  return (
-    <div className='flex items-center space-x-2'>
-      {/* eslint-disable-next-line */}
-      <div className='text-xs'>{label}</div><div className={`h-1 bg-gray-700 w-${width}`}>&nbsp;</div><div className='pl-2 text-sm'>{count}</div>
-    </div>
-  )
-}
-
 const LABELS = {
   0: {
-    label: 'under 45 mins',
+    label: 'under 1 hr',
     width: 4
   },
   48: {
-    label: '45m to 1.5 hrs',
+    label: '1 to 2 hrs',
     width: 8
   },
   96: {
-    label: '1.5 to 2.5 hrs',
+    label: '2 to 3 hrs',
     width: 16
   },
   theRest: {
-    label: '2.5 hrs or more',
+    label: 'more than 3hrs',
     width: 20
   }
 }
 
-// const CragBadge = ({ label, count }): JSX.Element => {
-//   return (
-//     <div className='rounded border border-gray-800 text-xs flex justify-around'>
-//       <div className='bg-gray-800 text-white'>&#8212;&#8212;</div><div className='px-4'>{count}</div>
-//     </div>
-//   )
-// }
+const cragDensityLevel = (count: number): number => {
+  const score = count / 20
+  if (score < 1) {
+    return 0
+  } else if (score > 1 && score < 5) {
+    return 1
+  } else if (score > 5 && score < 10) {
+    return 2
+  } else return 4
+}
