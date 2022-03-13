@@ -4,7 +4,7 @@ import ClientOnly from '../../components/ClientOnly'
 
 import { Autocomplete } from './Autocomplete'
 import { geocoderLookup } from '../../js/mapbox/Client'
-import { PlaceTemplate } from './CragFinderTemplates'
+import { PlaceTemplate, resultItemToUrl } from './CragFinderTemplates'
 
 const SEARCH_OPTIONS = {
   country: 'US',
@@ -43,10 +43,8 @@ const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las 
             }
           },
           getItemUrl ({ item }) {
-            // const { hits } = item
-            /* eslint-disable-next-line */
-            // return hits.length > 0 ? `/climbs/${hits[0].document.climbId}` : ''
-            return '/'
+            const { text, center }: {text: string, center: [number, number]} = item
+            return resultItemToUrl(text, center)
           },
           templates: {
             noResults () {
@@ -55,7 +53,7 @@ const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las 
             item ({ item }) {
               return (
                 <ClientOnly>
-                  <PlaceTemplate key={item.id} placeName={item.place_name} center={item.center} router={router} />
+                  <PlaceTemplate key={item.id} placeName={item.place_name} shortName={item.text} center={item.center} router={router} />
                 </ClientOnly>
               )
             }

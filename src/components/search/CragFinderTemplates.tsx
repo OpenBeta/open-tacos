@@ -1,8 +1,10 @@
-import { NextRouter } from 'next/router'
+import Link from 'next/link'
+import { NextRouter, useRouter } from 'next/router'
 import Icon from '../Icon'
 import CragsNearBy from './CragsNearBy'
 interface PlaceTemplateType {
   placeName: string
+  shortName: string
   center: [number, number]
   router: NextRouter
 }
@@ -16,23 +18,33 @@ interface CragFinderResultsProps {
  * @param param0
  * @returns
  */
-export const CragFinderResults = ({ features, router }: CragFinderResultsProps): JSX.Element => {
-  return (
-    <div>
-      {/* <PlaceHeader typeKeys={groupKey} /> */}
-      <div>
-        {features.map(
-          ({ feature }) => <PlaceTemplate key={feature.id} placeName={feature.place_name} center={feature.center} router={router} />
-        )}
-      </div>
-    </div>
-  )
-}
+// export const CragFinderResults = ({ features, router }: CragFinderResultsProps): JSX.Element => {
+//   return (
+//     <div>
+//       {/* <PlaceHeader typeKeys={groupKey} /> */}
+//       <div>
+//         {features.map(
+//           ({ feature }) => <PlaceTemplate key={feature.id} placeName={feature.place_name} center={feature.center} router={router} />
+//         )}
+//       </div>
+//     </div>
+//   )
+// }
 
-export const PlaceTemplate = ({ placeName, center, router }: PlaceTemplateType): JSX.Element => {
+export const PlaceTemplate = ({ placeName, shortName, center, router }: PlaceTemplateType): JSX.Element => {
   return (
-    <div className='px-4 py-4'>
-      <div className=' space-x-2 lg:space-x-4 flex flex-nowrap items-center '>
+    <div
+      className='px-4 py-4'
+      onClick={async () =>
+        await router.push({
+          pathname: '/finder',
+          query: {
+            shortName,
+            center: center.join(',')
+          }
+        }, null, { shallow: true })}
+    >
+      <div className='space-x-2 lg:space-x-4 flex flex-nowrap items-center'>
         <div className='rounded-md p-2 bg-slate-100'>
           <Icon className='fill-slate-900 stroke-white' type='droppin' />
         </div>
@@ -41,4 +53,8 @@ export const PlaceTemplate = ({ placeName, center, router }: PlaceTemplateType):
       <div><CragsNearBy key={center.join()} center={center} /></div>
     </div>
   )
+}
+
+export const resultItemToUrl = (shortName: string, center: [number, number]): string => {
+  return encodeURI(`/finder?shortName=${shortName}&center=${center.join(',')}`)
 }
