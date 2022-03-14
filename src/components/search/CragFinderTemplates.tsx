@@ -1,5 +1,4 @@
-import Link from 'next/link'
-import { NextRouter, useRouter } from 'next/router'
+import { NextRouter } from 'next/router'
 import Icon from '../Icon'
 import CragsNearBy from './CragsNearBy'
 interface PlaceTemplateType {
@@ -9,10 +8,10 @@ interface PlaceTemplateType {
   router: NextRouter
 }
 
-interface CragFinderResultsProps {
-  features: any[]
-  router: NextRouter
-}
+// interface CragFinderResultsProps {
+//   features: any[]
+//   router: NextRouter
+// }
 /**
  * Template for rendering indiviual search result item
  * @param param0
@@ -48,7 +47,7 @@ export const PlaceTemplate = ({ placeName, shortName, center, router }: PlaceTem
         <div className='rounded-md p-2 bg-slate-100'>
           <Icon className='fill-slate-900 stroke-white' type='droppin' />
         </div>
-        <div className='text-lg'>{placeName}</div>
+        <div className='text-base'>{placeName}</div>
       </div>
       <div><CragsNearBy key={center.join()} center={center} /></div>
     </div>

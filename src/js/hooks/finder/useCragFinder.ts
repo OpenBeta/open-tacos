@@ -3,6 +3,7 @@ import { NextRouter } from 'next/router'
 
 import { actions, cragFinderStore } from '../../stores/index'
 
+/* eslint-disable-next-line */
 const useCragFinder = (router: NextRouter) => {
   const { query } = router
 

@@ -25,7 +25,9 @@
 
 body, html {
   height: 100%;
+  font-size: 18px;
 }
+
 
 /* Main page hero card gradient color overlay */
 .hero-card {
@@ -48,7 +50,7 @@ body, html {
 @layer utilities {
   /*  For larger screens */
   .layout-wide {
-    @apply mt-8 max-w-screen-2xl mx-auto xl:px-8 md:px-4
+    @apply mt-8 max-w-screen-2xl mx-auto xl:px-6 md:px-4
   }
 
   .layout-default {

@@ -32,11 +32,21 @@ const CragsNearBy = ({ center }: {center: [number, number]}): JSX.Element => {
     )
   }
 
+  console.log(data)
+
   return (
-    <div className='mt-4 ml-16 flex flex-col w-full'>
+    <CragDensity crags={data.cragsNear.slice(0, 2)} />
+  )
+}
+
+export default CragsNearBy
+
+export const CragDensity = ({ crags }: {crags: any[]}): JSX.Element => {
+  return (
+    <div className='py-8 pl-16 flex flex-col w-full'>
       <div className='flex items-end space-x-6'>
-        <div className='mb-4 text-sm font-semibold px-4 bg-gray-400 rounded-md'>Crag density</div>
-        {data.cragsNear.slice(0, 2).map(
+        <div className='mb-4 text-sm font-semibold px-4'>Crag density</div>
+        {crags.map(
           ({ _id, count }: {_id: string, count: number}) => {
             return (
               <div key={_id} className='flex flex-col'>
@@ -50,11 +60,9 @@ const CragsNearBy = ({ center }: {center: [number, number]}): JSX.Element => {
   )
 }
 
-export default CragsNearBy
-
-const LABELS = {
+export const LABELS = {
   0: {
-    label: 'under 1 hr',
+    label: 'Under 1 hr',
     width: 4
   },
   48: {
@@ -62,11 +70,11 @@ const LABELS = {
     width: 8
   },
   96: {
-    label: '2 to 3 hrs',
+    label: '2 to 3  hrs',
     width: 16
   },
   theRest: {
-    label: 'more than 3hrs',
+    label: 'More than 3 hrs',
     width: 20
   }
 }

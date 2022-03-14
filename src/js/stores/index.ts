@@ -17,7 +17,7 @@ export const cragFiltersStore = createStore('filters')({
  */
 export const cragFinderStore = createStore('finder')({
   searchText: '',
-  crags: [],
+  groups: [],
   total: 0,
   lnglat: [-90, -180]
 }).extendActions((set, get, api) => ({
@@ -37,7 +37,7 @@ export const cragFinderStore = createStore('finder')({
 
     const { cragsNear } = rs.data
 
-    set.crags(cragsNear)
+    set.groups(cragsNear)
 
     const total = cragsNear.reduce((acc: number, curr) => {
       return acc + (curr.count as number)
@@ -54,6 +54,7 @@ export const rootStore = {
 }
 
 // Global hook selectors
+/* eslint-disable-next-line */
 export const useStore = () => mapValuesKey('use', rootStore)
 
 // Global getter selectors
@@ -74,6 +75,8 @@ const CRAGS_NEAR = gql`query CragsNear($lng: Float, $lat: Float, $maxDistance: I
               }
           }
           area_name
+          id
+          totalClimbs
       }
   }
 }`
