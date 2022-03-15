@@ -8,8 +8,9 @@ interface LayoutProps {
   customClz?: string
   children?: JSX.Element | JSX.Element[]
   hero?: JSX.Element | JSX.Element[]
+  subheader?: JSX.Element
 }
-function Layout ({ layoutClz = 'layout-default', customClz = '', children, hero = null }: LayoutProps): JSX.Element {
+function Layout ({ layoutClz = 'layout-default', customClz = '', children, hero = null, subheader = null }: LayoutProps): JSX.Element {
   return (
     <>
       <Head>
@@ -21,7 +22,7 @@ function Layout ({ layoutClz = 'layout-default', customClz = '', children, hero 
           rel='stylesheet'
         />
 
-        <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
+        {/* <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' /> */}
         <SeoTags
           keywords={['openbeta', 'rock climbing', 'climbing api']}
           description='Climbing route catalog'
@@ -30,10 +31,13 @@ function Layout ({ layoutClz = 'layout-default', customClz = '', children, hero 
       </Head>
 
       <div className={`main-container ${customClz}`}>
-        <Header />
-
+        <div className='relative w-full z-50'>
+          <div className='absolute w-full z-50'>
+            <Header />
+          </div>
+        </div>
+        {/* {subheader} */}
         {hero}
-
         <main className={layoutClz}>
           {children}
         </main>

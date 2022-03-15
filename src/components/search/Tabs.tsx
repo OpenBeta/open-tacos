@@ -19,7 +19,7 @@ const Tabs = ({ labels, panelCompList }: TabsProps): JSX.Element => {
 }
 
 const TabLabel = ({ label }): JSX.Element => (
-  <Tab className='text-lg lg:text-xl text-white underline-offset-8'>
+  <Tab className='text-lg text-white underline-offset-8'>
     {({ selected }) => (
       <div
         className={

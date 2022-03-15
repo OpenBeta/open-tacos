@@ -22,3 +22,15 @@ export const typesenseSearch = async (query: string): Promise<any> => {
     group_by: 'disciplines'
   })
 }
+
+export const getStatsNear = async (latlng: [number, number]): Promise<any> => {
+  return await typesenseClient.collections('climbs').documents().search({
+    q: '*',
+    query_by: 'climbName',
+    exclude_fields: 'climbDesc',
+    filter_by: `cragLatLng:(${latlng[1]},${latlng[0]},20 mi)`,
+    group_by: 'disciplines'
+    // group_limit: 1
+    // sort_by: `cragLatLng(${latlng[1]},${latlng[0]}):asc`
+  })
+}
