@@ -96,7 +96,7 @@ export const computeClimbingPercentsAndColors = (climbs: Climb[]): PercentAndCol
  * @param {String} s
  */
 export const sanitizeName = (s: string): string =>
-  s.replace(/^(\(.{1,3}\) *)|((\d?[1-9]|[1-9]0)[-:])/, '')
+  s.replace(/^(\(.{1,3}\) *)|((\d?[1-9]|[1-9]0)[-:])|[a-zA-Z]{1,2}\./, '')
 
 /**
  * Simplify climb 'type' dictionary to contain only 'true' key-value pair.

@@ -32,5 +32,9 @@ export const Autocomplete = (props): JSX.Element => {
     }
   }, [props])
 
-  return <div className='w-full z-50' ref={containerRef} />
+  return (
+    <div className='bg-slate-800 max-w-screen-2xl  pb-8 w-full'>
+      <div className='max-w-lg z-50 mx-auto' ref={containerRef} />
+    </div>
+  )
 }

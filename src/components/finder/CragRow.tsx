@@ -1,5 +1,5 @@
 import Link from 'next/link'
-// import CounterPie from '../ui/Statistics/CounterPie'
+import CounterPie from '../ui/Statistics/CounterPie'
 import { sanitizeName } from '../../js/utils'
 
 interface CragRowProps {
@@ -12,13 +12,14 @@ const CragRow = ({ id, area_name, totalClimbs}: CragRowProps): JSX.Element => {
   return (
     <Link href={`crag/${id}`}>
       <a>
-        <div className='first:border-t border-b border-b-neutral-200 py-6'>
-          <div className='flex justify-between items-center'><div className='text-lg font-medium text-primary'>{sanitizeName(area_name)}</div><div>&hearts;</div></div>
+        <div className='border-b border-b-neutral-200 py-6'>
+          <div className='flex justify-between items-center'><div className='text-lg font-semibold text-primary'>{sanitizeName(area_name)}</div><div>&hearts;</div></div>
           <hr className='w-8 my-2' />
-          <div className='flex flex-col space-y-2'>
-            <div className='text-secondary text-sm'><span className='font-semibold'>{totalClimbs - getRandomInt(totalClimbs)} climbs for you</span> · {totalClimbs} total </div>
+          <div className='text-secondary text-sm'>Climbs for you</div>
+          <div className='flex justify-between items-center'>
+            {/* <div className='text-secondary text-sm'><span className='font-semibold'>{totalClimbs - getRandomInt(totalClimbs)} climbs for you</span> · {totalClimbs} total </div> */}
+            <div className='w-24 h-24'><CounterPie total={totalClimbs} forYou={totalClimbs - getRandomInt(totalClimbs)} /></div>
             <div><DistributionTable totalClimbs={totalClimbs} /></div>
-            {/* <div className='w-24 h-24'><CounterPie total={totalClimbs} forYou={totalClimbs - getRandomInt(totalClimbs)} /></div> */}
           </div>
         </div>
       </a>
@@ -28,21 +29,21 @@ const CragRow = ({ id, area_name, totalClimbs}: CragRowProps): JSX.Element => {
 
 const DistributionTable = ({ totalClimbs }): JSX.Element => {
   return (
-    <table className='table-fixed text-sm border border-collapse border-slate-800'>
-      <thead className='bg-slate-800 text-primary-contrast text-center'>
+    <table className='table-fixed text-sm border border-collapse border-slate-500 rounded'>
+      <thead className=' text-center'>
         <tr>
-          <th className='px-2 font-semibold'>Beginner</th>
-          <th className='px-2 font-semibold'>Intermediate</th>
-          <th className='px-2 font-semibold'>Advanced</th>
-          <th className='px-2 font-semibold'>Expert</th>
+          <th className='px-2 font-normal text-secondary text-sm'>Beginner</th>
+          <th className='px-2 font-normal text-secondary text-sm'>Intermediate</th>
+          <th className='px-2 font-normal text-secondary text-sm'>Advanced</th>
+          <th className='px-2 font-normal text-secondary text-sm'>Expert</th>
         </tr>
       </thead>
       <tbody className='text-center text-secondary'>
         <tr>
-          <td className='border border-slate-300 bg-amber-100'>{getRandomInt(totalClimbs)}</td>
-          <td className='border border-slate-300'>{getRandomInt(totalClimbs)}</td>
-          <td className='border border-slate-300'>{getRandomInt(totalClimbs)}</td>
-          <td className='border border-slate-300'>{getRandomInt(totalClimbs)}</td>
+          <td className='border border-slate-500 bg-ob-secondary'>{getRandomInt(totalClimbs)}</td>
+          <td className='border border-slate-500 py-1'>{getRandomInt(totalClimbs)}</td>
+          <td className='border border-slate-500  py-1'>{getRandomInt(totalClimbs)}</td>
+          <td className='border border-slate-500  py-1'>{getRandomInt(totalClimbs)}</td>
         </tr>
       </tbody>
     </table>

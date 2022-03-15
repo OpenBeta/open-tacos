@@ -8,9 +8,18 @@ import { graphqlClient } from '../../js/graphql/Client'
  * Crag finder filters
  */
 export const cragFiltersStore = createStore('filters')({
-  name: 'zustood',
-  stars: 0
-})
+  trad: true,
+  sport: true,
+  bouldering: true,
+  tr: true
+}).extendActions((set, get, api) => ({
+  toggle: (stateName: 'sport'| 'trad' | 'tr' | 'bouldering') => {
+    set.state(draft => {
+      /* eslint-disable-next-line */
+      draft[stateName] = !(draft[stateName] as boolean)
+    })
+  }
+}))
 
 /**
  * Crag finder data
@@ -19,31 +28,38 @@ export const cragFinderStore = createStore('finder')({
   searchText: '',
   groups: [],
   total: 0,
-  lnglat: [-90, -180]
+  lnglat: [-90, -180],
+  isLoading: false
 }).extendActions((set, get, api) => ({
   validLnglat: async (text: string, lnglat: [number, number]) => {
     set.lnglat(lnglat)
     set.searchText(text)
-    const rs = await graphqlClient.query({
-      query: CRAGS_NEAR,
-      fetchPolicy: 'network-only',
-      variables: {
-        lng: lnglat[0],
-        lat: lnglat[1],
-        maxDistance: 200000
-      }
-    })
-    // console.log(rs.data)
+    set.isLoading(true)
+    set.groups([])
+    try {
+      const rs = await graphqlClient.query({
+        query: CRAGS_NEAR,
+        fetchPolicy: 'cache-first',
+        variables: {
+          lng: lnglat[0],
+          lat: lnglat[1],
+          maxDistance: 120000
+        }
+      })
 
-    const { cragsNear } = rs.data
+      const { cragsNear } = rs.data
 
-    set.groups(cragsNear)
+      set.groups(cragsNear)
 
-    const total = cragsNear.reduce((acc: number, curr) => {
-      return acc + (curr.count as number)
-    }, 0)
+      const total = cragsNear.reduce((acc: number, curr) => {
+        return acc + (curr.count as number)
+      }, 0)
 
-    set.total(total)
+      set.total(total)
+    } catch (e) {
+    } finally {
+      set.isLoading(false)
+    }
   }
 }))
 
@@ -68,15 +84,20 @@ const CRAGS_NEAR = gql`query CragsNear($lng: Float, $lat: Float, $maxDistance: I
       count
       _id 
       crags {
-          aggregate {
-              byGrade {
-                  count
-                  label
-              }
-          }
           area_name
           id
           totalClimbs
+          climbs {
+            type {
+              aid
+              alpine
+              bouldering
+              mixed
+              sport
+              tr
+              trad
+            }
+        }
       }
   }
 }`

@@ -31,9 +31,6 @@ const CragsNearBy = ({ center }: {center: [number, number]}): JSX.Element => {
       <div>{loading && 'loading'}</div>
     )
   }
-
-  console.log(data)
-
   return (
     <CragDensity crags={data.cragsNear.slice(0, 2)} />
   )
