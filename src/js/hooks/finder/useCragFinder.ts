@@ -10,7 +10,8 @@ const useCragFinder = (router: NextRouter) => {
   useEffect(() => {
     try {
       const lnglat = parseCenterStr(query.center as string)
-      const fetch = async (): Promise<any> => await actions.finder.validLnglat(query.shortName as string, lnglat)
+      const placeId = query?.placeId === undefined ? lnglat.join() : (query.placeId as string)
+      const fetch = async (): Promise<any> => await actions.finder.validLnglat(query.shortName as string, placeId, lnglat)
       void fetch()
       // Todo: clear finder.errors
     } catch (e) {

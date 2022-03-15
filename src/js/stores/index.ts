@@ -31,7 +31,7 @@ export const cragFinderStore = createStore('finder')({
   lnglat: [-90, -180],
   isLoading: false
 }).extendActions((set, get, api) => ({
-  validLnglat: async (text: string, lnglat: [number, number]) => {
+  validLnglat: async (text: string, placeId: string, lnglat: [number, number]) => {
     set.lnglat(lnglat)
     set.searchText(text)
     set.isLoading(true)
@@ -43,6 +43,7 @@ export const cragFinderStore = createStore('finder')({
         variables: {
           lng: lnglat[0],
           lat: lnglat[1],
+          placeId,
           maxDistance: 120000
         }
       })
@@ -57,6 +58,7 @@ export const cragFinderStore = createStore('finder')({
 
       set.total(total)
     } catch (e) {
+      console.log(e)
     } finally {
       set.isLoading(false)
     }
@@ -79,10 +81,11 @@ export const store = mapValuesKey('get', rootStore)
 // Global actions
 export const actions = mapValuesKey('set', rootStore)
 
-const CRAGS_NEAR = gql`query CragsNear($lng: Float, $lat: Float, $maxDistance: Int) {
-  cragsNear(lnglat: {lat: $lat, lng: $lng}, maxDistance: $maxDistance) {
+const CRAGS_NEAR = gql`query CragsNear($placeId: String, $lng: Float, $lat: Float, $maxDistance: Int) {
+  cragsNear(placeId: $placeId, lnglat: {lat: $lat, lng: $lng}, maxDistance: $maxDistance) {
       count
       _id 
+      placeId
       crags {
           area_name
           id

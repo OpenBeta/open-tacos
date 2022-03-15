@@ -11,7 +11,7 @@ export const graphqlClient = new ApolloClient({
     {
       typePolicies: {
         CragsNear: {
-          keyFields: false
+          keyFields: ['placeId', '_id']
         },
         Area: {
           keyFields: ['id']

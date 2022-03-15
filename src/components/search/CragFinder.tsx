@@ -43,8 +43,8 @@ const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las 
             }
           },
           getItemUrl ({ item }) {
-            const { text, center }: {text: string, center: [number, number]} = item
-            return resultItemToUrl(text, center)
+            const { text, center, id }: {text: string, center: [number, number], id: string } = item
+            return resultItemToUrl(text, id, center)
           },
           templates: {
             noResults () {
@@ -53,7 +53,7 @@ const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las 
             item ({ item }) {
               return (
                 <ClientOnly>
-                  <PlaceTemplate key={item.id} placeName={item.place_name} shortName={item.text} center={item.center} router={router} />
+                  <PlaceTemplate key={item.id} placeName={item.place_name} shortName={item.text} center={item.center} placeId={item.id} router={router} />
                 </ClientOnly>
               )
             }

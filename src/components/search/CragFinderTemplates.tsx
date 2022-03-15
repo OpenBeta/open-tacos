@@ -4,6 +4,7 @@ import CragsNearBy from './CragsNearBy'
 interface PlaceTemplateType {
   placeName: string
   shortName: string
+  placeId: string
   center: [number, number]
   router: NextRouter
 }
@@ -30,7 +31,7 @@ interface PlaceTemplateType {
 //   )
 // }
 
-export const PlaceTemplate = ({ placeName, shortName, center, router }: PlaceTemplateType): JSX.Element => {
+export const PlaceTemplate = ({ placeName, shortName, center, placeId, router }: PlaceTemplateType): JSX.Element => {
   return (
     <div
       className='px-4 py-4'
@@ -39,6 +40,7 @@ export const PlaceTemplate = ({ placeName, shortName, center, router }: PlaceTem
           pathname: '/finder',
           query: {
             shortName,
+            placeId,
             center: center.join(',')
           }
         }, null, { shallow: true })}
@@ -49,11 +51,11 @@ export const PlaceTemplate = ({ placeName, shortName, center, router }: PlaceTem
         </div>
         <div className='text-base'>{placeName}</div>
       </div>
-      <div><CragsNearBy key={center.join()} center={center} /></div>
+      <div><CragsNearBy key={center.join()} center={center} placeId={placeId} /></div>
     </div>
   )
 }
 
-export const resultItemToUrl = (shortName: string, center: [number, number]): string => {
-  return encodeURI(`/finder?shortName=${shortName}&center=${center.join(',')}`)
+export const resultItemToUrl = (shortName: string, placeId: string, center: [number, number]): string => {
+  return encodeURI(`/finder?shortName=${shortName}&placeId=${placeId}&center=${center.join(',')}`)
 }

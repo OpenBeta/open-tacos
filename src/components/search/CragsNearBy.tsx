@@ -6,17 +6,19 @@ import {
 import { graphqlClient } from '../../js/graphql/Client'
 import DensityBar from '../ui/Statistics/DensityBar'
 
-const GET_CRAGS_NEAR = gql`query CragsNear($lng: Float, $lat: Float, $maxDistance: Int) {
-    cragsNear(lnglat: {lat: $lat, lng: $lng}, maxDistance: $maxDistance) {
+const GET_CRAGS_NEAR = gql`query CragsNear($placeId: String, $lng: Float, $lat: Float, $maxDistance: Int) {
+    cragsNear(placeId: $placeId, lnglat: {lat: $lat, lng: $lng}, maxDistance: $maxDistance) {
         count
         _id
+        placeId
     }
   }`
 
-const CragsNearBy = ({ center }: {center: [number, number]}): JSX.Element => {
+const CragsNearBy = ({ center, placeId }: {center: [number, number], placeId: string}): JSX.Element => {
   const { loading, data } = useQuery(GET_CRAGS_NEAR, {
     client: graphqlClient,
     variables: {
+      placeId,
       lng: center[0],
       lat: center[1],
       maxDistance: 200000
