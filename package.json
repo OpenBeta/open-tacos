@@ -7,7 +7,7 @@
     "@algolia/autocomplete-js": "^1.5.1",
     "@algolia/autocomplete-preset-algolia": "^1.5.1",
     "@algolia/autocomplete-theme-classic": "^1.5.1",
-    "@apollo/client": "^3.5.6",
+    "@apollo/client": "^3.5.10",
     "@auth0/auth0-react": "^1.6.0",
     "@babel/plugin-proposal-decorators": "^7.15.8",
     "@babel/runtime": "^7.17.2",
@@ -24,6 +24,7 @@
     "@openbeta/sandbag": "^0.0.11",
     "@turf/bbox": "^6.5.0",
     "@udecode/plate": "^9.1.2",
+    "@udecode/zustood": "^0.4.4",
     "algoliasearch": "^4.11.0",
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.24.0",
@@ -44,7 +45,7 @@
     "react-helmet": "6.1.0",
     "react-map-gl": "^6.1.18",
     "react-placeholder": "^4.1.0",
-    "recharts": "^2.0.9",
+    "recharts": "^2.1.9",
     "remark-parse": "^10.0.0",
     "slate": "^0.72.3",
     "slate-history": "^0.66.0",
@@ -55,7 +56,8 @@
     "supercluster": "^7.1.4",
     "typesense": "^1.2.1",
     "unified": "^10.1.0",
-    "yup": "^0.32.9"
+    "yup": "^0.32.9",
+    "zustand": "^3.7.1"
   },
   "keywords": [
     "rock climbing",

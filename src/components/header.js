@@ -5,6 +5,8 @@ import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../tailwind.config.js'
 import ClimbSearch from './search/ClimbSearch'
 import { ClimbSearchByName } from './search/ClimbSearchByName'
+import CragFilters from './finder/filters'
+
 import { TextButton } from './ui/Button'
 
 const fullConfig = resolveConfig(tailwindConfig)
@@ -51,12 +53,12 @@ function Header () {
     // Large screens: fixed, collapsed as users scroll page or click outside of navbar
     // ${direction === 'down' || !isIndexPage ? 'bg-gray-800' : ''}
     <header
-      className={`lg:fixed lg:top-0 z-20 w-full px-4 py-4 lg:py-2  mx-auto lg:border-b lg:border-gray-300 bg-gray-800 transition duration-300 ease-in-out ${expanded ? 'h-36 ' : ''} ${!isIndexPage || direction === 'down' ? 'bg-gray-800' : 'lg:bg-transparent'} `}
+      className={`lg:fixed lg:top-0 z-50 w-full px-4 py-4 lg:py-2 max-w-screen-2xl mx-auto bg-gray-800 transition duration-300 ease-in-out ${expanded ? 'h-36' : ''} ${isIndexPage && expanded && window.scrollY < 80 ? 'bg-opacity-30' : ''}`}
     >
-      <nav className='z-50 flex items-center justify-between max-w-screen-2xl '>
+      <nav className='z-50 flex items-center justify-between w-full'>
         <a href='/' className='inline-flex flex-rows justify-start items-center md:gap-x-2'>
           <Image className='align-middle' src='/tortilla.png' height={32} width={32} />
-          <span className='hidden md:inline-flex items-center font-semibold text-2xl lg:text-3xl text-custom-primary pt-1'>OpenTacos</span>
+          <span className='hidden md:inline-flex items-center font-semibold text-xl lg:text-2xl text-custom-primary pt-1'>OpenTacos</span>
         </a>
         {/* Large screens only: show search widget */}
         <ClimbSearch
@@ -68,10 +70,11 @@ function Header () {
           {navList.map(item => <NavItem key={item.title} {...item} />)}
         </div>
       </nav>
+      {router.pathname === '/finder' && <CragFilters />}
       {/* Mobile only: Sticky search bar to appear as users scroll */}
       <div className='lg:hidden w-full'>
         {!isIndexPage && <div className='pt-8 w-full'><ClimbSearchByName placeholder='"Levitation 29" or "technical crimpy"' /></div>}
-        {direction === 'down' && <div className='z-50 fixed top-0 left-0 bg-gray-800 px-2 py-2 w-full'><ClimbSearchByName placeholder='"Levitation 29" or "technical crimpy"' /></div>}
+        {direction === 'down' && <div className='fixed top-0 left-0 bg-gray-800 px-2 py-2 w-full'><ClimbSearchByName placeholder='"Levitation 29" or "technical crimpy"' /></div>}
       </div>
     </header>
   )
