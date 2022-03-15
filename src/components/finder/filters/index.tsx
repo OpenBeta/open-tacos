@@ -3,7 +3,7 @@ import { FilterToggleButton } from '../../ui/Button'
 
 const index = (): JSX.Element => {
   return (
-    <div className='z-10 bg-slate-800 w-full w-screen mx-auto xl:px-6 pt-4 pb-2'><DisciplineGroup /></div>
+    <div className='z-10 bg-slate-800 w-full w-screen mx-auto pt-4 pb-2'><DisciplineGroup /></div>
   )
 }
 

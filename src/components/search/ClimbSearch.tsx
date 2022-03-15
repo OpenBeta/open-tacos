@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useRouter } from 'next/router'
 import Tabs from './Tabs'
 import SearchIcon from '../../assets/icons/search.svg'
 import { ClimbSearchByName } from './ClimbSearchByName'
@@ -15,6 +16,8 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
     return () => { document.removeEventListener('click', outsideClickDectector) }
   }, [])
 
+  const router = useRouter()
+
   const outsideClickDectector = (event: any): void => {
     const searchDiv = document.getElementById('searchPanel')
     const isClickInsideElement = searchDiv.contains(event.target as Node)
@@ -24,17 +27,19 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
   }
 
   return (
-    <div className='hidden lg:fixed top-0 left-0 w-screen lg:horizontal-center pointer-events-none'>
-      <div id='searchPanel' className='mt-1 horizontal-center w-full px-8'>
+    <div className='hidden lg:fixed top-0 left-0 mx-auto w-full max-w-screen-2xl lg:horizontal-center pointer-events-none'>
+      <div id='searchPanel' className='mt-1 horizontal-center w-full pointer-events-none'>
         <FakeSearchBox onClick={onClick} expanded={expanded} />
-        {/* {expanded && <div className='hidden md:block py-4 text-secondary-contrast pointer-events-auto'>Find climbs by name, style or FA</div>} */}
         <div className={`pointer-events-auto opacity-100 ${expanded ? 'w-full' : 'hidden'}`}>
           <Tabs
             labels={['Places to climb', 'Climb search']}
             panelCompList={[
-              <CragFinder key={2} isMobile={false} />,
-              <ClimbSearchByName key={1} isMobile={false} />
-              // (<div className='w-full bg-white rounded-full h-12 flex flex-col items-center justify-center' key={2}><div>🌱🌱🌱 Coming soon 🌱🌱🌱</div></div>)
+              <div key={2} className={`pb-4 ${router.pathname === '/finder' ? 'bg-slate-800' : ''}`}>
+                <CragFinder isMobile={false} />
+              </div>,
+              <div key={1} className={`pb-4 ${router.pathname === '/finder' ? 'bg-slate-800' : ''}`}>
+                <ClimbSearchByName isMobile={false} />
+              </div>
             ]}
           />
         </div>

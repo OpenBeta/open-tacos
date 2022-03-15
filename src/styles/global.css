@@ -138,7 +138,7 @@ p {
 
 @layer components {
   .btn-small {
-    @apply py-1 px-4 text-base !important
+    @apply py-1 px-4 text-sm !important
   }
 
   .btn-medium {

@@ -32,7 +32,7 @@ const Preface = ({ isLoading, total, searchText }: {isLoading: boolean, total: n
     <div>
       {isLoading
         ? `Loading crags in ${searchText}...`
-        : `${humanizeNumber(total)} crags in ${searchText}`}
+        : `${humanizeNumber(total)} crags near ${searchText}`}
     </div>
     <div>Consult local climbing community and guidebooks before you visit.</div>
   </section>
