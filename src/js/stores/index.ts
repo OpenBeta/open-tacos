@@ -12,6 +12,14 @@ export const cragFiltersStore = createStore('filters')({
   sport: true,
   bouldering: true,
   tr: true
+}, {
+  // persist: {
+  //   name: 'ob-filters',
+  //   enabled: true,
+  //   onRehydrateStorage: () => (state) => {
+  //     console.log('hydration starts', state)
+  //   }
+  // }
 }).extendActions((set, get, api) => ({
   toggle: (stateName: 'sport'| 'trad' | 'tr' | 'bouldering') => {
     set.state(draft => {
@@ -90,6 +98,10 @@ const CRAGS_NEAR = gql`query CragsNear($placeId: String, $lng: Float, $lat: Floa
           area_name
           id
           totalClimbs
+          metadata {
+            lat
+            lng
+          }
           climbs {
             type {
               aid
