@@ -1,14 +1,21 @@
 import { useRouter } from 'next/router'
+import { Position } from '@turf/helpers'
+
+import Heatmap from '../maps/Heatmap'
 import useCragFinder from '../../js/hooks/finder/useCragFinder'
 import { CragDensity, LABELS } from '../search/CragsNearBy'
 import CragTable from './CragTable'
-import { TwoColumnLayout } from './TwoColumnLayout'
+import TwoColumnLayout from './TwoColumnLayout'
 
 const DataContainer = (): JSX.Element => {
   const cragFinderStore = useCragFinder(useRouter())
 
-  const { total, searchText, groups, isLoading } = cragFinderStore.useStore()
-
+  const { total, searchText, groups, isLoading, lnglat } = cragFinderStore.useStore()
+  const points: Position[] = groups !== undefined && groups.length > 0
+    ? groups[0].crags.map(
+      ({ metadata }) => [metadata.lng, metadata.lat]
+    )
+    : []
   return (
     <TwoColumnLayout
       left={
@@ -20,7 +27,7 @@ const DataContainer = (): JSX.Element => {
           })}
         </>
 }
-      right={<div>Map (TBD)</div>}
+      right={<Heatmap geojson={points} center={lnglat} />}
     />
   )
 }
@@ -28,7 +35,7 @@ const DataContainer = (): JSX.Element => {
 export default DataContainer
 
 const Preface = ({ isLoading, total, searchText }: {isLoading: boolean, total: number, searchText: string}): JSX.Element => (
-  <section className='mt-4 text-sm'>
+  <section className='mt-32 text-sm'>
     <div>
       {isLoading
         ? `Loading crags in ${searchText}...`

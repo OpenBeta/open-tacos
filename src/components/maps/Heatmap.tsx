@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { HeatmapLayer } from '@deck.gl/aggregation-layers'
-import { GeoJsonLayer } from '@deck.gl/layers'
+import { Position2D } from 'deck.gl'
+import { multiPoint, Position } from '@turf/helpers'
 
-import usaHeatMapData from '../../assets/usa-heatmap.json'
 import BaseMap, { DEFAULT_INITIAL_VIEWSTATE } from './BaseMap'
 import { bboxFromGeoJson, bbox2Viewport } from '../../js/GeoHelpers'
-import { GeojsonFeatureType } from '../../js/types'
 import { InitialViewStateProps } from '@deck.gl/core/lib/deck'
 import { ColorRange } from '@deck.gl/core/utils/color'
 
@@ -21,29 +20,27 @@ const COLOR_RANGE: ColorRange = [
 const NAV_BAR_OFFSET = 66
 
 interface HeatmapProps {
-  geojson?: GeojsonFeatureType
+  geojson?: Position[]
+  center: Position
   children?: JSX.Element
-  getTooltip: (obj: unknown) => void
 }
 
-export default function Heatmap ({ geojson }: HeatmapProps): JSX.Element {
+export default function Heatmap ({ geojson, center }: HeatmapProps): JSX.Element {
   const [[width, height], setWH] = useState([400, 400])
   const [viewstate, setViewState] = useState<InitialViewStateProps>(DEFAULT_INITIAL_VIEWSTATE)
 
+  const [ready, setReady] = useState(false)
   useEffect(() => {
-    if (geojson == null) return
-
     updateDimensions()
 
     window.addEventListener('resize', updateDimensions)
-    const bbox = bboxFromGeoJson(geojson)
-    const vs = bbox2Viewport(bbox, width, height)
-
-    if (geojson.geometry !== undefined && geojson.geometry.type.toUpperCase() === 'POINT') {
-      setViewState({ ...vs, zoom: 10 })
-    } else {
-      setViewState(vs)
+    if (geojson.length > 0) {
+      const bbox = bboxFromGeoJson(multiPoint(geojson))
+      const vs = bbox2Viewport(bbox, width, height)
+      setViewState({ ...viewstate, ...vs })
+      setReady(true)
     }
+
     return () => {
       window.removeEventListener('resize', updateDimensions)
     }
@@ -59,47 +56,33 @@ export default function Heatmap ({ geojson }: HeatmapProps): JSX.Element {
   }, [width, height])
 
   const layers = [
-    new GeoJsonLayer({
-      id: 'geojson-layer',
-      data: (geojson != null) || [],
-      pickable: false,
-      stroked: true,
-      filled: viewstate.zoom < 8,
-      extruded: false,
-      pointType: 'circle',
-      lineWidthScale: 20,
-      lineWidthMinPixels: 2,
-      getFillColor: [251, 113, 133, 50],
-      opacity: viewstate.zoom < 6 ? 1 : 0.2,
-      getLineColor: [253, 164, 175],
-      getPointRadius: 100,
-      getLineWidth: 4,
-      getElevation: 0
-    }),
     new HeatmapLayer({
-      data: usaHeatMapData,
+      data: geojson ?? [],
       id: 'heatmp-layer',
-      pickable: false,
-      getPosition: (d) => [d.lon, d.lat, 10],
       getWeight: () => 1,
+      getPosition: (d: Position2D) => d,
       radiusPixels: 20,
       intensity: 1,
       threshold: 0.03,
       opacity: 0.65,
-      colorRange: COLOR_RANGE
+      colorRange: COLOR_RANGE,
+      visible: ready
     })
   ]
+
   return (
     <div
-      id='my-area-map'
-      className='w-full xl:sticky xl:top-16 z-9 xl:m-0 xl:p-0'
+      id='my-area-heatmap'
+      className='w-full xl:sticky xl:top-28 xl:m-0 xl:p-0'
       style={{ height }}
     >
       <BaseMap
+        disableController={false}
         layers={layers}
         initialViewState={viewstate}
         viewstate={viewstate}
         onViewStateChange={onViewStateChange}
+        light={false}
       />
     </div>
   )

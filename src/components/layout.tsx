@@ -21,8 +21,6 @@ function Layout ({ layoutClz = 'layout-default', customClz = '', children, hero 
           href='/fonts/fonts.css'
           rel='stylesheet'
         />
-
-        {/* <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' /> */}
         <SeoTags
           keywords={['openbeta', 'rock climbing', 'climbing api']}
           description='Climbing route catalog'

@@ -16,7 +16,6 @@ const useCragFinder = (router: NextRouter) => {
       // Todo: clear finder.errors
     } catch (e) {
       // Todo: set finder.errors
-      console.log('# useCragFinder error', e)
     }
   }, [query])
   return cragFinderStore
