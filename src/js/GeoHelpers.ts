@@ -1,8 +1,10 @@
 import { fitBounds } from '@math.gl/web-mercator'
 import bbox from '@turf/bbox'
-import { BBoxType, GeojsonFeatureType } from './types'
+import { FeatureCollection, Feature } from '@turf/helpers'
 
-export const bboxFromGeoJson = (geojson: GeojsonFeatureType): BBoxType => {
+import { BBoxType } from './types'
+
+export const bboxFromGeoJson = (geojson: FeatureCollection | Feature): BBoxType => {
   const _bbox = bbox(geojson)
   if (_bbox[0] === _bbox[2] && _bbox[1] === _bbox[3]) {
     // If all features are the same point, bbox is also single point.
@@ -21,7 +23,7 @@ export const bbox2Viewport = (bbox: BBoxType, width: number, height: number): an
   return fitBounds({
     width: width,
     height: height,
-    bounds: [[bbox[0], bbox[1]], [bbox[2], bbox[3]]],
-    padding: Math.min(width, height) * 0.15
+    bounds: [[bbox[0], bbox[1]], [bbox[2], bbox[3]]]
+    // padding: 100
   })
 }

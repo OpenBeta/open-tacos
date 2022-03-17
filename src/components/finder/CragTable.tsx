@@ -24,5 +24,6 @@ const applyFilters = (crag, filters: any): boolean => {
   return false
 }
 
+// Todo: use Area.aggregate field instead
 const hasDiscipline = (crag, discipline: string): boolean =>
   crag.climbs.some(entry => entry.type?.[discipline] ?? false)
