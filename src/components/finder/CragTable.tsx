@@ -6,7 +6,8 @@ const CragTable = ({ crags, subheader }: { crags: any[], subheader: string }): J
   return (
     <div className=''>
       <div className='border-b border-b-neutral-200' />
-      {crags.filter(crag => applyFilters(crag, filters)).map((crag) => <CragRow key={crag.id} {...crag} />)}
+      {crags.map(
+        (crag) => applyFilters(crags, filters) ? <CragRow key={crag.id} {...crag} /> : null)}
     </div>
   )
 }
