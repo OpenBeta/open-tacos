@@ -1,21 +1,27 @@
+import { useMemo } from 'react'
 import { useRouter } from 'next/router'
-import { Position } from '@turf/helpers'
+import { Feature, Geometry, featureCollection, point, Properties } from '@turf/helpers'
 
-import Heatmap from '../maps/Heatmap'
+import CragsMap from '../maps/CragsMap'
 import useCragFinder from '../../js/hooks/finder/useCragFinder'
 import { CragDensity, LABELS } from '../search/CragsNearBy'
 import CragTable from './CragTable'
 import TwoColumnLayout from './TwoColumnLayout'
+import { sanitizeName } from '../../js/utils'
 
 const DataContainer = (): JSX.Element => {
   const cragFinderStore = useCragFinder(useRouter())
 
   const { total, searchText, groups, isLoading, lnglat } = cragFinderStore.useStore()
-  const points: Position[] = groups !== undefined && groups.length > 0
+  const points: Array<Feature<Geometry, Properties>> = groups !== undefined && groups.length > 0
     ? groups[0].crags.map(
-      ({ metadata }) => [metadata.lng, metadata.lat]
+      ({ area_name: name, metadata }) => point([metadata.lng, metadata.lat], { name: sanitizeName(name) })
     )
     : []
+
+  const geojson = featureCollection(points)
+  const map = useMemo(() => <CragsMap geojson={geojson} center={lnglat} />, [geojson, lnglat])
+
   return (
     <TwoColumnLayout
       left={
@@ -27,7 +33,7 @@ const DataContainer = (): JSX.Element => {
           })}
         </>
 }
-      right={<Heatmap geojson={points} center={lnglat} />}
+      right={map}
     />
   )
 }

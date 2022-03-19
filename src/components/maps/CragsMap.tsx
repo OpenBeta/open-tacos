@@ -1,44 +1,54 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { HeatmapLayer } from '@deck.gl/aggregation-layers'
-import { Position2D } from 'deck.gl'
-import { multiPoint, Position } from '@turf/helpers'
+import { InitialViewStateProps } from '@deck.gl/core/lib/deck'
+import { Source, Layer, LayerProps } from 'react-map-gl'
+import { Position, Properties, FeatureCollection, Geometry } from '@turf/helpers'
 
 import BaseMap, { DEFAULT_INITIAL_VIEWSTATE } from './BaseMap'
 import { bboxFromGeoJson, bbox2Viewport } from '../../js/GeoHelpers'
-import { InitialViewStateProps } from '@deck.gl/core/lib/deck'
-import { ColorRange } from '@deck.gl/core/utils/color'
-
-const COLOR_RANGE: ColorRange = [
-  [1, 152, 189],
-  [73, 227, 206],
-  [216, 254, 181],
-  [254, 237, 177],
-  [254, 173, 84],
-  [209, 55, 78]
-]
 
 const NAV_BAR_OFFSET = 66
 
+const layerStyle: LayerProps = {
+  id: 'area-labels',
+  type: 'symbol',
+  source: 'areas',
+  layout: {
+    'icon-size': ['interpolate', ['linear'], ['zoom'], 8, 1.25, 12, 1],
+    'symbol-spacing': 5,
+    'text-field': ['get', 'name'],
+    'text-variable-anchor': ['bottom', 'left', 'right'],
+    'text-radial-offset': 1,
+    'text-justify': 'auto',
+    'icon-image': 'circle',
+    'text-size': ['interpolate', ['linear'], ['zoom'], 8, 14, 14, 12]
+  },
+  paint: {
+    'text-halo-blur': 4,
+    'text-halo-width': 2,
+    'text-color': '#ffffff',
+    'text-halo-color': '#334455'
+  }
+}
+
 interface HeatmapProps {
-  geojson?: Position[]
+  geojson?: FeatureCollection<Geometry, Properties>
   center: Position
   children?: JSX.Element
 }
 
-export default function Heatmap ({ geojson, center }: HeatmapProps): JSX.Element {
+export default function CragsMap ({ geojson, center }: HeatmapProps): JSX.Element {
   const [[width, height], setWH] = useState([400, 400])
   const [viewstate, setViewState] = useState<InitialViewStateProps>(DEFAULT_INITIAL_VIEWSTATE)
 
-  const [ready, setReady] = useState(false)
   useEffect(() => {
     updateDimensions()
 
     window.addEventListener('resize', updateDimensions)
-    if (geojson.length > 0) {
-      const bbox = bboxFromGeoJson(multiPoint(geojson))
+    if (geojson === undefined) return
+    if (geojson.features.length > 0) {
+      const bbox = bboxFromGeoJson(geojson)
       const vs = bbox2Viewport(bbox, width, height)
       setViewState({ ...viewstate, ...vs })
-      setReady(true)
     }
 
     return () => {
@@ -55,21 +65,6 @@ export default function Heatmap ({ geojson, center }: HeatmapProps): JSX.Element
     setWH([width, height])
   }, [width, height])
 
-  const layers = [
-    new HeatmapLayer({
-      data: geojson ?? [],
-      id: 'heatmp-layer',
-      getWeight: () => 1,
-      getPosition: (d: Position2D) => d,
-      radiusPixels: 20,
-      intensity: 1,
-      threshold: 0.03,
-      opacity: 0.65,
-      colorRange: COLOR_RANGE,
-      visible: ready
-    })
-  ]
-
   return (
     <div
       id='my-area-heatmap'
@@ -78,12 +73,20 @@ export default function Heatmap ({ geojson, center }: HeatmapProps): JSX.Element
     >
       <BaseMap
         disableController={false}
-        layers={layers}
+        layers={[]}
         initialViewState={viewstate}
         viewstate={viewstate}
         onViewStateChange={onViewStateChange}
         light={false}
-      />
+      >
+        <Source
+          id='areas'
+          type='geojson'
+          data={geojson as FeatureCollection<GeoJSON.Geometry, Properties>}
+        >
+          <Layer {...layerStyle} />
+        </Source>
+      </BaseMap>
     </div>
   )
 }

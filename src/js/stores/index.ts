@@ -112,7 +112,13 @@ const CRAGS_NEAR = gql`query CragsNear($placeId: String, $lng: Float, $lat: Floa
               tr
               trad
             }
-        }
+         }
+         aggregate {
+          byType {
+            label
+            count
+          }
+          }
       }
   }
 }`

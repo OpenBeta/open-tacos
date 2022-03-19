@@ -6,14 +6,30 @@ interface CragRowProps {
   id: string
   area_name: string
   totalClimbs: number
+  metadata: CragMetadataPartial
 }
+
+interface CragMetadataPartial {
+  lat: number
+  lng: number
+}
+
 /* eslint-disable-next-line */
-const CragRow = ({ id, area_name, totalClimbs}: CragRowProps): JSX.Element => { 
+const CragRow = ({ id, area_name: _name, totalClimbs, metadata}: CragRowProps): JSX.Element => {
+  // const { lng, lat } = metadata
+  const name = sanitizeName(_name)
   return (
     <Link href={`crag/${id}`}>
       <a>
-        <div className='border-b border-b-neutral-200 py-6'>
-          <div className='flex justify-between items-center'><div className='text-lg font-semibold text-primary'>{sanitizeName(area_name)}</div><div>&hearts;</div></div>
+        <div
+          className='border-b border-b-neutral-200 py-6' onMouseOver={() => {
+            // actions.finder.selectedArea(point([lng, lat], {
+            //   name,
+            //   icon: 'theatre-15'
+            // }))
+          }}
+        >
+          <div className='flex justify-between items-center'><div className='text-lg font-semibold text-primary'>{name}</div><div>&hearts;</div></div>
           <hr className='w-8 my-2' />
           <div className='text-secondary text-sm'>Climbs for you</div>
           <div className='flex justify-between items-center'>
