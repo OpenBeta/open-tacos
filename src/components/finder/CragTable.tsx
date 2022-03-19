@@ -3,10 +3,12 @@ import CragRow from './CragRow'
 
 const CragTable = ({ crags, subheader }: { crags: any[], subheader: string }): JSX.Element => {
   const filters = cragFiltersStore.useStore()
+
   return (
     <div className=''>
       <div className='border-b border-b-neutral-200' />
-      {crags.filter(crag => applyFilters(crag, filters)).map((crag) => <CragRow key={crag.id} {...crag} />)}
+      {crags.map(
+        (crag) => applyFilters(crag, filters) ? <CragRow key={crag.id} {...crag} /> : null)}
     </div>
   )
 }
