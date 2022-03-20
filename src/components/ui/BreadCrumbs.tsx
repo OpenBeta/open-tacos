@@ -31,6 +31,7 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
         const isLastElement = array.length - 1 === index
         const path = ancestors[index]
         const url = `/areas/${path}`
+        const climbPageLastUrl = `/crag/${path}`
         return (
           <span key={index}>
             <span className='text-secondary mx-1.5'>/</span>
@@ -38,13 +39,23 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
               ? (
                 <span className=''>{sanitizeName(place)}</span>
                 )
-              : (
-                <span className='text-secondary'>
-                  <Link href={url}>
-                    <a className='hover:underline hover:text-gray-900'>{sanitizeName(place)}</a>
-                  </Link>
-                </span>
-                )}
+              : isLastElement && isClimbPage
+                ? (
+                  <span className='text-secondary'>
+                    <Link href={climbPageLastUrl}>
+                      <a className='hover:underline hover:text-gray-900'>
+                        {sanitizeName(place)}
+                      </a>
+                    </Link>
+                  </span>
+                  )
+                : (
+                  <span className='text-secondary'>
+                    <Link href={url}>
+                      <a className='hover:underline hover:text-gray-900'>{sanitizeName(place)}</a>
+                    </Link>
+                  </span>
+                  )}
           </span>
         )
       })}
