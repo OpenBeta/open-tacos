@@ -79,6 +79,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "clintonlunn",
+      "name": "Clinton Lunn",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24685932?v=4",
+      "profile": "http://clintonlunn.com",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
