@@ -1,9 +1,9 @@
 import { cragFiltersStore } from '../../js/stores'
+import { AreaType, CountByDisciplineType } from '../../js/types'
 import CragRow from './CragRow'
 
 const CragTable = ({ crags, subheader }: { crags: any[], subheader: string }): JSX.Element => {
   const filters = cragFiltersStore.useStore()
-
   return (
     <div className=''>
       <div className='border-b border-b-neutral-200' />
@@ -14,18 +14,18 @@ const CragTable = ({ crags, subheader }: { crags: any[], subheader: string }): J
 }
 export default CragTable
 
-const applyFilters = (crag, filters: any): boolean => {
+const applyFilters = (crag: AreaType, filters: any): boolean => {
+  const { byDiscipline } = crag.aggregate
   /* eslint-disable-next-line */
-  if (filters.trad && hasDiscipline(crag, 'trad')) return true
+  if (filters.trad && (byDiscipline?.trad?.total > 0 ?? false)) return true
   /* eslint-disable-next-line */
-  if (filters.sport && hasDiscipline(crag, 'sport')) return true
+  if (filters.sport && (byDiscipline?.sport?.total > 0 ?? false)) return true
   /* eslint-disable-next-line */
-  if (filters.bouldering && hasDiscipline(crag, 'bouldering')) return true
+  if (filters.bouldering && (byDiscipline?.boulder?.total > 0 ?? false)) return true
   /* eslint-disable-next-line */
-  if (filters.tr && hasDiscipline(crag, 'tr')) return true
+  if (filters.tr && (byDiscipline?.tr?.total > 0 ?? false)) return true
   return false
 }
 
-// Todo: use Area.aggregate field instead
-const hasDiscipline = (crag, discipline: string): boolean =>
-  crag.climbs.some(entry => entry.type?.[discipline] ?? false)
+// const hasDiscipline = (byDiscipline: CountByDisciplineType): boolean =>
+//   byDiscipline?.[discipline]?.total > 0 ?? false

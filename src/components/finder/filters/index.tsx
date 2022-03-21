@@ -1,9 +1,12 @@
 import { actions, cragFiltersStore } from '../../../js/stores/index'
 import { FilterToggleButton } from '../../ui/Button'
+import YDSFilterPopover from '../../ui/YDSFilterPopover'
 
 const index = (): JSX.Element => {
   return (
-    <div className='z-10 bg-slate-800 w-full w-screen mx-auto pt-4 pb-2'><DisciplineGroup /></div>
+    <div className='z-10 bg-slate-800 w-full w-screen mx-auto pt-4 pb-2 flex space-x-2'>
+      <DisciplineGroup /> <YDSFilterPopover />
+    </div>
   )
 }
 

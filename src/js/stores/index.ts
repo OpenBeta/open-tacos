@@ -36,7 +36,7 @@ export const cragFinderStore = createStore('finder')({
   searchText: '',
   groups: [],
   total: 0,
-  lnglat: [-90, -180],
+  lnglat: undefined,
   isLoading: false
 }).extendActions((set, get, api) => ({
   validLnglat: async (text: string, placeId: string, lnglat: [number, number]) => {
@@ -95,30 +95,70 @@ const CRAGS_NEAR = gql`query CragsNear($placeId: String, $lng: Float, $lat: Floa
       _id 
       placeId
       crags {
-          area_name
-          id
-          totalClimbs
-          metadata {
-            lat
-            lng
+        area_name
+        id
+        totalClimbs
+        metadata {
+          lat
+          lng
+        }
+        climbs {
+          type {
+            aid
+            alpine
+            bouldering
+            mixed
+            sport
+            tr
+            trad
           }
-          climbs {
-            type {
-              aid
-              alpine
-              bouldering
-              mixed
-              sport
-              tr
-              trad
+        }
+        aggregate {
+          byDiscipline {
+            sport {
+              total
+              bands {
+                advance
+                beginner
+                expert
+                intermediate
+              }
             }
-         }
-         aggregate {
-          byType {
-            label
-            count
+            trad {
+              total
+              bands {
+                advance
+                beginner
+                expert
+                intermediate
+              }
+            }
+            boulder {
+              total
+              bands {
+                advance
+                beginner
+                expert
+                intermediate
+              }
+            }
+            tr {
+              total
+              bands {
+                advance
+                beginner
+                expert
+                intermediate
+              }
+            }
           }
+          byGradeBand {
+            advance
+            beginner
+            expert
+            intermediate
           }
+        }
       }
   }
 }`

@@ -1,24 +1,15 @@
 import Link from 'next/link'
+import { cragFiltersStore } from '../../js/stores'
 import CounterPie from '../ui/Statistics/CounterPie'
 import { sanitizeName } from '../../js/utils'
-
-interface CragRowProps {
-  id: string
-  area_name: string
-  totalClimbs: number
-  metadata: CragMetadataPartial
-}
-
-interface CragMetadataPartial {
-  lat: number
-  lng: number
-}
+import { AreaType, CountByDisciplineType, CountByGradeBandType } from '../../js/types'
 
 /* eslint-disable-next-line */
-const CragRow = ({ id, area_name: _name, totalClimbs, metadata}: CragRowProps): JSX.Element => {
+const CragRow = ({ id, area_name: _name, totalClimbs, metadata, aggregate}: Partial<AreaType>): JSX.Element => {
   // const { lng, lat } = metadata
   const name = sanitizeName(_name)
   return (
+    // eslint-disable-next-line
     <Link href={`crag/${id}`}>
       <a>
         <div
@@ -33,9 +24,8 @@ const CragRow = ({ id, area_name: _name, totalClimbs, metadata}: CragRowProps): 
           <hr className='w-8 my-2' />
           <div className='text-secondary text-sm'>Climbs for you</div>
           <div className='flex justify-between items-center'>
-            {/* <div className='text-secondary text-sm'><span className='font-semibold'>{totalClimbs - getRandomInt(totalClimbs)} climbs for you</span> · {totalClimbs} total </div> */}
             <div className='w-24 h-24'><CounterPie total={totalClimbs} forYou={totalClimbs - getRandomInt(totalClimbs)} /></div>
-            <div><DistributionTable totalClimbs={totalClimbs} /></div>
+            <div><DistributionTable totalClimbs={totalClimbs} byDiscipline={aggregate.byDiscipline} /></div>
           </div>
         </div>
       </a>
@@ -43,24 +33,59 @@ const CragRow = ({ id, area_name: _name, totalClimbs, metadata}: CragRowProps): 
   )
 }
 
-const DistributionTable = ({ totalClimbs }): JSX.Element => {
+interface DistributionTableProps {
+  byDiscipline: CountByDisciplineType
+  totalClimbs: number
+
+}
+const DistributionTable = ({ totalClimbs, byDiscipline }: DistributionTableProps): JSX.Element => {
   return (
-    <table className='table-fixed text-sm border border-collapse border-slate-500 rounded'>
-      <thead className=' text-center'>
+    <table className='table-fixed text-sm rounded'>
+      <thead className=' text-center text-xs'>
         <tr>
-          <th className='border border-slate-500 py-1 px-2 font-normal text-secondary text-sm'>Beginner</th>
-          <th className='border border-slate-500 py-1 px-2 font-normal text-secondary text-sm'>Intermediate</th>
-          <th className='border border-slate-500 py-1 px-2 font-normal text-secondary text-sm'>Advanced</th>
-          <th className='border border-slate-500 py-1 px-2 font-normal text-secondary text-sm'>Expert</th>
+          <th />
+          <th className='py-1 px-2 font-normal text-secondary'>Beginner</th>
+          <th className='py-1 px-2 font-normal text-secondary'>Intermediate</th>
+          <th className='py-1 px-2 font-normal text-secondary'>Advanced</th>
+          <th className='py-1 px-2 font-normal text-secondary'>Expert</th>
+          <th className='py-1 px-2 font-normal text-secondarybg-slate-400'>Total</th>
         </tr>
       </thead>
-      <tbody className='text-center text-secondary'>
-        <tr>
-          <td className='bg-gradient-to-r from-ob-secondary'>{getRandomInt(totalClimbs)}</td>
-          <td className='py-1'>{getRandomInt(totalClimbs)}</td>
-          <td className='py-1'>{getRandomInt(totalClimbs)}</td>
-          <td className='py-1'>{getRandomInt(totalClimbs)}</td>
+      <tbody className='text-center text-secondary divide-y divide-y-4 divide-white'>
+
+        {(byDiscipline?.sport?.total > 0 ?? false) &&
+      (
+        <tr className={`${cragFiltersStore.get.sport() ? 'bg-slate-100' : 'text-tertiary bg-inherit'}`}>
+          <td className='border-0'>Sport</td>
+          <td className='bg-gradient-to-r from-ob-secondary'>{byDiscipline?.sport?.bands.beginner}</td>
+          <td className='py-1'>{byDiscipline?.sport?.bands?.intermediate}</td>
+          <td className='py-1'>{byDiscipline?.sport?.bands?.advance}</td>
+          <td className='py-1'>{byDiscipline?.sport?.bands?.expert}</td>
+          <td className='py-1 border-l border-slate-500 bg-slate-600 text-white'>{byDiscipline?.sport.total}</td>
         </tr>
+      )}
+        {(byDiscipline?.trad?.total > 0 ?? false) &&
+      (
+        <tr className={`${cragFiltersStore.get.trad() ? 'bg-slate-100' : 'text-tertiary bg-inherit'}`}>
+          <td className='border-0'>Trad</td>
+          <td className='bg-gradient-to-r from-ob-secondary'>{byDiscipline?.trad?.bands.beginner}</td>
+          <td className='py-1'>{byDiscipline?.trad?.bands?.intermediate}</td>
+          <td className='py-1'>{byDiscipline?.trad?.bands?.advance}</td>
+          <td className='py-1'>{byDiscipline?.trad?.bands?.expert}</td>
+          <td className='py-1 border-l border-slate-500 bg-slate-600 text-white'>{byDiscipline?.trad.total}</td>
+        </tr>
+      )}
+        {(byDiscipline?.boulder?.total > 0 ?? false) &&
+      (
+        <tr className={`${cragFiltersStore.get.bouldering() ? 'bg-slate-100' : 'text-tertiary bg-inherit'}`}>
+          <td className='border-0'>Bouldering</td>
+          <td className='bg-gradient-to-r from-ob-secondary'>{byDiscipline?.boulder?.bands.beginner}</td>
+          <td className='py-1'>{byDiscipline?.boulder?.bands?.intermediate}</td>
+          <td className='py-1'>{byDiscipline?.boulder?.bands?.advance}</td>
+          <td className='py-1'>{byDiscipline?.boulder?.bands?.expert}</td>
+          <td className='py-1 border-l border-slate-500 bg-slate-600 text-white'>{byDiscipline?.boulder.total}</td>
+        </tr>
+      )}
       </tbody>
     </table>
   )

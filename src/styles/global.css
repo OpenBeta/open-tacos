@@ -73,6 +73,9 @@ body, html {
   .text-secondary {
     @apply text-slate-600
   }
+  .text-tertiary {
+    @apply text-slate-400
+  }
 
   .text-primary-contrast {
     @apply text-white
@@ -306,4 +309,10 @@ input:checked + label {
 .bar {
   padding-top: 2px;
   padding-bottom: 2px;
+}
+
+/* yds and vscale range slider */
+
+.rc-slider-mark-text-active {
+  @apply text-ob-secondary !important;
 }
