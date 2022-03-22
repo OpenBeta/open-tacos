@@ -11,7 +11,15 @@ export const cragFiltersStore = createStore('filters')({
   trad: true,
   sport: true,
   bouldering: true,
-  tr: true
+  tr: true,
+  freeRange: {
+    scores: [0, 0],
+    labels: ['5.6', '5.10']
+  },
+  boulderingRange: {
+    scores: [0, 0],
+    labels: ['v0', 'v3']
+  }
 }, {
   // persist: {
   //   name: 'ob-filters',

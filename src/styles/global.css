@@ -35,7 +35,7 @@ body, html {
 }
 
 .main-container {
-  @apply w-full font-sans text-base text-gray-900 bg-white h-screen;
+  @apply w-full font-sans text-base text-gray-900 bg-white h-screen bg-gray-100;
 }
 
 .layout-edit {

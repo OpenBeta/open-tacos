@@ -1,7 +1,10 @@
-import Slider from 'rc-slider'
+import Slider, { SliderProps } from 'rc-slider'
 import 'rc-slider/assets/index.css'
 
-const RangeSlider = (props): JSX.Element => (
+export interface RangeSliderProps {
+  onChange: Function
+}
+const RangeSlider = (props: Partial<SliderProps>): JSX.Element => (
   <Slider
     range
     {...props}

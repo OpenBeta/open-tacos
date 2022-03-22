@@ -1,7 +1,7 @@
 import { Popover } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 
-const MyPopover = ({ label, children }): JSX.Element => {
+const SimplePopover = ({ label, children }): JSX.Element => {
   return (
     <Popover className='relative'>
       {({ open }) => (
@@ -18,4 +18,4 @@ const MyPopover = ({ label, children }): JSX.Element => {
   )
 }
 
-export default MyPopover
+export default SimplePopover

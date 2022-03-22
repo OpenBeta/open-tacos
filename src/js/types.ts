@@ -131,3 +131,10 @@ export interface TypesenseDocumentType {
   safety: SafetyType
   areaNames: string[]
 }
+
+export enum GradeBand {
+  beginner = '0',
+  intermediate = '1',
+  advanced = '2',
+  expert = '3'
+}

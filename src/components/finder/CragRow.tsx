@@ -2,11 +2,11 @@ import Link from 'next/link'
 import { cragFiltersStore } from '../../js/stores'
 import CounterPie from '../ui/Statistics/CounterPie'
 import { sanitizeName } from '../../js/utils'
-import { AreaType, CountByDisciplineType, CountByGradeBandType } from '../../js/types'
+import { AreaType, CountByDisciplineType } from '../../js/types'
+import { getBandIndex } from '../../js/grades/bandUtil'
 
 /* eslint-disable-next-line */
 const CragRow = ({ id, area_name: _name, totalClimbs, metadata, aggregate}: Partial<AreaType>): JSX.Element => {
-  // const { lng, lat } = metadata
   const name = sanitizeName(_name)
   return (
     // eslint-disable-next-line
@@ -14,10 +14,7 @@ const CragRow = ({ id, area_name: _name, totalClimbs, metadata, aggregate}: Part
       <a>
         <div
           className='border-b border-b-neutral-200 py-6' onMouseOver={() => {
-            // actions.finder.selectedArea(point([lng, lat], {
-            //   name,
-            //   icon: 'theatre-15'
-            // }))
+            // Todo set some state to highlight crag on the map
           }}
         >
           <div className='flex justify-between items-center'><div className='text-lg font-semibold text-primary'>{name}</div><div>&hearts;</div></div>
@@ -39,6 +36,9 @@ interface DistributionTableProps {
 
 }
 const DistributionTable = ({ totalClimbs, byDiscipline }: DistributionTableProps): JSX.Element => {
+  const { freeRange } = cragFiltersStore.useStore()
+  const myLowBand = getBandIndex(freeRange.labels[0])
+  const myHighBand = getBandIndex(freeRange.labels[1])
   return (
     <table className='table-fixed text-sm rounded'>
       <thead className=' text-center text-xs'>
@@ -68,8 +68,8 @@ const DistributionTable = ({ totalClimbs, byDiscipline }: DistributionTableProps
       (
         <tr className={`${cragFiltersStore.get.trad() ? 'bg-slate-100' : 'text-tertiary bg-inherit'}`}>
           <td className='border-0'>Trad</td>
-          <td className='bg-gradient-to-r from-ob-secondary'>{byDiscipline?.trad?.bands.beginner}</td>
-          <td className='py-1'>{byDiscipline?.trad?.bands?.intermediate}</td>
+          <td className={`py-1 ${isInMyRange(0, [myLowBand, myHighBand]) ? 'bg-ob-secondary' : ''}`}>{byDiscipline?.trad?.bands.beginner}</td>
+          <td className={`py-1 ${isInMyRange(1, [myLowBand, myHighBand]) ? 'bg-ob-secondary' : ''}`}>{byDiscipline?.trad?.bands?.intermediate}</td>
           <td className='py-1'>{byDiscipline?.trad?.bands?.advance}</td>
           <td className='py-1'>{byDiscipline?.trad?.bands?.expert}</td>
           <td className='py-1 border-l border-slate-500 bg-slate-600 text-white'>{byDiscipline?.trad.total}</td>
@@ -89,6 +89,13 @@ const DistributionTable = ({ totalClimbs, byDiscipline }: DistributionTableProps
       </tbody>
     </table>
   )
+}
+
+const isInMyRange = (thisIndex: number, myFreeRange: number[]): boolean => {
+  if (thisIndex >= myFreeRange[0] && thisIndex <= myFreeRange[1]) {
+    return true
+  }
+  return false
 }
 
 function getRandomInt (max: number): number {
