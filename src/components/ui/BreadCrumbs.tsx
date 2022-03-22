@@ -33,28 +33,13 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
         const url = `/areas/${path}`
         const climbPageLastUrl = `/crag/${path}`
         return (
-          <span key={index}>
-            <span className='text-secondary mx-1.5'>/</span>
-            {/* last element but not currently on the climb page */}
-            {isLastElement && !isClimbPage && <span className=''>{sanitizeName(place)}</span>}
-
-            {/* last element and currently on the climb page, so /crag/ url used */}
-            {isLastElement && isClimbPage &&
-              <span className='text-secondary'>
-                <Link href={climbPageLastUrl}>
-                  <a className='hover:underline hover:text-gray-900'>
-                    {sanitizeName(place)}
-                  </a>
-                </Link>
-              </span>}
-
-            {/* all links before last element when on climb page to get /areas/ url */}
-            {!isLastElement && isClimbPage &&
-              <span className='text-secondary'>
-                <Link href={url}>
-                  <a className='hover:underline hover:text-gray-900'>{sanitizeName(place)}</a>
-                </Link>
-              </span>}
+          <span key={index} className='text-secondary'>
+            <span className='mx-1.5'>/</span>
+            <Link href={isLastElement && isClimbPage ? climbPageLastUrl : url}>
+              <a className='hover:underline hover:text-gray-900'>
+                {sanitizeName(place)}
+              </a>
+            </Link>
           </span>
         )
       })}
