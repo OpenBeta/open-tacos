@@ -1,10 +1,7 @@
 import { GetStaticProps } from 'next'
-import { useState } from 'react'
 import { gql } from '@apollo/client'
 
 import { AreaType } from '../../js/types'
-import ClusterMap from '../../components/maps/ClusterMap'
-import Drawer from '../../components/ui/Drawer'
 import { graphqlClient } from '../../js/graphql/Client'
 import Link from 'next/link'
 import Layout from '../../components/layout'
@@ -20,18 +17,7 @@ interface AreaPageProps {
 }
 const Area = ({ area }: AreaPageProps): JSX.Element => {
   const { id, area_name: areaName, children, metadata, content, pathTokens, ancestors } = area
-  const [selectedAreaIds, setSelectedAreaIds] = useState<string[]>([])
 
-  const handleClick = ({ object, objects }: {object: AreaType | any, objects: AreaType[]}): void => {
-    if (objects === undefined || object?.cluster !== true) {
-      setSelectedAreaIds([(object as AreaType).id])
-    } else {
-      setSelectedAreaIds(objects.map(o => { return o.id }))
-    }
-  }
-  const selectedAreas = area.children.filter(c =>
-    selectedAreaIds.includes(c.id)
-  )
   return (
     <Layout layoutClz='layout-default'>
       <SeoTags
@@ -68,7 +54,7 @@ const Area = ({ area }: AreaPageProps): JSX.Element => {
                 <hr className='my-8' />
               </>}
 
-            <div className='w-full relative mt-8 flex my-8'>
+            {/* <div className='w-full relative mt-8 flex my-8'>
               <Drawer
                 className='border border-slate-400'
                 areas={selectedAreas.length === 0 ? area.children : selectedAreas}
@@ -76,7 +62,7 @@ const Area = ({ area }: AreaPageProps): JSX.Element => {
               <ClusterMap className='shadow-[-3px_0px_6px_-3px_rgba(0,0,0,0.3)]' onClick={handleClick} bbox={area.metadata.bbox}>
                 {area.children}
               </ClusterMap>
-            </div>
+            </div> */}
 
             <h2>Subareas</h2>
             <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
@@ -159,16 +145,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           leaf
           lat
           lng
-        }
-        aggregate {
-          byGrade {
-            count
-            label
-          }
-          byType {
-            count
-            label
-          }
         }
       }
     }

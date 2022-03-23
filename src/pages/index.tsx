@@ -61,14 +61,29 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       totalClimbs
       density
       aggregate {
-        byType {
-          label
-          count
-        }
-        byGrade {
-          label
-          count
-        }
+        byDiscipline {
+            sport {
+              total
+            }
+            trad {
+              total
+            }
+            boulder {
+              total
+            }
+            tr {
+              total
+            }
+            alpine {
+              total
+            }
+            mixed {
+              total
+            }
+            aid {
+              total
+            }
+          }
       }
       metadata {
         lat
