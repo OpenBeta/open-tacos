@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Link from 'next/link'
-import { AggregateType, AreaType } from '../../../js/types'
+import { AggregateType, AreaType, CountByDisciplineType, DisciplineStatsType } from '../../../js/types'
 import { getSlug, sanitizeName } from '../../../js/utils'
 import { OpenverseImage, OpenverseResponse } from '.'
 import { FeatureImage, DefaultImage } from './FeatureImage'
@@ -47,15 +47,26 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
     }
   }
 
-  function formatClimbingTypes (aggregateTypes: AggregateType): string {
-    return [...aggregate.byType]
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 5)
-      .reduce((acc, t) => {
-        t.count > 5 && acc.push(t.label)
-        return acc
-      }, [])
-      .join(', ')
+  /**
+   * Turn count-by-discipline to tiny tags.
+   * Only consider crags with more 5 climbs for a given discipline.
+   * @param aggregateTypes T
+   * @returns
+   */
+  function formatClimbingTypes (aggregate: AggregateType): JSX.Element {
+    const aggByDiscipline: CountByDisciplineType = aggregate.byDiscipline
+    return (
+      <>
+        {
+          Object.keys(aggregate.byDiscipline).map((key: string) => {
+            if ((aggByDiscipline?.[key] as DisciplineStatsType)?.total > 5) {
+              return <span className='bg-slate-700 text-white px-2'>{key}</span>
+            }
+            return null
+          })
+        }
+      </>
+    )
   }
 
   const attribution = image.attribution ?? image.creator ?? ''
@@ -74,9 +85,9 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
           >
             <div className='text-lg'>{sanitizeName(areaName)}</div>
             <div>{totalClimbs} Climbs</div>
-            <div className='text-sm'>{pathTokens.join(' / ')}</div>
-            <div className='text-xs'>{formatClimbingTypes(aggregate)}</div>
-            {attribution !== '' && <div className='text-xs'>Image By: {attribution}</div>}
+            <div className='text-xs flex flex-row space-x-2'>{formatClimbingTypes(aggregate)}</div>
+            <div className='text-secondary text-sm'>{pathTokens.join(' / ')}</div>
+            {attribution !== '' && <div className='text-xs text-tertiary'>Image By: {attribution}</div>}
           </h3>
 
           <div className='mt-4 flex justify-between items-center' />
