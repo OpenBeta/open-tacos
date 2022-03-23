@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { InitialViewStateProps } from '@deck.gl/core/lib/deck'
 import { Source, Layer, LayerProps } from 'react-map-gl'
-import { Position, Properties, FeatureCollection, Geometry } from '@turf/helpers'
+import { point, Position, Properties, FeatureCollection, Geometry } from '@turf/helpers'
 
 import BaseMap, { DEFAULT_INITIAL_VIEWSTATE } from './BaseMap'
 import { bboxFromGeoJson, bbox2Viewport } from '../../js/GeoHelpers'
@@ -42,19 +42,16 @@ export default function CragsMap ({ geojson, center }: HeatmapProps): JSX.Elemen
 
   useEffect(() => {
     updateDimensions()
-
     window.addEventListener('resize', updateDimensions)
-    if (geojson === undefined) return
-    if (geojson.features.length > 0) {
-      const bbox = bboxFromGeoJson(geojson)
+    if (geojson !== undefined && center !== undefined) {
+      const bbox = geojson.features.length > 0 ? bboxFromGeoJson(geojson) : bboxFromGeoJson(point(center))
       const vs = bbox2Viewport(bbox, width, height)
       setViewState({ ...viewstate, ...vs })
     }
-
     return () => {
       window.removeEventListener('resize', updateDimensions)
     }
-  }, [geojson])
+  }, [geojson, center])
 
   const onViewStateChange = useCallback(({ viewState }) => {
     setViewState(viewState)

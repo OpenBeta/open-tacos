@@ -16,11 +16,12 @@ module.exports = {
       },
       colors: {
         'custom-green': '#8BB191',
+        'ob-primary': '#F07933',
         'ob-tertiary': '#8BB191',
         'ob-secondary': '#62cae3',
         'custom-secondary': '#62cae3',
         'custom-avery': '#a5d9cf',
-        'custom-primary': '#e7811d'
+        'custom-primary': '#F07933'
       },
       height: {
         'screen-85': '85vh',
