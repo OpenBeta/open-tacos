@@ -35,11 +35,14 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
         return (
           <span key={index} className='text-secondary'>
             <span className='mx-1.5'>/</span>
-            <Link href={isLastElement && isClimbPage ? climbPageLastUrl : url}>
-              <a className='hover:underline hover:text-gray-900'>
-                {sanitizeName(place)}
-              </a>
-            </Link>
+            {(isLastElement && !isClimbPage && <span className=''>{sanitizeName(place)}</span>) ||
+            (
+              <Link href={isLastElement && isClimbPage ? climbPageLastUrl : url}>
+                <a className='hover:underline hover:text-gray-900'>
+                  {sanitizeName(place)}
+                </a>
+              </Link>
+            )}
           </span>
         )
       })}
