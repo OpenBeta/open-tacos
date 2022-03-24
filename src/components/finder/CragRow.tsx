@@ -12,7 +12,7 @@ const CragRow = ({ id, area_name: _name, totalClimbs, metadata, aggregate}: Part
     <Link href={`crag/${id}`}>
       <a>
         <div
-          className='border-b border-b-neutral-200 py-6' onMouseOver={() => {
+          className='border-b border-b-slate-500 py-6' onMouseOver={() => {
             // Todo set some state to highlight this crag on the map
           }}
         >

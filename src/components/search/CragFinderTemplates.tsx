@@ -46,7 +46,7 @@ export const PlaceTemplate = ({ placeName, shortName, center, placeId, router }:
         }, null, { shallow: true })}
     >
       <div className='space-x-2 lg:space-x-4 flex flex-nowrap items-center'>
-        <div className='rounded-md p-2 bg-slate-100'>
+        <div className='rounded-md p-2 bg-slate-200'>
           <Icon className='fill-slate-900 stroke-white' type='droppin' />
         </div>
         <div className='text-base'>{placeName}</div>
