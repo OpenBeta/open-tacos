@@ -1,11 +1,10 @@
 import { mapValuesKey, createStore } from '@udecode/zustood'
-import {
-  gql
-} from '@apollo/client'
-import { graphqlClient } from '../../js/graphql/Client'
+
+import { RadiusRange } from '../types'
+import { getCragDetailsNear } from '../graphql/api'
 
 /**
- * Crag finder filters
+ * App main data store
  */
 export const cragFiltersStore = createStore('filters')({
   trad: true,
@@ -19,8 +18,13 @@ export const cragFiltersStore = createStore('filters')({
   boulderingRange: {
     scores: [0, 0],
     labels: ['v0', 'v3']
+  },
+  radius: {
+    rangeMeters: [0, 48000],
+    rangeIndices: [0, 1]
   }
 }, {
+  // Todo: figure out how to persist/restore settings from Local storage
   // persist: {
   //   name: 'ob-filters',
   //   enabled: true,
@@ -34,6 +38,15 @@ export const cragFiltersStore = createStore('filters')({
       /* eslint-disable-next-line */
       draft[stateName] = !(draft[stateName] as boolean)
     })
+  },
+
+  updateRadius: async (range: RadiusRange) => {
+    set.radius(range)
+    const { groups, total } = await getCragDetailsNear(
+      undefined,
+      cragFinderStore.get.lnglat(),
+      get.radius().rangeMeters, true)
+    actions.finder.updateData(groups, total)
   }
 }))
 
@@ -47,37 +60,19 @@ export const cragFinderStore = createStore('finder')({
   lnglat: undefined,
   isLoading: false
 }).extendActions((set, get, api) => ({
+  updateData: (groups, total) => {
+    set.groups(groups)
+    set.total(total)
+  },
   validLnglat: async (text: string, placeId: string, lnglat: [number, number]) => {
     set.lnglat(lnglat)
     set.searchText(text)
-    set.isLoading(true)
     set.groups([])
-    try {
-      const rs = await graphqlClient.query({
-        query: CRAGS_NEAR,
-        fetchPolicy: 'cache-first',
-        variables: {
-          lng: lnglat[0],
-          lat: lnglat[1],
-          placeId,
-          maxDistance: 120000
-        }
-      })
-
-      const { cragsNear } = rs.data
-
-      set.groups(cragsNear)
-
-      const total = cragsNear.reduce((acc: number, curr) => {
-        return acc + (curr.count as number)
-      }, 0)
-
-      set.total(total)
-    } catch (e) {
-      console.log(e)
-    } finally {
-      set.isLoading(false)
-    }
+    set.isLoading(true)
+    const { groups, total } = await getCragDetailsNear(placeId, lnglat, cragFiltersStore.get.radius().rangeMeters, true)
+    set.groups(groups)
+    set.total(total)
+    set.isLoading(false)
   }
 }))
 
@@ -96,77 +91,3 @@ export const store = mapValuesKey('get', rootStore)
 
 // Global actions
 export const actions = mapValuesKey('set', rootStore)
-
-const CRAGS_NEAR = gql`query CragsNear($placeId: String, $lng: Float, $lat: Float, $maxDistance: Int) {
-  cragsNear(placeId: $placeId, lnglat: {lat: $lat, lng: $lng}, maxDistance: $maxDistance) {
-      count
-      _id 
-      placeId
-      crags {
-        area_name
-        id
-        totalClimbs
-        metadata {
-          lat
-          lng
-        }
-        climbs {
-          type {
-            aid
-            alpine
-            bouldering
-            mixed
-            sport
-            tr
-            trad
-          }
-        }
-        aggregate {
-          byDiscipline {
-            sport {
-              total
-              bands {
-                advance
-                beginner
-                expert
-                intermediate
-              }
-            }
-            trad {
-              total
-              bands {
-                advance
-                beginner
-                expert
-                intermediate
-              }
-            }
-            boulder {
-              total
-              bands {
-                advance
-                beginner
-                expert
-                intermediate
-              }
-            }
-            tr {
-              total
-              bands {
-                advance
-                beginner
-                expert
-                intermediate
-              }
-            }
-          }
-          byGradeBand {
-            advance
-            beginner
-            expert
-            intermediate
-          }
-        }
-      }
-  }
-}`

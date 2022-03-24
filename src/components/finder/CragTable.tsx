@@ -7,7 +7,7 @@ const CragTable = ({ crags, subheader }: { crags: any[], subheader: string }): J
   const filters = cragFiltersStore.useStore()
   return (
     <>
-      <div className='border-b border-b-neutral-200' />
+      <div className='mt-4 border-b border-b-slate-500' />
       {crags.map(
         (crag) => {
           const disciplineFlag = applyFilters(crag, filters)

@@ -4,7 +4,7 @@ import { Feature, Geometry, featureCollection, point, Properties } from '@turf/h
 
 import CragsMap from '../maps/CragsMap'
 import useCragFinder from '../../js/hooks/finder/useCragFinder'
-import { CragDensity, LABELS } from '../search/CragsNearBy'
+import { LABELS } from '../search/CragsNearBy'
 import CragTable from './CragTable'
 import TwoColumnLayout from './TwoColumnLayout'
 import { sanitizeName } from '../../js/utils'
@@ -27,8 +27,7 @@ const DataContainer = (): JSX.Element => {
       left={
         <>
           <Preface isLoading={isLoading} total={total} searchText={searchText} />
-          <CragDensity crags={groups} />
-          {groups.map(({ _id, crags, total }) => {
+          {groups.map(({ _id, crags }) => {
             return <CragTable key={_id} subheader={LABELS[_id].label} crags={crags} />
           })}
         </>
@@ -41,7 +40,7 @@ const DataContainer = (): JSX.Element => {
 export default DataContainer
 
 const Preface = ({ isLoading, total, searchText }: {isLoading: boolean, total: number, searchText: string}): JSX.Element => (
-  <section className='mt-32 text-sm'>
+  <section className='mt-36 px-2 py-3 text-sm border border-b-2 border-slate-600 rounded-md'>
     <div>
       {isLoading
         ? `Loading crags in ${searchText}...`

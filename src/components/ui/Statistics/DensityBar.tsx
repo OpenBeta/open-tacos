@@ -4,7 +4,7 @@ const DensityBar = ({ level, max }: {level: number, max: number}): JSX.Element =
       {
     [...Array(max)].map(
       (_, i) =>
-        <span key={i} className={`h-2 w-2.5 ${i > level ? 'bg-gray-300' : 'bg-slate-900'}`} />)
+        <span key={i} className={`h-1.5 w-2 ${i > level ? 'bg-slate-200' : 'bg-slate-500'}`} />)
 }
     </div>
   )
