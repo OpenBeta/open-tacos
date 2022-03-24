@@ -138,3 +138,8 @@ export enum GradeBand {
   advanced = '2',
   expert = '3'
 }
+
+export interface RadiusRange {
+  rangeMeters: number[]
+  rangeIndices: number[]
+}
