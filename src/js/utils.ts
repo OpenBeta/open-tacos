@@ -118,3 +118,17 @@ export const getSlug = (areaId: string, isLeaf: boolean): string => {
   const type = isLeaf ? 'crag' : 'areas'
   return `/${type}/${areaId}`
 }
+
+function debouncePromise (fn: Function, time: number): any {
+  let timerId: ReturnType<typeof setTimeout>
+
+  return async function debounced (...args) {
+    clearTimeout(timerId)
+
+    return await new Promise((resolve) => {
+      timerId = setTimeout(() => resolve(fn(...args)), time)
+    })
+  }
+}
+
+export const debounced = debouncePromise(async (items: object[]): Promise<object[]> => await Promise.resolve(items), 1000)

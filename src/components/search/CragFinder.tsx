@@ -5,6 +5,8 @@ import ClientOnly from '../../components/ClientOnly'
 import { Autocomplete } from './Autocomplete'
 import { geocoderLookup } from '../../js/mapbox/Client'
 import { PlaceTemplate, resultItemToUrl } from './CragFinderTemplates'
+// import { useDebounce } from '../../js/hooks/useDebounce'
+import { debounced } from '../../js/utils'
 
 const SEARCH_OPTIONS = {
   country: 'US',
@@ -18,25 +20,25 @@ export interface CragFinderProps {
 const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las Vegas\'' }: CragFinderProps): JSX.Element => {
   const router = useRouter()
   useEffect(() => {
-    if (isMobile) return
-    const inputs = document.getElementsByClassName('aa-Input')
-    for (let i = 0; i < inputs.length; i++) {
-      (inputs[i] as HTMLElement).focus()
-    }
+    // if (isMobile) return
+    // const inputs = document.getElementsByClassName('aa-Input')
+    // for (let i = 0; i < inputs.length; i++) {
+    //   (inputs[i] as HTMLElement).focus()
+    // }
   })
   return (
     <Autocomplete
       id='crag-finder'
       classNames={{ item: 'crag-finder-item', panelLayout: 'crag-finder-panelLayout' }}
       placeholder={placeholder}
-      getSources={async ({ query }) => {
+      getSources={({ query }) => {
         if ((query as string).length < 3) {
           return []
         }
-        const features = await geocoderLookup(query, SEARCH_OPTIONS)
-        return [{
+        const features = async (): Promise<any> => await geocoderLookup(query, SEARCH_OPTIONS)
+        return debounced([{
           sourceId: 'location',
-          getItems: () => features,
+          getItems: features,
           navigator: {
             async navigate ({ itemUrl }) {
               await router.push(itemUrl)
@@ -59,7 +61,7 @@ const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las 
             }
           }
         }
-        ]
+        ])
       }}
     />
   )
