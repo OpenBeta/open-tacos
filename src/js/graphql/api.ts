@@ -4,6 +4,7 @@ import { graphqlClient } from './Client'
 
 interface CragsDetailsNearType {
   data: Array<Partial<AreaType>>
+  placeId: string
   error?: string | undefined
 }
 
@@ -29,13 +30,14 @@ export const getCragDetailsNear = async (
 
     const { cragsNear } = rs.data
     const groups = cragsNear.map(entry => entry.crags).flat()
-    return { data: groups }
+    return { data: groups, placeId }
   } catch (e) {
     console.log(e)
   }
   return {
     data: [],
-    error: 'API error'
+    error: 'API error',
+    placeId: undefined
   }
 }
 

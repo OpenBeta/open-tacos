@@ -3,6 +3,7 @@ import { mapValuesKey, createStore } from '@udecode/zustood'
 import { RadiusRange } from '../types'
 import { getCragDetailsNear } from '../graphql/api'
 import { calculatePagination } from './util'
+import { applyFilters } from '../../components/finder/CragTable'
 /**
  * App main data store
  */
@@ -10,6 +11,7 @@ import { calculatePagination } from './util'
 const ITEMS_PER_PAGE = 20
 
 export const cragFiltersStore = createStore('filters')({
+  placeId: '',
   searchText: '',
   crags: [],
   total: 0,
@@ -17,7 +19,7 @@ export const cragFiltersStore = createStore('filters')({
   isLoading: false,
   trad: true,
   sport: true,
-  bouldering: true,
+  boulder: true,
   tr: true,
   freeRange: {
     scores: [0, 0],
@@ -47,13 +49,6 @@ export const cragFiltersStore = createStore('filters')({
   //   }
   // }
 }).extendActions((set, get, api) => ({
-  toggle: (stateName: 'sport'| 'trad' | 'tr' | 'bouldering') => {
-    set.state(draft => {
-      /* eslint-disable-next-line */
-      draft[stateName] = !(draft[stateName] as boolean)
-    })
-  }
-})).extendActions((set, get, api) => ({
   updatePagination: (shouldResetToPage0: boolean = false) => {
     const itemOffset = shouldResetToPage0 ? 0 : get.pagination().itemOffset
     const newState = calculatePagination(
@@ -65,40 +60,46 @@ export const cragFiltersStore = createStore('filters')({
     set.pagination(newState)
   }
 })).extendActions((set, get, api) => ({
-  // - Update main data structure (crags)
-  // - Calculate derived data
-  update: (crags) => {
-    set.crags(crags)
-    set.total(crags.length)
+  applyLocalFilters: () => {
+    const newCragsState = get.crags().filter(crag => applyFilters(crag, get))
+    set.crags(newCragsState)
+    set.total(newCragsState.length)
     set.updatePagination(true)
   }
 }))
   .extendActions((set, get, api) => ({
-    updateRadius: async (range: RadiusRange) => {
-      set.radius(range)
+  // - Update main data structure (crags)
+  // - Calculate derived data
+    fetchData: async () => {
+      const { placeId, lnglat, radius } = get
       set.isLoading(true)
       const { data } = await getCragDetailsNear(
-        undefined,
-        get.lnglat(),
-        get.radius().rangeMeters, true)
+        placeId(), lnglat(), radius().rangeMeters, true)
+      const newCragsState = data.filter(crag => applyFilters(crag, get))
+
       set.isLoading(false)
-      set.update(data)
+      set.crags(newCragsState)
+      set.total(newCragsState.length)
+      set.updatePagination(true)
+    }
+  }))
+  .extendActions((set, get, api) => ({
+    updateRadius: async (range: RadiusRange) => {
+      set.radius(range)
+      await set.fetchData()
     },
 
     validLnglat: async (text: string, placeId: string, lnglat: [number, number]) => {
       set.lnglat(lnglat)
+      set.placeId(placeId)
       set.searchText(text)
-      set.isLoading(true)
-      const { data } = await getCragDetailsNear(
-        placeId, lnglat, get.radius().rangeMeters, true)
-      set.update(data)
-      set.isLoading(false)
+      await set.fetchData()
     },
 
-    /**
-   * Jump to new page
-   * @param pageNumber
-   */
+    /*
+     * Jump to new page
+     * @param pageNumber
+     */
     toPage: (pageNumber: number) => {
       const newOffset = (pageNumber * ITEMS_PER_PAGE) % get.crags().length
       set.pagination({
@@ -107,6 +108,26 @@ export const cragFiltersStore = createStore('filters')({
       })
 
       set.updatePagination()
+    },
+
+    updateFreeRange: async (newRange) => {
+      set.freeRange(newRange)
+      await set.fetchData()
+    },
+
+    toggle: async (stateName: 'sport'| 'trad' | 'tr' | 'boulder') => {
+      let previousState = true
+      set.state(draft => {
+        /* eslint-disable-next-line */
+        previousState = draft[stateName] as boolean
+        draft[stateName] = !previousState
+      })
+
+      if (!previousState) {
+        await set.fetchData()
+      } else {
+        set.applyLocalFilters()
+      }
     }
   }))
 

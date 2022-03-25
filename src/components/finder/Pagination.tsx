@@ -29,5 +29,6 @@ const Pagination = (): JSX.Element => {
 export default Pagination
 
 const handlePageClick = ({ selected }: { selected: number }): void => {
+  window.scrollTo({ top: 0, behavior: 'auto' })
   actions.filters.toPage(selected)
 }

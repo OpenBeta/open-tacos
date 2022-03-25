@@ -12,7 +12,7 @@ import Pagination from './Pagination'
 
 const DataContainer = (): JSX.Element => {
   const cragFiltersStore = useCragFinder(useRouter())
-  const { lnglat, total, searchText, crags, isLoading, pagination } = cragFiltersStore.useStore()
+  const { lnglat, total, searchText, crags, isLoading } = cragFiltersStore.useStore()
 
   const points: Array<Feature<Geometry, Properties>> =
   crags.map((crag: AreaType) => {
@@ -23,15 +23,12 @@ const DataContainer = (): JSX.Element => {
 
   const geojson = featureCollection(points)
   const map = useMemo(() => <CragsMap geojson={geojson} center={lnglat} />, [geojson, lnglat])
-
-  const { currentItems } = pagination
-
   return (
     <TwoColumnLayout
       left={
         <>
           <Preface isLoading={isLoading} total={total} searchText={searchText} />
-          <CragTable crags={currentItems} />
+          <CragTable />
           <Pagination />
         </>
 }

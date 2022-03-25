@@ -9,7 +9,7 @@ const RadiusFilter = (): JSX.Element => {
   const [range, setRange] = useState(initial)
 
   const applyFn = useCallback(async (): Promise<any> => {
-    void actions.filters.updateRadius(range)
+    await actions.filters.updateRadius(range)
   }, [range]
   )
 
