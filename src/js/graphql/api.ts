@@ -1,12 +1,18 @@
 import { gql } from '@apollo/client'
+import { AreaType } from '../types'
 import { graphqlClient } from './Client'
+
+interface CragsDetailsNearType {
+  data: Array<Partial<AreaType>>
+  error?: string | undefined
+}
 
 export const getCragDetailsNear = async (
   placeId: string = 'unspecified',
   lnglat: [number, number],
   range: number[],
   includeCrags: boolean = false
-): Promise<any> => {
+): Promise<CragsDetailsNearType> => {
   try {
     const rs = await graphqlClient.query({
       query: CRAGS_NEAR,
@@ -22,20 +28,14 @@ export const getCragDetailsNear = async (
     })
 
     const { cragsNear } = rs.data
-
-    const total = cragsNear.reduce((acc: number, curr) => {
-      return acc + (curr.count as number)
-    }, 0)
-    return {
-      groups: cragsNear,
-      total: total
-    }
+    const groups = cragsNear.map(entry => entry.crags).flat()
+    return { data: groups }
   } catch (e) {
     console.log(e)
   }
   return {
-    groups: {},
-    total: 0
+    data: [],
+    error: 'API error'
   }
 }
 

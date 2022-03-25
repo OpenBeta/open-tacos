@@ -3,7 +3,7 @@ import { AreaType, CountByDisciplineType } from '../../js/types'
 import { getBandIndex } from '../../js/grades/bandUtil'
 import CragRow from './CragRow'
 
-const CragTable = ({ crags, subheader }: { crags: any[], subheader: string }): JSX.Element => {
+const CragTable = ({ crags }: { crags: Array<Partial<AreaType>>}): JSX.Element => {
   const filters = cragFiltersStore.useStore()
   return (
     <>
@@ -21,7 +21,7 @@ const CragTable = ({ crags, subheader }: { crags: any[], subheader: string }): J
 }
 export default CragTable
 
-const applyFilters = (crag: AreaType, filters: any): boolean => {
+const applyFilters = (crag: Partial<AreaType>, filters: any): boolean => {
   const { byDiscipline } = crag.aggregate
 
   if (applyDisciplineFilter('trad', filters, byDiscipline) &&

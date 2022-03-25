@@ -2,11 +2,19 @@ import { mapValuesKey, createStore } from '@udecode/zustood'
 
 import { RadiusRange } from '../types'
 import { getCragDetailsNear } from '../graphql/api'
-
+import { calculatePagination } from './util'
 /**
  * App main data store
  */
+
+const ITEMS_PER_PAGE = 20
+
 export const cragFiltersStore = createStore('filters')({
+  searchText: '',
+  crags: [],
+  total: 0,
+  lnglat: undefined,
+  isLoading: false,
   trad: true,
   sport: true,
   bouldering: true,
@@ -22,6 +30,12 @@ export const cragFiltersStore = createStore('filters')({
   radius: {
     rangeMeters: [0, 48000],
     rangeIndices: [0, 1]
+  },
+  pagination: {
+    currentItems: [],
+    pageCount: 0,
+    itemOffset: 0,
+    currentPage: 0
   }
 }, {
   // Todo: figure out how to persist/restore settings from Local storage
@@ -38,47 +52,67 @@ export const cragFiltersStore = createStore('filters')({
       /* eslint-disable-next-line */
       draft[stateName] = !(draft[stateName] as boolean)
     })
-  },
-
-  updateRadius: async (range: RadiusRange) => {
-    set.radius(range)
-    const { groups, total } = await getCragDetailsNear(
-      undefined,
-      cragFinderStore.get.lnglat(),
-      get.radius().rangeMeters, true)
-    actions.finder.updateData(groups, total)
+  }
+})).extendActions((set, get, api) => ({
+  updatePagination: (shouldResetToPage0: boolean = false) => {
+    const itemOffset = shouldResetToPage0 ? 0 : get.pagination().itemOffset
+    const newState = calculatePagination(
+      {
+        whole: get.crags(),
+        itemOffset,
+        itemsPerPage: ITEMS_PER_PAGE
+      })
+    set.pagination(newState)
+  }
+})).extendActions((set, get, api) => ({
+  // - Update main data structure (crags)
+  // - Calculate derived data
+  update: (crags) => {
+    set.crags(crags)
+    set.total(crags.length)
+    set.updatePagination(true)
   }
 }))
+  .extendActions((set, get, api) => ({
+    updateRadius: async (range: RadiusRange) => {
+      set.radius(range)
+      set.isLoading(true)
+      const { data } = await getCragDetailsNear(
+        undefined,
+        get.lnglat(),
+        get.radius().rangeMeters, true)
+      set.isLoading(false)
+      set.update(data)
+    },
 
-/**
- * Crag finder data
- */
-export const cragFinderStore = createStore('finder')({
-  searchText: '',
-  groups: [],
-  total: 0,
-  lnglat: undefined,
-  isLoading: false
-}).extendActions((set, get, api) => ({
-  updateData: (groups, total) => {
-    set.groups(groups)
-    set.total(total)
-  },
-  validLnglat: async (text: string, placeId: string, lnglat: [number, number]) => {
-    set.lnglat(lnglat)
-    set.searchText(text)
-    set.groups([])
-    set.isLoading(true)
-    const { groups, total } = await getCragDetailsNear(placeId, lnglat, cragFiltersStore.get.radius().rangeMeters, true)
-    set.groups(groups)
-    set.total(total)
-    set.isLoading(false)
-  }
-}))
+    validLnglat: async (text: string, placeId: string, lnglat: [number, number]) => {
+      set.lnglat(lnglat)
+      set.searchText(text)
+      set.isLoading(true)
+      const { data } = await getCragDetailsNear(
+        placeId, lnglat, get.radius().rangeMeters, true)
+      set.update(data)
+      set.isLoading(false)
+    },
+
+    /**
+   * Jump to new page
+   * @param pageNumber
+   */
+    toPage: (pageNumber: number) => {
+      const newOffset = (pageNumber * ITEMS_PER_PAGE) % get.crags().length
+      set.pagination({
+        ...get.pagination(),
+        itemOffset: newOffset
+      })
+
+      set.updatePagination()
+    }
+  }))
 
 // Global store
 export const rootStore = {
-  finder: cragFinderStore,
+  // finder: cragFinderStore,
   filters: cragFiltersStore
 }
 
