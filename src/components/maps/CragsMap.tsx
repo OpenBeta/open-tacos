@@ -20,7 +20,8 @@ const layerStyle: LayerProps = {
     'text-radial-offset': 1,
     'text-justify': 'auto',
     'icon-image': 'circle',
-    'text-size': ['interpolate', ['linear'], ['zoom'], 8, 14, 14, 12]
+    'text-size': ['interpolate', ['linear'], ['zoom'], 8, 14, 14, 12],
+    'icon-allow-overlap': true
   },
   paint: {
     'text-halo-blur': 4,

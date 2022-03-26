@@ -4,11 +4,12 @@ import { RadiusRange } from '../types'
 import { getCragDetailsNear } from '../graphql/api'
 import { calculatePagination } from './util'
 import { applyFilters } from '../../components/finder/CragTable'
+
 /**
  * App main data store
  */
 
-const ITEMS_PER_PAGE = 20
+export const ITEMS_PER_PAGE = 20
 
 export const cragFiltersStore = createStore('filters')({
   placeId: '',
@@ -122,12 +123,7 @@ export const cragFiltersStore = createStore('filters')({
         previousState = draft[stateName] as boolean
         draft[stateName] = !previousState
       })
-
-      if (!previousState) {
-        await set.fetchData()
-      } else {
-        set.applyLocalFilters()
-      }
+      await set.fetchData()
     }
   }))
 

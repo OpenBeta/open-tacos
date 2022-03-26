@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { Feature, Geometry, featureCollection, point, Properties } from '@turf/helpers'
+import NProgress from 'nprogress/nprogress'
 
 import CragsMap from '../maps/CragsMap'
 import useCragFinder from '../../js/hooks/finder/useCragFinder'
@@ -10,9 +11,11 @@ import { sanitizeName } from '../../js/utils'
 import { AreaType } from '../../js/types'
 import Pagination from './Pagination'
 
+NProgress.configure({ showSpinner: false, easing: 'ease-in-out', speed: 1000 })
+
 const DataContainer = (): JSX.Element => {
   const cragFiltersStore = useCragFinder(useRouter())
-  const { lnglat, total, searchText, crags, isLoading } = cragFiltersStore.useStore()
+  const { lnglat, total, searchText, isLoading, crags } = cragFiltersStore.useStore()
 
   const points: Array<Feature<Geometry, Properties>> =
   crags.map((crag: AreaType) => {
@@ -20,6 +23,12 @@ const DataContainer = (): JSX.Element => {
     return point([metadata.lng, metadata.lat], { name: sanitizeName(name) })
   }
   )
+
+  if (isLoading) {
+    NProgress.start()
+  } else {
+    NProgress.done()
+  }
 
   const geojson = featureCollection(points)
   const map = useMemo(() => <CragsMap geojson={geojson} center={lnglat} />, [geojson, lnglat])

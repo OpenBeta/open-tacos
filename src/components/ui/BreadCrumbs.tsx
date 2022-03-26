@@ -52,13 +52,17 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
 
 export interface MiniBreadCrumbsProps {
   pathTokens: string[]
-  end?: number // how many levels of ancestor to disply
+  end?: number // number of immediate ancestors to disply
+  skipLast?: boolean
 }
 
 const SEPARATOR = ' \u25BB '
 
-export const MiniCrumbs = ({ pathTokens, end = 2 }: MiniBreadCrumbsProps): JSX.Element => {
-  const tokens = [pathTokens.slice(1, 2)[0] + ' ...', ...pathTokens.slice(pathTokens.length - end)].map(sanitizeName)
+export const MiniCrumbs = ({ pathTokens, end = 2, skipLast = false }: MiniBreadCrumbsProps): JSX.Element => {
+  const tokens = [
+    pathTokens.slice(1, 2)[0] + ' ...',
+    ...pathTokens.slice(pathTokens.length - end, skipLast ? pathTokens.length - 1 : undefined)
+  ].map(sanitizeName)
   return (
     <div className='pb-2 font-semibold text-xs text-secondary'>{tokens.join(SEPARATOR)}</div>
   )
