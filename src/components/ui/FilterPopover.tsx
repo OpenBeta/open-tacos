@@ -20,15 +20,21 @@ const FilterPopover = ({ label, header, children, onApply, min, max }: FilterPop
       btnLabel={label}
     >
       <LeanPopover.ContentPanel
-        className='relative w-full max-w-screen-sm mt-2 bg-white rounded-md p-4 drop-shadow-md'
+        className='relative max-w-screen-sm mt-2 bg-white rounded-md p-4 drop-shadow-md min-w-[400px]'
         onApply={onApply}
       >
         <header className='mb-16'>{header}</header>
         <div className='px-4'>{children}</div>
         {min !== undefined && max !== undefined &&
-          <div className='mt-8 flex justify-between text-sm'>
-            <div>{min}</div>
-            <div>{max}</div>
+          <div className='px-4 mt-12 flex justify-between text-sm'>
+            <div className='flex flex-col items-center'>
+              <div className='text-secondary text-xs'>Min</div>
+              <div className='pt-1 text-primary border-t-2 border-slate-400'>{min}</div>
+            </div>
+            <div className='flex flex-col items-center'>
+              <div className='text-secondary text-xs'>Max</div>
+              <div className='pt-1 text-primary border-t-2 border-slate-400'>{max}</div>
+            </div>
           </div>}
       </LeanPopover.ContentPanel>
     </LeanPopover>

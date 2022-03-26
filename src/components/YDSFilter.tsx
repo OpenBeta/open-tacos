@@ -1,25 +1,31 @@
 import { useState, useCallback } from 'react'
-import GradeFilterPopover from './ui/GradeFilterPopover'
-import YDSRangeSlider from './ui/YDSRangeSlider'
+import FilterPopover from './ui/FilterPopover'
+import YDSRangeSlider, { YDS_DEFS } from './ui/YDSRangeSlider'
 import { actions, cragFiltersStore } from '../js/stores'
 
+/**
+ * Free climb grade range selector
+ */
 const YDSFilter = (): JSX.Element => {
-  const initial = cragFiltersStore.use.freeRange()
-  const [range, setRange] = useState(initial)
+  const initialRange = cragFiltersStore.get.freeRange()
+  const [range, setRange] = useState(initialRange)
 
   const applyFn = useCallback((): void => {
     void actions.filters.updateFreeRange(range)
   }, [range]
   )
+
+  const displayRange = cragFiltersStore.get.displayFreeRange()
   return (
-    <GradeFilterPopover
-      label={`${range.labels[0]} – ${range.labels[1]}`}
-      heading='Select a grade range'
-      slider={<YDSRangeSlider onChange={setRange} defaultValue={[4, 8]} />}
-      min={range.labels[0]}
-      max={range.labels[1]}
+    <FilterPopover
+      label={`${displayRange[0]} - ${displayRange[1]}`}
+      header='Select a grade range'
+      min={YDS_DEFS[range[0]].label}
+      max={YDS_DEFS[range[1]].label}
       onApply={applyFn}
-    />
+    >
+      <YDSRangeSlider onChange={setRange} defaultValue={initialRange} />
+    </FilterPopover>
   )
 }
 

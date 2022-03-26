@@ -1,6 +1,5 @@
 import { cragFiltersStore } from '../../js/stores'
 import { CountByDisciplineType } from '../../js/types'
-import { getBandIndex } from '../../js/grades/bandUtil'
 
 const DISCIPLINES = [
   'sport',
@@ -13,10 +12,13 @@ interface DTableProps {
   byDisciplineAgg: CountByDisciplineType
 }
 
+/**
+ * Grade distribution table
+ * @param CountByDisciplineType stat aggregate
+ */
 const DTable = ({ byDisciplineAgg }: DTableProps): JSX.Element => {
-  const { freeRange, trad, sport, boulder, tr } = cragFiltersStore.useStore()
-  const myLowBand = getBandIndex(freeRange.labels[0])
-  const myHighBand = getBandIndex(freeRange.labels[1])
+  const { trad, sport, boulder, tr } = cragFiltersStore.get
+  const [myLowBand, myHighBand] = cragFiltersStore.get.bandRange()
   return (
     <table
       className='table-fixed text-sm rounded border-separate'
@@ -45,7 +47,7 @@ const DTable = ({ byDisciplineAgg }: DTableProps): JSX.Element => {
                 total={byDisciplineAgg?.[d]?.total}
                 {...byDisciplineAgg[d]?.bands}
                 myFreeRange={[myLowBand, myHighBand]}
-                highlighted={shouldHighlight(d, trad, sport, boulder, tr)}
+                highlighted={shouldHighlight(d, trad(), sport(), boulder(), tr())}
               />
             )
           })

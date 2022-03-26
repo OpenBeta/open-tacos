@@ -5,7 +5,7 @@ import { RadiusRangeSlider, radiusRangeToString, prettifyLabel } from './ui/Radi
 import FilterPopover from './ui/FilterPopover'
 
 const RadiusFilter = (): JSX.Element => {
-  const initial = cragFiltersStore.use.radius()
+  const initial = cragFiltersStore.get.radius()
   const [range, setRange] = useState(initial)
 
   const applyFn = useCallback(async (): Promise<any> => {
@@ -16,7 +16,7 @@ const RadiusFilter = (): JSX.Element => {
   const { min, max } = radiusRangeToString(range)
   return (
     <FilterPopover
-      label={prettifyLabel(range)}
+      label={prettifyLabel(initial)}
       header='Select a search radius'
       min={min}
       max={max}

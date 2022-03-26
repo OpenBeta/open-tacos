@@ -2,9 +2,7 @@ import { Popover } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 
 /**
- * Barebone popover component
- * @param
- * @returns
+ * Barebone popover component for grades, radius, disciplines selector
  */
 const LeanPopover = ({ btnClz, btnLabel, children }): JSX.Element => {
   return (
@@ -15,7 +13,7 @@ const LeanPopover = ({ btnClz, btnLabel, children }): JSX.Element => {
             <span>{btnLabel}</span>
             <div className='w-4 h-4'><ChevronDownIcon className={`text-white ${open ? 'transform rotate-180' : ''}`} /></div>
           </Popover.Button>
-          <Popover.Panel className='absolute w-full z-10'>
+          <Popover.Panel className='absolute z-10'>
             {children}
           </Popover.Panel>
         </>)}
@@ -27,10 +25,13 @@ const ContentPanel = ({ className, onApply, btnApplyLabel = 'Apply', children })
   return (
     <div className={className}>
       {children}
-      <hr className='my-2.5' />
-      <footer className='flex justify-end items-center'>
+      <hr className='mt-8' />
+      <footer className='mt-2 flex justify-between items-center'>
+        <Popover.Button className='text-secondary hover:underline'>
+          Cancel
+        </Popover.Button>
         <div onClick={onApply}>
-          <Popover.Button>
+          <Popover.Button className='text-primary-contrast bg-slate-800 rounded-md px-2 py-0.5'>
             {btnApplyLabel}
           </Popover.Button>
         </div>

@@ -6,7 +6,7 @@ interface CalculatePaginationProps {
   whole: AreaType[]
 }
 
-interface NextPaginationProps {
+export interface NextPaginationProps {
   currentItems: AreaType[]
   pageCount: number
   itemOffset: number
