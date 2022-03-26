@@ -1,5 +1,5 @@
 import RangeSlider from './RangeSlider'
-import { YDS_DEFS, rangeTransformer, genSliderMarks } from '../../js/grades/ranges'
+import { YDS_DEFS, genSliderMarks } from '../../js/grades/ranges'
 
 export { YDS_DEFS }
 
@@ -13,7 +13,7 @@ const YDSRangeSlider = ({ onChange, defaultValue }): JSX.Element => {
       min={0}
       max={13}
       defaultValue={defaultValue}
-      onChange={(range: [number, number]) => onChange(rangeTransformer(range, YDS_DEFS))}
+      onChange={onChange}
     />
   )
 }

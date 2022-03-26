@@ -1,9 +1,10 @@
 import { mapValuesKey, createStore } from '@udecode/zustood'
 
-import { RadiusRange } from '../types'
+import { RadiusRange, CountByGradeBandType, AreaType } from '../types'
 import { getCragDetailsNear } from '../graphql/api'
-import { calculatePagination } from './util'
-import { applyFilters } from '../../components/finder/CragTable'
+import { calculatePagination, NextPaginationProps } from './util'
+import { YDS_DEFS } from '../grades/rangeDefs'
+import { freeScoreToBandIndex, BAND_BY_INDEX } from '../grades/bandUtil'
 
 /**
  * App main data store
@@ -22,10 +23,7 @@ export const cragFiltersStore = createStore('filters')({
   sport: true,
   boulder: true,
   tr: true,
-  freeRange: {
-    scores: [0, 0],
-    labels: ['5.6', '5.10']
-  },
+  freeRange: [4, 8], // keys to YDS_DEFS object
   boulderingRange: {
     scores: [0, 0],
     labels: ['v0', 'v3']
@@ -49,25 +47,89 @@ export const cragFiltersStore = createStore('filters')({
   //     console.log('hydration starts', state)
   //   }
   // }
-}).extendActions((set, get, api) => ({
-  updatePagination: (shouldResetToPage0: boolean = false) => {
-    const itemOffset = shouldResetToPage0 ? 0 : get.pagination().itemOffset
-    const newState = calculatePagination(
-      {
-        whole: get.crags(),
-        itemOffset,
-        itemsPerPage: ITEMS_PER_PAGE
-      })
-    set.pagination(newState)
-  }
-})).extendActions((set, get, api) => ({
-  applyLocalFilters: () => {
-    const newCragsState = get.crags().filter(crag => applyFilters(crag, get))
-    set.crags(newCragsState)
-    set.total(newCragsState.length)
-    set.updatePagination(true)
+}).extendSelectors((_, get) => ({
+
+  displayFreeRange: () => {
+    const [min, max] = get.freeRange()
+    return ([
+      YDS_DEFS[min].label,
+      YDS_DEFS[max].label])
+  },
+
+  scoreFreeRange: () => {
+    const [min, max] = get.freeRange()
+    return ([
+      YDS_DEFS[min].score,
+      YDS_DEFS[max].score])
   }
 }))
+  .extendSelectors((_, get) => ({
+
+    bandRange: () => {
+      const [min, max] = get.scoreFreeRange()
+      const minBand = freeScoreToBandIndex(min)
+      const maxBand = freeScoreToBandIndex(max)
+      return [
+        minBand,
+        maxBand]
+    }
+  })).extendSelectors((_, get) => ({
+
+    withinFreeRange: (gradeBands: CountByGradeBandType | undefined) => {
+      if (gradeBands === undefined) return false
+
+      const [min, max] = get.bandRange()
+
+      for (let i: number = min; i <= max; i++) {
+        if (gradeBands[BAND_BY_INDEX[i]] > 0) {
+          return true
+        }
+      }
+      return false
+    },
+
+    /**
+   * Test if crag's gradeBands match user's preferences
+   * @param gradeBands user bouldering range
+   * @returns
+   */
+    withinBoulderRange: (gradeBands: CountByGradeBandType | undefined) => {
+    // TBD
+      return true
+    }
+  })).extendSelectors((_, get) => ({
+
+    inMyRange: (crag: Partial<AreaType>): boolean => {
+      const { byDiscipline } = crag.aggregate
+
+      const { trad, sport, boulder, tr } = get
+
+      if (trad() && (byDiscipline?.trad?.total > 0 ?? false) &&
+      get.withinFreeRange(byDiscipline?.trad?.bands)) return true
+
+      if (sport() && (byDiscipline?.sport?.total > 0 ?? false) &&
+      get.withinFreeRange(byDiscipline?.sport?.bands)) return true
+
+      if (boulder() && (byDiscipline?.boulder?.total > 0 ?? false) &&
+        get.withinBoulderRange(byDiscipline?.boulder?.bands)) return true
+
+      if (tr() && (byDiscipline?.tr?.total > 0 ?? false) &&
+      get.withinFreeRange(byDiscipline?.tr?.bands)) return true
+
+      return false
+    }
+  })).extendActions((set, get, api) => ({
+    updatePagination: (shouldResetToPage0: boolean = false) => {
+      const itemOffset = shouldResetToPage0 ? 0 : get.pagination().itemOffset
+      const newState = calculatePagination(
+        {
+          whole: get.crags(),
+          itemOffset,
+          itemsPerPage: ITEMS_PER_PAGE
+        })
+      set.pagination(newState)
+    }
+  }))
   .extendActions((set, get, api) => ({
   // - Update main data structure (crags)
   // - Calculate derived data
@@ -76,7 +138,7 @@ export const cragFiltersStore = createStore('filters')({
       set.isLoading(true)
       const { data } = await getCragDetailsNear(
         placeId(), lnglat(), radius().rangeMeters, true)
-      const newCragsState = data.filter(crag => applyFilters(crag, get))
+      const newCragsState = data.filter(crag => get.inMyRange(crag))
 
       set.isLoading(false)
       set.crags(newCragsState)
@@ -142,3 +204,5 @@ export const store = mapValuesKey('get', rootStore)
 
 // Global actions
 export const actions = mapValuesKey('set', rootStore)
+
+export type { NextPaginationProps }

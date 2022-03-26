@@ -4,15 +4,24 @@ import 'rc-slider/assets/index.css'
 export interface RangeSliderProps {
   onChange: Function
 }
+
+const handleStyle = {
+  width: '1.25rem',
+  height: '1.25rem',
+  marginTop: '-0.5rem',
+  borderColor: 'rgb(30 41 59)',
+  opacity: 1,
+  backgroundColor: 'rgb(241 245 249)'
+}
+
 const RangeSlider = (props: Partial<SliderProps>): JSX.Element => (
   <Slider
     range
     {...props}
-    trackStyle={[{ backgroundColor: '#62cae3' }
+    trackStyle={[{ backgroundColor: 'rgb(30 41 59)' }
     ]}
-    activeDotStyle={{ borderColor: '#62cae3', backgroundColor: '#fafafa' }}
-    railStyle={{ backgroundColor: 'rgb(71 85 105)' }} // bg-slate-600
-    dotStyle={{ backgroundColor: 'rgb(148 163 184)', borderColor: 'rgb(148 163 184)' }}
+    activeDotStyle={{ borderColor: 'rgb(30 41 59)', backgroundColor: '#fafafa' }}
+    handleStyle={handleStyle}
   />
 )
 
