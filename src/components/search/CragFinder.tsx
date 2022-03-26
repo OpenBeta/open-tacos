@@ -7,6 +7,7 @@ import { geocoderLookup } from '../../js/mapbox/Client'
 import { PlaceTemplate, resultItemToUrl } from './CragFinderTemplates'
 // import { useDebounce } from '../../js/hooks/useDebounce'
 import { debounced } from '../../js/utils'
+import { Feature, Geometry } from 'geojson'
 
 const SEARCH_OPTIONS = {
   country: 'US',
@@ -35,15 +36,13 @@ const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las 
         if ((query as string).length < 3) {
           return []
         }
-        const features = async (): Promise<any> => await geocoderLookup(query, SEARCH_OPTIONS)
+        const features: () => Promise<Array<Feature<Geometry, { [name: string]: object }>>> = async () => await geocoderLookup(query, SEARCH_OPTIONS)
+        const navigate: ({ itemUrl: string }) => Promise<boolean> = async ({ itemUrl }) => await router.push(itemUrl)
+
         return debounced([{
           sourceId: 'location',
           getItems: features,
-          navigator: {
-            async navigate ({ itemUrl }) {
-              await router.push(itemUrl)
-            }
-          },
+          navigator: navigate,
           getItemUrl ({ item }) {
             const { text, center, id }: {text: string, center: [number, number], id: string } = item
             return resultItemToUrl(text, id, center)
