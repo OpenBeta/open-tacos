@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { typesenseSearch } from '../../js/typesense/TypesenseClient'
 import { Autocomplete } from './Autocomplete'
@@ -8,14 +7,6 @@ import { Feature, Geometry } from 'geojson'
 
 export const ClimbSearchByName = ({ isMobile = true, placeholder = 'Try \'Levitation 29\', \'technical crimpy\', or \'Lynn Hill\'' }: {isMobile?: boolean, placeholder?: string}): JSX.Element => {
   const router = useRouter()
-
-  useEffect(() => {
-    // if (isMobile) return
-    // const inputs = document.getElementsByClassName('aa-Input')
-    // for (let i = 0; i < inputs.length; i++) {
-    //   (inputs[i] as HTMLElement).focus()
-    // }
-  })
 
   return (
 

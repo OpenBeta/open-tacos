@@ -1,11 +1,8 @@
-import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import ClientOnly from '../../components/ClientOnly'
-
 import { Autocomplete } from './Autocomplete'
 import { geocoderLookup } from '../../js/mapbox/Client'
 import { PlaceTemplate, resultItemToUrl } from './CragFinderTemplates'
-// import { useDebounce } from '../../js/hooks/useDebounce'
 import { debounced } from '../../js/utils'
 import { Feature, Geometry } from 'geojson'
 
@@ -20,13 +17,7 @@ export interface CragFinderProps {
 
 const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las Vegas\'' }: CragFinderProps): JSX.Element => {
   const router = useRouter()
-  useEffect(() => {
-    // if (isMobile) return
-    // const inputs = document.getElementsByClassName('aa-Input')
-    // for (let i = 0; i < inputs.length; i++) {
-    //   (inputs[i] as HTMLElement).focus()
-    // }
-  })
+
   return (
     <Autocomplete
       id='crag-finder'
