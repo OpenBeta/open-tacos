@@ -4,6 +4,7 @@ import { typesenseSearch } from '../../js/typesense/TypesenseClient'
 import { Autocomplete } from './Autocomplete'
 import { SearchByNameTemplate } from './ResultTemplates'
 import { debounced } from '../../js/utils'
+import { Feature, Geometry } from 'geojson'
 
 export const ClimbSearchByName = ({ isMobile = true, placeholder = 'Try \'Levitation 29\', \'technical crimpy\', or \'Lynn Hill\'' }: {isMobile?: boolean, placeholder?: string}): JSX.Element => {
   const router = useRouter()
@@ -22,10 +23,10 @@ export const ClimbSearchByName = ({ isMobile = true, placeholder = 'Try \'Levita
       placeholder={placeholder}
       classNames={{ item: 'name-search-item', panel: 'name-search-panel' }}
       getSources={async ({ query }) => {
-        const search: () => Promise<any> = async () => await typesenseSearch(query)
+        const search: () => Promise<Array<Feature<Geometry, { [name: string]: object }>>> = async () => await typesenseSearch(query)
           .then(({ grouped_hits: groupedHits }) => { return groupedHits })
           .catch(() => { return [] })
-        const navigate: ({ itemUrl: any }) => Promise<any> = async ({ itemUrl }) => await router.push(itemUrl)
+        const navigate: ({ itemUrl: string }) => Promise<boolean> = async ({ itemUrl }) => await router.push(itemUrl)
         const itemUrl: ({ item }: { item: any }) => string = ({ item }) => {
           const { hits } = item
           const climbId: string = hits[0].document.climbId
