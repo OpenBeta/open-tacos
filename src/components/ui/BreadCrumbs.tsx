@@ -17,16 +17,15 @@ import { sanitizeName } from '../../js/utils'
 interface BreakCrumbsProps {
   pathTokens: string[]
   ancestors: string[]
-
   isClimbPage?: boolean
 }
+
 function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumbsProps): JSX.Element {
   return (
-    <div>
+    <div aria-label='area-breadcrumbs'>
       <Link href='/'>
         <a className='hover:underline hover:text-gray-900 text-gray-400 '>Home</a>
       </Link>
-
       {pathTokens.map((place, index, array) => {
         const isLastElement = array.length - 1 === index
         const path = ancestors[index]
@@ -58,13 +57,21 @@ export interface MiniBreadCrumbsProps {
 
 const SEPARATOR = ' \u25BB '
 
+/**
+ * Show small and truncated breadcrumbs by trimming items in the middle
+ * @param MiniBreadCrumbsProps
+ */
 export const MiniCrumbs = ({ pathTokens, end = 2, skipLast = false }: MiniBreadCrumbsProps): JSX.Element => {
   const tokens = [
     pathTokens.slice(1, 2)[0] + ' ...',
     ...pathTokens.slice(pathTokens.length - end, skipLast ? pathTokens.length - 1 : undefined)
   ].map(sanitizeName)
   return (
-    <div className='pb-2 font-semibold text-xs text-secondary'>{tokens.join(SEPARATOR)}</div>
+    <div
+      aria-label='area-minicrumbs'
+      className='pb-2 font-semibold text-xs text-secondary'
+    >{tokens.join(SEPARATOR)}
+    </div>
   )
 }
 
