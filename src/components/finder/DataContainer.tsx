@@ -1,35 +1,44 @@
 import { useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { Feature, Geometry, featureCollection, point, Properties } from '@turf/helpers'
+import NProgress from 'nprogress/nprogress'
 
 import CragsMap from '../maps/CragsMap'
 import useCragFinder from '../../js/hooks/finder/useCragFinder'
-import { LABELS } from '../search/CragsNearBy'
 import CragTable from './CragTable'
 import TwoColumnLayout from './TwoColumnLayout'
 import { sanitizeName } from '../../js/utils'
+import { AreaType } from '../../js/types'
+import Pagination from './Pagination'
+
+NProgress.configure({ showSpinner: false, easing: 'ease-in-out', speed: 1000 })
 
 const DataContainer = (): JSX.Element => {
-  const cragFinderStore = useCragFinder(useRouter())
-  const { total, searchText, groups, isLoading } = cragFinderStore.useStore()
-  const points: Array<Feature<Geometry, Properties>> = groups !== undefined && groups.length > 0
-    ? groups[0].crags.map(
-      ({ area_name: name, metadata }) => point([metadata.lng, metadata.lat], { name: sanitizeName(name) })
-    )
-    : []
+  const cragFiltersStore = useCragFinder(useRouter())
+  const { lnglat, total, searchText, isLoading, crags } = cragFiltersStore.useStore()
 
-  const lnglat = cragFinderStore.use.lnglat()
+  const points: Array<Feature<Geometry, Properties>> =
+  crags.map((crag: AreaType) => {
+    const { area_name: name, metadata } = crag
+    return point([metadata.lng, metadata.lat], { name: sanitizeName(name) })
+  }
+  )
+
+  if (isLoading) {
+    NProgress.start()
+  } else {
+    NProgress.done()
+  }
+
   const geojson = featureCollection(points)
   const map = useMemo(() => <CragsMap geojson={geojson} center={lnglat} />, [geojson, lnglat])
-
   return (
     <TwoColumnLayout
       left={
         <>
           <Preface isLoading={isLoading} total={total} searchText={searchText} />
-          {groups.map(({ _id, crags }) => {
-            return <CragTable key={_id} subheader={LABELS[_id].label} crags={crags} />
-          })}
+          <CragTable />
+          <Pagination />
         </>
 }
       right={map}

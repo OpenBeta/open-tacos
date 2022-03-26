@@ -4,12 +4,11 @@ import YDSRangeSlider from './ui/YDSRangeSlider'
 import { actions, cragFiltersStore } from '../js/stores'
 
 const YDSFilter = (): JSX.Element => {
-  // Todo: convert initial state to Slider defaultValue
   const initial = cragFiltersStore.use.freeRange()
   const [range, setRange] = useState(initial)
 
   const applyFn = useCallback((): void => {
-    actions.filters.freeRange(range)
+    void actions.filters.updateFreeRange(range)
   }, [range]
   )
   return (

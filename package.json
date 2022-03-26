@@ -46,6 +46,7 @@
     "react-dropzone": "^11.4.2",
     "react-helmet": "6.1.0",
     "react-map-gl": "^7.0.10",
+    "react-paginate": "^8.1.2",
     "react-placeholder": "^4.1.0",
     "recharts": "^2.1.9",
     "remark-parse": "^10.0.0",

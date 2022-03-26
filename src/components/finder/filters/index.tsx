@@ -18,31 +18,31 @@ const index = (): JSX.Element => {
 export default index
 
 const DisciplineGroup = (): JSX.Element => {
-  const { trad, sport, tr, bouldering } = cragFiltersStore.useStore()
+  const { trad, sport, tr, boulder } = cragFiltersStore.useStore()
   return (
     <div className='flex space-x-2'>
       <FilterToggleButton
         selected={sport}
         label='Sport' onClick={() => {
-          actions.filters.toggle('sport')
+          void actions.filters.toggle('sport')
         }}
       />
       <FilterToggleButton
         selected={trad}
         label='Trad' onClick={() => {
-          actions.filters.toggle('trad')
+          void actions.filters.toggle('trad')
         }}
       />
       <FilterToggleButton
         selected={tr}
         label='Top rope' onClick={() => {
-          cragFiltersStore.set.tr(!tr)
+          void actions.filters.toggle('tr')
         }}
       />
       <FilterToggleButton
-        selected={bouldering}
+        selected={boulder}
         label='Bouldering' onClick={() => {
-          cragFiltersStore.set.bouldering(!bouldering)
+          void actions.filters.toggle('boulder')
         }}
       />
     </div>

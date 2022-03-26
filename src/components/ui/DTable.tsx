@@ -14,7 +14,7 @@ interface DTableProps {
 }
 
 const DTable = ({ byDisciplineAgg }: DTableProps): JSX.Element => {
-  const { freeRange, trad, sport, bouldering, tr } = cragFiltersStore.useStore()
+  const { freeRange, trad, sport, boulder, tr } = cragFiltersStore.useStore()
   const myLowBand = getBandIndex(freeRange.labels[0])
   const myHighBand = getBandIndex(freeRange.labels[1])
   return (
@@ -45,11 +45,10 @@ const DTable = ({ byDisciplineAgg }: DTableProps): JSX.Element => {
                 total={byDisciplineAgg?.[d]?.total}
                 {...byDisciplineAgg[d]?.bands}
                 myFreeRange={[myLowBand, myHighBand]}
-                highlighted={shouldHighlight(d, trad, sport, bouldering, tr)}
+                highlighted={shouldHighlight(d, trad, sport, boulder, tr)}
               />
             )
           })
-
         }
       </tbody>
     </table>
