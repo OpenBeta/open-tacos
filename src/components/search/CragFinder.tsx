@@ -35,15 +35,13 @@ const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las 
         if ((query as string).length < 3) {
           return []
         }
-        const features = async (): Promise<any> => await geocoderLookup(query, SEARCH_OPTIONS)
+        const features: () => Promise<any> = async () => await geocoderLookup(query, SEARCH_OPTIONS)
+        const navigate: ({ itemUrl: any }) => Promise<any> = async ({ itemUrl }) => await router.push(itemUrl)
+
         return debounced([{
           sourceId: 'location',
           getItems: features,
-          navigator: {
-            async navigate ({ itemUrl }) {
-              await router.push(itemUrl)
-            }
-          },
+          navigator: navigate,
           getItemUrl ({ item }) {
             const { text, center, id }: {text: string, center: [number, number], id: string } = item
             return resultItemToUrl(text, id, center)

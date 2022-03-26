@@ -22,26 +22,21 @@ export const ClimbSearchByName = ({ isMobile = true, placeholder = 'Try \'Levita
       placeholder={placeholder}
       classNames={{ item: 'name-search-item', panel: 'name-search-panel' }}
       getSources={async ({ query }) => {
-        return await debounced([
+        const search: () => Promise<any> = async () => await typesenseSearch(query)
+          .then(({ grouped_hits: groupedHits }) => { return groupedHits })
+          .catch(() => { return [] })
+        const navigate: ({ itemUrl: any }) => Promise<any> = async ({ itemUrl }) => await router.push(itemUrl)
+        const itemUrl: ({ item }: { item: any }) => string = ({ item }) => {
+          const { hits } = item
+          const climbId: string = hits[0].document.climbId
+          return hits.length > 0 ? '/climbs/' + climbId : ''
+        }
+        return debounced([
           {
             sourceId: 'climbs',
-            async getItems () {
-              return await typesenseSearch(query)
-                .then(({ grouped_hits: groupedHits }) => {
-                  return groupedHits
-                })
-                .catch(() => { return [] })
-            },
-            navigator: {
-              async navigate ({ itemUrl }) {
-                await router.push(itemUrl)
-              }
-            },
-            getItemUrl ({ item }) {
-              const { hits } = item
-              /* eslint-disable-next-line */
-              return hits.length > 0 ? `/climbs/${hits[0].document.climbId}` : ''
-            },
+            getItems: search,
+            navigator: navigate,
+            getItemUrl: itemUrl,
             templates: {
               noResults () {
                 return 'No results.'
