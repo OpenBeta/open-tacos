@@ -13,7 +13,10 @@ export const ClimbSearchByName = ({ isMobile = true, placeholder = 'Try \'Levita
     <Autocomplete
       placeholder={placeholder}
       classNames={{ item: 'name-search-item', panel: 'name-search-panel' }}
-      getSources={async ({ query }) => {
+      getSources={({ query }) => {
+        if ((query as string).length < 3) {
+          return []
+        }
         const search: () => Promise<Array<Feature<Geometry, { [name: string]: object }>>> = async () => await typesenseSearch(query)
           .then(({ grouped_hits: groupedHits }) => { return groupedHits })
           .catch(() => { return [] })
