@@ -7,22 +7,13 @@ import CragsMap from '../maps/CragsMap'
 import useCragFinder from '../../js/hooks/finder/useCragFinder'
 import CragTable from './CragTable'
 import TwoColumnLayout from './TwoColumnLayout'
-import { sanitizeName } from '../../js/utils'
-import { AreaType } from '../../js/types'
 import Pagination from './Pagination'
 
 NProgress.configure({ showSpinner: false, easing: 'ease-in-out', speed: 1000 })
 
 const DataContainer = (): JSX.Element => {
   const cragFiltersStore = useCragFinder(useRouter())
-  const { lnglat, total, searchText, isLoading, crags } = cragFiltersStore.useStore()
-
-  const points: Array<Feature<Geometry, Properties>> =
-  crags.map((crag: AreaType) => {
-    const { area_name: name, metadata } = crag
-    return point([metadata.lng, metadata.lat], { name: sanitizeName(name) })
-  }
-  )
+  const { total, searchText, isLoading } = cragFiltersStore.useStore()
 
   if (isLoading) {
     NProgress.start()
@@ -30,8 +21,6 @@ const DataContainer = (): JSX.Element => {
     NProgress.done()
   }
 
-  const geojson = featureCollection(points)
-  const map = useMemo(() => <CragsMap geojson={geojson} center={lnglat} />, [geojson, lnglat])
   return (
     <TwoColumnLayout
       left={
@@ -41,7 +30,7 @@ const DataContainer = (): JSX.Element => {
           <Pagination />
         </>
 }
-      right={map}
+      right={<CragsMap />}
     />
   )
 }

@@ -52,7 +52,7 @@ body, html {
   /*  For larger screens */
   .layout-wide {
     /* @apply relative mt-32 max-w-screen-2xl mx-auto xl:px-6 md:px-4 */
-    @apply relative max-w-screen-2xl xl:max-w-full	xl:w-screen flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0
+    @apply relative max-w-screen-2xl flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0;
   }
 
   .layout-default {
@@ -336,5 +336,3 @@ table td.dtable-highlight:last-of-type {
 table td.dtable-my-range {
   @apply bg-ob-secondary bg-opacity-70;
 }
-
-

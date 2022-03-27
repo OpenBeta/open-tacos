@@ -1,6 +1,6 @@
 import React from 'react'
 import DeckGL from '@deck.gl/react'
-import { Map } from 'react-map-gl'
+import { Map, useMap } from 'react-map-gl'
 
 export const DEFAULT_INITIAL_VIEWSTATE = {
   width: 300,
@@ -17,6 +17,7 @@ const MAP_STYLES = {
   light: 'mapbox://styles/mappandas/ckx5ksor56x3z15qavm57edp9',
   dark: 'mapbox://styles/mappandas/cl0u44wo8008415pedsbgtml7'
 }
+
 const BaseMap = ({
   layers,
   disableController = false,
@@ -25,31 +26,26 @@ const BaseMap = ({
   onViewStateChange,
   getTooltip = null,
   children = null,
-  light = true
+  light = true,
+  onClick,
+  onHover
 }) => {
   return (
-    <DeckGL
-      layers={layers}
-      controller={{ doubleClickZoom: true, inertia: true }}
+    <Map
+      id='areaHeatmap'
+      initialViewState={initialViewState}
       viewState={viewstate}
-      onViewStateChange={onViewStateChange}
-      initialViewState={DEFAULT_INITIAL_VIEWSTATE}
+      reuseMaps
+      mapStyle={light ? MAP_STYLES.light : MAP_STYLES.dark}
+      mapboxAccessToken='pk.eyJ1IjoibWFwcGFuZGFzIiwiYSI6ImNqcDdzbW12aTBvOHAzcW82MGg0ZTRrd3MifQ.MYiNJHklgMkRzapAKuTQNg'
+      onMouseMove={onHover}
+      onClick={onClick}
+      interactiveLayerIds={['area-labels']}
+      onMove={onViewStateChange}
+      interactive
     >
-      <Map
-        id='areaHeatmap'
-        initialViewState={initialViewState}
-        viewState={viewstate}
-        reuseMaps
-        mapStyle={light ? MAP_STYLES.light : MAP_STYLES.dark}
-        mapboxAccessToken='pk.eyJ1IjoibWFwcGFuZGFzIiwiYSI6ImNqcDdzbW12aTBvOHAzcW82MGg0ZTRrd3MifQ.MYiNJHklgMkRzapAKuTQNg'
-        style={{ position: 'absolute', zIndex: 1 }}
-        onClick={(e) => {
-          console.log('#onclick', e)
-        }}
-        interactive
-      >{children}
-      </Map>
-    </DeckGL>
+      {children}
+    </Map>
   )
 }
 
