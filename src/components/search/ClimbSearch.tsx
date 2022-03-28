@@ -30,19 +30,21 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
     <div className='hidden lg:fixed top-0 left-0 mx-auto w-full max-w-screen-2xl lg:horizontal-center pointer-events-none'>
       <div id='searchPanel' className='mt-1 horizontal-center w-full pointer-events-none'>
         <FakeSearchBox onClick={onClick} expanded={expanded} />
-        <div className={`pointer-events-auto opacity-100 ${expanded ? 'w-full' : 'hidden'}`}>
-          <Tabs
-            labels={['Places to climb', 'Climb search']}
-            panelCompList={[
-              <div key={2} className={`pb-4 ${router.pathname === '/finder' ? 'bg-slate-800' : ''}`}>
-                <CragFinder isMobile={false} />
-              </div>,
-              <div key={1} className={`pb-4 ${router.pathname === '/finder' ? 'bg-slate-800' : ''}`}>
-                <ClimbSearchByName isMobile={false} />
-              </div>
-            ]}
-          />
-        </div>
+        {expanded && (
+          <div className={`pointer-events-auto opacity-100 ${expanded ? 'w-full' : 'hidden'}`}>
+            <Tabs
+              labels={['Places to climb', 'Climb search']}
+              panelCompList={[
+                <div key={2} className={`pb-4 ${router.pathname === '/finder' ? 'bg-slate-800' : ''}`}>
+                  <CragFinder isMobile={false} />
+                </div>,
+                <div key={1} className={`pb-4 ${router.pathname === '/finder' ? 'bg-slate-800' : ''}`}>
+                  <ClimbSearchByName isMobile={false} />
+                </div>
+              ]}
+            />
+          </div>
+        )}
       </div>
     </div>
   )
