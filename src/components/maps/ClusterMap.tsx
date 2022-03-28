@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import IconClusterLayer from './layers/IconClusterLayer'
-import BaseMap, { DEFAULT_INITIAL_VIEWSTATE } from './BaseMap'
+import { DEFAULT_INITIAL_VIEWSTATE } from './BaseMap'
 import { getPieIcon, getTotal, getTypePieData } from './ui/PieIcon'
 import { CountByGroupType, BBoxType } from '../../js/types'
 import { bbox2Viewport } from '../../js/GeoHelpers'
@@ -28,6 +28,7 @@ export default function ClusterMap ({ onClick, geojson, bbox, children, getToolt
     }
   }, [])
 
+  // eslint-disable-next-line
   const onViewStateChange = useCallback(({ viewState }) => {
     setViewState(viewState)
   }, [viewstate])
@@ -111,19 +112,21 @@ export default function ClusterMap ({ onClick, geojson, bbox, children, getToolt
       }
     })
   ]
+
   return (
     <div
       id='my-area-map'
       className={`w-full relative xl:sticky xl:top-16 z-9 xl:m-0 xl:p-0 ${className}`}
       style={{ height }}
     >
-      <BaseMap
-        getTooltip={getTooltip}
-        layers={layers}
+      <div>{layers}Fix BaseMap</div>
+      {/* <BaseMap
+        // getTooltip={getTooltip}
+        // layers={layers}
         initialViewState={viewstate}
         viewstate={viewstate}
         onViewStateChange={onViewStateChange}
-      />
+      /> */}
     </div>
   )
 }

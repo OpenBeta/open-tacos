@@ -323,7 +323,7 @@ table td {
 }
 
 table td.dtable-highlight {
-  @apply text-sm text-secondary bg-slate-200;
+  @apply text-sm text-secondary bg-gray-200;
 }
 
 table td.dtable-highlight:nth-of-type(1) {

@@ -1,6 +1,4 @@
-import { useMemo } from 'react'
 import { useRouter } from 'next/router'
-import { Feature, Geometry, featureCollection, point, Properties } from '@turf/helpers'
 import NProgress from 'nprogress/nprogress'
 
 import CragsMap from '../maps/CragsMap'
