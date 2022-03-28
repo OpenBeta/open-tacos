@@ -1,100 +1,86 @@
-import React, { useEffect, useState, useCallback } from 'react'
-import { InitialViewStateProps } from '@deck.gl/core/lib/deck'
-import { Source, Layer, LayerProps } from 'react-map-gl'
-import { point, Position, Properties, FeatureCollection, Geometry } from '@turf/helpers'
+import React, { useMemo, useState, useCallback } from 'react'
 
-import BaseMap, { DEFAULT_INITIAL_VIEWSTATE } from './BaseMap'
-import { bboxFromGeoJson, bbox2Viewport } from '../../js/GeoHelpers'
+import { point, featureCollection } from '@turf/helpers'
 
-const NAV_BAR_OFFSET = 66
+import BaseMap from './BaseMap'
+import CragHighlightPopover from '../finder/CragHighlightPopover'
+import { store, actions } from '../../js/stores'
+import { AreaType } from '../../js/types'
+import { sanitizeName } from '../../js/utils'
+import MarkerLayer from './MarkerLayer'
+import InteractiveMarker
+  from './InteractiveMarker'
+import useAutoSizing from '../../js/hooks/finder/useMapAutoSizing'
 
-const layerStyle: LayerProps = {
-  id: 'area-labels',
-  type: 'symbol',
-  source: 'areas',
-  layout: {
-    'icon-size': ['interpolate', ['linear'], ['zoom'], 8, 1.25, 12, 1],
-    'symbol-spacing': 5,
-    'text-field': ['get', 'name'],
-    'text-variable-anchor': ['bottom', 'left', 'right'],
-    'text-radial-offset': 1,
-    'text-justify': 'auto',
-    'icon-image': 'circle',
-    'text-size': ['interpolate', ['linear'], ['zoom'], 8, 14, 14, 12],
-    'icon-allow-overlap': true
-  },
-  paint: {
-    'text-halo-blur': 4,
-    'text-halo-width': 2,
-    'text-color': '#ffffff',
-    'text-halo-color': '#334455'
-  }
-}
+/**
+ * Make a map of crag markers.
+ */
+export default function CragsMap (): JSX.Element {
+  const crags = store.filters.crags()
 
-interface HeatmapProps {
-  geojson?: FeatureCollection<Geometry, Properties>
-  center: Position
-  children?: JSX.Element
-}
+  // Convert crag array to Geojson FeatureCollection.
+  // This probably needs to be in data store selector.
+  const geojson = useMemo(
+    () => {
+      const points = crags.map((crag: AreaType) => {
+        const { id, area_name: name, metadata } = crag
+        return point([metadata.lng, metadata.lat], { id, name: sanitizeName(name), lng: metadata.lng, lat: metadata.lat }, { id: id })
+      })
+      return featureCollection(points)
+    }, [crags])
 
-export default function CragsMap ({ geojson, center }: HeatmapProps): JSX.Element {
-  const [[width, height], setWH] = useState([400, 400])
-  const [viewstate, setViewState] = useState<InitialViewStateProps>(DEFAULT_INITIAL_VIEWSTATE)
-
-  useEffect(() => {
-    updateDimensions()
-    window.addEventListener('resize', updateDimensions)
-    if (geojson !== undefined && center !== undefined) {
-      const bbox = geojson.features.length > 0 ? bboxFromGeoJson(geojson) : bboxFromGeoJson(point(center))
-      const vs = bbox2Viewport(bbox, width, height)
-      setViewState({ ...viewstate, ...vs })
-    }
-    return () => {
-      window.removeEventListener('resize', updateDimensions)
-    }
-  }, [geojson, center])
+  const [viewstate, height, setViewState] = useAutoSizing({ geojson })
 
   const onViewStateChange = useCallback(({ viewState }) => {
     setViewState(viewState)
   }, [])
 
-  const updateDimensions = useCallback(() => {
-    const { width, height } = getMapDivDimensions('my-area-map')
-    setWH([width, height])
-  }, [width, height])
+  // track current mouseover marker
+  const [hoverMarker, setHoverMarker] = useState(null)
+
+  const onHoverHandler = useCallback((event) => {
+    const { features } = event
+    const f = features[0]
+    setHoverMarker([f.properties.lng, f.properties.lat])
+  }, [])
+
+  const onClickHandler = useCallback((event) => {
+    const { features } = event
+    const { id, lng, lat } = features[0].properties
+    actions.filters.setActiveMarker(id, [lng, lat])
+  }, [])
+
+  const { areaId, lnglat } = store.filters.map().active
 
   return (
     <div
-      id='my-area-heatmap'
-      className='w-full xl:sticky xl:top-28 xl:m-0 xl:p-0'
+      id='my-area-map'
+      className='w-full xl:sticky xl:top-[132px] xl:m-0 xl:p-0'
       style={{ height }}
     >
+      <div className='absolute left-1 top-1 z-20'>
+        {areaId !== null &&
+          <CragHighlightPopover
+            {...store.filters.areaById(areaId)}
+          />}
+      </div>
       <BaseMap
-        disableController={false}
-        layers={[]}
         initialViewState={viewstate}
         viewstate={viewstate}
         onViewStateChange={onViewStateChange}
         light={false}
+        onClick={onClickHandler}
+        onHover={onHoverHandler}
       >
-        <Source
-          id='areas'
-          type='geojson'
-          data={geojson as FeatureCollection<GeoJSON.Geometry, Properties>}
-        >
-          <Layer {...layerStyle} />
-        </Source>
+        <MarkerLayer geojson={geojson} />
+        <InteractiveMarker
+          lnglat={hoverMarker}
+        />
+        <InteractiveMarker
+          lnglat={lnglat}
+          hover={false}
+        />
       </BaseMap>
     </div>
   )
-}
-
-const getMapDivDimensions = (id: string): { width: number, height: number } => {
-  const div = document.getElementById(id)
-  let width = 200
-  if (div != null) {
-    width = div.clientWidth
-  }
-  const height = window.innerHeight - NAV_BAR_OFFSET
-  return { width, height }
 }

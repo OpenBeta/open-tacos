@@ -13,7 +13,7 @@ const fullConfig = resolveConfig(tailwindConfig)
 
 const parseTailwindScreenValue = (w) => w.slice(0, w.indexOf('px'))
 
-function Header () {
+export default function Header () {
   const router = useRouter()
   // track position of scrollbar
   const [direction, setDirection] = useState('top')
@@ -104,4 +104,11 @@ const navList = [
   }
 ]
 
-export default Header
+/**
+ * Important:
+ * This value defines the actual height of the header.
+ * Map div uses absolute positioning and relies on the value to set
+ * its top-${NAV_BAR_OFFSET}px
+ * Todo: caclculate this value programmatically
+ */
+export const NAV_BAR_OFFSET = 132 // px

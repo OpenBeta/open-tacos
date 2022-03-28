@@ -143,3 +143,11 @@ export interface RadiusRange {
   rangeMeters: number[]
   rangeIndices: number[]
 }
+
+/// /////////////////////////////////////////////
+// Map interactive states
+
+export interface MarkerStateType {
+  areaId: string
+  lnglat: number[]
+}
