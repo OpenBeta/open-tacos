@@ -4,16 +4,16 @@ interface FilterPopoverProps {
   label: string
   header: string
   children: JSX.Element | JSX.Element[]
-  onApply: Function
-  min: string | number
-  max: string | number
+  onApply?: Function
+  min?: string | number
+  max?: string | number
 }
 /**
  * Base popover component for crag finder filter bar
  * @param FilterPopoverProps
  * @returns
  */
-const FilterPopover = ({ label, header, children, onApply, min, max }: FilterPopoverProps): JSX.Element => {
+const FilterPopover = ({ label, header, children, onApply, min = undefined, max = undefined }: FilterPopoverProps): JSX.Element => {
   return (
     <LeanPopover
       btnClz='border-2 rounded-2xl btn-small border-neutral-100 text-neutral-100 flex flex-row space-x-1.5 center-items'
@@ -25,7 +25,7 @@ const FilterPopover = ({ label, header, children, onApply, min, max }: FilterPop
       >
         <header className='mb-16'>{header}</header>
         <div className='px-4'>{children}</div>
-        {min !== undefined && max !== undefined &&
+        {(min !== undefined && max !== undefined) && min !== undefined && max !== undefined &&
           <div className='px-4 mt-12 flex justify-between text-sm'>
             <div className='flex flex-col items-center'>
               <div className='text-secondary text-xs'>Min</div>
