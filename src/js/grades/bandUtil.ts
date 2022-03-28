@@ -14,10 +14,10 @@ export const getBandIndex = (grade: string): number => {
     return vScoreToBandIndex(score)
   }
   const score = getScoreForSort(grade, GradeScales.Yds)
-  return ysdScoreToBandIndex(score)
+  return freeScoreToBandIndex(score)
 }
 
-const ysdScoreToBandIndex = (score: number): number =>
+export const freeScoreToBandIndex = (score: number): number =>
   score < 54
     ? 0
     : score < 67.5
@@ -34,3 +34,7 @@ const vScoreToBandIndex = (score: number): number =>
       : score < 72 // v3 - v6
         ? 1
         : 3
+
+export const BAND_BY_INDEX = [
+  'beginner', 'intermediate', 'advanced', 'expert'
+]

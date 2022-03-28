@@ -314,7 +314,7 @@ input:checked + label {
 
 /* yds and vscale range slider */
 .rc-slider-mark-text-active {
-  @apply text-ob-secondary !important;
+  @apply text-primary font-bold !important;
 }
 
 /* DTable (grade distribution table */

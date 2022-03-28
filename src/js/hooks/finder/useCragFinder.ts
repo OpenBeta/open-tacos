@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { NextRouter } from 'next/router'
 
-import { actions, cragFinderStore } from '../../stores/index'
+import { actions, cragFiltersStore } from '../../stores/index'
 
 /* eslint-disable-next-line */
 const useCragFinder = (router: NextRouter) => {
@@ -10,16 +10,15 @@ const useCragFinder = (router: NextRouter) => {
   useEffect(() => {
     try {
       const lnglat = parseCenterStr(query.center as string)
-      actions.finder.lnglat(lnglat)
       const placeId = query?.placeId === undefined ? lnglat.join() : (query.placeId as string)
-      const fetch = async (): Promise<any> => await actions.finder.validLnglat(query.shortName as string, placeId, lnglat)
+      const fetch = async (): Promise<any> => await actions.filters.validLnglat(query.shortName as string, placeId, lnglat)
       void fetch()
       // Todo: clear finder.errors
     } catch (e) {
       // Todo: set finder.errors
     }
   }, [query])
-  return cragFinderStore
+  return cragFiltersStore
 }
 
 const parseCenterStr = (s: string): [number, number] => {

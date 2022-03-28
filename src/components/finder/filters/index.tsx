@@ -1,6 +1,7 @@
 import { actions, cragFiltersStore } from '../../../js/stores/index'
 import { FilterToggleButton } from '../../ui/Button'
 import YDSFilter from '../../YDSFilter'
+import RadiusFilter from '../../RadiusFilter'
 
 const index = (): JSX.Element => {
   return (
@@ -9,7 +10,7 @@ const index = (): JSX.Element => {
       <VerticalDiv />
       <DisciplineGroup />
       <VerticalDiv />
-      <DistanceGroup />
+      <RadiusFilter />
     </div>
   )
 }
@@ -17,56 +18,31 @@ const index = (): JSX.Element => {
 export default index
 
 const DisciplineGroup = (): JSX.Element => {
-  const { trad, sport, tr, bouldering } = cragFiltersStore.useStore()
+  const { trad, sport, tr, boulder } = cragFiltersStore.useStore()
   return (
     <div className='flex space-x-2'>
       <FilterToggleButton
         selected={sport}
         label='Sport' onClick={() => {
-          actions.filters.toggle('sport')
+          void actions.filters.toggle('sport')
         }}
       />
       <FilterToggleButton
         selected={trad}
         label='Trad' onClick={() => {
-          actions.filters.toggle('trad')
+          void actions.filters.toggle('trad')
         }}
       />
       <FilterToggleButton
         selected={tr}
         label='Top rope' onClick={() => {
-          cragFiltersStore.set.tr(!tr)
+          void actions.filters.toggle('tr')
         }}
       />
       <FilterToggleButton
-        selected={bouldering}
+        selected={boulder}
         label='Bouldering' onClick={() => {
-          cragFiltersStore.set.bouldering(!bouldering)
-        }}
-      />
-    </div>
-  )
-}
-
-const DistanceGroup = (): JSX.Element => {
-  return (
-    <div className='flex space-x-2'>
-      <FilterToggleButton
-        selected={false}
-        label='Under 1 hr' onClick={() => {
-          alert('Coming soon!')
-        }}
-      />
-      <FilterToggleButton
-        selected={false}
-        label='Between 1 - 2 hrs' onClick={() => {
-          alert('¡Ay, caramba!')
-        }}
-      />
-      <FilterToggleButton
-        selected={false}
-        label='More than 2 hrs' onClick={() => {
-          alert('Sorry still brewing!')
+          void actions.filters.toggle('boulder')
         }}
       />
     </div>

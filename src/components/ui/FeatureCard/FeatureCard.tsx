@@ -60,7 +60,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
         {
           Object.keys(aggregate.byDiscipline).map((key: string) => {
             if ((aggByDiscipline?.[key] as DisciplineStatsType)?.total > 5) {
-              return <span className='bg-slate-700 text-white px-2'>{key}</span>
+              return <span key={key} className='bg-slate-700 text-white px-2'>{key}</span>
             }
             return null
           })

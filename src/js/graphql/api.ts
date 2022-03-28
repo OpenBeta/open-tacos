@@ -1,23 +1,180 @@
 import { gql } from '@apollo/client'
+import { AreaType } from '../types'
 import { graphqlClient } from './Client'
 
-export const getCragsNear = async (lnglat: [number, number]): Promise<any> => {
-  const query = gql`query CragsNear($lng: Float, $lat: Float, $maxDistance: Int) {
-        cragsNear(lnglat: {lat: $lat, lng: $lng}, maxDistance: $maxDistance) {
-            crags {
-                area_name
-            }
-            count
-            _id
-        }
-    }`
-  const rs = await graphqlClient.query<any>({
-    query,
-    variables: {
-      lng: lnglat[0],
-      lat: lnglat[1],
-      maxDistance: 200000
-    }
-  })
-  return rs.data
+interface CragsDetailsNearType {
+  data: Array<Partial<AreaType>>
+  placeId: string
+  error?: string | undefined
 }
+
+export const getCragDetailsNear = async (
+  placeId: string = 'unspecified',
+  lnglat: [number, number],
+  range: number[],
+  includeCrags: boolean = false
+): Promise<CragsDetailsNearType> => {
+  try {
+    const rs = await graphqlClient.query({
+      query: CRAGS_NEAR,
+      fetchPolicy: 'cache-first',
+      variables: {
+        lng: lnglat[0],
+        lat: lnglat[1],
+        placeId,
+        minDistance: range[0],
+        maxDistance: range[1],
+        includeCrags
+      }
+    })
+
+    const { cragsNear } = rs.data
+    const groups = cragsNear.map(entry => entry.crags).flat()
+    return { data: groups, placeId }
+  } catch (e) {
+    console.log(e)
+  }
+  return {
+    data: [],
+    error: 'API error',
+    placeId: undefined
+  }
+}
+
+const CRAGS_NEAR = gql`query CragsNear($placeId: String, $lng: Float, $lat: Float, $minDistance: Int, $maxDistance: Int, $includeCrags: Boolean) {
+  cragsNear(placeId: $placeId, lnglat: {lat: $lat, lng: $lng}, minDistance: $minDistance, maxDistance: $maxDistance, includeCrags: $includeCrags) {
+      count
+      _id 
+      placeId
+      crags {
+        area_name
+        id
+        totalClimbs
+        pathTokens
+        metadata {
+          lat
+          lng
+        }
+        aggregate {
+          byDiscipline {
+            sport {
+              total
+              bands {
+                advance
+                beginner
+                expert
+                intermediate
+              }
+            }
+            trad {
+              total
+              bands {
+                advance
+                beginner
+                expert
+                intermediate
+              }
+            }
+            boulder {
+              total
+              bands {
+                advance
+                beginner
+                expert
+                intermediate
+              }
+            }
+            tr {
+              total
+              bands {
+                advance
+                beginner
+                expert
+                intermediate
+              }
+            }
+          }
+          byGradeBand {
+            advance
+            beginner
+            expert
+            intermediate
+          }
+        }
+      }
+  }
+}`
+
+// const CRAGS_NEAR = gql`query CragsNear($placeId: String, $lng: Float, $lat: Float, $minDistance: Int, $maxDistance: Int) {
+//   cragsNear(placeId: $placeId, lnglat: {lat: $lat, lng: $lng}, minDistance: $minDistance, maxDistance: $maxDistance) {
+//       count
+//       _id
+//       placeId
+//       crags {
+//         area_name
+//         id
+//         totalClimbs
+//         metadata {
+//           lat
+//           lng
+//         }
+//         climbs {
+//           type {
+//             aid
+//             alpine
+//             bouldering
+//             mixed
+//             sport
+//             tr
+//             trad
+//           }
+//         }
+//         aggregate {
+//           byDiscipline {
+//             sport {
+//               total
+//               bands {
+//                 advance
+//                 beginner
+//                 expert
+//                 intermediate
+//               }
+//             }
+//             trad {
+//               total
+//               bands {
+//                 advance
+//                 beginner
+//                 expert
+//                 intermediate
+//               }
+//             }
+//             boulder {
+//               total
+//               bands {
+//                 advance
+//                 beginner
+//                 expert
+//                 intermediate
+//               }
+//             }
+//             tr {
+//               total
+//               bands {
+//                 advance
+//                 beginner
+//                 expert
+//                 intermediate
+//               }
+//             }
+//           }
+//           byGradeBand {
+//             advance
+//             beginner
+//             expert
+//             intermediate
+//           }
+//         }
+//       }
+//   }
+// }`
