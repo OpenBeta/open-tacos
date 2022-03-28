@@ -13,7 +13,7 @@ interface FilterPopoverProps {
  * @param FilterPopoverProps
  * @returns
  */
-const FilterPopover = ({ label, header, children, onApply, min = undefined, max = undefined }: FilterPopoverProps): JSX.Element => {
+const FilterPopover = ({ label, header, children, onApply, min, max }: FilterPopoverProps): JSX.Element => {
   return (
     <LeanPopover
       btnClz='border-2 rounded-2xl btn-small border-neutral-100 text-neutral-100 flex flex-row space-x-1.5 center-items'
