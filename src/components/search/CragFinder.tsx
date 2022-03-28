@@ -5,6 +5,7 @@ import { geocoderLookup } from '../../js/mapbox/Client'
 import { PlaceTemplate, resultItemToUrl } from './CragFinderTemplates'
 import { debounced } from '../../js/utils'
 import { Feature, Geometry } from 'geojson'
+import { useEffect } from 'react'
 
 const SEARCH_OPTIONS = {
   country: 'US',
@@ -17,7 +18,15 @@ export interface CragFinderProps {
 
 const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las Vegas\'' }: CragFinderProps): JSX.Element => {
   const router = useRouter()
-
+  useEffect(() => {
+    document.getElementById('crag-finder-input').addEventListener("click", selectFinder)
+    function selectFinder(e) {
+      setTimeout(() => {
+        (e.target as any).select()
+      }, 100);
+    }
+    return () =>  document.getElementById('crag-finder-input').removeEventListener("click", selectFinder)
+  },[])
   return (
     <Autocomplete
       id='crag-finder'
