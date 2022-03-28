@@ -1,5 +1,5 @@
-import FilterPopover from './ui/FilterPopover'
-import DisciplineGroup from './DisciplineGroup'
+import FilterPopover from '../../ui/FilterPopover'
+import DisciplineGroup from '../../DisciplineGroup'
 
 /**
  * Discipline Filter Popover

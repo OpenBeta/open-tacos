@@ -1,6 +1,6 @@
 import YDSFilter from '../../YDSFilter'
 import RadiusFilter from '../../RadiusFilter'
-import DisciplineFilter from '../../DisciplineFilter'
+import DisciplineFilter from './DisciplineFilter'
 
 const index = (): JSX.Element => {
   return (
