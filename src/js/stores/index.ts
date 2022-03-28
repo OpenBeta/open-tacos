@@ -1,4 +1,5 @@
 import { mapValuesKey, createStore } from '@udecode/zustood'
+import produce from 'immer'
 
 import { RadiusRange, CountByGradeBandType, AreaType } from '../types'
 import { getCragDetailsNear } from '../graphql/api'
@@ -37,6 +38,16 @@ export const cragFiltersStore = createStore('filters')({
     pageCount: 0,
     itemOffset: 0,
     currentPage: 0
+  },
+  map: {
+    hover: {
+      areaId: null,
+      lnglat: null
+    },
+    active: {
+      areaId: null,
+      lnglat: null
+    }
   }
 }, {
   // Todo: figure out how to persist/restore settings from Local storage
@@ -118,7 +129,13 @@ export const cragFiltersStore = createStore('filters')({
 
       return false
     }
-  })).extendActions((set, get, api) => ({
+  }))
+  .extendSelectors((_, get) => ({
+    areaById: (searchId: string): AreaType | undefined => {
+      return get.crags().find(({ id }) => id === searchId)
+    }
+  }))
+  .extendActions((set, get, api) => ({
     updatePagination: (shouldResetToPage0: boolean = false) => {
       const itemOffset = shouldResetToPage0 ? 0 : get.pagination().itemOffset
       const newState = calculatePagination(
@@ -131,6 +148,26 @@ export const cragFiltersStore = createStore('filters')({
     }
   }))
   .extendActions((set, get, api) => ({
+    setActiveMarker: (areaId: string, lnglat: number[]) => {
+      const nextState = produce(get.map(), draft => {
+        draft.active = {
+          areaId,
+          lnglat
+        }
+      })
+      set.map(nextState)
+    },
+    deactivateActiveMarker: () => {
+      const nextState = produce(get.map(), draft => {
+        draft.active = {
+          areaId: null,
+          lnglat: null
+        }
+      })
+      set.map(nextState)
+    }
+  }))
+  .extendActions((set, get, api) => ({
   // - Update main data structure (crags)
   // - Calculate derived data
     fetchData: async () => {
@@ -139,8 +176,8 @@ export const cragFiltersStore = createStore('filters')({
       const { data } = await getCragDetailsNear(
         placeId(), lnglat(), radius().rangeMeters, true)
       const newCragsState = data.filter(crag => get.inMyRange(crag))
-
       set.isLoading(false)
+      set.deactivateActiveMarker()
       set.crags(newCragsState)
       set.total(newCragsState.length)
       set.updatePagination(true)
