@@ -10,7 +10,11 @@ import '@algolia/autocomplete-theme-classic'
  */
 export const Autocomplete = (props): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
-
+  useEffect(() => {
+    setTimeout(() => {
+      (document.getElementsByClassName('aa-Input')[0] as HTMLInputElement).focus()
+    }, 100)
+  }, [])
   useEffect(() => {
     if (containerRef.current === null) {
       return undefined

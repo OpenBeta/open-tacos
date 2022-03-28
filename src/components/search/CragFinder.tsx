@@ -1,10 +1,10 @@
-import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import ClientOnly from '../../components/ClientOnly'
-
 import { Autocomplete } from './Autocomplete'
 import { geocoderLookup } from '../../js/mapbox/Client'
 import { PlaceTemplate, resultItemToUrl } from './CragFinderTemplates'
+import { debounced } from '../../js/utils'
+import { Feature, Geometry } from 'geojson'
 
 const SEARCH_OPTIONS = {
   country: 'US',
@@ -17,35 +17,28 @@ export interface CragFinderProps {
 
 const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las Vegas\'' }: CragFinderProps): JSX.Element => {
   const router = useRouter()
-  useEffect(() => {
-    if (isMobile) return
-    const inputs = document.getElementsByClassName('aa-Input')
-    for (let i = 0; i < inputs.length; i++) {
-      (inputs[i] as HTMLElement).focus()
-    }
-  })
+
   return (
     <Autocomplete
       id='crag-finder'
       classNames={{ item: 'crag-finder-item', panelLayout: 'crag-finder-panelLayout' }}
       placeholder={placeholder}
-      getSources={async ({ query }) => {
+      getSources={({ query }) => {
         if ((query as string).length < 3) {
           return []
         }
-        const features = await geocoderLookup(query, SEARCH_OPTIONS)
-        return [{
+        const features: () => Promise<Array<Feature<Geometry, { [name: string]: object }>>> = async () => await geocoderLookup(query, SEARCH_OPTIONS)
+        const navigate: ({ itemUrl: string }) => Promise<boolean> = async ({ itemUrl }) => await router.push(itemUrl)
+        const itemUrl = ({ item }): string => {
+          const { text, center, id }: {text: string, center: [number, number], id: string } = item
+          return resultItemToUrl(text, id, center)
+        }
+
+        return debounced([{
           sourceId: 'location',
-          getItems: () => features,
-          navigator: {
-            async navigate ({ itemUrl }) {
-              await router.push(itemUrl)
-            }
-          },
-          getItemUrl ({ item }) {
-            const { text, center, id }: {text: string, center: [number, number], id: string } = item
-            return resultItemToUrl(text, id, center)
-          },
+          getItems: features,
+          navigator: navigate,
+          getItemUrl: itemUrl,
           templates: {
             noResults () {
               return 'No results.'
@@ -59,7 +52,7 @@ const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las 
             }
           }
         }
-        ]
+        ])
       }}
     />
   )
