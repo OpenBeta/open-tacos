@@ -1,12 +1,8 @@
 import React, { useMemo, useState, useCallback } from 'react'
 
-import { point, featureCollection } from '@turf/helpers'
-
 import BaseMap from './BaseMap'
 import CragHighlightPopover from '../finder/CragHighlightPopover'
 import { store, actions } from '../../js/stores'
-import { AreaType } from '../../js/types'
-import { sanitizeName } from '../../js/utils'
 import MarkerLayer from './MarkerLayer'
 import InteractiveMarker
   from './InteractiveMarker'
@@ -18,16 +14,9 @@ import useAutoSizing from '../../js/hooks/finder/useMapAutoSizing'
 export default function CragsMap (): JSX.Element {
   const crags = store.filters.crags()
 
-  // Convert crag array to Geojson FeatureCollection.
-  // This probably needs to be in data store selector.
   const geojson = useMemo(
-    () => {
-      const points = crags.map((crag: AreaType) => {
-        const { id, area_name: name, metadata } = crag
-        return point([metadata.lng, metadata.lat], { id, name: sanitizeName(name), lng: metadata.lng, lat: metadata.lat }, { id: id })
-      })
-      return featureCollection(points)
-    }, [crags])
+    () => store.filters.geojsonify()
+    , [crags])
 
   const [viewstate, height, setViewState] = useAutoSizing({ geojson })
 

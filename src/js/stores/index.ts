@@ -1,11 +1,13 @@
 import { mapValuesKey, createStore } from '@udecode/zustood'
 import produce from 'immer'
+import { point, featureCollection } from '@turf/helpers'
 
 import { RadiusRange, CountByGradeBandType, AreaType } from '../types'
 import { getCragDetailsNear } from '../graphql/api'
 import { calculatePagination, NextPaginationProps } from './util'
 import { YDS_DEFS } from '../grades/rangeDefs'
 import { freeScoreToBandIndex, BAND_BY_INDEX } from '../grades/bandUtil'
+import { sanitizeName } from '../utils'
 
 /**
  * App main data store
@@ -59,6 +61,16 @@ export const cragFiltersStore = createStore('filters')({
   //   }
   // }
 }).extendSelectors((_, get) => ({
+  /**
+   * Convert crags to Geojson.FeatureCollection
+   */
+  geojsonify: () => {
+    const points = get.crags().map((crag: AreaType) => {
+      const { id, area_name: name, metadata } = crag
+      return point([metadata.lng, metadata.lat], { id, name: sanitizeName(name), lng: metadata.lng, lat: metadata.lat }, { id: id })
+    })
+    return featureCollection(points)
+  },
 
   displayFreeRange: () => {
     const [min, max] = get.freeRange()

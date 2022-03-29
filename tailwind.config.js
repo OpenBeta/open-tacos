@@ -19,6 +19,7 @@ module.exports = {
         'ob-primary': '#F07933',
         'ob-tertiary': '#8BB191',
         'ob-secondary': '#62cae3',
+        'ob-dark': '#0f172a', // slate-900
         'custom-secondary': '#62cae3',
         'custom-avery': '#a5d9cf',
         'custom-primary': '#F07933'
