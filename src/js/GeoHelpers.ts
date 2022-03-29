@@ -23,7 +23,7 @@ export const bbox2Viewport = (bbox: BBoxType, width: number, height: number): an
   return fitBounds({
     width: width,
     height: height,
-    bounds: [[bbox[0], bbox[1]], [bbox[2], bbox[3]]]
-    // padding: 100
+    bounds: [[bbox[0], bbox[1]], [bbox[2], bbox[3]]],
+    padding: 100
   })
 }
