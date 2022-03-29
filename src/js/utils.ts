@@ -131,4 +131,4 @@ function debouncePromise (fn: Function, time: number): any {
   }
 }
 
-export const debounced = debouncePromise(async (items: object[]): Promise<object[]> => await Promise.resolve(items), 1000)
+export const debounced = debouncePromise(async (items: object[]): Promise<object[]> => await Promise.resolve(items), 300)
