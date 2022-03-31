@@ -25,7 +25,7 @@ const FilterPopover = ({ label, header, children, onApply, min, max }: FilterPop
       >
         <header className='mb-16'>{header}</header>
         <div className='px-4'>{children}</div>
-        {(min !== undefined && max !== undefined) && min !== undefined && max !== undefined &&
+        {min !== undefined && max !== undefined &&
           <div className='px-4 mt-12 flex justify-between text-sm'>
             <div className='flex flex-col items-center'>
               <div className='text-secondary text-xs'>Min</div>
