@@ -1,36 +1,52 @@
-import { actions, cragFiltersStore } from '../js/stores'
+import { useState } from 'react'
+import { cragFiltersStore } from '../js/stores'
 import { FilterToggleButton } from './ui/Button'
 
-const DisciplineGroup = (): JSX.Element => {
+const DisciplineGroup = ({ onChange }): JSX.Element => {
   const { trad, sport, tr, boulder } = cragFiltersStore.useStore()
+  const [sportSelected, setSportSelected] = useState(sport)
+  const [tradSelected, setTradSelected] = useState(trad)
+  const [trSelected, setTrSelected] = useState(tr)
+  const [boulderSelected, setBoulderSelected] = useState(boulder)
+
+  console.log({ sportSelected, tradSelected, trSelected, boulderSelected })
   return (
     <div className='flex space-x-2'>
       <FilterToggleButton
-        selected={sport}
+        selected={sportSelected}
         label='Sport' onClick={() => {
-          void actions.filters.toggle('sport')
+          setSportSelected(!sportSelected)
+          onChange('sport')
         }}
       />
       <FilterToggleButton
-        selected={trad}
+        selected={tradSelected}
         label='Trad' onClick={() => {
-          void actions.filters.toggle('trad')
+          setTradSelected(!tradSelected)
+          onChange('trad')
         }}
       />
       <FilterToggleButton
-        selected={tr}
+        selected={trSelected}
         label='Top rope' onClick={() => {
-          void actions.filters.toggle('tr')
+          setTrSelected(!trSelected)
+          onChange('tr')
         }}
       />
       <FilterToggleButton
-        selected={boulder}
+        selected={boulderSelected}
         label='Bouldering' onClick={() => {
-          void actions.filters.toggle('boulder')
+          setBoulderSelected(!boulderSelected)
+          onChange('boulder')
         }}
       />
     </div>
   )
 }
+
+// sample click even before change
+// onClick={() => {
+//   void actions.filters.toggle('boulder')
+// }}
 
 export default DisciplineGroup

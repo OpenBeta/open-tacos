@@ -26,6 +26,7 @@ export const cragFiltersStore = createStore('filters')({
   sport: true,
   boulder: true,
   tr: true,
+  climbTypes: ['sport', 'trad', 'tr', 'boulder'],
   freeRange: [4, 8], // keys to YDS_DEFS object
   boulderingRange: {
     scores: [0, 0],
@@ -227,13 +228,11 @@ export const cragFiltersStore = createStore('filters')({
       await set.fetchData()
     },
 
-    toggle: async (stateName: 'sport'| 'trad' | 'tr' | 'boulder') => {
-      let previousState = true
-      set.state(draft => {
-        /* eslint-disable-next-line */
-        previousState = draft[stateName] as boolean
-        draft[stateName] = !previousState
-      })
+    updateClimbTypes: async (climbTypes: string[]) => {
+      climbTypes.includes('sport') ? set.sport(true) : set.sport(false)
+      climbTypes.includes('trad') ? set.trad(true) : set.trad(false)
+      climbTypes.includes('tr') ? set.tr(true) : set.tr(false)
+      climbTypes.includes('boulder') ? set.boulder(true) : set.boulder(false)
       await set.fetchData()
     }
   }))
