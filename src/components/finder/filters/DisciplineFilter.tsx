@@ -7,16 +7,10 @@ import { useCallback, useState } from 'react'
  * Discipline Filter Popover
  */
 const DisciplineFilter = (): JSX.Element => {
-  const initialClimbTypes = cragFiltersStore.get.climbTypes()
+  const initialClimbTypes: string[] = cragFiltersStore.get.climbTypes()
   const { trad, sport, tr, boulder } = cragFiltersStore.useStore()
 
   const [climbTypes, setClimbTypes] = useState<string[]>(initialClimbTypes)
-
-  const modifyClimbTypesArr = (climbType: string): string[] => {
-    return climbTypes.includes(climbType)
-      ? climbTypes.filter((e) => (e !== climbType))
-      : [...climbTypes, climbType]
-  }
 
   const applyFn = useCallback((): void => {
     void actions.filters.updateClimbTypes(climbTypes)
@@ -24,13 +18,7 @@ const DisciplineFilter = (): JSX.Element => {
 
   const cancelFn = (): void => {
     // clear any climb types that may have been clicked but not applied and sync that with climbTypes
-    const activeClimbTypes: string[] = []
-    trad && activeClimbTypes.push('trad')
-    sport && activeClimbTypes.push('sport')
-    tr && activeClimbTypes.push('tr')
-    boulder && activeClimbTypes.push('boulder')
-
-    setClimbTypes(activeClimbTypes)
+    void setClimbTypes(actions.filters.getActiveClimbTypes(trad, sport, tr, boulder))
   }
 
   return (
@@ -40,7 +28,7 @@ const DisciplineFilter = (): JSX.Element => {
       onApply={applyFn}
       onCancel={cancelFn}
     >
-      <DisciplineGroup onChange={((climbType: string) => setClimbTypes(modifyClimbTypesArr(climbType)))} />
+      <DisciplineGroup onChange={((climbType: string) => setClimbTypes(actions.filters.modifyClimbTypesArr(climbType, climbTypes)))} />
     </FilterPopover>
   )
 }

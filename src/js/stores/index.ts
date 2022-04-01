@@ -234,6 +234,21 @@ export const cragFiltersStore = createStore('filters')({
       climbTypes.includes('tr') ? set.tr(true) : set.tr(false)
       climbTypes.includes('boulder') ? set.boulder(true) : set.boulder(false)
       await set.fetchData()
+    },
+
+    getActiveClimbTypes: (trad: boolean, sport: boolean, tr: boolean, boulder: boolean): string[] => {
+      const activeClimbTypes: string[] = []
+      trad && activeClimbTypes.push('trad')
+      sport && activeClimbTypes.push('sport')
+      tr && activeClimbTypes.push('tr')
+      boulder && activeClimbTypes.push('boulder')
+      return activeClimbTypes
+    },
+
+    modifyClimbTypesArr: (climbType: string, climbTypes: string[]): string[] => {
+      return climbTypes.includes(climbType)
+        ? climbTypes.filter((e) => (e !== climbType))
+        : [...climbTypes, climbType]
     }
   }))
 
