@@ -9,7 +9,6 @@ const DisciplineGroup = ({ onChange }): JSX.Element => {
   const [trSelected, setTrSelected] = useState(tr)
   const [boulderSelected, setBoulderSelected] = useState(boulder)
 
-  console.log({ sportSelected, tradSelected, trSelected, boulderSelected })
   return (
     <div className='flex space-x-2'>
       <FilterToggleButton
@@ -43,10 +42,5 @@ const DisciplineGroup = ({ onChange }): JSX.Element => {
     </div>
   )
 }
-
-// sample click even before change
-// onClick={() => {
-//   void actions.filters.toggle('boulder')
-// }}
 
 export default DisciplineGroup
