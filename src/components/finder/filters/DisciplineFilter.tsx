@@ -11,12 +11,10 @@ const DisciplineFilter = (): JSX.Element => {
   const { trad, sport, tr, boulder } = cragFiltersStore.useStore()
 
   const defaultTypes: Partial<ClimbDisciplineRecord> = { trad, sport, tr, bouldering: boulder }
-  console.log(defaultTypes)
 
   const [climbTypes, setClimbTypes] = useState<Partial<ClimbDisciplineRecord>>(defaultTypes)
 
   const applyFn = useCallback((): void => {
-    console.log(climbTypes)
     void actions.filters.updateClimbTypes(climbTypes)
   }, [climbTypes])
 
@@ -27,7 +25,6 @@ const DisciplineFilter = (): JSX.Element => {
       onApply={applyFn}
     >
       <DisciplineGroup onChange={setClimbTypes} climbTypes={climbTypes} />
-
     </FilterPopover>
   )
 }
