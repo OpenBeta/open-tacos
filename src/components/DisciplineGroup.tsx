@@ -1,42 +1,42 @@
-import { useState } from 'react'
-import { cragFiltersStore } from '../js/stores'
+import { ClimbDisciplineRecord } from '../js/types'
 import { FilterToggleButton } from './ui/Button'
 
-const DisciplineGroup = ({ onChange }): JSX.Element => {
-  const { trad, sport, tr, boulder } = cragFiltersStore.useStore()
-  const [sportSelected, setSportSelected] = useState(sport)
-  const [tradSelected, setTradSelected] = useState(trad)
-  const [trSelected, setTrSelected] = useState(tr)
-  const [boulderSelected, setBoulderSelected] = useState(boulder)
+interface DisciplineGroupProps {
+  climbTypes: Partial<ClimbDisciplineRecord>
+  onChange: Function
+}
 
+const DisciplineGroup = ({ climbTypes, onChange }: DisciplineGroupProps): JSX.Element => {
   return (
     <div className='flex space-x-2'>
       <FilterToggleButton
-        selected={sportSelected}
-        label='Sport' onClick={() => {
-          setSportSelected(!sportSelected)
-          onChange('sport')
+        selected={climbTypes.sport}
+        label='Sport'
+        // eslint-disable-next-line
+        onClick={() => onChange({ ...climbTypes, sport: !climbTypes.sport })}
+      />
+      <FilterToggleButton
+        selected={climbTypes.trad}
+        label='Trad'
+        onClick={() => {
+          // eslint-disable-next-line
+          onChange({ ...climbTypes, trad: !climbTypes.trad })
         }}
       />
       <FilterToggleButton
-        selected={tradSelected}
-        label='Trad' onClick={() => {
-          setTradSelected(!tradSelected)
-          onChange('trad')
+        selected={climbTypes.tr}
+        label='Top rope'
+        onClick={() => {
+          // eslint-disable-next-line
+          onChange({ ...climbTypes, tr: !climbTypes.tr })
         }}
       />
       <FilterToggleButton
-        selected={trSelected}
-        label='Top rope' onClick={() => {
-          setTrSelected(!trSelected)
-          onChange('tr')
-        }}
-      />
-      <FilterToggleButton
-        selected={boulderSelected}
-        label='Bouldering' onClick={() => {
-          setBoulderSelected(!boulderSelected)
-          onChange('boulder')
+        selected={climbTypes.bouldering}
+        label='Bouldering'
+        onClick={() => {
+          // eslint-disable-next-line
+          onChange({ ...climbTypes, boulder: !climbTypes.bouldering })
         }}
       />
     </div>
