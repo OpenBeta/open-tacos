@@ -21,17 +21,15 @@ const LeanPopover = ({ btnClz, btnLabel, children }): JSX.Element => {
   )
 }
 
-const ContentPanel = ({ className, onApply, onCancel, btnApplyLabel = 'Apply', children }): JSX.Element => {
+const ContentPanel = ({ className, onApply, btnApplyLabel = 'Apply', children }): JSX.Element => {
   return (
     <div className={className}>
       {children}
       <hr className='mt-8' />
       <footer className='mt-2 flex justify-between items-center'>
-        <div onClick={onCancel}>
-          <Popover.Button className='text-secondary hover:underline'>
-            Cancel
-          </Popover.Button>
-        </div>
+        <Popover.Button className='text-secondary hover:underline'>
+          Cancel
+        </Popover.Button>
         <div onClick={onApply}>
           <Popover.Button className='text-primary-contrast bg-slate-800 rounded-md px-2 py-0.5'>
             {btnApplyLabel}
