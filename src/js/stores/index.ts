@@ -2,7 +2,7 @@ import { mapValuesKey, createStore } from '@udecode/zustood'
 import produce from 'immer'
 import { point, featureCollection } from '@turf/helpers'
 
-import { RadiusRange, CountByGradeBandType, AreaType } from '../types'
+import { RadiusRange, CountByGradeBandType, AreaType, ClimbDisciplineRecord } from '../types'
 import { getCragDetailsNear } from '../graphql/api'
 import { calculatePagination, NextPaginationProps } from './util'
 import { YDS_DEFS } from '../grades/rangeDefs'
@@ -26,7 +26,6 @@ export const cragFiltersStore = createStore('filters')({
   sport: true,
   boulder: true,
   tr: true,
-  climbTypes: ['sport', 'trad', 'tr', 'boulder'],
   freeRange: [4, 8], // keys to YDS_DEFS object
   boulderingRange: {
     scores: [0, 0],
@@ -228,27 +227,13 @@ export const cragFiltersStore = createStore('filters')({
       await set.fetchData()
     },
 
-    updateClimbTypes: async (climbTypes: string[]) => {
-      climbTypes.includes('sport') ? set.sport(true) : set.sport(false)
-      climbTypes.includes('trad') ? set.trad(true) : set.trad(false)
-      climbTypes.includes('tr') ? set.tr(true) : set.tr(false)
-      climbTypes.includes('boulder') ? set.boulder(true) : set.boulder(false)
+    updateClimbTypes: async (climbTypes: Partial<ClimbDisciplineRecord>): Promise<void> => {
+      const { sport, trad, tr, bouldering } = climbTypes
+      sport === true ? set.sport(true) : set.sport(false)
+      trad === true ? set.trad(true) : set.trad(false)
+      tr === true ? set.tr(true) : set.tr(false)
+      bouldering === true ? set.boulder(true) : set.boulder(false)
       await set.fetchData()
-    },
-
-    getActiveClimbTypes: (trad: boolean, sport: boolean, tr: boolean, boulder: boolean): string[] => {
-      const activeClimbTypes: string[] = []
-      trad && activeClimbTypes.push('trad')
-      sport && activeClimbTypes.push('sport')
-      tr && activeClimbTypes.push('tr')
-      boulder && activeClimbTypes.push('boulder')
-      return activeClimbTypes
-    },
-
-    modifyClimbTypesArr: (climbType: string, climbTypes: string[]): string[] => {
-      return climbTypes.includes(climbType)
-        ? climbTypes.filter((e) => (e !== climbType))
-        : [...climbTypes, climbType]
     }
   }))
 
