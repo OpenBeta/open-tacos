@@ -5,7 +5,7 @@ import { RadiusRangeSlider, radiusRangeToString, prettifyLabel } from './ui/Radi
 import FilterPopover from './ui/FilterPopover'
 
 const RadiusFilter = (): JSX.Element => {
-  const initial = cragFiltersStore.get.radius()
+  const initial = cragFiltersStore.use.radius()
   const [range, setRange] = useState(initial)
 
   const applyFn = useCallback(async (): Promise<any> => {
