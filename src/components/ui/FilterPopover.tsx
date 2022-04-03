@@ -4,9 +4,9 @@ interface FilterPopoverProps {
   label: string
   header: string
   children: JSX.Element | JSX.Element[]
-  onApply: Function
-  min: string | number
-  max: string | number
+  onApply?: Function
+  min?: string | number
+  max?: string | number
 }
 /**
  * Base popover component for crag finder filter bar

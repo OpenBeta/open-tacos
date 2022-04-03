@@ -2,7 +2,7 @@ import { mapValuesKey, createStore } from '@udecode/zustood'
 import produce from 'immer'
 import { point, featureCollection } from '@turf/helpers'
 
-import { RadiusRange, CountByGradeBandType, AreaType } from '../types'
+import { RadiusRange, CountByGradeBandType, AreaType, ClimbDisciplineRecord } from '../types'
 import { getCragDetailsNear } from '../graphql/api'
 import { calculatePagination, NextPaginationProps } from './util'
 import { YDS_DEFS } from '../grades/rangeDefs'
@@ -227,12 +227,14 @@ export const cragFiltersStore = createStore('filters')({
       await set.fetchData()
     },
 
-    toggle: async (stateName: 'sport'| 'trad' | 'tr' | 'boulder') => {
-      let previousState = true
-      set.state(draft => {
-        /* eslint-disable-next-line */
-        previousState = draft[stateName] as boolean
-        draft[stateName] = !previousState
+    updateClimbTypes: async (climbTypes: Partial<ClimbDisciplineRecord>): Promise<void> => {
+      const { sport, trad, tr, bouldering } = climbTypes
+      // Update multiple states at once
+      api.set.state(draft => {
+        draft.sport = sport === true
+        draft.trad = trad === true
+        draft.tr = tr === true
+        draft.boulder = bouldering === true
       })
       await set.fetchData()
     }
