@@ -7,7 +7,7 @@ import { actions, cragFiltersStore } from '../js/stores'
  * Free climb grade range selector
  */
 const YDSFilter = (): JSX.Element => {
-  const initialRange = cragFiltersStore.get.freeRange()
+  const initialRange = cragFiltersStore.use.freeRange()
   const [range, setRange] = useState(initialRange)
 
   const applyFn = useCallback((): void => {

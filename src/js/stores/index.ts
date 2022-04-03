@@ -229,10 +229,13 @@ export const cragFiltersStore = createStore('filters')({
 
     updateClimbTypes: async (climbTypes: Partial<ClimbDisciplineRecord>): Promise<void> => {
       const { sport, trad, tr, bouldering } = climbTypes
-      sport === true ? set.sport(true) : set.sport(false)
-      trad === true ? set.trad(true) : set.trad(false)
-      tr === true ? set.tr(true) : set.tr(false)
-      bouldering === true ? set.boulder(true) : set.boulder(false)
+      // Update multiple states at once
+      api.set.state(draft => {
+        draft.sport = sport === true
+        draft.trad = trad === true
+        draft.tr = tr === true
+        draft.boulder = bouldering === true
+      })
       await set.fetchData()
     }
   }))
