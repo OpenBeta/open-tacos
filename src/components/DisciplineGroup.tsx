@@ -1,35 +1,36 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { ClimbDisciplineRecord } from '../js/types'
 import { FilterToggleButton } from './ui/Button'
 
 interface DisciplineGroupProps {
   defaultTypes: Partial<ClimbDisciplineRecord>
   climbTypes: Partial<ClimbDisciplineRecord>
-  onChange: Function
+  setClimbTypes: Function
 }
 
-const DisciplineGroup = ({ climbTypes, onChange, defaultTypes }: DisciplineGroupProps): JSX.Element => {
-  const [types, setTypes] = useState(defaultTypes)
-
-  useEffect(() => {
+const DisciplineGroup = ({ climbTypes, setClimbTypes, defaultTypes }: DisciplineGroupProps): JSX.Element => {
+  useEffect(() => { // if doesn't match, set everything to default
     if (JSON.stringify(climbTypes) !== JSON.stringify(defaultTypes)) {
-      onChange({ ...climbTypes, sport: types.sport, tr: types.tr, trad: types.trad, bouldering: types.bouldering })
+      setClimbTypes({ ...climbTypes, sport: defaultTypes.sport, tr: defaultTypes.tr, trad: defaultTypes.trad, bouldering: defaultTypes.bouldering })
     }
   }, [])
+
   return (
     <div className='flex space-x-2'>
       <FilterToggleButton
         selected={climbTypes.sport}
         label='Sport'
-        // eslint-disable-next-line
-        onClick={() => onChange({ ...types, sport: !types.sport })}
+        onClick={() => {
+          // eslint-disable-next-line
+          setClimbTypes({ ...climbTypes, sport: !climbTypes.sport })
+        }}
       />
       <FilterToggleButton
         selected={climbTypes.trad}
         label='Trad'
         onClick={() => {
           // eslint-disable-next-line
-          onChange({ ...climbTypes, trad: !types.trad })
+          setClimbTypes({ ...climbTypes, trad: !climbTypes.trad })
         }}
       />
       <FilterToggleButton
@@ -37,7 +38,7 @@ const DisciplineGroup = ({ climbTypes, onChange, defaultTypes }: DisciplineGroup
         label='Top rope'
         onClick={() => {
           // eslint-disable-next-line
-          onChange({ ...climbTypes, tr: !types.tr })
+          setClimbTypes({ ...climbTypes, tr: !climbTypes.tr })
         }}
       />
       <FilterToggleButton
@@ -45,7 +46,7 @@ const DisciplineGroup = ({ climbTypes, onChange, defaultTypes }: DisciplineGroup
         label='Bouldering'
         onClick={() => {
           // eslint-disable-next-line
-          onChange({ ...climbTypes, bouldering: !types.bouldering })
+          setClimbTypes({ ...climbTypes, bouldering: !climbTypes.bouldering })
         }}
       />
     </div>
