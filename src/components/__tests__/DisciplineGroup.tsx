@@ -49,7 +49,7 @@ describe('DisciplineGroup', () => {
   })
 
   it('all 4 types selected by default mo', async () => {
-    const clickButton = async (index) => {
+    const clickButton = async (index): Promise<void> => {
       await userEvent.click(buttons[index])
       rerender(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
     }
@@ -64,6 +64,15 @@ describe('DisciplineGroup', () => {
     await clickButton(3)
 
     expect(container.getElementsByClassName('border-neutral-800').length).toBe(1)
+    await clickButton(3)
+    expect(container.getElementsByClassName('border-neutral-800').length).toBe(2)
+
+    // cancel and click away functionality.
+    const { container: recreatedContainer2, rerender: rerender2 } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
+
+    // rerender needed so that useEffect [] runs.
+    rerender2(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
+    expect(recreatedContainer2.getElementsByClassName('border-neutral-800').length).toBe(4)
   })
 
   it('changs values and resets to defaultTypes when component regenerated', () => {
