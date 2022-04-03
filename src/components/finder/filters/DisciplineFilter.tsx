@@ -24,7 +24,7 @@ const DisciplineFilter = (): JSX.Element => {
       header='Filter by climbing discipline(s)'
       onApply={applyFn}
     >
-      <DisciplineGroup onChange={setClimbTypes} climbTypes={climbTypes} />
+      <DisciplineGroup onChange={setClimbTypes} climbTypes={climbTypes} defaultTypes={defaultTypes} />
     </FilterPopover>
   )
 }
