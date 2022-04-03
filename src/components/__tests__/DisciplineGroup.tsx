@@ -11,19 +11,20 @@ const defaultTypes = {
   tr: true,
   bouldering: true
 }
-
-let climbTypes = {
-  trad: true,
-  sport: true,
-  tr: true,
-  bouldering: true
-}
-
+let climbTypes
 const setClimbTypes = (value): void => {
   climbTypes = value
 }
 
 describe('DisciplineGroup', () => {
+  beforeEach(() => {
+    climbTypes = {
+      trad: true,
+      sport: true,
+      tr: true,
+      bouldering: true
+    }
+  })
   it('renders component without error', () => {
     render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
   })
@@ -33,17 +34,36 @@ describe('DisciplineGroup', () => {
     expect(container.getElementsByClassName('border-neutral-800').length).toBe(4)
 
     const sportButton = getByRole('button', { name: /Sport/i })
-    console.log(sportButton)
 
     await userEvent.click(sportButton)
 
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 3))
     })
+
     rerender(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
     expect(container.getElementsByClassName('border-neutral-800').length).toBe(3)
 
     // expect(container).toMatchSnapshot()
+    // debug()
+  })
+
+  it('all 4 types selected by default mo', async () => {
+    const clickButton = async (index) => {
+      await userEvent.click(buttons[index])
+      rerender(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
+    }
+
+    const { container, getAllByRole, rerender } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
+    expect(container.getElementsByClassName('border-neutral-800').length).toBe(4)
+
+    const buttons = getAllByRole('button')
+
+    await clickButton(0)
+    await clickButton(1)
+    await clickButton(3)
+
+    expect(container.getElementsByClassName('border-neutral-800').length).toBe(1)
   })
 
   it('changs values and resets to defaultTypes when component regenerated', () => {
