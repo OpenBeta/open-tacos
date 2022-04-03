@@ -29,11 +29,7 @@ function Layout ({ layoutClz = 'layout-default', customClz = '', children, hero 
       </Head>
 
       <div className={`main-container ${customClz}`}>
-        <div className='relative w-full z-50'>
-          <div className='absolute w-full z-50'>
-            <Header />
-          </div>
-        </div>
+        <Header />
         {/* {subheader} */}
         {hero}
         <main className={layoutClz}>

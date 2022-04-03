@@ -12,7 +12,7 @@ const HomeHero = ({ statsProps }: HomeHeroProps): JSX.Element => {
   return (
     <>
       <LargeScreen statsProps={statsProps} />
-      <SmallScreen statsProps={statsProps} />
+      {/* <SmallScreen statsProps={statsProps} /> */}
     </>
   )
 }

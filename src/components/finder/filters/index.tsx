@@ -2,15 +2,18 @@ import { actions, cragFiltersStore } from '../../../js/stores/index'
 import { FilterToggleButton } from '../../ui/Button'
 import YDSFilter from '../../YDSFilter'
 import RadiusFilter from '../../RadiusFilter'
+import ClientOnly from '../../ClientOnly'
 
 const index = (): JSX.Element => {
   return (
     <div className='z-0 hidden bg-slate-800 w-full pt-4 pb-2 lg:flex no-wrap  items-center space-x-4'>
-      <YDSFilter />
-      <VerticalDiv />
-      <DisciplineGroup />
-      <VerticalDiv />
-      <RadiusFilter />
+      <ClientOnly>
+        <YDSFilter />
+        <VerticalDiv />
+        <DisciplineGroup />
+        <VerticalDiv />
+        <RadiusFilter />
+      </ClientOnly>
     </div>
   )
 }
