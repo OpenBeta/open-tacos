@@ -1,6 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { act, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import DisciplineGroup from '../DisciplineGroup'
@@ -29,42 +29,30 @@ describe('DisciplineGroup', () => {
     render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
   })
 
-  it('all 4 types selected by default', async () => {
+  it('all 4 types selected by default', () => {
+    const { container } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
+    expect(container.getElementsByClassName('border-neutral-800').length).toBe(4)
+  })
+
+  it('changs values and resets to defaultTypes when component regenerated', async () => {
+    const clickButton = async (button): Promise<void> => {
+      await userEvent.click(button)
+      rerender(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
+    }
+
     const { container, getByRole, rerender } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
     expect(container.getElementsByClassName('border-neutral-800').length).toBe(4)
 
     const sportButton = getByRole('button', { name: /Sport/i })
+    const tradButton = getByRole('button', { name: /Trad/i })
+    const topRopeButton = getByRole('button', { name: /Top rope/i })
 
-    await userEvent.click(sportButton)
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 3))
-    })
-
-    rerender(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
-    expect(container.getElementsByClassName('border-neutral-800').length).toBe(3)
-
-    // expect(container).toMatchSnapshot()
-    // debug()
-  })
-
-  it('all 4 types selected by default mo', async () => {
-    const clickButton = async (index): Promise<void> => {
-      await userEvent.click(buttons[index])
-      rerender(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
-    }
-
-    const { container, getAllByRole, rerender } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
-    expect(container.getElementsByClassName('border-neutral-800').length).toBe(4)
-
-    const buttons = getAllByRole('button')
-
-    await clickButton(0)
-    await clickButton(1)
-    await clickButton(3)
+    await clickButton(sportButton)
+    await clickButton(tradButton)
+    await clickButton(topRopeButton)
 
     expect(container.getElementsByClassName('border-neutral-800').length).toBe(1)
-    await clickButton(3)
+    await clickButton(topRopeButton)
     expect(container.getElementsByClassName('border-neutral-800').length).toBe(2)
 
     // cancel and click away functionality.
@@ -74,15 +62,4 @@ describe('DisciplineGroup', () => {
     rerender2(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
     expect(recreatedContainer2.getElementsByClassName('border-neutral-800').length).toBe(4)
   })
-
-  it('changs values and resets to defaultTypes when component regenerated', () => {
-    // caused by cancel or click away
-    render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
-  })
 })
-
-// possible tests
-
-// does it render without error
-// do all 4 types show by default
-// if not matches, does it reset to defaultTypes?
