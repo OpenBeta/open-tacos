@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { useRouter } from 'next/router'
 import Tabs from './Tabs'
 import SearchIcon from '../../assets/icons/search.svg'
 import { ClimbSearchByName } from './ClimbSearchByName'
@@ -15,8 +14,6 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
     document.addEventListener('click', outsideClickDectector)
     return () => { document.removeEventListener('click', outsideClickDectector) }
   }, [])
-
-  const router = useRouter()
 
   const outsideClickDectector = (event: any): void => {
     const searchDiv = document.getElementById('searchPanel')
@@ -35,10 +32,10 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
             <Tabs
               labels={['Places to climb', 'Climb search']}
               panelCompList={[
-                <div key={2} className={`pb-4 ${router.pathname === '/finder' ? 'bg-slate-800' : ''}`}>
+                <div key={2} className='pb-4 bg-slate-800'>
                   <CragFinder isMobile={false} />
                 </div>,
-                <div key={1} className={`pb-4 ${router.pathname === '/finder' ? 'bg-slate-800' : ''}`}>
+                <div key={1} className='pb-4 bg-slate-800'>
                   <ClimbSearchByName isMobile={false} />
                 </div>
               ]}

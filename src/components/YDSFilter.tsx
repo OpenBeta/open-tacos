@@ -3,11 +3,15 @@ import FilterPopover from './ui/FilterPopover'
 import YDSRangeSlider, { YDS_DEFS } from './ui/YDSRangeSlider'
 import { actions, cragFiltersStore } from '../js/stores'
 
+interface YDSFilterProps {
+  isMobile?: boolean
+}
+
 /**
  * Free climb grade range selector
  */
-const YDSFilter = (): JSX.Element => {
-  const initialRange = cragFiltersStore.get.freeRange()
+const YDSFilter = ({ isMobile = true }: YDSFilterProps): JSX.Element => {
+  const initialRange = cragFiltersStore.use.freeRange()
   const [range, setRange] = useState(initialRange)
 
   const applyFn = useCallback((): void => {
@@ -23,6 +27,7 @@ const YDSFilter = (): JSX.Element => {
       min={YDS_DEFS[range[0]].label}
       max={YDS_DEFS[range[1]].label}
       onApply={applyFn}
+      isMobile={isMobile}
     >
       <YDSRangeSlider onChange={setRange} defaultValue={initialRange} />
     </FilterPopover>

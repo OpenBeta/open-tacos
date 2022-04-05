@@ -15,7 +15,7 @@ export interface CragFinderProps {
   placeholder?: string
 }
 
-const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las Vegas\'' }: CragFinderProps): JSX.Element => {
+export default function CragFinder ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las Vegas\'' }: CragFinderProps): JSX.Element {
   const router = useRouter()
 
   return (
@@ -58,4 +58,6 @@ const CragFinder = ({ isMobile = true, placeholder = 'Try \'Smith Rock\', \'Las 
   )
 }
 
-export default CragFinder
+export function MobileCragFinder (): JSX.Element {
+  return (<div>foos</div>)
+}

@@ -1,5 +1,4 @@
 import StatsPanel, { StatsPanelProps } from './ui/StatsPanel'
-import { ClimbSearchByName } from './search/ClimbSearchByName'
 interface HomeHeroProps {
   statsProps: StatsPanelProps
 }
@@ -12,7 +11,6 @@ const HomeHero = ({ statsProps }: HomeHeroProps): JSX.Element => {
   return (
     <>
       <LargeScreen statsProps={statsProps} />
-      {/* <SmallScreen statsProps={statsProps} /> */}
     </>
   )
 }
@@ -25,22 +23,6 @@ const LargeScreen = ({ statsProps }: ResponsiveScreenProps): JSX.Element => {
           <StatsPanel isMobile={false} className='px-32 py-4' {...statsProps} />
         </section>
       </div>
-    </div>
-  )
-}
-
-const SmallScreen = ({ statsProps }: ResponsiveScreenProps): JSX.Element => {
-  return (
-    <div className='home-hero-mobile'>
-      <section className='h-full flex flex-col justify-center items-center'>
-        <h1 className='landscape:mt-16 text-white text-3xl text-center mb-8 semibold'>
-          Rock Climbing Wiki
-        </h1>
-        <div className='mb-6 px-4 sm:px-8 md:max-w-screen-sm w-full'>
-          <ClimbSearchByName placeholder='Levitation 29' />
-        </div>
-        <StatsPanel isMobile className='portrait:mt-16 px-16 py-2' {...statsProps} />
-      </section>
     </div>
   )
 }

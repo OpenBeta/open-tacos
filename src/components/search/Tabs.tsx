@@ -23,7 +23,7 @@ const TabLabel = ({ label }): JSX.Element => (
     {({ selected }) => (
       <div
         className={
-        selected ? 'font-medium underline decoration-2' : 'font-light text-gray-400 hover:text-ob-tertiary  hover:scale-105  ease-in-out duration-500'
+        selected ? 'font-medium underline decoration-2' : 'font-light text-gray-400 hover:text-ob-tertiary'
       }
       >
         {label}

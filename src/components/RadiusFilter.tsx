@@ -4,8 +4,12 @@ import { actions, cragFiltersStore } from '../js/stores'
 import { RadiusRangeSlider, radiusRangeToString, prettifyLabel } from './ui/RadiusRangeSlider'
 import FilterPopover from './ui/FilterPopover'
 
-const RadiusFilter = (): JSX.Element => {
-  const initial = cragFiltersStore.get.radius()
+interface RadiusFilterProps {
+  isMobile?: boolean
+}
+
+const RadiusFilter = ({ isMobile = true }: RadiusFilterProps): JSX.Element => {
+  const initial = cragFiltersStore.use.radius()
   const [range, setRange] = useState(initial)
 
   const applyFn = useCallback(async (): Promise<any> => {
@@ -21,6 +25,7 @@ const RadiusFilter = (): JSX.Element => {
       min={min}
       max={max}
       onApply={applyFn}
+      isMobile={isMobile}
     >
       <RadiusRangeSlider
         onChange={setRange} defaultValue={initial.rangeIndices}

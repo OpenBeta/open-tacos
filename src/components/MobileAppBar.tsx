@@ -2,7 +2,7 @@ import Link from 'next/link'
 import CragFinder from './search/CragFinder'
 import MobileNavBar from './ui/MobileNavBar'
 import { HomeIcon } from '@heroicons/react/outline'
-import MobileFilters from './finder/filters/MobileFilters'
+import MobileFilterBar from './finder/filters/MobileFilterBar'
 
 export default function MobileAppBar (): JSX.Element {
   return (
@@ -13,7 +13,7 @@ export default function MobileAppBar (): JSX.Element {
         search={<CragFinder />}
         more={<div>more</div>}
       />
-      <MobileFilters />
+      <MobileFilterBar />
     </>
 
   )

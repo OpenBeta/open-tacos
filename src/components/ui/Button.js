@@ -21,7 +21,7 @@ export function IconButton ({ onClick, children, active, text, className }) {
 
 export const FilterToggleButton = ({ selected, label, onClick }) => {
   return (
-    <button type='button' onClick={onClick} className={`border-2 rounded-2xl  btn-small active:scale-95 ${selected ? 'border-neutral-100 text-neutral-100' : 'border-neutral-500 text-neutral-400 hover:border-neutral-400'}`}>
+    <button type='button' role='checkbox' aria-checked={selected} onClick={onClick} className={`border-2 rounded-2xl  btn-small active:scale-95 ${selected ? 'border-neutral-800 text-neutral-800' : 'border-neutral-400 text-neutral-400 hover:border-neutral-600'}`}>
       {label}
     </button>
   )

@@ -1,60 +1,43 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../../tailwind.config.js'
 import ClimbSearch from './search/ClimbSearch'
 
 import { TextButton } from './ui/Button'
 import MobileTableAppBar from './MobileAppBar'
-
-const fullConfig = resolveConfig(tailwindConfig)
-
-const parseTailwindScreenValue = (w) => w.slice(0, w.indexOf('px'))
+import { FilterBar } from './finder/filters'
 
 export default function Header () {
   const router = useRouter()
-  // track position of scrollbar
-  const [direction, setDirection] = useState('top')
+  const isIndexPage = router.pathname === '/'
 
   // track expand/collapse of search widget (for large screen only)
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(isIndexPage)
 
-  const controlDirection = () => {
-    if (window.scrollY > 80) {
+  const controlDirection = useCallback(() => {
+    if (typeof window !== 'undefined' && window.scrollY < 150 && isIndexPage) {
+      setExpanded(true)
+    } else {
       setExpanded(false)
     }
-    if (window.scrollY > 280) {
-      setDirection('down')
-    } else {
-      setDirection('top')
-    }
-  }
+  }, [isIndexPage])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
     window.addEventListener('scroll', controlDirection)
     return () => {
       window.removeEventListener('scroll', controlDirection)
     }
   }, [])
 
-  useEffect(() => {
-    const isLargeScreen = window.innerWidth >= parseTailwindScreenValue(fullConfig.theme.screens.lg)
-    if (isIndexPage && isLargeScreen) { setExpanded(direction === 'top') }
-  }, [direction])
-
   const onClick = () => setExpanded(!expanded)
   const onClickOutside = () => setExpanded(false)
 
-  const isIndexPage = router.pathname === '/'
   return (
     <>
       <MobileTableAppBar />
-      {/* // Mobile: to be scrolled up
-    // Large screens: fixed, collapsed as users scroll page or click outside of navbar
-    // ${direction === 'down' || !isIndexPage ? 'bg-gray-800' : ''} */}
       <header
-        className={`hidden lg:block lg:fixed lg:top-0 z-50 w-full px-4 py-4 lg:py-2 max-w-screen-2xl mx-auto bg-gray-800 transition duration-300 ease-in-out ${expanded ? 'h-36' : ''} ${isIndexPage && expanded && window.scrollY < 80 ? 'bg-opacity-30' : ''}`}
+        className={`hidden lg:block lg:fixed lg:top-0 h-16 z-50 w-full px-4 py-4 lg:py-2 max-w-screen-2xl mx-auto bg-gray-800 transition duration-300 ease-in-out ${expanded ? 'h-36' : ''}`}
       >
         <nav className='z-50 flex items-center justify-between w-full'>
           <a href='/' className='inline-flex flex-rows justify-start items-center md:gap-x-2'>
@@ -72,6 +55,7 @@ export default function Header () {
           </div>
         </nav>
       </header>
+      <FilterBar />
     </>
   )
 }
@@ -107,4 +91,4 @@ const navList = [
  * its top-${NAV_BAR_OFFSET}px
  * Todo: caclculate this value programmatically
  */
-export const NAV_BAR_OFFSET = 132 // px
+export const NAV_BAR_OFFSET = 112 // px

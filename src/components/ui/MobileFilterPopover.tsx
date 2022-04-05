@@ -15,7 +15,7 @@ export default function MobileFilterPopover ({ btnLabel, title, onApply, childre
     <div>
       <button
         type='button'
-        className='underline text-sm lg:text-base md:no-underline'
+        className='underline text-sm lg:text-base'
         onClick={() => setIsOpen(true)}
       >
         {btnLabel}
