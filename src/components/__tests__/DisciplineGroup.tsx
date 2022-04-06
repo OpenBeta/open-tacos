@@ -30,36 +30,63 @@ describe('DisciplineGroup', () => {
   })
 
   it('all 4 types selected by default', () => {
-    const { container } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
-    expect(container.getElementsByClassName('border-neutral-800').length).toBe(4)
+    const { getByRole } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
+    const sportButton = getByRole('checkbox', { name: /Sport/i })
+    const tradButton = getByRole('checkbox', { name: /Trad/i })
+    const topRopeButton = getByRole('checkbox', { name: /Top rope/i })
+
+    expect(sportButton).toBeChecked()
+    expect(tradButton).toBeChecked()
+    expect(topRopeButton).toBeChecked()
   })
 
-  it('changs values and resets to defaultTypes when component regenerated', async () => {
+  it('changes values and resets to defaultTypes when component regenerated', async () => {
     const clickButton = async (button): Promise<void> => {
       await userEvent.click(button)
       rerender(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
     }
 
-    const { container, getByRole, rerender } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
+    const { container, getByRole, rerender, unmount } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
     expect(container.getElementsByClassName('border-neutral-800').length).toBe(4)
 
-    const sportButton = getByRole('button', { name: /Sport/i })
-    const tradButton = getByRole('button', { name: /Trad/i })
-    const topRopeButton = getByRole('button', { name: /Top rope/i })
+    const sportButton = getByRole('checkbox', { name: /Sport/i })
+    const tradButton = getByRole('checkbox', { name: /Trad/i })
+    const topRopeButton = getByRole('checkbox', { name: /Top rope/i })
 
+    // click buttons to remove from filter
+    // sportButton
+    expect(sportButton).toBeChecked()
     await clickButton(sportButton)
-    await clickButton(tradButton)
-    await clickButton(topRopeButton)
+    expect(sportButton).not.toBeChecked()
 
-    expect(container.getElementsByClassName('border-neutral-800').length).toBe(1)
+    // tradButton
+    expect(tradButton).toBeChecked()
+    await clickButton(tradButton)
+    expect(tradButton).not.toBeChecked()
+
+    // topRopeButton
+    expect(topRopeButton).toBeChecked()
     await clickButton(topRopeButton)
-    expect(container.getElementsByClassName('border-neutral-800').length).toBe(2)
+    expect(topRopeButton).not.toBeChecked()
+    await clickButton(topRopeButton)
+    expect(topRopeButton).toBeChecked()
 
     // cancel and click away functionality.
-    const { container: recreatedContainer2, rerender: rerender2 } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
+    unmount() // cancel/click-away unmounts <DisciplineGroup /> component
+
+    const { rerender: rerender2, getByRole: getByRole2 } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
 
     // rerender needed so that useEffect [] runs.
     rerender2(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
-    expect(recreatedContainer2.getElementsByClassName('border-neutral-800').length).toBe(4)
+
+    const sportButton2 = getByRole2('checkbox', { name: /Sport/i })
+    const tradButton2 = getByRole2('checkbox', { name: /Trad/i })
+    const topRopeButton2 = getByRole2('checkbox', { name: /Top rope/i })
+    const boulderingButton2 = getByRole2('checkbox', { name: /Bouldering/i })
+
+    expect(sportButton2).toBeChecked()
+    expect(tradButton2).toBeChecked()
+    expect(topRopeButton2).toBeChecked()
+    expect(boulderingButton2).toBeChecked()
   })
 })
