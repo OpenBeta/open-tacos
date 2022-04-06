@@ -11,7 +11,7 @@ interface DisciplineGroupProps {
 const DisciplineGroup = ({ climbTypes, setClimbTypes, defaultTypes }: DisciplineGroupProps): JSX.Element => {
   useEffect(() => { // if doesn't match, set everything to default
     if (JSON.stringify(climbTypes) !== JSON.stringify(defaultTypes)) {
-      setClimbTypes({ ...climbTypes, sport: defaultTypes.sport, tr: defaultTypes.tr, trad: defaultTypes.trad, bouldering: defaultTypes.bouldering })
+      setClimbTypes({ ...defaultTypes })
     }
   }, [])
 
