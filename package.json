@@ -85,6 +85,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^14.0.4",
     "@types/js-yaml": "^4.0.5",
     "@types/react": "^17.0.38",
     "@types/supercluster": "^5.0.3",
