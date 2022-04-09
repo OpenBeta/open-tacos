@@ -5,7 +5,7 @@ import { point, featureCollection } from '@turf/helpers'
 import { RadiusRange, CountByGradeBandType, AreaType, ClimbDisciplineRecord } from '../types'
 import { getCragDetailsNear } from '../graphql/api'
 import { calculatePagination, NextPaginationProps } from './util'
-import { YDS_DEFS } from '../grades/rangeDefs'
+import { BOULDER_DEFS, YDS_DEFS } from '../grades/rangeDefs'
 import { freeScoreToBandIndex, BAND_BY_INDEX } from '../grades/bandUtil'
 import { sanitizeName } from '../utils'
 
@@ -26,7 +26,8 @@ export const cragFiltersStore = createStore('filters')({
   sport: true,
   boulder: true,
   tr: true,
-  freeRange: [4, 8], // keys to YDS_DEFS object
+  freeRange: [4, 8], // keys to YDS_DEFS object'
+  boulderRange: [0, 3], // keys to YDS_BOULDER object
   boulderingRange: {
     scores: [0, 0],
     labels: ['v0', 'v3']
@@ -77,6 +78,13 @@ export const cragFiltersStore = createStore('filters')({
     return ([
       YDS_DEFS[min].label,
       YDS_DEFS[max].label])
+  },
+
+  displayBoulderRange: () => {
+    const [min, max] = get.boulderRange()
+    return ([
+      BOULDER_DEFS[min].label,
+      BOULDER_DEFS[max].label])
   },
 
   scoreFreeRange: () => {
@@ -227,6 +235,11 @@ export const cragFiltersStore = createStore('filters')({
 
     updateFreeRange: async (newRange) => {
       set.freeRange(newRange)
+      await set.fetchData()
+    },
+
+    updateBoulderRange: async (newRange) => {
+      set.boulderRange(newRange)
       await set.fetchData()
     },
 

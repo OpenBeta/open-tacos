@@ -2,9 +2,9 @@
 // Constants and util functions for grade ranges
 // ****************************************************
 
-import { YDS_DEFS, SliderMarksType } from './rangeDefs'
+import { YDS_DEFS, BOULDER_DEFS, SliderMarksType } from './rangeDefs'
 
-export { YDS_DEFS }
+export { YDS_DEFS, BOULDER_DEFS }
 export type { SliderMarksType }
 
 export interface GradeRangeType {
