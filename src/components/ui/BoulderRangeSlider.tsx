@@ -1,5 +1,5 @@
 import RangeSlider from './RangeSlider'
-import { BOULDER_DEFS } from '../../js/grades/ranges'
+import { BOULDER_DEFS, genSliderMarks } from '../../js/grades/ranges'
 
 export { BOULDER_DEFS }
 
@@ -9,7 +9,7 @@ const BoulderRangeSlider = ({ onChange, defaultValue }): JSX.Element => {
       count={1}
       step={1}
       dots
-      marks={BOULDER_DEFS}
+      marks={genSliderMarks(BOULDER_DEFS, 'boulderRange')}
       min={0}
       max={13}
       defaultValue={defaultValue}

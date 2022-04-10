@@ -74,59 +74,63 @@ export const YDS_DEFS: SliderMarksType =
 export const BOULDER_DEFS: SliderMarksType =
 {
   0: {
-    score: 0,
+    score: -1,
     label: 'V-easy'
   },
   1: {
-    score: 5,
-    label: 'V1'
+    score: getScoreForSort('v0', GradeScales.VScale),
+    label: 'V0'
   },
   2: {
-    label: 'V2',
-    score: getScoreForSort('5.0', GradeScales.VScale)
+    score: getScoreForSort('v1', GradeScales.VScale),
+    label: 'V1'
   },
   3: {
-    label: 'V3',
-    score: getScoreForSort('5.5', GradeScales.VScale)
+    label: 'V2',
+    score: getScoreForSort('v2', GradeScales.VScale)
   },
   4: {
-    label: 'V4',
-    score: getScoreForSort('5.6', GradeScales.VScale)
+    label: 'V3',
+    score: getScoreForSort('v3', GradeScales.VScale)
   },
   5: {
-    label: 'V5',
-    score: getScoreForSort('5.7', GradeScales.VScale)
+    label: 'V4',
+    score: getScoreForSort('v4', GradeScales.VScale)
   },
   6: {
-    label: 'V6',
-    score: getScoreForSort('5.8', GradeScales.VScale)
+    label: 'V5',
+    score: getScoreForSort('v5', GradeScales.VScale)
   },
   7: {
-    label: 'V7',
-    score: getScoreForSort('5.9', GradeScales.VScale)
+    label: 'V6',
+    score: getScoreForSort('v6', GradeScales.VScale)
   },
   8: {
-    label: 'V8',
-    score: getScoreForSort('5.10', GradeScales.VScale)
+    label: 'V7',
+    score: getScoreForSort('v7', GradeScales.VScale)
   },
   9: {
-    label: 'V9',
-    score: getScoreForSort('5.11', GradeScales.VScale)
+    label: 'V8',
+    score: getScoreForSort('v8', GradeScales.VScale)
   },
   10: {
-    label: 'V10',
-    score: getScoreForSort('5.12', GradeScales.VScale)
+    label: 'V9',
+    score: getScoreForSort('v9', GradeScales.VScale)
   },
   11: {
-    label: 'V11',
-    score: getScoreForSort('5.13', GradeScales.VScale)
+    label: 'V10',
+    score: getScoreForSort('v10', GradeScales.VScale)
   },
   12: {
-    label: 'V12',
-    score: getScoreForSort('5.14', GradeScales.VScale)
+    label: 'V11',
+    score: getScoreForSort('V11', GradeScales.VScale)
   },
   13: {
+    label: 'V12',
+    score: getScoreForSort('v12', GradeScales.VScale)
+  },
+  14: {
     label: 'V13+',
-    score: getScoreForSort('5.15', GradeScales.VScale)
+    score: getScoreForSort('v13+', GradeScales.VScale)
   }
 }
