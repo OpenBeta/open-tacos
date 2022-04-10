@@ -4,10 +4,11 @@
 
 @layer base {
   .toggle-checkbox {
+    /* @apply bg-ob-tertiary !important; */
     box-shadow: none !important; 
   }
   .toggle-checkbox:checked {
-      @apply: right-0 border-green-400;
+      @apply right-0;
       right: 0;
       border-color: #68D391;
       outline: none;
@@ -15,8 +16,8 @@
   }
 
   .toggle-checkbox:checked + .toggle-label {
-      @apply: bg-green-400;
-      background-color: #68D391;
+     @apply bg-ob-tertiary !important;
+      /* background-color: #68D391; */
       outline: none;
       box-shadow: none !important; 
   }

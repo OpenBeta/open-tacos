@@ -34,6 +34,6 @@ export default function Bar ({
 
 Bar.H_DEFAULT = 'h-12'
 Bar.H_LG = 'h-16' /* Large screen */
-Bar.BG_DEFAULT = 'bg-slate-200'
+Bar.BG_DEFAULT = 'bg-gray-50'
 Bar.JUSTIFY_LEFT = 'flex justify-start items-center max-w-screen-2xl'
 Bar.PX_DEFAULT = 'px-4'

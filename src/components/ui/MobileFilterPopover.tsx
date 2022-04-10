@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import MobilePage from './MobilePage'
 
 /**
@@ -6,10 +6,10 @@ import MobilePage from './MobilePage'
  */
 export default function MobileFilterPopover ({ btnLabel, title, onApply, children }): JSX.Element {
   const [isOpen, setIsOpen] = useState(false)
-  const onCloseHandler = useCallback(() => {
+  const onCloseHandler = (): void => {
     setIsOpen(false)
     onApply()
-  }, [])
+  }
 
   return (
     <div>
@@ -34,9 +34,9 @@ export default function MobileFilterPopover ({ btnLabel, title, onApply, childre
 
 const ContentPanel = ({ children }): JSX.Element => {
   return (
-    <div className='relative px-4 py-16'>
+    <>
       {children}
-    </div>
+    </>
   )
 }
 

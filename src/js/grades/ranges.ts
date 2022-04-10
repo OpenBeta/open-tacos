@@ -42,5 +42,6 @@ export const genSliderMarks = (): any => {
       if (defs?.[key] !== undefined) { defs[key].label = '' }
     }
   }
+  defs[0].label = '3rd'
   return defs
 }

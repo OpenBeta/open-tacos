@@ -184,6 +184,9 @@ export const cragFiltersStore = createStore('filters')({
   // - Calculate derived data
     fetchData: async () => {
       const { placeId, lnglat, radius } = get
+      if (lnglat() === undefined) {
+        return await Promise.resolve()
+      }
       set.isLoading(true)
       const { data } = await getCragDetailsNear(
         placeId(), lnglat(), radius().rangeMeters, true)

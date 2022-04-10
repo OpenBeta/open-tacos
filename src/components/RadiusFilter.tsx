@@ -2,7 +2,8 @@ import { useState, useCallback } from 'react'
 
 import { actions, cragFiltersStore } from '../js/stores'
 import { RadiusRangeSlider, radiusRangeToString, prettifyLabel } from './ui/RadiusRangeSlider'
-import FilterPopover from './ui/FilterPopover'
+import FilterPopover, { MinMax } from './ui/FilterPopover'
+import TableView from './ui/TableView'
 
 interface RadiusFilterProps {
   isMobile?: boolean
@@ -21,15 +22,17 @@ const RadiusFilter = ({ isMobile = true }: RadiusFilterProps): JSX.Element => {
   return (
     <FilterPopover
       label={prettifyLabel(initial)}
+      shortHeader='Search radius'
       header='Select a search radius'
-      min={min}
-      max={max}
+      minMax={<MinMax min={min} max={max} />}
       onApply={applyFn}
       isMobile={isMobile}
     >
-      <RadiusRangeSlider
-        onChange={setRange} defaultValue={initial.rangeIndices}
-      />
+      <TableView paddingClass={TableView.PADDING_MD}>
+        <RadiusRangeSlider
+          onChange={setRange} defaultValue={initial.rangeIndices}
+        />
+      </TableView>
     </FilterPopover>
   )
 }

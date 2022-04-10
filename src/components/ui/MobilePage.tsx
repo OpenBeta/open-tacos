@@ -14,7 +14,7 @@ interface MobilePageProps {
  */
 export default function MobilePage ({ isOpen, onClose, onGoBack, title, children }: MobilePageProps): JSX.Element {
   return (
-    <Dialog open={isOpen} onClose={onClose} className='absolute z-50 inset-0  w-screen h-screen bg-white'>
+    <Dialog open={isOpen} onClose={onClose} className='absolute z-50 inset-0  w-screen h-screen bg-gray-200'>
       <Dialog.Title className='bg-ob-tertiary'>
         <Bar>
           <button
