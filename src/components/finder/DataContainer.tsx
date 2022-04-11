@@ -38,12 +38,12 @@ export default DataContainer
 
 const Preface = ({ isLoading, total, searchText }: {isLoading: boolean, total: number, searchText: string}): JSX.Element => {
   return (
-    <section className='mt-36 px-2 py-3 text-sm border border-b-2 border-slate-600 rounded-md flex items-center justify-between'>
+    <section className='lg:mt-28 px-2 py-3 text-sm border border-b-2 border-slate-600 rounded-md flex items-center justify-between'>
       <div>
         <div>
           {isLoading
             ? `Loading crags in ${searchText}...`
-            : `${humanizeNumber(total)} crags near ${searchText}`}
+            : `${humanizeNumber(total)} crags near ${searchText}.`}
         </div>
         <div>Consult local climbing community and guidebooks before you visit.</div>
       </div>

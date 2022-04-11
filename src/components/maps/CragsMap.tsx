@@ -44,7 +44,7 @@ export default function CragsMap (): JSX.Element {
   return (
     <div
       id='my-area-map'
-      className='w-full xl:sticky xl:top-[132px] xl:m-0 xl:p-0'
+      className='w-full xl:sticky xl:top-28 xl:m-0 xl:p-0'
       style={{ height }}
     >
       <div className='absolute left-1 top-1 z-20'>

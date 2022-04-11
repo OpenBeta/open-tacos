@@ -1,6 +1,6 @@
 import React from 'react'
-import { TextButton } from './Button'
 import Topography from '../../assets/topography.svg'
+import { Button } from './BaseButton'
 
 export default function LandingHero () {
   return (
@@ -25,8 +25,8 @@ export default function LandingHero () {
           <div className='text-center md:text-left md:pt-4'><h3 className='text-white font-bold'>Respect user privacy</h3><div className='text-lg text-pink-500'>No Ads, No tracking</div></div>
           <div className='text-center md:text-left md:pt-4'><h3 className='text-white font-bold'>Community over profits</h3><div className='text-lg text-pink-500'>Backed by a nonprofit collective</div></div>
         </section>
-        <div className='pt-8 lg:-mt-24 2xl:-mt-32'>
-          <TextButton className='btn-nav btn-medium' label='Explore' to='/' />
+        <div className='pt-8 lg:-mt-24 2xl:-mt-32 z-50'>
+          <Button label='Explore' onClick={() => alert('click')} variant={Button.VARIANT_OUTLINED_PRIMARY} />
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import DisciplineGroup from '../DisciplineGroup'
@@ -9,12 +9,14 @@ const defaultTypes = {
   trad: true,
   sport: true,
   tr: true,
-  bouldering: true
+  bouldering: false // <--- False
 }
 let climbTypes
 const setClimbTypes = (value): void => {
   climbTypes = value
 }
+
+const getButton = (label: string): HTMLElement => screen.getByLabelText(label)
 
 describe('DisciplineGroup', () => {
   beforeEach(() => {
@@ -22,71 +24,109 @@ describe('DisciplineGroup', () => {
       trad: true,
       sport: true,
       tr: true,
-      bouldering: true
+      bouldering: false // <--- False
     }
   })
   it('renders component without error', () => {
     render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
   })
 
-  it('all 4 types selected by default', () => {
-    const { getByRole } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
-    const sportButton = getByRole('checkbox', { name: /Sport/i })
-    const tradButton = getByRole('checkbox', { name: /Trad/i })
-    const topRopeButton = getByRole('checkbox', { name: /Top rope/i })
+  it('renders correct default initial values', () => {
+    render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
 
-    expect(sportButton).toBeChecked()
-    expect(tradButton).toBeChecked()
-    expect(topRopeButton).toBeChecked()
+    expect(getButton('Sport')).toBeChecked()
+    expect(getButton('Trad')).toBeChecked()
+    expect(getButton('Top rope')).toBeChecked()
+    expect(getButton('Bouldering')).not.toBeChecked()
   })
 
-  it('changes values and resets to defaultTypes when component regenerated', async () => {
-    const clickButton = async (button): Promise<void> => {
-      await userEvent.click(button)
-      rerender(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
+  it('changes all states on click', async () => {
+    const mockOnChange = jest.fn()
+    render(
+      <DisciplineGroup
+        defaultTypes={defaultTypes}
+        climbTypes={climbTypes}
+        setClimbTypes={mockOnChange}
+      />)
+
+    expect(getButton('Sport')).toBeChecked()
+    expect(getButton('Trad')).toBeChecked()
+    expect(getButton('Top rope')).toBeChecked()
+    expect(getButton('Bouldering')).not.toBeChecked()
+
+    await userEvent.click(getButton('Sport'))
+
+    expect(mockOnChange).toBeCalledWith({
+      sport: false,
+      trad: true,
+      tr: true,
+      bouldering: false
     }
+    )
 
-    const { container, getByRole, rerender, unmount } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
-    expect(container.getElementsByClassName('border-neutral-800').length).toBe(4)
+    await userEvent.click(getButton('Trad'))
 
-    const sportButton = getByRole('checkbox', { name: /Sport/i })
-    const tradButton = getByRole('checkbox', { name: /Trad/i })
-    const topRopeButton = getByRole('checkbox', { name: /Top rope/i })
+    expect(mockOnChange).toBeCalledWith({
+      sport: true,
+      trad: false,
+      tr: true,
+      bouldering: false
+    }
+    )
 
-    // click buttons to remove from filter
-    // sportButton
-    expect(sportButton).toBeChecked()
-    await clickButton(sportButton)
-    expect(sportButton).not.toBeChecked()
+    await userEvent.click(getButton('Top rope'))
+    expect(mockOnChange).toBeCalledWith({
+      sport: true,
+      trad: true,
+      tr: false,
+      bouldering: false
+    }
+    )
 
-    // tradButton
-    expect(tradButton).toBeChecked()
-    await clickButton(tradButton)
-    expect(tradButton).not.toBeChecked()
+    await userEvent.click(getButton('Bouldering'))
+    expect(mockOnChange).toBeCalledWith({
+      sport: true,
+      trad: true,
+      tr: true,
+      bouldering: true
+    }
+    )
+  })
 
-    // topRopeButton
-    expect(topRopeButton).toBeChecked()
-    await clickButton(topRopeButton)
-    expect(topRopeButton).not.toBeChecked()
-    await clickButton(topRopeButton)
-    expect(topRopeButton).toBeChecked()
+  it('resets to defaultTypes when component regenerated', async () => {
+    const { unmount } = render(
+      <DisciplineGroup
+        defaultTypes={defaultTypes}
+        climbTypes={climbTypes}
+        setClimbTypes={setClimbTypes}
+      />)
 
-    // cancel and click away functionality.
-    unmount() // cancel/click-away unmounts <DisciplineGroup /> component
+    await userEvent.click(getButton('Sport'))
+    await userEvent.click(getButton('Trad'))
+    await userEvent.click(getButton('Top rope'))
+    await userEvent.click(getButton('Bouldering'))
 
-    const { rerender: rerender2, getByRole: getByRole2 } = render(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
+    unmount()
 
-    // rerender needed so that useEffect [] runs.
-    rerender2(<DisciplineGroup defaultTypes={defaultTypes} climbTypes={climbTypes} setClimbTypes={setClimbTypes} />)
+    // initial render
+    const { rerender } = render(
+      <DisciplineGroup
+        defaultTypes={defaultTypes}
+        climbTypes={climbTypes}
+        setClimbTypes={setClimbTypes}
+      />)
 
-    const sportButton2 = getByRole2('checkbox', { name: /Sport/i })
-    const tradButton2 = getByRole2('checkbox', { name: /Trad/i })
-    const topRopeButton2 = getByRole2('checkbox', { name: /Top rope/i })
-    const boulderingButton2 = getByRole2('checkbox', { name: /Bouldering/i })
+    // re-render when useEffect runs
+    rerender(<DisciplineGroup
+      defaultTypes={defaultTypes}
+      climbTypes={climbTypes}
+      setClimbTypes={setClimbTypes}
+             />)
 
-    expect(sportButton2).toBeChecked()
-    expect(tradButton2).toBeChecked()
-    expect(topRopeButton2).toBeChecked()
-    expect(boulderingButton2).toBeChecked()
+    // States should be restored
+    expect(getButton('Sport')).toBeChecked()
+    expect(getButton('Trad')).toBeChecked()
+    expect(getButton('Top rope')).toBeChecked()
+    expect(getButton('Bouldering')).not.toBeChecked()
   })
 })

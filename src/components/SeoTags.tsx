@@ -69,6 +69,10 @@ function SeoTags ({ description = '', keywords = [], title, image = '' }: SEOPro
         {
           property: 'twitter:image',
           content: metaImage
+        },
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1.0'
         }
       ]
         .concat(
