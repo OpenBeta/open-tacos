@@ -2,6 +2,7 @@ import React, { createElement, Fragment, useEffect, useRef } from 'react'
 import { render } from 'react-dom'
 import { autocomplete } from '@algolia/autocomplete-js'
 import '@algolia/autocomplete-theme-classic'
+import classNames from 'classnames'
 
 /**
  * Autocomplete widget based on Algolia Autocomplete
@@ -36,7 +37,8 @@ export const Autocomplete = (props): JSX.Element => {
     }
   }, [props])
 
+  const isMobile: boolean = props.isMobile
   return (
-    <div className='max-w-lg z-50 mx-auto' ref={containerRef} />
+    <div className={classNames('max-w-lg z-50 mx-auto', isMobile ? 'scale-75' : '')} ref={containerRef} />
   )
 }

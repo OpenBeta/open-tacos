@@ -1,3 +1,6 @@
+import resolveConfig from 'tailwindcss/resolveConfig'
+
+import tailwindConfig from '../../tailwind.config.js'
 import { ClimbTypeToColor } from './constants'
 import { Climb, ClimbDisciplineRecord } from './types'
 
@@ -132,3 +135,19 @@ function debouncePromise (fn: Function, time: number): any {
 }
 
 export const debounced = debouncePromise(async (items: object[]): Promise<object[]> => await Promise.resolve(items), 300)
+
+/**
+ *  Extract the number portion from '1024px' or similar string
+ */
+const parseTailwindScreenValue = (w: string): number => parseInt(w.slice(0, w.indexOf('px')))
+
+const fullConfig = resolveConfig(tailwindConfig)
+
+/**
+ * Determine whether the screen width > large breakpoint.
+ * Less than large: mobile and tablet
+ * More than large: desktop
+ */
+export const isLargeScreen = (window: Window): boolean => {
+  return window.innerWidth >= parseTailwindScreenValue(fullConfig.theme.screens.lg)
+}

@@ -184,6 +184,9 @@ export const cragFiltersStore = createStore('filters')({
   // - Calculate derived data
     fetchData: async () => {
       const { placeId, lnglat, radius } = get
+      if (lnglat() === undefined) {
+        return await Promise.resolve()
+      }
       set.isLoading(true)
       const { data } = await getCragDetailsNear(
         placeId(), lnglat(), radius().rangeMeters, true)
@@ -231,10 +234,10 @@ export const cragFiltersStore = createStore('filters')({
       const { sport, trad, tr, bouldering } = climbTypes
       // Update multiple states at once
       api.set.state(draft => {
-        draft.sport = sport === true
-        draft.trad = trad === true
-        draft.tr = tr === true
-        draft.boulder = bouldering === true
+        draft.sport = sport
+        draft.trad = trad
+        draft.tr = tr
+        draft.boulder = bouldering
       })
       await set.fetchData()
     }

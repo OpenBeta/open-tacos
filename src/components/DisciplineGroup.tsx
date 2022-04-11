@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { ClimbDisciplineRecord } from '../js/types'
-import { FilterToggleButton } from './ui/Button'
+import TableView from './ui/TableView'
+import Toggle from './ui/Toggle'
 
 interface DisciplineGroupProps {
   defaultTypes: Partial<ClimbDisciplineRecord>
@@ -16,40 +17,41 @@ const DisciplineGroup = ({ climbTypes, setClimbTypes, defaultTypes }: Discipline
   }, [])
 
   return (
-    <div className='flex space-x-2'>
-      <FilterToggleButton
-        selected={climbTypes.sport}
+    <TableView divider>
+      <Toggle
         label='Sport'
+        enabled={climbTypes.sport}
         onClick={() => {
           // eslint-disable-next-line
-          setClimbTypes({ ...climbTypes, sport: !climbTypes.sport })
+         setClimbTypes({ ...climbTypes, sport: !climbTypes.sport })
         }}
       />
-      <FilterToggleButton
-        selected={climbTypes.trad}
+
+      <Toggle
+        enabled={climbTypes.trad}
         label='Trad'
         onClick={() => {
           // eslint-disable-next-line
           setClimbTypes({ ...climbTypes, trad: !climbTypes.trad })
         }}
       />
-      <FilterToggleButton
-        selected={climbTypes.tr}
+      <Toggle
+        enabled={climbTypes.tr}
         label='Top rope'
         onClick={() => {
           // eslint-disable-next-line
           setClimbTypes({ ...climbTypes, tr: !climbTypes.tr })
         }}
       />
-      <FilterToggleButton
-        selected={climbTypes.bouldering}
+      <Toggle
+        enabled={climbTypes.bouldering}
         label='Bouldering'
         onClick={() => {
           // eslint-disable-next-line
           setClimbTypes({ ...climbTypes, bouldering: !climbTypes.bouldering })
         }}
       />
-    </div>
+    </TableView>
   )
 }
 

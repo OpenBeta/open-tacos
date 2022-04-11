@@ -1,13 +1,16 @@
 import FilterPopover from '../../ui/FilterPopover'
 import DisciplineGroup from '../../DisciplineGroup'
-import { actions, cragFiltersStore } from '../../../js/stores'
+import { actions, cragFiltersStore } from '../../../js/stores/index'
 import { useCallback, useState } from 'react'
 import { ClimbDisciplineRecord } from '../../../js/types'
 
+interface DisciplineProps {
+  isMobile?: boolean
+}
 /**
  * Discipline Filter Popover
  */
-const DisciplineFilter = (): JSX.Element => {
+export default function DisciplineFilter ({ isMobile = true }: DisciplineProps): JSX.Element {
   const { trad, sport, tr, boulder } = cragFiltersStore.useStore()
 
   const defaultTypes: Partial<ClimbDisciplineRecord> = { trad, sport, tr, bouldering: boulder }
@@ -20,13 +23,13 @@ const DisciplineFilter = (): JSX.Element => {
 
   return (
     <FilterPopover
-      label='Climb Type'
-      header='Filter by climbing discipline(s)'
+      label='Disciplines'
+      shortHeader='Disciplines'
+      header='Filter by climbing disciplines'
       onApply={applyFn}
+      isMobile={isMobile}
     >
       <DisciplineGroup setClimbTypes={setClimbTypes} climbTypes={climbTypes} defaultTypes={defaultTypes} />
     </FilterPopover>
   )
 }
-
-export default DisciplineFilter

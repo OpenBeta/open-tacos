@@ -31,6 +31,7 @@
     "axios": "^0.24.0",
     "btoa": "^1.2.1",
     "buffer": "^6.0.3",
+    "classnames": "^2.3.1",
     "dayjs": "^1.10.6",
     "file-saver": "^2.0.5",
     "formik": "^2.2.9",

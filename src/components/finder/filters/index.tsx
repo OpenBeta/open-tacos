@@ -1,19 +1,22 @@
 import YDSFilter from '../../YDSFilter'
 import RadiusFilter from '../../RadiusFilter'
 import DisciplineFilter from './DisciplineFilter'
+import Bar from '../../ui/Bar'
 
-const index = (): JSX.Element => {
+export function FilterBar (): JSX.Element {
   return (
-    <div className='z-0 hidden bg-slate-800 w-full pt-4 pb-2 lg:flex no-wrap  items-center space-x-4'>
-      <YDSFilter />
+    <Bar
+      className='hidden z-20 fixed left-0 top-16 lg:flex gap-x-4 w-full'
+      layoutClass={Bar.JUSTIFY_LEFT}
+      backgroundClass='bg-slate-800'
+    >
+      <YDSFilter isMobile={false} />
       <VerticalDiv />
-      <DisciplineFilter />
+      <DisciplineFilter isMobile={false} />
       <VerticalDiv />
-      <RadiusFilter />
-    </div>
+      <RadiusFilter isMobile={false} />
+    </Bar>
   )
 }
-
-export default index
 
 const VerticalDiv = (): JSX.Element => <span className='w-0.5 h-4 border-l' />
