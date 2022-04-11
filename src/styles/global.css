@@ -3,24 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  .toggle-checkbox {
-    /* @apply bg-ob-tertiary !important; */
-    box-shadow: none !important; 
-  }
-  .toggle-checkbox:checked {
-      @apply right-0;
-      right: 0;
-      border-color: #68D391;
-      outline: none;
-      box-shadow: none !important; 
-  }
-
-  .toggle-checkbox:checked + .toggle-label {
-     @apply bg-ob-tertiary !important;
-      /* background-color: #68D391; */
-      outline: none;
-      box-shadow: none !important; 
-  }
 
 }
 
@@ -262,6 +244,10 @@ input:checked + label {
   @apply p-2;
 }
 
+/*
+  Autocomplete
+*/
+
 .aa-Autocomplete {
   @apply z-50 w-full !important;
 }
@@ -270,9 +256,6 @@ input:checked + label {
   @apply ring-0 rounded-full bg-white !important;
 }
 
-/*
-  Autocomplete
-*/
 .aa-SubmitButton {
   @apply rounded-full bg-custom-primary !important;
 }

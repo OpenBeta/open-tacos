@@ -17,7 +17,7 @@ export default function Toggle ({ label, onClick, enabled, justifyClass = Toggle
           checked={enabled}
           onChange={onClick}
           className={`${
-        enabled ? 'bg-ob-tertiary' : 'bg-gray-200  shadow-inner border border-gray-300'
+        enabled ? 'bg-ob-secondary' : 'bg-gray-200  shadow-inner border border-gray-300'
       } relative inline-flex items-center h-6 rounded-full w-12`}
         >
           <span

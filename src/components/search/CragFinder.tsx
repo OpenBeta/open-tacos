@@ -21,6 +21,7 @@ export default function CragFinder ({ isMobile = true, placeholder = 'Try \'Smit
   return (
     <Autocomplete
       id='crag-finder'
+      isMobile={isMobile}
       classNames={{ item: 'crag-finder-item', panelLayout: 'crag-finder-panelLayout' }}
       placeholder={placeholder}
       getSources={({ query }) => {
