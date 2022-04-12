@@ -7,6 +7,8 @@ import CragTable from './CragTable'
 import TwoColumnLayout from './TwoColumnLayout'
 import Pagination from './Pagination'
 import DownloadLink from './Download'
+import MobileMainView from './MobileMainView'
+import useResponsive from '../../js/hooks/useResponsive'
 
 NProgress.configure({ showSpinner: false, easing: 'ease-in-out', speed: 1000 })
 
@@ -20,23 +22,29 @@ const DataContainer = (): JSX.Element => {
     NProgress.done()
   }
 
+  const { isTablet, isMobile } = useResponsive()
   return (
-    <TwoColumnLayout
-      left={
-        <>
-          <Preface isLoading={isLoading} total={total} searchText={searchText} />
-          <CragTable />
-          <Pagination />
-        </>
-}
-      right={<CragsMap />}
-    />
+    <>
+      {isMobile || isTablet
+        ? <MobileMainView />
+        : <TwoColumnLayout
+            left={
+              <>
+                <Preface isLoading={isLoading} total={total} searchText={searchText} />
+                <CragTable />
+                <Pagination />
+              </>
+            }
+            right={<CragsMap />}
+          />}
+    </>
   )
 }
 
 export default DataContainer
 
 const Preface = ({ isLoading, total, searchText }: {isLoading: boolean, total: number, searchText: string}): JSX.Element => {
+  console.log('#desktop only')
   return (
     <section className='lg:mt-28 px-2 py-3 text-sm border border-b-2 border-slate-600 rounded-md flex items-center justify-between'>
       <div>
