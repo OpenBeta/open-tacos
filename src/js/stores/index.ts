@@ -158,7 +158,6 @@ export const cragFiltersStore = createStore('filters')({
       const { byDiscipline } = crag.aggregate
 
       const { trad, sport, boulder, tr } = get
-      console.log(crag)
 
       if (trad() && (byDiscipline?.trad?.total > 0 ?? false) &&
       get.withinFreeRange(byDiscipline?.trad?.bands)) return true
@@ -216,8 +215,6 @@ export const cragFiltersStore = createStore('filters')({
   // - Update main data structure (crags)
   // - Calculate derived data
     fetchData: async () => {
-      console.log('fetchData')
-
       const { placeId, lnglat, radius } = get
       if (lnglat() === undefined) {
         return await Promise.resolve()
@@ -226,8 +223,6 @@ export const cragFiltersStore = createStore('filters')({
       const { data } = await getCragDetailsNear(
         placeId(), lnglat(), radius().rangeMeters, true)
       const newCragsState = data.filter(crag => get.inMyRange(crag))
-      console.log()
-
       set.isLoading(false)
       set.deactivateActiveMarker()
       set.crags(newCragsState)

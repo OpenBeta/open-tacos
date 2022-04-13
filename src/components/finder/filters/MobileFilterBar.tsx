@@ -1,6 +1,6 @@
-import YDSFilter from '../../YDSFilter'
+import YDSFilter from './YDSFilter'
 import DisciplineFilter from './DisciplineFilter'
-import RadiusFilter from '../../RadiusFilter'
+import RadiusFilter from './RadiusFilter'
 import Bar from '../../ui/Bar'
 
 export default function MobileFilters (): JSX.Element {

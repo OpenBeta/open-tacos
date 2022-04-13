@@ -34,7 +34,6 @@ export const rangeTransformer = (range: [number, number], gradeDefs: SliderMarks
  * @returns Return selected labels in order to not overcrowding the slider
  */
 export const genSliderMarks = (DEFS: SliderMarksType, climbType: string): any => {
-  console.log(DEFS)
   // Warning: not a deep clone. we simply copy over keys
   const defs = Object.assign({}, DEFS)
   for (const key of Object.keys(defs)) {

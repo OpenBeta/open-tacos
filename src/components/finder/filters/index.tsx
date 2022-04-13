@@ -13,7 +13,7 @@ export function FilterBar (): JSX.Element {
     >
       <YDSFilter isMobile={false} />
       <VerticalDiv />
-      <BoulderRangeFilter />
+      <BoulderRangeFilter isMobile={false} />
       <VerticalDiv />
       <DisciplineFilter isMobile={false} />
       <VerticalDiv />
