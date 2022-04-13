@@ -26,7 +26,16 @@ const DataContainer = (): JSX.Element => {
   return (
     <>
       {isMobile || isTablet
-        ? <MobileMainView />
+        ? <MobileMainView
+            listView={
+              <>
+                <Preface isLoading={isLoading} total={total} searchText={searchText} />
+                <CragTable />
+                <Pagination />
+              </>
+        }
+            mapView={<CragsMap />}
+          />
         : <TwoColumnLayout
             left={
               <>

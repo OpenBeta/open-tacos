@@ -10,7 +10,7 @@ import { NAV_BAR_OFFSET } from '../../../components/header'
  * React hook for auto detecting and calculating div height
  */
 export default function useAutoSizing ({ geojson }): any {
-  const [[width, height], setWH] = useState([400, 400])
+  const [[width, height], setWH] = useState([300, 400])
   const [viewState, setViewState] = useState<InitialViewStateProps>(DEFAULT_INITIAL_VIEWSTATE)
 
   const isLoading = store.filters.isLoading()

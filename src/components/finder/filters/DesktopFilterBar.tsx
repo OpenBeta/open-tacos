@@ -3,10 +3,10 @@ import RadiusFilter from '../../RadiusFilter'
 import DisciplineFilter from './DisciplineFilter'
 import Bar from '../../ui/Bar'
 
-export function FilterBar (): JSX.Element {
+export default function DesktopFilterBar (): JSX.Element {
   return (
     <Bar
-      className='hidden z-20 fixed left-0 top-16 lg:flex gap-x-4 w-full'
+      className='z-20 fixed left-0 top-16 lg:flex gap-x-4 w-full'
       layoutClass={Bar.JUSTIFY_LEFT}
       backgroundClass='bg-slate-800'
     >

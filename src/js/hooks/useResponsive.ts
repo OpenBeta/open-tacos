@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import resolveConfig from 'tailwindcss/resolveConfig'
 
@@ -12,7 +12,7 @@ const parseTailwindScreenValue = (w: string): number => parseInt(w.slice(0, w.in
 const fullConfig = resolveConfig(tailwindConfig)
 
 const mobileW = parseTailwindScreenValue(fullConfig.theme.screens.sm)
-const tabletW = parseTailwindScreenValue(fullConfig.theme.screens.lg)
+const desktopW = parseTailwindScreenValue(fullConfig.theme.screens.xl)
 
 interface useResponsiveProps {
   isDesktop: boolean
@@ -28,14 +28,14 @@ export default function useResponsive (): useResponsiveProps {
 
   const isTablet = useMediaQuery({
     minWidth: mobileW,
-    maxWidth: tabletW
+    maxWidth: desktopW - 1
   })
 
   const isDesktop = useMediaQuery({
-    minWidth: tabletW
+    minWidth: desktopW
   })
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (typeof window !== 'undefined') setIsClient(true)
   }, [])
 

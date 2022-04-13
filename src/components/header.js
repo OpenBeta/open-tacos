@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import MobileTabletAppBar from './MobileAppBar'
-import { FilterBar } from './finder/filters'
 import DesktopAppBar from './DesktopAppBar'
+import useResponsive from '../js/hooks/useResponsive'
 
 export default function Header () {
+  const { isTablet, isMobile } = useResponsive()
+
   const router = useRouter()
   const isIndexPage = router.pathname === '/'
 
@@ -38,15 +40,15 @@ export default function Header () {
   }
   return (
     <>
-      <MobileTabletAppBar />
-      <DesktopAppBar
-        expanded={expanded}
-        onExpandSearchBox={() => {
-          setExpanded(true)
-        }}
-        onClose={handleClose}
-      />
-      <FilterBar />
+      {isTablet || isMobile
+        ? <MobileTabletAppBar />
+        : <DesktopAppBar
+            expanded={expanded}
+            onExpandSearchBox={() => {
+              setExpanded(true)
+            }}
+            onClose={handleClose}
+          />}
     </>
   )
 }

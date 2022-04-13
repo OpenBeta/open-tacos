@@ -5,10 +5,10 @@ interface TwoColumnLayoutProps {
 
 const TwoColumnLayout = ({ left, right }: TwoColumnLayoutProps): JSX.Element => {
   return (
-    <div className='hidden lg:block overflow-y'>
-      <div className='xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch'>
-        <div className='xl:flex-none xl:max-w-screen-md xl:w-full'>{left}</div>
-        <div className='w-full relative flex xl:mt-0'>
+    <div className='hidden xl:block overflow-y'>
+      <div className='flex flex-row gap-x-4 justify-center items-stretch'>
+        <div className='flex-none max-w-screen-md w-full'>{left}</div>
+        <div className='w-full relative flex mt-0'>
           {right}
         </div>
       </div>

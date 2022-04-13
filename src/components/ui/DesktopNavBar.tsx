@@ -14,7 +14,6 @@ export default function DesktopAppBar ({ expanded, branding, search, navList }: 
       className='hidden lg:block w-full'
     >
       <Bar
-        className='lg:hidden'
         fixed
         backgroundClass='bg-slate-800'
         heightClass={Bar.H_LG}
