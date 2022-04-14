@@ -18,7 +18,7 @@ interface DTableProps {
  */
 const DTable = ({ byDisciplineAgg }: DTableProps): JSX.Element => {
   const { trad, sport, boulder, tr } = cragFiltersStore.get
-  const [myLowBand, myHighBand] = cragFiltersStore.get.bandRange()
+  const [myLowBand, myHighBand] = cragFiltersStore.get.freeBandRange()
   return (
     <table
       className='table-fixed text-sm rounded border-separate'

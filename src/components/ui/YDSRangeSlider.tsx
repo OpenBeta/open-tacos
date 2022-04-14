@@ -9,7 +9,7 @@ const YDSRangeSlider = ({ onChange, defaultValue }): JSX.Element => {
       count={1}
       step={1}
       dots
-      marks={genSliderMarks()}
+      marks={genSliderMarks(YDS_DEFS, 'freeRange')}
       min={0}
       max={13}
       defaultValue={defaultValue}

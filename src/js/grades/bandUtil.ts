@@ -26,7 +26,7 @@ export const freeScoreToBandIndex = (score: number): number =>
         ? 2
         : 3
 
-const vScoreToBandIndex = (score: number): number =>
+export const vScoreToBandIndex = (score: number): number =>
   score < 50 // v0
     ? 0
     : score < 60 // v1 - v2
