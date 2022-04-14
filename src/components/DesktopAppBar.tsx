@@ -10,7 +10,7 @@ interface DesktopAppBarProps {
 
 export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }: DesktopAppBarProps): JSX.Element {
   return (
-    <>
+    <header className='sticky top-0 z-10'>
       <DesktopNavBar
         expanded={expanded}
         branding={
@@ -29,7 +29,7 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }:
         navList={navList}
       />
       <DesktopFilterBar />
-    </>
+    </header>
   )
 }
 

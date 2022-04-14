@@ -7,10 +7,10 @@ interface SegmentedControlProps {
 export default function SegmentedControl ({ labels, children }: SegmentedControlProps): JSX.Element {
   return (
     <Tab.Group>
-      <Tab.List className='z-10 mx-auto border rounded-md overflow-hidden shadow-inner bg-gray-300 text-sm my-4'>
+      <Tab.List className='z-30 mx-auto border rounded-md overflow-hidden shadow-inner bg-gray-300 text-sm my-4'>
         {labels.map(label => <Label key={label} label={label} />)}
       </Tab.List>
-      <Tab.Panels>
+      <Tab.Panels className=''>
         {children}
       </Tab.Panels>
     </Tab.Group>

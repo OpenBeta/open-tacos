@@ -5,7 +5,7 @@ import Bar from '../../ui/Bar'
 
 export default function MobileFilters (): JSX.Element {
   return (
-    <Bar className='px-4'>
+    <Bar className='px-4' borderBottom>
       <YDSFilter />
       <DisciplineFilter />
       <RadiusFilter />

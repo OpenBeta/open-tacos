@@ -32,7 +32,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
       </Head>
 
       <Layout
-        layoutClz='layout-wide'
+        contentContainerClass='content-2xl-center'
         hero={<HomeHero statsProps={stats} />}
       >
         <section>

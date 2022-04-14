@@ -8,27 +8,23 @@ interface DesktopAppBarProps {
   navList: any[]
 }
 
-export default function DesktopAppBar ({ expanded, branding, search, navList }: DesktopAppBarProps): JSX.Element {
+export default function DesktopNavBar ({ expanded, branding, search, navList }: DesktopAppBarProps): JSX.Element {
   return (
-    <header
-      className='hidden lg:block w-full'
+    <Bar
+      // fixed
+      backgroundClass='bg-slate-800'
+      heightClass={Bar.H_LG}
+      layoutClass={Bar.JUSTIFY_BETWEEN}
+      zIndexClass={Bar.Z_HIGH}
     >
-      <Bar
-        fixed
-        backgroundClass='bg-slate-800'
-        heightClass={Bar.H_LG}
-        layoutClass={Bar.JUSTIFY_BETWEEN}
-        zIndexClass={Bar.Z_HIGH}
-      >
-        <div>{branding}</div>
-        <div className='block'>{search}</div>
-        <nav className='flex items-center justify-between'>
-          <div className='flex items-center gap-x-4'>
-            {navList.map(item => <NavItem key={item.title} {...item} />)}
-          </div>
-        </nav>
-      </Bar>
-    </header>
+      <div>{branding}</div>
+      <div className='block'>{search}</div>
+      <nav className='flex items-center justify-between'>
+        <div className='flex items-center gap-x-4'>
+          {navList.map(item => <NavItem key={item.title} {...item} />)}
+        </div>
+      </nav>
+    </Bar>
   )
 }
 

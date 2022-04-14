@@ -14,7 +14,7 @@ const fullConfig = resolveConfig(tailwindConfig)
 const mobileW = parseTailwindScreenValue(fullConfig.theme.screens.sm)
 const desktopW = parseTailwindScreenValue(fullConfig.theme.screens.xl)
 
-interface useResponsiveProps {
+export interface useResponsiveProps {
   isDesktop: boolean
   isTablet: boolean
   isMobile: boolean

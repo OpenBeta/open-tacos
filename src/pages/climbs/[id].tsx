@@ -17,13 +17,13 @@ interface ClimbProps {
 function Climbs ({ climb }: ClimbProps): JSX.Element {
   const { name, fa, yds, type, content, safety, id, ancestors, pathTokens } = climb
   return (
-    <Layout>
+    <Layout contentContainerClass='content-2xl-left-header-offset'>
       <SeoTags
         keywords={[name]}
         title={name}
         description={buildMetaDescription({ pathTokens, fa, yds })}
       />
-      <div>
+      <div className='max-w-screen-md'>
         <BreadCrumbs pathTokens={pathTokens} ancestors={ancestors} isClimbPage />
         <h1 className='title'>{name}</h1>
         <RouteGradeChip yds={yds} safety={safety} />
@@ -40,7 +40,6 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
           <InlineEditor id={`climb-pro-${id}`} markdown={content.protection} readOnly />
         </div>
       </div>
-
     </Layout>
   )
 }

@@ -27,7 +27,7 @@ const CragRow = ({ id, area_name: _name, totalClimbs, metadata, aggregate, pathT
           <hr className='w-8 my-2' />
           <div className='text-secondary text-sm'>Climbs for you</div>
           <div className='flex justify-between items-center'>
-            <div className='w-24 h-24'><CounterPie total={totalClimbs} forYou={totalClimbs - getRandomInt(totalClimbs)} /></div>
+            <div className='hidden md:block w-24 h-24'><CounterPie total={totalClimbs} forYou={totalClimbs - getRandomInt(totalClimbs)} /></div>
             <div>
               <DTable byDisciplineAgg={aggregate.byDiscipline} />
             </div>

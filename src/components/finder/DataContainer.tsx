@@ -28,11 +28,11 @@ const DataContainer = (): JSX.Element => {
       {isMobile || isTablet
         ? <MobileMainView
             listView={
-              <>
+              <div className='px-4'>
                 <Preface isLoading={isLoading} total={total} searchText={searchText} />
                 <CragTable />
                 <Pagination />
-              </>
+              </div>
         }
             mapView={<CragsMap />}
           />
@@ -53,9 +53,8 @@ const DataContainer = (): JSX.Element => {
 export default DataContainer
 
 const Preface = ({ isLoading, total, searchText }: {isLoading: boolean, total: number, searchText: string}): JSX.Element => {
-  console.log('#desktop only')
   return (
-    <section className='lg:mt-28 px-2 py-3 text-sm border border-b-2 border-slate-600 rounded-md flex items-center justify-between'>
+    <section className='mt-6 px-2 py-3 text-sm border border-b-2 border-slate-600 rounded-md flex items-center justify-between'>
       <div>
         <div>
           {isLoading

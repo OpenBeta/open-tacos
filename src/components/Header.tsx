@@ -2,9 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import MobileTabletAppBar from './MobileAppBar'
 import DesktopAppBar from './DesktopAppBar'
-import useResponsive from '../js/hooks/useResponsive'
+import useResponsive, { useResponsiveProps } from '../js/hooks/useResponsive'
 
-export default function Header () {
+export default function Header (): JSX.Element {
   const { isTablet, isMobile } = useResponsive()
 
   const router = useRouter()
@@ -33,11 +33,12 @@ export default function Header () {
     }
   }, [])
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     if ((typeof window !== 'undefined' && window.scrollY > 150) || !isIndexPage) {
       setExpanded(false)
     }
   }
+
   return (
     <>
       {isTablet || isMobile
@@ -53,11 +54,21 @@ export default function Header () {
   )
 }
 
+export const getNavBarOffset = ({ isTablet, isMobile, isDesktop = false }: useResponsiveProps): number => {
+  if (isMobile) return NAV_BAR_OFFSET.mobile
+  if (isTablet) return NAV_BAR_OFFSET.tablet
+  return NAV_BAR_OFFSET.desktop
+}
+
 /**
  * Important:
- * This value defines the actual height of the header.
- * Map div uses absolute positioning and relies on the value to set
- * its top-${NAV_BAR_OFFSET}px
+ * This value defines the actual height of header + toolbar.
+ * Map div container uses absolute positioning and relies on the value to set
+ * its top-${NAV_BAR_OFFSET}px and height.
  * Todo: caclculate this value programmatically
  */
-export const NAV_BAR_OFFSET = 112 // px
+const NAV_BAR_OFFSET = {
+  mobile: 96,
+  tablet: 96,
+  desktop: 112
+}

@@ -6,8 +6,8 @@ interface TwoColumnLayoutProps {
 const TwoColumnLayout = ({ left, right }: TwoColumnLayoutProps): JSX.Element => {
   return (
     <div className='hidden xl:block overflow-y'>
-      <div className='flex flex-row gap-x-4 justify-center items-stretch'>
-        <div className='flex-none max-w-screen-md w-full'>{left}</div>
+      <div className='flex flex-row justify-center items-stretch'>
+        <div className='px-4 flex-none max-w-screen-sm w-full'>{left}</div>
         <div className='w-full relative flex mt-0'>
           {right}
         </div>

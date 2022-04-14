@@ -1,15 +1,15 @@
 import React from 'react'
-import Header from './header'
+import Header from './Header'
 import Head from 'next/head'
 import SeoTags from '../components/SeoTags'
 
 interface LayoutProps {
-  layoutClz?: string
-  customClz?: string
+  contentContainerClass?: string
+  mainContainerClass?: string
   children?: JSX.Element | JSX.Element[]
   hero?: JSX.Element | JSX.Element[]
 }
-function Layout ({ layoutClz = 'layout-default', customClz = '', children, hero = null }: LayoutProps): JSX.Element {
+function Layout ({ contentContainerClass = 'content-2xl-center', mainContainerClass = 'main-container-default', children, hero = null }: LayoutProps): JSX.Element {
   return (
     <>
       <Head>
@@ -27,19 +27,19 @@ function Layout ({ layoutClz = 'layout-default', customClz = '', children, hero 
         />
       </Head>
 
-      <div className={`main-container ${customClz}`}>
+      <div className={mainContainerClass}>
         <Header />
         {hero}
-        <main className={layoutClz}>
+        <main className={contentContainerClass}>
           {children}
         </main>
 
-        <footer className='hidden lg:block bg-custom-green'>
+        <footer className='bg-contrast text-primary'>
           <nav className='flex justify-between max-w-4xl p-4 mx-auto text-sm md:p-8'>
-            <p className='text-white'>
+            <p className=''>
               A project by {' '}
               <a
-                className='font-bold no-underline'
+                className='font-semibold no-underline'
                 href='https://openbeta.io'
                 target='_blank'
                 rel='noopener noreferrer'
@@ -50,7 +50,7 @@ function Layout ({ layoutClz = 'layout-default', customClz = '', children, hero 
 
             <p>
               <a
-                className='font-bold text-white no-underline'
+                className='font-semibold no-underline'
                 href='https://github.com/OpenBeta/open-tacos'
                 target='_blank'
                 rel='noopener noreferrer'
