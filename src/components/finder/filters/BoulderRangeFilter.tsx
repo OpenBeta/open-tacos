@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import FilterPopover, { MinMax } from '../../ui/FilterPopover'
 import BoulderRangeSlider, { BOULDER_DEFS } from '../../ui/BoulderRangeSlider'
 import { actions, cragFiltersStore } from '../../../js/stores'
+import TableView from '../../ui/TableView'
 
 interface BoulderRangeFilterProps {
   isMobile?: boolean
@@ -34,7 +35,9 @@ const BoulderRangeFilter = ({ isMobile = true }: BoulderRangeFilterProps): JSX.E
       onApply={applyFn}
       isMobile={isMobile}
     >
-      <BoulderRangeSlider onChange={setRange} defaultValue={initialRange} />
+      <TableView paddingClass={TableView.PADDING_MD}>
+        <BoulderRangeSlider onChange={setRange} defaultValue={initialRange} />
+      </TableView>
     </FilterPopover>
   )
 }
