@@ -11,7 +11,7 @@ const BoulderRangeSlider = ({ onChange, defaultValue }): JSX.Element => {
       dots
       marks={genSliderMarks(BOULDER_DEFS, 'boulderRange')}
       min={0}
-      max={13}
+      max={14}
       defaultValue={defaultValue}
       onChange={onChange}
     />

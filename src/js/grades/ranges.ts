@@ -42,12 +42,13 @@ export const genSliderMarks = (DEFS: SliderMarksType, climbType: string): any =>
       if (!['0', '3', '6', '7', '9', '11', '13'].includes(key)) {
         if (defs?.[key] !== undefined) { defs[key].label = '' }
       }
+      defs[0].label = '3rd'
     } else if (climbType === 'boulderRange') {
       if (!['0', '2', '4', '6', '8', '10', '12', '14', '16', '18'].includes(key)) {
         if (defs?.[key] !== undefined) { defs[key].label = '' }
       }
+      defs[0].label = 'V-Easy'
     }
   }
-  defs[0].label = '3rd'
   return defs
 }
