@@ -27,10 +27,10 @@ function RouteCard ({ routeName, type, safety, yds, fa = '', pathTokens }: Route
       </div>
       {fa !== null ? (<div className='text-xs font-light text-slate-500'>{fa}</div>) : null}
       <div className='mt-4 flex justify-between items-center'>
-        <div>
-          <RouteGradeGip yds={yds} safety={safety} />
-          <RouteTypeChips type={type} />
-        </div>
+        <RouteGradeGip yds={yds} safety={safety} />
+      </div>
+      <div className='mt-4 flex justify-between items-center'>
+        <RouteTypeChips type={type} />
       </div>
     </Card>
   )
