@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react'
-import FilterPopover, { MinMax } from './ui/FilterPopover'
-import YDSRangeSlider, { YDS_DEFS } from './ui/YDSRangeSlider'
-import { actions, cragFiltersStore } from '../js/stores'
-import TableView from './ui/TableView'
+import FilterPopover, { MinMax } from '../../ui/FilterPopover'
+import YDSRangeSlider, { YDS_DEFS } from '../../ui/YDSRangeSlider'
+import { actions, cragFiltersStore } from '../../../js/stores'
+import TableView from '../../ui/TableView'
 interface YDSFilterProps {
   isMobile?: boolean
 }

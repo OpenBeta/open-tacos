@@ -14,11 +14,11 @@ interface ClimbSearchProps {
 
 const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): JSX.Element => {
   useEffect(() => {
-    document.addEventListener('click', outsideClickDectector)
-    return () => { document.removeEventListener('click', outsideClickDectector) }
+    document.addEventListener('click', outsideClickDetector)
+    return () => { document.removeEventListener('click', outsideClickDetector) }
   }, [])
 
-  const outsideClickDectector = (event: any): void => {
+  const outsideClickDetector = (event: any): void => {
     const searchDiv = document.getElementById('searchPanel')
     if (searchDiv === null) return
     const withinBoundaries: boolean = event.composedPath().includes(searchDiv)

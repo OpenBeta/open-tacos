@@ -37,6 +37,11 @@ body, html {
   .content-fullscreen-desktop {
     @apply relative w-full max-w-full flex flex-col;
   }
+  
+  /*  For larger screens */
+  .layout-wide {
+    @apply relative flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0 mt-6;
+  }
 
   .content-2xl-center {
     @apply relative my-6 w-full max-w-full flex flex-col mx-auto;

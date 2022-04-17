@@ -1,5 +1,6 @@
-import YDSFilter from '../../YDSFilter'
-import RadiusFilter from '../../RadiusFilter'
+import YDSFilter from './YDSFilter'
+import RadiusFilter from './RadiusFilter'
+import BoulderRangeFilter from './BoulderRangeFilter'
 import DisciplineFilter from './DisciplineFilter'
 import Bar from '../../ui/Bar'
 
@@ -11,6 +12,8 @@ export default function DesktopFilterBar (): JSX.Element {
       backgroundClass='bg-slate-800'
     >
       <YDSFilter isMobile={false} />
+      <VerticalDiv />
+      <BoulderRangeFilter isMobile={false} />
       <VerticalDiv />
       <DisciplineFilter isMobile={false} />
       <VerticalDiv />

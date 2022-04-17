@@ -1,9 +1,9 @@
 import { useState, useCallback } from 'react'
 
-import { actions, cragFiltersStore } from '../js/stores'
-import { RadiusRangeSlider, radiusRangeToString, prettifyLabel } from './ui/RadiusRangeSlider'
-import FilterPopover, { MinMax } from './ui/FilterPopover'
-import TableView from './ui/TableView'
+import { actions, cragFiltersStore } from '../../../js/stores'
+import { RadiusRangeSlider, radiusRangeToString, prettifyLabel } from '../../ui/RadiusRangeSlider'
+import FilterPopover, { MinMax } from '../../ui/FilterPopover'
+import TableView from '../../ui/TableView'
 
 interface RadiusFilterProps {
   isMobile?: boolean

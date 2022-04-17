@@ -46,5 +46,5 @@ Bar.H_DEFAULT = 'h-12'
 Bar.H_LG = 'h-16' /* Large screen */
 Bar.BG_DEFAULT = 'bg-gray-50'
 Bar.JUSTIFY_LEFT = 'flex no-wrap justify-start items-center'
-Bar.JUSTIFY_BETWEEN = 'flex no-wrap justify-between items-center'
+Bar.JUSTIFY_BETWEEN = 'flex no-wrap justify-between items-center w-full'
 Bar.PX_DEFAULT = 'px-4'

@@ -5,8 +5,8 @@ import { point, featureCollection } from '@turf/helpers'
 import { RadiusRange, CountByGradeBandType, AreaType, ClimbDisciplineRecord } from '../types'
 import { getCragDetailsNear } from '../graphql/api'
 import { calculatePagination, NextPaginationProps } from './util'
-import { YDS_DEFS } from '../grades/rangeDefs'
-import { freeScoreToBandIndex, BAND_BY_INDEX } from '../grades/bandUtil'
+import { BOULDER_DEFS, YDS_DEFS } from '../grades/rangeDefs'
+import { vScoreToBandIndex, freeScoreToBandIndex, BAND_BY_INDEX } from '../grades/bandUtil'
 import { sanitizeName } from '../utils'
 
 /**
@@ -26,10 +26,11 @@ export const cragFiltersStore = createStore('filters')({
   sport: true,
   boulder: true,
   tr: true,
-  freeRange: [4, 8], // keys to YDS_DEFS object
+  freeRange: [4, 8], // keys to YDS_DEFS object'
+  boulderRange: [0, 4], // keys to YDS_BOULDER object
   boulderingRange: {
     scores: [0, 0],
-    labels: ['v0', 'v3']
+    labels: ['V-easy', 'V3']
   },
   radius: {
     rangeMeters: [0, 48000],
@@ -79,19 +80,42 @@ export const cragFiltersStore = createStore('filters')({
       YDS_DEFS[max].label])
   },
 
+  displayBoulderRange: () => {
+    const [min, max] = get.boulderRange()
+    return ([
+      BOULDER_DEFS[min].label,
+      BOULDER_DEFS[max].label])
+  },
+
   scoreFreeRange: () => {
     const [min, max] = get.freeRange()
     return ([
       YDS_DEFS[min].score,
       YDS_DEFS[max].score])
+  },
+
+  scoreBoulderRange: () => {
+    const [min, max] = get.boulderRange()
+    return ([
+      BOULDER_DEFS[min].score,
+      BOULDER_DEFS[max].score])
   }
+
 }))
   .extendSelectors((_, get) => ({
 
-    bandRange: () => {
+    freeBandRange: () => {
       const [min, max] = get.scoreFreeRange()
       const minBand = freeScoreToBandIndex(min)
       const maxBand = freeScoreToBandIndex(max)
+      return [
+        minBand,
+        maxBand]
+    },
+    boulderBandRange: () => {
+      const [min, max] = get.scoreBoulderRange()
+      const minBand = vScoreToBandIndex(min)
+      const maxBand = vScoreToBandIndex(max)
       return [
         minBand,
         maxBand]
@@ -101,7 +125,7 @@ export const cragFiltersStore = createStore('filters')({
     withinFreeRange: (gradeBands: CountByGradeBandType | undefined) => {
       if (gradeBands === undefined) return false
 
-      const [min, max] = get.bandRange()
+      const [min, max] = get.freeBandRange()
 
       for (let i: number = min; i <= max; i++) {
         if (gradeBands[BAND_BY_INDEX[i]] > 0) {
@@ -117,8 +141,16 @@ export const cragFiltersStore = createStore('filters')({
    * @returns
    */
     withinBoulderRange: (gradeBands: CountByGradeBandType | undefined) => {
-    // TBD
-      return true
+      if (gradeBands === undefined) return false
+
+      const [min, max] = get.boulderBandRange()
+
+      for (let i: number = min; i <= max; i++) {
+        if (gradeBands[BAND_BY_INDEX[i]] > 0) {
+          return true
+        }
+      }
+      return false
     }
   })).extendSelectors((_, get) => ({
 
@@ -227,6 +259,11 @@ export const cragFiltersStore = createStore('filters')({
 
     updateFreeRange: async (newRange) => {
       set.freeRange(newRange)
+      await set.fetchData()
+    },
+
+    updateBoulderRange: async (newRange) => {
+      set.boulderRange(newRange)
       await set.fetchData()
     },
 
