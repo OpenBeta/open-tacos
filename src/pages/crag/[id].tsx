@@ -34,33 +34,33 @@ const Crag = ({ area }: CragProps): JSX.Element => {
   ]
 
   return (
-    <Layout contentContainerClass='content-2xl-left-header-offset'>
+    <Layout contentContainerClass='content-default'>
       <SeoTags
         keywords={[areaName]}
         title={areaName}
         description='description'
       />
-      <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
-      <h1 className='title'>{sanitizeName(areaName)}</h1>
-      <span className='flex items-center flex-shrink text-gray-500 text-xs gap-x-1'>
-        <Icon type='droppin' />
-        <a
-          className='hover:underline hover:text-gray-800'
-          href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
-          target='_blank'
-          rel='noopener noreferrer'
+      <div className='px-4 max-w-screen-md'>
+        <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
+        <h1 className='title'>{sanitizeName(areaName)}</h1>
+        <span className='flex items-center flex-shrink text-gray-500 text-xs gap-x-1'>
+          <Icon type='droppin' />
+          <a
+            className='hover:underline hover:text-gray-800'
+            href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            {metadata.lat},{metadata.lng}
+          </a>
+        </span>
+        <div
+          className='pt-4 markdown'
         >
-          {metadata.lat},{metadata.lng}
-        </a>
-      </span>
-      <div
-        className='pt-4 markdown'
-      >
-        <h2>Description</h2>
-        <InlineEditor id='crag-1' markdown={content.description} readOnly />
-      </div>
-      <hr className='my-8' />
-      <>
+          <h2>Description</h2>
+          <InlineEditor id='crag-1' markdown={content.description} readOnly />
+        </div>
+        <hr className='my-8' />
         <h2>Climbs</h2>
         <ButtonGroup
           disabled={false}
@@ -103,7 +103,7 @@ const Crag = ({ area }: CragProps): JSX.Element => {
             }
           )}
         </div>
-      </>
+      </div>
     </Layout>
   )
 }

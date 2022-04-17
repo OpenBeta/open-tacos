@@ -13,8 +13,8 @@ export function DefaultImage (): JSX.Element {
 export function FeatureImage ({ image }: { image: OpenverseImage }): JSX.Element {
   return (
     <div
-      style={{ height: '250px', backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url('${image.url}')` }}
-      className='overflow-hidden items-end flex flex-col-reverse'
+      style={{ backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url('${image.url}')` }}
+      className='aspect-[4/3] overflow-hidden items-end flex flex-col-reverse'
       data-tooltip={image.attribution}
     >
       <LicenseIcons image={image} />

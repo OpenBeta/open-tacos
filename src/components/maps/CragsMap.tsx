@@ -43,17 +43,17 @@ export default function CragsMap (): JSX.Element {
 
   return (
     <>
-      <div className='absolute left-1 top-1 z-50'>
-        {areaId !== null &&
-          <CragHighlightPopover
-            {...store.filters.areaById(areaId)}
-          />}
-      </div>
       <div
         id='my-area-map'
-        className='z-10 w-full absolute top-0 left-0 xl:sticky xl:top-28 xl:m-0 xl:p-0'
+        className='w-full absolute top-0 left-0 xl:sticky xl:top-28 xl:m-0 xl:p-0'
         style={{ height }}
       >
+        <div className='absolute left-1 top-1 z-50'>
+          {areaId !== null &&
+            <CragHighlightPopover
+              {...store.filters.areaById(areaId)}
+            />}
+        </div>
         <BaseMap
           initialViewState={viewstate}
           viewstate={viewstate}

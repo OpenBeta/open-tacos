@@ -32,12 +32,12 @@ const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
       </Head>
 
       <Layout
-        contentContainerClass='content-2xl-center'
+        contentContainerClass='content-default'
         hero={<HomeHero statsProps={stats} />}
       >
         <section>
-          <h2 className='mb-4 text-3xl h-padding-wide'>Explore</h2>
-          <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg:gap-x-3 gap-y-3'>
+          <h2 className='mb-4 text-3xl px-4'>Explore</h2>
+          <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 lg:gap-x-3 gap-y-3'>
             {areas.map(area => <FeatureCard key={area.id} area={area} />)}
           </div>
         </section>

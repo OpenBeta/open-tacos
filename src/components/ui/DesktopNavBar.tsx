@@ -11,11 +11,9 @@ interface DesktopAppBarProps {
 export default function DesktopNavBar ({ expanded, branding, search, navList }: DesktopAppBarProps): JSX.Element {
   return (
     <Bar
-      // fixed
       backgroundClass='bg-slate-800'
       heightClass={Bar.H_LG}
       layoutClass={Bar.JUSTIFY_BETWEEN}
-      zIndexClass={Bar.Z_HIGH}
     >
       <div>{branding}</div>
       <div className='block'>{search}</div>

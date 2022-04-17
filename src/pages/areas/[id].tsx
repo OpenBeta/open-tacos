@@ -19,13 +19,13 @@ const Area = ({ area }: AreaPageProps): JSX.Element => {
   const { id, area_name: areaName, children, metadata, content, pathTokens, ancestors } = area
 
   return (
-    <Layout contentContainerClass='content-2xl-left-header-offset'>
+    <Layout contentContainerClass='content-default'>
       <SeoTags
         keywords={[areaName]}
         title={areaName}
         description='description'
       />
-      <div className='max-w-screen-md'>
+      <div className='px-4 max-w-screen-md'>
         <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
         <h1 className='title'>{areaName}</h1>
         <span className='flex items-center flex-shrink text-gray-500 text-xs gap-x-1'>
