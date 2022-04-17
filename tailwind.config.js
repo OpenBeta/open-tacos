@@ -30,6 +30,9 @@ module.exports = {
         'screen-80': '80vh',
         'screen-20': '20vh',
         'screen-15': '15vh'
+      },
+      screens: {
+        '3xl': '2560px'
       }
     }
   }

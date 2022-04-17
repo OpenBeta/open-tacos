@@ -9,11 +9,11 @@
 body, html {
   height: 100%;
   font-size: 16px;
-  @apply bg-neutral-50 font-sans text-base text-gray-900;
+  @apply bg-gray-900 font-sans text-base text-gray-900;
 }
 
 .main-container-default {
-  @apply relative max-w-screen-2xl w-full mx-auto;
+  @apply relative max-w-screen-3xl w-full mx-auto;
 }
 
 .main-container-max {
@@ -107,7 +107,7 @@ body, html {
   
   .home-hero {
     min-height: 600px;
-    @apply relative block top-0 left-0 bg-gray-800 home-hero-bg-img xl:min-h-[800px]
+    @apply relative block top-0 left-0 bg-gray-800 home-hero-bg-img xl:min-h-[800px] 2xl:min-h-[1000px]
   }
   
   .height-mobile-portrait {
