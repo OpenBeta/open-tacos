@@ -34,7 +34,7 @@ body, html {
 @layer utilities {
   /*  For larger screens */
   .layout-wide {
-    @apply relative max-w-screen-2xl flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0 mt-6;
+    @apply relative flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0 mt-6;
   }
 
   .layout-default {
