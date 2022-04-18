@@ -1,5 +1,6 @@
 import React from 'react'
 import { GetStaticProps } from 'next'
+import { useRouter } from 'next/router'
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
@@ -15,6 +16,11 @@ interface ClimbProps {
 }
 
 function Climbs ({ climb }: ClimbProps): JSX.Element {
+  const router = useRouter()
+
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
   const { name, fa, yds, type, content, safety, id, ancestors, pathTokens } = climb
   return (
     <Layout contentContainerClass='content-default with-standard-y-margin'>
@@ -78,13 +84,14 @@ export async function getStaticPaths (): Promise<any> {
 
   return {
     paths: [],
-    fallback: 'blocking'
+    fallback: true
   }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = gql`query ClimbByUUID($id: ID) {
     climb(id: $id) {
+      id
       name
       fa
       yds
