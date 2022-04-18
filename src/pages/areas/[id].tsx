@@ -1,6 +1,6 @@
 import { GetStaticProps } from 'next'
 import { gql } from '@apollo/client'
-
+import { useRouter } from 'next/router'
 import { AreaType } from '../../js/types'
 import { graphqlClient } from '../../js/graphql/Client'
 import Link from 'next/link'
@@ -16,6 +16,10 @@ interface AreaPageProps {
   area: AreaType
 }
 const Area = ({ area }: AreaPageProps): JSX.Element => {
+  const router = useRouter()
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
   const { id, area_name: areaName, children, metadata, content, pathTokens, ancestors } = area
 
   return (
@@ -109,7 +113,7 @@ export async function getStaticPaths (): Promise<any> {
   // { fallback: true } means render on first reques for those that are not in `paths`
   return {
     paths: [],
-    fallback: 'blocking'
+    fallback: true
   }
 }
 

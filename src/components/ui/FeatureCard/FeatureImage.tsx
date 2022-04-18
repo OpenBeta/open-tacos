@@ -4,8 +4,8 @@ import LicenseIcons from './LicenseIcons'
 export function DefaultImage (): JSX.Element {
   return (
     <div
-      style={{ height: '250px', backgroundRepeat: 'no-repeat', backgroundSize: '35%', backgroundPosition: 'center', backgroundImage: 'url("tortilla.png")' }}
-      className='overflow-hidden items-end flex flex-col-reverse'
+      style={{ backgroundRepeat: 'no-repeat', backgroundSize: '35%', backgroundPosition: 'center', backgroundImage: 'url("tortilla.png")' }}
+      className='aspect-[4/3] overflow-hidden items-end flex flex-col-reverse'
     />
   )
 }
