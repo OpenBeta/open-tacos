@@ -13,7 +13,8 @@ export const Autocomplete = (props): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     setTimeout(() => {
-      (document.getElementsByClassName('aa-Input')[0] as HTMLInputElement).focus()
+      const element = document.getElementsByClassName('aa-Input')[0] as HTMLInputElement
+      element?.focus()
     }, 100)
   }, [])
   useEffect(() => {

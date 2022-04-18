@@ -42,34 +42,36 @@ export default function CragsMap (): JSX.Element {
   const { areaId, lnglat } = store.filters.map().active
 
   return (
-    <div
-      id='my-area-map'
-      className='w-full xl:sticky xl:top-28 xl:m-0 xl:p-0'
-      style={{ height }}
-    >
-      <div className='absolute left-1 top-1 z-20'>
-        {areaId !== null &&
-          <CragHighlightPopover
-            {...store.filters.areaById(areaId)}
-          />}
-      </div>
-      <BaseMap
-        initialViewState={viewstate}
-        viewstate={viewstate}
-        onViewStateChange={onViewStateChange}
-        light={false}
-        onClick={onClickHandler}
-        onHover={onHoverHandler}
+    <>
+      <div
+        id='my-area-map'
+        className='w-full absolute top-0 left-0 xl:sticky xl:top-28 xl:m-0 xl:p-0'
+        style={{ height }}
       >
-        <MarkerLayer geojson={geojson} />
-        <InteractiveMarker
-          lnglat={hoverMarker}
-        />
-        <InteractiveMarker
-          lnglat={lnglat}
-          hover={false}
-        />
-      </BaseMap>
-    </div>
+        <div className='absolute left-1 top-1 z-50'>
+          {areaId !== null &&
+            <CragHighlightPopover
+              {...store.filters.areaById(areaId)}
+            />}
+        </div>
+        <BaseMap
+          initialViewState={viewstate}
+          viewstate={viewstate}
+          onViewStateChange={onViewStateChange}
+          light={false}
+          onClick={onClickHandler}
+          onHover={onHoverHandler}
+        >
+          <MarkerLayer geojson={geojson} />
+          <InteractiveMarker
+            lnglat={hoverMarker}
+          />
+          <InteractiveMarker
+            lnglat={lnglat}
+            hover={false}
+          />
+        </BaseMap>
+      </div>
+    </>
   )
 }

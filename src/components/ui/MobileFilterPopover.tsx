@@ -15,7 +15,7 @@ export default function MobileFilterPopover ({ btnLabel, title, onApply, childre
     <div>
       <button
         type='button'
-        className='underline text-sm lg:text-base'
+        className='border rounded-lg border-neutral-300 px-4 py-1.5 text-xs lg:text-sm whitespace-nowrap'
         onClick={() => setIsOpen(true)}
       >
         {btnLabel}

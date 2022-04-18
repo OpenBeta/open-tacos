@@ -2,6 +2,7 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 
 // See https://tailwindcss.com/docs/configuration for details
 module.exports = {
+  darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/components/**/*.{js,ts,jsx,tsx}'
@@ -29,6 +30,9 @@ module.exports = {
         'screen-80': '80vh',
         'screen-20': '20vh',
         'screen-15': '15vh'
+      },
+      screens: {
+        '3xl': '2560px'
       }
     }
   }

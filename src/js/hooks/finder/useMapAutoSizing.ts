@@ -1,16 +1,19 @@
 import { useEffect, useCallback, useState } from 'react'
 import { InitialViewStateProps } from '@deck.gl/core/lib/deck'
 
+import useResponsive from '../useResponsive'
 import { bboxFromGeoJson, bbox2Viewport } from '../../../js/GeoHelpers'
 import { DEFAULT_INITIAL_VIEWSTATE } from '../../../components/maps/BaseMap'
 import { store } from '../../stores'
-import { NAV_BAR_OFFSET } from '../../../components/header'
+import { getNavBarOffset } from '../../../components/Header'
 
 /**
  * React hook for auto detecting and calculating div height
  */
 export default function useAutoSizing ({ geojson }): any {
-  const [[width, height], setWH] = useState([400, 400])
+  const { isMobile, isTablet, isDesktop } = useResponsive()
+  const navbarOffset = getNavBarOffset({ isMobile, isTablet, isDesktop })
+  const [[width, height], setWH] = useState([300, 400])
   const [viewState, setViewState] = useState<InitialViewStateProps>(DEFAULT_INITIAL_VIEWSTATE)
 
   const isLoading = store.filters.isLoading()
@@ -29,18 +32,18 @@ export default function useAutoSizing ({ geojson }): any {
   }, [geojson, isLoading])
 
   const updateDimensions = useCallback(() => {
-    const { width, height } = getMapDivDimensions('my-area-map')
+    const { width, height } = getMapDivDimensions('my-area-map', navbarOffset)
     setWH([width, height])
   }, [width, height])
   return [viewState, height, setViewState]
 }
 
-const getMapDivDimensions = (id: string): { width: number, height: number } => {
+const getMapDivDimensions = (id: string, offset): { width: number, height: number } => {
   const div = document.getElementById(id)
   let width = 200
   if (div != null) {
     width = div.clientWidth
   }
-  const height = window.innerHeight - NAV_BAR_OFFSET
+  const height = window.innerHeight - offset
   return { width, height }
 }

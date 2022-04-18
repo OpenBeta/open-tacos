@@ -15,7 +15,6 @@ const YDSFilter = ({ isMobile = true }: YDSFilterProps): JSX.Element => {
   const [range, setRange] = useState(initialRange)
 
   const applyFn = useCallback((): void => {
-    console.log('#onApply')
     void actions.filters.updateFreeRange(range)
   }, [range]
   )

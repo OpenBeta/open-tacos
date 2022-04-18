@@ -9,18 +9,19 @@
 body, html {
   height: 100%;
   font-size: 16px;
-  @apply bg-gray-100;
+  @apply bg-neutral-900 font-sans text-base text-gray-900;
 }
 
-
-/* Main page hero card gradient color overlay */
-.hero-card {
-  background-image: linear-gradient(to right top, #12bee5, #00b6f4, #1bacff, #58a0ff, #888fff, #ac80f2, #c970e0, #e05ec8, #ee52ad, #f64b91, #f74a75, #f24f5a);
+/******** App's root container *********/
+/* Max width=3xl */
+.root-container-default {
+  @apply relative max-w-screen-3xl w-full mx-auto bg-neutral-50;
 }
-
-.main-container {
-  @apply relative w-full font-sans text-base text-gray-900 h-screen;
+/* Full screen */
+.root-container-full {
+  @apply relative w-screen max-w-full bg-neutral-50;
 }
+/***************************************/
 
 .layout-edit {
   @apply bg-white  max-w-4xl  2xl:max-w-screen-2xl mx-auto px-4 py-8 mt-8 mb-16 rounded-lg
@@ -32,13 +33,21 @@ body, html {
 }
 
 @layer utilities {
-  /*  For larger screens */
-  .layout-wide {
-    @apply relative flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0 mt-6;
+  /* For device up to xl (exclusively) */
+  .content-fullscreen-tablet {
+    @apply relative flex flex-col w-full max-w-screen-lg;
   }
 
-  .layout-default {
-    @apply my-4 lg:mt-32 lg:mb-8 w-full max-w-screen-md mx-auto px-4
+  .content-default {
+    @apply relative flex flex-col w-full max-w-full ;
+  }
+
+  .with-standard-y-margin {
+    @apply py-6;
+  }
+
+  .content-mobile {
+    @apply relative flex flex-col;
   }
 
   .layout-edit-wide {
@@ -51,13 +60,13 @@ body, html {
   }
 
   .text-primary {
-    @apply text-slate-800 
+    @apply text-neutral-800 
   }
   .text-secondary {
-    @apply text-slate-600
+    @apply text-neutral-600
   }
   .text-tertiary {
-    @apply text-slate-400
+    @apply text-neutral-400
   }
 
   .text-primary-contrast {
@@ -66,10 +75,17 @@ body, html {
   .text-secondary-contrast {
     @apply text-gray-300
   }
+  .bg-default {
+    @apply bg-neutral-50 dark:bg-slate-900;
+  }
+
+  .bg-contrast {
+    @apply bg-neutral-200 dark:bg-slate-700
+  }
 
   /* Add a small horizontal padding for main section headers */
   .h-padding-wide {
-    @apply px-4 md:px-0
+    @apply px-4 2xl:px-0
   }
 
   h1 {
@@ -90,8 +106,8 @@ body, html {
   }
   
   .home-hero {
-    min-height: 500px;
-    @apply relative block top-0 left-0 bg-gray-800 home-hero-bg-img h-screen-85 w-screen
+    min-height: 600px;
+    @apply relative block top-0 left-0 bg-gray-800 home-hero-bg-img xl:min-h-[500px] xl:h-[80vh]
   }
   
   .height-mobile-portrait {

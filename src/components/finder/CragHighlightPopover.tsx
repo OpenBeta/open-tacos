@@ -17,7 +17,7 @@ function CragHighlightPopover({ id, area_name: _name, aggregate}: AreaType): JSX
         <Link href={`crag/${id}`}>
           <a>
             <div
-              className='p-2 rounded-md bg-white border-2 border-slate-800 drop-shadow-xl min-w-[400px]'
+              className='p-2 rounded-md bg-white border-2 border-slate-800 drop-shadow-xl'
             >
               <header className='flex justify-between items-center'>
                 <div className='text-base font-semibold text-primary'>
