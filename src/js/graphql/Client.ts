@@ -15,6 +15,12 @@ export const graphqlClient = new ApolloClient({
         },
         Area: {
           keyFields: ['id']
+        },
+        AreaMetadata: {
+          keyFields: false
+        },
+        Climb: {
+          keyFields: ['id']
         }
       }
     }

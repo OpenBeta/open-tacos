@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { GetStaticProps } from 'next'
 import { gql } from '@apollo/client'
+import { useRouter } from 'next/router'
 import { graphqlClient } from '../../js/graphql/Client'
 import Link from 'next/link'
 import Layout from '../../components/layout'
@@ -25,6 +26,10 @@ interface CragSortType {
 }
 
 const Crag = ({ area }: CragProps): JSX.Element => {
+  const router = useRouter()
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
   const { area_name: areaName, climbs, metadata, content, ancestors, pathTokens } = area
 
   const [selectedClimbSort, setSelectedClimbSort] = useState(0)
@@ -151,7 +156,7 @@ export async function getStaticPaths (): Promise<any> {
 
   return {
     paths: [],
-    fallback: 'blocking'
+    fallback: true
   }
 }
 
