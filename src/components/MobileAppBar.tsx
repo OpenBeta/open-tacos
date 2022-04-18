@@ -11,7 +11,7 @@ export default function MobileAppBar (): JSX.Element {
         branding={<Branding />}
         home={<Home />}
         search={<CragFinder />}
-        more={<div>more</div>}
+        more={<div>&nbsp;</div>}
       />
       <MobileFilterBar />
     </>
@@ -20,7 +20,7 @@ export default function MobileAppBar (): JSX.Element {
 }
 
 const Home = (): JSX.Element => {
-  return (<Link href='/'><a><HomeIcon /></a></Link>)
+  return (<Link href='/'><a><HomeIcon className='text-primary' /></a></Link>)
 }
 
 const Branding = (): JSX.Element => {

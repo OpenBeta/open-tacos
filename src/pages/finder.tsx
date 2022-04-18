@@ -5,7 +5,8 @@ import DataContainer from '../components/finder/DataContainer'
 const Finder = (): JSX.Element => {
   return (
     <Layout
-      layoutClz='layout-wide'
+      rootContainerClass='root-container-full'
+      contentContainerClass='content-mobile xl:content-default'
     >
       <DataContainer />
     </Layout>

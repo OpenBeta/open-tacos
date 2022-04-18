@@ -2,6 +2,7 @@ import classnames from 'classnames'
 
 interface BarProps {
   fixed?: boolean
+  borderBottom?: boolean
   backgroundClass?: string
   layoutClass?: string
   heightClass?: string
@@ -12,18 +13,20 @@ interface BarProps {
 }
 export default function Bar ({
   fixed = false,
+  borderBottom = false,
   className = '',
   zIndexClass = Bar.Z_DEFAULT,
   backgroundClass = Bar.BG_DEFAULT,
   heightClass = Bar.H_DEFAULT,
-  layoutClass = 'flex justify-between items-center',
+  layoutClass = Bar.JUSTIFY_BETWEEN,
   paddingX = Bar.PX_DEFAULT,
   children
 }: BarProps): JSX.Element {
   return (
     <div className={
       classnames(
-        fixed ? 'fixed top-0 left-0' : '',
+        fixed ? 'sticky top-0' : '',
+        borderBottom ? 'drop-shadow' : '',
         zIndexClass,
         heightClass,
         layoutClass,

@@ -34,81 +34,74 @@ const Crag = ({ area }: CragProps): JSX.Element => {
   ]
 
   return (
-    <Layout layoutClz='layout-default'>
+    <Layout contentContainerClass='content-default with-standard-y-margin'>
       <SeoTags
         keywords={[areaName]}
         title={areaName}
         description='description'
       />
-
-      <div className='overflow-y'>
-        <div className='xl:flex xl:flex-row xl:gap-x-4 xl:justify-center xl:items-stretch'>
-          <div className='xl:flex-none xl:max-w-screen-md xl:w-full'>
-            <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
-            <h1 className='title'>{sanitizeName(areaName)}</h1>
-            <span className='flex items-center flex-shrink text-gray-500 text-xs gap-x-1'>
-              <Icon type='droppin' />
-              <a
-                className='hover:underline hover:text-gray-800'
-                href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                {metadata.lat},{metadata.lng}
-              </a>
-            </span>
-            <div
-              className='pt-4 markdown'
-            >
-              <h2>Description</h2>
-              <InlineEditor id='crag-1' markdown={content.description} readOnly />
-            </div>
-            <hr className='my-8' />
-            <>
-              <h2>Climbs</h2>
-              <ButtonGroup
-                disabled={false}
-                selected={[selectedClimbSort]}
-                onClick={(_, index) => {
-                  setSelectedClimbSort(index)
-                }}
-                className='text-right'
-              >
-                {climbSortByOptions.map(({ text }, index) => {
-                  return (
-                    <Button
-                      key={index}
-                      label={text}
-                      className={null}
-                      onClick={null}
-                    />
-                  )
-                })}
-              </ButtonGroup>
-              <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
-                {sortRoutes([...climbs], climbSortByOptions[selectedClimbSort]).map(
-                  (climb: Climb) => {
-                    const { id, yds, name, type } = climb
-                    return (
-                      <div className='pt-6 max-h-96' key={id}>
-                        <Link href={`/climbs/${id}`} passHref>
-                          <a>
-                            <RouteCard
-                              routeName={name}
+      <div className='px-4 max-w-screen-md'>
+        <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
+        <h1 className='title'>{sanitizeName(areaName)}</h1>
+        <span className='flex items-center flex-shrink text-gray-500 text-xs gap-x-1'>
+          <Icon type='droppin' />
+          <a
+            className='hover:underline hover:text-gray-800'
+            href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            {metadata.lat},{metadata.lng}
+          </a>
+        </span>
+        <div
+          className='pt-4 markdown'
+        >
+          <h2>Description</h2>
+          <InlineEditor id='crag-1' markdown={content.description} readOnly />
+        </div>
+        <hr className='my-8' />
+        <h2>Climbs</h2>
+        <ButtonGroup
+          disabled={false}
+          selected={[selectedClimbSort]}
+          onClick={(_, index) => {
+            setSelectedClimbSort(index)
+          }}
+          className='text-right'
+        >
+          {climbSortByOptions.map(({ text }, index) => {
+            return (
+              <Button
+                key={index}
+                label={text}
+                className={null}
+                onClick={null}
+              />
+            )
+          })}
+        </ButtonGroup>
+        <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
+          {sortRoutes([...climbs], climbSortByOptions[selectedClimbSort]).map(
+            (climb: Climb) => {
+              const { id, yds, name, type } = climb
+              return (
+                <div className='pt-6 max-h-96' key={id}>
+                  <Link href={`/climbs/${id}`} passHref>
+                    <a>
+                      <RouteCard
+                        routeName={name}
                             // climbId={metadata.climb_id} not actually used
-                              yds={yds}
-                              safety={undefined} /// TODO: Find out what routes have this value?
-                              type={type}
-                            />
-                          </a>
-                        </Link>
-                      </div>
-                    )
-                  }
-                )}
-              </div>
-            </>
-          </div>
+                        yds={yds}
+                        safety={undefined} /// TODO: Find out what routes have this value?
+                        type={type}
+                      />
+                    </a>
+                  </Link>
+                </div>
+              )
+            }
+          )}
         </div>
       </div>
     </Layout>
