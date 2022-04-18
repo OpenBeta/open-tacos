@@ -32,7 +32,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
       </Head>
 
       <Layout
-        contentContainerClass='content-default'
+        contentContainerClass='content-default with-standard-y-margin'
         hero={<HomeHero statsProps={stats} />}
       >
         <section>

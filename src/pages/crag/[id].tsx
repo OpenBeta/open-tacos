@@ -34,7 +34,7 @@ const Crag = ({ area }: CragProps): JSX.Element => {
   ]
 
   return (
-    <Layout contentContainerClass='content-default'>
+    <Layout contentContainerClass='content-default with-standard-y-margin'>
       <SeoTags
         keywords={[areaName]}
         title={areaName}

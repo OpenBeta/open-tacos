@@ -12,13 +12,16 @@ body, html {
   @apply bg-neutral-900 font-sans text-base text-gray-900;
 }
 
-.main-container-default {
+/******** App's root container *********/
+/* Max width=3xl */
+.root-container-default {
   @apply relative max-w-screen-3xl w-full mx-auto bg-neutral-50;
 }
-
-.main-container-max {
+/* Full screen */
+.root-container-full {
   @apply relative w-screen max-w-full bg-neutral-50;
 }
+/***************************************/
 
 .layout-edit {
   @apply bg-white  max-w-4xl  2xl:max-w-screen-2xl mx-auto px-4 py-8 mt-8 mb-16 rounded-lg
@@ -34,21 +37,13 @@ body, html {
   .content-fullscreen-tablet {
     @apply relative flex flex-col w-full max-w-screen-lg;
   }
-  .content-fullscreen-desktop {
-    @apply relative w-full max-w-full flex flex-col;
-  }
-
-  /*  For larger screens */
-  .layout-wide {
-    @apply relative flex flex-col px-4 xl:pl-4 xl:pr-0 mx-auto xl:mx-0 xl:mx-0 mt-6;
-  }
 
   .content-default {
-    @apply relative my-6 w-full max-w-full flex flex-col;
+    @apply relative flex flex-col w-full max-w-full ;
   }
 
-  .content-2xl-left-header-offset {
-    @apply px-4 my-6 relative w-full max-w-full flex flex-col justify-between;
+  .with-standard-y-margin {
+    @apply py-6;
   }
 
   .content-mobile {

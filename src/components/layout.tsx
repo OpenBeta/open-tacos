@@ -5,11 +5,11 @@ import SeoTags from '../components/SeoTags'
 
 interface LayoutProps {
   contentContainerClass?: string
-  mainContainerClass?: string
+  rootContainerClass?: string
   children?: JSX.Element | JSX.Element[]
   hero?: JSX.Element | JSX.Element[]
 }
-function Layout ({ contentContainerClass = 'content-2xl-center', mainContainerClass = 'main-container-default', children, hero = null }: LayoutProps): JSX.Element {
+function Layout ({ contentContainerClass = 'content-fullscreen-tablet', rootContainerClass = 'root-container-default', children, hero = null }: LayoutProps): JSX.Element {
   return (
     <>
       <Head>
@@ -27,7 +27,7 @@ function Layout ({ contentContainerClass = 'content-2xl-center', mainContainerCl
         />
       </Head>
 
-      <div className={mainContainerClass}>
+      <div className={rootContainerClass}>
         <Header />
         {hero}
         <main className={contentContainerClass}>

@@ -17,7 +17,7 @@ interface ClimbProps {
 function Climbs ({ climb }: ClimbProps): JSX.Element {
   const { name, fa, yds, type, content, safety, id, ancestors, pathTokens } = climb
   return (
-    <Layout contentContainerClass='content-default'>
+    <Layout contentContainerClass='content-default with-standard-y-margin'>
       <SeoTags
         keywords={[name]}
         title={name}

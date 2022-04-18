@@ -18,7 +18,7 @@ export default function Bar ({
   zIndexClass = Bar.Z_DEFAULT,
   backgroundClass = Bar.BG_DEFAULT,
   heightClass = Bar.H_DEFAULT,
-  layoutClass = 'flex justify-between items-center',
+  layoutClass = Bar.JUSTIFY_BETWEEN,
   paddingX = Bar.PX_DEFAULT,
   children
 }: BarProps): JSX.Element {

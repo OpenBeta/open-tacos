@@ -19,7 +19,7 @@ const Area = ({ area }: AreaPageProps): JSX.Element => {
   const { id, area_name: areaName, children, metadata, content, pathTokens, ancestors } = area
 
   return (
-    <Layout contentContainerClass='content-default'>
+    <Layout contentContainerClass='content-default with-standard-y-margin'>
       <SeoTags
         keywords={[areaName]}
         title={areaName}
