@@ -1,7 +1,7 @@
 import React from 'react'
 import Card from './Card'
 import RouteTypeChips from './RouteTypeChips'
-import RouteGradeGip from './RouteGradeChip'
+import RouteGradeChip from './RouteGradeChip'
 import { MiniCrumbs } from './BreadCrumbs'
 import { ClimbDisciplineRecord, SafetyType } from '../../js/types'
 
@@ -27,7 +27,7 @@ function RouteCard ({ routeName, type, safety, yds, fa = '', pathTokens }: Route
       </div>
       {fa !== null ? (<div className='text-xs font-light text-slate-500'>{fa}</div>) : null}
       <div className='mt-4 flex justify-between items-center'>
-        <RouteGradeGip yds={yds} safety={safety} />
+        <RouteGradeChip yds={yds} safety={safety} />
       </div>
       <div className='mt-4 flex justify-between items-center'>
         <RouteTypeChips type={type} />
