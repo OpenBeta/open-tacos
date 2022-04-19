@@ -7,7 +7,7 @@ interface ChipProps {
 }
 function RouteTypeChips ({ type }: ChipProps): JSX.Element {
   return (
-    <div className='inline'>
+    <div className='flex flex-wrap'>
       {type?.trad && <Chip type='trad' />}
       {type?.sport && <Chip type='sport' />}
       {type?.tr && <Chip type='tr' />}

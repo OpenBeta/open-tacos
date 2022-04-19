@@ -21,7 +21,7 @@ function Chip ({ type }: ChipProps): JSX.Element {
   return (
     <span
       aria-label='climb-discipline'
-      className={`font-extralight font-mono rounded-sm py-1 mr-4 px-2 text-xs uppercase border-2 ${ChipType[type]}`}
+      className={`font-extralight font-mono rounded-sm py-1 mr-3 px-2 my-1 text-xs uppercase border-2 ${ChipType[type]}`}
     >
       {type}
     </span>
