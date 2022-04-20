@@ -5,9 +5,11 @@ import { AreaType } from '../../js/types'
 import DTable from '../ui/DTable'
 import { MiniCrumbs } from '../ui/BreadCrumbs'
 import useResponsive from '../../js/hooks/useResponsive'
+import { cragFiltersStore } from '../../js/stores'
 
 /* eslint-disable-next-line */
-const CragRow = ({ id, area_name: _name, totalClimbs, metadata, aggregate, pathTokens}: Partial<AreaType>): JSX.Element => {
+const CragRow = ({ id, area_name: _name, totalClimbs, metadata, aggregate, pathTokens }: Partial<AreaType>): JSX.Element => {
+  const getClimbsForYou = cragFiltersStore.get.inMyRangeCount(aggregate)
   const name = sanitizeName(_name)
   const { isMobile } = useResponsive()
 
@@ -29,7 +31,7 @@ const CragRow = ({ id, area_name: _name, totalClimbs, metadata, aggregate, pathT
           <hr className='w-8 my-2' />
           <div className='text-secondary text-sm'>Climbs for you</div>
           <div className='flex justify-between items-center'>
-            {!isMobile && <div className='md:block w-24 h-24'><CounterPie total={totalClimbs} forYou={totalClimbs - getRandomInt(totalClimbs)} /></div>}
+            {!isMobile && <div className='md:block w-24 h-24'><CounterPie total={totalClimbs} forYou={getClimbsForYou} /></div>}
             <div>
               <DTable byDisciplineAgg={aggregate.byDiscipline} />
             </div>
@@ -38,10 +40,6 @@ const CragRow = ({ id, area_name: _name, totalClimbs, metadata, aggregate, pathT
       </a>
     </Link>
   )
-}
-
-function getRandomInt (max: number): number {
-  return Math.floor(Math.random() * max)
 }
 
 export default CragRow
