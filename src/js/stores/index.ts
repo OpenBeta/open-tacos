@@ -2,7 +2,7 @@ import { mapValuesKey, createStore } from '@udecode/zustood'
 import produce from 'immer'
 import { point, featureCollection } from '@turf/helpers'
 
-import { RadiusRange, CountByGradeBandType, AreaType, ClimbDisciplineRecord } from '../types'
+import { RadiusRange, CountByGradeBandType, AreaType, ClimbDisciplineRecord, AggregateType } from '../types'
 import { getCragDetailsNear } from '../graphql/api'
 import { calculatePagination, NextPaginationProps } from './util'
 import { BOULDER_DEFS, YDS_DEFS } from '../grades/rangeDefs'
@@ -122,6 +122,62 @@ export const cragFiltersStore = createStore('filters')({
     }
   })).extendSelectors((_, get) => ({
 
+    withinSportRangeCount: (gradeBands: CountByGradeBandType | undefined): number => {
+      let total: number = 0
+      if (gradeBands === undefined) return total
+
+      const [min, max] = get.freeBandRange()
+
+      for (let i: number = min; i <= max; i++) {
+        if (gradeBands[BAND_BY_INDEX[i]] > 0) {
+          total += parseInt(gradeBands[BAND_BY_INDEX[i]])
+        }
+      }
+      return total
+    },
+
+    withinTradRangeCount: (gradeBands: CountByGradeBandType | undefined) => {
+      let total: number = 0
+      if (gradeBands === undefined) return total
+
+      const [min, max] = get.freeBandRange()
+
+      for (let i: number = min; i <= max; i++) {
+        if (gradeBands[BAND_BY_INDEX[i]] > 0) {
+          total += parseInt(gradeBands[BAND_BY_INDEX[i]])
+        }
+      }
+      return total
+    },
+
+    withinBoulderRangeCount: (gradeBands: CountByGradeBandType | undefined) => {
+      let total: number = 0
+      if (gradeBands === undefined) return total
+
+      const [min, max] = get.boulderBandRange()
+
+      for (let i: number = min; i <= max; i++) {
+        if (gradeBands[BAND_BY_INDEX[i]] > 0) {
+          total += parseInt(gradeBands[BAND_BY_INDEX[i]])
+        }
+      }
+      return total
+    },
+
+    withinTrRangeCount: (gradeBands: CountByGradeBandType | undefined) => {
+      let total: number = 0
+      if (gradeBands === undefined) return total
+
+      const [min, max] = get.freeBandRange()
+
+      for (let i: number = min; i <= max; i++) {
+        if (gradeBands[BAND_BY_INDEX[i]] > 0) {
+          total += parseInt(gradeBands[BAND_BY_INDEX[i]])
+        }
+      }
+      return total
+    },
+
     withinFreeRange: (gradeBands: CountByGradeBandType | undefined) => {
       if (gradeBands === undefined) return false
 
@@ -172,6 +228,35 @@ export const cragFiltersStore = createStore('filters')({
       get.withinFreeRange(byDiscipline?.tr?.bands)) return true
 
       return false
+    }
+  })).extendSelectors((_, get) => ({
+
+    inMyRangeCount: (aggregate: AggregateType): number => {
+      const { byDiscipline } = aggregate
+      let total = 0
+      const { trad, sport, boulder, tr } = get
+
+      if (trad() && (byDiscipline?.trad?.total > 0 ?? false) &&
+      get.withinFreeRange(byDiscipline?.trad?.bands)) {
+        total += get.withinTradRangeCount(byDiscipline?.trad?.bands)
+      }
+
+      if (sport() && (byDiscipline?.sport?.total > 0 ?? false) &&
+      get.withinFreeRange(byDiscipline?.sport?.bands)) {
+        total += get.withinSportRangeCount(byDiscipline?.sport?.bands)
+      }
+
+      if (boulder() && (byDiscipline?.boulder?.total > 0 ?? false) &&
+        get.withinBoulderRange(byDiscipline?.boulder?.bands)) {
+        total += get.withinBoulderRangeCount(byDiscipline?.boulder?.bands)
+      }
+
+      if (tr() && (byDiscipline?.tr?.total > 0 ?? false) &&
+      get.withinFreeRange(byDiscipline?.tr?.bands)) {
+        total += get.withinTrRangeCount(byDiscipline?.tr?.bands)
+      }
+
+      return total
     }
   }))
   .extendSelectors((_, get) => ({
