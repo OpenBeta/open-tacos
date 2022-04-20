@@ -20,7 +20,7 @@ const Area = ({ area }: AreaPageProps): JSX.Element => {
   if (router.isFallback) {
     return <div>Loading...</div>
   }
-  const { id, area_name: areaName, children, metadata, content, pathTokens, ancestors } = area
+  const { id, areaName, children, metadata, content, pathTokens, ancestors } = area
 
   return (
     <Layout contentContainerClass='content-default with-standard-y-margin'>
@@ -55,23 +55,14 @@ const Area = ({ area }: AreaPageProps): JSX.Element => {
             <hr className='my-8' />
           </>}
 
-        {/* <div className='w-full relative mt-8 flex my-8'>
-              <Drawer
-                className='border border-slate-400'
-                areas={selectedAreas.length === 0 ? area.children : selectedAreas}
-              />
-              <ClusterMap className='shadow-[-3px_0px_6px_-3px_rgba(0,0,0,0.3)]' onClick={handleClick} bbox={area.metadata.bbox}>
-                {area.children}
-              </ClusterMap>
-            </div> */}
-
         <h2>Subareas</h2>
         <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
           {children.map((child) => {
-            const { id, area_name: areaName, metadata } = child
+            const { areaName, metadata } = child
+            const { areaId, leaf } = metadata
             return (
-              <div className='max-h-96' key={metadata.area_id}>
-                <Link href={getSlug(id, metadata.leaf)} passHref>
+              <div className='max-h-96' key={areaId}>
+                <Link href={getSlug(areaId, leaf)} passHref>
                   <a>
                     <AreaCard areaName={areaName} />
                   </a>
@@ -120,10 +111,10 @@ export async function getStaticPaths (): Promise<any> {
 // This also gets called at build time
 // Query graphql api for area by id
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const query = gql`query getAreaById($id: ID) {
-    area(id: $id) {
+  const query = gql`query getAreaById($uuid: ID) {
+    area(uuid: $uuid) {
       id
-      area_name
+      areaName
       ancestors
       pathTokens
       metadata {
@@ -131,16 +122,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         lng 
         leaf
         bbox
+        areaId
       } 
       content {
         description 
       } 
       children {
         id
-        area_name
+        areaName
         totalClimbs
         metadata {
-          area_id
+          areaId
           leaf
           lat
           lng
@@ -153,13 +145,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const rs = await graphqlClient.query<AreaType>({
       query,
       variables: {
-        id: params.id
+        uuid: params.id
       }
     })
     if (rs.data === null) throw new Error('Area not found')
     // Pass post data to the page via props
     return { props: rs.data }
   } catch (e) {
+    console.log('GraphQL exception:', e)
     return {
       notFound: true
     }

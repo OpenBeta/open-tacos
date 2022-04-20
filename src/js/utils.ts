@@ -114,9 +114,9 @@ export const simplifyClimbTypeJson = (type?: ClimbDisciplineRecord): {[key: stri
   return type
 }
 
-export const getSlug = (areaId: string, isLeaf: boolean): string => {
+export const getSlug = (areaID: string, isLeaf: boolean): string => {
   const type = isLeaf ? 'crag' : 'areas'
-  return `/${type}/${areaId}`
+  return `/${type}/${areaID}`
 }
 
 function debouncePromise (fn: Function, time: number): any {

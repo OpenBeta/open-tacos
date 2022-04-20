@@ -30,7 +30,7 @@ const Crag = ({ area }: CragProps): JSX.Element => {
   if (router.isFallback) {
     return <div>Loading...</div>
   }
-  const { area_name: areaName, climbs, metadata, content, ancestors, pathTokens } = area
+  const { areaName, climbs, metadata, content, ancestors, pathTokens } = area
 
   const [selectedClimbSort, setSelectedClimbSort] = useState(0)
   const climbSortByOptions: CragSortType[] = [
@@ -89,16 +89,16 @@ const Crag = ({ area }: CragProps): JSX.Element => {
         <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
           {sortRoutes([...climbs], climbSortByOptions[selectedClimbSort]).map(
             (climb: Climb) => {
-              const { id, yds, name, type } = climb
+              const { yds, name, type, safety, metadata } = climb
+              const { climbId } = metadata
               return (
-                <div className='pt-6 max-h-96' key={id}>
-                  <Link href={`/climbs/${id}`} passHref>
+                <div className='pt-6 max-h-96' key={climbId}>
+                  <Link href={`/climbs/${climbId}`} passHref>
                     <a>
                       <RouteCard
                         routeName={name}
-                            // climbId={metadata.climb_id} not actually used
                         yds={yds}
-                        safety={undefined} /// TODO: Find out what routes have this value?
+                        safety={safety} /// TODO: Find out what routes have this value?
                         type={type}
                       />
                     </a>
@@ -161,12 +161,12 @@ export async function getStaticPaths (): Promise<any> {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const query = gql`query AreaByID($id: ID) {
-    area(id: $id) {
+  const query = gql`query AreaByID($uuid: ID) {
+    area(uuid: $uuid) {
       id
-      area_name
+      areaName
       metadata {
-        area_id
+        areaId
         lat
         lng 
         left_right_index
@@ -190,7 +190,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           aid
         }
         metadata {
-          climb_id
+          climbId
         }
       }
       content {
@@ -202,9 +202,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const rs = await graphqlClient.query<AreaType>({
     query,
     variables: {
-      id: params.id
+      uuid: params.id
     }
   })
+
+  if (rs.data === null) throw new Error('Area not found')
 
   // Pass post data to the page via props
   return { props: rs.data }

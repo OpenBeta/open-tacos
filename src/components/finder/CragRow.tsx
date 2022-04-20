@@ -6,14 +6,13 @@ import DTable from '../ui/DTable'
 import { MiniCrumbs } from '../ui/BreadCrumbs'
 import useResponsive from '../../js/hooks/useResponsive'
 
-/* eslint-disable-next-line */
-const CragRow = ({ id, area_name: _name, totalClimbs, metadata, aggregate, pathTokens}: Partial<AreaType>): JSX.Element => {
-  const name = sanitizeName(_name)
+const CragRow = ({ areaName, totalClimbs, metadata, aggregate, pathTokens }: Partial<AreaType>): JSX.Element => {
+  const name = sanitizeName(areaName)
+  const { areaId } = metadata
   const { isMobile } = useResponsive()
 
   return (
-    // eslint-disable-next-line
-    <Link href={`crag/${id}`}>
+    <Link href={`crag/${areaId as string}`}>
       <a>
         <div
           className='border-b border-b-slate-500 py-6' onMouseOver={() => {

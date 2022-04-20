@@ -67,8 +67,8 @@ export const cragFiltersStore = createStore('filters')({
    */
   geojsonify: () => {
     const points = get.crags().map((crag: AreaType) => {
-      const { id, area_name: name, metadata } = crag
-      return point([metadata.lng, metadata.lat], { id, name: sanitizeName(name), lng: metadata.lng, lat: metadata.lat }, { id: id })
+      const { id, areaName, metadata } = crag
+      return point([metadata.lng, metadata.lat], { id, name: sanitizeName(areaName), lng: metadata.lng, lat: metadata.lat }, { id: id })
     })
     return featureCollection(points)
   },
@@ -176,7 +176,7 @@ export const cragFiltersStore = createStore('filters')({
   }))
   .extendSelectors((_, get) => ({
     areaById: (searchId: string): AreaType | undefined => {
-      return get.crags().find(({ id }) => id === searchId)
+      return get.crags().find(({ metadata }) => metadata.areaID === searchId)
     }
   }))
   .extendActions((set, get, api) => ({

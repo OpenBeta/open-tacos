@@ -23,8 +23,8 @@ export const ClimbSearchByName = ({ isMobile = true, placeholder = 'Try \'Levita
         const navigate: ({ itemUrl: string }) => Promise<boolean> = async ({ itemUrl }) => await router.push(itemUrl)
         const itemUrl: ({ item }: { item: any }) => string = ({ item }) => {
           const { hits } = item
-          const climbId: string = hits[0].document.climbId
-          return hits.length > 0 ? '/climbs/' + climbId : ''
+          const climbUUID: string = hits[0].document.climbUUID
+          return hits.length > 0 ? '/climbs/' + climbUUID : ''
         }
         return debounced([
           {
