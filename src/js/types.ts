@@ -8,6 +8,7 @@ export interface AreaMetadataType {
   left_right_index: number
   mp_id: string
   area_id: string
+  areaId: string
 }
 
 export enum SafetyType {
@@ -23,7 +24,7 @@ export interface ClimbMetadataType {
   lng: number
   left_right_index: string
   mp_id: string
-  climb_id: string
+  climbId: string
 }
 
 export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' | 'mixed' | 'aid'
@@ -86,7 +87,7 @@ export interface AggregateType {
 }
 export interface AreaType {
   id: string
-  area_name: string
+  areaName: string
   pathTokens: string[]
   metadata: AreaMetadataType
   ancestors: string[]
@@ -122,7 +123,7 @@ export interface AlgoliaResultType {
 export type ClimbAlgoliaType = Climb & AlgoliaResultType
 
 export interface TypesenseDocumentType {
-  climbId: string
+  climbUUID: string
   climbDesc: string
   climbName: string
   disciplines: string[]

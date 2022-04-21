@@ -56,7 +56,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   let query = gql`query UsaAreas( $filter: Filter) {
     areas(filter: $filter, sort: { totalClimbs: -1 }) {
       id
-      area_name
+      areaName
       pathTokens
       totalClimbs
       density
@@ -87,7 +87,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       }
       metadata {
         lat
-        lng        
+        lng
+        areaId
       }
     }
   }`

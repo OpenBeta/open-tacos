@@ -44,8 +44,8 @@ const ClimbTypesHeader = ({ typeKeys }: {typeKeys: string[]}): JSX.Element =>
  *
  */
 const ClimbTemplate = (props: ClimbTemplateType): JSX.Element => {
-  const { climbName, climbId, fa, disciplines, grade, safety, router, areaNames } = props
-  const url = `/climbs/${climbId}`
+  const { climbName, climbUUID, fa, disciplines, grade, safety, router, areaNames } = props
+  const url = `/climbs/${climbUUID}`
   return (
     <div className='py-2' onClick={async () => await router.push(url)}>
       <RouteCard

@@ -8,13 +8,15 @@ import { AreaType } from '../../js/types'
 import DTable from '../ui/DTable'
 import { actions } from '../../js/stores'
 
-/* eslint-disable-next-line */
-function CragHighlightPopover({ id, area_name: _name, aggregate}: AreaType): JSX.Element {
-  const name = sanitizeName(_name)
+function CragHighlightPopover (props: AreaType | undefined): JSX.Element {
+  if (props === undefined) return null
+  const { areaName, aggregate, metadata } = props
+  const name = sanitizeName(areaName)
+  const { areaId } = metadata
   return (
     <Popover>
       <Popover.Panel static>
-        <Link href={`crag/${id}`}>
+        <Link href={`crag/${areaId}`}>
           <a>
             <div
               className='p-2 rounded-md bg-white border-2 border-slate-800 drop-shadow-xl'
