@@ -54,7 +54,7 @@ const CRAGS_NEAR = gql`query CragsNear($placeId: String, $lng: Float, $lat: Floa
         metadata {
           lat
           lng
-          areaID
+          areaId
         }
         aggregate {
           byDiscipline {
