@@ -22,6 +22,7 @@ const YDSFilter = ({ isMobile = true }: YDSFilterProps): JSX.Element => {
   const displayRange = cragFiltersStore.get.displayFreeRange()
   return (
     <FilterPopover
+      mobileLabel='YDS'
       label={`${displayRange[0]} - ${displayRange[1]}`}
       shortHeader='Grade range'
       header='Select a grade range'
