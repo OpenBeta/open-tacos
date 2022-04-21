@@ -23,6 +23,7 @@ const BoulderRangeFilter = ({ isMobile = true }: BoulderRangeFilterProps): JSX.E
   const displayRange = cragFiltersStore.get.displayBoulderRange()
   return (
     <FilterPopover
+      mobileLabel='V Grade'
       label={`${displayRange[0]} - ${displayRange[1]}`}
       shortHeader='Grade range'
       header='Select a grade range'

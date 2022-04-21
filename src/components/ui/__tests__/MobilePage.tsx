@@ -20,6 +20,7 @@ test('MobileFilterPopover', () => {
 
   render(
     <MobileFilterPopover
+      mobileLabel='mobile label'
       btnLabel='click me'
       title='my title 1'
       onApply={handleClick}
@@ -37,5 +38,3 @@ test('MobileFilterPopover', () => {
   fireEvent.click(screen.getByText(/Home/i))
   expect(handleClick).toBeCalledTimes(1)
 })
-
-// fireEvent.click(screen.getByText(/click me/i))

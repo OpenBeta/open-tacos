@@ -23,7 +23,8 @@ export default function DisciplineFilter ({ isMobile = true }: DisciplineProps):
 
   return (
     <FilterPopover
-      label='Disciplines'
+      mobileLabel='Types'
+      label='Types'
       shortHeader='Disciplines'
       header='Filter by climbing disciplines'
       onApply={applyFn}
