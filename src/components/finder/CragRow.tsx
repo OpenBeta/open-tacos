@@ -12,7 +12,7 @@ const CragRow = ({ areaName, totalClimbs, metadata, aggregate, pathTokens }: Par
   const name = sanitizeName(areaName)
   const { areaId } = metadata
   const { isMobile } = useResponsive()
-  
+
   return (
     <Link href={`crag/${areaId as string}`}>
       <a>
