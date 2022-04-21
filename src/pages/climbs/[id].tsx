@@ -21,7 +21,8 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
   if (router.isFallback) {
     return <div>Loading...</div>
   }
-  const { name, fa, yds, type, content, safety, id, ancestors, pathTokens } = climb
+  const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
+  const { climbId } = metadata
   return (
     <Layout contentContainerClass='content-default with-standard-y-margin'>
       <SeoTags
@@ -39,11 +40,11 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
           className='pt-4 markdown'
         >
           <h2 className='h2'>Description</h2>
-          <InlineEditor id={`climb-desc-${id}`} markdown={content.description} readOnly />
+          <InlineEditor id={`climb-desc-${climbId}`} markdown={content.description} readOnly />
           <h2>Location</h2>
-          <InlineEditor id={`climb-loc-${id}`} markdown={content.location} readOnly />
+          <InlineEditor id={`climb-loc-${climbId}`} markdown={content.location} readOnly />
           <h2>Protection</h2>
-          <InlineEditor id={`climb-pro-${id}`} markdown={content.protection} readOnly />
+          <InlineEditor id={`climb-pro-${climbId}`} markdown={content.protection} readOnly />
         </div>
       </div>
     </Layout>
@@ -89,8 +90,8 @@ export async function getStaticPaths (): Promise<any> {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const query = gql`query ClimbByUUID($id: ID) {
-    climb(id: $id) {
+  const query = gql`query ClimbByUUID($uuid: ID) {
+    climb(uuid: $uuid) {
       id
       name
       fa
@@ -112,13 +113,16 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       }
       pathTokens
       ancestors
+      metadata {
+        climbId
+      }
     }
   }`
 
   const rs = await graphqlClient.query<Climb>({
     query,
     variables: {
-      id: params.id
+      uuid: params.id
     }
   })
 

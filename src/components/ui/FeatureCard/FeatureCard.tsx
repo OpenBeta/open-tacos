@@ -19,7 +19,7 @@ const RESULT_LIMIT = 10
 const LICENSES = 'CC0,BY,BY-NC-SA,BY-SA,BY-NC-ND'
 
 function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
-  const { id, area_name: areaName, pathTokens, aggregate, metadata, totalClimbs } = area
+  const { areaName, pathTokens, aggregate, metadata, totalClimbs } = area
   const [image, setImage] = React.useState<OpenverseImage>(DEFAULT_IMAGE)
 
   const mainQuery = ['rock', 'climbing', ...areaName.split(' ')]
@@ -75,23 +75,25 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
     <div
       className='card rounded-lg cursor-pointer hover:bg-ob-secondary hover:bg-opacity-50 border'
     >
-      <Link href={getSlug(id, metadata.leaf)} passHref>
-        <div className='m-5'>
-          {image !== DEFAULT_IMAGE && <FeatureImage image={image} />}
-          {image === DEFAULT_IMAGE && <DefaultImage />}
+      <Link href={getSlug(metadata.areaId, metadata.leaf)} passHref>
+        <a>
+          <div className='m-5'>
+            {image !== DEFAULT_IMAGE && <FeatureImage image={image} />}
+            {image === DEFAULT_IMAGE && <DefaultImage />}
 
-          <h3
-            className='font-medium whitespace-normal font-sans my-2 text-base truncate'
-          >
-            <div className='text-lg'>{sanitizeName(areaName)}</div>
-            <div>{totalClimbs} Climbs</div>
-            <div className='text-xs flex flex-row space-x-2'>{formatClimbingTypes(aggregate)}</div>
-            <div className='text-secondary text-sm'>{pathTokens.join(' / ')}</div>
-            {attribution !== '' && <div className='text-xs text-tertiary'>Image By: {attribution}</div>}
-          </h3>
+            <h3
+              className='font-medium whitespace-normal font-sans my-2 text-base truncate'
+            >
+              <div className='text-lg'>{sanitizeName(areaName)}</div>
+              <div>{totalClimbs} Climbs</div>
+              <div className='text-xs flex flex-row space-x-2'>{formatClimbingTypes(aggregate)}</div>
+              <div className='text-secondary text-sm'>{pathTokens.join(' / ')}</div>
+              {attribution !== '' && <div className='text-xs text-tertiary'>Image By: {attribution}</div>}
+            </h3>
 
-          <div className='mt-4 flex justify-between items-center' />
-        </div>
+            <div className='mt-4 flex justify-between items-center' />
+          </div>
+        </a>
       </Link>
     </div>
   )

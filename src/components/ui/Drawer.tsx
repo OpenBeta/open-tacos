@@ -10,8 +10,8 @@ interface DrawerProps {
 
 const Drawer = ({ areas, className = '' }: DrawerProps): JSX.Element => {
   const areaElem = areas.map(a => (
-    <div key={a.metadata.area_id} className='pb-4'>
-      {a.area_name}
+    <div key={a.metadata.areaId} className='pb-4'>
+      {a.areaName}
       <div className='text-sm text-gray-600'>{a.totalClimbs} climbs</div>
       {/* <TypeBar /> */}
       <GradeGraph
