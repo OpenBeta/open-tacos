@@ -8,16 +8,17 @@ interface FilterPopoverProps {
   onApply?: Function
   minMax?: JSX.Element
   isMobile?: boolean
+  mobileLabel?: JSX.Element | string
 }
 /**
  * Base popover component for crag finder filter bar
  * @param FilterPopoverProps
  * @returns
  */
-export default function FilterPopover ({ label, header, shortHeader, children, onApply, minMax, isMobile = true }: FilterPopoverProps): JSX.Element {
+export default function FilterPopover ({ label, mobileLabel, header, shortHeader, children, onApply, minMax, isMobile = true }: FilterPopoverProps): JSX.Element {
   if (isMobile) {
     return (
-      <MobileFilterPopover btnLabel={label} title={shortHeader} onApply={onApply}>
+      <MobileFilterPopover mobileLabel={mobileLabel} btnLabel={label} title={shortHeader} onApply={onApply}>
         <MobileFilterPopover.ContentPanel>
           {minMax}
           {children}
