@@ -53,8 +53,10 @@ describe('DTable', () => {
     render(<DTable byDisciplineAgg={byDisciplineAggBoulder} />)
 
     const boulderingRow = screen.getByRole('row', { name: /boulder/i })
+    const sportRow = screen.getByRole('row', { name: /sport/i })
 
     expect(boulderingRow.childNodes.length).toEqual(5)
+    expect(sportRow.childNodes.length).toEqual(5)
 
     expect(boulderingRow.childNodes[0]).toHaveTextContent('boulder')
     expect(boulderingRow.childNodes[1]).toHaveTextContent('2') // Beginner
@@ -62,8 +64,8 @@ describe('DTable', () => {
     expect(boulderingRow.childNodes[3]).toHaveTextContent('1') // Advanced
     expect(boulderingRow.childNodes[4]).toHaveTextContent('0')
 
-    const sportRow = screen.queryByRole('row', { name: /trad/i })
-    expect(sportRow).toBeNull()
+    expect(screen.queryByRole('row', { name: /trad/i })).toBeNull()
+    expect(screen.queryByRole('row', { name: /tr/i })).toBeNull()
   })
 
   test('DTable highlights my disciplines', () => {
