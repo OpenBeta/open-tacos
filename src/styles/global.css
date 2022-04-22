@@ -265,16 +265,34 @@ input:checked + label {
 */
 
 .aa-Autocomplete {
-  @apply z-50 w-full !important;
+  @apply z-50 max-h-7 lg:max-h-full w-full border border-black rounded-lg overflow-hidden !important;
 }
 
 .aa-Form {
-  @apply ring-0 rounded-full bg-white !important;
+  @apply ring-0 bg-white border-black overflow-hidden  !important;
 }
 
 .aa-SubmitButton {
-  @apply rounded-full bg-custom-primary !important;
+  @apply bg-custom-primary !important;
 }
+.aa-DetachedSearchButton {
+  @apply max-h-7 lg:max-h-full text-sm rounded-lg bg-neutral-100 border-0 !important;
+}
+
+.aa-DetachedSearchButtonIcon {
+  @apply bg-neutral-100 !important;
+}
+
+.aa-DetachedSearchButtonIcon .aa-SubmitIcon {
+  @apply h-4 w-4 text-ob-primary -ml-4 -mt-0.5 !important;
+}
+
+.aa-DetachedSearchButtonPlaceholder {
+  @apply text-xs;
+}
+
+
+
 .aa-SubmitIcon {
   @apply text-white !important;
 }

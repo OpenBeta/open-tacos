@@ -26,7 +26,7 @@ export const Autocomplete = (props): JSX.Element => {
       defaultActiveItemId: 0,
       container: containerRef.current,
       renderer: { createElement, Fragment },
-      detachedMediaQuery: 'none',
+      detachedMediaQuery: (props.isMobile as boolean) ? '' : 'none',
       render ({ children }, root) {
         render(children, root)
       },
@@ -38,8 +38,10 @@ export const Autocomplete = (props): JSX.Element => {
     }
   }, [props])
 
-  const isMobile: boolean = props.isMobile
+  // const isMobile: boolean = props.isMobile
   return (
-    <div className={classNames('max-w-lg z-50 mx-auto', isMobile ? 'scale-75' : '')} ref={containerRef} />
+    <div className={classNames('max-w-lg z-50 mx-auto')} ref={containerRef} />
   )
 }
+
+//  isMobile ? 'scale-75' : ''
