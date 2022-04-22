@@ -44,6 +44,7 @@ const mockedStore = jest.requireMock('../../../js/stores/index')
 let DTable
 
 beforeAll(async () => {
+  // why async import?  see https://github.com/facebook/jest/issues/10025#issuecomment-716789840
   const module = await import('../DTable')
   DTable = module.default
 })
