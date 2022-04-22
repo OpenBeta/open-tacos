@@ -64,7 +64,7 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
 
 export const FakeSearchBox = ({ placeholder = 'Start your search', onClick, expanded = false }: {placeholder?: string, onClick: any, expanded: boolean}): JSX.Element => {
   return (
-    <div onClick={onClick} className='pointer-events-auto cursor-pointer border border-gray-200 shadow-lg shadow-inner rounded-full flex flex-row justify-between items-center gap-x-4 py-1 bg-white'>
+    <div onClick={onClick} className='pointer-events-auto cursor-pointer border border-gray-200 shadow-lg shadow-inner rounded-lg flex flex-row justify-between items-center gap-x-4 py-1 bg-white'>
       <div className='pl-4 pr-8 text-sm'>{placeholder}</div>
       <div className='rounded-full bg-custom-primary p-2 mr-1'>
         <SearchIcon className='stroke-white' />
