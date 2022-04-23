@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 
 import BaseMap from './BaseMap'
 import CragHighlightPopover from '../finder/CragHighlightPopover'
@@ -13,11 +13,7 @@ import useAutoSizing from '../../js/hooks/finder/useMapAutoSizing'
  * Make a map of crag markers.
  */
 export default function CragsMap (): JSX.Element {
-  const crags = store.filters.crags()
-
-  const geojson = useMemo(
-    () => store.filters.geojsonify()
-    , [crags])
+  const geojson = store.filters.allGeoJson()
 
   const [viewstate, height, setViewState] = useAutoSizing({ geojson })
 
@@ -63,7 +59,7 @@ export default function CragsMap (): JSX.Element {
           onClick={onClickHandler}
           onHover={onHoverHandler}
         >
-          <HeatmapLayer />
+          <HeatmapLayer geojson={geojson} />
           <MarkerLayer geojson={geojson} />
           <InteractiveMarker
             lnglat={hoverMarker}

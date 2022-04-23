@@ -16,8 +16,8 @@ const layerStyle: LayerProps = {
     'icon-image': [
       'case',
       ['boolean', ['get', 'isInMyRange'], false],
-      'circle',
-      'dot-11'
+      'circle', // more important - larger marker
+      'dot-11' // small marker
     ],
     'text-size': ['interpolate', ['linear'], ['zoom'], 8, 12, 14, 14],
     'icon-allow-overlap': false
@@ -53,7 +53,6 @@ const closeupLayerStyle: LayerProps = {
     'text-halo-width': 2,
     'text-color': '#a3a3a3',
     'text-halo-color': '#334455'
-    // 'text-opacity':
   }
 }
 
@@ -77,4 +76,6 @@ export default function MarkerLayer ({ geojson }: MarkerLayerProps): JSX.Element
   )
 }
 
+// Important! Pass these IDs to Mapbox GL so that onClick/onHover receives
+// the active Geojson object
 export const InteractiveLayerIDs = [layerStyle.id, closeupLayerStyle.id]

@@ -87,6 +87,7 @@ export interface AggregateType {
 }
 export interface AreaType {
   id: string
+  uuid: string
   areaName: string
   pathTokens: string[]
   metadata: AreaMetadataType

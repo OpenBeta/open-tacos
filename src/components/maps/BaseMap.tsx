@@ -53,7 +53,9 @@ export default function BaseMap ({
       mapboxAccessToken='pk.eyJ1IjoibWFwcGFuZGFzIiwiYSI6ImNqcDdzbW12aTBvOHAzcW82MGg0ZTRrd3MifQ.MYiNJHklgMkRzapAKuTQNg'
       onMouseMove={onHover}
       onClick={onClick}
-      interactiveLayerIds={InteractiveLayerIDs} // Important! onClick/hover won't work properly without layer id
+      // Important! if you want MapGL to pass custom layer data to onClick/onHover,
+      // you need to provide the layer id to MapGL via interactiveLayerIds
+      interactiveLayerIds={InteractiveLayerIDs}
       onMove={onViewStateChange}
       interactive
     >

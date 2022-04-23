@@ -1,14 +1,13 @@
 import { Source, Layer, LayerProps } from 'react-map-gl'
-
-import { cragFiltersStore } from '../../js/stores'
+import { Properties, FeatureCollection } from '@turf/helpers'
 
 export const LayerId = 'heatmap'
 
 const layerStyle: LayerProps = {
-  id: 'earthquakes-heat',
+  id: 'all-areas-heat',
   type: 'heatmap',
-  source: 'earthquakes',
-  maxzoom: 14,
+  source: 'all-areas',
+  maxzoom: 15,
   paint: {
     // Increase the heatmap weight based on frequency and property magnitude
     'heatmap-weight': [
@@ -66,19 +65,21 @@ const layerStyle: LayerProps = {
       'interpolate',
       ['linear'],
       ['zoom'],
-      12,
-      0.35,
+      8,
+      0.45,
       16,
       1
     ]
   }
 }
 
+interface MarkerLayerProps {
+  geojson: FeatureCollection<GeoJSON.Geometry, Properties>
+}
 /**
  * Build a heatmap layer using native Mapbox GL style.
  */
-export default function HeatmapLayer (): JSX.Element {
-  const geojson = cragFiltersStore.get.geojsonify(false)
+export default function HeatmapLayer ({ geojson }: MarkerLayerProps): JSX.Element {
   return (
     <Source
       id='heatmap'
