@@ -18,7 +18,8 @@ interface DTableProps {
  */
 const DTable = ({ byDisciplineAgg }: DTableProps): JSX.Element => {
   const { trad, sport, boulder, tr } = cragFiltersStore.get
-  const [myLowBand, myHighBand] = cragFiltersStore.get.freeBandRange()
+  const [myLowFreeBand, myHighFreeBand] = cragFiltersStore.get.freeBandRange()
+  const [myLowBoulderBand, myHighBoulderBand] = cragFiltersStore.get.boulderBandRange()
   return (
     <table
       className='table-fixed text-sm rounded border-separate'
@@ -39,6 +40,16 @@ const DTable = ({ byDisciplineAgg }: DTableProps): JSX.Element => {
             if (byDisciplineAgg[d] === null) {
               return null
             }
+            let myLowBand: number
+            let myHighBand: number
+
+            if (['trad', 'sport', 'tr'].includes(d)) {
+              myLowBand = myLowFreeBand
+              myHighBand = myHighFreeBand
+            } else {
+              myLowBand = myLowBoulderBand
+              myHighBand = myHighBoulderBand
+            }
 
             return (
               <Row
@@ -46,7 +57,7 @@ const DTable = ({ byDisciplineAgg }: DTableProps): JSX.Element => {
                 rowHeader={d}
                 total={byDisciplineAgg?.[d]?.total}
                 {...byDisciplineAgg[d]?.bands}
-                myFreeRange={[myLowBand, myHighBand]}
+                myRange={[myLowBand, myHighBand]}
                 highlighted={shouldHighlight(d, trad(), sport(), boulder(), tr())}
               />
             )
@@ -66,18 +77,18 @@ interface RowProps {
   advance: number
   expert: number
   total: number
-  myFreeRange: number[]
+  myRange: number[]
   highlighted: boolean
 }
 
-const Row = ({ rowHeader, beginner, intermediate, advance, expert, total, myFreeRange, highlighted }: RowProps): JSX.Element => {
+const Row = ({ rowHeader, beginner, intermediate, advance, expert, total, myRange, highlighted }: RowProps): JSX.Element => {
   return (
     <tr className='text-tertiary text-xs my-2'>
       <th scope='row' className='py-0.5 pr-2 text-right'>{rowHeader}</th>
-      <td className={`${highlighted ? 'dtable-highlight' : ''} ${highlighted && isInMyRange(0, myFreeRange) ? 'dtable-my-range' : ''}`}>{beginner}</td>
-      <td className={`${highlighted ? 'dtable-highlight' : ''} ${highlighted && isInMyRange(1, myFreeRange) ? 'dtable-my-range' : ''}`}>{intermediate}</td>
-      <td className={`${highlighted ? 'dtable-highlight' : ''} ${highlighted && isInMyRange(2, myFreeRange) ? 'dtable-my-range' : ''}`}>{advance}</td>
-      <td className={`${highlighted ? 'dtable-highlight' : ''} ${highlighted && isInMyRange(3, myFreeRange) ? 'dtable-my-range' : ''}`}>{expert}</td>
+      <td className={`${highlighted ? 'dtable-highlight' : ''} ${highlighted && isInMyRange(0, myRange) ? 'dtable-my-range' : ''}`}>{beginner}</td>
+      <td className={`${highlighted ? 'dtable-highlight' : ''} ${highlighted && isInMyRange(1, myRange) ? 'dtable-my-range' : ''}`}>{intermediate}</td>
+      <td className={`${highlighted ? 'dtable-highlight' : ''} ${highlighted && isInMyRange(2, myRange) ? 'dtable-my-range' : ''}`}>{advance}</td>
+      <td className={`${highlighted ? 'dtable-highlight' : ''} ${highlighted && isInMyRange(3, myRange) ? 'dtable-my-range' : ''}`}>{expert}</td>
     </tr>
   )
 }
@@ -95,8 +106,8 @@ const shouldHighlight = (key: string, trad: boolean, sport: boolean, bouldering:
   return false
 }
 
-const isInMyRange = (thisIndex: number, myFreeRange: number[]): boolean => {
-  if (thisIndex >= myFreeRange[0] && thisIndex <= myFreeRange[1]) {
+const isInMyRange = (thisIndex: number, myRange: number[]): boolean => {
+  if (thisIndex >= myRange[0] && thisIndex <= myRange[1]) {
     return true
   }
   return false
