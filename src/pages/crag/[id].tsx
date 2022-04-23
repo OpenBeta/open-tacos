@@ -164,6 +164,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = gql`query AreaByID($uuid: ID) {
     area(uuid: $uuid) {
       id
+      uuid
       areaName
       metadata {
         areaId
