@@ -7,7 +7,7 @@ export interface CounterPieProps {
 
 const CounterPie = ({ total, forYou }: CounterPieProps): JSX.Element => {
   const data = [
-    { name: 'total', value: total },
+    { name: 'total', value: total - forYou },
     { name: 'forYou', value: forYou }
   ]
   return (
