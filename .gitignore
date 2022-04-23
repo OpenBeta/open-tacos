@@ -77,3 +77,5 @@ content
 .env.local
 *.pem
 .vscode/launch.json
+
+.lighthouseci

@@ -1,0 +1,22 @@
+name: CI
+on: [pull_request]
+jobs:
+  lhci:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - uses: bahmutov/npm-install@v1
+      - name: npm install
+        run: npm install -g @lhci/cli@0.8.x
+      - name: npm build
+        run: npm run build
+      - name: run Lighthouse CI
+        run: lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
