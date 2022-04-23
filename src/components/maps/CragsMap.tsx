@@ -4,6 +4,7 @@ import BaseMap from './BaseMap'
 import CragHighlightPopover from '../finder/CragHighlightPopover'
 import { store, actions } from '../../js/stores'
 import MarkerLayer from './MarkerLayer'
+import HeatmapLayer from './HeatmapLayer'
 import InteractiveMarker
   from './InteractiveMarker'
 import useAutoSizing from '../../js/hooks/finder/useMapAutoSizing'
@@ -62,6 +63,7 @@ export default function CragsMap (): JSX.Element {
           onClick={onClickHandler}
           onHover={onHoverHandler}
         >
+          <HeatmapLayer />
           <MarkerLayer geojson={geojson} />
           <InteractiveMarker
             lnglat={hoverMarker}

@@ -18,7 +18,8 @@ export const ITEMS_PER_PAGE = 20
 export const cragFiltersStore = createStore('filters')({
   placeId: '',
   searchText: '',
-  crags: [],
+  crags: [], // crags with filters applied
+  allCrags: [], // all crags without filtering
   total: 0,
   lnglat: undefined,
   isLoading: false,
@@ -62,18 +63,6 @@ export const cragFiltersStore = createStore('filters')({
   //   }
   // }
 }).extendSelectors((_, get) => ({
-  /**
-   * Convert crags to Geojson.FeatureCollection
-   */
-  geojsonify: () => {
-    const points = get.crags().map((crag: AreaType) => {
-      const { areaName, metadata } = crag
-      const { areaId } = metadata
-      return point([metadata.lng, metadata.lat], { id: areaId, name: sanitizeName(areaName), lng: metadata.lng, lat: metadata.lat }, { id: areaId })
-    })
-    return featureCollection(points)
-  },
-
   displayFreeRange: () => {
     const [min, max] = get.freeRange()
     return ([
@@ -262,7 +251,27 @@ export const cragFiltersStore = createStore('filters')({
   }))
   .extendSelectors((_, get) => ({
     areaById: (searchId: string): AreaType | undefined => {
-      return get.crags().find(({ metadata }: {metadata: AreaMetadataType}) => metadata.areaId === searchId)
+      return get.allCrags().find(({ metadata }: {metadata: AreaMetadataType}) => metadata.areaId === searchId)
+    },
+    /**
+   * Convert crags to Geojson.FeatureCollection
+   */
+    geojsonify: (filtered: boolean = true) => {
+    // const data = filtered ? get.crags() : get.allCrags()
+      const points = get.allCrags().map((crag: AreaType) => {
+        const { areaName, metadata, totalClimbs } = crag
+        const { areaId } = metadata
+        const props = {
+          id: areaId,
+          name: sanitizeName(areaName),
+          lng: metadata.lng,
+          lat: metadata.lat,
+          totalClimbs,
+          isInMyRange: get.inMyRange(crag)
+        }
+        return point([metadata.lng, metadata.lat], props, { id: areaId })
+      })
+      return featureCollection(points)
     }
   }))
   .extendActions((set, get, api) => ({
@@ -311,6 +320,7 @@ export const cragFiltersStore = createStore('filters')({
       const newCragsState = data.filter(crag => get.inMyRange(crag))
       set.isLoading(false)
       set.deactivateActiveMarker()
+      set.allCrags(data)
       set.crags(newCragsState)
       set.total(newCragsState.length)
       set.updatePagination(true)
