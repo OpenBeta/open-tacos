@@ -14,7 +14,7 @@ export const graphqlClient = new ApolloClient({
           keyFields: ['placeId', '_id']
         },
         Area: {
-          keyFields: ['id']
+          keyFields: ['uuid']
         },
         AreaMetadata: {
           keyFields: ['areaId']

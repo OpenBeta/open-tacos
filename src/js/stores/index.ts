@@ -1,13 +1,12 @@
 import { mapValuesKey, createStore } from '@udecode/zustood'
 import produce from 'immer'
-import { point, featureCollection } from '@turf/helpers'
+import { featureCollection, Feature, Point } from '@turf/helpers'
 
-import { RadiusRange, CountByGradeBandType, AreaType, AreaMetadataType, ClimbDisciplineRecord, AggregateType } from '../types'
-import { getCragDetailsNear } from '../graphql/api'
-import { calculatePagination, NextPaginationProps } from './util'
+import { RadiusRange, CountByGradeBandType, AreaType, ClimbDisciplineRecord, AggregateType } from '../types'
+import { getCragDetailsNear, getAreaByUUID } from '../graphql/api'
+import { calculatePagination, NextPaginationProps, geojsonifyCrag } from './util'
 import { BOULDER_DEFS, YDS_DEFS } from '../grades/rangeDefs'
 import { vScoreToBandIndex, freeScoreToBandIndex, BAND_BY_INDEX } from '../grades/bandUtil'
-import { sanitizeName } from '../utils'
 
 /**
  * App main data store
@@ -18,7 +17,8 @@ export const ITEMS_PER_PAGE = 20
 export const cragFiltersStore = createStore('filters')({
   placeId: '',
   searchText: '',
-  crags: [],
+  crags: [], // crags with filters applied
+  allGeoJson: undefined, // all crags in Geojson without filtering
   total: 0,
   lnglat: undefined,
   isLoading: false,
@@ -62,18 +62,6 @@ export const cragFiltersStore = createStore('filters')({
   //   }
   // }
 }).extendSelectors((_, get) => ({
-  /**
-   * Convert crags to Geojson.FeatureCollection
-   */
-  geojsonify: () => {
-    const points = get.crags().map((crag: AreaType) => {
-      const { areaName, metadata } = crag
-      const { areaId } = metadata
-      return point([metadata.lng, metadata.lat], { id: areaId, name: sanitizeName(areaName), lng: metadata.lng, lat: metadata.lat }, { id: areaId })
-    })
-    return featureCollection(points)
-  },
-
   displayFreeRange: () => {
     const [min, max] = get.freeRange()
     return ([
@@ -261,9 +249,10 @@ export const cragFiltersStore = createStore('filters')({
     }
   }))
   .extendSelectors((_, get) => ({
-    areaById: (searchId: string): AreaType | undefined => {
-      return get.crags().find(({ metadata }: {metadata: AreaMetadataType}) => metadata.areaId === searchId)
+    areaById: (searchId: string): AreaType | null => {
+      return getAreaByUUID(searchId)
     }
+
   }))
   .extendActions((set, get, api) => ({
     updatePagination: (shouldResetToPage0: boolean = false) => {
@@ -308,11 +297,25 @@ export const cragFiltersStore = createStore('filters')({
       set.isLoading(true)
       const { data } = await getCragDetailsNear(
         placeId(), lnglat(), radius().rangeMeters, true)
-      const newCragsState = data.filter(crag => get.inMyRange(crag))
+
+      const allCragsGeoJson: Array<Feature<Point>> = []
+
+      // Use Array.reduce() to apply filter
+      const filteredCrags = data.reduce((acc, currentCrag) => {
+        const isMyCrag = get.inMyRange(currentCrag)
+        if (isMyCrag) {
+          acc.push(currentCrag)
+        }
+        // we want to store all crags in geojson for heatmaps
+        allCragsGeoJson.push(geojsonifyCrag(currentCrag, isMyCrag))
+        return acc
+      }, [])
+
       set.isLoading(false)
       set.deactivateActiveMarker()
-      set.crags(newCragsState)
-      set.total(newCragsState.length)
+      set.allGeoJson(featureCollection(allCragsGeoJson))
+      set.crags(filteredCrags)
+      set.total(filteredCrags.length)
       set.updatePagination(true)
     }
   }))

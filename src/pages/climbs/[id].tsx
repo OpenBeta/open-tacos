@@ -93,6 +93,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = gql`query ClimbByUUID($uuid: ID) {
     climb(uuid: $uuid) {
       id
+      uuid
       name
       fa
       yds
