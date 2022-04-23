@@ -2,27 +2,28 @@ import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 
-const byDisciplineAggBoulder = {
+const byDisciplineAggBoulderSport = {
   sport:
     {
       total: 10,
       bands: {
-        beginner: 6,
+        beginner: 4,
         intermediate: 6,
         expert: 0,
         advance: 0
       }
     },
   trad: null,
-  boulder: {
-    total: 3,
-    bands: {
-      beginner: 2,
-      intermediate: 0,
-      expert: 0,
-      advance: 1
-    }
-  },
+  boulder:
+    {
+      total: 3,
+      bands: {
+        beginner: 2,
+        intermediate: 0,
+        expert: 0,
+        advance: 1
+      }
+    },
   tr: null
 }
 
@@ -50,8 +51,8 @@ beforeAll(async () => {
 })
 
 describe('DTable', () => {
-  test('DTable renders without crashing', () => {
-    render(<DTable byDisciplineAgg={byDisciplineAggBoulder} />)
+  test('Dtable has correct climb counts for Bouldering and Sport disciplines', () => {
+    render(<DTable byDisciplineAgg={byDisciplineAggBoulderSport} />)
 
     const boulderingRow = screen.getByRole('row', { name: /boulder/i })
     const sportRow = screen.getByRole('row', { name: /sport/i })
@@ -69,14 +70,30 @@ describe('DTable', () => {
     expect(screen.queryByRole('row', { name: /tr/i })).toBeNull()
   })
 
-  test('DTable highlights my disciplines', () => {
+  test('DTable highlights my disciplines and updates when user unchecks a discipline', () => {
     (mockedStore.cragFiltersStore.get.boulder as jest.Mock).mockReturnValue(false) // user unchecks 'bouldering'
-    render(<DTable byDisciplineAgg={byDisciplineAggBoulder} />)
+    render(<DTable byDisciplineAgg={byDisciplineAggBoulderSport} />)
 
     const boulderingRow = screen.getByRole('row', { name: /boulder/i })
     expect(boulderingRow.childNodes[1]).not.toHaveClass('dtable-highlight')
 
     const sportRow = screen.getByRole('row', { name: /sport/i })
     expect(sportRow.childNodes[1]).toHaveClass('dtable-highlight')
+  })
+
+  test('DTable highlights my disciplines and updates when user unchecks and rechecks a discipline', () => {
+    (mockedStore.cragFiltersStore.get.boulder as jest.Mock).mockReturnValue(false) // user unchecks 'bouldering'
+    const { rerender } = render(<DTable byDisciplineAgg={byDisciplineAggBoulderSport} />)
+
+    const boulderingRow = screen.getByRole('row', { name: /boulder/i })
+    expect(boulderingRow.childNodes[1]).not.toHaveClass('dtable-highlight')
+    console.log(boulderingRow.childNodes[1])
+
+    const sportRow = screen.getByRole('row', { name: /sport/i })
+    expect(sportRow.childNodes[1]).toHaveClass('dtable-highlight');
+
+    (mockedStore.cragFiltersStore.get.boulder as jest.Mock).mockReturnValue(true) // user rechecks 'bouldering'
+    rerender(<DTable byDisciplineAgg={byDisciplineAggBoulderSport} />)
+    expect(boulderingRow.childNodes[1]).toHaveClass('dtable-highlight')
   })
 })
