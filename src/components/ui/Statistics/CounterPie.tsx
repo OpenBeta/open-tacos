@@ -21,7 +21,7 @@ const CounterPie = ({ total, forYou }: CounterPieProps): JSX.Element => {
           outerRadius='80%'
           startAngle={90}
           endAngle={450}
-          fill='#62cae3'
+          fill='#8BB191B3'
           dataKey='value'
           paddingAngle={5}
           isAnimationActive={false}
