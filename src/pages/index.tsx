@@ -1,22 +1,23 @@
-import type { NextPage } from 'next'
+import type { NextPage, GetStaticProps } from 'next'
 import Head from 'next/head'
+import { gql } from '@apollo/client'
+
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
 import { StatsPanelProps } from '../components/ui/StatsPanel'
-
-import { gql } from '@apollo/client'
 import { graphqlClient } from '../js/graphql/Client'
-import { GetStaticProps } from 'next'
 import { IndexResponseType } from '../js/types'
 import FeatureCard from '../components/ui/FeatureCard'
 import HomeHero from '../components/HomeHero'
 import CTAEmailSignup from '../components/CTAEmailSignup'
+import useCanary from '../js/hooks/useCanary'
 
 interface HomePageType {
   exploreData: IndexResponseType
   stats: StatsPanelProps
 }
 const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
+  useCanary()
   const { areas } = exploreData
   return (
     <>

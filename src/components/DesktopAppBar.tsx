@@ -1,7 +1,11 @@
 import Image from 'next/image'
+
 import DesktopNavBar from './ui/DesktopNavBar'
 import ClimbSearch from './search/ClimbSearch'
+import XSearch from './search/XSearch'
 import DesktopFilterBar from './finder/filters/DesktopFilterBar'
+import useCanary from '../js/hooks/useCanary'
+
 interface DesktopAppBarProps {
   expanded: boolean
   onExpandSearchBox: Function
@@ -9,6 +13,7 @@ interface DesktopAppBarProps {
 }
 
 export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }: DesktopAppBarProps): JSX.Element {
+  const canary = useCanary()
   return (
     <header className='sticky top-0 z-10'>
       <DesktopNavBar
@@ -20,11 +25,13 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }:
           </a>
       }
         search={
-          <ClimbSearch
-            expanded={expanded}
-            onClick={onExpandSearchBox}
-            onClickOutside={onClose}
-          />
+          canary
+            ? <XSearch isMobile={false} />
+            : <ClimbSearch
+                expanded={expanded}
+                onClick={onExpandSearchBox}
+                onClickOutside={onClose}
+              />
       }
         navList={navList}
       />
