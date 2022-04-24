@@ -87,7 +87,6 @@ describe('DTable', () => {
 
     const boulderingRow = screen.getByRole('row', { name: /boulder/i })
     expect(boulderingRow.childNodes[1]).not.toHaveClass('dtable-highlight')
-    console.log(boulderingRow.childNodes[1])
 
     const sportRow = screen.getByRole('row', { name: /sport/i })
     expect(sportRow.childNodes[1]).toHaveClass('dtable-highlight');
