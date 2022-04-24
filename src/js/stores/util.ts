@@ -1,4 +1,7 @@
+import { point, Feature, Point } from '@turf/helpers'
+
 import { AreaType } from '../types'
+import { sanitizeName } from '../utils'
 
 interface CalculatePaginationProps {
   itemOffset: number
@@ -25,4 +28,18 @@ export const calculatePagination = (
     itemOffset,
     currentPage
   }
+}
+
+export const geojsonifyCrag = (crag, isInMyRange): Feature<Point> => {
+  const { areaName, metadata, totalClimbs } = crag
+  const { areaId } = metadata
+  const props = {
+    id: areaId,
+    name: sanitizeName(areaName),
+    lng: metadata.lng,
+    lat: metadata.lat,
+    totalClimbs,
+    isInMyRange
+  }
+  return point([metadata.lng, metadata.lat], props, { id: areaId })
 }

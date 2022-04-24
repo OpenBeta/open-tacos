@@ -9,7 +9,7 @@ import DTable from '../ui/DTable'
 import { actions } from '../../js/stores'
 
 function CragHighlightPopover (props: AreaType | undefined): JSX.Element {
-  if (props === undefined) return null
+  if (props == null) return null
   const { areaName, aggregate, metadata } = props
   const name = sanitizeName(areaName)
   const { areaId } = metadata

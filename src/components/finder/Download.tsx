@@ -14,6 +14,6 @@ export default function DownloadLink (): JSX.Element {
 }
 
 const saveFile = (): void => {
-  const blob = new Blob([JSON.stringify(store.filters.geojsonify())], { type: 'text/plain;charset=utf-8' })
+  const blob = new Blob([JSON.stringify(store.filters.allGeoJson())], { type: 'text/plain;charset=utf-8' })
   saveAs(blob, 'climbing-data.geojson')
 }

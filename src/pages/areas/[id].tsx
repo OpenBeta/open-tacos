@@ -114,6 +114,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = gql`query getAreaById($uuid: ID) {
     area(uuid: $uuid) {
       id
+      uuid
       areaName
       ancestors
       pathTokens
@@ -129,6 +130,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       } 
       children {
         id
+        uuid
         areaName
         totalClimbs
         metadata {

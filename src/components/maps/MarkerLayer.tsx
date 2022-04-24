@@ -1,12 +1,11 @@
 import { Properties, FeatureCollection } from '@turf/helpers'
 import { Source, Layer, LayerProps } from 'react-map-gl'
 
-export const LayerId = 'area-labels'
-
 const layerStyle: LayerProps = {
-  id: LayerId,
+  id: 'my-areas',
   type: 'symbol',
   source: 'areas',
+  filter: ['==', 'isInMyRange', true],
   layout: {
     'icon-size': ['interpolate', ['linear'], ['zoom'], 8, 1.25, 12, 1],
     'symbol-spacing': 5,
@@ -14,14 +13,45 @@ const layerStyle: LayerProps = {
     'text-variable-anchor': ['bottom', 'left', 'right'],
     'text-radial-offset': 1,
     'text-justify': 'auto',
-    'icon-image': 'circle',
-    'text-size': ['interpolate', ['linear'], ['zoom'], 8, 14, 14, 12],
-    'icon-allow-overlap': true
+    'icon-image': [
+      'case',
+      ['boolean', ['get', 'isInMyRange'], false],
+      'circle', // more important - larger marker
+      'dot-11' // small marker
+    ],
+    'text-size': ['interpolate', ['linear'], ['zoom'], 8, 12, 14, 14],
+    'icon-allow-overlap': false
   },
   paint: {
     'text-halo-blur': 4,
-    'text-halo-width': 2,
+    'text-halo-width': 1,
     'text-color': '#ffffff',
+    'text-halo-color': '#262626'
+  }
+}
+
+const closeupLayerStyle: LayerProps = {
+  id: 'all-markers',
+  type: 'symbol',
+  source: 'areas',
+  minzoom: 14,
+  filter: ['==', 'isInMyRange', false],
+  layout: {
+    'icon-size': ['interpolate', ['linear'], ['zoom'], 8, 0.75, 12, 1],
+    'symbol-spacing': 10,
+    'text-field': ['get', 'name'],
+    'text-variable-anchor': ['bottom', 'left', 'right'],
+    'text-radial-offset': 1,
+    'text-justify': 'auto',
+    'icon-image': 'dot-11',
+    'text-size': ['interpolate', ['linear'], ['zoom'], 8, 12, 14, 10],
+    'icon-allow-overlap': false
+  },
+  paint: {
+    'icon-color': '#ffffff',
+    'text-halo-blur': 4,
+    'text-halo-width': 2,
+    'text-color': '#a3a3a3',
     'text-halo-color': '#334455'
   }
 }
@@ -40,7 +70,12 @@ export default function MarkerLayer ({ geojson }: MarkerLayerProps): JSX.Element
       type='geojson'
       data={geojson}
     >
+      <Layer id='closeup-markers' {...closeupLayerStyle} />
       <Layer id='crag-markers' {...layerStyle} />
     </Source>
   )
 }
+
+// Important! Pass these IDs to Mapbox GL so that onClick/onHover receives
+// the active Geojson object
+export const InteractiveLayerIDs = [layerStyle.id, closeupLayerStyle.id]
