@@ -1,6 +1,7 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render } from '@testing-library/react'
+import renderer from 'react-test-renderer'
 import CounterPie from '../Statistics/CounterPie'
 
 const total = 18
@@ -25,4 +26,11 @@ test('that there are 2 parts to the pie chart', async () => {
   const { container } = render(<CounterPie total={total} forYou={forYou} />)
   const sectors = container.getElementsByClassName('recharts-pie-sector')
   expect(sectors.length).toBe(2)
+})
+
+it('renders correctly', () => {
+  const tree = renderer
+    .create(<CounterPie total={total} forYou={forYou} />)
+    .toJSON()
+  expect(tree).toMatchSnapshot()
 })
