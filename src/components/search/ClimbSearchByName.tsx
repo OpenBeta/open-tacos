@@ -11,6 +11,7 @@ export const ClimbSearchByName = ({ isMobile = true, placeholder = 'Try \'Levita
   return (
 
     <Autocomplete
+      isMobile={isMobile}
       placeholder={placeholder}
       classNames={{ item: 'name-search-item', panel: 'name-search-panel' }}
       getSources={({ query }) => {
