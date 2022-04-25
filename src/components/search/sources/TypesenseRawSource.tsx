@@ -1,12 +1,12 @@
 import { AutocompleteSource } from '@algolia/autocomplete-js'
 
-import { multiSearch } from '../../js/typesense/TypesenseClient'
+import { multiSearch } from '../../../js/typesense/TypesenseClient'
 
 /**
- * Call Typesense search API and return a Source object.
- * Since the search result contains complex data coming from multiple search indices,
- * we don't render the result directly in this component, but rather 'reshape',
- * destructure it into 'Climb source', 'Area source', etc.
+ * Call Typesense search API and wrap the result in Algolia.Source object
+ * which contains matching climbs, areas, fa.  To map the data to UI components,
+ *  we use Algolia.reshape() to destructure the combined Source to 'Climb source',
+ * 'Area source', 'FA source', etc.
  * See also https://www.algolia.com/doc/ui-libraries/autocomplete/core-concepts/sources/
  * @param query search string
  */

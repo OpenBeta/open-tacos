@@ -67,6 +67,7 @@ export const multiSearch = async (query: string): Promise<any> => {
   }
 
   const rs = await typesenseClient.multiSearch.perform(searchRequests, commonSearchParams)
+  // FYI: rs.results contains a lot more useful data
   return {
     climbs: rs.results[0].hits,
     areas: rs.results[1].hits,

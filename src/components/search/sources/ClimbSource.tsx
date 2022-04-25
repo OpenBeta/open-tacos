@@ -1,12 +1,12 @@
 import { AutocompleteReshapeSource } from '@algolia/autocomplete-core'
 import { AutocompleteSource } from '@algolia/autocomplete-js'
 
-import { MiniCrumbs } from '../ui/BreadCrumbs'
+import { MiniCrumbs } from '../../ui/BreadCrumbs'
 
 export function reshapeClimbSource (items, sourceObject: AutocompleteReshapeSource<any>): AutocompleteSource<any> | undefined {
   return {
-    sourceId: 'climbs',
     ...sourceObject,
+    sourceId: 'climbs',
     getItems: () => items,
     getItemInputValue: ({ item }) => item.name,
     getItemUrl: ({ item }) => item.climbUUID,

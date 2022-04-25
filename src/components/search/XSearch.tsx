@@ -1,5 +1,7 @@
+import { render } from 'react-dom'
+
 import { Autocomplete } from './Autocomplete'
-import { searchTypesense } from './TypesenseRawSource'
+import { searchTypesense, searchPoi } from './sources'
 import { reshapeResults } from './Reshape'
 interface XSearchProps {
   isMobile?: boolean
@@ -17,10 +19,20 @@ export default function XSearch ({ isMobile = true, placeholder = 'Climb search'
       isMobile={isMobile}
       placeholder={placeholder}
       getSources={({ query }) => {
-        return [searchTypesense(query)]
+        return [searchTypesense(query), searchPoi(query)]
       }}
       reshape={reshapeResults}
       classNames={CUSTOM_CLASSES}
+      render={({ elements }, root) => {
+        const { climbs, areas, fa, poi } = elements
+        render(
+          <div className='flex'>
+            <div>{climbs}</div>
+            <div>{areas}</div>
+            <div>{fa}</div>
+            <div>{poi}</div>
+          </div>, root)
+      }}
     />
   )
 }
