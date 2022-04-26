@@ -10,9 +10,14 @@ export default function useCanary (): boolean {
   }
   const router = useRouter()
   const isNext = router.query.next // url contains ?next=true
-  if (typeof isNext === 'string' && Boolean(isNext)) {
-    sessionStorage.setItem('canary', 'true')
-    return true
+  if (typeof isNext === 'string') {
+    if (isNext === 'true') {
+      sessionStorage.setItem('canary', 'true')
+      return true
+    } else {
+      sessionStorage.setItem('canary', 'false')
+      return false
+    }
   }
   return Boolean(sessionStorage.getItem('canary'))
 }

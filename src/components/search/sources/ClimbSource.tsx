@@ -19,7 +19,6 @@ export function reshapeClimbSource (items, sourceObject: AutocompleteReshapeSour
 }
 
 const ClimbItem = (props): JSX.Element => {
-  console.log(props)
   const { climbName, areaNames } = props.item.document
   return (<div className='my-4 text-xs'><MiniCrumbs pathTokens={areaNames} /><div>{climbName}</div></div>)
 }

@@ -19,7 +19,6 @@ export function reshapeAreaSource (items, sourceObject: AutocompleteReshapeSourc
 }
 
 const ItemRenderer = (props): JSX.Element => {
-  console.log(props)
   const { areaNames } = props.item.document
   return (<div className='my-4 text-xs'><MiniCrumbs pathTokens={areaNames} /></div>)
 }

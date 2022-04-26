@@ -32,7 +32,7 @@ export const typesenseSearch = async (query: string): Promise<any> => {
  * Search multiple collections in one request
  * @param query
  */
-export const multiSearch = async (query: string): Promise<any> => {
+export async function multiSearch (query: string): Promise<any> {
   // See https://typesense.org/docs/0.19.0/api/documents.html#federated-multi-search
   const commonSearchParams = {
 

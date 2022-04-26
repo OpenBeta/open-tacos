@@ -15,7 +15,7 @@ interface XSearchProps {
 export default function XSearch ({ isMobile = true, placeholder = 'Climb search' }: XSearchProps): JSX.Element {
   return (
     <Autocomplete
-      id='combined-search'
+      id='xsearch'
       isMobile={isMobile}
       placeholder={placeholder}
       getSources={({ query }) => {
