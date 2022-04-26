@@ -13,6 +13,11 @@ const typesenseClient = new Typesense.Client({
   logLevel: 'info'
 })
 
+/**
+ * Search climbs by name, description, fa, area name
+ * @param query search string
+ * @returns result group by discipline
+ */
 export const typesenseSearch = async (query: string): Promise<any> => {
   return await typesenseClient.collections('climbs').documents().search({
     q: query,
@@ -23,14 +28,49 @@ export const typesenseSearch = async (query: string): Promise<any> => {
   })
 }
 
-export const getStatsNear = async (latlng: [number, number]): Promise<any> => {
-  return await typesenseClient.collections('climbs').documents().search({
-    q: '*',
-    query_by: 'climbName',
-    exclude_fields: 'climbDesc',
-    filter_by: `cragLatLng:(${latlng[1]},${latlng[0]},20 mi)`,
-    group_by: 'disciplines'
-    // group_limit: 1
-    // sort_by: `cragLatLng(${latlng[1]},${latlng[0]}):asc`
-  })
+/**
+ * Search multiple collections in one request
+ * @param query
+ */
+export async function multiSearch (query: string): Promise<any> {
+  // See https://typesense.org/docs/0.19.0/api/documents.html#federated-multi-search
+  const commonSearchParams = {
+
+  }
+  const searchRequests = {
+    searches: [
+      {
+        q: query,
+        query_by: 'climbName, climbDesc',
+        collection: 'climbs',
+        exclude_fields: 'climbDesc',
+        page: 1,
+        per_page: 10
+      },
+      {
+        q: query,
+        query_by: 'areaNames',
+        collection: 'climbs',
+        exclude_fields: 'climbDesc',
+        page: 1,
+        per_page: 10
+      },
+      {
+        q: query,
+        query_by: 'fa',
+        collection: 'climbs',
+        exclude_fields: 'climbDesc',
+        page: 1,
+        per_page: 10
+      }
+    ]
+  }
+
+  const rs = await typesenseClient.multiSearch.perform(searchRequests, commonSearchParams)
+  // FYI: rs.results contains a lot more useful data
+  return {
+    climbs: rs.results[0].hits,
+    areas: rs.results[1].hits,
+    fa: rs.results[2].hits
+  }
 }

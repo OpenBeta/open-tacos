@@ -316,6 +316,22 @@ input:checked + label {
   @apply p-0 !important;
 }
 
+/* XSearch */
+.xsearch-form {
+  @apply w-32  md:w-96 lg:max-w-xl w-full !important;
+}
+
+.xsearch-panel {
+  /* Result panel - Tablet and desktop only. We need a mobile specific width and layout */
+  transform: translate(-50%, 0);
+  @apply drop-shadow-lg left-[50%] absolute max-w-screen-lg	w-full mx-auto !important;
+}
+
+.xsearch-sourceHeader {
+  @apply bg-blue-200;
+}
+
+/* End of XSearch */
 
 .fading-hidden {
   visibility: hidden;

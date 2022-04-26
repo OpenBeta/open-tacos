@@ -29,8 +29,10 @@ test('that there are 2 parts to the pie chart', async () => {
 })
 
 it('renders correctly', () => {
+  jest.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(96)
+  jest.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(96)
   const tree = renderer
-    .create(<CounterPie total={total} forYou={forYou} />)
+    .create(<div style={{ width: '100px', height: '100px' }}><CounterPie total={total} forYou={forYou} /></div>)
     .toJSON()
   expect(tree).toMatchSnapshot()
 })

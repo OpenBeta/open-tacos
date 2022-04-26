@@ -12,7 +12,7 @@ import useResponsive from '../../js/hooks/useResponsive'
 
 NProgress.configure({ showSpinner: false, easing: 'ease-in-out', speed: 1000 })
 
-const DataContainer = (): JSX.Element => {
+export default function DataContainer (): JSX.Element {
   const cragFiltersStore = useCragFinder(useRouter())
   const { total, searchText, isLoading } = cragFiltersStore.useStore()
 
@@ -50,9 +50,7 @@ const DataContainer = (): JSX.Element => {
   )
 }
 
-export default DataContainer
-
-const Preface = ({ isLoading, total, searchText }: {isLoading: boolean, total: number, searchText: string}): JSX.Element => {
+export const Preface = ({ isLoading, total, searchText }: {isLoading: boolean, total: number, searchText: string}): JSX.Element => {
   return (
     <section className='mt-6 px-2 py-3 text-sm border border-b-2 border-slate-600 rounded-md flex items-center justify-between'>
       <div>
