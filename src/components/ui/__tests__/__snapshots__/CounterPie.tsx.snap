@@ -2,15 +2,24 @@
 
 exports[`renders correctly 1`] = `
 <div
-  className="recharts-responsive-container"
   style={
     Object {
-      "height": "100%",
-      "maxHeight": undefined,
-      "minHeight": undefined,
-      "minWidth": undefined,
-      "width": "100%",
+      "height": "100px",
+      "width": "100px",
     }
   }
-/>
+>
+  <div
+    className="recharts-responsive-container"
+    style={
+      Object {
+        "height": "100%",
+        "maxHeight": undefined,
+        "minHeight": undefined,
+        "minWidth": undefined,
+        "width": "100%",
+      }
+    }
+  />
+</div>
 `;

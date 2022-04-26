@@ -1,15 +1,19 @@
-import React, { createElement, Fragment, useEffect, useRef } from 'react'
-import { render } from 'react-dom'
-import { autocomplete } from '@algolia/autocomplete-js'
+import React, { createElement, Fragment, useEffect, useRef, ReactElement } from 'react'
+import { render as reactRender } from 'react-dom'
+import { autocomplete, AutocompleteOptions } from '@algolia/autocomplete-js'
 import '@algolia/autocomplete-theme-classic'
+
 import classNames from 'classnames'
 
+interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
+  isMobile: boolean
+}
 /**
  * Autocomplete widget based on Algolia Autocomplete
  * @param props
  * @returns
  */
-export const Autocomplete = (props): JSX.Element => {
+export const Autocomplete = (props: AutocompleteProps): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     setTimeout(() => {
@@ -26,9 +30,9 @@ export const Autocomplete = (props): JSX.Element => {
       defaultActiveItemId: 0,
       container: containerRef.current,
       renderer: { createElement, Fragment },
-      detachedMediaQuery: (props.isMobile as boolean) ? '' : 'none',
+      detachedMediaQuery: (props.isMobile) ? '' : 'none',
       render ({ children }, root) {
-        render(children, root)
+        reactRender(children as ReactElement, root)
       },
       ...props
     })
@@ -38,10 +42,7 @@ export const Autocomplete = (props): JSX.Element => {
     }
   }, [props])
 
-  // const isMobile: boolean = props.isMobile
   return (
     <div className={classNames('max-w-lg z-50 mx-auto')} ref={containerRef} />
   )
 }
-
-//  isMobile ? 'scale-75' : ''
