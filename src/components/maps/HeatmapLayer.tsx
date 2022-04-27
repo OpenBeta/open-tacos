@@ -80,6 +80,7 @@ interface MarkerLayerProps {
  * Build a heatmap layer using native Mapbox GL style.
  */
 export default function HeatmapLayer ({ geojson }: MarkerLayerProps): JSX.Element {
+  if (geojson == null) return null
   return (
     <Source
       id='heatmap'

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Map, MapLayerMouseEvent, ViewStateChangeEvent, ViewState } from 'react-map-gl'
-import { InteractiveLayerIDs } from './MarkerLayer'
 
 export const DEFAULT_INITIAL_VIEWSTATE = {
   width: 300,
@@ -32,8 +31,13 @@ interface BaseMapProps {
   light: boolean
   onClick?: (event: MapLayerMouseEvent) => void
   onHover?: (event: MapLayerMouseEvent) => void
+  interactiveLayerIds: string[]
 }
 
+/**
+ * Important! if you want MapGL to pass custom layer data to onClick/onHover,
+ * you need to provide the layer id to MapGL via interactiveLayerIds
+ */
 export default function BaseMap ({
   viewstate,
   initialViewState,
@@ -41,7 +45,8 @@ export default function BaseMap ({
   children,
   light,
   onClick = (): void => {},
-  onHover = (): void => {}
+  onHover = (): void => {},
+  interactiveLayerIds
 }: BaseMapProps): JSX.Element {
   return (
     <Map
@@ -53,9 +58,7 @@ export default function BaseMap ({
       mapboxAccessToken='pk.eyJ1IjoibWFwcGFuZGFzIiwiYSI6ImNqcDdzbW12aTBvOHAzcW82MGg0ZTRrd3MifQ.MYiNJHklgMkRzapAKuTQNg'
       onMouseMove={onHover}
       onClick={onClick}
-      // Important! if you want MapGL to pass custom layer data to onClick/onHover,
-      // you need to provide the layer id to MapGL via interactiveLayerIds
-      interactiveLayerIds={InteractiveLayerIDs}
+      interactiveLayerIds={interactiveLayerIds}
       onMove={onViewStateChange}
       interactive
     >
