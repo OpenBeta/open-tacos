@@ -20,7 +20,7 @@ export default function useAutoSizing ({ geojson }): any {
   useEffect(() => {
     updateDimensions()
     window.addEventListener('resize', updateDimensions)
-    if (geojson !== undefined && geojson.features.length > 0) {
+    if (geojson != null && geojson.features.length > 0) {
       // Calculate new viewState based on crag search result
       const bbox = bboxFromGeoJson(geojson)
       const vs = bbox2Viewport(bbox, width, height)
