@@ -26,7 +26,7 @@ function LicenseIcons ({ image }: { image: OpenverseImage }): JSX.Element {
       onClick={() => {
         window.open(image.license_url, '_blank')
         return false
-      }} className='flex flex-row-reverse m-2'
+      }} className='absolute right-0 bottom-0 block flex flex-row-reverse m-2'
     >
       {getIcon(image.license)}
     </div>
