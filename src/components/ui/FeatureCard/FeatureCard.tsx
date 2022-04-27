@@ -103,7 +103,7 @@ export default FeatureCard
 
 const findImages = async (query: string[]): Promise<OpenverseImage[]> => {
   const queryString = query.join('+')
-  const source = 'wordpress,wikimedia,smithsonian_libraries,flickr'
+  const source = 'wikimedia,flickr'
   const url = `https://api.openverse.engineering/v1/images/?source=${source}&license=${LICENSES}&page_size=${RESULT_LIMIT}&page=1&q=${queryString}`
 
   try {
