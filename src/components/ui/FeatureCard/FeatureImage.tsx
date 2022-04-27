@@ -25,7 +25,7 @@ export function FeatureImage ({ image }: { image: OpenverseImage }): JSX.Element
           objectFit='cover'
           objectPosition='center'
           layout='fill'
-          priority
+          priority={false}
         />
       </div>
       <LicenseIcons image={image} />

@@ -119,9 +119,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }`
   const rsStats = await graphqlClient.query<StatsPanelProps>({ query })
-
   // Pass post data to the page via props
   return { props: { exploreData: rs.data, ...rsStats.data } }
 }
-
 export default Home
