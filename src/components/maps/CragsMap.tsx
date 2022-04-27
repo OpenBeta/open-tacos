@@ -3,7 +3,7 @@ import React, { useState, useCallback } from 'react'
 import BaseMap from './BaseMap'
 import CragHighlightPopover from '../finder/CragHighlightPopover'
 import { store, actions } from '../../js/stores'
-import MarkerLayer from './MarkerLayer'
+import MarkerLayer, { InteractiveLayerIDs as markerLayerIds } from './MarkerLayer'
 import HeatmapLayer from './HeatmapLayer'
 import InteractiveMarker
   from './InteractiveMarker'
@@ -46,7 +46,7 @@ export default function CragsMap (): JSX.Element {
         style={{ height }}
       >
         <div className='absolute left-1 top-1 z-50'>
-          {areaId !== null &&
+          {areaId != null &&
             <CragHighlightPopover
               {...store.filters.areaById(areaId)}
             />}
@@ -58,6 +58,7 @@ export default function CragsMap (): JSX.Element {
           light={false}
           onClick={onClickHandler}
           onHover={onHoverHandler}
+          interactiveLayerIds={geojson == null ? [] : markerLayerIds}
         >
           <HeatmapLayer geojson={geojson} />
           <MarkerLayer geojson={geojson} />

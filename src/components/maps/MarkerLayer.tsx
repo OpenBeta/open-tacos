@@ -64,6 +64,7 @@ interface MarkerLayerProps {
  * Build a layer of crag markers using native Mapbox GL style.
  */
 export default function MarkerLayer ({ geojson }: MarkerLayerProps): JSX.Element {
+  if (geojson == null) return null
   return (
     <Source
       id='areas'
