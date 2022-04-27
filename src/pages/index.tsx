@@ -9,7 +9,7 @@ import { graphqlClient } from '../js/graphql/Client'
 import { IndexResponseType } from '../js/types'
 import FeatureCard from '../components/ui/FeatureCard'
 import HomeHero from '../components/HomeHero'
-import CTAEmailSignup from '../components/CTAEmailSignup'
+// import CTAEmailSignup from '../components/CTAEmailSignup'
 import useCanary from '../js/hooks/useCanary'
 
 interface HomePageType {
@@ -45,7 +45,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
         <section>
           <h2 className='mt-16 mb-4 text-3xl h-padding-wide'>Follow our progress</h2>
           <div className='horizontal-center pb-8'>
-            <CTAEmailSignup />
+            {/* <CTAEmailSignup /> */}
           </div>
         </section>
       </Layout>
