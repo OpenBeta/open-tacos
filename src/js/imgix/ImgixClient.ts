@@ -26,7 +26,6 @@ export const listPhotos = async (
       const response = await axiosClient.get(
       `/sources/${IMGIX_CONFIG.sourceId}/assets?${safeQuery}`,
       { headers: { Authorization: `Bearer ${IMGIX_CONFIG.apiToken}` } })
-      console.log('# Image api', response)
       return response.status === 200
         ? flatten(response?.data)
         : []

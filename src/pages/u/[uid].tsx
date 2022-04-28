@@ -46,7 +46,6 @@ export async function getStaticPaths (): Promise<any> {
 }
 export const getStaticProps: GetStaticProps<UserHomeProps> = async ({ params }) => {
   const { uid } = params
-  console.log('#getStaticProps()', params)
   const imageList = await listPhotos({ uid: uid as string })
   const data = {
     uid: uid as string,
