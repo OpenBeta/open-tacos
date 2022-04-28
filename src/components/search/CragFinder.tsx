@@ -25,7 +25,7 @@ export default function CragFinder ({ isMobile = true, placeholder = 'Try \'Smit
       classNames={{ item: 'crag-finder-item', panelLayout: 'crag-finder-panelLayout' }}
       placeholder={placeholder}
       getSources={({ query }) => {
-        if ((query as string).length < 3) {
+        if ((query).length < 3) {
           return []
         }
         const features: () => Promise<Array<Feature<Geometry, { [name: string]: object }>>> = async () => await geocoderLookup(query, SEARCH_OPTIONS)

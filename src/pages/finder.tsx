@@ -13,7 +13,7 @@ import { Preface } from '../components/finder/Preface'
 
 NProgress.configure({ showSpinner: false, easing: 'ease-in-out', speed: 1000 })
 
-export default function Finder2 (): JSX.Element {
+export default function Finder (): JSX.Element {
   const { isTablet, isMobile } = useResponsive()
   const cragFiltersStore = useCragFinder(useRouter())
   const { total, searchText, isLoading } = cragFiltersStore.useStore()
