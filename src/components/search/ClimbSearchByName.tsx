@@ -15,7 +15,7 @@ export const ClimbSearchByName = ({ isMobile = true, placeholder = 'Try \'Levita
       placeholder={placeholder}
       classNames={{ item: 'name-search-item', panel: 'name-search-panel' }}
       getSources={({ query }) => {
-        if ((query as string).length < 3) {
+        if ((query).length < 3) {
           return []
         }
         const search: () => Promise<Array<Feature<Geometry, { [name: string]: object }>>> = async () => await typesenseSearch(query)

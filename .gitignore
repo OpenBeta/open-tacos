@@ -73,8 +73,8 @@ yarn-error.log
 opentacos-content
 content
 
-# Env files
-.env.local
+# Env files  - do not check in .env.local!!!
+.env.local 
 *.pem
 .vscode/launch.json
 
