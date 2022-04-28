@@ -1,3 +1,5 @@
+// Replace imagekit TS definition in node_modules
+// due to https://github.com/imagekit-developer/imagekit-nodejs/issues/39
 import { ImageKitOptions } from './ImageKitOptions';
 import { Transformation, TransformationPosition } from './Transformation';
 import { UploadOptions } from './UploadOptions';

@@ -36,8 +36,6 @@
     "formik": "^2.2.9",
     "front-matter": "^4.0.2",
     "graphql": "^16.2.0",
-    "imagekit": "^3.2.5",
-    "imagekitio-react": "^1.1.0",
     "immer": "^9.0.12",
     "js-yaml": "^4.1.0",
     "mapbox-gl": "^2.7.0",
@@ -49,6 +47,7 @@
     "react-dom": "^18.0.0",
     "react-dropzone": "^11.4.2",
     "react-helmet": "6.1.0",
+    "react-imgix": "^9.5.0",
     "react-map-gl": "^7.0.10",
     "react-paginate": "^8.1.2",
     "react-placeholder": "^4.1.0",
@@ -82,8 +81,7 @@
     "develop": "next dev",
     "start": "next start",
     "test": "jest",
-    "prepare": "husky install",
-    "postinstall": "cp  ./hacks/imagekit-interfaces-index.ts ./node_modules/imagekit/libs/interfaces/index.ts"
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",

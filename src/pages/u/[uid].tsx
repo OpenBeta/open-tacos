@@ -1,15 +1,14 @@
 import { NextPage, GetStaticProps } from 'next'
 import Head from 'next/head'
-import type { ListFileResponse } from 'imagekit/libs/interfaces'
 
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import ImageTable from '../../components/users/ImageTable'
-import { listFile } from '../../js/imagekit'
+import { listPhotos } from '../../js/imgix/ImgixClient'
 
 interface UserHomeProps {
   uid: string
-  imageList: ListFileResponse[]
+  imageList: any[]
 }
 const UserHomePage: NextPage<UserHomeProps> = ({ uid, imageList }) => {
   return (
@@ -29,6 +28,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, imageList }) => {
         contentContainerClass='content-default with-standard-y-margin'
       >
         <div className='max-w-screen-2xl w-full mx-auto'>
+          {imageList?.length === 0 && <div>Account not found</div>}
           <ImageTable imageList={imageList} />
         </div>
       </Layout>
@@ -46,7 +46,7 @@ export async function getStaticPaths (): Promise<any> {
 }
 export const getStaticProps: GetStaticProps<UserHomeProps> = async ({ params }) => {
   const { uid } = params
-  const imageList = await listFile()
+  const imageList = await listPhotos({ uid: uid as string })
   const data = {
     uid: uid as string,
     imageList

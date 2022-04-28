@@ -1,35 +1,32 @@
-import { IKImage, IKContext } from 'imagekitio-react'
-import type { ListFileResponse } from 'imagekit/libs/interfaces'
-
+import Imgix from 'react-imgix'
+import { IMGIX_CONFIG } from '../../js/imgix/ImgixClient'
 interface ImageTableProps {
-  imageList: ListFileResponse[]
+  imageList: any[]
 }
 export default function ImageTable ({ imageList }: ImageTableProps): JSX.Element {
   if (imageList == null) return null
   return (
     <div className='flex justify-center flex-wrap'>
-      <IKContext
-        urlEndpoint={process.env.NEXT_PUBLIC_IMAGEKIT_URL}
-      >
-        {imageList.map(imageInfo => <UserImage key={imageInfo.fileId} imageInfo={imageInfo} />)}
-      </IKContext>
+      {imageList.map(imageInfo => <UserImage key={imageInfo.fileId} imageInfo={imageInfo} />)}
     </div>
   )
 }
 
 interface UserImageProps {
-  imageInfo: ListFileResponse
+  imageInfo: any
 }
 const UserImage = ({ imageInfo }: UserImageProps): JSX.Element => {
+  const imgUrl = `${IMGIX_CONFIG.sourceURL}${imageInfo.origin_path as string}`
   return (
     <div className='block px-0 py-4 md:p-4'>
-      <IKImage
-        path={imageInfo.filePath}
-        transformation={[{
-          height: '300',
-          width: '300'
-        }]}
-        loading='lazy'
+      <Imgix
+        src={imgUrl}
+        width={300}
+        height={300}
+        imgixParams={{
+          fit: 'crop',
+          ar: '1:1'
+        }}
       />
     </div>
   )
