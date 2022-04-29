@@ -60,3 +60,11 @@ export const CORE_CRAG_FIELDS = gql`
     }
   }
 `
+
+export const TAG_CLIMB = gql`
+  mutation tagPhotoWithClimb($mediaId: ID!, $mediaUrl: String!, $srcUuid: ID!) {
+    setTags(input: {mediaId: $mediaId, mediaUrl: $mediaUrl, mediaType: 0, sources: [{srcUuid: $srcUuid, srcType: 0}]}) {
+      mediaId
+    }
+  }
+`

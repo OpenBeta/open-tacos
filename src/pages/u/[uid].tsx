@@ -1,5 +1,6 @@
 import { NextPage, GetStaticProps } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
@@ -11,6 +12,11 @@ interface UserHomeProps {
   imageList: any[]
 }
 const UserHomePage: NextPage<UserHomeProps> = ({ uid, imageList }) => {
+  const router = useRouter()
+
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
   return (
     <>
       <Head>

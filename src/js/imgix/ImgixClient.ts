@@ -8,7 +8,7 @@ export const IMGIX_CONFIG = {
 
 const axiosClient = axios.create({
   baseURL: process.env.NEXT_IMGIX_MGMT_API,
-  timeout: 2000
+  timeout: 10000
 })
 
 interface ListPhotoProps {
