@@ -132,3 +132,11 @@ function debouncePromise (fn: Function, time: number): any {
 }
 
 export const debounced = debouncePromise(async (items: object[]): Promise<object[]> => await Promise.resolve(items), 300)
+
+export const disciplineArrayToObj = (types: string[]): any => {
+  const z = {}
+  for (const t of types) {
+    z[t] = true
+  }
+  return z
+}

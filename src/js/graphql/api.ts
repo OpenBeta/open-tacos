@@ -77,22 +77,3 @@ export const getAreaByUUID = (uuid: string): AreaType | null => {
   }
   return null
 }
-
-interface TagClimbOnPhotoType {
-  climbUuid
-  imageUuid
-  imageUrl
-}
-export const tagClimbOnPhoto = async ({ climbUuid, imageUuid, imageUrl }: TagClimbOnPhotoType): Promise<void> => {
-  try {
-    const rs = await graphqlClient.mutate({
-
-      variables: {
-      }
-    })
-
-    const { cragsNear } = rs.data
-  } catch (e) {
-    console.log(e)
-  }
-}

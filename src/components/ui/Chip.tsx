@@ -1,8 +1,10 @@
 import React from 'react'
+import classNames from 'classnames'
 import { ClimbDiscipline } from '../../js/types'
 
 interface ChipProps {
   type: ClimbDiscipline
+  size?: string
 }
 
 type ChipCSSType = Record<ClimbDiscipline, string>
@@ -17,15 +19,19 @@ const ChipType: ChipCSSType = {
   mixed: 'border-gray-600'
 }
 
-function Chip ({ type }: ChipProps): JSX.Element {
+export default function Chip ({ type, size }: ChipProps): JSX.Element {
   return (
     <span
       aria-label='climb-discipline'
-      className={`font-extralight font-mono rounded-sm py-1 mr-3 px-2 my-1 text-xs uppercase border-2 ${ChipType[type]}`}
+      className={
+        classNames(
+          'font-extralight rounded-sm uppercase',
+          ChipType[type],
+          size === 'sm' ? 'text-xs border px-1' : 'border-2 text-sm py-0.5 px-2'
+        )
+      }
     >
       {type}
     </span>
   )
 }
-
-export default Chip

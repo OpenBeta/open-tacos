@@ -18,10 +18,10 @@ export const Autocomplete = (props: AutocompleteProps): JSX.Element => {
   useEffect(() => {
     setTimeout(() => {
       const element = document.getElementsByClassName('aa-Input')[0] as HTMLInputElement
-      console.log('#input element', element)
       element?.focus()
-    }, 100)
-  }, [])
+    }, 200)
+  })
+
   useEffect(() => {
     if (containerRef.current == null) {
       return undefined
@@ -29,7 +29,6 @@ export const Autocomplete = (props: AutocompleteProps): JSX.Element => {
 
     const search = autocomplete({
       defaultActiveItemId: 0,
-      // openOnFocus: true,
       container: containerRef.current,
       renderer: { createElement, Fragment },
       detachedMediaQuery: (props.isMobile) ? '' : 'none',

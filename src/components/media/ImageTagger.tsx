@@ -1,49 +1,80 @@
-import { useState, useCallback, memo } from 'react'
-import { Popover } from '@headlessui/react'
+import { useState, useEffect, useCallback, memo } from 'react'
+import { usePopper } from 'react-popper'
+import { useMutation } from '@apollo/client'
 
+import { graphqlClient } from '../../js/graphql/Client'
+import { TAG_CLIMB } from '../../js/graphql/fragments'
 import ClimbSearchForTagging from '../search/ClimbSearchForTagging'
 
-export default function ImageTagger (): JSX.Element {
-  const [mouseXY, setXY] = useState([0, 0])
-  const clickHandler = useCallback((event) => {
-    setXY([event.clientX, event.clientY])
+interface ImageTaggerProps {
+  isOpen: boolean
+  mouseXY: number[]
+  close: () => void
+  imageInfo: any
+  onClick: any
+}
+
+export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close }: ImageTaggerProps): JSX.Element {
+  const [tagPhotoWithClimb] = useMutation(TAG_CLIMB, { client: graphqlClient })
+
+  const [referenceElement, setReferenceElement] = useState(null)
+  const [popperElement, setPopperElement] = useState(null)
+  const { styles, attributes, update } = usePopper(referenceElement, popperElement, {
+    modifiers: [{
+      name: 'arrow',
+      options: {
+        padding: 15 // not working
+      }
+    }],
+    strategy: 'fixed'
+  })
+
+  // Run once
+  useEffect(() => {
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  })
+
+  // Run always
+  useEffect(() => {
+    if (update != null) void update()
+  }, [mouseXY])
+
+  const onKeyDown = useCallback((event) => {
+    if (isOpen && event.key === 'Escape') {
+      console.log('Closing search')
+      close()
+    }
   }, [])
+
+  const boxOffset = 16
+  if (!isOpen) return null
   return (
-    <div
-      className='absolute w-full h-full top-0 left-0'
-    >
-      <Popover className='relative w-full h-full'>
-        {({ open }) => (
-          <>
-            <div
-              className='relative w-full h-full border-blue-200 border-2' onClick={(event) => {
-                clickHandler(event)
-              }}
-            >
-              <Popover.Button className='w-full h-full'>
-                <span>&nbsp;</span>
-              </Popover.Button>
-            </div>
-            <Popover.Overlay className='fixed w-full h-full h-screen w-screen inset-0 bg-black opacity-30' />
-            <M mouseXY={mouseXY} />
-          </>)}
-      </Popover>
+    <div className='fixed top-0 left-0 select-none' onBlur={close}>
+      <div
+        className='relative w-8 h-8 ring-1 ring-neutral-300 rounded border border-white'
+        style={{
+          left: mouseXY[0] - boxOffset,
+          top: mouseXY[1] - boxOffset
+        }} ref={setReferenceElement}
+      />
+      <div
+        tabIndex={0}
+        ref={setPopperElement} style={{ ...styles.popper }} {...attributes.popper}
+      >
+        <ClimbSuggestion
+          isMobile={false} placeholder='Search for climb' onSelect={async (item) => {
+            console.log('onselect', item)
+            const { climbUUID } = item
+            await tagPhotoWithClimb({ variables: { mediaId: imageInfo.origin_path, mediaUrl: imageInfo.origin_path, srcUuid: climbUUID } })
+            close()
+          }}
+        />
+      </div>
     </div>
   )
 }
 
-const PopContainer = ({ mouseXY }): JSX.Element => {
-  console.log(mouseXY)
-  return (
-    <Popover.Panel focus className='z-20 fixed top-0 left-0 w-full'>
-      <div className='absolute' style={{ left: mouseXY[0] - 12, top: mouseXY[1] - 12 }}>
-        <div className='w-8 h-8 border'>&nbsp;</div>
-        <div className='absolute -left-[126px]'>
-          <ClimbSearchForTagging isMobile={false} placeholder='Search for climb' />
-        </div>
-      </div>
-    </Popover.Panel>
-  )
-}
-
-const M = memo(PopContainer)
+const ClimbSuggestion = memo(ClimbSearchForTagging)

@@ -1,34 +1,36 @@
 import { render as reactRender } from 'react-dom'
+import { TypesenseDocumentType } from '../../js/types'
 
 import { Autocomplete } from './Autocomplete'
-import { searchTypesense } from './sources'
-import { reshapeMiniResults } from './Reshape'
+import { TypesenseClimbNameSource } from './sources'
+// import { reshapeMiniResults } from './Reshape'
 
 interface XSearchProps {
   isMobile?: boolean
   placeholder?: string
+  onSelect: (props: TypesenseDocumentType) => void
 }
 
 /**
  * Extended search widget
  * @param XSearchProps
  */
-export default function ClimbSearchForTagging ({ isMobile = true, placeholder = 'Climb search' }: XSearchProps): JSX.Element {
+export default function ClimbSearchForTagging ({ isMobile = true, placeholder = 'Climb search', onSelect }: XSearchProps): JSX.Element {
   return (
     <Autocomplete
+      // openOnFocus
       autoFocus
       id='climb-tag-search'
       isMobile={isMobile}
       placeholder={placeholder}
       getSources={({ query }) => {
-        return [searchTypesense(query)]
+        return [TypesenseClimbNameSource(query, onSelect)]
       }}
-      reshape={reshapeMiniResults}
       classNames={CUSTOM_CLASSES}
       render={({ elements }, root) => {
-        const { climbs } = elements
+        const { climbsForTagging } = elements
         reactRender(
-          <div>{climbs}</div>, root)
+          <div>{climbsForTagging}</div>, root)
       }}
     />
   )

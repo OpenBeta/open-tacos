@@ -7179,6 +7179,14 @@ react-popper@2.2.5, react-popper@^2.2.4:
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
 
+react-popper@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-2.3.0.tgz#17891c620e1320dce318bad9fede46a5f71c70ba"
+  integrity sha512-e1hj8lL3uM+sgSR4Lxzn5h1GxBlpa4CQz0XLF8kx4MDrDRWY0Ena4c97PUeSX9i5W3UAfDP0z0FXCTQkoXUl3Q==
+  dependencies:
+    react-fast-compare "^3.0.1"
+    warning "^4.0.2"
+
 react-resize-detector@^6.6.3:
   version "6.7.7"
   resolved "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-6.7.7.tgz#f0a58948169840b7a3cac3cb34ef824d2bf92a24"

@@ -6,9 +6,18 @@ export function reshapeClimbSource (items, sourceObject: AutocompleteReshapeSour
     ...sourceObject,
     sourceId: 'climbs',
     getItems: () => items,
-    getItemInputValue: ({ item }) => item.name,
-    getItemUrl: ({ item }) => item.climbUUID,
+    onSelect ({ item, setQuery, setIsOpen, refresh }) {
+      console.log('#onSelect', item)
+    },
 
+    onActive ({ item, setQuery, setIsOpen, refresh }) {
+      console.log('#onActive', item)
+    },
+
+    getItemInputValue: ({ item }) => {
+      return item.document.climbName
+    },
+    getItemUrl: ({ item }) => item.climbUUID,
     templates: {
       item: itemTemplate,
       header: itemHeader

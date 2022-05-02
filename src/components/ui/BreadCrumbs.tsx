@@ -69,7 +69,7 @@ export const MiniCrumbs = ({ pathTokens, end = 2, skipLast = false }: MiniBreadC
   return (
     <div
       aria-label='area-minicrumbs'
-      className='pb-2 text-xs text-secondary'
+      className='text-xs text-secondary'
     >{tokens.join(SEPARATOR)}
     </div>
   )

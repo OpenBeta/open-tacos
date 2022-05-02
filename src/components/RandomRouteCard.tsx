@@ -21,7 +21,7 @@ function RandomRouteCard ({ climb }): JSX.Element {
               {sanitizeName(pathTokens[pathTokens.length - 2])}
             </div>
             <div className='my-2'>
-              <RouteGradeChip yds={yds} safety={safety} />
+              <RouteGradeChip grade={yds} safety={safety} />
               <RouteTypeChips type={type} />
             </div>
           </div>

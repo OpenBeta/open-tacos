@@ -334,7 +334,7 @@ input:checked + label {
 
 /* Climb search for tagging */
 .tag-search-form {
-  @apply w-80 h-9 border-neutral-600 rounded-lg !important;
+  @apply w-80 h-9 ring-2 ring-neutral-200 border-neutral-600 rounded-lg !important;
 }
 
 .tag-search-inputWrapper {
@@ -356,11 +356,7 @@ input:checked + label {
 
 .tag-search-panel {
   /* Result panel - Tablet and desktop only. We need a mobile specific width and layout */
-  @apply mt-0 pt-0 rounded-lg border border-neutral-600 drop-shadow-lg absolute max-w-screen-sm !important;
-}
-
-.tag-search-sourceHeader {
-  @apply bg-blue-200;
+  @apply mt-0.5 pt-0 rounded-lg border border-neutral-600 drop-shadow-lg max-w-screen-sm !important;
 }
 
 .tag-search-item {
