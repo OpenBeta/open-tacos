@@ -99,6 +99,16 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "nthh",
+      "name": "Nate Hearnsberger",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22553869?v=4",
+      "profile": "https://github.com/nthh",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
