@@ -23,6 +23,7 @@
     "@openbeta/remark-slate": "^1.8.2",
     "@openbeta/sandbag": "^0.0.11",
     "@turf/bbox": "^6.5.0",
+    "@types/uuid": "^8.3.4",
     "@udecode/plate": "^9.1.2",
     "@udecode/zustood": "^0.4.4",
     "algoliasearch": "^4.11.0",
@@ -64,6 +65,7 @@
     "supercluster": "^7.1.4",
     "typesense": "^1.2.1",
     "unified": "^10.1.0",
+    "uuid": "^8.3.2",
     "yup": "^0.32.9",
     "zustand": "^3.7.1"
   },

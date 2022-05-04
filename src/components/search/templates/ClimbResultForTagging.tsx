@@ -9,13 +9,11 @@ import { disciplineArrayToObj } from '../../../js/utils'
 export function MiniClimbItem ({ item }): JSX.Element {
   const { climbName, areaNames, grade, safety, disciplines } = item
   return (
-    <div className='z-50 pointer-events-auto' onClick={() => console.log('#onClick')}>
-      <a href='/'>Home</a>
+    <div>
       <div
-        className='text-primary text-sm font-semibold' onClick={(event) => {
-          console.log('#onClick')
-        }}
-      >{climbName}
+        className='text-primary text-sm font-semibold'
+      >
+        {climbName}
       </div>
       <div className='inline-flex items-center space-x-0.5'>
         <RouteGradeChip grade={grade} safety={safety} size={RouteGradeChip.Size.sm} />

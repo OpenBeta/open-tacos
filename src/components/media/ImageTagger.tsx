@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, memo } from 'react'
 import { usePopper } from 'react-popper'
 import { useMutation } from '@apollo/client'
+import { v5 as uuidv5 } from 'uuid'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import { TAG_CLIMB } from '../../js/graphql/fragments'
@@ -12,10 +13,17 @@ interface ImageTaggerProps {
   close: () => void
   imageInfo: any
   onClick: any
+  onCompleted: (data: any) => void
 }
 
-export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close }: ImageTaggerProps): JSX.Element {
-  const [tagPhotoWithClimb] = useMutation(TAG_CLIMB, { client: graphqlClient })
+export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close, onCompleted }: ImageTaggerProps): JSX.Element {
+  const [tagPhotoWithClimb] = useMutation(
+    TAG_CLIMB, {
+      client: graphqlClient,
+      errorPolicy: 'none',
+      onCompleted
+    }
+  )
 
   const [referenceElement, setReferenceElement] = useState(null)
   const [popperElement, setPopperElement] = useState(null)
@@ -68,7 +76,18 @@ export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close }: Imag
           isMobile={false} placeholder='Search for climb' onSelect={async (item) => {
             console.log('onselect', item)
             const { climbUUID } = item
-            await tagPhotoWithClimb({ variables: { mediaId: imageInfo.origin_path, mediaUrl: imageInfo.origin_path, srcUuid: climbUUID } })
+            const mediaUuid = uuidv5(imageInfo.origin_path, uuidv5.URL)
+            try {
+              const rs = await tagPhotoWithClimb({
+                variables: {
+                  mediaUuid,
+                  mediaUrl: imageInfo.origin_path,
+                  srcUuid: climbUUID
+                }
+              })
+            } catch (e) {
+              console.log(e)
+            }
             close()
           }}
         />

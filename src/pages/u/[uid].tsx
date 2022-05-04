@@ -13,10 +13,6 @@ interface UserHomeProps {
 }
 const UserHomePage: NextPage<UserHomeProps> = ({ uid, imageList }) => {
   const router = useRouter()
-
-  if (router.isFallback) {
-    return <div>Loading...</div>
-  }
   return (
     <>
       <Head>
@@ -34,8 +30,9 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, imageList }) => {
         contentContainerClass='content-default with-standard-y-margin'
       >
         <div className='max-w-screen-2xl w-full mx-auto'>
+          {router.isFallback && <div>Loading...</div>}
           {imageList?.length === 0 && <div>Account not found</div>}
-          <ImageTable imageList={imageList} />
+          {imageList?.length > 0 && <ImageTable imageList={imageList} />}
         </div>
       </Layout>
     </>
@@ -46,10 +43,11 @@ export default UserHomePage
 
 export async function getStaticPaths (): Promise<any> {
   return {
-    paths: [],
+    paths: [{ params: { uid: 'vietnguyen' } }],
     fallback: true
   }
 }
+
 export const getStaticProps: GetStaticProps<UserHomeProps> = async ({ params }) => {
   const { uid } = params
   const imageList = await listPhotos({ uid: uid as string })
