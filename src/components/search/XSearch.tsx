@@ -21,7 +21,7 @@ export default function XSearch ({ isMobile = true, placeholder = 'Climb search'
       getSources={({ query }) => {
         return [searchTypesense(query), searchPoi(query)]
       }}
-      reshape={reshapeResults}
+      reshape={reshapeResults} // Todo: cleanup/simplify reshapeResults()
       classNames={CUSTOM_CLASSES}
       render={({ elements }, root) => {
         const { climbs, areas, fa, poi } = elements

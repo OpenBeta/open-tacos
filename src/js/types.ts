@@ -153,3 +153,22 @@ export interface MarkerStateType {
   areaId: string
   lnglat: number[]
 }
+
+/// /////////////////////////////////////////////
+// Media tags
+
+export interface MediaBaseTag {
+  mediaUuid: string
+  mediaUrl: string
+  mediaType: number
+  destType: number
+}
+export interface MediaClimbTag extends MediaBaseTag {
+  climb: Climb
+}
+
+export interface MediaAreaTag extends MediaBaseTag {
+  area: AreaType
+}
+
+export type MediaTag = MediaClimbTag | MediaAreaTag

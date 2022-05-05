@@ -74,17 +74,17 @@ export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close, onComp
       >
         <ClimbSuggestion
           isMobile={false} placeholder='Search for climb' onSelect={async (item) => {
-            console.log('onselect', item)
             const { climbUUID } = item
             const mediaUuid = uuidv5(imageInfo.origin_path, uuidv5.URL)
             try {
-              const rs = await tagPhotoWithClimb({
+              await tagPhotoWithClimb({
                 variables: {
                   mediaUuid,
                   mediaUrl: imageInfo.origin_path,
                   srcUuid: climbUUID
                 }
               })
+              // Todo: update Apollo cache
             } catch (e) {
               console.log(e)
             }

@@ -80,6 +80,11 @@ export const TAG_CLIMB = gql`
       }
   }`
 
+export const MUTATION_REMOVE_MEDIA_TAG = gql`
+  mutation removeTag($mediaUuid: ID!, $destinationId: ID!) {
+    removeTag(mediaUuid: $mediaUuid, destinationId: $destinationId) 
+  }`
+
 export const QUERY_TAGS_BY_MEDIA_ID = gql`
   query getTagsByMediaIdList($uuidList: [ID!]) {
     getTagsByMediaIdList(uuidList: $uuidList) {

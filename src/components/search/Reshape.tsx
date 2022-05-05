@@ -19,9 +19,9 @@ export const reshapeResults = ({ sourcesBySourceId }: ReshapeResultsProps): any 
     return []
   }
 
-  const { climbs, areas, fa } = rs[0]
+  const { areas, fa } = rs[0]
   return [
-    //reshapeClimbSource(climbs, typesense),
+    // reshapeClimbSource(climbs, typesense),
     reshapeAreaSource(areas, typesense),
     reshapeFASource(fa, typesense),
     Object.values(rest)
