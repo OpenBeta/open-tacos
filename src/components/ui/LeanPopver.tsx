@@ -30,11 +30,12 @@ const ContentPanel = ({ className, onApply, btnApplyLabel = 'Apply', children })
         <Popover.Button className='text-secondary hover:underline'>
           Cancel
         </Popover.Button>
-        <div onClick={onApply}>
-          <Popover.Button className='text-primary-contrast bg-slate-800 rounded-md px-2 py-0.5'>
-            {btnApplyLabel}
-          </Popover.Button>
-        </div>
+        <Popover.Button
+          className='text-primary-contrast bg-slate-800 rounded-md px-2 py-0.5'
+          onClick={onApply}
+        >
+          {btnApplyLabel}
+        </Popover.Button>
       </footer>
     </div>
   )
