@@ -109,6 +109,15 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "tittaenalg",
+      "name": "tittaenalg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10101026?v=4",
+      "profile": "https://github.com/tittaenalg",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
