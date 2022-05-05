@@ -8,6 +8,7 @@
     "@algolia/autocomplete-theme-classic": "^1.5.1",
     "@apollo/client": "^3.6.2",
     "@auth0/auth0-react": "^1.6.0",
+    "@auth0/nextjs-auth0": "^1.8.0",
     "@babel/plugin-proposal-decorators": "^7.15.8",
     "@babel/runtime": "^7.17.2",
     "@danmarshall/deckgl-typings": "^4.9.15",

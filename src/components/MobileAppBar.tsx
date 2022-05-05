@@ -5,6 +5,7 @@ import { HomeIcon, MenuIcon } from '@heroicons/react/outline'
 import MobileFilterBar from './finder/filters/MobileFilterBar'
 import { Popover } from '@headlessui/react'
 import { Button } from './ui/BaseButton'
+import { useUser } from '@auth0/nextjs-auth0'
 
 export default function MobileAppBar (): JSX.Element {
   return (
@@ -39,6 +40,7 @@ const Branding = (): JSX.Element => {
 }
 
 const More = (): JSX.Element => {
+  const { user } = useUser()
   return (
     <Popover>
       <Popover.Button className='flex center-items'>
@@ -47,6 +49,7 @@ const More = (): JSX.Element => {
 
       <Popover.Panel className='absolute z-20 right-0 mt-2 p-6 bg-white rounded-md'>
         <div className='grid'>
+          {user == null ? <Button href='/api/auth/login' label='Login' /> : <Button href='/api/auth/logout' label='Logout' />}
           <Button href='/about' label='About' />
           <Button
             href='https://discord.gg/2A2F6kUtyh'

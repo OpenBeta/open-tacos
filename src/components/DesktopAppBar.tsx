@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useUser } from '@auth0/nextjs-auth0'
 
 import DesktopNavBar from './ui/DesktopNavBar'
 import ClimbSearch from './search/ClimbSearch'
@@ -14,6 +15,37 @@ interface DesktopAppBarProps {
 
 export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }: DesktopAppBarProps): JSX.Element {
   const canary = useCanary()
+
+  const { user } = useUser()
+
+  const navList = [
+    {
+      route: '/about',
+      title: 'About'
+    },
+    {
+      route: 'https://docs.openbeta.io',
+      title: 'Docs'
+    },
+    {
+      route: 'https://discord.gg/2A2F6kUtyh',
+      title: 'Discord',
+      cta: true
+    }
+  ]
+
+  if (user != null) {
+    navList.unshift({
+      route: '/api/auth/logout',
+      title: 'Logout'
+    })
+  } else {
+    navList.unshift({
+      route: '/api/auth/login',
+      title: 'Login'
+    })
+  }
+
   return (
     <header className='sticky top-0 z-10'>
       <DesktopNavBar
@@ -39,19 +71,3 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }:
     </header>
   )
 }
-
-const navList = [
-  {
-    route: '/about',
-    title: 'About'
-  },
-  {
-    route: 'https://docs.openbeta.io',
-    title: 'Docs'
-  },
-  {
-    route: 'https://discord.gg/2A2F6kUtyh',
-    title: 'Discord',
-    cta: true
-  }
-]
