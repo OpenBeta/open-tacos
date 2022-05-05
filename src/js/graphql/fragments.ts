@@ -71,23 +71,26 @@ export const TAG_CLIMB = gql`
         mediaUuid: $mediaUuid,
         mediaUrl: $mediaUrl,
         mediaType: 0,
-        srcUuid: $srcUuid,
-        srcType: 0
+        destinationId: $srcUuid,
+        destType: 0
       }
     ) {
-        srcUuid
-        srcType
+        mediaUuid
+        destType
       }
   }`
 
 export const QUERY_TAGS_BY_MEDIA_ID = gql`
-  query getTagsByMediaId($mediaUuid: ID!) {
-    getTagsByMediaId(uuid: $mediaUuid) {
-      mediaType
-      mediaUrl
-      mediaUuid
-      srcUuid
-      srcType
+  query getTagsByMediaIdList($uuidList: [ID!]) {
+    getTagsByMediaIdList(uuidList: $uuidList) {
+      ... on ClimbTag {
+        mediaUuid
+        mediaUrl
+        climb {
+          id
+          name
+        }
+      }
     }
   }
 `

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useState } from 'react'
 import Imgix from 'react-imgix'
 import { useQuery } from '@apollo/client'
 import { v5 as uuidv5 } from 'uuid'
@@ -6,6 +6,7 @@ import { v5 as uuidv5 } from 'uuid'
 import { IMGIX_CONFIG } from '../../js/imgix/ImgixClient'
 import ImageTagger from '../media/ImageTagger'
 import useImageTagHelper from '../media/useImageTagHelper'
+import Tags from '../media/Tags'
 import { QUERY_TAGS_BY_MEDIA_ID } from '../../js/graphql/fragments'
 import { graphqlClient } from '../../js/graphql/Client'
 
@@ -42,6 +43,7 @@ interface UserImageProps {
   onClick: (props: any) => void
 }
 const UserImage = ({ imageInfo, onClick }: UserImageProps): JSX.Element => {
+  const [hovered, setHover] = useState(false)
   const imgUrl = `${IMGIX_CONFIG.sourceURL}${imageInfo.origin_path as string}`
   const onClickHandler = useCallback((event) => {
     onClick({ mouseXY: [event.clientX, event.clientY], imageInfo })
@@ -50,21 +52,12 @@ const UserImage = ({ imageInfo, onClick }: UserImageProps): JSX.Element => {
   const { loading, error, data, refetch, called } = useQuery(QUERY_TAGS_BY_MEDIA_ID, {
     client: graphqlClient,
     variables: {
-      mediaUuid: uuidv5(imageInfo.origin_path, uuidv5.URL)
+      uuidList: [uuidv5(imageInfo.origin_path, uuidv5.URL)]
     }
   })
 
-  if (called) {
-    console.log('#tagging', data)
-  }
-
-  // useEffect(() => {
-  //   const f = getTagsByMediaId(uuidv5(imageInfo.origin_path, uuidv5.URL)
-
-  // })
-
   return (
-    <div className='cursor-pointer block mx-0 my-4 md:m-4 relative' onClick={onClickHandler}>
+    <div className='cursor-pointer block mx-0 my-4 md:m-4 relative' onClick={onClickHandler} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
       <Imgix
         src={imgUrl}
         width={300}
@@ -74,9 +67,10 @@ const UserImage = ({ imageInfo, onClick }: UserImageProps): JSX.Element => {
           ar: '1:1'
         }}
       />
-      <div>
-        {called && data?.getTagsByMediaId != null && <div> {data?.getTagsByMediaId.mediaUuid}</div>}
-      </div>
+      {called && data?.getTagsByMediaIdList != null && data?.getTagsByMediaIdList.length > 0 &&
+        <div className='absolute inset-0 flex flex-col justify-end'>
+          <Tags hovered={hovered} list={data?.getTagsByMediaIdList} />
+        </div>}
     </div>
   )
 }
