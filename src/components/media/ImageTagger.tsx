@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'
 import { v5 as uuidv5 } from 'uuid'
 
 import { graphqlClient } from '../../js/graphql/Client'
-import { TAG_CLIMB } from '../../js/graphql/fragments'
+import { TAG_CLIMB, QUERY_TAGS_BY_MEDIA_ID } from '../../js/graphql/fragments'
 import ClimbSearchForTagging from '../search/ClimbSearchForTagging'
 
 interface ImageTaggerProps {
@@ -21,7 +21,8 @@ export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close, onComp
     TAG_CLIMB, {
       client: graphqlClient,
       errorPolicy: 'none',
-      onCompleted
+      onCompleted,
+      refetchQueries: [QUERY_TAGS_BY_MEDIA_ID, 'getTagsByMediaIdList']
     }
   )
 

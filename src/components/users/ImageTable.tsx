@@ -55,13 +55,18 @@ const UserImage = ({ imageInfo, onClick }: UserImageProps): JSX.Element => {
   const { loading, data, refetch, called } = useQuery(QUERY_TAGS_BY_MEDIA_ID, {
     client: graphqlClient,
     variables: {
-      uuidList: [uuidv5(imageInfo.origin_path, uuidv5.URL)]
+      uuidList: [uuidv5(imageInfo.origin_path, uuidv5.URL)],
+      notifyOnNetworkStatusChange: true
     }
+    // fetchPolicy: 'cache-and-network'
   })
 
   const onDeletedHandler = useCallback(async () => {
-    if (!loading) await refetch()
+    console.log('removing tag', loading)
+    await refetch()
   }, [])
+
+  console.log('#image tag data', data)
 
   return (
     <div className='cursor-pointer block mx-0 my-4 md:m-4 relative' onClick={onClickHandler} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>

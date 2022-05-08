@@ -77,3 +77,8 @@ export const getAreaByUUID = (uuid: string): AreaType | null => {
   }
   return null
 }
+
+export const invalidateMediaTagCache = async (mediaId: string): Promise<boolean> => {
+  // graphqlClient.cache.
+  return true
+}
