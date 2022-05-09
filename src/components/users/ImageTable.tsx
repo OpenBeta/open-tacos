@@ -1,26 +1,26 @@
 import { useCallback, useState } from 'react'
 import Imgix from 'react-imgix'
-import { useQuery } from '@apollo/client'
 import { v5 as uuidv5 } from 'uuid'
+import { Dictionary } from 'underscore'
 
 import { IMGIX_CONFIG } from '../../js/imgix/ImgixClient'
 import ImageTagger from '../media/ImageTagger'
 import useImageTagHelper from '../media/useImageTagHelper'
 import TagList from '../media/TagList'
-import { QUERY_TAGS_BY_MEDIA_ID } from '../../js/graphql/fragments'
-import { graphqlClient } from '../../js/graphql/Client'
+import { MediaTag } from '../../js/types'
 
 interface ImageTableProps {
   imageList: any[]
+  tagsByMediaId: Dictionary<MediaTag[]>
 }
-export default function ImageTable ({ imageList }: ImageTableProps): JSX.Element {
+
+export default function ImageTable ({ imageList, tagsByMediaId }: ImageTableProps): JSX.Element {
   const imageHelper = useImageTagHelper()
   const { onClick } = imageHelper
 
   if (imageList == null) return null
 
   const onCompletedHandler = useCallback((data: any) => {
-    console.log('#Tagging completed', data)
     // Todo: call revalidate api
   }, [])
   return (
@@ -28,7 +28,7 @@ export default function ImageTable ({ imageList }: ImageTableProps): JSX.Element
       <div className='flex justify-center flex-wrap'>
         {imageList.map(imageInfo =>
           <UserImage
-            key={imageInfo.origin_path} imageInfo={imageInfo} onClick={onClick}
+            key={imageInfo.origin_path} tagList={tagsByMediaId?.[uuidv5(imageInfo.origin_path, uuidv5.URL)] ?? []} imageInfo={imageInfo} onClick={onClick}
           />)}
       </div>
       <ImageTagger
@@ -42,9 +42,10 @@ export default function ImageTable ({ imageList }: ImageTableProps): JSX.Element
 interface UserImageProps {
   imageInfo: any
   onClick: (props: any) => void
+  tagList: MediaTag[]
 }
 
-const UserImage = ({ imageInfo, onClick }: UserImageProps): JSX.Element => {
+const UserImage = ({ imageInfo, onClick, tagList }: UserImageProps): JSX.Element => {
   const [hovered, setHover] = useState(false)
   const imgUrl = `${IMGIX_CONFIG.sourceURL}${imageInfo.origin_path as string}`
 
@@ -52,21 +53,19 @@ const UserImage = ({ imageInfo, onClick }: UserImageProps): JSX.Element => {
     onClick({ mouseXY: [event.clientX, event.clientY], imageInfo })
   }, [])
 
-  const { loading, data, refetch, called } = useQuery(QUERY_TAGS_BY_MEDIA_ID, {
-    client: graphqlClient,
-    variables: {
-      uuidList: [uuidv5(imageInfo.origin_path, uuidv5.URL)],
-      notifyOnNetworkStatusChange: true
-    }
-    // fetchPolicy: 'cache-and-network'
-  })
+  // const { loading, data, refetch, called } = useQuery(QUERY_TAGS_BY_MEDIA_ID, {
+  //   client: graphqlClient,
+  //   variables: {
+  //     uuidList: [uuidv5(imageInfo.origin_path, uuidv5.URL)],
+  //     notifyOnNetworkStatusChange: true
+  //   },
+  //   // fetchPolicy: 'cache-and-network'
+  // })
 
   const onDeletedHandler = useCallback(async () => {
-    console.log('removing tag', loading)
-    await refetch()
+    // console.log('removing tag', loading)
+    // await refetch()
   }, [])
-
-  console.log('#image tag data', data)
 
   return (
     <div className='cursor-pointer block mx-0 my-4 md:m-4 relative' onClick={onClickHandler} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
@@ -79,9 +78,9 @@ const UserImage = ({ imageInfo, onClick }: UserImageProps): JSX.Element => {
           ar: '1:1'
         }}
       />
-      {called && data?.getTagsByMediaIdList != null && data?.getTagsByMediaIdList.length > 0 &&
+      {tagList?.length > 0 &&
         <div className='absolute inset-0 flex flex-col justify-end'>
-          <TagList hovered={hovered} list={data?.getTagsByMediaIdList} onDeleted={onDeletedHandler} />
+          <TagList hovered={hovered} list={tagList} onDeleted={onDeletedHandler} />
         </div>}
     </div>
   )

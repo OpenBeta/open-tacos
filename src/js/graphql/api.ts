@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
-import { AreaType } from '../types'
+import { AreaType, MediaTag } from '../types'
 import { graphqlClient } from './Client'
-import { CORE_CRAG_FIELDS } from './fragments'
+import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID } from './fragments'
 interface CragsDetailsNearType {
   data: Array<Partial<AreaType>>
   placeId: string
@@ -78,7 +78,23 @@ export const getAreaByUUID = (uuid: string): AreaType | null => {
   return null
 }
 
-export const invalidateMediaTagCache = async (mediaId: string): Promise<boolean> => {
-  // graphqlClient.cache.
-  return true
+export const getTagsByMediaId = async (uuidList: string[]): Promise<MediaTag[]> => {
+  try {
+    const rs = await graphqlClient.query({
+      query: QUERY_TAGS_BY_MEDIA_ID,
+      variables: {
+        uuidList
+      },
+      fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true
+    })
+
+    console.log('getTagsByMediaId', rs.data)
+    if (Array.isArray(rs.data?.getTagsByMediaIdList)) {
+      return rs.data?.getTagsByMediaIdList
+    }
+  } catch (e) {
+    console.log('getTagsByMediaId() error', e)
+  }
+  return []
 }
