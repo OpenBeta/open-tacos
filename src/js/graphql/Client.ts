@@ -28,5 +28,5 @@ export const graphqlClient = new ApolloClient({
       }
     }
   ),
-  ssrMode: false // We relies on NextJS for server vs client-side data instead of Apollo
+  ssrMode: false // We relies on NextJS for SSR data management
 })

@@ -22,17 +22,12 @@ export const listPhotos = async (
 ): Promise<any[]> => {
   if (uid != null) {
     const safeQuery = encodeURI(`filter[metadata:uid]=${uid}`)
-    try {
-      const response = await axiosClient.get(
+    const response = await axiosClient.get(
       `/sources/${IMGIX_CONFIG.sourceId}/assets?${safeQuery}`,
       { headers: { Authorization: `Bearer ${IMGIX_CONFIG.apiToken}` } })
-      return response.status === 200
-        ? flatten(response?.data)
-        : []
-    } catch (e) {
-      console.log('Photo management service error', e)
-      return []
-    }
+    return response.status === 200
+      ? flatten(response?.data)
+      : []
   }
   return []
 }

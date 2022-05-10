@@ -10,23 +10,23 @@ import { MediaTag, MediaClimbTag } from '../../js/types'
 interface TagsProps {
   hovered: boolean
   list: MediaTag[]
-  onDeleted: () => void
+  onDeleted: (props?: any) => void
 }
 
 export default function TagList ({ hovered, list, onDeleted }: TagsProps): JSX.Element {
   const [removeTag] = useMutation(
     MUTATION_REMOVE_MEDIA_TAG, {
-      client: graphqlClient
+      client: graphqlClient,
+      onCompleted: onDeleted
     }
   )
   const onDeleteHandler = useCallback(async (mediaUuid, destinationId) => {
-    const rs = await removeTag({
+    await removeTag({
       variables: {
         mediaUuid,
         destinationId
       }
     })
-    if (rs as boolean) onDeleted()
   }, [])
 
   return (

@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'
 import { v5 as uuidv5 } from 'uuid'
 
 import { graphqlClient } from '../../js/graphql/Client'
-import { TAG_CLIMB, QUERY_TAGS_BY_MEDIA_ID } from '../../js/graphql/fragments'
+import { MUTATION_ADD_CLIMB_TAG_TO_MEDIA } from '../../js/graphql/fragments'
 import ClimbSearchForTagging from '../search/ClimbSearchForTagging'
 
 interface ImageTaggerProps {
@@ -18,11 +18,10 @@ interface ImageTaggerProps {
 
 export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close, onCompleted }: ImageTaggerProps): JSX.Element {
   const [tagPhotoWithClimb] = useMutation(
-    TAG_CLIMB, {
+    MUTATION_ADD_CLIMB_TAG_TO_MEDIA, {
       client: graphqlClient,
       errorPolicy: 'none',
-      onCompleted,
-      refetchQueries: [QUERY_TAGS_BY_MEDIA_ID, 'getTagsByMediaIdList']
+      onCompleted
     }
   )
 
@@ -85,9 +84,9 @@ export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close, onComp
                   srcUuid: climbUUID
                 }
               })
-              // Todo: update Apollo cache
             } catch (e) {
-              console.log(e)
+              // TODO: Add friendly error message
+              console.log('tagging API error', e)
             }
             close()
           }}

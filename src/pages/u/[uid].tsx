@@ -27,7 +27,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, imageList, tagsByMediaId }
         <SeoTags
           keywords={['openbeta', 'rock climbing', 'climbing api']}
           description='Climbing route catalog'
-          title='Home'
+          title={uid}
         />
       </Head>
 
@@ -37,7 +37,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, imageList, tagsByMediaId }
         <div className='max-w-screen-2xl w-full mx-auto'>
           {router.isFallback && <div>Loading...</div>}
           {imageList?.length === 0 && <div>Account not found</div>}
-          {imageList?.length > 0 && <ImageTable imageList={imageList} tagsByMediaId={tagsByMediaId} />}
+          {imageList?.length > 0 && <ImageTable imageList={imageList} initialTagsByMediaId={tagsByMediaId} />}
         </div>
       </Layout>
     </>

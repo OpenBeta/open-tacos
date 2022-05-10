@@ -89,7 +89,6 @@ export const getTagsByMediaId = async (uuidList: string[]): Promise<MediaTag[]> 
       notifyOnNetworkStatusChange: true
     })
 
-    console.log('getTagsByMediaId', rs.data)
     if (Array.isArray(rs.data?.getTagsByMediaIdList)) {
       return rs.data?.getTagsByMediaIdList
     }

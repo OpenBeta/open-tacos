@@ -7,29 +7,83 @@ import { IMGIX_CONFIG } from '../../js/imgix/ImgixClient'
 import ImageTagger from '../media/ImageTagger'
 import useImageTagHelper from '../media/useImageTagHelper'
 import TagList from '../media/TagList'
-import { MediaTag } from '../../js/types'
+import { MediaTag, MediaClimbTag } from '../../js/types'
 
 interface ImageTableProps {
   imageList: any[]
-  tagsByMediaId: Dictionary<MediaTag[]>
+  initialTagsByMediaId: Dictionary<MediaTag[]>
 }
 
-export default function ImageTable ({ imageList, tagsByMediaId }: ImageTableProps): JSX.Element {
+export default function ImageTable ({ imageList, initialTagsByMediaId }: ImageTableProps): JSX.Element {
+  const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
+
   const imageHelper = useImageTagHelper()
   const { onClick } = imageHelper
 
   if (imageList == null) return null
 
-  const onCompletedHandler = useCallback((data: any) => {
-    // Todo: call revalidate api
+  /**
+   * Run after a tag has sucessfully added to the backend
+   */
+  const onCompletedHandler = useCallback(async (data: any) => {
+    const { setTag } = data
+    if (setTag == null) return
+    const { mediaUuid } = setTag
+    const { id } = setTag.climb
+    const currentTagList = tagsByMediaId?.[mediaUuid] ?? []
+
+    if (currentTagList.findIndex((tag: MediaClimbTag) => tag.climb.id === id) !== -1) {
+      // Tag for the same climb exists
+      // We only allow 1 climb/area tag per media
+      return
+    }
+
+    updateTag(curr => {
+      const currTagList = curr?.[mediaUuid] ?? []
+      return ({
+        ...curr,
+        [mediaUuid]: currTagList.length === 0 ? [setTag] : currTagList.concat([setTag])
+      })
+    })
+    await fetch('/api/revalidate')
   }, [])
+
+  /**
+   * Run after a tag has sucessfully deleted from the backend
+   */
+  const onDeletedHandler = useCallback(async (data: any) => {
+    const { removeTag } = data
+    if (removeTag == null) return
+    const { mediaUuid, destinationId } = removeTag
+
+    if (tagsByMediaId?.[mediaUuid] == null) {
+      // Try to remove a tag that doesn't exist in local state
+      return
+    }
+
+    updateTag(curr => {
+      const currTagList = curr[mediaUuid]
+      const idx = currTagList.findIndex((tag: MediaClimbTag) => tag.climb.id === destinationId)
+      currTagList.splice(idx, 1)
+      return ({
+        ...curr,
+        [removeTag.mediaUuid]: currTagList
+      })
+    })
+    await fetch('/api/revalidate')
+  }, [tagsByMediaId])
+
   return (
     <>
       <div className='flex justify-center flex-wrap'>
-        {imageList.map(imageInfo =>
-          <UserImage
-            key={imageInfo.origin_path} tagList={tagsByMediaId?.[uuidv5(imageInfo.origin_path, uuidv5.URL)] ?? []} imageInfo={imageInfo} onClick={onClick}
-          />)}
+        {imageList.map(imageInfo => {
+          const tags = tagsByMediaId?.[uuidv5(imageInfo.origin_path, uuidv5.URL)] ?? []
+          return (
+            <UserImage
+              key={imageInfo.origin_path} tagList={tags} imageInfo={imageInfo} onClick={onClick} onTagDeleted={onDeletedHandler}
+            />
+          )
+        })}
       </div>
       <ImageTagger
         {...imageHelper} onCompleted={onCompletedHandler}
@@ -42,29 +96,16 @@ export default function ImageTable ({ imageList, tagsByMediaId }: ImageTableProp
 interface UserImageProps {
   imageInfo: any
   onClick: (props: any) => void
+  onTagDeleted?: (props?: any) => void
   tagList: MediaTag[]
 }
 
-const UserImage = ({ imageInfo, onClick, tagList }: UserImageProps): JSX.Element => {
+const UserImage = ({ imageInfo, onClick, tagList, onTagDeleted }: UserImageProps): JSX.Element => {
   const [hovered, setHover] = useState(false)
   const imgUrl = `${IMGIX_CONFIG.sourceURL}${imageInfo.origin_path as string}`
 
   const onClickHandler = useCallback((event) => {
     onClick({ mouseXY: [event.clientX, event.clientY], imageInfo })
-  }, [])
-
-  // const { loading, data, refetch, called } = useQuery(QUERY_TAGS_BY_MEDIA_ID, {
-  //   client: graphqlClient,
-  //   variables: {
-  //     uuidList: [uuidv5(imageInfo.origin_path, uuidv5.URL)],
-  //     notifyOnNetworkStatusChange: true
-  //   },
-  //   // fetchPolicy: 'cache-and-network'
-  // })
-
-  const onDeletedHandler = useCallback(async () => {
-    // console.log('removing tag', loading)
-    // await refetch()
   }, [])
 
   return (
@@ -80,7 +121,7 @@ const UserImage = ({ imageInfo, onClick, tagList }: UserImageProps): JSX.Element
       />
       {tagList?.length > 0 &&
         <div className='absolute inset-0 flex flex-col justify-end'>
-          <TagList hovered={hovered} list={tagList} onDeleted={onDeletedHandler} />
+          <TagList hovered={hovered} list={tagList} onDeleted={onTagDeleted} />
         </div>}
     </div>
   )
