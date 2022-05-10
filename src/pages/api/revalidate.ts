@@ -8,7 +8,7 @@ export default async function handler (req, res): Promise<any> {
   }
 
   try {
-    await res.unstable_revalidate(encodeURIComponent(`/u/${req.query.u as string}`))
+    await res.unstable_revalidate(`/u/${encodeURIComponent(req.query.u as string)}`)
     return res.json({ revalidated: true })
   } catch (err) {
     // If there was an error, Next.js will continue
