@@ -37,7 +37,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, imageList, tagsByMediaId }
         <div className='max-w-screen-2xl w-full mx-auto'>
           {router.isFallback && <div>Loading...</div>}
           {imageList?.length === 0 && <div>Account not found</div>}
-          {imageList?.length > 0 && <ImageTable imageList={imageList} initialTagsByMediaId={tagsByMediaId} />}
+          {imageList?.length > 0 && <ImageTable uid={uid} imageList={imageList} initialTagsByMediaId={tagsByMediaId} />}
         </div>
       </Layout>
     </>

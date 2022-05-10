@@ -10,11 +10,12 @@ import TagList from '../media/TagList'
 import { MediaTag, MediaClimbTag } from '../../js/types'
 
 interface ImageTableProps {
+  uid: string
   imageList: any[]
   initialTagsByMediaId: Dictionary<MediaTag[]>
 }
 
-export default function ImageTable ({ imageList, initialTagsByMediaId }: ImageTableProps): JSX.Element {
+export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: ImageTableProps): JSX.Element {
   const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
 
   const imageHelper = useImageTagHelper()
@@ -45,7 +46,7 @@ export default function ImageTable ({ imageList, initialTagsByMediaId }: ImageTa
         [mediaUuid]: currTagList.length === 0 ? [setTag] : currTagList.concat([setTag])
       })
     })
-    await fetch('/api/revalidate')
+    await revalidateServePage(uid)
   }, [])
 
   /**
@@ -70,7 +71,7 @@ export default function ImageTable ({ imageList, initialTagsByMediaId }: ImageTa
         [removeTag.mediaUuid]: currTagList
       })
     })
-    await fetch('/api/revalidate')
+    await revalidateServePage(uid)
   }, [tagsByMediaId])
 
   return (
@@ -92,6 +93,14 @@ export default function ImageTable ({ imageList, initialTagsByMediaId }: ImageTa
 
   )
 }
+
+/**
+ * Tell the backend to regenerate user profile page.
+ * See https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration
+ * The token is URL encoded value of .env PAGE_REVALIDATE_TOKEN
+ * @param uid user id
+ */
+const revalidateServePage = async (uid: string): Promise<any> => await fetch(`/api/revalidate?token=8b%26o4t%21xUqAN3Y%239&u=${uid}`)
 
 interface UserImageProps {
   imageInfo: any
