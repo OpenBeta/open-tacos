@@ -11,6 +11,7 @@ export default async function handler (req, res): Promise<any> {
     await res.unstable_revalidate(`/u/${encodeURIComponent(req.query.u as string)}`)
     return res.json({ revalidated: true })
   } catch (err) {
+    console.log(err)
     // If there was an error, Next.js will continue
     // to show the last successfully generated page
     return res.status(500).send('Error revalidating')
