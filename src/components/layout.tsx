@@ -16,10 +16,7 @@ function Layout ({ contentContainerClass = 'content-fullscreen-tablet', rootCont
         <title>Climbing Route Catalog</title>
         <meta name='description' content='Open license climbing route catalog' />
         <link rel='icon' href='/favicon.ico' />
-        <link
-          href='/fonts/fonts.css'
-          rel='stylesheet'
-        />
+
         <SeoTags
           keywords={['openbeta', 'rock climbing', 'climbing api']}
           description='Climbing route catalog'
