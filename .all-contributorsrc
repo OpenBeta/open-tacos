@@ -118,6 +118,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "CocoisBuggy",
+      "name": "Colin Gale",
+      "avatar_url": "https://avatars.githubusercontent.com/u/64557383?v=4",
+      "profile": "https://github.com/CocoisBuggy",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
