@@ -45,7 +45,7 @@ export default function BaseMap ({
 }: BaseMapProps): JSX.Element {
   return (
     <Map
-      viewState={viewstate}
+      {...viewstate}
       id='areaHeatmap'
       reuseMaps
       mapStyle={light ? MAP_STYLES.light : MAP_STYLES.dark}
