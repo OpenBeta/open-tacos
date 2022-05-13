@@ -1,5 +1,5 @@
-import React from 'react'
-import { Map, MapLayerMouseEvent, ViewStateChangeEvent, ViewState } from 'react-map-gl'
+import React, { useEffect, useRef } from 'react'
+import { Map, MapLayerMouseEvent, ViewStateChangeEvent, ViewState, MapboxMap } from 'react-map-gl'
 
 export const DEFAULT_INITIAL_VIEWSTATE = {
   width: 300,
@@ -18,14 +18,8 @@ const MAP_STYLES = {
 }
 
 interface BaseMapProps {
-  viewstate: ViewState & {
-    width: number
-    height: number
-  }
-  initialViewState: ViewState & {
-    width: number
-    height: number
-  }
+  height: number
+  viewstate: ViewState
   onViewStateChange: (event: ViewStateChangeEvent) => void
   children: JSX.Element | JSX.Element[]
   light: boolean
@@ -39,8 +33,8 @@ interface BaseMapProps {
  * you need to provide the layer id to MapGL via interactiveLayerIds
  */
 export default function BaseMap ({
+  height,
   viewstate,
-  initialViewState,
   onViewStateChange,
   children,
   light,
@@ -48,11 +42,20 @@ export default function BaseMap ({
   onHover = (): void => {},
   interactiveLayerIds
 }: BaseMapProps): JSX.Element {
+  const mapRef = useRef(null)
+
+  // Map seems to struggle responding to height changes after initial set
+  useEffect(() => {
+    if (mapRef.current !== null) {
+      const map: MapboxMap = (mapRef.current as any)
+      map.resize()
+    }
+  }, [height, mapRef])
+
   return (
     <Map
+      {...viewstate}
       id='areaHeatmap'
-      initialViewState={initialViewState}
-      viewState={viewstate}
       reuseMaps
       mapStyle={light ? MAP_STYLES.light : MAP_STYLES.dark}
       mapboxAccessToken='pk.eyJ1IjoibWFwcGFuZGFzIiwiYSI6ImNqcDdzbW12aTBvOHAzcW82MGg0ZTRrd3MifQ.MYiNJHklgMkRzapAKuTQNg'
@@ -61,6 +64,8 @@ export default function BaseMap ({
       interactiveLayerIds={interactiveLayerIds}
       onMove={onViewStateChange}
       interactive
+      style={{ height: height }}
+      ref={mapRef}
     >
       {children}
     </Map>

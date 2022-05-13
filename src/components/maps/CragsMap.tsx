@@ -52,7 +52,7 @@ export default function CragsMap (): JSX.Element {
             />}
         </div>
         <BaseMap
-          initialViewState={viewstate}
+          height={height}
           viewstate={viewstate}
           onViewStateChange={onViewStateChange}
           light={false}
