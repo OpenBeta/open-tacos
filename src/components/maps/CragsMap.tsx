@@ -52,6 +52,7 @@ export default function CragsMap (): JSX.Element {
             />}
         </div>
         <BaseMap
+          height={height}
           viewstate={viewstate}
           onViewStateChange={onViewStateChange}
           light={false}
