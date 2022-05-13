@@ -22,10 +22,6 @@ interface BaseMapProps {
     width: number
     height: number
   }
-  initialViewState: ViewState & {
-    width: number
-    height: number
-  }
   onViewStateChange: (event: ViewStateChangeEvent) => void
   children: JSX.Element | JSX.Element[]
   light: boolean
@@ -40,7 +36,6 @@ interface BaseMapProps {
  */
 export default function BaseMap ({
   viewstate,
-  initialViewState,
   onViewStateChange,
   children,
   light,
@@ -50,9 +45,8 @@ export default function BaseMap ({
 }: BaseMapProps): JSX.Element {
   return (
     <Map
+      {...viewstate}
       id='areaHeatmap'
-      initialViewState={initialViewState}
-      viewState={viewstate}
       reuseMaps
       mapStyle={light ? MAP_STYLES.light : MAP_STYLES.dark}
       mapboxAccessToken='pk.eyJ1IjoibWFwcGFuZGFzIiwiYSI6ImNqcDdzbW12aTBvOHAzcW82MGg0ZTRrd3MifQ.MYiNJHklgMkRzapAKuTQNg'

@@ -38,7 +38,7 @@ export default function useAutoSizing ({ geojson }): any {
   return [viewState, height, setViewState]
 }
 
-const getMapDivDimensions = (id: string, offset): { width: number, height: number } => {
+const getMapDivDimensions = (id: string, offset: number): { width: number, height: number } => {
   const div = document.getElementById(id)
   let width = 200
   if (div != null) {
