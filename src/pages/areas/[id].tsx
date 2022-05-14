@@ -44,7 +44,7 @@ function Area ({ area }: AreaPageProps): JSX.Element {
 
       <div className='flex mt-16 mx-16' style={{ height: '600px' }}>
         <div className='flex-1 mx-4  border border-slate-500 rounded-xl p-1'>
-          <div className='overflow-y-auto'>
+          <div className='overflow-y-auto h-full'>
             <AreaList subAreas={children} onHover={setFocused} />
           </div>
         </div>
