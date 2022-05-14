@@ -42,15 +42,25 @@ function Area ({ area }: AreaPageProps): JSX.Element {
         />
       </div>
 
-      <div className='flex mt-16 mx-16' style={{ height: '600px' }}>
-        <div className='flex-1 mx-4  border border-slate-500 rounded-xl p-1'>
-          <div className='overflow-y-auto h-full'>
-            <AreaList subAreas={children} onHover={setFocused} />
+      <div
+        className='lg:flex mt-16 mx-2 md:mx-8 xl:mx-16'
+      >
+        <div
+          className='mb-4 lg:ml-2 md:1-1/4 lg:w-1/2 h-96'
+          style={{ maxHeight: '600px' }}
+        >
+          <div className='h-96 lg:h-[600px]'>
+            <AreaMap focused={focused} subAreas={children} area={area} />
           </div>
         </div>
 
-        <div className='mx-8' style={{ width: '700px' }}>
-          <AreaMap focused={focused} subAreas={children} area={area} />
+        <div
+          className='flex-1 border border-slate-500 rounded-xl p-1 order-first'
+          style={{ height: '600px' }}
+        >
+          <div className='overflow-y-auto h-full'>
+            <AreaList subAreas={children} onHover={setFocused} />
+          </div>
         </div>
       </div>
 
