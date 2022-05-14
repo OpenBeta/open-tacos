@@ -12,11 +12,12 @@ export default function AreaList (props: AreaListProps): JSX.Element {
     <div
       onMouseLeave={() => props.onHover(null)}
     >
-      {props.subAreas.map(i => <SubAreaItem
-        onHover={props.onHover}
-        key={i.metadata.areaId}
-        subArea={i}
-                               />)}
+      {props.subAreas.map(i => (
+        <SubAreaItem
+          onHover={props.onHover}
+          key={i.metadata.areaId}
+          subArea={i}
+        />))}
     </div>
   )
 }

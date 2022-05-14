@@ -4,8 +4,8 @@ export interface CragHeroProps {
   title: string
   latitude: number
   longitude: number
-  galleryRef?: string
   description: string
+  galleryRef?: string
 }
 
 /**  For a given number of allowed words, quantize to the nearest
