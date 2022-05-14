@@ -3,75 +3,57 @@ import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { AreaType } from '../../js/types'
 import { graphqlClient } from '../../js/graphql/Client'
-import Link from 'next/link'
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
-import AreaCard from '../../components/ui/AreaCard'
-import Icon from '../../components/Icon'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
-
-import { getSlug } from '../../js/utils'
-import InlineEditor from '../../components/editor/InlineEditor'
+import AreaList from '../../components/area/areaList'
+import CragSummary from '../../components/crag/cragSummary'
+import AreaMap from '../../components/area/areaMap'
+import { useState } from 'react'
 interface AreaPageProps {
   area: AreaType
 }
-const Area = ({ area }: AreaPageProps): JSX.Element => {
+
+function Area ({ area }: AreaPageProps): JSX.Element {
+  const [focused, setFocused] = useState<string | null>(null)
   const router = useRouter()
   if (router.isFallback) {
     return <div>Loading...</div>
   }
-  const { id, areaName, children, metadata, content, pathTokens, ancestors } = area
+  const { areaName, children, metadata, content, pathTokens, ancestors } = area
 
   return (
     <Layout contentContainerClass='content-default with-standard-y-margin'>
       <SeoTags
         keywords={[areaName]}
         title={areaName}
-        description='description'
+        description={content.description}
       />
       <div className='px-4 max-w-screen-md'>
         <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
-        <h1 className='title'>{areaName}</h1>
-        <span className='flex items-center flex-shrink text-gray-500 text-xs gap-x-1'>
-          <Icon type='droppin' />
-          <a
-            className='hover:underline hover:text-gray-800'
-                /* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */
-            href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            {metadata.lat},{metadata.lng}
-          </a>
-        </span>
-        {content.description !== '' &&
-          <>
-            <div
-              className='pt-4 markdown'
-            >
-              <h2>Description</h2>
-              <InlineEditor id={`area-${id}`} markdown={content.description} readOnly />
-            </div>
-            <hr className='my-8' />
-          </>}
+      </div>
 
-        <h2>Subareas</h2>
-        <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
-          {children.map((child) => {
-            const { areaName, metadata } = child
-            const { areaId, leaf } = metadata
-            return (
-              <div className='max-h-96' key={areaId}>
-                <Link href={getSlug(areaId, leaf)} passHref>
-                  <a>
-                    <AreaCard areaName={areaName} />
-                  </a>
-                </Link>
-              </div>
-            )
-          })}
+      <div className='px-2 md:px-16 pt-16'>
+        <CragSummary
+          title={areaName}
+          latitude={metadata.lat}
+          longitude={metadata.lng}
+          description={content.description}
+        />
+      </div>
+
+      <div className='flex mt-16 mx-16' style={{ height: '600px' }}>
+        <div className='flex-1 mx-4  border border-slate-500 rounded-xl p-1'>
+          <div className='overflow-y-auto'>
+            <AreaList subAreas={children} onHover={setFocused} />
+          </div>
+        </div>
+
+        <div className='mx-8' style={{ width: '700px' }}>
+          <AreaMap focused={focused} subAreas={children} area={area} />
         </div>
       </div>
+
     </Layout>
   )
 }
