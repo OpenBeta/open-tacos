@@ -72,7 +72,6 @@ function computeNearestSubAreas (areas: AreaType[], focused: AreaType, retN: num
     pool = pool.filter(item => item.id !== subAreas[i].id)
   }
 
-  console.log({ subAreas })
   return subAreas
 }
 
