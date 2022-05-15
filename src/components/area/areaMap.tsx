@@ -49,7 +49,10 @@ function getBounds (areas: AreaType[]): [[number, number], [number, number]] {
 }
 
 function computeVS (area: AreaType, subAreas: AreaType[], focusedId: string | null): PartialViewState {
-  if (focusedId === null) {
+  // If an area is selected, we could return bounds that center on the selected item,
+  // but includes the nearest neighbour in the parent area.
+  const targetArea = subAreas.find(i => i.id === focusedId)
+  if (focusedId === null || targetArea === undefined) {
     return {
       latitude: area.metadata.lat,
       longitude: area.metadata.lng,
@@ -57,9 +60,7 @@ function computeVS (area: AreaType, subAreas: AreaType[], focusedId: string | nu
       zoom: 6
     }
   }
-  // If an area is selected, we could return bounds that center on the selected item,
-  // but includes the nearest neighbour in the parent area.
-  const targetArea = subAreas.find(i => i.id === focusedId)
+
   return {
     latitude: targetArea.metadata?.lat,
     longitude: targetArea.metadata?.lng,
@@ -105,7 +106,7 @@ export default function AreaMap (props: AreaMapProps): JSX.Element {
         map.fitBounds(vs.bounds)
       }
     }
-  }, [props.subAreas, props.focused])
+  }, [props.subAreas, props.focused, props.area.id])
 
   const handleMove = ({ viewState }: {viewState: ViewState}): void => {
     setViewState(viewState)
