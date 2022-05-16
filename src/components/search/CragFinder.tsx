@@ -20,9 +20,9 @@ export default function CragFinder ({ isMobile = true, placeholder = 'Try \'Smit
 
   return (
     <Autocomplete
-      id='crag-finder'
+      id={CUSTOM_CLASSES.root}
       isMobile={isMobile}
-      classNames={{ item: 'crag-finder-item', panelLayout: 'crag-finder-panelLayout' }}
+      classNames={CUSTOM_CLASSES}
       placeholder={placeholder}
       getSources={({ query }) => {
         if ((query).length < 3) {
@@ -61,4 +61,10 @@ export default function CragFinder ({ isMobile = true, placeholder = 'Try \'Smit
 
 export function MobileCragFinder (): JSX.Element {
   return (<div>foos</div>)
+}
+
+const CUSTOM_CLASSES = {
+  root: 'crag-finder',
+  item: 'crag-finder-item',
+  panelLayout: 'crag-finder-panelLayout'
 }

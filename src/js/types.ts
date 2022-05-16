@@ -128,7 +128,7 @@ export interface TypesenseDocumentType extends BaseItem {
   climbUUID: string
   climbDesc: string
   climbName: string
-  disciplines: string[]
+  disciplines: ClimbDiscipline[]
   fa: string
   grade: string
   safety: SafetyType

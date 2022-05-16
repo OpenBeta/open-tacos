@@ -11,10 +11,11 @@ import { TypesenseDocumentType } from '../../../js/types'
  * @param query search string
  * @param onSelect receive a callback when the user selects a result item
  */
-export const TypesenseClimbNameSource = (query: string, onSelect: (item: TypesenseDocumentType) => void): AutocompleteSource<TypesenseDocumentType> => {
-  return {
+export const TypesenseClimbNameSource = async (query: string, onSelect: (item: TypesenseDocumentType) => void): Promise<AutocompleteSource<TypesenseDocumentType>> => {
+  const rs = await climbSearchByName(query)
+  return await Promise.resolve({
     sourceId: 'climbsForTagging',
-    getItems: async ({ query }) => await climbSearchByName(query),
+    getItems: async ({ query }) => rs,
     onSelect ({ item, setQuery, setIsOpen, refresh }) {
       setIsOpen(false)
       onSelect(item)
@@ -26,5 +27,5 @@ export const TypesenseClimbNameSource = (query: string, onSelect: (item: Typesen
       item: MiniClimbItem,
       header: () => null
     }
-  }
+  })
 }

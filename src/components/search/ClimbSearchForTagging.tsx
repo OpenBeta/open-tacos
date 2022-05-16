@@ -17,12 +17,11 @@ interface XSearchProps {
 export default function ClimbSearchForTagging ({ isMobile = true, placeholder = 'Climb search', onSelect }: XSearchProps): JSX.Element {
   return (
     <Autocomplete
-      autoFocus
-      id='climb-tag-search'
+      id={CUSTOM_CLASSES.root}
       isMobile={isMobile}
       placeholder={placeholder}
-      getSources={({ query }) => {
-        return [TypesenseClimbNameSource(query, onSelect)]
+      getSources={async ({ query }) => {
+        return await Promise.all([await TypesenseClimbNameSource(query, onSelect)])
       }}
       classNames={CUSTOM_CLASSES}
       render={({ elements }, root) => {
@@ -42,5 +41,6 @@ const CUSTOM_CLASSES = {
   form: 'tag-search-form',
   inputWrapper: 'tag-search-inputWrapper',
   inputWrapperPrefix: 'tag-search-inputWrapperPrefix',
-  submitButton: 'tag-search-submit-button'
+  submitButton: 'tag-search-submit-button',
+  root: 'climb-tag-search'
 }

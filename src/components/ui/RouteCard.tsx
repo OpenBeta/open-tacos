@@ -7,7 +7,7 @@ import { ClimbDisciplineRecord, SafetyType } from '../../js/types'
 
 interface RouteCardProps {
   routeName: string
-  type: ClimbDisciplineRecord
+  type: Partial<ClimbDisciplineRecord>
   safety?: SafetyType
   yds: string
   fa?: string

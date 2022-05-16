@@ -14,7 +14,7 @@ interface XSearchProps {
 export default function XSearch ({ isMobile = true, placeholder = 'Climb search' }: XSearchProps): JSX.Element {
   return (
     <Autocomplete
-      id='xsearch'
+      id={CUSTOM_CLASSES.root}
       isMobile={isMobile}
       placeholder={placeholder}
       getSources={async ({ query }) => {
@@ -43,5 +43,6 @@ const CUSTOM_CLASSES = {
   item: 'xsearch-item',
   panelLayout: 'xsearch-panelLayout',
   sourceHeader: 'xsearch-sourceHeader',
-  form: 'xsearch-form'
+  form: 'xsearch-form',
+  root: 'xsearch'
 }
