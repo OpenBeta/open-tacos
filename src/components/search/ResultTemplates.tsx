@@ -3,6 +3,7 @@ import { NextRouter } from 'next/router'
 
 import RouteCard from '../ui/RouteCard'
 import { TypesenseDocumentType } from '../../js/types'
+import { disciplineArrayToObj } from '../../js/utils'
 
 interface ClimbTemplateType extends TypesenseDocumentType {
   router: NextRouter
@@ -58,12 +59,4 @@ const ClimbTemplate = (props: ClimbTemplateType): JSX.Element => {
       />
     </div>
   )
-}
-
-const disciplineArrayToObj = (types: string[]): any => {
-  const z = {}
-  for (const t of types) {
-    z[t] = true
-  }
-  return z
 }

@@ -1,5 +1,5 @@
 import { ClimbTypeToColor } from './constants'
-import { Climb, ClimbDisciplineRecord } from './types'
+import { Climb, ClimbDisciplineRecord, ClimbDiscipline } from './types'
 
 /**
  * Given a path or parent id and the type of the page generate the GitHub URL
@@ -132,3 +132,17 @@ function debouncePromise (fn: Function, time: number): any {
 }
 
 export const debounced = debouncePromise(async (items: object[]): Promise<object[]> => await Promise.resolve(items), 300)
+
+/**
+ * Convert array of disciplines ['trad', 'sport'] => {trad: true, sport: true}
+ * @param types
+ * @returns ClimbDisciplineRecord
+ */
+export const disciplineArrayToObj = (types: ClimbDiscipline[]): Partial<ClimbDisciplineRecord> => {
+  // use Array.reduce() because ts-jest doesn't support for..of
+  const z: Partial<ClimbDisciplineRecord> = types.reduce((acc, curr) => {
+    acc[curr] = true
+    return acc
+  }, {})
+  return z
+}

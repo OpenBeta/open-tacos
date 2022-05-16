@@ -33,8 +33,10 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
       <div className='px-4 max-w-screen-md'>
         <BreadCrumbs pathTokens={pathTokens} ancestors={ancestors} isClimbPage />
         <h1 className='title'>{name}</h1>
-        <RouteGradeChip yds={yds} safety={safety} />
-        <RouteTypeChips type={type} />
+        <div className='flex items-center space-x-2'>
+          <RouteGradeChip grade={yds} safety={safety} />
+          <RouteTypeChips type={type} />
+        </div>
         <div className='pt-4 text-sm text-gray-600 italic'>FA: {fa}</div>
         <div
           className='pt-4 markdown'
