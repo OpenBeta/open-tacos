@@ -61,7 +61,7 @@ function Area ({ area }: AreaPageProps): JSX.Element {
         </div>
 
         <div
-          className='flex-1 border border-slate-500 rounded-xl p-1 order-first'
+          className='flex-1 md:p-1 order-first'
           style={{ height: '600px' }}
         >
           <div className='overflow-y-auto overflow-x-hidden h-full'>
