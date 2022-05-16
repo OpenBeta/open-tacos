@@ -21,9 +21,12 @@ export const graphqlClient = new ApolloClient({
         },
         Climb: {
           keyFields: ['id']
+        },
+        ClimbTag: {
+          keyFields: ['mediaUuid', 'climb', ['id']]
         }
       }
     }
   ),
-  ssrMode: true
+  ssrMode: false // We relies on NextJS for SSR data management
 })

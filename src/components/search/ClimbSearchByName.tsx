@@ -13,7 +13,8 @@ export const ClimbSearchByName = ({ isMobile = true, placeholder = 'Try \'Levita
     <Autocomplete
       isMobile={isMobile}
       placeholder={placeholder}
-      classNames={{ item: 'name-search-item', panel: 'name-search-panel' }}
+      id={CUSTOM_CLASSES.root}
+      classNames={CUSTOM_CLASSES}
       getSources={({ query }) => {
         if ((query).length < 3) {
           return []
@@ -48,4 +49,10 @@ export const ClimbSearchByName = ({ isMobile = true, placeholder = 'Try \'Levita
       }}
     />
   )
+}
+
+const CUSTOM_CLASSES = {
+  root: 'name-search',
+  item: 'name-search-item',
+  panel: 'name-search-panel'
 }

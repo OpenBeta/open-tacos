@@ -264,9 +264,9 @@ input:checked + label {
   Autocomplete
 */
 
-.aa-Autocomplete {
+/* .aa-Autocomplete {
   @apply z-50 max-h-7 lg:max-h-full w-full border border-black rounded-lg overflow-hidden !important;
-}
+} */
 
 .aa-Form {
   @apply ring-0 bg-white border-black overflow-hidden  !important;
@@ -330,8 +330,40 @@ input:checked + label {
 .xsearch-sourceHeader {
   @apply bg-blue-200;
 }
-
 /* End of XSearch */
+
+/* Climb search for tagging */
+.tag-search-form {
+  @apply w-80 h-9 ring-2 ring-neutral-200 border-neutral-600 rounded-lg !important;
+}
+
+.tag-search-inputWrapper {
+  @apply m-0 text-sm !important;
+}
+
+.tag-search-inputWrapperPrefix {
+  @apply h-9 w-9 !important;
+
+}
+
+.tag-search-submit-button {
+  @apply h-9 w-9 bg-white !important;
+}
+
+.tag-search-submit-button .aa-SubmitIcon {
+  @apply h-4 w-4 text-neutral-600 !important;
+}
+
+.tag-search-panel {
+  /* Result panel - Tablet and desktop only. We need a mobile specific width and layout */
+  @apply mt-0.5 pt-0 rounded-lg border border-neutral-600 drop-shadow-lg max-w-screen-sm !important;
+}
+
+.tag-search-item {
+  @apply m-1 px-2 rounded-md hover:bg-ob-secondary hover:bg-opacity-20 !important;
+}
+/* End of search for tagging */
+
 
 .fading-hidden {
   visibility: hidden;
