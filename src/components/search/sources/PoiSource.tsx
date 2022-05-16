@@ -1,27 +1,26 @@
 import { AutocompleteSource } from '@algolia/autocomplete-js'
 
 import { geocoderLookup } from '../../../js/mapbox/Client'
+import { DefaultHeader, DefaultNoResult } from '../templates/ClimbResultXSearch'
 
 /**
- * Call Mapbox Geocoder to return cities, landmarks, and point-of-interests that match 'query'.
+ * Call Mapbox Geocoder to find cities, landmarks, and point-of-interests that
+ * match 'query'.  Wrap result in Algolia.Source object to allow Autocomplete component.
+ * See also https://www.algolia.com/doc/ui-libraries/autocomplete/core-concepts/sources/
+ * to render the result.
  * @param query search string
  */
-export const searchPoi = (query: string): AutocompleteSource<any> | undefined => {
+export const searchPoi = async (query: string): Promise<AutocompleteSource<any> | undefined> => {
+  const rs = await geocoderLookup(query)
   return {
     sourceId: 'poi',
-    getItems: async ({ query }) => await geocoderLookup(query),
+    getItems: ({ query }) => rs,
     templates: {
-      noResults: () => {
-        return 'No results.'
-      },
+      noResults: DefaultNoResult,
       item: ({ item }) => {
         return <div className='text-xs'>{item.place_name}</div>
       },
-      header: Header
+      header: DefaultHeader // you can also define your own header
     }
   }
-}
-
-const Header = (props: any): JSX.Element => {
-  return (<div className='bg-green-200'>Place header</div>)
 }

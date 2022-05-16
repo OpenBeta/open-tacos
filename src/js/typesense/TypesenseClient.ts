@@ -28,6 +28,15 @@ export const typesenseSearch = async (query: string): Promise<any> => {
   })
 }
 
+export const climbSearchByName = async (query: string): Promise<any> => {
+  const rs = await typesenseClient.collections('climbs').documents().search({
+    q: query,
+    query_by: 'climbName,areaNames,climbDesc,fa',
+    exclude_fields: 'climbDesc'
+  })
+  return rs.hits.map(hit => hit.document)
+}
+
 /**
  * Search multiple collections in one request
  * @param query
@@ -69,8 +78,8 @@ export async function multiSearch (query: string): Promise<any> {
   const rs = await typesenseClient.multiSearch.perform(searchRequests, commonSearchParams)
   // FYI: rs.results contains a lot more useful data
   return {
-    climbs: rs.results[0].hits,
-    areas: rs.results[1].hits,
-    fa: rs.results[2].hits
+    climbs: rs.results[0].hits.map(hit => hit.document),
+    areas: rs.results[1].hits.map(hit => hit.document),
+    fa: rs.results[2].hits.map(hit => hit.document)
   }
 }

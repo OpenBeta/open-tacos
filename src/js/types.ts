@@ -1,4 +1,5 @@
 import { BBox, Feature } from '@turf/helpers'
+import { BaseItem } from '@algolia/autocomplete-core'
 
 export interface AreaMetadataType {
   leaf: boolean
@@ -123,11 +124,11 @@ export interface AlgoliaResultType {
 }
 export type ClimbAlgoliaType = Climb & AlgoliaResultType
 
-export interface TypesenseDocumentType {
+export interface TypesenseDocumentType extends BaseItem {
   climbUUID: string
   climbDesc: string
   climbName: string
-  disciplines: string[]
+  disciplines: ClimbDiscipline[]
   fa: string
   grade: string
   safety: SafetyType
@@ -153,3 +154,22 @@ export interface MarkerStateType {
   areaId: string
   lnglat: number[]
 }
+
+/// /////////////////////////////////////////////
+// Media tags
+
+export interface MediaBaseTag {
+  mediaUuid: string
+  mediaUrl: string
+  mediaType: number
+  destType: number
+}
+export interface MediaClimbTag extends MediaBaseTag {
+  climb: Climb
+}
+
+export interface MediaAreaTag extends MediaBaseTag {
+  area: AreaType
+}
+
+export type MediaTag = MediaClimbTag | MediaAreaTag
