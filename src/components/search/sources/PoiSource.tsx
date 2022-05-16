@@ -6,10 +6,11 @@ import { geocoderLookup } from '../../../js/mapbox/Client'
  * Call Mapbox Geocoder to return cities, landmarks, and point-of-interests that match 'query'.
  * @param query search string
  */
-export const searchPoi = (query: string): AutocompleteSource<any> | undefined => {
+export const searchPoi = async (query: string): Promise<AutocompleteSource<any> | undefined> => {
+  const rs = await geocoderLookup(query)
   return {
     sourceId: 'poi',
-    getItems: async ({ query }) => await geocoderLookup(query),
+    getItems: ({ query }) => rs,
     templates: {
       noResults: () => {
         return 'No results.'

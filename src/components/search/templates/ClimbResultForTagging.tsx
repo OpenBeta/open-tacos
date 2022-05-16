@@ -2,11 +2,16 @@ import { MiniCrumbs } from '../../ui/BreadCrumbs'
 import RouteGradeChip from '../../ui/RouteGradeChip'
 import RouteTypeChips from '../../ui/RouteTypeChips'
 import { disciplineArrayToObj } from '../../../js/utils'
+import { TypesenseDocumentType } from '../../../js/types'
+
+interface ItemProps {
+  item: TypesenseDocumentType
+}
 
 /**
  * Define how to render each search result entry
  */
-export function MiniClimbItem ({ item }): JSX.Element {
+export function MiniClimbItem ({ item }: ItemProps): JSX.Element {
   const { climbName, areaNames, grade, safety, disciplines } = item
   return (
     <div>

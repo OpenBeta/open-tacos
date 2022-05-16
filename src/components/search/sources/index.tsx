@@ -1,5 +1,5 @@
-import { searchTypesense } from './TypesenseRawSource'
+import { xsearchTypesense } from './TypesenseXSearchSources'
 import { searchPoi } from './PoiSource'
 import { TypesenseClimbNameSource } from './TypesenseClimbName'
 
-export { TypesenseClimbNameSource, searchTypesense, searchPoi }
+export { TypesenseClimbNameSource, xsearchTypesense, searchPoi }

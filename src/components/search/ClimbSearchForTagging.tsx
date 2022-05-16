@@ -3,7 +3,6 @@ import { TypesenseDocumentType } from '../../js/types'
 
 import { Autocomplete } from './Autocomplete'
 import { TypesenseClimbNameSource } from './sources'
-// import { reshapeMiniResults } from './Reshape'
 
 interface XSearchProps {
   isMobile?: boolean
@@ -18,7 +17,6 @@ interface XSearchProps {
 export default function ClimbSearchForTagging ({ isMobile = true, placeholder = 'Climb search', onSelect }: XSearchProps): JSX.Element {
   return (
     <Autocomplete
-      // openOnFocus
       autoFocus
       id='climb-tag-search'
       isMobile={isMobile}

@@ -1,4 +1,5 @@
 import { BBox, Feature } from '@turf/helpers'
+import { BaseItem } from '@algolia/autocomplete-core'
 
 export interface AreaMetadataType {
   leaf: boolean
@@ -123,7 +124,7 @@ export interface AlgoliaResultType {
 }
 export type ClimbAlgoliaType = Climb & AlgoliaResultType
 
-export interface TypesenseDocumentType {
+export interface TypesenseDocumentType extends BaseItem {
   climbUUID: string
   climbDesc: string
   climbName: string
