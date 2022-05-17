@@ -1,14 +1,15 @@
 import React from 'react'
-import { Button } from './BaseButton'
+import { Button, ButtonVariant } from './BaseButton'
 
 interface NavMenuButtonProps {
   to: string
   label: string | JSX.Element
-  cta?: boolean
+  variant?: ButtonVariant
+  onClick?: () => void
 }
 
-export default function NavMenuButton ({ label, to, cta = false }: NavMenuButtonProps): JSX.Element {
+export default function NavMenuButton ({ label, to, variant, onClick }: NavMenuButtonProps): JSX.Element {
   return (
-    <Button href={to} label={label} variant={cta ? Button.VARIANT_SOLID_SECONDARY : Button.VARIANT_TEXT_CONTRAST} />
+    <Button href={(onClick != null) ? undefined : to} onClick={onClick} label={label} variant={variant ?? ButtonVariant.TEXT_CONTRAST} />
   )
 }

@@ -1,11 +1,11 @@
 import Image from 'next/image'
-import { useUser } from '@auth0/nextjs-auth0'
 
-import DesktopNavBar from './ui/DesktopNavBar'
+import DesktopNavBar, { NavListItem } from './ui/DesktopNavBar'
 import ClimbSearch from './search/ClimbSearch'
 import XSearch from './search/XSearch'
 import DesktopFilterBar from './finder/filters/DesktopFilterBar'
-import useCanary from '../js/hooks/useCanary'
+import { useAuth, useCanary } from '../js/hooks'
+import { ButtonVariant } from './ui/BaseButton'
 
 interface DesktopAppBarProps {
   expanded: boolean
@@ -15,10 +15,9 @@ interface DesktopAppBarProps {
 
 export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }: DesktopAppBarProps): JSX.Element {
   const canary = useCanary()
+  const { user, isLoading, loginWithRedirect, logout } = useAuth()
 
-  const { user } = useUser()
-
-  const navList = [
+  const navList: NavListItem[] = [
     {
       route: '/about',
       title: 'About'
@@ -30,19 +29,20 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }:
     {
       route: 'https://discord.gg/2A2F6kUtyh',
       title: 'Discord',
-      cta: true
+      variant: ButtonVariant.OUTLINED_PRIMARY
     }
   ]
 
   if (user != null) {
     navList.unshift({
-      route: '/api/auth/logout',
+      action: () => logout(),
       title: 'Logout'
     })
   } else {
     navList.unshift({
-      route: '/api/auth/login',
-      title: 'Login'
+      action: async () => await loginWithRedirect(),
+      title: 'Login',
+      variant: ButtonVariant.SOLID_SECONDARY
     })
   }
 
@@ -65,7 +65,7 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }:
                 onClickOutside={onClose}
               />
       }
-        navList={navList}
+        navList={isLoading ? [] : navList}
       />
       <DesktopFilterBar />
     </header>
