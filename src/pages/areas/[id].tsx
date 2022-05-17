@@ -22,14 +22,6 @@ function Area ({ area }: AreaPageProps): JSX.Element {
   }
   const { areaName, children, metadata, content, pathTokens, ancestors } = area
 
-  const handleAreaSelect = (id: string | null): void => {
-    if (id === focused) {
-      setFocused(null)
-      return
-    }
-    setFocused(id)
-  }
-
   return (
     <Layout contentContainerClass='content-default with-standard-y-margin'>
       <SeoTags
@@ -67,7 +59,7 @@ function Area ({ area }: AreaPageProps): JSX.Element {
           <div className='overflow-y-auto overflow-x-hidden h-full'>
             <AreaList
               subAreas={children}
-              onSelect={handleAreaSelect}
+              onFocus={setFocused}
               selected={focused}
             />
           </div>
