@@ -35,7 +35,7 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }:
 
   if (user != null) {
     navList.unshift({
-      action: () => logout(),
+      action: () => logout({ returnTo: window.location.origin }),
       title: 'Logout'
     })
   } else {
