@@ -4,7 +4,8 @@ import { MediaType } from '../types'
 
 export const SIRV_CONFIG = {
   clientId: process.env.SIRV_CLIENT_ID_RO != null ? process.env.SIRV_CLIENT_ID_RO : '',
-  clientSecret: process.env.SIRV_CLIENT_SECRET_RO != null ? process.env.SIRV_CLIENT_SECRET_RO : ''
+  clientSecret: process.env.SIRV_CLIENT_SECRET_RO != null ? process.env.SIRV_CLIENT_SECRET_RO : '',
+  baseUrl: process.env.NEXT_PUBLIC_SIRV_BASE_URL != null ? process.env.NEXT_PUBLIC_SIRV_BASE_URL : ''
 }
 
 const client = axios.create({
@@ -59,7 +60,7 @@ export const getUserImages = async (uuid: string, token?: string): Promise<UserI
     {
       query: 'dirname:\\/u AND contentType:image',
       sort: {
-        ctime: 'asc'
+        ctime: 'desc'
       }
     },
     {

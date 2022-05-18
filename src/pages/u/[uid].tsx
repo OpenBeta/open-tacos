@@ -1,14 +1,12 @@
 import { NextPage, GetStaticProps } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { v5 as uuidv5 } from 'uuid'
 import { groupBy, Dictionary } from 'underscore'
 
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import ImageTable from '../../components/users/ImageTable'
 import { getTagsByMediaId } from '../../js/graphql/api'
-// import { listPhotos } from '../../js/imgix/ImgixClient'
 import { getUserImages } from '../../js/sirv/SirvClient'
 import { MediaTag, MediaType } from '../../js/types'
 
@@ -56,12 +54,9 @@ export async function getStaticPaths (): Promise<any> {
 
 export const getStaticProps: GetStaticProps<UserHomeProps> = async ({ params }) => {
   const { uid } = params
-  // const imageList = await listPhotos({ uid: uid as string })
   const { mediaList, mediaIdList } = await getUserImages(MOCK_USER_ID_MAP[uid as string])
-
-  // const uuidList = imageList.map(imageInfo => uuidv5(imageInfo.origin_path, uuidv5.URL))
-
   const tagArray = await getTagsByMediaId(mediaIdList)
+
   const tagsByMediaId = groupBy(tagArray, 'mediaUuid')
   const data = {
     uid: uid as string,
@@ -73,6 +68,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps> = async ({ params }) 
   }
 }
 
+// once we implement user account, we should be able to get this mapping user metadata
 const MOCK_USER_ID_MAP = {
   vietnguyen: 'abe96612-2742-43b0-a128-6b19d4e4615f'
 }

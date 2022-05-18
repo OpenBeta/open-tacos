@@ -8,6 +8,9 @@ export default function useImageTagHelper (): any {
   const [mouseXY, _setMouseXY] = useState([0, 0])
   const [isOpen, setIsOpen] = useState(true)
 
+  /**
+   * Record onClick image and screen X, Y
+   */
   const onClick = ({ imageInfo, mouseXY }): void => {
     setImageInfo(imageInfo)
     _setMouseXY(mouseXY)

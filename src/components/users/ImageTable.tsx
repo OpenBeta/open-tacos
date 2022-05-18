@@ -1,20 +1,20 @@
 import { useCallback, useState } from 'react'
-import Imgix from 'react-imgix'
-import { v5 as uuidv5 } from 'uuid'
 import { Dictionary } from 'underscore'
 
-import { IMGIX_CONFIG } from '../../js/imgix/ImgixClient'
+import UserMedia from '../media/UserMedia'
 import ImageTagger from '../media/ImageTagger'
 import useImageTagHelper from '../media/useImageTagHelper'
-import TagList from '../media/TagList'
-import { MediaTag, MediaClimbTag } from '../../js/types'
+import { MediaTag, MediaClimbTag, MediaType } from '../../js/types'
 
 interface ImageTableProps {
   uid: string
-  imageList: any[]
+  imageList: MediaType[]
   initialTagsByMediaId: Dictionary<MediaTag[]>
 }
 
+/**
+ * Image table on user profile
+ */
 export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: ImageTableProps): JSX.Element {
   const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
 
@@ -78,10 +78,14 @@ export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: Im
     <>
       <div className='flex justify-center flex-wrap'>
         {imageList.map(imageInfo => {
-          const tags = tagsByMediaId?.[uuidv5(imageInfo.origin_path, uuidv5.URL)] ?? []
+          const tags = tagsByMediaId?.[imageInfo.mediaId] ?? []
           return (
-            <UserImage
-              key={imageInfo.origin_path} tagList={tags} imageInfo={imageInfo} onClick={onClick} onTagDeleted={onDeletedHandler}
+            <UserMedia
+              key={imageInfo.mediaId}
+              tagList={tags}
+              imageInfo={imageInfo}
+              onClick={onClick}
+              onTagDeleted={onDeletedHandler}
             />
           )
         })}
@@ -101,37 +105,3 @@ export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: Im
  * @param uid user id
  */
 const revalidateServePage = async (uid: string): Promise<any> => await fetch(`/api/revalidate?token=8b%26o4t%21xUqAN3Y%239&u=${uid}`)
-
-interface UserImageProps {
-  imageInfo: any
-  onClick: (props: any) => void
-  onTagDeleted?: (props?: any) => void
-  tagList: MediaTag[]
-}
-
-const UserImage = ({ imageInfo, onClick, tagList, onTagDeleted }: UserImageProps): JSX.Element => {
-  const [hovered, setHover] = useState(false)
-  const imgUrl = `${IMGIX_CONFIG.sourceURL}${imageInfo.origin_path as string}`
-
-  const onClickHandler = useCallback((event) => {
-    onClick({ mouseXY: [event.clientX, event.clientY], imageInfo })
-  }, [])
-
-  return (
-    <div className='cursor-pointer block mx-0 my-4 md:m-4 relative' onClick={onClickHandler} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-      <Imgix
-        src={imgUrl}
-        width={300}
-        height={300}
-        imgixParams={{
-          fit: 'crop',
-          ar: '1:1'
-        }}
-      />
-      {tagList?.length > 0 &&
-        <div className='absolute inset-0 flex flex-col justify-end'>
-          <TagList hovered={hovered} list={tagList} onDeleted={onTagDeleted} />
-        </div>}
-    </div>
-  )
-}

@@ -1,18 +1,17 @@
 import { useState, useEffect, useCallback, memo } from 'react'
 import { usePopper } from 'react-popper'
 import { useMutation } from '@apollo/client'
-import { v5 as uuidv5 } from 'uuid'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import { MUTATION_ADD_CLIMB_TAG_TO_MEDIA } from '../../js/graphql/fragments'
 import ClimbSearchForTagging from '../search/ClimbSearchForTagging'
+import { MediaType } from '../../js/types'
 
 interface ImageTaggerProps {
   isOpen: boolean
   mouseXY: number[]
   close: () => void
-  imageInfo: any
-  onClick: any
+  imageInfo: MediaType
   onCompleted: (data: any) => void
 }
 
@@ -75,12 +74,11 @@ export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close, onComp
         <ClimbSuggestion
           isMobile={false} placeholder='Search for climb' onSelect={async (item) => {
             const { climbUUID } = item
-            const mediaUuid = uuidv5(imageInfo.origin_path, uuidv5.URL)
             try {
               await tagPhotoWithClimb({
                 variables: {
-                  mediaUuid,
-                  mediaUrl: imageInfo.origin_path,
+                  mediaUuid: imageInfo.mediaId,
+                  mediaUrl: imageInfo.filename,
                   srcUuid: climbUUID
                 }
               })

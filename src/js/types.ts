@@ -176,6 +176,7 @@ export type MediaTag = MediaClimbTag | MediaAreaTag
 
 export interface MediaType {
   ownerId: string
+  mediaId: string
   filename: string
   ctime: Date
   mtime: Date
