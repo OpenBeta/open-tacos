@@ -1,8 +1,10 @@
 import axios from 'axios'
+import { v5 as uuidv5 } from 'uuid'
+import { MediaType } from '../types'
 
 export const SIRV_CONFIG = {
-  clientId: process.env.NEXT_SIRV_CLIENT_ID != null ? process.env.NEXT_SIRV_CLIENT_ID : '',
-  clientSecret: process.env.NEXT_SIRV_CLIENT_SECRET != null ? process.env.NEXT_SIRV_CLIENT_SECRET : ''
+  clientId: process.env.SIRV_CLIENT_ID_RO != null ? process.env.SIRV_CLIENT_ID_RO : '',
+  clientSecret: process.env.SIRV_CLIENT_SECRET_RO != null ? process.env.SIRV_CLIENT_SECRET_RO : ''
 }
 
 const client = axios.create({
@@ -16,7 +18,7 @@ const headers = {
   'content-type': 'application/json'
 }
 
-export const getToken = async (): Promise<string> => {
+export const getToken = async (): Promise<string|undefined> => {
   if (SIRV_CONFIG.clientSecret == null) {
     console.log('Missing clientSecret')
     return ''
@@ -31,18 +33,34 @@ export const getToken = async (): Promise<string> => {
   if (res.status === 200) {
     return res.data.token
   }
-  return ''
+  console.log('Sirv API.getToken() error', res)
+  return undefined
 }
 
-export const getUserImages = async (uuid: string, token?: string): Promise<any> => {
+export interface UserImageReturnType {
+  mediaList: MediaType[]
+  mediaIdList: string[]
+}
+export const getUserImages = async (uuid: string, token?: string): Promise<UserImageReturnType> => {
   let _t = token
   if (token == null) {
     _t = await getToken()
   }
+
+  if (_t == null) {
+    return {
+      mediaList: [],
+      mediaIdList: []
+    }
+  }
+
   const res = await client.post(
     '/files/search',
     {
-      query: 'dirname:\\/u'
+      query: 'dirname:\\/u AND contentType:image',
+      sort: {
+        ctime: 'asc'
+      }
     },
     {
       headers: {
@@ -51,7 +69,31 @@ export const getUserImages = async (uuid: string, token?: string): Promise<any> 
       }
     }
   )
+  if (res.status === 200 && Array.isArray(res.data.hits)) {
+    const mediaIdList = []
+    const mediaList = res.data.hits.map(entry => {
+      const { filename, ctime, mtime, contentType, meta } = entry._source
+      const mediaId = uuidv5(filename, uuidv5.URL)
+      mediaIdList.push(mediaId)
+      return ({
+        ownerId: uuid,
+        filename,
+        mediaId,
+        ctime,
+        mtime,
+        contentType,
+        meta
+      })
+    })
 
-  console.log(res.data.hits)
-  return ''
+    return {
+      mediaList,
+      mediaIdList
+    }
+  }
+
+  return {
+    mediaList: [],
+    mediaIdList: []
+  }
 }

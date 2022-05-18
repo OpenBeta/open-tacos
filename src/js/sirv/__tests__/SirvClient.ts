@@ -3,5 +3,6 @@ import { getToken, getUserImages } from '../SirvClient'
 
 test('Sirv client', async () => {
   const token = await getToken()
-  const list = await getUserImages('1232', token)
+  const list = await getUserImages('abe96612-2742-43b0-a128-6b19d4e4615f', token)
+  console.log(list)
 })

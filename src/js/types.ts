@@ -173,3 +173,11 @@ export interface MediaAreaTag extends MediaBaseTag {
 }
 
 export type MediaTag = MediaClimbTag | MediaAreaTag
+
+export interface MediaType {
+  ownerId: string
+  filename: string
+  ctime: Date
+  mtime: Date
+  contentType: string
+}
