@@ -1,11 +1,18 @@
 import Bar from './Bar'
+import { ButtonVariant } from './BaseButton'
 import NavMenuButton from './NavMenuButton'
 
+export interface NavListItem {
+  title: string
+  route?: string
+  variant?: ButtonVariant
+  action?: () => void
+}
 interface DesktopAppBarProps {
   expanded: boolean
   branding: JSX.Element
   search: JSX.Element
-  navList: any[]
+  navList: NavListItem[]
 }
 
 export default function DesktopNavBar ({ expanded, branding, search, navList }: DesktopAppBarProps): JSX.Element {
@@ -26,15 +33,11 @@ export default function DesktopNavBar ({ expanded, branding, search, navList }: 
   )
 }
 
-interface NavItemProps {
-  route: string
-  title: string
-  cta: boolean
-}
-const NavItem = ({ route, title, cta }: NavItemProps): JSX.Element => {
+const NavItem = ({ route, title, variant, action }: NavListItem): JSX.Element => {
   return (
     <NavMenuButton
-      cta={cta}
+      onClick={action}
+      variant={variant}
       label={title}
       to={route}
     />

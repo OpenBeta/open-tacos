@@ -1,10 +1,12 @@
 import Image from 'next/image'
 
-import DesktopNavBar from './ui/DesktopNavBar'
+import DesktopNavBar, { NavListItem } from './ui/DesktopNavBar'
 import ClimbSearch from './search/ClimbSearch'
 import XSearch from './search/XSearch'
 import DesktopFilterBar from './finder/filters/DesktopFilterBar'
-import useCanary from '../js/hooks/useCanary'
+import { useCanary } from '../js/hooks'
+import { ButtonVariant } from './ui/BaseButton'
+import { useSession, signIn, signOut } from 'next-auth/react'
 
 interface DesktopAppBarProps {
   expanded: boolean
@@ -14,6 +16,37 @@ interface DesktopAppBarProps {
 
 export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }: DesktopAppBarProps): JSX.Element {
   const canary = useCanary()
+  const { status } = useSession()
+
+  const navList: NavListItem[] = [
+    {
+      route: '/about',
+      title: 'About'
+    },
+    {
+      route: 'https://docs.openbeta.io',
+      title: 'Docs'
+    },
+    {
+      route: 'https://discord.gg/2A2F6kUtyh',
+      title: 'Discord',
+      variant: ButtonVariant.OUTLINED_PRIMARY
+    }
+  ]
+
+  if (status === 'authenticated') {
+    navList.unshift({
+      action: async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` }),
+      title: 'Logout'
+    })
+  } else {
+    navList.unshift({
+      action: async () => await signIn('auth0'),
+      title: 'Login',
+      variant: ButtonVariant.SOLID_SECONDARY
+    })
+  }
+
   return (
     <header className='sticky top-0 z-10'>
       <DesktopNavBar
@@ -39,19 +72,3 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }:
     </header>
   )
 }
-
-const navList = [
-  {
-    route: '/about',
-    title: 'About'
-  },
-  {
-    route: 'https://docs.openbeta.io',
-    title: 'Docs'
-  },
-  {
-    route: 'https://discord.gg/2A2F6kUtyh',
-    title: 'Discord',
-    cta: true
-  }
-]
