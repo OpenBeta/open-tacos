@@ -64,7 +64,8 @@ export const getStaticProps: GetStaticProps<UserHomeProps> = async ({ params }) 
     tagsByMediaId
   }
   return {
-    props: data
+    props: data,
+    revalidate: 60
   }
 }
 
