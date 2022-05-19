@@ -4,8 +4,9 @@ import DesktopNavBar, { NavListItem } from './ui/DesktopNavBar'
 import ClimbSearch from './search/ClimbSearch'
 import XSearch from './search/XSearch'
 import DesktopFilterBar from './finder/filters/DesktopFilterBar'
-import { useAuth, useCanary } from '../js/hooks'
+import { useCanary } from '../js/hooks'
 import { ButtonVariant } from './ui/BaseButton'
+import { useSession, signIn, signOut } from 'next-auth/react'
 
 interface DesktopAppBarProps {
   expanded: boolean
@@ -15,7 +16,7 @@ interface DesktopAppBarProps {
 
 export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }: DesktopAppBarProps): JSX.Element {
   const canary = useCanary()
-  const { user, isLoading, loginWithRedirect, logout } = useAuth()
+  const { status } = useSession()
 
   const navList: NavListItem[] = [
     {
@@ -33,14 +34,14 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }:
     }
   ]
 
-  if (user != null) {
+  if (status === 'authenticated') {
     navList.unshift({
-      action: () => logout({ returnTo: window.location.origin }),
+      action: async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` }),
       title: 'Logout'
     })
   } else {
     navList.unshift({
-      action: async () => await loginWithRedirect(),
+      action: async () => await signIn('auth0'),
       title: 'Login',
       variant: ButtonVariant.SOLID_SECONDARY
     })
@@ -65,7 +66,7 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }:
                 onClickOutside={onClose}
               />
       }
-        navList={isLoading ? [] : navList}
+        navList={navList}
       />
       <DesktopFilterBar />
     </header>
