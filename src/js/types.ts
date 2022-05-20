@@ -165,11 +165,11 @@ export interface MediaBaseTag {
   destType: number
 }
 export interface MediaClimbTag extends MediaBaseTag {
-  climb: Climb
+  climb: Partial<Climb>
 }
 
 export interface MediaAreaTag extends MediaBaseTag {
-  area: AreaType
+  area: Partial<AreaType>
 }
 
 export type MediaTag = MediaClimbTag | MediaAreaTag
@@ -181,4 +181,5 @@ export interface MediaType {
   ctime: Date
   mtime: Date
   contentType: string
+  meta: any
 }

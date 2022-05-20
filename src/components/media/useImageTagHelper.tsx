@@ -1,15 +1,20 @@
 import { useState } from 'react'
 
 /**
- * React hook for managing tagging UI states
+ * React hook for managing image tagging states
  */
 export default function useImageTagHelper (): any {
+  /* Info of the image being clicked on */
   const [imageInfo, setImageInfo] = useState(null)
+
+  /* Screen coordinates of click event */
   const [mouseXY, _setMouseXY] = useState([0, 0])
+
+  /* search popover state */
   const [isOpen, setIsOpen] = useState(true)
 
   /**
-   * Record onClick image and screen X, Y
+   * Record onClick event on image and screen X, Y
    */
   const onClick = ({ imageInfo, mouseXY }): void => {
     setImageInfo(imageInfo)
@@ -18,7 +23,7 @@ export default function useImageTagHelper (): any {
   }
 
   /**
-   * Close/cancel in-process climb search
+   * Close/cancel active popover climb search widget
    */
   const close = (): void => {
     setIsOpen(false)

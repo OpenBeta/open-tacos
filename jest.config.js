@@ -1,3 +1,5 @@
+const nextEnv = require('@next/env')
+
 const nextJest = require('next/jest')
 
 const createJestConfig = nextJest({
@@ -15,6 +17,9 @@ const customJestConfig = {
     '^.+\\.tsx?$': 'ts-jest'
   }
 }
+
+const projectDir = process.cwd()
+nextEnv.loadEnvConfig(projectDir)
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
 module.exports = createJestConfig(customJestConfig)
