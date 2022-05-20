@@ -165,11 +165,11 @@ export interface MediaBaseTag {
   destType: number
 }
 export interface MediaClimbTag extends MediaBaseTag {
-  climb: Partial<Climb>
+  climb: Pick<Climb, 'id' | 'name'>
 }
 
 export interface MediaAreaTag extends MediaBaseTag {
-  area: Partial<AreaType>
+  area: Pick<AreaType, 'id'>
 }
 
 export type MediaTag = MediaClimbTag | MediaAreaTag

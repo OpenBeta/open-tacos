@@ -38,7 +38,7 @@ export default function TagList ({ hovered, list, onDeleted }: TagsProps): JSX.E
     >
       {list.map((tag: MediaClimbTag) =>
         <Tag
-          key={tag.mediaUuid + tag.climb.id}
+          key={`${tag.mediaUuid}-${tag.climb.id}`}
           highlighted={hovered}
           tag={tag}
           onDelete={onDeleteHandler}
