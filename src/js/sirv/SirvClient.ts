@@ -76,7 +76,7 @@ export const getUserImages = async (uuid: string, token?: string): Promise<UserI
       const { filename, ctime, mtime, contentType, meta } = entry._source
       const mediaId = uuidv5(filename, uuidv5.URL)
       mediaIdList.push(mediaId)
-      const foo = ({
+      return ({
         ownerId: uuid,
         filename,
         mediaId,
@@ -85,17 +85,12 @@ export const getUserImages = async (uuid: string, token?: string): Promise<UserI
         contentType,
         meta
       })
-      // console.log('#foo', foo)
-      return foo
     })
 
-    const foos = {
+    return {
       mediaList,
       mediaIdList
     }
-
-    console.log('#foo', foos)
-    return foos
   }
 
   return {
