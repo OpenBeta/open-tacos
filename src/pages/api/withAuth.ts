@@ -8,7 +8,6 @@ import { NextApiHandler } from 'next'
 const withAuth = (handler: NextApiHandler): NextApiHandler => {
   return async (req, res) => {
     const session = await getSession({ req })
-    console.log(session)
     if (session != null) {
       handler(req, res)
     } else {
