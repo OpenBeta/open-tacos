@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { UserMetadata } from './api/user/metadataClient'
 import { Button, ButtonVariant } from '../components/ui/BaseButton'
 import { useSession } from 'next-auth/react'
+import { withAuth } from '../js/auth'
 
 const Profile: NextPage = () => {
   const [profile, setProfile] = useState<UserMetadata>()
@@ -52,4 +53,4 @@ const Profile: NextPage = () => {
     </>
   )
 }
-export default Profile
+export default withAuth(Profile)
