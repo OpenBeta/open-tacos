@@ -38,8 +38,7 @@ export const getToken = async (): Promise<string|undefined> => {
   if (res.status === 200) {
     return res.data.token
   }
-  console.log('Sirv API.getToken() error', res)
-  return undefined
+  throw new Error('Sirv API.getToken() error' + res.statusText)
 }
 
 export interface UserImageReturnType {
@@ -97,8 +96,5 @@ export const getUserImages = async (uuid: string, token?: string): Promise<UserI
     }
   }
 
-  return {
-    mediaList: [],
-    mediaIdList: []
-  }
+  throw new Error('Sirv API.getUserImages() error' + res.statusText)
 }
