@@ -74,12 +74,12 @@ const layerStyle: LayerProps = {
 }
 
 interface MarkerLayerProps {
-  geojson: FeatureCollection<GeoJSON.Geometry, Properties>
+  geojson: FeatureCollection<GeoJSON.Geometry, Properties> | undefined
 }
 /**
  * Build a heatmap layer using native Mapbox GL style.
  */
-export default function HeatmapLayer ({ geojson }: MarkerLayerProps): JSX.Element {
+export default function HeatmapLayer ({ geojson }: MarkerLayerProps): JSX.Element | null {
   if (geojson == null) return null
   return (
     <Source
@@ -87,7 +87,7 @@ export default function HeatmapLayer ({ geojson }: MarkerLayerProps): JSX.Elemen
       type='geojson'
       data={geojson}
     >
-      <Layer id='heatmap' {...layerStyle} />
+      <Layer {...layerStyle} />
     </Source>
   )
 }

@@ -1,7 +1,8 @@
 import axios from 'axios'
-import { Feature } from 'geojson'
+import { Feature, Geometry } from 'geojson'
 import { NEXT_PUBLIC_MAPBOX_API_KEY } from '../../Config'
 
+type ArrayOfFeatures = Promise<Array<Feature<Geometry, { [name: string]: object }>>>
 /**
  * Call Mapbox forward geocoder look up
  * @param query Search string. Eg: Smith Rock
@@ -11,7 +12,7 @@ import { NEXT_PUBLIC_MAPBOX_API_KEY } from '../../Config'
 export const geocoderLookup = async (
   query: string,
   options = {}
-): Promise<Feature[]> => {
+): Promise<ArrayOfFeatures> => {
   const safeQuery = encodeURI(query)
   const opts = Object.keys(options)
     .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(options[k])}`)

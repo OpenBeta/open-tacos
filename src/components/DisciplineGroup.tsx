@@ -20,7 +20,7 @@ const DisciplineGroup = ({ climbTypes, setClimbTypes, defaultTypes }: Discipline
     <TableView divider>
       <Toggle
         label='Sport'
-        enabled={climbTypes.sport}
+        enabled={climbTypes.sport ?? false}
         onClick={() => {
           // eslint-disable-next-line
          setClimbTypes({ ...climbTypes, sport: !climbTypes.sport })
@@ -28,7 +28,7 @@ const DisciplineGroup = ({ climbTypes, setClimbTypes, defaultTypes }: Discipline
       />
 
       <Toggle
-        enabled={climbTypes.trad}
+        enabled={climbTypes.trad ?? false}
         label='Trad'
         onClick={() => {
           // eslint-disable-next-line
@@ -36,7 +36,7 @@ const DisciplineGroup = ({ climbTypes, setClimbTypes, defaultTypes }: Discipline
         }}
       />
       <Toggle
-        enabled={climbTypes.tr}
+        enabled={climbTypes.tr ?? false}
         label='Top rope'
         onClick={() => {
           // eslint-disable-next-line
@@ -44,7 +44,7 @@ const DisciplineGroup = ({ climbTypes, setClimbTypes, defaultTypes }: Discipline
         }}
       />
       <Toggle
-        enabled={climbTypes.bouldering}
+        enabled={climbTypes.bouldering ?? false}
         label='Bouldering'
         onClick={() => {
           // eslint-disable-next-line

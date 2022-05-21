@@ -23,7 +23,7 @@ const Pagination = (): JSX.Element => {
         previousClassName={`${currentPage === 0 ? 'pointer-events-none text-tertiary' : ''}`}
         previousLabel='<'
         nextClassName={`${currentPage < pageCount - 1 ? '' : 'pointer-events-none text-tertiary'}`}
-        renderOnZeroPageCount={null}
+        renderOnZeroPageCount={undefined}
         forcePage={currentPage}
       />
       <Footer

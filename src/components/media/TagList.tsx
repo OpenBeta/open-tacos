@@ -38,7 +38,7 @@ export default function TagList ({ hovered, list, onDeleted }: TagsProps): JSX.E
     >
       {list.map((tag: MediaClimbTag) =>
         <Tag
-          key={tag.mediaUuid + tag.climb.id}
+          key={`${tag.mediaUuid}-${tag.climb.id}`}
           highlighted={hovered}
           tag={tag}
           onDelete={onDeleteHandler}
@@ -53,7 +53,7 @@ interface PhotoTagProps {
   onDelete: (mediaId: string, destinationId: string) => void
 }
 
-const Tag = ({ tag, highlighted, onDelete }: PhotoTagProps): JSX.Element => {
+export const Tag = ({ tag, highlighted, onDelete }: PhotoTagProps): JSX.Element => {
   const { climb } = tag
   return (
     <span className={classNames(

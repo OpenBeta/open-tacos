@@ -3,7 +3,7 @@ import {
   InMemoryCache
 } from '@apollo/client'
 
-const uri: string = process.env.NEXT_PUBLIC_API_SERVER
+const uri: string = process.env.NEXT_PUBLIC_API_SERVER ?? ''
 
 export const graphqlClient = new ApolloClient({
   uri,
