@@ -7,9 +7,9 @@ if ((process.env.SIRV_CLIENT_SECRET_RO ?? null) == null && window == null) throw
 if ((process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? null) == null) throw new Error('NEXT_PUBLIC_SIRV_BASE_URL not set')
 
 export const SIRV_CONFIG = {
-  clientId: process.env.SIRV_CLIENT_ID_RO ?? '',
-  clientSecret: process.env.SIRV_CLIENT_SECRET_RO ?? '',
-  baseUrl: process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? ''
+  clientId: process.env.SIRV_CLIENT_ID_RO ?? null,
+  clientSecret: process.env.SIRV_CLIENT_SECRET_RO ?? null,
+  baseUrl: process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? null
 }
 
 const client = axios.create({

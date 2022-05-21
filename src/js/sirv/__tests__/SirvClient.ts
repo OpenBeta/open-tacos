@@ -1,10 +1,14 @@
 import '@testing-library/jest-dom/extend-expect'
-import { getToken, getUserImages } from '../SirvClient'
+import { getToken, getUserImages, SIRV_CONFIG } from '../SirvClient'
+
+beforeAll(() => {
+  expect(SIRV_CONFIG.clientSecret).not.toBeNull()
+  expect(SIRV_CONFIG.baseUrl).not.toBeNull()
+  expect(SIRV_CONFIG.clientId).not.toBeNull()
+})
 
 test('Sirv client', async () => {
   const token = await getToken()
-  console.log('#token', token != null)
   const list = await getUserImages('abe96612-2742-43b0-a128-6b19d4e4615f', token)
-  console.log('#getImages', list)
   expect(list.mediaList.length).toBeGreaterThan(0)
 })
