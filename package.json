@@ -41,7 +41,7 @@
     "immer": "^9.0.12",
     "js-yaml": "^4.1.0",
     "mapbox-gl": "^2.7.0",
-    "next": "^12.1.7-canary.10",
+    "next": "^12.1.7-canary.9",
     "next-auth": "^4.3.4",
     "nprogress": "^0.2.0",
     "query-string": "^7.0.1",

@@ -6,8 +6,8 @@ import { signIn, useSession } from 'next-auth/react'
  *  Wrap a component to check that the user has a valid session.
  *  Redirect to the sign in page if the user is not authenticated.
 */
-const withAuth = (Component: NextComponentType): NextComponentType => {
-  const AuthenticatedComponent = (): JSX.Element => {
+const withAuth = (Component: NextComponentType): NextComponentType | null => {
+  const AuthenticatedComponent = (): JSX.Element | null => {
     const { status } = useSession()
 
     const isAuthenticated = status === 'authenticated'

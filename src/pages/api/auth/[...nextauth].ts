@@ -1,7 +1,10 @@
 import NextAuth from 'next-auth'
 import Auth0Provider from 'next-auth/providers/auth0'
 
-const clientSecret = process.env.AUTH0_CLIENT_SECRET ?? ''
+import { AUTH_CONFIG_SERVER } from '../../../Config'
+
+if (AUTH_CONFIG_SERVER == null) throw new Error('AUTH_CONFIG_SERVER not defined')
+const { clientSecret, clientId, issuer } = AUTH_CONFIG_SERVER
 
 if (process.env.NODE_ENV === 'production' && clientSecret.length === 0) {
   throw new Error('AUTH0_CLIENT_SECRET is required in production')
@@ -10,10 +13,10 @@ if (process.env.NODE_ENV === 'production' && clientSecret.length === 0) {
 export default NextAuth({
   providers: [
     Auth0Provider({
-      clientId: process.env.AUTH0_CLIENT_ID,
+      clientId,
       clientSecret,
-      issuer: process.env.AUTH0_DOMAIN,
-      authorization: { params: { audience: `${process.env.AUTH0_DOMAIN ?? ''}/api/v2/`, scope: 'openid email profile read:current_user create:current_user_metadata update:current_user_metadata' } },
+      issuer,
+      authorization: { params: { audience: `${issuer}/api/v2/`, scope: 'openid email profile read:current_user create:current_user_metadata update:current_user_metadata' } },
       client: {
         token_endpoint_auth_method: clientSecret.length === 0 ? 'none' : 'client_secret_basic'
       }

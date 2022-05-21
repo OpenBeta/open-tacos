@@ -1,5 +1,5 @@
 import React from 'react'
-import { GetStaticProps } from 'next'
+import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../../js/graphql/Client'
@@ -15,16 +15,29 @@ interface ClimbProps {
   climb: Climb
 }
 
-function Climbs ({ climb }: ClimbProps): JSX.Element {
+const ClimbPage: NextPage<ClimbProps> = ({ climb }: ClimbProps) => {
   const router = useRouter()
 
-  if (router.isFallback) {
-    return <div>Loading...</div>
-  }
+  return (
+    <Layout contentContainerClass='content-default with-standard-y-margin'>
+      {router.isFallback
+        ? (
+          <div className='px-4 max-w-screen-md'>
+            <div>Loading...</div>
+          </div>
+          )
+        : <Body climb={climb} />}
+    </Layout>
+  )
+}
+
+export default ClimbPage
+
+const Body = ({ climb }: ClimbProps): JSX.Element => {
   const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
   const { climbId } = metadata
   return (
-    <Layout contentContainerClass='content-default with-standard-y-margin'>
+    <>
       <SeoTags
         keywords={[name]}
         title={name}
@@ -49,9 +62,10 @@ function Climbs ({ climb }: ClimbProps): JSX.Element {
           <InlineEditor id={`climb-pro-${climbId}`} markdown={content.protection} readOnly />
         </div>
       </div>
-    </Layout>
+    </>
   )
 }
+
 interface MetaType {
   pathTokens: string[]
   fa?: string
@@ -91,7 +105,12 @@ export async function getStaticPaths (): Promise<any> {
   }
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<ClimbProps, { id: string}> = async ({ params }) => {
+  if (params == null || params.id == null) {
+    return {
+      notFound: true
+    }
+  }
   const query = gql`query ClimbByUUID($uuid: ID) {
     climb(uuid: $uuid) {
       id
@@ -122,15 +141,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }`
 
-  const rs = await graphqlClient.query<Climb>({
+  const rs = await graphqlClient.query<{climb: Climb}>({
     query,
     variables: {
       uuid: params.id
     }
   })
 
-  // Pass post data to the page via props
-  return { props: rs.data }
+  // Pass climb data to the page via props
+  return {
+    props: {
+      climb: rs.data.climb
+    }
+  }
 }
-
-export default Climbs
