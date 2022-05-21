@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build:
     runs-on: 'ubuntu-latest'
-
+    environment: preview
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.5.0
