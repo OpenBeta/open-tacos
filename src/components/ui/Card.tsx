@@ -1,6 +1,11 @@
 import React from 'react'
 
-function Card ({ children, footer }: {children: JSX.Element | JSX.Element[], footer?: JSX.Element}): JSX.Element {
+interface CardProps {
+  children: React.ReactNode
+  footer?: JSX.Element
+}
+
+export default function Card ({ children, footer }: CardProps): JSX.Element {
   return (
     <div
       className='card rounded-lg cursor-pointer hover:bg-ob-secondary hover:bg-opacity-50 border'
@@ -12,5 +17,3 @@ function Card ({ children, footer }: {children: JSX.Element | JSX.Element[], foo
     </div>
   )
 }
-
-export default Card

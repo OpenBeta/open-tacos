@@ -20,7 +20,7 @@ const LargeScreen = ({ statsProps }: ResponsiveScreenProps): JSX.Element => {
       <div className='absolute flex items-center justify-end top-0 w-full h-full gap-x-4' style={{ background: 'rgba(0,0,0,0.35)' }}>
         <section className='flex flex-col items-center pr-16'>
           <h1 className='text-white'>Rock Climbing Wiki</h1>
-          <StatsPanel isMobile={false} className='px-32 py-4' {...statsProps} />
+          <StatsPanel className='px-32 py-4' {...statsProps} />
         </section>
       </div>
     </div>

@@ -7,20 +7,54 @@ import { getCragDetailsNear, getAreaByUUID } from '../graphql/api'
 import { calculatePagination, NextPaginationProps, geojsonifyCrag } from './util'
 import { BOULDER_DEFS, YDS_DEFS } from '../grades/rangeDefs'
 import { vScoreToBandIndex, freeScoreToBandIndex, BAND_BY_INDEX } from '../grades/bandUtil'
-
 /**
  * App main data store
  */
 
 export const ITEMS_PER_PAGE = 20
 
-export const cragFiltersStore = createStore('filters')({
+export interface IAppState {
+  placeId: string
+  searchText: string
+  crags: AreaType[] // crags with filters applied
+  allGeoJson: any// all crags in Geojson without filtering
+  total: number
+  lnglat: number[]
+  isLoading: boolean
+  trad: boolean
+  sport: boolean
+  boulder: boolean
+  tr: boolean
+  freeRange: number[] // keys to YDS_DEFS object'
+  boulderRange: number[] // keys to YDS_BOULDER object
+  boulderingRange: {
+    scores: number[]
+    labels: string[]
+  }
+  radius: {
+    rangeMeters: number[]
+    rangeIndices: number[]
+  }
+  pagination: NextPaginationProps
+  map: {
+    hover: {
+      areaId: string | null
+      lnglat: number[] | null
+    }
+    active: {
+      areaId: string | null
+      lnglat: number[] | null
+    }
+  }
+}
+
+const INITIAL_STATE: IAppState = {
   placeId: '',
   searchText: '',
   crags: [], // crags with filters applied
   allGeoJson: undefined, // all crags in Geojson without filtering
   total: 0,
-  lnglat: undefined,
+  lnglat: [0, 0],
   isLoading: false,
   trad: true,
   sport: true,
@@ -45,14 +79,15 @@ export const cragFiltersStore = createStore('filters')({
   map: {
     hover: {
       areaId: null,
-      lnglat: null
+      lnglat: [0, 0]
     },
     active: {
       areaId: null,
-      lnglat: null
+      lnglat: [0, 0]
     }
   }
-}, {
+}
+export const cragFiltersStore = createStore('filters')(INITIAL_STATE, {
   // Todo: figure out how to persist/restore settings from Local storage
   // persist: {
   //   name: 'ob-filters',
@@ -199,21 +234,21 @@ export const cragFiltersStore = createStore('filters')({
     }
   })).extendSelectors((_, get) => ({
 
-    inMyRange: (crag: Partial<AreaType>): boolean => {
+    inMyRange: (crag: AreaType): boolean => {
       const { byDiscipline } = crag.aggregate
 
       const { trad, sport, boulder, tr } = get
 
-      if (trad() && (byDiscipline?.trad?.total > 0 ?? false) &&
+      if (trad() && ((byDiscipline?.trad?.total ?? 0) > 0 ?? false) &&
       get.withinFreeRange(byDiscipline?.trad?.bands)) return true
 
-      if (sport() && (byDiscipline?.sport?.total > 0 ?? false) &&
+      if (sport() && ((byDiscipline?.sport?.total ?? 0) > 0 ?? false) &&
       get.withinFreeRange(byDiscipline?.sport?.bands)) return true
 
-      if (boulder() && (byDiscipline?.boulder?.total > 0 ?? false) &&
+      if (boulder() && ((byDiscipline?.boulder?.total ?? 0) > 0 ?? false) &&
         get.withinBoulderRange(byDiscipline?.boulder?.bands)) return true
 
-      if (tr() && (byDiscipline?.tr?.total > 0 ?? false) &&
+      if (tr() && ((byDiscipline?.tr?.total ?? 0) > 0 ?? false) &&
       get.withinFreeRange(byDiscipline?.tr?.bands)) return true
 
       return false
@@ -225,22 +260,22 @@ export const cragFiltersStore = createStore('filters')({
       let total = 0
       const { trad, sport, boulder, tr } = get
 
-      if (trad() && (byDiscipline?.trad?.total > 0 ?? false) &&
+      if (trad() && ((byDiscipline?.trad?.total ?? 0) > 0 ?? false) &&
       get.withinFreeRange(byDiscipline?.trad?.bands)) {
         total += get.withinTradRangeCount(byDiscipline?.trad?.bands)
       }
 
-      if (sport() && (byDiscipline?.sport?.total > 0 ?? false) &&
+      if (sport() && ((byDiscipline?.sport?.total ?? 0) > 0 ?? false) &&
       get.withinFreeRange(byDiscipline?.sport?.bands)) {
         total += get.withinSportRangeCount(byDiscipline?.sport?.bands)
       }
 
-      if (boulder() && (byDiscipline?.boulder?.total > 0 ?? false) &&
+      if (boulder() && ((byDiscipline?.boulder?.total ?? 0) > 0 ?? false) &&
         get.withinBoulderRange(byDiscipline?.boulder?.bands)) {
         total += get.withinBoulderRangeCount(byDiscipline?.boulder?.bands)
       }
 
-      if (tr() && (byDiscipline?.tr?.total > 0 ?? false) &&
+      if (tr() && ((byDiscipline?.tr?.total ?? 0) > 0 ?? false) &&
       get.withinFreeRange(byDiscipline?.tr?.bands)) {
         total += get.withinTrRangeCount(byDiscipline?.tr?.bands)
       }
@@ -301,7 +336,7 @@ export const cragFiltersStore = createStore('filters')({
       const allCragsGeoJson: Array<Feature<Point>> = []
 
       // Use Array.reduce() to apply filter
-      const filteredCrags = data.reduce((acc, currentCrag) => {
+      const filteredCrags = data.reduce<AreaType[]>((acc, currentCrag) => {
         const isMyCrag = get.inMyRange(currentCrag)
         if (isMyCrag) {
           acc.push(currentCrag)
@@ -360,10 +395,10 @@ export const cragFiltersStore = createStore('filters')({
       const { sport, trad, tr, bouldering } = climbTypes
       // Update multiple states at once
       api.set.state(draft => {
-        draft.sport = sport
-        draft.trad = trad
-        draft.tr = tr
-        draft.boulder = bouldering
+        draft.sport = sport ?? false
+        draft.trad = trad ?? false
+        draft.tr = tr ?? false
+        draft.boulder = bouldering ?? false
       })
       await set.fetchData()
     }

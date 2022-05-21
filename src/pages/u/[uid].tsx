@@ -52,14 +52,19 @@ export async function getStaticPaths (): Promise<any> {
   }
 }
 
-export const getStaticProps: GetStaticProps<UserHomeProps> = async ({ params }) => {
-  const { uid } = params
-  const { mediaList, mediaIdList } = await getUserImages(MOCK_USER_ID_MAP[uid as string])
+export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = async ({ params }) => {
+  const { uid } = params ?? { uid: null }
+
+  if (uid == null) {
+    return { notFound: true }
+  }
+
+  const { mediaList, mediaIdList } = await getUserImages(MOCK_USER_ID_MAP[uid])
   const tagArray = await getTagsByMediaId(mediaIdList)
 
   const tagsByMediaId = groupBy(tagArray, 'mediaUuid')
   const data = {
-    uid: uid as string,
+    uid,
     mediaList,
     tagsByMediaId
   }

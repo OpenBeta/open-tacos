@@ -6,7 +6,7 @@ interface ActiveMarkerProps {
   hover?: boolean
 }
 
-function InteractiveMarker ({ lnglat, hover = true }: ActiveMarkerProps): JSX.Element {
+function InteractiveMarker ({ lnglat, hover = true }: ActiveMarkerProps): JSX.Element | null {
   if (lnglat === null) return null
   return (
     <Marker

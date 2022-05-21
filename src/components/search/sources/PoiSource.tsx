@@ -10,7 +10,7 @@ import { DefaultHeader, DefaultNoResult } from '../templates/ClimbResultXSearch'
  * to render the result.
  * @param query search string
  */
-export const searchPoi = async (query: string): Promise<AutocompleteSource<any> | undefined> => {
+export const searchPoi = async (query: string): Promise<AutocompleteSource<any>> => {
   const rs = await geocoderLookup(query)
   return {
     sourceId: 'poi',

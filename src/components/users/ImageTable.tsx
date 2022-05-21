@@ -15,7 +15,7 @@ interface ImageTableProps {
 /**
  * Image table on user profile
  */
-export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: ImageTableProps): JSX.Element {
+export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
   const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
 
   const imageHelper = useImageTagHelper()
@@ -26,7 +26,7 @@ export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: Im
   /**
    * Run after a tag has sucessfully added to the backend
    */
-  const onCompletedHandler = useCallback(async (data: any) => {
+  const onCompletedHandler = useCallback(async (data?: any) => {
     const { setTag } = data
     if (setTag == null) return
     const { mediaUuid } = setTag

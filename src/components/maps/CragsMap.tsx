@@ -22,7 +22,7 @@ export default function CragsMap (): JSX.Element {
   }, [])
 
   // track current mouseover marker
-  const [hoverMarker, setHoverMarker] = useState(null)
+  const [hoverMarker, setHoverMarker] = useState<null|number[]>(null)
 
   const onHoverHandler = useCallback((event) => {
     const { features } = event
@@ -37,7 +37,7 @@ export default function CragsMap (): JSX.Element {
   }, [])
 
   const { areaId, lnglat } = store.filters.map().active
-
+  const area = areaId != null ? store.filters.areaById(areaId) : null
   return (
     <>
       <div
@@ -46,9 +46,9 @@ export default function CragsMap (): JSX.Element {
         style={{ height }}
       >
         <div className='absolute left-1 top-1 z-50'>
-          {areaId != null &&
+          {area != null &&
             <CragHighlightPopover
-              {...store.filters.areaById(areaId)}
+              {...area}
             />}
         </div>
         <BaseMap

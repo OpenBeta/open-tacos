@@ -53,7 +53,7 @@ interface PhotoTagProps {
   onDelete: (mediaId: string, destinationId: string) => void
 }
 
-const Tag = ({ tag, highlighted, onDelete }: PhotoTagProps): JSX.Element => {
+export const Tag = ({ tag, highlighted, onDelete }: PhotoTagProps): JSX.Element => {
   const { climb } = tag
   return (
     <span className={classNames(

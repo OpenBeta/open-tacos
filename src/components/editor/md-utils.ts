@@ -65,8 +65,8 @@ export const topImages = (ast): any => {
     const processedNode = cur
     // Extract images from wrapping node while preserving any other children
     if (processedNode.children !== null && processedNode.type === 'p') {
-      const images = []
-      const children = []
+      const images: any[] = []
+      const children: any = []
       processedNode.children.forEach((node) => {
         if (node.type === 'img') {
           images.push(node)

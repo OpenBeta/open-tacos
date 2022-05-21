@@ -23,8 +23,9 @@ function AreaCard ({ areaName, stats }: AreaCardProps): JSX.Element {
   return (
     <Card
       footer={
-        (stats != null) &&
-          <BarPercent styles='-mt-2' percents={stats.percents} colors={stats.colors} />
+        (stats != null)
+          ? <BarPercent styles='-mt-2' percents={stats.percents} colors={stats.colors} />
+          : undefined
       }
     >
       <h3 className='font-medium font-sans my-4 text-base truncate'>

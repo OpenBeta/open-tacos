@@ -15,7 +15,7 @@ interface ImageTaggerProps {
   onCompleted: (data: any) => void
 }
 
-export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close, onCompleted }: ImageTaggerProps): JSX.Element {
+export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close, onCompleted }: ImageTaggerProps): JSX.Element | null {
   const [tagPhotoWithClimb] = useMutation(
     MUTATION_ADD_CLIMB_TAG_TO_MEDIA, {
       client: graphqlClient,
@@ -24,8 +24,8 @@ export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close, onComp
     }
   )
 
-  const [referenceElement, setReferenceElement] = useState(null)
-  const [popperElement, setPopperElement] = useState(null)
+  const [referenceElement, setReferenceElement] = useState<null | HTMLElement>(null)
+  const [popperElement, setPopperElement] = useState<null | HTMLElement>(null)
   const { styles, attributes, update } = usePopper(referenceElement, popperElement, {
     modifiers: [{
       name: 'arrow',

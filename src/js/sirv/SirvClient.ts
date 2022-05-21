@@ -2,14 +2,14 @@ import axios from 'axios'
 import { v5 as uuidv5 } from 'uuid'
 import { MediaType } from '../types'
 
-if ((process.env.SIRV_CLIENT_ID_RO ?? null) == null) throw new Error('SIRV_CLIENT_ID_RO not set')
-if ((process.env.SIRV_CLIENT_SECRET_RO ?? null) == null) throw new Error('SIRV_CLIENT_SECRET_RO not set')
+if ((process.env.SIRV_CLIENT_ID_RO ?? null) == null && window == null) throw new Error('SIRV_CLIENT_ID_RO not set')
+if ((process.env.SIRV_CLIENT_SECRET_RO ?? null) == null && window == null) throw new Error('SIRV_CLIENT_SECRET_RO not set')
 if ((process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? null) == null) throw new Error('NEXT_PUBLIC_SIRV_BASE_URL not set')
 
 export const SIRV_CONFIG = {
-  clientId: process.env.SIRV_CLIENT_ID_RO,
-  clientSecret: process.env.SIRV_CLIENT_SECRET_RO,
-  baseUrl: process.env.NEXT_PUBLIC_SIRV_BASE_URL
+  clientId: process.env.SIRV_CLIENT_ID_RO ?? '',
+  clientSecret: process.env.SIRV_CLIENT_SECRET_RO ?? '',
+  baseUrl: process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? ''
 }
 
 const client = axios.create({
@@ -75,7 +75,7 @@ export const getUserImages = async (uuid: string, token?: string): Promise<UserI
     }
   )
   if (res.status === 200 && Array.isArray(res.data.hits)) {
-    const mediaIdList = []
+    const mediaIdList: string[] = []
     const mediaList = res.data.hits.map(entry => {
       const { filename, ctime, mtime, contentType, meta } = entry._source
       const mediaId = uuidv5(filename, uuidv5.URL)

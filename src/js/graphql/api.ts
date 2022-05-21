@@ -4,14 +4,14 @@ import { AreaType, MediaTag } from '../types'
 import { graphqlClient } from './Client'
 import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID } from './fragments'
 interface CragsDetailsNearType {
-  data: Array<Partial<AreaType>>
-  placeId: string
+  data: AreaType[] // Should use Omit or Pick
+  placeId: string | undefined
   error?: string | undefined
 }
 
 export const getCragDetailsNear = async (
   placeId: string = 'unspecified',
-  lnglat: [number, number],
+  lnglat: number[],
   range: number[],
   includeCrags: boolean = false
 ): Promise<CragsDetailsNearType> => {

@@ -39,7 +39,7 @@ export function getPieIcon ({ data, text }: {data: PieData, text: string}): stri
   const padding = 20
   const radius = 55
   const center = [radius + padding, radius + padding]
-  const paths = []
+  const paths: string[] = []
 
   let start = [(radius * 2) + padding, radius + padding] // + < right middle
   let angle = 0
