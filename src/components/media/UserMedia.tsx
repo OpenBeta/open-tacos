@@ -17,7 +17,7 @@ interface UserMediaProps {
  */
 export default function UserMedia ({ imageInfo, onClick, tagList, onTagDeleted }: UserMediaProps): JSX.Element {
   const [hovered, setHover] = useState(false)
-  const imgUrl = `${SIRV_CONFIG.baseUrl}${imageInfo.filename}?format=webp&thumbnail=300&q=90`
+  const imgUrl = `${SIRV_CONFIG.baseUrl ?? ''}${imageInfo.filename}?format=webp&thumbnail=300&q=90`
 
   const onClickHandler = useCallback((event) => {
     onClick({ mouseXY: [event.clientX, event.clientY], imageInfo })

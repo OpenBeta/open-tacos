@@ -78,7 +78,7 @@
   ],
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "lint": "yarn run ts-standard",
+    "lint": "yarn run ts-standard -p ./tsconfig.json",
     "build": "next build",
     "dev": "next dev",
     "dev-local": "NEXT_PUBLIC_API_SERVER=http://localhost:4000 yarn dev",
