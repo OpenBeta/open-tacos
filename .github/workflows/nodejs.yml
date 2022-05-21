@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build:
     runs-on: 'ubuntu-latest'
-    environment: Preview
+    environment: "Preview"
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.5.0
@@ -25,6 +25,10 @@ jobs:
 
       - name: Run unit tests
         run: yarn test
+        env:
+          SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
 
       - name: Test build
         run: yarn build
+        env:
+          SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
