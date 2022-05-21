@@ -5,7 +5,7 @@ import { OpenverseImage } from '.'
 
 function LicenseIcons ({ image }: { image: OpenverseImage }): JSX.Element {
   const size = { width: 25, height: 25 }
-  const getIcon = (license: string): JSX.Element => {
+  const getIcon = (license: string): JSX.Element | null => {
     switch (license.toUpperCase()) {
       case 'BY':
         return (<By {...size} />)

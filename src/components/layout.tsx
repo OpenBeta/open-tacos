@@ -7,7 +7,7 @@ interface LayoutProps {
   contentContainerClass?: string
   rootContainerClass?: string
   children?: JSX.Element | JSX.Element[]
-  hero?: JSX.Element | JSX.Element[]
+  hero?: JSX.Element | JSX.Element[] | null
 }
 function Layout ({ contentContainerClass = 'content-fullscreen-tablet', rootContainerClass = 'root-container-default', children, hero = null }: LayoutProps): JSX.Element {
   return (

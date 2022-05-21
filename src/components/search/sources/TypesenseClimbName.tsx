@@ -25,7 +25,7 @@ export const TypesenseClimbNameSource = async (query: string, onSelect: (item: T
     },
     templates: {
       item: MiniClimbItem,
-      header: () => null
+      header: () => ''
     }
   })
 }

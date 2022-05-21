@@ -1,6 +1,6 @@
 import React from 'react'
 export interface CounterProps {
-  icon?: JSX.Element
+  icon: JSX.Element | null
   counter: number
   label: string
 }

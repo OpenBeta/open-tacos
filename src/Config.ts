@@ -1,7 +1,6 @@
-const checkAndPrintWarning = (name: string, value: string): string => {
-  if (value === undefined || value === '') {
-    console.error(`## Error: '${name}' not defined ##`)
-    if (window === undefined) process?.exit(1)
+const checkAndPrintWarning = (name: string, value?: string): string => {
+  if (value == null) {
+    throw new Error(`## Error: '${name}' not defined ##`)
   }
   return value
 }

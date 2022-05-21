@@ -57,13 +57,13 @@ const closeupLayerStyle: LayerProps = {
 }
 
 interface MarkerLayerProps {
-  geojson: FeatureCollection<GeoJSON.Geometry, Properties>
+  geojson: FeatureCollection<GeoJSON.Geometry, Properties> | undefined
 }
 
 /**
  * Build a layer of crag markers using native Mapbox GL style.
  */
-export default function MarkerLayer ({ geojson }: MarkerLayerProps): JSX.Element {
+export default function MarkerLayer ({ geojson }: MarkerLayerProps): JSX.Element | null {
   if (geojson == null) return null
   return (
     <Source
@@ -71,8 +71,8 @@ export default function MarkerLayer ({ geojson }: MarkerLayerProps): JSX.Element
       type='geojson'
       data={geojson}
     >
-      <Layer id='closeup-markers' {...closeupLayerStyle} />
-      <Layer id='crag-markers' {...layerStyle} />
+      <Layer {...closeupLayerStyle} />
+      <Layer {...layerStyle} />
     </Source>
   )
 }

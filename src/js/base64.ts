@@ -11,17 +11,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export function b64EncodeUnicode (str: string): string {
-  if (window.btoa !== undefined) {
+export function b64EncodeUnicode (str: string): string | null {
+  if (window.btoa != null) {
     return window.btoa(
       encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match: string, p1: string) {
         return String.fromCharCode(Number(`0x${p1}`))
       })
     )
   }
-  return window.btoa(
-    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match: string, p1: string) {
-      return String.fromCharCode(Number(`0x${p1}`))
-    })
-  )
+  return null
 }

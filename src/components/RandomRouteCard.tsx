@@ -5,7 +5,7 @@ import RouteTypeChips from './ui/RouteTypeChips'
 import RouteGradeChip from './ui/RouteGradeChip'
 import { sanitizeName } from '../js/utils'
 
-function RandomRouteCard ({ climb }): JSX.Element {
+function RandomRouteCard ({ climb }): JSX.Element | null {
   if (climb === null) return null
   const { slug, pathTokens } = climb
   const { type, route_name: routeName, safety, yds } = climb.frontmatter

@@ -12,7 +12,6 @@ interface ItemProps {
  * Define how to render each search result entry
  */
 export function MiniClimbItem ({ item }: ItemProps): JSX.Element {
-  if (item == null) return null
   const { climbName, areaNames, grade, safety, disciplines } = item
   return (
     <div>

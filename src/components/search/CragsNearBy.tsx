@@ -14,7 +14,7 @@ const GET_CRAGS_NEAR = gql`query CragsNear($placeId: String, $lng: Float, $lat: 
     }
   }`
 
-const CragsNearBy = ({ center, placeId }: {center: [number, number], placeId: string}): JSX.Element => {
+const CragsNearBy = ({ center, placeId }: {center: [number, number], placeId: string}): JSX.Element| null => {
   const { loading, data } = useQuery(GET_CRAGS_NEAR, {
     client: graphqlClient,
     variables: {

@@ -3,12 +3,12 @@ import Typesense from 'typesense'
 const typesenseClient = new Typesense.Client({
   nodes: [
     {
-      host: process.env.NEXT_PUBLIC_TYPESENSE_NODES,
+      host: process.env.NEXT_PUBLIC_TYPESENSE_NODES ?? '',
       port: 443,
       protocol: 'https'
     }
   ],
-  apiKey: process.env.NEXT_PUBLIC_TYPESENSE_API_KEY,
+  apiKey: process.env.NEXT_PUBLIC_TYPESENSE_API_KEY ?? '',
   numRetries: 3, // A total of 4 tries (1 original try + 3 retries)
   logLevel: 'info'
 })
@@ -34,7 +34,7 @@ export const climbSearchByName = async (query: string): Promise<any> => {
     query_by: 'climbName,areaNames,climbDesc,fa',
     exclude_fields: 'climbDesc'
   })
-  return rs.hits.map(hit => hit.document)
+  return rs?.hits?.map(hit => hit.document) ?? []
 }
 
 /**
@@ -78,8 +78,8 @@ export async function multiSearch (query: string): Promise<any> {
   const rs = await typesenseClient.multiSearch.perform(searchRequests, commonSearchParams)
   // FYI: rs.results contains a lot more useful data
   return {
-    climbs: rs.results[0].hits.map(hit => hit.document),
-    areas: rs.results[1].hits.map(hit => hit.document),
-    fa: rs.results[2].hits.map(hit => hit.document)
+    climbs: rs?.results[0].hits?.map(hit => hit.document) ?? [],
+    areas: rs?.results[1].hits?.map(hit => hit.document) ?? [],
+    fa: rs?.results[2].hits?.map(hit => hit.document) ?? []
   }
 }

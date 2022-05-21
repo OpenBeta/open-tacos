@@ -7,14 +7,16 @@ import { MiniCrumbs } from '../ui/BreadCrumbs'
 import useResponsive from '../../js/hooks/useResponsive'
 import { cragFiltersStore } from '../../js/stores'
 
-const CragRow = ({ areaName, totalClimbs, metadata, aggregate, pathTokens }: Partial<AreaType>): JSX.Element => {
+type CragRowProps = Pick<AreaType, 'areaName'|'totalClimbs'|'metadata'|'aggregate'|'pathTokens'>
+
+export default function CragRow ({ areaName, totalClimbs, metadata, aggregate, pathTokens }: CragRowProps): JSX.Element {
   const getClimbsForYou = cragFiltersStore.get.inMyRangeCount(aggregate)
   const name = sanitizeName(areaName)
   const { areaId } = metadata
   const { isMobile } = useResponsive()
 
   return (
-    <Link href={`crag/${areaId as string}`}>
+    <Link href={`crag/${areaId}`}>
       <a>
         <div
           className='border-b border-b-slate-500 py-6' onMouseOver={() => {
@@ -40,5 +42,3 @@ const CragRow = ({ areaName, totalClimbs, metadata, aggregate, pathTokens }: Par
     </Link>
   )
 }
-
-export default CragRow

@@ -11,7 +11,7 @@ import { TypesenseDocumentType } from '../../../js/types'
  * @see TypesenseClient.multiSearch()
  */
 
-export const xsearchTypesense = async (query: string): Promise<Array<AutocompleteSource<TypesenseDocumentType>> | undefined> => {
+export const xsearchTypesense = async (query: string): Promise<Array<AutocompleteSource<TypesenseDocumentType>>> => {
   const rs = await multiSearch(query)
   return await Promise.all([{
     sourceId: 'climbs',

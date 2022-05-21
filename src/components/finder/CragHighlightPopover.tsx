@@ -8,7 +8,7 @@ import { AreaType } from '../../js/types'
 import DTable from '../ui/DTable'
 import { actions } from '../../js/stores'
 
-function CragHighlightPopover (props: AreaType | undefined): JSX.Element {
+function CragHighlightPopover (props: AreaType | undefined): JSX.Element | null {
   if (props == null) return null
   const { areaName, aggregate, metadata } = props
   const name = sanitizeName(areaName)
