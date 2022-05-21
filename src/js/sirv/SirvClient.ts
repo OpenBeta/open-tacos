@@ -26,7 +26,7 @@ const headers = {
 export const getToken = async (): Promise<string|undefined> => {
   if (SIRV_CONFIG.clientSecret == null) {
     console.log('Missing clientSecret')
-    return ''
+    return undefined
   }
 
   const res = await client.post(
@@ -52,10 +52,7 @@ export const getUserImages = async (uuid: string, token?: string): Promise<UserI
   }
 
   if (_t == null) {
-    return {
-      mediaList: [],
-      mediaIdList: []
-    }
+    throw new Error('Sirv API.getUserImages(): unable to get a token')
   }
 
   const res = await client.post(
