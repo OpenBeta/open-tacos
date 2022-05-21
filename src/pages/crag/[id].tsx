@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { GetStaticProps } from 'next'
+import { NextPage, GetStaticProps } from 'next'
 import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { graphqlClient } from '../../js/graphql/Client'
 import Link from 'next/link'
+
+import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import ButtonGroup from '../../components/ui/ButtonGroup'
@@ -25,11 +26,24 @@ interface CragSortType {
   text: string
 }
 
-const Crag = ({ area }: CragProps): JSX.Element => {
+const CragPage: NextPage<CragProps> = ({ area }) => {
   const router = useRouter()
-  if (router.isFallback) {
-    return <div>Loading...</div>
-  }
+
+  return (
+    <Layout contentContainerClass='content-default with-standard-y-margin'>
+      {router.isFallback
+        ? (
+          <div className='px-4 max-w-screen-md'>
+            <div>Loading...</div>
+          </div>
+          )
+        : <Body area={area} />}
+    </Layout>
+  )
+}
+export default CragPage
+
+const Body = ({ area }: CragProps): JSX.Element => {
   const { areaName, climbs, metadata, content, ancestors, pathTokens } = area
 
   const [selectedClimbSort, setSelectedClimbSort] = useState(0)
@@ -37,9 +51,8 @@ const Crag = ({ area }: CragProps): JSX.Element => {
     { value: 'leftToRight', text: 'Left To Right' },
     { value: 'grade', text: 'Grade' }
   ]
-
   return (
-    <Layout contentContainerClass='content-default with-standard-y-margin'>
+    <>
       <SeoTags
         keywords={[areaName]}
         title={areaName}
@@ -109,7 +122,7 @@ const Crag = ({ area }: CragProps): JSX.Element => {
           )}
         </div>
       </div>
-    </Layout>
+    </>
   )
 }
 
@@ -160,7 +173,12 @@ export async function getStaticPaths (): Promise<any> {
   }
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<CragProps, {id: string}> = async ({ params }) => {
+  if (params == null || params.id == null) {
+    return {
+      notFound: true
+    }
+  }
   const query = gql`query AreaByID($uuid: ID) {
     area(uuid: $uuid) {
       id
@@ -200,17 +218,23 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }`
 
-  const rs = await graphqlClient.query<AreaType>({
+  const rs = await graphqlClient.query<{area: AreaType}>({
     query,
     variables: {
       uuid: params.id
     }
   })
 
-  if (rs.data === null) throw new Error('Area not found')
+  if (rs.data === null) {
+    return {
+      notFound: true
+    }
+  }
 
   // Pass post data to the page via props
-  return { props: rs.data }
+  return {
+    props: {
+      area: rs.data.area
+    }
+  }
 }
-
-export default Crag
