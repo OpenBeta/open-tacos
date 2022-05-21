@@ -13,9 +13,27 @@ export default NextAuth({
       clientId: process.env.AUTH0_CLIENT_ID,
       clientSecret,
       issuer: process.env.AUTH0_DOMAIN,
+      authorization: { params: { audience: `${process.env.AUTH0_DOMAIN ?? ''}/api/v2/`, scope: 'openid email profile read:current_user create:current_user_metadata update:current_user_metadata' } },
       client: {
         token_endpoint_auth_method: clientSecret.length === 0 ? 'none' : 'client_secret_basic'
       }
     })
-  ]
+  ],
+  callbacks: {
+    async jwt ({ token, account, profile }) {
+      if (account?.access_token != null) {
+        token.accessToken = account.access_token
+      }
+      if (profile?.sub != null) {
+        token.id = profile.sub
+      }
+      return token
+    },
+    async session ({ session, token }) {
+      session.accessToken = token.accessToken
+      session.id = token.id
+      return session
+    }
+  }
+
 })
