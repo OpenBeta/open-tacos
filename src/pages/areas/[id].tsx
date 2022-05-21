@@ -1,9 +1,10 @@
-import { GetStaticProps } from 'next'
+import { NextPage, GetStaticProps } from 'next'
 import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
+
 import { AreaType } from '../../js/types'
 import { graphqlClient } from '../../js/graphql/Client'
-import Link from 'next/link'
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import AreaCard from '../../components/ui/AreaCard'
@@ -15,15 +16,28 @@ import InlineEditor from '../../components/editor/InlineEditor'
 interface AreaPageProps {
   area: AreaType
 }
-const Area = ({ area }: AreaPageProps): JSX.Element => {
-  const router = useRouter()
-  if (router.isFallback) {
-    return <div>Loading...</div>
-  }
-  const { id, areaName, children, metadata, content, pathTokens, ancestors } = area
 
+const Area: NextPage<AreaPageProps> = ({ area }) => {
+  const router = useRouter()
   return (
     <Layout contentContainerClass='content-default with-standard-y-margin'>
+      {router.isFallback
+        ? (
+          <div className='px-4 max-w-screen-md'>
+            <div>Loading...</div>
+          </div>
+          )
+        : <Body area={area} />}
+    </Layout>
+  )
+}
+
+export default Area
+
+const Body = ({ area }: AreaPageProps): JSX.Element => {
+  const { id, areaName, children, metadata, content, pathTokens, ancestors } = area
+  return (
+    <>
       <SeoTags
         keywords={[areaName]}
         title={areaName}
@@ -72,7 +86,7 @@ const Area = ({ area }: AreaPageProps): JSX.Element => {
           })}
         </div>
       </div>
-    </Layout>
+    </>
   )
 }
 
@@ -103,14 +117,24 @@ export async function getStaticPaths (): Promise<any> {
   // We'll pre-render only these paths at build time.
   // { fallback: true } means render on first reques for those that are not in `paths`
   return {
-    paths: [],
+    paths: [
+      { params: { id: 'bea6bf11-de53-5046-a5b4-b89217b7e9bc' } },
+      { params: { id: 'decc1251-4a67-52b9-b23f-3243e10e93d0' } },
+      { params: { id: '78da26bc-cd94-5ac8-8e1c-815f7f30a28b' } }
+    ],
     fallback: true
   }
 }
 
 // This also gets called at build time
 // Query graphql api for area by id
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async ({ params }) => {
+  if (params == null || params.id == null) {
+    return {
+      notFound: true
+    }
+  }
+
   const query = gql`query getAreaById($uuid: ID) {
     area(uuid: $uuid) {
       id
@@ -144,15 +168,23 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }`
 
   try {
-    const rs = await graphqlClient.query<AreaType>({
+    const rs = await graphqlClient.query<{area: AreaType}>({
       query,
       variables: {
         uuid: params.id
       }
     })
-    if (rs.data === null) throw new Error('Area not found')
-    // Pass post data to the page via props
-    return { props: rs.data }
+    if (rs.data.area == null) {
+      return {
+        notFound: true
+      }
+    }
+    // Pass Area data to the page via props
+    return {
+      props: {
+        area: rs.data.area
+      }
+    }
   } catch (e) {
     console.log('GraphQL exception:', e)
     return {
@@ -160,5 +192,3 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }
 }
-
-export default Area

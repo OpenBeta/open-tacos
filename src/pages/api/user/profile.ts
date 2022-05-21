@@ -5,7 +5,7 @@ import createMetadataClient, { UserMetadata } from './metadataClient'
 
 type Handler = NextApiHandler<UserMetadata | { message: string }>
 
-const getProfile: Handler = async (req, res): Promise<void> => {
+const getProfile: Handler = async (req, res) => {
   const metadataClient = await createMetadataClient(req)
   if (metadataClient == null) {
     return res.status(401).end()
@@ -21,7 +21,7 @@ const getProfile: Handler = async (req, res): Promise<void> => {
   }
 }
 
-const updateProfile: Handler = async (req, res): Promise<void> => {
+const updateProfile: Handler = async (req, res) => {
   const metadataClient = await createMetadataClient(req)
   if (metadataClient == null) {
     return res.status(401).end()

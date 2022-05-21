@@ -2,6 +2,8 @@ import { ManagementClient } from 'auth0'
 import { NextApiRequest } from 'next'
 import { getSession } from 'next-auth/react'
 
+import { AUTH_CONFIG_SERVER } from '../../../Config'
+
 const allowedFields = ['name'] as const
 type AllowedField = typeof allowedFields[number]
 
@@ -22,7 +24,7 @@ interface MetadataClient {
 
 const createMetadataClient = async (
   req: NextApiRequest
-): Promise<MetadataClient> => {
+): Promise<MetadataClient|null> => {
   const session = await getSession({ req })
   const { id, accessToken } = session as unknown as {id: string, accessToken: string}
 
@@ -31,7 +33,7 @@ const createMetadataClient = async (
   }
 
   const currentUserManagementClient = new ManagementClient({
-    domain: process.env.AUTH0_DOMAIN.replace('https://', ''),
+    domain: AUTH_CONFIG_SERVER?.issuer.replace('https://', '') ?? '',
     token: accessToken
   })
 
