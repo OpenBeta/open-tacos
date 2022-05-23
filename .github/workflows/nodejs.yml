@@ -24,7 +24,7 @@ jobs:
         run: yarn lint
 
       - name: Run unit tests
-        run: yarn test
+        run: yarn test-all
         env:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
 
