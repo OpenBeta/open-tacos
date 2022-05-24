@@ -128,6 +128,15 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "bhlox",
+      "name": "Kurk Villanueva",
+      "avatar_url": "https://avatars.githubusercontent.com/u/86870447?v=4",
+      "profile": "http://linkedin.com/in/kurk-villanueva-02779216b",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
