@@ -59,18 +59,29 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
     return { notFound: true }
   }
 
-  const { mediaList, mediaIdList } = await getUserImages(MOCK_USER_ID_MAP[uid])
-  const tagArray = await getTagsByMediaId(mediaIdList)
+  try {
+    const { mediaList, mediaIdList } = await getUserImages(MOCK_USER_ID_MAP[uid])
+    const tagArray = await getTagsByMediaId(mediaIdList)
 
-  const tagsByMediaId = groupBy(tagArray, 'mediaUuid')
-  const data = {
-    uid,
-    mediaList,
-    tagsByMediaId
-  }
-  return {
-    props: data,
-    revalidate: 60
+    const tagsByMediaId = groupBy(tagArray, 'mediaUuid')
+    const data = {
+      uid,
+      mediaList,
+      tagsByMediaId
+    }
+    return {
+      props: data,
+      revalidate: 60
+    }
+  } catch (e) {
+    return {
+      props: {
+        uid,
+        mediaList: [],
+        tagsByMediaId: {}
+      },
+      revalidate: 60
+    }
   }
 }
 
