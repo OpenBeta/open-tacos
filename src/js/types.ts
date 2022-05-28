@@ -102,7 +102,7 @@ export interface AreaType {
   }
   children: AreaType[]
   climbs: Climb[]
-  media: [MediaClimbTag]
+  media: [MediaTag]
 }
 
 export interface AreaResponseType {
