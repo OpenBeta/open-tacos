@@ -16,6 +16,7 @@ import { getScoreForSort, GradeScales } from '@openbeta/sandbag'
 import RouteCard from '../../components/ui/RouteCard'
 import InlineEditor from '../../components/editor/InlineEditor'
 import { sanitizeName } from '../../js/utils'
+import PhotoMontage from '../../components/media/PhotoMontage'
 
 interface CragProps {
   area: AreaType
@@ -44,7 +45,7 @@ const CragPage: NextPage<CragProps> = ({ area }) => {
 export default CragPage
 
 const Body = ({ area }: CragProps): JSX.Element => {
-  const { areaName, climbs, metadata, content, ancestors, pathTokens } = area
+  const { areaName, climbs, metadata, content, ancestors, pathTokens, media } = area
 
   const [selectedClimbSort, setSelectedClimbSort] = useState(0)
   const climbSortByOptions: CragSortType[] = [
@@ -72,6 +73,9 @@ const Body = ({ area }: CragProps): JSX.Element => {
             {metadata.lat},{metadata.lng}
           </a>
         </span>
+
+        <PhotoMontage photoList={media} />
+
         <div
           className='pt-4 markdown'
         >
@@ -191,8 +195,11 @@ export const getStaticProps: GetStaticProps<CragProps, {id: string}> = async ({ 
         left_right_index
       }
       pathTokens
-      
       ancestors
+      media {
+        mediaUrl
+        mediaUuid
+      }
       climbs {
         id
         name
@@ -214,7 +221,7 @@ export const getStaticProps: GetStaticProps<CragProps, {id: string}> = async ({ 
       }
       content {
         description 
-      } 
+      }
     }
   }`
 
