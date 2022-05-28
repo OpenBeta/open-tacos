@@ -2,6 +2,7 @@ import { NextPage, GetStaticProps } from 'next'
 import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import Image from 'next/image'
 
 import { AreaType } from '../../js/types'
 import { graphqlClient } from '../../js/graphql/Client'
@@ -13,6 +14,8 @@ import BreadCrumbs from '../../components/ui/BreadCrumbs'
 
 import { getSlug } from '../../js/utils'
 import InlineEditor from '../../components/editor/InlineEditor'
+import { SIRV_CONFIG } from '../../js/sirv/SirvClient'
+
 interface AreaPageProps {
   area: AreaType
 }
@@ -35,7 +38,8 @@ const Area: NextPage<AreaPageProps> = ({ area }) => {
 export default Area
 
 const Body = ({ area }: AreaPageProps): JSX.Element => {
-  const { id, areaName, children, metadata, content, pathTokens, ancestors } = area
+  const { id, areaName, children, metadata, content, pathTokens, ancestors, media } = area
+  console.log('#media', media)
   return (
     <>
       <SeoTags
@@ -81,6 +85,17 @@ const Body = ({ area }: AreaPageProps): JSX.Element => {
                     <AreaCard areaName={areaName} />
                   </a>
                 </Link>
+              </div>
+            )
+          })}
+        </div>
+
+        <div>
+          {media.map(({ mediaUrl, mediaUuid }) => {
+            const imgUrl = `${SIRV_CONFIG.baseUrl ?? ''}${mediaUrl}?format=webp&thumbnail=300&q=90`
+            return (
+              <div key={mediaUuid}>
+                <Image src={imgUrl} width={300} height={300} />
               </div>
             )
           })}
@@ -163,6 +178,9 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
           lat
           lng
         }
+      }
+      media {
+        mediaUrl
       }
     }
   }`

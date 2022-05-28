@@ -47,6 +47,7 @@ export interface Climb {
   }
   ancestors: string[]
   pathTokens: string[]
+  media: Array<MediaClimbTag|MediaAreaTag>
 }
 
 export interface CountByGroupType {
@@ -101,6 +102,7 @@ export interface AreaType {
   }
   children: AreaType[]
   climbs: Climb[]
+  media: [MediaClimbTag]
 }
 
 export interface AreaResponseType {

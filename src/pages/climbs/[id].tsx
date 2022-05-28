@@ -2,6 +2,8 @@ import React from 'react'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { gql } from '@apollo/client'
+import Image from 'next/image'
+
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import { Climb } from '../../js/types'
@@ -10,6 +12,7 @@ import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
 import InlineEditor from '../../components/editor/InlineEditor'
+import { SIRV_CONFIG } from '../../js/sirv/SirvClient'
 
 interface ClimbProps {
   climb: Climb
@@ -34,7 +37,7 @@ const ClimbPage: NextPage<ClimbProps> = ({ climb }: ClimbProps) => {
 export default ClimbPage
 
 const Body = ({ climb }: ClimbProps): JSX.Element => {
-  const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
+  const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens, media } = climb
   const { climbId } = metadata
   return (
     <>
@@ -60,6 +63,17 @@ const Body = ({ climb }: ClimbProps): JSX.Element => {
           <InlineEditor id={`climb-loc-${climbId}`} markdown={content.location} readOnly />
           <h2>Protection</h2>
           <InlineEditor id={`climb-pro-${climbId}`} markdown={content.protection} readOnly />
+
+          <div>
+            {media.map(({ mediaUrl, mediaUuid }) => {
+              const imgUrl = `${SIRV_CONFIG.baseUrl ?? ''}${mediaUrl}?format=webp&thumbnail=300&q=90`
+              return (
+                <div key={mediaUuid}>
+                  <Image src={imgUrl} width={300} height={300} />
+                </div>
+              )
+            })}
+          </div>
         </div>
       </div>
     </>
@@ -137,6 +151,9 @@ export const getStaticProps: GetStaticProps<ClimbProps, { id: string}> = async (
       ancestors
       metadata {
         climbId
+      }
+      media {
+        mediaUrl
       }
     }
   }`
