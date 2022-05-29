@@ -61,6 +61,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
 
   try {
     const { mediaList, mediaIdList } = await getUserImages(MOCK_USER_ID_MAP[uid])
+    console.log('#images', mediaList)
     const tagArray = await getTagsByMediaId(mediaIdList)
 
     const tagsByMediaId = groupBy(tagArray, 'mediaUuid')

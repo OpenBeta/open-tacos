@@ -2,6 +2,7 @@ import React from 'react'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { gql } from '@apollo/client'
+
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import { Climb } from '../../js/types'
@@ -10,7 +11,7 @@ import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
 import InlineEditor from '../../components/editor/InlineEditor'
-
+import PhotoMontage from '../../components/media/PhotoMontage'
 interface ClimbProps {
   climb: Climb
 }
@@ -34,7 +35,7 @@ const ClimbPage: NextPage<ClimbProps> = ({ climb }: ClimbProps) => {
 export default ClimbPage
 
 const Body = ({ climb }: ClimbProps): JSX.Element => {
-  const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
+  const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens, media } = climb
   const { climbId } = metadata
   return (
     <>
@@ -51,6 +52,9 @@ const Body = ({ climb }: ClimbProps): JSX.Element => {
           <RouteTypeChips type={type} />
         </div>
         <div className='pt-4 text-sm text-gray-600 italic'>FA: {fa}</div>
+
+        <PhotoMontage photoList={media} isHero />
+
         <div
           className='pt-4 markdown'
         >
@@ -137,6 +141,10 @@ export const getStaticProps: GetStaticProps<ClimbProps, { id: string}> = async (
       ancestors
       metadata {
         climbId
+      }
+      media {
+        mediaUrl
+        mediaUuid
       }
     }
   }`
