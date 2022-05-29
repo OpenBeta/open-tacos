@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react'
 import Link from 'next/link'
+import axios from 'axios'
+import { shuffle } from 'underscore'
+
 import { AggregateType, AreaType, CountByDisciplineType, DisciplineStatsType } from '../../../js/types'
 import { getSlug, sanitizeName } from '../../../js/utils'
 import { OpenverseImage, OpenverseResponse } from '.'
 import { FeatureImage, DefaultImage } from './FeatureImage'
-import axios from 'axios'
+import { SIRV_CONFIG } from '../../../js/sirv/SirvClient'
 
 const DEFAULT_IMAGE = {
   url: '/tortilla.png',
@@ -19,14 +22,24 @@ const RESULT_LIMIT = 10
 const LICENSES = 'CC0,BY,BY-NC-SA,BY-SA,BY-NC-ND'
 
 function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
-  const { areaName, pathTokens, aggregate, metadata, totalClimbs } = area
+  const { areaName, pathTokens, aggregate, metadata, totalClimbs, media } = area
   const [image, setImage] = React.useState<OpenverseImage>(DEFAULT_IMAGE)
 
   const mainQuery = ['rock', 'climbing', ...areaName.split(' ')]
   const backupQuery = ['rock', 'mountain', ...areaName.split(' ')]
 
   useEffect(() => {
-    void fetchImages()
+    if (media == null || media.length === 0) {
+      void fetchImages()
+    } else {
+      setImage({
+        url: `${SIRV_CONFIG.baseUrl ?? ''}${shuffle(media)[0].mediaUrl}?format=webp&h=400&q=90`,
+        license: 'All Rights Reserved',
+        creator: '',
+        license_url: '',
+        attribution: ''
+      })
+    }
   }, [])
 
   const fetchImages = async (): Promise<void> => {

@@ -74,7 +74,7 @@ const Body = ({ area }: CragProps): JSX.Element => {
           </a>
         </span>
 
-        <PhotoMontage photoList={media} />
+        <PhotoMontage photoList={media} isHero />
 
         <div
           className='pt-4 markdown'

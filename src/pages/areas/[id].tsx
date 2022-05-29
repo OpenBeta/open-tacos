@@ -60,7 +60,7 @@ const Body = ({ area }: AreaPageProps): JSX.Element => {
           </a>
         </span>
 
-        <PhotoMontage photoList={media} />
+        <PhotoMontage photoList={media} isHero />
 
         {content.description !== '' &&
           <>
@@ -170,6 +170,7 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
       }
       media {
         mediaUrl
+        mediaUuid
       }
     }
   }`

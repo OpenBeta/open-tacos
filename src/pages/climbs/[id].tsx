@@ -2,7 +2,6 @@ import React from 'react'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { gql } from '@apollo/client'
-import Image from 'next/image'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
@@ -12,8 +11,7 @@ import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
 import InlineEditor from '../../components/editor/InlineEditor'
-import { SIRV_CONFIG } from '../../js/sirv/SirvClient'
-
+import PhotoMontage from '../../components/media/PhotoMontage'
 interface ClimbProps {
   climb: Climb
 }
@@ -54,6 +52,9 @@ const Body = ({ climb }: ClimbProps): JSX.Element => {
           <RouteTypeChips type={type} />
         </div>
         <div className='pt-4 text-sm text-gray-600 italic'>FA: {fa}</div>
+
+        <PhotoMontage photoList={media} isHero />
+
         <div
           className='pt-4 markdown'
         >
@@ -63,17 +64,6 @@ const Body = ({ climb }: ClimbProps): JSX.Element => {
           <InlineEditor id={`climb-loc-${climbId}`} markdown={content.location} readOnly />
           <h2>Protection</h2>
           <InlineEditor id={`climb-pro-${climbId}`} markdown={content.protection} readOnly />
-
-          <div>
-            {media.map(({ mediaUrl, mediaUuid }) => {
-              const imgUrl = `${SIRV_CONFIG.baseUrl ?? ''}${mediaUrl}?format=webp&thumbnail=300&q=90`
-              return (
-                <div key={mediaUuid}>
-                  <Image src={imgUrl} width={300} height={300} />
-                </div>
-              )
-            })}
-          </div>
         </div>
       </div>
     </>
@@ -154,6 +144,7 @@ export const getStaticProps: GetStaticProps<ClimbProps, { id: string}> = async (
       }
       media {
         mediaUrl
+        mediaUuid
       }
     }
   }`

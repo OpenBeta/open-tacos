@@ -1,33 +1,64 @@
-import Image from 'next/image'
+import Image, { ImageLoaderProps } from 'next/image'
+import { shuffle } from 'underscore'
+import classNames from 'classnames'
 import { MediaTag } from '../../js/types'
 import { SIRV_CONFIG } from '../../js/sirv/SirvClient'
 import useResponsive from '../../js/hooks/useResponsive'
-import { shuffle } from 'underscore'
 interface PhotoMontageProps {
-  photoList: MediaTag[]
+  photoList: Array<Pick<MediaTag, 'mediaUuid'|'mediaUrl'>>
+  isHero?: boolean
 }
-export default function PhotoMontage ({ photoList }: PhotoMontageProps): JSX.Element | null {
+
+/**
+ * Responsive photo gallery.  Behavoirs:
+ * - Mobile: show 1 random image
+ * - 1..4 images: show 2 images
+ * - 5 or more: show 5 random images
+ *
+ * Set isHero=`true` when the gallery is placed visibly at the top of the page or when
+ * you see a warning about *'Image was detected as the Largest Contentful Paint (LCP).'*
+ *
+ * @param photoList
+ * @param isHero set to `true` if gallery is placed above the fold
+ * @see https://nextjs.org/docs/api-reference/next/image
+ */
+export default function PhotoMontage ({ photoList, isHero = false }: PhotoMontageProps): JSX.Element | null {
   const { isMobile } = useResponsive()
 
   if (photoList == null || photoList?.length === 0) { return null }
 
+  const shuffledList = shuffle(photoList)
+
   if (isMobile) {
-    const first = `${SIRV_CONFIG.baseUrl ?? ''}${photoList[0].mediaUrl}?format=webp&w=650&q=90`
     return (
       <div className='block relative w-full h-60'>
-        <Image src={first} layout='fill' sizes='100vw' objectFit='cover' quality={100} />
+        <Image
+          src={shuffle(shuffledList)[0].mediaUrl}
+          layout='fill'
+          sizes='100vw'
+          objectFit='cover'
+          quality={90}
+          loader={MobileLoader}
+          priority={isHero}
+        />
       </div>
     )
   }
 
-  if (photoList.length <= 4) {
+  if (shuffledList.length <= 4) {
     return (
-      <div className='grid grid-cols-2 grid-flow-row-dense gap-1 rounded-xl overflow-hidden w-full h-80'>
-        {photoList.slice(0, 4).map(({ mediaUrl, mediaUuid }) => {
-          const imgUrl = `${SIRV_CONFIG.baseUrl ?? ''}${mediaUrl}?format=webp&h=364&q=90`
+      <div className='grid grid-cols-2 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80'>
+        {photoList.slice(0, 2).map(({ mediaUrl, mediaUuid }) => {
           return (
-            <div key={mediaUuid} className='block relative'>
-              <Image src={imgUrl} layout='fill' sizes='50vw' objectFit='cover' quality={100} />
+            <div
+              key={mediaUuid}
+              className={
+                classNames(
+                  'block relative',
+                  photoList.length === 1 ? ' overflow-hidden rounded-r-xl' : '')
+                }
+            >
+              <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} />
             </div>
           )
         })}
@@ -35,22 +66,44 @@ export default function PhotoMontage ({ photoList }: PhotoMontageProps): JSX.Ele
     )
   }
 
-  const newList = shuffle(photoList)
-  const first = `${SIRV_CONFIG.baseUrl ?? ''}${newList[0].mediaUrl}?format=webp&h=320&q=90`
+  const first = shuffledList[0].mediaUrl
+  const theRest = shuffledList.slice(1, 5)
   return (
-    <div className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden w-full h-80'>
+    <div className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80'>
       <div className='block relative col-start-1 col-span-2 row-span-2 col-end-3'>
-        <Image src={first} layout='fill' sizes='50vw' objectFit='cover' quality={100} />
+        <ResponsiveImage mediaUrl={first} isHero={isHero} />
       </div>
-      {newList.slice(1, 5).map(({ mediaUrl, mediaUuid }) => {
-        const imgUrl = `${SIRV_CONFIG.baseUrl ?? ''}${mediaUrl}?format=webp&&thumbnail=158&q=90`
+      {theRest.map(({ mediaUrl, mediaUuid }) => {
         return (
           <div key={mediaUuid} className='block relative'>
-            <Image src={imgUrl} quality={100} layout='fill' sizes='50vw' objectFit='cover' />
+            <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} />
           </div>
         )
       })}
 
     </div>
   )
+}
+
+/**
+ * See https://nextjs.org/docs/api-reference/next/image
+ * Set priority={true} if the photo montage is above the fold
+ */
+const ResponsiveImage = ({ mediaUrl, isHero = true }): JSX.Element => (
+  <Image
+    src={mediaUrl}
+    loader={DefaultLoader}
+    quality={90}
+    layout='fill'
+    sizes='50vw'
+    objectFit='cover'
+    priority={isHero}
+  />)
+
+const DefaultLoader = ({ src, width, quality }: ImageLoaderProps): string => {
+  return `${SIRV_CONFIG.baseUrl ?? ''}${src}?format=webp&w=${width}&q=${quality ?? '90'}`
+}
+
+const MobileLoader = ({ src, width, quality }: ImageLoaderProps): string => {
+  return `${SIRV_CONFIG.baseUrl ?? ''}${src}?format=webp&w=640&q=${quality ?? '90'}`
 }
