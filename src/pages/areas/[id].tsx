@@ -10,9 +10,10 @@ import SeoTags from '../../components/SeoTags'
 import AreaCard from '../../components/ui/AreaCard'
 import Icon from '../../components/Icon'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
-
+import PhotoMontage from '../../components/media/PhotoMontage'
 import { getSlug } from '../../js/utils'
 import InlineEditor from '../../components/editor/InlineEditor'
+
 interface AreaPageProps {
   area: AreaType
 }
@@ -35,7 +36,7 @@ const Area: NextPage<AreaPageProps> = ({ area }) => {
 export default Area
 
 const Body = ({ area }: AreaPageProps): JSX.Element => {
-  const { id, areaName, children, metadata, content, pathTokens, ancestors } = area
+  const { id, areaName, children, metadata, content, pathTokens, ancestors, media } = area
   return (
     <>
       <SeoTags
@@ -58,6 +59,9 @@ const Body = ({ area }: AreaPageProps): JSX.Element => {
             {metadata.lat},{metadata.lng}
           </a>
         </span>
+
+        <PhotoMontage photoList={media} isHero />
+
         {content.description !== '' &&
           <>
             <div
@@ -163,6 +167,10 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
           lat
           lng
         }
+      }
+      media {
+        mediaUrl
+        mediaUuid
       }
     }
   }`

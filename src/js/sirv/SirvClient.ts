@@ -58,10 +58,11 @@ export const getUserImages = async (uuid: string, token?: string): Promise<UserI
   const res = await client.post(
     '/files/search',
     {
-      query: 'dirname:\\/u AND contentType:image',
+      query: `dirname:\\/u\\/${uuid}`,
       sort: {
         ctime: 'desc'
-      }
+      },
+      size: 100
     },
     {
       headers: {

@@ -92,6 +92,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         lng
         areaId
       }
+      media {
+        mediaUrl
+        mediaUuid
+      }
     }
   }`
 
