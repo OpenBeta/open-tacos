@@ -8,14 +8,17 @@ import SeoTags from '../../components/SeoTags'
 import ImageTable from '../../components/users/ImageTable'
 import { getTagsByMediaId } from '../../js/graphql/api'
 import { getUserImages } from '../../js/sirv/SirvClient'
-import { MediaTag, MediaType } from '../../js/types'
+import { MediaTag, MediaType, IUserProfile } from '../../js/types'
+import PublicProfile from '../../components/users/PublicProfile'
+import { getUserProfileByNick, getAllUsersMetadata } from '../../js/auth/ManagementClient'
 
 interface UserHomeProps {
   uid: string
   mediaList: MediaType[]
   tagsByMediaId: Dictionary<MediaTag[]>
+  userProfile: IUserProfile
 }
-const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList, tagsByMediaId }) => {
+const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList, tagsByMediaId, userProfile }) => {
   const router = useRouter()
   return (
     <>
@@ -32,9 +35,13 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList, tagsByMediaId }
 
       <Layout
         contentContainerClass='content-default with-standard-y-margin'
+        showFilterBar={false}
       >
         <div className='max-w-screen-2xl w-full mx-auto'>
           {router.isFallback && <div>Loading...</div>}
+
+          {userProfile != null && <PublicProfile userProfile={userProfile} />}
+
           {mediaList?.length === 0 && <div>Account not found</div>}
           {mediaList?.length > 0 && <ImageTable uid={uid} imageList={mediaList} initialTagsByMediaId={tagsByMediaId} />}
         </div>
@@ -46,8 +53,10 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList, tagsByMediaId }
 export default UserHomePage
 
 export async function getStaticPaths (): Promise<any> {
+  const users = await getAllUsersMetadata()
+  const paths = users.map(user => ({ params: { uid: user.user_metadata.nick } }))
   return {
-    paths: [{ params: { uid: 'vietnguyen' } }],
+    paths,
     fallback: true
   }
 }
@@ -60,15 +69,16 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
   }
 
   try {
-    const { mediaList, mediaIdList } = await getUserImages(MOCK_USER_ID_MAP[uid])
-    console.log('#images', mediaList)
+    const userProfile = await getUserProfileByNick(uid)
+    const { mediaList, mediaIdList } = await getUserImages(userProfile.uuid)
     const tagArray = await getTagsByMediaId(mediaIdList)
 
     const tagsByMediaId = groupBy(tagArray, 'mediaUuid')
     const data = {
       uid,
       mediaList,
-      tagsByMediaId
+      tagsByMediaId,
+      userProfile
     }
     return {
       props: data,
@@ -76,17 +86,8 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
     }
   } catch (e) {
     return {
-      props: {
-        uid,
-        mediaList: [],
-        tagsByMediaId: {}
-      },
+      notFound: true,
       revalidate: 60
     }
   }
-}
-
-// once we implement user account, we should be able to get this mapping user metadata
-const MOCK_USER_ID_MAP = {
-  vietnguyen: 'abe96612-2742-43b0-a128-6b19d4e4615f'
 }

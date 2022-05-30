@@ -27,7 +27,7 @@
     "@types/uuid": "^8.3.4",
     "@udecode/plate": "^9.1.2",
     "@udecode/zustood": "^0.4.4",
-    "auth0": "^2.40.0",
+    "auth0": "^2.42.0",
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.24.0",
     "btoa": "^1.2.1",

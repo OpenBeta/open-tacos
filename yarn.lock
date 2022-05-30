@@ -2565,10 +2565,10 @@ attr-accept@^2.2.2:
   resolved "https://registry.yarnpkg.com/attr-accept/-/attr-accept-2.2.2.tgz#646613809660110749e92f2c10833b70968d929b"
   integrity sha512-7prDjvt9HmqiZ0cl5CRjtS84sEyhsHP2coDkaZKRKVfCDo9s7iw7ChVmar78Gu9pC4SoR/28wFu/G5JJhTnqEg==
 
-auth0@^2.40.0:
-  version "2.41.0"
-  resolved "https://registry.yarnpkg.com/auth0/-/auth0-2.41.0.tgz#ed847f43b6ff31819844bcb400a219cd2d9ddd9b"
-  integrity sha512-ycsZfpy+6j36aqybQjDK0RHfZ+LiyloemoYfdUNG0JuouvucNkJiVcZhozHIzuc6+Fk5WW8rJk9MYzZ0DandvQ==
+auth0@^2.42.0:
+  version "2.42.0"
+  resolved "https://registry.yarnpkg.com/auth0/-/auth0-2.42.0.tgz#8202f94ce438b7b3081a29ce7325e08662a9268d"
+  integrity sha512-IiA224CoqjPF9Pnx0R80wQZBGlXMia69s7lQHg328Oe2mngdp6Qi32DaIKkkVtJb8FuMleWMgI+zmbwW0znhYw==
   dependencies:
     axios "^0.26.1"
     form-data "^3.0.1"

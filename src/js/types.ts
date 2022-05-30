@@ -1,6 +1,8 @@
 import { BBox, Feature } from '@turf/helpers'
 import { BaseItem } from '@algolia/autocomplete-core'
 
+import { IUserProfile } from './types/IUserProfile'
+
 export interface AreaMetadataType {
   leaf: boolean
   lat: number
@@ -185,3 +187,5 @@ export interface MediaType {
   contentType: string
   meta: any
 }
+
+export type { IUserProfile }

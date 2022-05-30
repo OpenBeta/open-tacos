@@ -4,19 +4,22 @@ import { getSession } from 'next-auth/react'
 
 import { AUTH_CONFIG_SERVER } from '../../../Config'
 
-const allowedFields = ['name'] as const
+const allowedFields = ['name', 'nick', 'uuid'] as const
 type AllowedField = typeof allowedFields[number]
 
 const isString = (value: any): value is string => typeof value === 'string'
 
 const dataTypeCheck: { [field in AllowedField]: (value: any) => boolean } = {
-  name: isString
+  name: isString,
+  nick: isString,
+  uuid: isString
 }
 
 export interface UserMetadata {
   name?: string
+  nick?: string
+  uuid?: string
 }
-
 interface MetadataClient {
   getUserMetadata: () => Promise<UserMetadata>
   updateUserMetadata: (metadata: UserMetadata) => Promise<UserMetadata>
@@ -32,14 +35,15 @@ const createMetadataClient = async (
     return null
   }
 
-  const currentUserManagementClient = new ManagementClient({
+  const currentUserManagementClient = new ManagementClient<any, UserMetadata>({
     domain: AUTH_CONFIG_SERVER?.issuer.replace('https://', '') ?? '',
     token: accessToken
   })
 
   const getUserMetadata = async (): Promise<UserMetadata> => {
     const user = await currentUserManagementClient.getUser({ id })
-    return user?.user_metadata ?? {}
+    console.log('#API.getUser()', user)
+    return user.user_metadata ?? { }
   }
 
   const updateUserMetadata = async (
