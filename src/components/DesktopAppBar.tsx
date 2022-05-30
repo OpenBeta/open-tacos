@@ -36,13 +36,14 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, s
   ]
 
   if (status === 'authenticated') {
-    navList.unshift({
-      action: async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` }),
-      title: 'Logout'
-    })
+    navList.unshift(
+      {
+        action: async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` }),
+        title: 'Logout'
+      })
   } else {
     navList.unshift({
-      action: async () => await signIn('auth0', { callbackUrl: '/u/vietnguyen' }),
+      action: async () => await signIn('auth0', { callbackUrl: '/api/user/me' }),
       title: 'Login',
       variant: ButtonVariant.SOLID_SECONDARY
     })

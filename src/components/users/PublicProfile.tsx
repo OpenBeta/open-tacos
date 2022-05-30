@@ -1,19 +1,22 @@
-import { IUserProfile } from '../../js/types'
-
+import { IUserProfile } from '../../js/types/User'
+import EditProfileButton from './EditProfileButton'
 interface PublicProfileProps {
   userProfile: IUserProfile
 }
 
 export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX.Element {
-  const { fullName, nick, avatar, bio } = userProfile
+  const { name, nick, avatar, bio } = userProfile
   return (
-    <div className='mx-auto max-w-screen-sm grid grid-cols-3'>
-      <div>
+    <div className='mx-auto max-w-screen-sm md:grid md:grid-cols-3'>
+      <div className='hidden md:block'>
         <img className='rounded-full' src={avatar} />
       </div>
-      <div className='col-span-2 text-medium'>
-        <div className='text-2xl font-semibold'>{nick}</div>
-        <div className='mt-8 text-lg font-semibold'>{fullName}</div>
+      <div className='md:col-span-2 text-medium'>
+        <div className='flex flex-row items-center'>
+          <span className='text-2xl font-bold mr-4'>{nick}</span>
+          <EditProfileButton />
+        </div>
+        <div className='mt-6 text-lg font-semibold'>{name}</div>
         <div className=''>{bio}</div>
       </div>
 

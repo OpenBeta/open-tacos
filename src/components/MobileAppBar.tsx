@@ -49,7 +49,7 @@ const More = (): JSX.Element => {
 
       <Popover.Panel className='absolute z-20 right-0 mt-2 p-6 bg-white rounded-md'>
         <div className='grid'>
-          {status === 'authenticated' ? <Button onClick={async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })} label='Logout' /> : <Button onClick={async () => await signIn()} label='Login' />}
+          {status === 'authenticated' ? <Button onClick={async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })} label='Logout' /> : <Button onClick={async () => await signIn('auth0', { callbackUrl: '/api/user/me' })} label='Login' />}
           <Button href='/about' label='About' />
           <Button
             href='https://discord.gg/2A2F6kUtyh'

@@ -1,9 +1,9 @@
 import { NextApiHandler } from 'next'
 
 import withAuth from '../withAuth'
-import createMetadataClient, { UserMetadata } from './metadataClient'
+import createMetadataClient, { Auth0UserMetadata } from './metadataClient'
 
-type Handler = NextApiHandler<UserMetadata | { message: string }>
+type Handler = NextApiHandler<Auth0UserMetadata | { message: string }>
 
 const getProfile: Handler = async (req, res) => {
   const metadataClient = await createMetadataClient(req)
@@ -37,11 +37,11 @@ const updateProfile: Handler = async (req, res) => {
   }
 }
 
-const userHandler: NextApiHandler<UserMetadata> = async (req, res) => {
+const userHandler: NextApiHandler<Auth0UserMetadata> = async (req, res) => {
   switch (req.method) {
     case 'GET':
       return getProfile(req, res)
-    case 'POST':
+    case 'PATCH':
       return updateProfile(req, res)
     default:
       return res.status(405).end()

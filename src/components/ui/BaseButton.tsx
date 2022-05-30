@@ -8,24 +8,29 @@ interface BaseButtonProps {
   variant?: ButtonVariant
   size?: string
   href?: string
+  type?: 'button' | 'reset' | 'submit'
+  disabled?: boolean
 }
 
 export const BaseButton = React.forwardRef<HTMLInputElement, BaseButtonProps>(({
   onClick = null,
   label,
   variant = ButtonVariant.DEFAULT,
-  size = Button.SIZE_MD
+  size = Button.SIZE_MD,
+  type = 'button',
+  disabled: disable = false
 }: BaseButtonProps, ref: any): JSX.Element => {
   return (
     <button
-      type='button'
+      type={type}
       onClick={onClick}
       ref={ref}
       className={classnames(
-        'cursor-pointer',
+        'cursor-pointer disabled:cursor-auto disabled:disabled:opacity-50',
         variant,
         size
       )}
+      disabled={disable}
     >
       {label}
     </button>
@@ -36,16 +41,18 @@ export const Button = ({
   onClick, label,
   variant,
   href,
-  size
+  size,
+  type = 'button',
+  disabled: disable = false
 }: BaseButtonProps): JSX.Element => {
   if (href !== undefined) {
     return (
       <Link href={href} passHref>
-        <BaseButton onClick={onClick} label={label} variant={variant} />
+        <BaseButton onClick={onClick} label={label} variant={variant} type={type} disabled={disable} />
       </Link>
     )
   }
-  return (<BaseButton onClick={onClick} label={label} variant={variant} />)
+  return (<BaseButton onClick={onClick} label={label} variant={variant} type={type} disabled={disable} />)
 }
 
 Button.SIZE_MD = 'px-2.5 py-1 text-base'

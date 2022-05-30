@@ -1,7 +1,7 @@
 import { ManagementClient as Auth0MgmtClient } from 'auth0'
-
+import type { User } from 'auth0'
 import { AUTH_CONFIG_SERVER } from '../../Config'
-import { IUserProfile } from '../types/IUserProfile'
+import { IWritableUserMetadata, IUserProfile } from '../types/User'
 
 if (AUTH_CONFIG_SERVER == null) throw new Error('AUTH_CONFIG_SERVER not defined')
 
@@ -26,15 +26,24 @@ export const getUserProfileByNick = async (nick: string): Promise<IUserProfile> 
 
   if (users != null && users.length > 1) throw new Error('Found multiple users for ' + nick)
 
-  const { user_metadata: umeta } = users[0]
-  if (umeta == null) throw new Error('Missing metadata for ' + nick)
+  return reshapeAuth0UserToProfile(users[0])
+}
 
+export const reshapeAuth0UserToProfile = (user: User): IUserProfile => {
+  const { user_metadata: umeta } = user
+  if (umeta == null) throw new Error(`Missing metadata for  ${user?.name ?? ''}`)
   return {
-    fullName: umeta.name,
+    name: umeta.name,
     nick: umeta.nick,
     uuid: umeta.uuid,
-    email: users[0].email ?? '',
-    avatar: users[0].picture,
+    email: user.email ?? '',
+    avatar: user.picture,
     bio: umeta.bio
   }
 }
+
+export const extractUpdatableMetadataFromProfile = ({ name, nick, bio }: IWritableUserMetadata): IWritableUserMetadata => ({
+  name,
+  nick,
+  bio
+})
