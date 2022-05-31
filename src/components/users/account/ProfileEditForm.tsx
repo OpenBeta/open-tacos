@@ -49,7 +49,7 @@ export default function ProfileEditForm (): ReactElement {
         <TextField name='bio' label='Bio' />
 
         <Button
-          label='Save' type='submit' variant={ButtonVariant.SOLID_SECONDARY}
+          label='Save' type='submit' variant={ButtonVariant.SOLID_DEFAULT}
           disabled={!isValid || isSubmitting || !dirty}
         />
       </Form>)}

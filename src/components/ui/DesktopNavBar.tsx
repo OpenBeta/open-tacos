@@ -25,8 +25,8 @@ export default function DesktopNavBar ({ expanded, branding, search, navList }: 
       <div>{branding}</div>
       <div className='block'>{search}</div>
       <nav className='flex items-center justify-between'>
-        <ProfileNavIcon />
         <div className='flex items-center gap-x-4'>
+          <ProfileNavIcon isMobile={false} />
           {navList.map(item => <NavItem key={item.title} {...item} />)}
         </div>
       </nav>

@@ -9,7 +9,7 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
   return (
     <div className='mx-auto max-w-screen-sm md:grid md:grid-cols-3'>
       <div className='hidden md:block'>
-        <img className='rounded-full' src={avatar} />
+        <img className='rounded-full hue-rotate-15' src={avatar} />
       </div>
       <div className='md:col-span-2 text-medium'>
         <div className='flex flex-row items-center'>

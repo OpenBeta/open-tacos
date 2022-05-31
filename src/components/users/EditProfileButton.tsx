@@ -1,9 +1,9 @@
 import { useSession } from 'next-auth/react'
-
+import { Button, ButtonVariant } from '../ui/BaseButton'
 export default function EditProfileButton (): JSX.Element | null {
   const session = useSession()
   if (session.status === 'authenticated') {
-    return (<a href='/account/edit'><button className='text-primary text-sm border-2 border-gray-600 rounded-md px-2 py-0.25'>Edit</button></a>)
+    return (<Button href='/account/edit' label='Edit' variant={ButtonVariant.OUTLINED_DEFAULT} size='sm' />)
   }
   return null
 }
