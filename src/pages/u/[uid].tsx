@@ -53,8 +53,13 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList, tagsByMediaId, 
 export default UserHomePage
 
 export async function getStaticPaths (): Promise<any> {
-  const users = await getAllUsersMetadata()
-  const paths = users.map(user => ({ params: { uid: user.user_metadata.nick } }))
+  let paths: any = []
+  try {
+    const users = await getAllUsersMetadata()
+    paths = users.map(user => ({ params: { uid: user.user_metadata.nick } }))
+  } catch (e) {
+    console.log('Warning: Error fetching user metadata from Auth provider.  User profile page will not be pre-generated at build time.')
+  }
   return {
     paths,
     fallback: true
