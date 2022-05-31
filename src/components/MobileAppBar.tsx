@@ -1,11 +1,13 @@
 import Link from 'next/link'
+import { signIn, signOut, useSession } from 'next-auth/react'
+import { Popover } from '@headlessui/react'
+
 import CragFinder from './search/CragFinder'
 import MobileNavBar from './ui/MobileNavBar'
 import { HomeIcon, MenuIcon } from '@heroicons/react/outline'
 import MobileFilterBar from './finder/filters/MobileFilterBar'
-import { Popover } from '@headlessui/react'
 import { Button, ButtonVariant } from './ui/BaseButton'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import ProfileNavButton from './ProfileNavButton'
 
 export default function MobileAppBar (): JSX.Element {
   return (
@@ -14,6 +16,7 @@ export default function MobileAppBar (): JSX.Element {
         branding={<Branding />}
         home={<Home />}
         search={<CragFinder />}
+        profile={<ProfileNavButton />}
         more={<More />}
       />
       <MobileFilterBar />
@@ -49,7 +52,13 @@ const More = (): JSX.Element => {
 
       <Popover.Panel className='absolute z-20 right-0 mt-2 p-6 bg-white rounded-md'>
         <div className='grid'>
-          {status === 'authenticated' ? <Button onClick={async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })} label='Logout' /> : <Button onClick={async () => await signIn()} label='Login' />}
+          {status === 'authenticated'
+            ? (
+              <>
+
+                <Button onClick={async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })} label='Logout' />
+              </>)
+            : <Button onClick={async () => await signIn('auth0', { callbackUrl: '/api/user/me' })} label='Login' />}
           <Button href='/about' label='About' />
           <Button
             href='https://discord.gg/2A2F6kUtyh'

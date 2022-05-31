@@ -76,7 +76,7 @@ export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: Im
 
   return (
     <>
-      <div className='flex justify-center flex-wrap'>
+      <div className='mt-8 flex justify-center flex-wrap'>
         {imageList.map(imageInfo => {
           const tags = tagsByMediaId?.[imageInfo.mediaId] ?? []
           return (

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Transition } from '@headlessui/react'
 
 import Tabs from './Tabs'
-import SearchIcon from '../../assets/icons/search.svg'
+import { SearchIcon } from '@heroicons/react/outline'
 import { ClimbSearchByName } from './ClimbSearchByName'
 import CragFinder from './CragFinder'
 
@@ -67,7 +67,7 @@ export const FakeSearchBox = ({ placeholder = 'Start your search', onClick, expa
     <div onClick={onClick} className='pointer-events-auto cursor-pointer border border-gray-200 shadow-lg shadow-inner rounded-lg flex flex-row justify-between items-center gap-x-4 py-1 bg-white'>
       <div className='pl-4 pr-8 text-sm'>{placeholder}</div>
       <div className='rounded-full bg-custom-primary p-2 mr-1'>
-        <SearchIcon className='stroke-white' />
+        <SearchIcon className='w-4 h-4 stroke-white' />
       </div>
     </div>
   )

@@ -3,29 +3,46 @@ import Router from 'next/router'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import fetch from 'node-fetch'
-import { abortableFetch } from 'abortcontroller-polyfill/dist/cjs-ponyfill'
+import { useSession, SessionProvider } from 'next-auth/react'
+import { ReactElement } from 'react'
 
 import '../styles/global.css'
 import '../../public/fonts/fonts.css'
-import { SessionProvider } from 'next-auth/react'
-
-global.fetch = abortableFetch(fetch).fetch
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 NProgress.configure({ showSpinner: false, easing: 'ease-in-out', speed: 500 })
 
-function MyApp ({ Component, pageProps: { session, ...pageProps } }: AppProps): JSX.Element {
-  return (
-    <SessionProvider
-      session={session}
-    >
+interface AppPropsWithAuth extends AppProps {
+  Component: AppProps['Component'] & { auth: boolean }
+}
 
-      <Component {...pageProps} />
+export default function MyApp ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithAuth): JSX.Element {
+  return (
+    <SessionProvider session={session}>
+      {
+        Component?.auth
+          ? (
+            <Auth>
+              <Component {...pageProps} />
+            </Auth>
+            )
+          : (
+            <Component {...pageProps} />
+            )
+      }
     </SessionProvider>
   )
 }
 
-export default MyApp
+function Auth ({ children }): ReactElement {
+  // if `{ required: true }` is supplied, `status` can only be "loading" or "authenticated"
+  const { status } = useSession({ required: true })
+
+  if (status === 'loading') {
+    return <div>Loading...</div>
+  }
+
+  return children
+}

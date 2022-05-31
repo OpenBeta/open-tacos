@@ -19,7 +19,8 @@ export default NextAuth({
       authorization: { params: { audience: `${issuer}/api/v2/`, scope: 'openid email profile read:current_user create:current_user_metadata update:current_user_metadata' } },
       client: {
         token_endpoint_auth_method: clientSecret.length === 0 ? 'none' : 'client_secret_basic'
-      }
+      },
+      idToken: true
     })
   ],
   callbacks: {
