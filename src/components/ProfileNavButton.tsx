@@ -2,10 +2,14 @@ import { useSession } from 'next-auth/react'
 import { Button } from './ui/BaseButton'
 import { UserCircleIcon } from '@heroicons/react/outline'
 
-interface ProfileNavIconProps {
+interface ProfileNavButtonProps {
   isMobile?: boolean
 }
-export default function ProfileNavIcon ({ isMobile = true }: ProfileNavIconProps): JSX.Element | null {
+
+/**
+ * Render user profile icon button if the user has logged in.  Return null otherwise.
+ */
+export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonProps): JSX.Element | null {
   const { status } = useSession()
   if (status === 'authenticated') {
     if (isMobile) {

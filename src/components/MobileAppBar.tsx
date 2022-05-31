@@ -7,7 +7,7 @@ import MobileNavBar from './ui/MobileNavBar'
 import { HomeIcon, MenuIcon } from '@heroicons/react/outline'
 import MobileFilterBar from './finder/filters/MobileFilterBar'
 import { Button, ButtonVariant } from './ui/BaseButton'
-import ProfileNavIcon from '../components/ProfileNavIcon'
+import ProfileNavButton from './ProfileNavButton'
 
 export default function MobileAppBar (): JSX.Element {
   return (
@@ -16,7 +16,7 @@ export default function MobileAppBar (): JSX.Element {
         branding={<Branding />}
         home={<Home />}
         search={<CragFinder />}
-        profile={<ProfileNavIcon />}
+        profile={<ProfileNavButton />}
         more={<More />}
       />
       <MobileFilterBar />

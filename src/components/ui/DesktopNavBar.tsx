@@ -1,7 +1,7 @@
 import Bar from './Bar'
 import { ButtonVariant } from './BaseButton'
 import NavMenuButton from './NavMenuButton'
-import ProfileNavIcon from '../ProfileNavIcon'
+import ProfileNavButton from '../ProfileNavButton'
 export interface NavListItem {
   title: string
   route?: string
@@ -26,7 +26,7 @@ export default function DesktopNavBar ({ expanded, branding, search, navList }: 
       <div className='block'>{search}</div>
       <nav className='flex items-center justify-between'>
         <div className='flex items-center gap-x-4'>
-          <ProfileNavIcon isMobile={false} />
+          <ProfileNavButton isMobile={false} />
           {navList.map(item => <NavItem key={item.title} {...item} />)}
         </div>
       </nav>
