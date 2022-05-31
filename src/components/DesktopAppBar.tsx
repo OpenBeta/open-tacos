@@ -12,9 +12,10 @@ interface DesktopAppBarProps {
   expanded: boolean
   onExpandSearchBox: Function
   onClose: Function
+  showFilterBar?: boolean
 }
 
-export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }: DesktopAppBarProps): JSX.Element {
+export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, showFilterBar = true }: DesktopAppBarProps): JSX.Element {
   const canary = useCanary()
   const { status } = useSession()
 
@@ -35,13 +36,14 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }:
   ]
 
   if (status === 'authenticated') {
-    navList.unshift({
-      action: async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` }),
-      title: 'Logout'
-    })
+    navList.unshift(
+      {
+        action: async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` }),
+        title: 'Logout'
+      })
   } else {
     navList.unshift({
-      action: async () => await signIn('auth0'),
+      action: async () => await signIn('auth0', { callbackUrl: '/api/user/me' }),
       title: 'Login',
       variant: ButtonVariant.SOLID_SECONDARY
     })
@@ -68,7 +70,7 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose }:
       }
         navList={navList}
       />
-      <DesktopFilterBar />
+      {showFilterBar && <DesktopFilterBar />}
     </header>
   )
 }

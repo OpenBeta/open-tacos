@@ -1,4 +1,3 @@
-import React from 'react'
 import Header from './Header'
 import Head from 'next/head'
 import SeoTags from '../components/SeoTags'
@@ -8,8 +7,9 @@ interface LayoutProps {
   rootContainerClass?: string
   children?: JSX.Element | JSX.Element[]
   hero?: JSX.Element | JSX.Element[] | null
+  showFilterBar?: boolean
 }
-function Layout ({ contentContainerClass = 'content-fullscreen-tablet', rootContainerClass = 'root-container-default', children, hero = null }: LayoutProps): JSX.Element {
+function Layout ({ contentContainerClass = 'content-fullscreen-tablet', rootContainerClass = 'root-container-default', children, hero = null, showFilterBar = true }: LayoutProps): JSX.Element {
   return (
     <>
       <Head>
@@ -25,7 +25,7 @@ function Layout ({ contentContainerClass = 'content-fullscreen-tablet', rootCont
       </Head>
 
       <div className={rootContainerClass}>
-        <Header />
+        <Header showFilterBar={showFilterBar} />
         {hero}
         <main className={contentContainerClass}>
           {children}

@@ -4,7 +4,11 @@ import MobileTabletAppBar from './MobileAppBar'
 import DesktopAppBar from './DesktopAppBar'
 import useResponsive, { useResponsiveProps } from '../js/hooks/useResponsive'
 
-export default function Header (): JSX.Element {
+interface HeaderProps {
+  showFilterBar?: boolean
+}
+
+export default function Header ({ showFilterBar = true }: HeaderProps): JSX.Element {
   const { isTablet, isMobile } = useResponsive()
 
   const router = useRouter()
@@ -49,6 +53,7 @@ export default function Header (): JSX.Element {
               setExpanded(true)
             }}
             onClose={handleClose}
+            showFilterBar={showFilterBar}
           />}
     </>
   )
