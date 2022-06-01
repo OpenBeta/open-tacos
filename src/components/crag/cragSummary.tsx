@@ -19,6 +19,10 @@ export function summarize (s: string, n: number): [string, string] {
   const words = s.split(' ')
   const quantized: string[] = []
 
+  if (words.length <= n || words.length === 0) {
+    return [s, '']
+  }
+
   function distanceToTermination (ordinal: number): [number, number] {
     function distDir (direction: -1 | 1): number {
       let dist = 0
@@ -35,6 +39,10 @@ export function summarize (s: string, n: number): [string, string] {
     return [distDir(1), distDir(-1)]
   }
 
+  if (!s.includes('.')) {
+    return [words.slice(0, n).join(' '), '']
+  }
+
   for (const word of words) {
     if (quantized.length >= n) {
       // Check the distance to next sentence termination. (in both directions)
@@ -42,12 +50,12 @@ export function summarize (s: string, n: number): [string, string] {
 
       // If it is nearer to remove elements until no sentence is interrupted,
       // then pop elements until we hit a sentence termination.
-      if (dbackward < dforward && dbackward < n) {
+      if (dbackward < dforward && quantized.length > 1) {
         while (quantized.length > 0 && !quantized[quantized.length - 1].endsWith('.')) {
           quantized.pop()
         }
       } else {
-        while (!quantized[quantized.length - 1].endsWith('.')) {
+        while (quantized[quantized.length - 1] !== undefined && !quantized[quantized.length - 1].endsWith('.')) {
           quantized.push(words[quantized.length - 1])
         }
       }
