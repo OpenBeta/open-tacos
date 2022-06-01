@@ -41,8 +41,7 @@ function getBounds (areas: Mappable[]): [[number, number], [number, number]] | n
       [minLon, minLat], // SouthWest corner
       [maxLon, maxLat]] // northeastern corner of the bounds
   }
-  // all 0s acts the same as no bounds (empty bounds) and so bounds will be
-  // skipped by map and use zoom instead
+  // No bounds
   return null
 }
 
@@ -63,12 +62,13 @@ export default function AreaMap (props: AreaMapProps): JSX.Element {
 
       const bounds = computeVS(props.subAreas)
 
-      if (bounds !== null) {
+      if (bounds !== null && props.subAreas.length > 1) {
         map.fitBounds(bounds, { padding })
       } else {
-        // This is not your regular edge-case, but it maintains type safety
+        // maintains safety for cases where bounds aren't useful.
         map.flyTo({
-          center: [props.area.metadata.lat, props.area.metadata.lng]
+          center: [props.area.metadata.lng, props.area.metadata.lat],
+          zoom: 10
         })
       }
     }

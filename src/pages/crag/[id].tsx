@@ -18,7 +18,7 @@ const CragPage: NextPage<CragProps> = ({ area }) => {
   const router = useRouter()
 
   return (
-    <Layout contentContainerClass='content-default'>
+    <Layout contentContainerClass='content-default' showFilterBar={false}>
       {router.isFallback
         ? (
           <div className='px-4 max-w-screen-md'>

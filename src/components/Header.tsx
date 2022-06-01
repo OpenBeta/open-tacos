@@ -4,6 +4,8 @@ import MobileTabletAppBar from './MobileAppBar'
 import DesktopAppBar from './DesktopAppBar'
 import useResponsive from '../js/hooks/useResponsive'
 
+const NAV_BAR_IDENTIFIER = 'tacos-nav-bar'
+
 interface HeaderProps {
   showFilterBar?: boolean
 }
@@ -45,7 +47,7 @@ export default function Header (props: HeaderProps): JSX.Element {
   }
 
   return (
-    <>
+    <div id={NAV_BAR_IDENTIFIER}>
       {isTablet || isMobile
         ? <MobileTabletAppBar includeFilters={includeFilters} />
         : <DesktopAppBar
@@ -56,11 +58,9 @@ export default function Header (props: HeaderProps): JSX.Element {
             onClose={handleClose}
             showFilterBar={includeFilters}
           />}
-    </>
+    </div>
   )
 }
-
-export const NAV_BAR_IDENTIFIER = 'tacos-nav-bar'
 
 export const getNavBarOffset = (): number => {
   if (typeof document === 'undefined') {
