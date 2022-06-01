@@ -1,3 +1,4 @@
+import { NAV_BAR_IDENTIFIER } from '../Header'
 import Bar from './Bar'
 interface MNavBarProps {
   branding: JSX.Element
@@ -9,7 +10,7 @@ interface MNavBarProps {
 
 export default function MobileNavBar ({ branding, home, search, profile, more }: MNavBarProps): JSX.Element {
   return (
-    <header className='xl:hidden'>
+    <header className='xl:hidden' id={NAV_BAR_IDENTIFIER}>
       <Bar className='max-w-screen-xl gap-x-8 px-4' backgroundClass='bg-default'>
         <div className='hidden md:block w-12'>{branding}</div>
         <div className='md:hidden w-12'>{home}</div>

@@ -7,6 +7,7 @@ import DesktopFilterBar from './finder/filters/DesktopFilterBar'
 import { useCanary } from '../js/hooks'
 import { ButtonVariant } from './ui/BaseButton'
 import { useSession, signIn, signOut } from 'next-auth/react'
+import { NAV_BAR_IDENTIFIER } from './Header'
 
 interface DesktopAppBarProps {
   expanded: boolean
@@ -50,7 +51,7 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, s
   }
 
   return (
-    <header className='sticky top-0 z-10'>
+    <header className='sticky top-0 z-10' id={NAV_BAR_IDENTIFIER}>
       <DesktopNavBar
         expanded={expanded}
         branding={

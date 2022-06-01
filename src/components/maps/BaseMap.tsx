@@ -12,7 +12,7 @@ export const DEFAULT_INITIAL_VIEWSTATE = {
   longitude: -103.77154
 }
 
-const MAP_STYLES = {
+export const MAP_STYLES = {
   light: 'mapbox://styles/mappandas/ckx5ksor56x3z15qavm57edp9',
   dark: 'mapbox://styles/mappandas/cl0u44wo8008415pedsbgtml7'
 }

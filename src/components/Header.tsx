@@ -2,14 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import MobileTabletAppBar from './MobileAppBar'
 import DesktopAppBar from './DesktopAppBar'
-import useResponsive, { useResponsiveProps } from '../js/hooks/useResponsive'
+import useResponsive from '../js/hooks/useResponsive'
 
 interface HeaderProps {
   showFilterBar?: boolean
 }
 
-export default function Header ({ showFilterBar = true }: HeaderProps): JSX.Element {
+export default function Header (props: HeaderProps): JSX.Element {
   const { isTablet, isMobile } = useResponsive()
+  const includeFilters = Boolean(props.showFilterBar)
 
   const router = useRouter()
   const isIndexPage = router.pathname === '/'
@@ -46,34 +47,25 @@ export default function Header ({ showFilterBar = true }: HeaderProps): JSX.Elem
   return (
     <>
       {isTablet || isMobile
-        ? <MobileTabletAppBar />
+        ? <MobileTabletAppBar includeFilters={includeFilters} />
         : <DesktopAppBar
             expanded={expanded}
             onExpandSearchBox={() => {
               setExpanded(true)
             }}
             onClose={handleClose}
-            showFilterBar={showFilterBar}
+            showFilterBar={includeFilters}
           />}
     </>
   )
 }
 
-export const getNavBarOffset = ({ isTablet, isMobile, isDesktop = false }: useResponsiveProps): number => {
-  if (isMobile) return NAV_BAR_OFFSET.mobile
-  if (isTablet) return NAV_BAR_OFFSET.tablet
-  return NAV_BAR_OFFSET.desktop
-}
+export const NAV_BAR_IDENTIFIER = 'tacos-nav-bar'
 
-/**
- * Important:
- * This value defines the actual height of header + toolbar.
- * Map div container uses absolute positioning and relies on the value to set
- * its top-${NAV_BAR_OFFSET}px and height.
- * Todo: caclculate this value programmatically
- */
-const NAV_BAR_OFFSET = {
-  mobile: 96,
-  tablet: 96,
-  desktop: 112
+export const getNavBarOffset = (): number => {
+  if (typeof document === 'undefined') {
+    return 0
+  }
+
+  return document.getElementById(NAV_BAR_IDENTIFIER)?.offsetHeight ?? 0
 }

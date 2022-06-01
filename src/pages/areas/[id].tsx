@@ -1,19 +1,18 @@
 import { NextPage, GetStaticProps } from 'next'
 import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 
 import { AreaType } from '../../js/types'
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
-import AreaCard from '../../components/ui/AreaCard'
-import Icon from '../../components/Icon'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
-import PhotoMontage from '../../components/media/PhotoMontage'
+import AreaMap from '../../components/area/areaMap'
+import { useMemo, useState } from 'react'
+import SidePanel from '../../components/area/panel/sidePanel'
 import { getSlug } from '../../js/utils'
-import InlineEditor from '../../components/editor/InlineEditor'
-
+import { getNavBarOffset } from '../../components/Header'
+import PhotoMontage from '../../components/media/PhotoMontage'
 interface AreaPageProps {
   area: AreaType
 }
@@ -21,7 +20,11 @@ interface AreaPageProps {
 const Area: NextPage<AreaPageProps> = ({ area }) => {
   const router = useRouter()
   return (
-    <Layout contentContainerClass='content-default with-standard-y-margin'>
+    <Layout
+      showFooter={false}
+      showFilterBar={false}
+      contentContainerClass='content-default'
+    >
       {router.isFallback
         ? (
           <div className='px-4 max-w-screen-md'>
@@ -36,58 +39,73 @@ const Area: NextPage<AreaPageProps> = ({ area }) => {
 export default Area
 
 const Body = ({ area }: AreaPageProps): JSX.Element => {
-  const { id, areaName, children, metadata, content, pathTokens, ancestors, media } = area
+  const [focused, setFocused] = useState<null | string>(null)
+  const [selected, setSelected] = useState<null | string>(null)
+  const navbarOffset = getNavBarOffset()
+
+  const items = useMemo(() => {
+    return area.children
+      // We don't care about empty children
+      .filter(i => i.totalClimbs > 0)
+      // map the actual data we need into the item entity
+      .map(child => ({
+        id: child.id,
+        name: child.areaName,
+        description: child.content?.description,
+        totalClimbs: child.totalClimbs,
+        aggregate: child.aggregate,
+        content: child.content,
+        href: getSlug(child.metadata.areaId, child.metadata.leaf)
+      }))
+  }, [area])
+
+  const { areaName, children, metadata, content, pathTokens, ancestors, media } = area
   return (
     <>
       <SeoTags
         keywords={[areaName]}
         title={areaName}
-        description='description'
+        description={content.description}
       />
-      <div className='px-4 max-w-screen-md'>
-        <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
-        <h1 className='title'>{areaName}</h1>
-        <span className='flex items-center flex-shrink text-gray-500 text-xs gap-x-1'>
-          <Icon type='droppin' />
-          <a
-            className='hover:underline hover:text-gray-800'
-                /* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */
-            href={`https://www.openstreetmap.org/#map=13/${metadata.lat}/${metadata.lng}`}
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            {metadata.lat},{metadata.lng}
-          </a>
-        </span>
 
-        <PhotoMontage photoList={media} isHero />
+      <div
+        className='flex overflow-y-auto'
+        style={{ height: `calc(100vh - ${navbarOffset}px)` }}
+      >
+        <div
+          className='p-6 flex-1 overflow-y-auto'
+          style={{
+            height: `calc(100vh - ${navbarOffset}px)`,
+            scrollSnapType: 'y mandatory'
+          }}
+        >
+          <div className='snap-start pt-4'>
+            <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
+            <div className='mt-4' />
+            <PhotoMontage isHero photoList={media} />
+          </div>
+          <div className='mt-16 snap-start'>
+            <SidePanel
+              onFocus={d => setFocused(d)}
+              onSelect={d => setSelected(d)}
+              items={items}
+              selected={selected}
+              focused={focused}
+              title={areaName}
+              description={content.description}
+              longitude={metadata.lng}
+              latitude={metadata.lat}
+            />
+          </div>
+        </div>
 
-        {content.description !== '' &&
-          <>
-            <div
-              className='pt-4 markdown'
-            >
-              <h2>Description</h2>
-              <InlineEditor id={`area-${id}`} markdown={content.description} readOnly />
-            </div>
-            <hr className='my-8' />
-          </>}
-
-        <h2>Subareas</h2>
-        <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-3 gap-y-3'>
-          {children.map((child) => {
-            const { areaName, metadata } = child
-            const { areaId, leaf } = metadata
-            return (
-              <div className='max-h-96' key={areaId}>
-                <Link href={getSlug(areaId, leaf)} passHref>
-                  <a>
-                    <AreaCard areaName={areaName} />
-                  </a>
-                </Link>
-              </div>
-            )
-          })}
+        <div className='md:1-1/4 lg:w-1/2'>
+          <AreaMap
+            focused={focused}
+            selected={selected}
+            subAreas={children}
+            area={area}
+          />
         </div>
       </div>
     </>
@@ -156,11 +174,52 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
       content {
         description 
       } 
+      aggregate {
+          byGradeBand {
+            intermediate
+            expert
+            beginner
+            advance
+          }
+          byDiscipline {
+            sport {
+              total
+            }
+            trad {
+              total
+            }
+            boulder {
+              total
+            }
+          }
+        }
       children {
         id
         uuid
         areaName
+        aggregate {
+          byGradeBand {
+            intermediate
+            expert
+            beginner
+            advance
+          }
+          byDiscipline {
+            sport {
+              total
+            }
+            trad {
+              total
+            }
+            boulder {
+              total
+            }
+          }
+        }
         totalClimbs
+        content {
+          description 
+        } 
         metadata {
           areaId
           leaf
@@ -168,6 +227,7 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
           lng
         }
       }
+
       media {
         mediaUrl
         mediaUuid

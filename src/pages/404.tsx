@@ -1,11 +1,9 @@
 import React from 'react'
 import { getNavBarOffset } from '../components/Header'
 import Layout from '../components/layout'
-import useResponsive from '../js/hooks/useResponsive'
 
 function NotFoundPage (): JSX.Element {
-  const { isMobile, isTablet, isDesktop } = useResponsive()
-  const navbarOffset = getNavBarOffset({ isMobile, isTablet, isDesktop })
+  const navbarOffset = getNavBarOffset()
   return (
     <Layout contentContainerClass=''>
       <div className='w-full  bg-gray-50 p-2' style={{ height: `calc(100vh - ${navbarOffset}px)` }}>
