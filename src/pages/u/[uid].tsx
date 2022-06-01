@@ -7,11 +7,11 @@ import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import ImageTable from '../../components/users/ImageTable'
 import { getTagsByMediaId } from '../../js/graphql/api'
-import { getUserImages } from '../../js/sirv/SirvClient'
+import { getUserImages, createUserDir } from '../../js/sirv/SirvClient'
 import { MediaTag, MediaType, IUserProfile } from '../../js/types'
 import PublicProfile from '../../components/users/PublicProfile'
 import { getUserProfileByNick, getAllUsersMetadata } from '../../js/auth/ManagementClient'
-
+import InitialUploadCTA from '../../components/media/InitialUploadCTA'
 interface UserHomeProps {
   uid: string
   mediaList: MediaType[]
@@ -42,7 +42,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList, tagsByMediaId, 
 
           {userProfile != null && <PublicProfile userProfile={userProfile} />}
 
-          {mediaList?.length === 0 && <div>Account not found</div>}
+          {mediaList?.length === 0 && <InitialUploadCTA />}
           {mediaList?.length > 0 && <ImageTable uid={uid} imageList={mediaList} initialTagsByMediaId={tagsByMediaId} />}
         </div>
       </Layout>
@@ -76,9 +76,16 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
   try {
     const userProfile = await getUserProfileByNick(uid)
     const { mediaList, mediaIdList } = await getUserImages(userProfile.uuid)
-    const tagArray = await getTagsByMediaId(mediaIdList)
+    let tagsByMediaId: Dictionary<MediaTag[]> = {}
 
-    const tagsByMediaId = groupBy(tagArray, 'mediaUuid')
+    if (mediaList.length === 0) {
+      console.log('Creating user dir on image provider...')
+      await createUserDir(userProfile.uuid)
+    } else {
+      const tagArray = await getTagsByMediaId(mediaIdList)
+      tagsByMediaId = groupBy(tagArray, 'mediaUuid')
+    }
+
     const data = {
       uid,
       mediaList,
@@ -90,6 +97,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
       revalidate: 60
     }
   } catch (e) {
+    console.log('Error in getStaticProps()', e)
     return {
       notFound: true,
       revalidate: 60

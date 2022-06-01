@@ -33,12 +33,12 @@ export const reshapeAuth0UserToProfile = (user: User): IUserProfile => {
   const { user_metadata: umeta } = user
   if (umeta == null) throw new Error(`Missing metadata for  ${user?.name ?? ''}`)
   return {
-    name: umeta.name,
+    name: umeta?.name ?? '',
     nick: umeta.nick,
     uuid: umeta.uuid,
     email: user.email ?? '',
-    avatar: user.picture,
-    bio: umeta.bio
+    avatar: user?.picture ?? '',
+    bio: umeta?.bio ?? ''
   }
 }
 
