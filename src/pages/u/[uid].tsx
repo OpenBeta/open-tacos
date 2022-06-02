@@ -84,9 +84,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
 
   try {
     const userProfile = await getUserProfileByNick(uid)
-    console.log('#userprofile', userProfile)
     const { mediaList, mediaIdList } = await getUserImages(userProfile.uuid)
-    console.log('#medialist', mediaIdList)
     let tagsByMediaId: Dictionary<MediaTag[]> = {}
 
     if (mediaList.length > 0) {

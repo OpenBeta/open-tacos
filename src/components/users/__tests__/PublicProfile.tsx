@@ -3,6 +3,8 @@ import { render, screen } from '@testing-library/react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { IUserProfile } from '../../../js/types'
+import type PublicProfileType from '../PublicProfile'
+
 const mockedUseSession = jest.fn()
 
 jest.mock('next-auth/react', () => ({
@@ -19,7 +21,7 @@ const userProfile: IUserProfile = {
   bio: 'totem eatsum'
 }
 
-let PublicProfile
+let PublicProfile: typeof PublicProfileType
 beforeAll(async () => {
   // why async import?  see https://github.com/facebook/jest/issues/10025#issuecomment-716789840
   const module = await import('../PublicProfile')
