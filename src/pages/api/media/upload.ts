@@ -1,5 +1,7 @@
 import getRawBody from 'raw-body'
 import { NextApiHandler } from 'next'
+
+import withAuth from '../withAuth'
 import { upload } from '../../../js/sirv/SirvClient'
 
 // We need to disable the default body parser
@@ -24,6 +26,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
       res.status(500).end()
     }
   }
+  res.status(400).json({ error: 'Request not supported' })
 }
 
-export default handler
+export default withAuth(handler)
