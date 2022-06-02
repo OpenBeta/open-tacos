@@ -2,7 +2,6 @@ import React from 'react'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { gql } from '@apollo/client'
-
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import { Climb } from '../../js/types'
@@ -12,6 +11,7 @@ import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
 import InlineEditor from '../../components/editor/InlineEditor'
 import PhotoMontage from '../../components/media/PhotoMontage'
+
 interface ClimbProps {
   climb: Climb
 }
@@ -20,7 +20,10 @@ const ClimbPage: NextPage<ClimbProps> = ({ climb }: ClimbProps) => {
   const router = useRouter()
 
   return (
-    <Layout contentContainerClass='content-default with-standard-y-margin'>
+    <Layout
+      showFilterBar={false}
+      contentContainerClass='content-default with-standard-y-margin h-screen'
+    >
       {router.isFallback
         ? (
           <div className='px-4 max-w-screen-md'>
@@ -37,6 +40,7 @@ export default ClimbPage
 const Body = ({ climb }: ClimbProps): JSX.Element => {
   const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens, media } = climb
   const { climbId } = metadata
+
   return (
     <>
       <SeoTags
@@ -44,26 +48,58 @@ const Body = ({ climb }: ClimbProps): JSX.Element => {
         title={name}
         description={buildMetaDescription({ pathTokens, fa, yds })}
       />
-      <div className='px-4 max-w-screen-md'>
-        <BreadCrumbs pathTokens={pathTokens} ancestors={ancestors} isClimbPage />
-        <h1 className='title'>{name}</h1>
-        <div className='flex items-center space-x-2'>
-          <RouteGradeChip grade={yds} safety={safety} />
-          <RouteTypeChips type={type} />
-        </div>
-        <div className='pt-4 text-sm text-gray-600 italic'>FA: {fa}</div>
+      <div className='lg:flex lg:justify-center w-full'>
+        <div className='px-4 max-w-screen-xl'>
+          <BreadCrumbs
+            pathTokens={pathTokens}
+            ancestors={ancestors}
+            isClimbPage
+          />
 
-        <PhotoMontage photoList={media} isHero />
+          <div className='md:flex py-6 mt-32'>
+            <PhotoMontage photoList={media} />
+            <div
+              id='Title Information'
+              style={{ minWidth: '300px' }}
+            >
+              <h1 className='text-4xl md:text-5xl'>{name}</h1>
+              <div className='pl-1'>
+                <div
+                  className='flex items-center space-x-2 mt-6'
+                >
+                  <RouteGradeChip grade={yds} safety={safety} />
+                  <RouteTypeChips type={type} />
+                </div>
 
-        <div
-          className='pt-4 markdown'
-        >
-          <h2 className='h2'>Description</h2>
-          <InlineEditor id={`climb-desc-${climbId}`} markdown={content.description} readOnly />
-          <h2>Location</h2>
-          <InlineEditor id={`climb-loc-${climbId}`} markdown={content.location} readOnly />
-          <h2>Protection</h2>
-          <InlineEditor id={`climb-pro-${climbId}`} markdown={content.protection} readOnly />
+                <div
+                  title='First Assent'
+                  className='text-slate-700 mt-4 text-sm'
+                >
+                  <strong>FA: </strong>{fa}
+                </div>
+              </div>
+            </div>
+
+            <div id='border div' className='border border-slate-500 my-6' />
+
+            <div id='Climb Content' />
+            <div className='md:px-16 mb-16'>
+              <h3 className='mb-3'>Description</h3>
+              <InlineEditor id={`climb-desc-${climbId}`} markdown={content.description} readOnly />
+
+              {content.location !== ''
+                ? (
+                  <>
+                    <h3 className='mb-3 mt-6'>Location</h3>
+                    <InlineEditor id={`climb-loc-${climbId}`} markdown={content.location} readOnly />
+                  </>
+                  )
+                : ''}
+
+              <h3 className='mb-3 mt-6'>Protection</h3>
+              <InlineEditor id={`climb-pro-${climbId}`} markdown={content.protection} readOnly />
+            </div>
+          </div>
         </div>
       </div>
     </>
@@ -132,6 +168,10 @@ export const getStaticProps: GetStaticProps<ClimbProps, { id: string}> = async (
         mixed
         aid
       }
+      media {
+        mediaUrl
+        mediaUuid
+      }
       content {
         description
         location
@@ -141,10 +181,6 @@ export const getStaticProps: GetStaticProps<ClimbProps, { id: string}> = async (
       ancestors
       metadata {
         climbId
-      }
-      media {
-        mediaUrl
-        mediaUuid
       }
     }
   }`

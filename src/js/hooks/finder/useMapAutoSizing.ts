@@ -1,6 +1,5 @@
 import { useEffect, useCallback, useState, Dispatch, SetStateAction } from 'react'
 
-import useResponsive from '../useResponsive'
 import { bboxFromGeoJson, bbox2Viewport } from '../../../js/GeoHelpers'
 import { DEFAULT_INITIAL_VIEWSTATE } from '../../../components/maps/BaseMap'
 import { store } from '../../stores'
@@ -18,8 +17,7 @@ type useAutoSizingReturn = readonly [
  * React hook for auto detecting and calculating div height
  */
 export default function useAutoSizing ({ geojson }): useAutoSizingReturn {
-  const { isMobile, isTablet, isDesktop } = useResponsive()
-  const navbarOffset = getNavBarOffset({ isMobile, isTablet, isDesktop })
+  const navbarOffset = getNavBarOffset()
   const [[width, height], setWH] = useState([300, 400])
   const [viewState, setViewState] = useState<ViewState>(DEFAULT_INITIAL_VIEWSTATE)
 
