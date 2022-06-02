@@ -6,6 +6,7 @@ import { SIRV_CONFIG } from '../../js/sirv/SirvClient'
 import useResponsive from '../../js/hooks/useResponsive'
 interface PhotoMontageProps {
   photoList: Array<Pick<MediaTag, 'mediaUuid'|'mediaUrl'>>
+  /** set to `true` if gallery is placed above the fold */
   isHero?: boolean
 }
 
@@ -18,8 +19,6 @@ interface PhotoMontageProps {
  * Set isHero=`true` when the gallery is placed visibly at the top of the page or when
  * you see a warning about *'Image was detected as the Largest Contentful Paint (LCP).'*
  *
- * @param photoList
- * @param isHero set to `true` if gallery is placed above the fold
  * @see https://nextjs.org/docs/api-reference/next/image
  */
 export default function PhotoMontage ({ photoList, isHero = false }: PhotoMontageProps): JSX.Element | null {

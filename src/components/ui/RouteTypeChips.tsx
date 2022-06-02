@@ -1,5 +1,5 @@
 import React from 'react'
-import { ClimbDisciplineRecord } from '../../js/types'
+import { ClimbDiscipline, ClimbDisciplineRecord } from '../../js/types'
 import Chip from './Chip'
 
 interface ChipProps {
@@ -18,4 +18,16 @@ export default function RouteTypeChips ({ type, size = 'md' }: ChipProps): JSX.E
       {(type?.alpine ?? false) && <Chip type='alpine' size={size} />}
     </div>
   )
+}
+
+export function getSetTypes (type: ClimbDisciplineRecord): ClimbDiscipline[] {
+  const set: ClimbDiscipline[] = []
+  if (type?.trad) { set.push('trad') }
+  if (type?.sport) { set.push('sport') }
+  if (type?.tr) { set.push('tr') }
+  if (type?.bouldering) { set.push('bouldering') }
+  if (type?.aid) { set.push('aid') }
+  if (type?.mixed) { set.push('mixed') }
+  if (type?.alpine) { set.push('alpine') }
+  return set
 }
