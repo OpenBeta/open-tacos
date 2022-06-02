@@ -1,22 +1,27 @@
 import { useCallback, useState } from 'react'
 import { Dictionary } from 'underscore'
+import { v5 as uuidv5 } from 'uuid'
 
-import UserMedia from '../media/UserMedia'
-import ImageTagger from '../media/ImageTagger'
-import useImageTagHelper from '../media/useImageTagHelper'
-import { MediaTag, MediaClimbTag, MediaType } from '../../js/types'
+import UserMedia from './UserMedia'
+import ImageTagger from './ImageTagger'
+import useImageTagHelper from './useImageTagHelper'
+import { MediaTag, MediaClimbTag, MediaType, IUserProfile } from '../../js/types'
+import InitialUploadCTA from './InitialUploadCTA'
 
 interface ImageTableProps {
+  isLoggedIn: boolean
   uid: string
-  imageList: MediaType[]
+  userProfile: IUserProfile
+  initialImageList: MediaType[]
   initialTagsByMediaId: Dictionary<MediaTag[]>
 }
 
 /**
  * Image table on user profile
  */
-export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
+export default function ImageTable ({ uid, isLoggedIn, userProfile, initialImageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
   const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
+  const [imageList, updateImageList] = useState(initialImageList)
 
   const imageHelper = useImageTagHelper()
   const { onClick } = imageHelper
@@ -74,9 +79,42 @@ export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: Im
     await revalidateServePage(uid)
   }, [tagsByMediaId])
 
+  const onUploadHandler = useCallback(async (imageUrl: string) => {
+    const newMediaUuid = uuidv5(imageUrl, uuidv5.URL)
+    let updated: boolean = false
+    updateImageList((currentList) => {
+      // Image already exists (same URL), don't add to current list
+      const existed = currentList.findIndex(({ mediaId }) => mediaId === newMediaUuid)
+      if (existed >= 0) { return currentList }
+      updated = true
+      return ([
+        ...currentList,
+        {
+          ownerId: uuid,
+          mediaId: newMediaUuid,
+          filename: imageUrl,
+          ctime: new Date(),
+          mtime: new Date(),
+          contentType: 'image/jpeg',
+          meta: {}
+        }
+      ])
+    })
+    if (updated) {
+      await revalidateServePage(uid)
+    }
+  }, [])
+
+  const { uuid } = userProfile
+
+  // When logged-in user has fewer than 3 photos,
+  // create empty slots for the call-to-action upload component.
+  const placeholders = imageList.length < 3 && isLoggedIn ? [...Array(3 - imageList.length).keys()] : []
+
   return (
     <>
-      <div className='mt-8 flex justify-center flex-wrap'>
+      <div className='mt-8 flex justify-center flex-wrap border-t'>
+
         {imageList.map(imageInfo => {
           const tags = tagsByMediaId?.[imageInfo.mediaId] ?? []
           return (
@@ -89,10 +127,15 @@ export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: Im
             />
           )
         })}
+
+        {placeholders.map(index =>
+          <InitialUploadCTA key={index} uuid={uuid} onUploadFinish={onUploadHandler} />)}
+
       </div>
-      <ImageTagger
-        {...imageHelper} onCompleted={onCompletedHandler}
-      />
+      {isLoggedIn && imageList.length > 0 &&
+        <ImageTagger
+          {...imageHelper} onCompleted={onCompletedHandler}
+        />}
     </>
 
   )

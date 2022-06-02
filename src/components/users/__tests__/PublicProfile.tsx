@@ -1,6 +1,8 @@
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
+import { v4 as uuidv4 } from 'uuid'
 
+import { IUserProfile } from '../../../js/types'
 const mockedUseSession = jest.fn()
 
 jest.mock('next-auth/react', () => ({
@@ -9,12 +11,14 @@ jest.mock('next-auth/react', () => ({
 
 jest.requireMock('next-auth/react')
 
-const userProfile = {
+const userProfile: IUserProfile = {
+  uuid: uuidv4(),
   name: 'cat blue',
   nick: 'cool_nick_2022',
   avatar: 'something',
   bio: 'totem eatsum'
 }
+
 let PublicProfile
 beforeAll(async () => {
   // why async import?  see https://github.com/facebook/jest/issues/10025#issuecomment-716789840

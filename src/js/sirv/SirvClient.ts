@@ -11,7 +11,7 @@ export const SIRV_CONFIG = {
   clientSecret: process.env.SIRV_CLIENT_SECRET_RO ?? null,
   clientAdminId: process.env.SIRV_CLIENT_ID_RW ?? null,
   clientAdminSecret: process.env.SIRV_CLIENT_SECRET_RW ?? null,
-  baseUrl: process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? null
+  baseUrl: process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? ''
 }
 
 const client = axios.create({
@@ -60,24 +60,38 @@ export const getToken = async (isAdmin: boolean = false): Promise<string|undefin
 
 export const getAdminToken = async (): Promise<string|undefined> => await getToken(true)
 
+const getAdminTokenIfNotExist = async (token?: string): Promise<string> => {
+  if (token != null) return token
+
+  const _t = await getAdminToken()
+
+  if (_t == null) {
+    throw new Error('Sirv API.getUserImages(): unable to get a token')
+  }
+  return _t
+}
+
+const getTokenIfNotExist = async (token?: string): Promise<string> => {
+  if (token != null) return token
+
+  const _t = await getToken()
+
+  if (_t == null) {
+    throw new Error('Sirv API.getUserImages(): unable to get a token')
+  }
+  return _t
+}
+
 export interface UserImageReturnType {
   mediaList: MediaType[]
   mediaIdList: string[]
 }
 export const getUserImages = async (uuid: string, token?: string): Promise<UserImageReturnType> => {
-  let _t = token
-  if (token == null) {
-    _t = await getToken()
-  }
-
-  if (_t == null) {
-    throw new Error('Sirv API.getUserImages(): unable to get a token')
-  }
-
+  const _t = await getTokenIfNotExist(token)
   const res = await client.post(
     '/files/search',
     {
-      query: `dirname:\\/u\\/${uuid}`,
+      query: `dirname:\\/u\\/${uuid} AND -dirname:\\/.Trash`,
       sort: {
         ctime: 'desc'
       },
@@ -117,15 +131,7 @@ export const getUserImages = async (uuid: string, token?: string): Promise<UserI
 }
 
 export const createUserDir = async (uuid: string, token?: string): Promise<boolean> => {
-  let _t = token
-  if (token == null) {
-    _t = await getAdminToken()
-  }
-
-  if (_t == null) {
-    throw new Error('Sirv API.getUserImages(): unable to get a token')
-  }
-
+  const _t = await getAdminTokenIfNotExist()
   try {
     const res = await client.post(
       `/files/mkdir?dirname=/u/${uuid}`,
@@ -144,4 +150,27 @@ export const createUserDir = async (uuid: string, token?: string): Promise<boole
     console.log(e)
     return false
   }
+}
+
+/**
+ * Upload a photo to Sirv
+ * @param filename
+ * @param imageData
+ * @param token
+ * @returns Full path to the photo
+ */
+export const upload = async (filename: string, imageData: Buffer, token?: string): Promise<string> => {
+  const _t = await getAdminTokenIfNotExist(token)
+  const res = await client.post(
+    '/files/upload?filename=' + filename,
+    imageData,
+    {
+      headers: {
+        'Content-Type': 'image/jpeg',
+        Authorization: `bearer ${_t}`
+      }
+    }
+  )
+  if (res.status >= 200 && res.status <= 204) { return filename }
+  throw new Error('Image API upload() failed')
 }

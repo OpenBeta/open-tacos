@@ -2,16 +2,16 @@ import { NextPage, GetStaticProps } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { groupBy, Dictionary } from 'underscore'
+import { useSession } from 'next-auth/react'
 
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
-import ImageTable from '../../components/users/ImageTable'
+import ImageTable from '../../components/media/ImageTable'
 import { getTagsByMediaId } from '../../js/graphql/api'
-import { getUserImages, createUserDir } from '../../js/sirv/SirvClient'
+import { getUserImages } from '../../js/sirv/SirvClient'
 import { MediaTag, MediaType, IUserProfile } from '../../js/types'
 import PublicProfile from '../../components/users/PublicProfile'
 import { getUserProfileByNick, getAllUsersMetadata } from '../../js/auth/ManagementClient'
-import InitialUploadCTA from '../../components/media/InitialUploadCTA'
 interface UserHomeProps {
   uid: string
   mediaList: MediaType[]
@@ -20,6 +20,9 @@ interface UserHomeProps {
 }
 const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList, tagsByMediaId, userProfile }) => {
   const router = useRouter()
+  const { status } = useSession()
+  const isLoggedIn = status === 'authenticated'
+
   return (
     <>
       <Head>
@@ -42,8 +45,14 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList, tagsByMediaId, 
 
           {userProfile != null && <PublicProfile userProfile={userProfile} />}
 
-          {mediaList?.length === 0 && <InitialUploadCTA />}
-          {mediaList?.length > 0 && <ImageTable uid={uid} imageList={mediaList} initialTagsByMediaId={tagsByMediaId} />}
+          {mediaList?.length >= 0 &&
+            <ImageTable
+              isLoggedIn={isLoggedIn}
+              uid={uid}
+              userProfile={userProfile}
+              initialImageList={mediaList}
+              initialTagsByMediaId={tagsByMediaId}
+            />}
         </div>
       </Layout>
     </>
@@ -75,13 +84,12 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
 
   try {
     const userProfile = await getUserProfileByNick(uid)
+    console.log('#userprofile', userProfile)
     const { mediaList, mediaIdList } = await getUserImages(userProfile.uuid)
+    console.log('#medialist', mediaIdList)
     let tagsByMediaId: Dictionary<MediaTag[]> = {}
 
-    if (mediaList.length === 0) {
-      console.log('Creating user dir on image provider...')
-      await createUserDir(userProfile.uuid)
-    } else {
+    if (mediaList.length > 0) {
       const tagArray = await getTagsByMediaId(mediaIdList)
       tagsByMediaId = groupBy(tagArray, 'mediaUuid')
     }
