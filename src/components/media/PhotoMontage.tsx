@@ -72,9 +72,9 @@ export default function PhotoMontage ({ photoList, isHero = false }: PhotoMontag
       <div className='block relative col-start-1 col-span-2 row-span-2 col-end-3'>
         <ResponsiveImage mediaUrl={first} isHero={isHero} />
       </div>
-      {theRest.map(({ mediaUrl, mediaUuid }) => {
+      {theRest.map(({ mediaUrl, mediaUuid }, i) => {
         return (
-          <div key={mediaUuid} className='block relative'>
+          <div key={`${mediaUuid}_${i}`} className='block relative'>
             <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} />
           </div>
         )
