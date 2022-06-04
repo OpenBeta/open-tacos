@@ -10,12 +10,13 @@ interface UserMediaProps {
   onClick: (props: any) => void
   onTagDeleted: (props?: any) => void
   tagList: MediaTag[]
+  isAuthorized?: boolean
 }
 
 /**
  * Wrapper for user uploaded photo (maybe short video in the future)
  */
-export default function UserMedia ({ imageInfo, onClick, tagList, onTagDeleted }: UserMediaProps): JSX.Element {
+export default function UserMedia ({ imageInfo, onClick, tagList, onTagDeleted, isAuthorized = false }: UserMediaProps): JSX.Element {
   const [hovered, setHover] = useState(false)
   const imgUrl = `${SIRV_CONFIG.baseUrl ?? ''}${imageInfo.filename}?format=webp&thumbnail=300&q=90`
 
@@ -37,7 +38,7 @@ export default function UserMedia ({ imageInfo, onClick, tagList, onTagDeleted }
       />
       {tagList?.length > 0 &&
         <div className='absolute inset-0 flex flex-col justify-end'>
-          <TagList hovered={hovered} list={tagList} onDeleted={onTagDeleted} />
+          <TagList hovered={hovered} list={tagList} onDeleted={onTagDeleted} isAuthorized={isAuthorized} />
         </div>}
     </div>
   )

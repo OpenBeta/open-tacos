@@ -40,7 +40,7 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
         <FakeSearchBox onClick={onClick} expanded={expanded} />
       </Transition>
       <Transition
-        className='mt-6 pointer-events-none w-full max-w-screen-sm mx-auto'
+        className='mt-6 pointer-events-none max-w-screen-sm mx-auto'
         show={expanded}
         enter='transition-opacity duration-150'
         enterFrom='opacity-0'
@@ -49,10 +49,10 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
         <Tabs
           labels={['Places to climb', 'Climb search']}
           panelCompList={[
-            <div key={2} className='pb-4 bg-slate-800'>
+            <div key={2} className='pb-2 bg-slate-800'>
               <CragFinder isMobile={false} />
             </div>,
-            <div key={1} className='pb-4 bg-slate-800'>
+            <div key={1} className='pb-2 bg-slate-800'>
               <ClimbSearchByName isMobile={false} />
             </div>
           ]}
