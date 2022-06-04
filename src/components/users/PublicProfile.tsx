@@ -15,7 +15,7 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
       <div className='md:col-span-2 text-medium text-primary'>
         <div className='flex flex-row items-center'>
           <div className='text-2xl font-bold mr-4'>{nick}</div>
-          <EditProfileButton />
+          <EditProfileButton ownerProfile={userProfile} />
         </div>
         <div className='mt-6 text-lg font-semibold'>{name}</div>
         <div className=''>{bio}</div>

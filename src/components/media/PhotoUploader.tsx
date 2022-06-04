@@ -3,20 +3,19 @@ import { useDropzone } from 'react-dropzone'
 import { uploadPhoto } from '../../js/userApi/media'
 
 interface PhotoUploaderProps {
-  uuid: string
   className: string
   children: JSX.Element | JSX.Element []
   onUploaded: (url: string) => void
 }
 
-export default function PhotoUploader ({ uuid, className = '', onUploaded, children }: PhotoUploaderProps): JSX.Element {
+export default function PhotoUploader ({ className = '', onUploaded, children }: PhotoUploaderProps): JSX.Element {
   const [uploading, setUploading] = useState<boolean>(false)
 
   const onload = async (event, filename: string): Promise<void> => {
     // Do whatever you want with the file contents
     const imageData = event.target.result
     setUploading(true)
-    const url = await uploadPhoto(uuid, filename, imageData)
+    const url = await uploadPhoto(filename, imageData)
     setUploading(false)
     onUploaded(url)
   }
@@ -44,7 +43,7 @@ export default function PhotoUploader ({ uuid, className = '', onUploaded, child
     onDrop,
     multiple: false,
     maxFiles: 1,
-    accept: 'image/jpeg, image/png',
+    accept: { 'image/jpeg': ['.jpeg', '.png'] },
     noClick: true
   })
 

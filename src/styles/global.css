@@ -202,7 +202,7 @@ p {
   }
 
   .edit-input {
-    @apply flex-grow w-full	outline-none bg-transparent	border border-gray-300 rounded-md focus:outline-none;
+    @apply px-2 py-1 flex-grow w-full	outline-none bg-transparent	border border-gray-300 rounded-md focus:outline-none;
   }
   .edit-input:focus {
     @apply border-2 border-gray-700 ring-transparent;

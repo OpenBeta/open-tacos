@@ -25,7 +25,7 @@ export default function UserMedia ({ imageInfo, onClick, tagList, onTagDeleted }
 
   return (
     <div
-      className='cursor-pointer block mx-0 my-4 md:m-4 w-[300px] h-[300px] relative'
+      className='cursor-pointer block w-[300px] h-[300px] relative'
       onClick={onClickHandler}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}

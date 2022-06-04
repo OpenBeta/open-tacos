@@ -14,6 +14,7 @@ jest.mock('next-auth/react', () => ({
 jest.requireMock('next-auth/react')
 
 const userProfile: IUserProfile = {
+  id: '123',
   uuid: uuidv4(),
   name: 'cat blue',
   nick: 'cool_nick_2022',

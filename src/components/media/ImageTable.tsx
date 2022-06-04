@@ -9,7 +9,7 @@ import { MediaTag, MediaClimbTag, MediaType, IUserProfile } from '../../js/types
 import InitialUploadCTA from './InitialUploadCTA'
 
 interface ImageTableProps {
-  isLoggedIn: boolean
+  isAuthorized: boolean
   uid: string
   userProfile: IUserProfile
   initialImageList: MediaType[]
@@ -19,7 +19,7 @@ interface ImageTableProps {
 /**
  * Image table on user profile
  */
-export default function ImageTable ({ uid, isLoggedIn, userProfile, initialImageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
+export default function ImageTable ({ uid, isAuthorized, userProfile, initialImageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
   const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
   const [imageList, updateImageList] = useState(initialImageList)
 
@@ -109,11 +109,11 @@ export default function ImageTable ({ uid, isLoggedIn, userProfile, initialImage
 
   // When logged-in user has fewer than 3 photos,
   // create empty slots for the call-to-action upload component.
-  const placeholders = imageList.length < 3 && isLoggedIn ? [...Array(3 - imageList.length).keys()] : []
+  const placeholders = imageList.length < 3 && isAuthorized ? [...Array(3 - imageList.length).keys()] : []
 
   return (
     <>
-      <div className='mt-8 flex justify-center flex-wrap border-t'>
+      <div className='flex flex-row flex-wrap md:gap-8 justify-center'>
 
         {imageList.map(imageInfo => {
           const tags = tagsByMediaId?.[imageInfo.mediaId] ?? []
@@ -129,15 +129,15 @@ export default function ImageTable ({ uid, isLoggedIn, userProfile, initialImage
         })}
 
         {placeholders.map(index =>
-          <InitialUploadCTA key={index} uuid={uuid} onUploadFinish={onUploadHandler} />)}
+          <InitialUploadCTA key={index} onUploadFinish={onUploadHandler} />)}
 
       </div>
-      {isLoggedIn && imageList.length > 0 &&
+      {isAuthorized && imageList.length > 0 &&
         <ImageTagger
           {...imageHelper} onCompleted={onCompletedHandler}
         />}
-    </>
 
+    </>
   )
 }
 

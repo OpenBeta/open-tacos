@@ -21,7 +21,7 @@ const getProfile: Handler = async (req, res) => {
   }
 }
 
-const updateProfile: Handler = async (req, res) => {
+const updateMyProfile: Handler = async (req, res) => {
   const metadataClient = await createMetadataClient(req)
   if (metadataClient == null) {
     return res.status(401).end()
@@ -42,7 +42,7 @@ const userHandler: NextApiHandler<Auth0UserMetadata> = async (req, res) => {
     case 'GET':
       return getProfile(req, res)
     case 'PATCH':
-      return updateProfile(req, res)
+      return updateMyProfile(req, res)
     default:
       return res.status(405).end()
   }

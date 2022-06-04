@@ -13,6 +13,7 @@ const sirvClient = jest.requireMock('../../../js/sirv/SirvClient')
 const graphApi = jest.requireMock('../../../js/graphql/api')
 
 const userProfile: IUserProfile = {
+  id: '123',
   uuid: '12233455667',
   name: 'cat blue',
   nick: 'cool_nick_2022',
@@ -36,7 +37,7 @@ test('ImageTable can render', async () => {
 
   render(
     <ImageTable
-      isLoggedIn
+      isAuthorized
       uid='coolusername'
       userProfile={userProfile}
       initialImageList={mediaList}

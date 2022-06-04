@@ -48,7 +48,9 @@ export const Button = ({
   if (href != null) {
     return (
       <Link href={href} passHref>
-        <BaseButton onClick={onClick} label={label} variant={variant} type={type} disabled={disable} size={size} />
+        <a>
+          <BaseButton onClick={onClick} label={label} variant={variant} type={type} disabled={disable} size={size} />
+        </a>
       </Link>
     )
   }
