@@ -59,7 +59,7 @@ export default function ProfileEditForm (): ReactElement {
         <Form>
           <TextField
             name='nick'
-            label='User name'
+            label='Username'
             validate={checkUsernameHandler}
             validateImmediately
           />
