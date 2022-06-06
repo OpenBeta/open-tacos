@@ -23,7 +23,7 @@ export default function CragFinder ({ isMobile = true, placeholder = 'Try \'Smit
       id={CUSTOM_CLASSES.root}
       isMobile={isMobile}
       classNames={CUSTOM_CLASSES}
-      placeholder={placeholder}
+      placeholder={isMobile ? '' : placeholder}
       getSources={({ query }) => {
         if ((query).length < 3) {
           return []

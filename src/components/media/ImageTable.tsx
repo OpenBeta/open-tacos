@@ -1,21 +1,27 @@
 import { useCallback, useState } from 'react'
 import { Dictionary } from 'underscore'
 
-import UserMedia from '../media/UserMedia'
-import ImageTagger from '../media/ImageTagger'
-import useImageTagHelper from '../media/useImageTagHelper'
-import { MediaTag, MediaClimbTag, MediaType } from '../../js/types'
+import UserMedia from './UserMedia'
+import ImageTagger from './ImageTagger'
+import useImageTagHelper from './useImageTagHelper'
+import { MediaTag, MediaClimbTag, MediaType, IUserProfile } from '../../js/types'
+import InitialUploadCTA from './InitialUploadCTA'
+import { userMediaStore, revalidateServePage } from '../../js/stores/media'
 
 interface ImageTableProps {
+  isAuthorized: boolean
   uid: string
-  imageList: MediaType[]
+  userProfile: IUserProfile
+  initialImageList: MediaType[]
   initialTagsByMediaId: Dictionary<MediaTag[]>
 }
 
 /**
  * Image table on user profile
  */
-export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
+export default function ImageTable ({ uid, isAuthorized, userProfile, initialImageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
+  const imageList = initialImageList
+
   const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
 
   const imageHelper = useImageTagHelper()
@@ -74,9 +80,20 @@ export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: Im
     await revalidateServePage(uid)
   }, [tagsByMediaId])
 
+  const onUploadHandler = async (imageUrl: string): Promise<void> => {
+    await userMediaStore.set.addImage(uid, uuid, imageUrl, true, true)
+  }
+
+  const { uuid } = userProfile
+
+  // When logged-in user has fewer than 3 photos,
+  // create empty slots for the call-to-action upload component.
+  const placeholders = imageList.length < 3 && isAuthorized ? [...Array(3 - imageList.length).keys()] : []
+
   return (
     <>
-      <div className='mt-8 flex justify-center flex-wrap'>
+      <div className='flex flex-row flex-wrap md:gap-8 justify-center'>
+
         {imageList.map(imageInfo => {
           const tags = tagsByMediaId?.[imageInfo.mediaId] ?? []
           return (
@@ -86,22 +103,20 @@ export default function ImageTable ({ uid, imageList, initialTagsByMediaId }: Im
               imageInfo={imageInfo}
               onClick={onClick}
               onTagDeleted={onDeletedHandler}
+              isAuthorized={isAuthorized}
             />
           )
         })}
-      </div>
-      <ImageTagger
-        {...imageHelper} onCompleted={onCompletedHandler}
-      />
-    </>
 
+        {placeholders.map(index =>
+          <InitialUploadCTA key={index} onUploadFinish={onUploadHandler} />)}
+
+      </div>
+      {isAuthorized && imageList.length > 0 &&
+        <ImageTagger
+          {...imageHelper} onCompleted={onCompletedHandler}
+        />}
+
+    </>
   )
 }
-
-/**
- * Tell the backend to regenerate user profile page.
- * See https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration
- * The token is URL encoded value of .env PAGE_REVALIDATE_TOKEN
- * @param uid user id
- */
-const revalidateServePage = async (uid: string): Promise<any> => await fetch(`/api/revalidate?token=8b%26o4t%21xUqAN3Y%239&u=${uid}`)

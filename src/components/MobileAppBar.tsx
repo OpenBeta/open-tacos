@@ -7,19 +7,22 @@ import { Popover } from '@headlessui/react'
 import { Button, ButtonVariant } from './ui/BaseButton'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import ProfileNavButton from './ProfileNavButton'
+import NewPost from './NewPost'
 
 interface HeaderProps {
   includeFilters: boolean
 }
 
 export default function MobileAppBar (props: HeaderProps): JSX.Element {
+  const { status } = useSession()
+  const nav = status === 'authenticated' ? <AuthenticatedNav /> : <LoginButton />
   return (
     <>
       <MobileNavBar
         branding={<Branding />}
         home={<Home />}
         search={<CragFinder />}
-        profile={<ProfileNavButton />}
+        profile={nav}
         more={<More />}
       />
       {props.includeFilters && <MobileFilterBar />}
@@ -27,20 +30,31 @@ export default function MobileAppBar (props: HeaderProps): JSX.Element {
   )
 }
 
-const Home = (): JSX.Element => {
-  return (
-    <Link href='/'>
-      <a>
-        <HomeIcon className='text-primary' />
-      </a>
-    </Link>
-  )
-}
+const AuthenticatedNav = (): JSX.Element => (
+  <>
+    <NewPost />
+    <ProfileNavButton />
+  </>
+
+)
+
+const LoginButton = (): JSX.Element => (
+  <Button
+    label='Login'
+    onClick={async () => await signIn('auth0', { callbackUrl: '/api/user/me' })}
+    variant={ButtonVariant.SOLID_PRIMARY}
+  />)
+
+const Home = (): JSX.Element => (
+  <Button
+    label={<HomeIcon className='w-6 h-6 text-secondary' />}
+    href='/'
+  />)
 
 const Branding = (): JSX.Element => {
   return (
     <Link href='/'>
-      <a className='font-semibold text-lg text-primary pt-1'>OpenTacos</a>
+      <a className='font-semibold text-lg text-secondary pt-1'>OpenTacos</a>
     </Link>
   )
 }
@@ -49,8 +63,8 @@ const More = (): JSX.Element => {
   const { status } = useSession()
   return (
     <Popover>
-      <Popover.Button className='flex center-items'>
-        <MenuIcon className='w-8 h-8' />
+      <Popover.Button as='div' className='flex center-items'>
+        <Button label={<MenuIcon className='text-secondary w-8 h-8' />} />
       </Popover.Button>
 
       <Popover.Panel className='absolute z-20 right-0 mt-2 p-6 bg-white rounded-md'>

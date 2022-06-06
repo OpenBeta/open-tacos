@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -5,12 +6,14 @@ import { groupBy, Dictionary } from 'underscore'
 
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
-import ImageTable from '../../components/users/ImageTable'
+import ImageTable from '../../components/media/ImageTable'
 import { getTagsByMediaId } from '../../js/graphql/api'
 import { getUserImages } from '../../js/sirv/SirvClient'
 import { MediaTag, MediaType, IUserProfile } from '../../js/types'
 import PublicProfile from '../../components/users/PublicProfile'
 import { getUserProfileByNick, getAllUsersMetadata } from '../../js/auth/ManagementClient'
+import usePermissions from '../../js/hooks/auth/usePermissions'
+import { userMediaStore } from '../../js/stores/media'
 
 interface UserHomeProps {
   uid: string
@@ -18,8 +21,21 @@ interface UserHomeProps {
   tagsByMediaId: Dictionary<MediaTag[]>
   userProfile: IUserProfile
 }
-const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList, tagsByMediaId, userProfile }) => {
+
+const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList, tagsByMediaId, userProfile }) => {
   const router = useRouter()
+  const { authorized } = usePermissions({ ownerProfileOnPage: userProfile })
+
+  useEffect(() => {
+    if (authorized) {
+      // Load server side image data into local state for client-side add/remove
+      userMediaStore.set.imageList(serverSideList)
+    }
+  }, [authorized])
+
+  const clientSideList = userMediaStore.use.imageList()
+  const currentMediaList = authorized ? clientSideList : serverSideList
+
   return (
     <>
       <Head>
@@ -42,8 +58,29 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList, tagsByMediaId, 
 
           {userProfile != null && <PublicProfile userProfile={userProfile} />}
 
-          {mediaList?.length === 0 && <div>Account not found</div>}
-          {mediaList?.length > 0 && <ImageTable uid={uid} imageList={mediaList} initialTagsByMediaId={tagsByMediaId} />}
+          {authorized && (
+            <div className='flex justify-center mt-8 text-secondary text-sm'>
+              <ul className='list-disc'>
+                {currentMediaList?.length < 3 &&
+                  <li>Please upload 3 photos to complete your profile</li>}
+                <li>Only upload your own photos</li>
+                <li>Keep it <b>Safe For Work</b> and climbing-related</li>
+              </ul>
+            </div>)}
+
+          <hr className='my-8' />
+
+          {currentMediaList?.length >= 0 &&
+            <ImageTable
+              isAuthorized={authorized}
+              uid={uid}
+              userProfile={userProfile}
+              initialImageList={currentMediaList}
+              initialTagsByMediaId={tagsByMediaId}
+            />}
+          <hr className='my-8' />
+
+          {!authorized && <div className='mx-auto text-sm text-secondary text-center'>All photos are copyrighted by their respective owners.  All Rights Reserved.</div>}
         </div>
       </Layout>
     </>
@@ -76,9 +113,13 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
   try {
     const userProfile = await getUserProfileByNick(uid)
     const { mediaList, mediaIdList } = await getUserImages(userProfile.uuid)
-    const tagArray = await getTagsByMediaId(mediaIdList)
 
-    const tagsByMediaId = groupBy(tagArray, 'mediaUuid')
+    let tagsByMediaId: Dictionary<MediaTag[]> = {}
+    if (mediaList.length > 0) {
+      const tagArray = await getTagsByMediaId(mediaIdList)
+      tagsByMediaId = groupBy(tagArray, 'mediaUuid')
+    }
+
     const data = {
       uid,
       mediaList,
@@ -90,6 +131,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
       revalidate: 60
     }
   } catch (e) {
+    console.log('Error in getStaticProps()', e)
     return {
       notFound: true,
       revalidate: 60
