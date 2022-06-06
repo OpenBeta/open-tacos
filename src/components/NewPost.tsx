@@ -13,7 +13,7 @@ export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JS
     if (isMobile) {
       return (
         <Button
-          label={<PlusIcon className='mt-1 w-8 h-8 bg-ob-secondary p-0.5 rounded-full' />}
+          label={<span className='border-2 rounded-md border-black'><PlusIcon className='w-6 h-6' /></span>}
           href='/api/user/me'
         />
       )

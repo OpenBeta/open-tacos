@@ -274,10 +274,6 @@ input:checked + label {
   Autocomplete
 */
 
-/* .aa-Autocomplete {
-  @apply z-50 max-h-7 lg:max-h-full w-full border border-black rounded-lg overflow-hidden !important;
-} */
-
 .aa-Form {
   @apply ring-0 bg-white border-black overflow-hidden  !important;
 }
@@ -285,23 +281,32 @@ input:checked + label {
 .aa-SubmitButton {
   @apply bg-custom-primary !important;
 }
+
+/*
+  Autocomplete default classes (before click)
+*/
 .aa-DetachedSearchButton {
-  @apply max-h-7 lg:max-h-full text-sm rounded-lg bg-neutral-100 border-0 !important;
+@apply h-8 border-0 ring-0 bg-gray-200 shadow-inner rounded-md !important;
+}
+.aa-DetachedSearchButton .aa-DetachedSearchButtonIcon {
+  @apply border-0 !important;
 }
 
-.aa-DetachedSearchButtonIcon {
-  @apply bg-neutral-100 !important;
+.aa-DetachedSearchButton .aa-DetachedSearchButtonIcon .aa-SubmitIcon {
+  @apply h-6 w-6 text-gray-700 !important;
 }
 
-.aa-DetachedSearchButtonIcon .aa-SubmitIcon {
-  @apply h-4 w-4 text-ob-primary -ml-4 -mt-0.5 !important;
+aa-DetachedSearchButtonPlaceholder {
+  /* @apply w-24; */
 }
 
 .aa-DetachedSearchButtonPlaceholder {
   @apply text-xs;
 }
 
-
+/*
+End of Aucomplete default classes
+*/
 
 .aa-SubmitIcon {
   @apply text-white !important;

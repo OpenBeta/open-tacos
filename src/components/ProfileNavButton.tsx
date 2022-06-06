@@ -17,7 +17,7 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
     if (isMobile) {
       return (
         <Button
-          label={<UserCircleIcon className='mt-1 w-8 h-8 bg-ob-secondary p-0.5 rounded-full' />}
+          label={<UserCircleIcon className='text-secondary w-8 h-8' />}
           href='/api/user/me'
         />
       )

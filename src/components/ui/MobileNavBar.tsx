@@ -10,11 +10,11 @@ interface MNavBarProps {
 export default function MobileNavBar ({ branding, home, search, profile, more }: MNavBarProps): JSX.Element {
   return (
     <header className='xl:hidden'>
-      <Bar className='max-w-screen-xl gap-x-8 px-4' backgroundClass='bg-default'>
+      <Bar className='max-w-screen-xl gap-x-8 px-4' backgroundClass='bg-default' borderBottom>
         <div className='hidden md:block w-12'>{branding}</div>
         <div className='md:hidden w-12'>{home}</div>
-        <div className='w-full'>{search}</div>
-        <div className='w-12'>{profile}</div>
+        {search}
+        {profile}
         <div className='w-12'>{more}</div>
       </Bar>
     </header>

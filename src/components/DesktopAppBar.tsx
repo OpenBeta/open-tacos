@@ -64,7 +64,7 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, s
 
 const DiscordNav = (): JSX.Element => (
   <NavMenuButton
-    variant={ButtonVariant.OUTLINED_PRIMARY}
+    variant={ButtonVariant.OUTLINED_SECONDARY}
     label='Discord'
     to='https://discord.gg/2A2F6kUtyh'
   />
@@ -74,7 +74,7 @@ const navListDefault: JSX.Element[] = [
   {
     action: async () => await signIn('auth0', { callbackUrl: '/api/user/me' }),
     title: 'Login',
-    variant: ButtonVariant.SOLID_SECONDARY
+    variant: ButtonVariant.SOLID_PRIMARY
   },
   {
     route: '/about',

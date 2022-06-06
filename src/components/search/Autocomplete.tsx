@@ -44,6 +44,11 @@ export const Autocomplete = (props: AutocompleteProps): JSX.Element => {
   }, [props])
 
   return (
-    <div className={classNames('max-w-md z-50 mx-auto')} ref={containerRef} />
+    <div
+      className={
+        classNames(props.isMobile ? 'w-24 ' : 'max-w-md z-50 mx-auto')
+      }
+      ref={containerRef}
+    />
   )
 }
