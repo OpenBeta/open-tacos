@@ -211,6 +211,16 @@ p {
   .edit-form-row {
     @apply py-4 flex flex-col items-center md:flex-row md:gap-x-4 2xl:gap-x-2;
   }
+
+  .dropdown-item > * {
+    @apply px-4 py-2  hover:bg-gray-100;
+  }
+  .dropdown-item > *:first-child {
+    @apply mt-1;
+  }
+  .dropdown-item > *:last-child {
+    @apply mb-1;
+  }
 }
 
 /* for climb profile form */
