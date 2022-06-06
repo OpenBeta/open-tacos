@@ -62,14 +62,6 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, s
   )
 }
 
-const DiscordNav = (): JSX.Element => (
-  <NavMenuButton
-    variant={ButtonVariant.OUTLINED_SECONDARY}
-    label='Discord'
-    to='https://discord.gg/2A2F6kUtyh'
-  />
-)
-
 const navListDefault: JSX.Element[] = [
   {
     action: async () => await signIn('auth0', { callbackUrl: '/api/user/me' }),
@@ -83,6 +75,11 @@ const navListDefault: JSX.Element[] = [
   {
     route: 'https://docs.openbeta.io',
     title: 'Docs'
+  },
+  {
+    route: 'https://discord.gg/2A2F6kUtyh',
+    title: 'Discord',
+    variant: ButtonVariant.OUTLINED_SECONDARY
   }
 ].map(
   ({ action, variant, title, route }: NavListItem) => (
@@ -94,8 +91,6 @@ const navListDefault: JSX.Element[] = [
       to={route}
     />)
 )
-
-navListDefault.push(<DiscordNav />)
 
 const navListAuthenticated = (
   <>

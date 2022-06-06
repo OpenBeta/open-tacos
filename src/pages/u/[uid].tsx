@@ -80,7 +80,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
             />}
           <hr className='my-8' />
 
-          {!authorized && <div className='mx-auto text-sm text-secondary text-center'>All photos are copyrighted by their respective owners</div>}
+          {!authorized && <div className='mx-auto text-sm text-secondary text-center'>All photos are copyrighted by their respective owners.  All Rights Reserved.</div>}
         </div>
       </Layout>
     </>

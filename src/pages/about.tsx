@@ -12,7 +12,7 @@ export const meta = {
 
 const About = (): JSX.Element => {
   return (
-    <Layout hero={<AboutHero />}>
+    <Layout showFilterBar={false} hero={<AboutHero />}>
       <div className='text-center'>
         <h1>An open source resource for rock climbers</h1>
         <h3 className='text-3xl my-12'>OpenTacos is a wiki for climbers to research and contribute information about rock climbing routes.</h3>
