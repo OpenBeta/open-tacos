@@ -11,7 +11,7 @@ const withAuth = (handler: NextApiHandler): NextApiHandler => {
     if (session != null) {
       await handler(req, res)
     } else {
-      res.status(403).json({ error: 'Not authenticated' })
+      res.redirect(307, '/')
     }
   }
 }

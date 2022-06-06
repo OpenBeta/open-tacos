@@ -38,13 +38,13 @@ const TextField = ({ name, label, multiline = false, rows = 3, validate, spellch
                 className='w-full edit-input'
                 rows={rows}
                 {...field}
-                spellcheck={spellcheck}
+                spellCheck={spellcheck}
                />)
             : (<input
                 className='w-full edit-input'
                 type='text'
                 {...field}
-                spellcheck={spellcheck}
+                spellCheck={spellcheck}
                />)}
 
           <div className='h-3 text-sm pt-1 px-3 text-pink-600'>
