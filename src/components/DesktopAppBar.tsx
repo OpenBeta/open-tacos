@@ -99,7 +99,7 @@ navListDefault.push(<DiscordNav />)
 
 const navListAuthenticated = (
   <>
-    <ProfileNavButton key='dropdown' isMobile={false} />
     <NewPost isMobile={false} />
+    <ProfileNavButton key='dropdown' isMobile={false} />
   </>
 )

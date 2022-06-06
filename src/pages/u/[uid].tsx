@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -12,6 +13,7 @@ import { MediaTag, MediaType, IUserProfile } from '../../js/types'
 import PublicProfile from '../../components/users/PublicProfile'
 import { getUserProfileByNick, getAllUsersMetadata } from '../../js/auth/ManagementClient'
 import usePermissions from '../../js/hooks/auth/usePermissions'
+import { userMediaStore } from '../../js/stores/media'
 
 interface UserHomeProps {
   uid: string
@@ -19,9 +21,21 @@ interface UserHomeProps {
   tagsByMediaId: Dictionary<MediaTag[]>
   userProfile: IUserProfile
 }
-const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList, tagsByMediaId, userProfile }) => {
+
+const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList, tagsByMediaId, userProfile }) => {
   const router = useRouter()
   const { authorized } = usePermissions({ ownerProfileOnPage: userProfile })
+
+  useEffect(() => {
+    if (authorized) {
+      // Load server side image data into local state for client-side add/remove
+      userMediaStore.set.imageList(serverSideList)
+    }
+  }, [authorized])
+
+  const clientSideList = userMediaStore.use.imageList()
+  const currentMediaList = authorized ? clientSideList : serverSideList
+
   return (
     <>
       <Head>
@@ -44,10 +58,11 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList, tagsByMediaId, 
 
           {userProfile != null && <PublicProfile userProfile={userProfile} />}
 
-          {mediaList?.length < 3 && authorized && (
+          {authorized && (
             <div className='flex justify-center mt-8 text-secondary text-sm'>
               <ul className='list-disc'>
-                <li>Please upload 3 photos to complete your profile</li>
+                {currentMediaList?.length < 3 &&
+                  <li>Please upload 3 photos to complete your profile</li>}
                 <li>Only upload your own photos</li>
                 <li>Keep it <b>Safe For Work</b> and climbing-related</li>
               </ul>
@@ -55,12 +70,12 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList, tagsByMediaId, 
 
           <hr className='my-8' />
 
-          {mediaList?.length >= 0 &&
+          {currentMediaList?.length >= 0 &&
             <ImageTable
               isAuthorized={authorized}
               uid={uid}
               userProfile={userProfile}
-              initialImageList={mediaList}
+              initialImageList={currentMediaList}
               initialTagsByMediaId={tagsByMediaId}
             />}
           <hr className='my-8' />

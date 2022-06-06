@@ -2,7 +2,7 @@ import { CameraIcon } from '@heroicons/react/outline'
 import PhotoUploader from './PhotoUploader'
 
 interface InitialUploadCTAProps {
-  onUploadFinish: (url: string) => void
+  onUploadFinish: (url: string) => Promise<void>
 }
 
 /**

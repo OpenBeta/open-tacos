@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react'
 import { Dictionary } from 'underscore'
-import { v5 as uuidv5 } from 'uuid'
 
 import UserMedia from './UserMedia'
 import ImageTagger from './ImageTagger'
 import useImageTagHelper from './useImageTagHelper'
 import { MediaTag, MediaClimbTag, MediaType, IUserProfile } from '../../js/types'
 import InitialUploadCTA from './InitialUploadCTA'
+import { userMediaStore, revalidateServePage } from '../../js/stores/media'
 
 interface ImageTableProps {
   isAuthorized: boolean
@@ -20,8 +20,9 @@ interface ImageTableProps {
  * Image table on user profile
  */
 export default function ImageTable ({ uid, isAuthorized, userProfile, initialImageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
+  const imageList = initialImageList
+
   const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
-  const [imageList, updateImageList] = useState(initialImageList)
 
   const imageHelper = useImageTagHelper()
   const { onClick } = imageHelper
@@ -79,31 +80,9 @@ export default function ImageTable ({ uid, isAuthorized, userProfile, initialIma
     await revalidateServePage(uid)
   }, [tagsByMediaId])
 
-  const onUploadHandler = useCallback(async (imageUrl: string) => {
-    const newMediaUuid = uuidv5(imageUrl, uuidv5.URL)
-    let updated: boolean = false
-    updateImageList((currentList) => {
-      // Image already exists (same URL), don't add to current list
-      const existed = currentList.findIndex(({ mediaId }) => mediaId === newMediaUuid)
-      if (existed >= 0) { return currentList }
-      updated = true
-      return ([
-        ...currentList,
-        {
-          ownerId: uuid,
-          mediaId: newMediaUuid,
-          filename: imageUrl,
-          ctime: new Date(),
-          mtime: new Date(),
-          contentType: 'image/jpeg',
-          meta: {}
-        }
-      ])
-    })
-    if (updated) {
-      await revalidateServePage(uid)
-    }
-  }, [])
+  const onUploadHandler = async (imageUrl: string): Promise<void> => {
+    await userMediaStore.set.addImage(uid, uuid, imageUrl, true, true)
+  }
 
   const { uuid } = userProfile
 
@@ -141,11 +120,3 @@ export default function ImageTable ({ uid, isAuthorized, userProfile, initialIma
     </>
   )
 }
-
-/**
- * Tell the backend to regenerate user profile page.
- * See https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration
- * The token is URL encoded value of .env PAGE_REVALIDATE_TOKEN
- * @param uid user id
- */
-const revalidateServePage = async (uid: string): Promise<any> => await fetch(`/api/revalidate?token=8b%26o4t%21xUqAN3Y%239&u=${uid}`)

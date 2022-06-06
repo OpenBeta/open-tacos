@@ -9,7 +9,7 @@ interface ProfileNavButtonProps {
 }
 
 /**
- * Render user profile icon button if the user has logged in.  Return null otherwise.
+ * Render user dropdown menu if the user has logged in.  Return null otherwise.
  */
 export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonProps): JSX.Element | null {
   const { status } = useSession()
@@ -36,6 +36,7 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
               variant={ButtonVariant.ROUNDED_ICON_CONTRAST}
             />
           }
+          activeClz='rounded-full ring-1 ring-gray-500'
         >
           <>
             <Menu.Item>

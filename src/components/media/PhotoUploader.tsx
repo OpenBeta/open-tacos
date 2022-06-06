@@ -1,59 +1,16 @@
-import React, { useCallback, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
-import { uploadPhoto } from '../../js/userApi/media'
+import React from 'react'
+import usePhotoUploader from '../../js/hooks/usePhotoUploader'
 
 interface PhotoUploaderProps {
   className: string
   children: JSX.Element | JSX.Element []
-  onUploaded: (url: string) => void
+  onUploaded: (url: string) => Promise<void>
 }
 
 export default function PhotoUploader ({ className = '', onUploaded, children }: PhotoUploaderProps): JSX.Element {
-  const [uploading, setUploading] = useState<boolean>(false)
-
-  const onload = async (event, filename: string): Promise<void> => {
-    // Do whatever you want with the file contents
-    const imageData = event.target.result
-    setUploading(true)
-    const url = await uploadPhoto(filename, imageData)
-    setUploading(false)
-    onUploaded(url)
-  }
-
-  const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      console.log('#number of files', acceptedFiles.length)
-      // Do something with the files
-      acceptedFiles.forEach((file) => {
-        if (file.size > 5242880) {
-          window.alert('You tried to upload a photo larger than 5MB')
-          return
-        }
-        const reader = new FileReader()
-        reader.onabort = () => console.log('file reading was aborted')
-        reader.onerror = () => console.log('file reading has failed')
-        reader.onload = async (event) => await onload(event, file.name)
-        reader.readAsArrayBuffer(file)
-      })
-    },
-    []
-  )
-
-  const { getRootProps, getInputProps, open } = useDropzone({
-    onDrop,
-    multiple: false,
-    maxFiles: 1,
-    accept: { 'image/jpeg': ['.jpeg', '.png'] },
-    noClick: true
-  })
-
-  const onClickHandler = useCallback(() => {
-    if (uploading) return
-    open()
-  }, [uploading])
-
+  const { uploading, getRootProps, getInputProps, openFileDialog } = usePhotoUploader({ onUploaded })
   return (
-    <div {...getRootProps()} className={className} onClick={onClickHandler}>
+    <div {...getRootProps()} className={className} onClick={openFileDialog}>
       {uploading && <Progress />}
       <input {...getInputProps()} />
       {children}
