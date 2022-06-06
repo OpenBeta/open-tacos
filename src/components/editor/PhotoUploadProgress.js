@@ -1,6 +1,6 @@
 import React from 'react'
 import { Dialog } from '@headlessui/react'
-import UploadIcon from '../../assets/icons/upload.svg'
+import { UploadIcon } from '@heroicons/react/outline'
 
 export default function PhotoUploadProgress ({ open }) {
   return (

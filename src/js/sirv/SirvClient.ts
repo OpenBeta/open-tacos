@@ -9,7 +9,9 @@ if ((process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? null) == null) throw new Error('NE
 export const SIRV_CONFIG = {
   clientId: process.env.SIRV_CLIENT_ID_RO ?? null,
   clientSecret: process.env.SIRV_CLIENT_SECRET_RO ?? null,
-  baseUrl: process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? null
+  clientAdminId: process.env.SIRV_CLIENT_ID_RW ?? null,
+  clientAdminSecret: process.env.SIRV_CLIENT_SECRET_RW ?? null,
+  baseUrl: process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? ''
 }
 
 const client = axios.create({
@@ -23,22 +25,61 @@ const headers = {
   'content-type': 'application/json'
 }
 
-export const getToken = async (): Promise<string|undefined> => {
-  if (SIRV_CONFIG.clientSecret == null) {
-    console.log('Missing clientSecret')
+interface TokenParamsType {
+  clientId: string | null
+  clientSecret: string | null
+}
+
+const _validateTokenParams = ({ clientId, clientSecret }: TokenParamsType): boolean =>
+  clientId != null && clientSecret != null
+
+export const getToken = async (isAdmin: boolean = false): Promise<string|undefined> => {
+  const params: TokenParamsType = isAdmin
+    ? {
+        clientId: SIRV_CONFIG.clientAdminId,
+        clientSecret: SIRV_CONFIG.clientAdminSecret
+      }
+    : {
+        clientId: SIRV_CONFIG.clientId,
+        clientSecret: SIRV_CONFIG.clientSecret
+      }
+
+  if (!_validateTokenParams(params)) {
+    console.log('Missing client token/secret')
     return undefined
   }
-
   const res = await client.post(
     '/token',
-    {
-      clientId: SIRV_CONFIG.clientId,
-      clientSecret: SIRV_CONFIG.clientSecret
-    })
+    params)
+
   if (res.status === 200) {
     return res.data.token
   }
   throw new Error('Sirv API.getToken() error' + res.statusText)
+}
+
+export const getAdminToken = async (): Promise<string|undefined> => await getToken(true)
+
+const getAdminTokenIfNotExist = async (token?: string): Promise<string> => {
+  if (token != null) return token
+
+  const _t = await getAdminToken()
+
+  if (_t == null) {
+    throw new Error('Sirv API.getUserImages(): unable to get a token')
+  }
+  return _t
+}
+
+const getTokenIfNotExist = async (token?: string): Promise<string> => {
+  if (token != null) return token
+
+  const _t = await getToken()
+
+  if (_t == null) {
+    throw new Error('Sirv API.getUserImages(): unable to get a token')
+  }
+  return _t
 }
 
 export interface UserImageReturnType {
@@ -46,19 +87,11 @@ export interface UserImageReturnType {
   mediaIdList: string[]
 }
 export const getUserImages = async (uuid: string, token?: string): Promise<UserImageReturnType> => {
-  let _t = token
-  if (token == null) {
-    _t = await getToken()
-  }
-
-  if (_t == null) {
-    throw new Error('Sirv API.getUserImages(): unable to get a token')
-  }
-
+  const _t = await getTokenIfNotExist(token)
   const res = await client.post(
     '/files/search',
     {
-      query: `dirname:\\/u\\/${uuid}`,
+      query: `dirname:\\/u\\/${uuid} AND -dirname:\\/.Trash`,
       sort: {
         ctime: 'desc'
       },
@@ -95,4 +128,49 @@ export const getUserImages = async (uuid: string, token?: string): Promise<UserI
   }
 
   throw new Error('Sirv API.getUserImages() error' + res.statusText)
+}
+
+export const createUserDir = async (uuid: string, token?: string): Promise<boolean> => {
+  const _t = await getAdminTokenIfNotExist()
+  try {
+    const res = await client.post(
+      `/files/mkdir?dirname=/u/${uuid}`,
+      {},
+      {
+        headers: {
+          ...headers,
+          Authorization: `bearer ${_t}`
+        }
+      }
+    )
+
+    return res.status === 200
+  } catch (e) {
+    console.log('Image API createUserDir() failed', e?.response?.status ?? '')
+    console.log(e)
+    return false
+  }
+}
+
+/**
+ * Upload a photo to Sirv
+ * @param filename
+ * @param imageData
+ * @param token
+ * @returns Full path to the photo
+ */
+export const upload = async (filename: string, imageData: Buffer, token?: string): Promise<string> => {
+  const _t = await getAdminTokenIfNotExist(token)
+  const res = await client.post(
+    '/files/upload?filename=' + filename,
+    imageData,
+    {
+      headers: {
+        'Content-Type': 'image/jpeg',
+        Authorization: `bearer ${_t}`
+      }
+    }
+  )
+  if (res.status >= 200 && res.status <= 204) { return filename }
+  throw new Error('Image API upload() failed')
 }

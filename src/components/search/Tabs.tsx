@@ -8,7 +8,7 @@ interface TabsProps {
 const Tabs = ({ labels, panelCompList }: TabsProps): JSX.Element => {
   return (
     <Tab.Group>
-      <Tab.List className='pointer-events-auto flex justify-center pb-4 space-x-4 lg:space-x-8'>
+      <Tab.List className='pointer-events-auto flex justify-center pb-3 space-x-4 lg:space-x-8'>
         {labels.map(label => <TabLabel key={label} label={label} />)}
       </Tab.List>
       <Tab.Panels className='left-0 absolute pointer-events-auto w-full'>

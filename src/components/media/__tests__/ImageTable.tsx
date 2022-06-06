@@ -2,6 +2,9 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import { groupBy } from 'underscore'
 
+import type ImageTableType from '../ImageTable'
+import { IUserProfile } from '../../../js/types'
+
 jest.mock('../../../js/sirv/SirvClient')
 jest.mock('../../../js/graphql/api')
 jest.mock('../../../js/graphql/Client')
@@ -9,7 +12,16 @@ jest.mock('../../../js/graphql/Client')
 const sirvClient = jest.requireMock('../../../js/sirv/SirvClient')
 const graphApi = jest.requireMock('../../../js/graphql/api')
 
-let ImageTable
+const userProfile: IUserProfile = {
+  id: '123',
+  uuid: '12233455667',
+  name: 'cat blue',
+  nick: 'cool_nick_2022',
+  avatar: 'something',
+  bio: 'totem eatsum'
+}
+
+let ImageTable: typeof ImageTableType
 
 beforeAll(async () => {
   // why async import?  see https://github.com/facebook/jest/issues/10025#issuecomment-716789840
@@ -25,8 +37,10 @@ test('ImageTable can render', async () => {
 
   render(
     <ImageTable
+      isAuthorized
       uid='coolusername'
-      imageList={mediaList}
+      userProfile={userProfile}
+      initialImageList={mediaList}
       initialTagsByMediaId={tagsByMediaId}
     />)
 

@@ -11,9 +11,10 @@ interface TagsProps {
   hovered: boolean
   list: MediaTag[]
   onDeleted: (props?: any) => void
+  isAuthorized?: boolean
 }
 
-export default function TagList ({ hovered, list, onDeleted }: TagsProps): JSX.Element {
+export default function TagList ({ hovered, list, onDeleted, isAuthorized = false }: TagsProps): JSX.Element {
   const [removeTag] = useMutation(
     MUTATION_REMOVE_MEDIA_TAG, {
       client: graphqlClient,
@@ -42,6 +43,7 @@ export default function TagList ({ hovered, list, onDeleted }: TagsProps): JSX.E
           highlighted={hovered}
           tag={tag}
           onDelete={onDeleteHandler}
+          isAuthorized={isAuthorized}
         />)}
     </div>
   )
@@ -51,9 +53,10 @@ interface PhotoTagProps {
   highlighted: boolean
   tag: MediaClimbTag // handle both climb and area type
   onDelete: (mediaId: string, destinationId: string) => void
+  isAuthorized?: boolean
 }
 
-export const Tag = ({ tag, highlighted, onDelete }: PhotoTagProps): JSX.Element => {
+export const Tag = ({ tag, highlighted, onDelete, isAuthorized = false }: PhotoTagProps): JSX.Element => {
   const { climb } = tag
   return (
     <span className={classNames(
@@ -64,13 +67,14 @@ export const Tag = ({ tag, highlighted, onDelete }: PhotoTagProps): JSX.Element 
       <Link href={`/climbs/${climb.id}`} passHref>
         <a className='whitespace-nowrap truncate px-1 hover:underline'>{climb.name}</a>
       </Link>
-      <span onClick={(e) => {
-        onDelete(tag.mediaUuid, tag.climb.id)
-        e.stopPropagation()
-      }}
-      >
-        <XCircleIcon className='w-5 h-5' />
-      </span>
+      {isAuthorized &&
+        <span onClick={(e) => {
+          onDelete(tag.mediaUuid, tag.climb.id)
+          e.stopPropagation()
+        }}
+        >
+          <XCircleIcon className='w-5 h-5' />
+        </span>}
     </span>
   )
 }

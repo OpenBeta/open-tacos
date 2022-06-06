@@ -1,9 +1,9 @@
-import Image, { ImageLoaderProps } from 'next/image'
+import Image from 'next/image'
 import { shuffle } from 'underscore'
 import classNames from 'classnames'
 import { MediaTag } from '../../js/types'
-import { SIRV_CONFIG } from '../../js/sirv/SirvClient'
 import useResponsive from '../../js/hooks/useResponsive'
+import { DefaultLoader, MobileLoader } from '../../js/sirv/util'
 interface PhotoMontageProps {
   photoList: Array<Pick<MediaTag, 'mediaUuid'|'mediaUrl'>>
   /** set to `true` if gallery is placed above the fold */
@@ -98,11 +98,3 @@ const ResponsiveImage = ({ mediaUrl, isHero = true }): JSX.Element => (
     objectFit='cover'
     priority={isHero}
   />)
-
-const DefaultLoader = ({ src, width, quality }: ImageLoaderProps): string => {
-  return `${SIRV_CONFIG.baseUrl ?? ''}${src}?format=webp&w=${width}&q=${quality ?? '90'}`
-}
-
-const MobileLoader = ({ src, width, quality }: ImageLoaderProps): string => {
-  return `${SIRV_CONFIG.baseUrl ?? ''}${src}?format=webp&w=640&q=${quality ?? '90'}`
-}

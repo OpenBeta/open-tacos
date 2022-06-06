@@ -1,12 +1,17 @@
 import Image from 'next/image'
+import { useSession, signIn } from 'next-auth/react'
 
 import DesktopNavBar, { NavListItem } from './ui/DesktopNavBar'
 import ClimbSearch from './search/ClimbSearch'
 import XSearch from './search/XSearch'
 import DesktopFilterBar from './finder/filters/DesktopFilterBar'
+import NavMenuButton from './ui/NavMenuButton'
+
 import { useCanary } from '../js/hooks'
 import { ButtonVariant } from './ui/BaseButton'
-import { useSession, signIn, signOut } from 'next-auth/react'
+
+import ProfileNavButton from './ProfileNavButton'
+import NewPost from './NewPost'
 
 interface DesktopAppBarProps {
   expanded: boolean
@@ -19,34 +24,16 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, s
   const canary = useCanary()
   const { status } = useSession()
 
-  const navList: NavListItem[] = [
-    {
-      route: '/about',
-      title: 'About'
-    },
-    {
-      route: 'https://docs.openbeta.io',
-      title: 'Docs'
-    },
-    {
-      route: 'https://discord.gg/2A2F6kUtyh',
-      title: 'Discord',
-      variant: ButtonVariant.OUTLINED_PRIMARY
-    }
-  ]
-
-  if (status === 'authenticated') {
-    navList.unshift(
-      {
-        action: async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` }),
-        title: 'Logout'
-      })
-  } else {
-    navList.unshift({
-      action: async () => await signIn('auth0', { callbackUrl: '/api/user/me' }),
-      title: 'Login',
-      variant: ButtonVariant.SOLID_SECONDARY
-    })
+  let navList: JSX.Element | null | JSX.Element[]
+  switch (status) {
+    case 'authenticated':
+      navList = navListAuthenticated
+      break
+    case 'loading':
+      navList = null
+      break
+    default:
+      navList = navListDefault
   }
 
   return (
@@ -74,3 +61,40 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, s
     </header>
   )
 }
+
+const navListDefault: JSX.Element[] = [
+  {
+    action: async () => await signIn('auth0', { callbackUrl: '/api/user/me' }),
+    title: 'Login',
+    variant: ButtonVariant.SOLID_PRIMARY
+  },
+  {
+    route: '/about',
+    title: 'About'
+  },
+  {
+    route: 'https://docs.openbeta.io',
+    title: 'Docs'
+  },
+  {
+    route: 'https://discord.gg/2A2F6kUtyh',
+    title: 'Discord',
+    variant: ButtonVariant.OUTLINED_SECONDARY
+  }
+].map(
+  ({ action, variant, title, route }: NavListItem) => (
+    <NavMenuButton
+      key={title}
+      onClick={action}
+      variant={variant}
+      label={title}
+      to={route}
+    />)
+)
+
+const navListAuthenticated = (
+  <>
+    <NewPost isMobile={false} />
+    <ProfileNavButton key='dropdown' isMobile={false} />
+  </>
+)

@@ -9,9 +9,9 @@ const withAuth = (handler: NextApiHandler): NextApiHandler => {
   return async (req, res) => {
     const session = await getSession({ req })
     if (session != null) {
-      handler(req, res)
+      await handler(req, res)
     } else {
-      res.redirect(307, '/api/auth/signin')
+      res.status(403).json({ error: 'Not authenticated' })
     }
   }
 }

@@ -13,4 +13,9 @@ export type IUserMetadata = IWritableUserMetadata & IReadOnlyUserMetadata
 export interface IUserProfile extends IUserMetadata {
   email?: string
   avatar?: string
+  authProviderId: string
+}
+
+export interface WithOwnerProfile {
+  ownerProfile: IUserProfile
 }

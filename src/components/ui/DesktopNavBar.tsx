@@ -1,7 +1,5 @@
 import Bar from './Bar'
 import { ButtonVariant } from './BaseButton'
-import NavMenuButton from './NavMenuButton'
-import ProfileNavButton from '../ProfileNavButton'
 export interface NavListItem {
   title: string
   route?: string
@@ -12,7 +10,7 @@ interface DesktopAppBarProps {
   expanded: boolean
   branding: JSX.Element
   search: JSX.Element
-  navList: NavListItem[]
+  navList: JSX.Element[] | JSX.Element | null
 }
 
 export default function DesktopNavBar ({ expanded, branding, search, navList }: DesktopAppBarProps): JSX.Element {
@@ -26,21 +24,9 @@ export default function DesktopNavBar ({ expanded, branding, search, navList }: 
       <div className='block'>{search}</div>
       <nav className='flex items-center justify-between'>
         <div className='flex items-center gap-x-4'>
-          <ProfileNavButton isMobile={false} />
-          {navList.map(item => <NavItem key={item.title} {...item} />)}
+          {navList}
         </div>
       </nav>
     </Bar>
-  )
-}
-
-const NavItem = ({ route, title, variant, action }: NavListItem): JSX.Element => {
-  return (
-    <NavMenuButton
-      onClick={action}
-      variant={variant}
-      label={title}
-      to={route}
-    />
   )
 }
