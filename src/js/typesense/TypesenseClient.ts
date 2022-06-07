@@ -31,8 +31,8 @@ export const typesenseSearch = async (query: string): Promise<any> => {
 export const climbSearchByName = async (query: string): Promise<any> => {
   const rs = await typesenseClient.collections('climbs').documents().search({
     q: query,
-    query_by: 'climbName,areaNames,climbDesc,fa',
-    exclude_fields: 'climbDesc'
+    query_by: 'climbName,disciplines,areaNames',
+    exclude_fields: 'climbDesc,fa'
   })
   return rs?.hits?.map(hit => hit.document) ?? []
 }
