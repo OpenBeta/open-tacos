@@ -146,3 +146,11 @@ export const disciplineArrayToObj = (types: ClimbDiscipline[]): Partial<ClimbDis
   }, {})
   return z
 }
+
+const regUsername = /^[a-zA-Z0-9]+([_\\.-]?[a-zA-Z0-9])*$/i
+const regUsernameKeywords = /openbeta|0penbeta|admin/i
+
+export const checkUsername = (uid: string): boolean =>
+  uid != null && uid.length <= 20 &&
+  !regUsernameKeywords.test(uid) &&
+  regUsername.test(uid)

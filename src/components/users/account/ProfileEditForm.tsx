@@ -7,14 +7,16 @@ import TextField from '../../ui/TextField'
 import { Button, ButtonVariant } from '../../ui/BaseButton'
 import { IWritableUserMetadata } from '../../../js/types/User'
 import { doesUsernameExist } from '../../../js/userApi/user'
+import { checkUsername } from '../../../js/utils'
 
 const UserProfileSchema = Yup.object().shape({
   nick: Yup.string()
     .min(2, 'Minimum 2 characters')
-    .max(50, 'Maximum 50 characters')
-    .required('Minimum 2 characters'),
+    .max(20, 'Maximum 20 characters')
+    .required('Minimum 2 characters')
+    .test('special-rules', 'Must start and end with a letter or a number.', checkUsername),
   name: Yup.string()
-    .max(40, 'Maximum 40 characters.'),
+    .max(50, 'Maximum 50 characters.'),
   bio: Yup.string()
     .max(150, 'Maximum 150 characters')
     .test('less-than-3-lines', 'Maximum 2 lines', (text) => text != null && text.split(/\r\n|\r|\n/).length <= 2)
