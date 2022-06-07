@@ -35,6 +35,7 @@ const updateMyProfile: Handler = async (req, res) => {
     if (req.body?.name?.length > 150 || req.body?.bio?.length > 150) {
       throw new Error('Bad profile data')
     }
+    req.body.nick = (req.body.nick as string).toLowerCase()
     const metadata = await metadataClient.updateUserMetadata(req.body)
 
     res.json(metadata)
