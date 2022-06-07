@@ -13,7 +13,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
   }
 
   try {
-    const found = await doesUserNameExist(req.query?.nick as string)
+    const found = await doesUserNameExist((req.query?.nick as string).toLowerCase())
     if (found) {
       res.status(200).json({ found: true })
     } else {
