@@ -4,7 +4,7 @@
   </a>
 </p>
 <h1 align="center">
-  OpenTacos v0.2
+  OpenTacos v0.3
 </h1>
 <p align="center">
   <strong>
@@ -16,7 +16,7 @@
 </p>
 
 <h2 align="center">
-  <a href="https://open-tacos.vercel.app">Live demo</a> 🚀
+  <a href="https://tacos.openbeta.io">Take me to the site</a> 🚀
 </h2>
 
 <p align="center">
@@ -28,11 +28,11 @@
 
 ## Screenshot
 
-<img alt="OpenTacos screenshot" src="./opentacos-screenshot.png"/>
+<img alt="OpenTacos screenshot" src="./opentacos-area-explorer.png"/>
 
 ## Tech stack
 
-1. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql)): Node.js.
+1. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql)): Apollo GraphQL,MongoDB, Node.js.
 
 2. Frontend (this repo): React.js, Next.js, TailwindCSS.
 
