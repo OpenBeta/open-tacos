@@ -4,7 +4,7 @@ import { Dictionary } from 'underscore'
 import UserMedia from './UserMedia'
 import ImageTagger from './ImageTagger'
 import useImageTagHelper from './useImageTagHelper'
-import { MediaTag, MediaClimbTag, MediaType, IUserProfile } from '../../js/types'
+import { MediaTagWithClimb, MediaType, IUserProfile } from '../../js/types'
 import InitialUploadCTA from './InitialUploadCTA'
 import { userMediaStore, revalidateServePage } from '../../js/stores/media'
 
@@ -13,7 +13,7 @@ interface ImageTableProps {
   uid: string
   userProfile: IUserProfile
   initialImageList: MediaType[]
-  initialTagsByMediaId: Dictionary<MediaTag[]>
+  initialTagsByMediaId: Dictionary<MediaTagWithClimb[]>
 }
 
 /**
@@ -39,7 +39,7 @@ export default function ImageTable ({ uid, isAuthorized, userProfile, initialIma
     const { id } = setTag.climb
     const currentTagList = tagsByMediaId?.[mediaUuid] ?? []
 
-    if (currentTagList.findIndex((tag: MediaClimbTag) => tag.climb.id === id) !== -1) {
+    if (currentTagList.findIndex((tag: MediaTagWithClimb) => tag.climb.id === id) !== -1) {
       // Tag for the same climb exists
       // We only allow 1 climb/area tag per media
       return
@@ -70,7 +70,7 @@ export default function ImageTable ({ uid, isAuthorized, userProfile, initialIma
 
     updateTag(curr => {
       const currTagList = curr[mediaUuid]
-      const idx = currTagList.findIndex((tag: MediaClimbTag) => tag.climb.id === destinationId)
+      const idx = currTagList.findIndex((tag: MediaTagWithClimb) => tag.climb.id === destinationId)
       currTagList.splice(idx, 1)
       return ({
         ...curr,

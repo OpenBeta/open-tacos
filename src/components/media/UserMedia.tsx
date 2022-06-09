@@ -3,13 +3,13 @@ import Image from 'next/image'
 
 import { SIRV_CONFIG } from '../../js/sirv/SirvClient'
 import TagList from './TagList'
-import { MediaTag, MediaType } from '../../js/types'
+import { MediaTagWithClimb, MediaType } from '../../js/types'
 
 interface UserMediaProps {
   imageInfo: MediaType
   onClick: (props: any) => void
   onTagDeleted: (props?: any) => void
-  tagList: MediaTag[]
+  tagList: MediaTagWithClimb[]
   isAuthorized?: boolean
 }
 

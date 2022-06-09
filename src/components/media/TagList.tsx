@@ -6,10 +6,11 @@ import { useMutation } from '@apollo/client'
 
 import { MUTATION_REMOVE_MEDIA_TAG } from '../../js/graphql/fragments'
 import { graphqlClient } from '../../js/graphql/Client'
-import { MediaTag, MediaClimbTag } from '../../js/types'
+import { MediaTagWithClimb } from '../../js/types'
+
 interface TagsProps {
   hovered: boolean
-  list: MediaTag[]
+  list: MediaTagWithClimb[]
   onDeleted: (props?: any) => void
   isAuthorized?: boolean
 }
@@ -37,7 +38,7 @@ export default function TagList ({ hovered, list, onDeleted, isAuthorized = fals
             hovered ? 'bg-opacity-40' : '')
           }
     >
-      {list.map((tag: MediaClimbTag) =>
+      {list.map((tag: MediaTagWithClimb) =>
         <Tag
           key={`${tag.mediaUuid}-${tag.climb.id}`}
           highlighted={hovered}
@@ -51,7 +52,7 @@ export default function TagList ({ hovered, list, onDeleted, isAuthorized = fals
 
 interface PhotoTagProps {
   highlighted: boolean
-  tag: MediaClimbTag // handle both climb and area type
+  tag: MediaTagWithClimb // only handle climb tag for now
   onDelete: (mediaId: string, destinationId: string) => void
   isAuthorized?: boolean
 }

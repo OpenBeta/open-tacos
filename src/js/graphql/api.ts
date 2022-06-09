@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { AreaType, MediaTag } from '../types'
+import { AreaType, MediaTagWithClimb } from '../types'
 import { graphqlClient } from './Client'
 import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID } from './fragments'
 interface CragsDetailsNearType {
@@ -78,7 +78,7 @@ export const getAreaByUUID = (uuid: string): AreaType | null => {
   return null
 }
 
-export const getTagsByMediaId = async (uuidList: string[]): Promise<MediaTag[]> => {
+export const getTagsByMediaId = async (uuidList: string[]): Promise<MediaTagWithClimb[]> => {
   try {
     const rs = await graphqlClient.query({
       query: QUERY_TAGS_BY_MEDIA_ID,

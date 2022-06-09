@@ -50,7 +50,7 @@ export interface Climb {
   }
   ancestors: string[]
   pathTokens: string[]
-  media: Array<MediaClimbTag|MediaAreaTag>
+  media: MediaBaseTag[]
 }
 
 export interface CountByGroupType {
@@ -105,7 +105,7 @@ export interface AreaType {
   }
   children: AreaType[]
   climbs: Climb[]
-  media: Array<MediaClimbTag|MediaAreaTag>
+  media: MediaBaseTag[]
 }
 
 export interface AreaResponseType {
@@ -168,16 +168,16 @@ export interface MediaBaseTag {
   mediaUrl: string
   mediaType: number
   destType: number
+  uid?: string
 }
-export interface MediaClimbTag extends MediaBaseTag {
+
+export interface MediaTagWithClimb extends MediaBaseTag {
   climb: Pick<Climb, 'id' | 'name'>
 }
 
-export interface MediaAreaTag extends MediaBaseTag {
-  area: Pick<AreaType, 'id'>
+export interface WithUid {
+  uid: string
 }
-
-export type MediaTag = MediaClimbTag | MediaAreaTag
 
 export interface MediaType {
   ownerId: string

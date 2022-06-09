@@ -2,7 +2,7 @@ import { NextPage, GetStaticProps } from 'next'
 import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
 
-import { AreaType } from '../../js/types'
+import { AreaType, MediaBaseTag } from '../../js/types'
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
@@ -13,11 +13,13 @@ import SidePanel from '../../components/area/panel/sidePanel'
 import { getSlug } from '../../js/utils'
 import { getNavBarOffset } from '../../components/Header'
 import PhotoMontage from '../../components/media/PhotoMontage'
+import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 interface AreaPageProps {
   area: AreaType
+  mediaListWithUsernames: MediaBaseTag[]
 }
 
-const Area: NextPage<AreaPageProps> = ({ area }) => {
+const Area: NextPage<AreaPageProps> = (props) => {
   const router = useRouter()
   return (
     <Layout
@@ -27,18 +29,18 @@ const Area: NextPage<AreaPageProps> = ({ area }) => {
     >
       {router.isFallback
         ? (
-          <div className='px-4 max-w-screen-md'>
+          <div className='px-4 max-w-screen-md h-screen'>
             <div>Loading...</div>
           </div>
           )
-        : <Body area={area} />}
+        : <Body {...props} />}
     </Layout>
   )
 }
 
 export default Area
 
-const Body = ({ area }: AreaPageProps): JSX.Element => {
+const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps): JSX.Element => {
   const [focused, setFocused] = useState<null | string>(null)
   const [selected, setSelected] = useState<null | string>(null)
   const navbarOffset = getNavBarOffset()
@@ -59,7 +61,7 @@ const Body = ({ area }: AreaPageProps): JSX.Element => {
       }))
   }, [area])
 
-  const { areaName, children, metadata, content, pathTokens, ancestors, media } = area
+  const { areaName, children, metadata, content, pathTokens, ancestors } = area
   return (
     <>
       <SeoTags
@@ -82,7 +84,7 @@ const Body = ({ area }: AreaPageProps): JSX.Element => {
           <div className='snap-start pt-4'>
             <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
             <div className='mt-4' />
-            <PhotoMontage isHero photoList={media} />
+            <PhotoMontage isHero photoList={enhancedMediaList} />
           </div>
           <div className='mt-16 snap-start'>
             <SidePanel
@@ -242,21 +244,34 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
         uuid: params.id
       }
     })
+
     if (rs.data.area == null) {
       return {
-        notFound: true
+        notFound: true,
+        revalidate: 600
       }
     }
+
+    let mediaListWithUsernames = rs.data.area.media
+    try {
+      mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.area.media)
+    } catch (e) {
+      console.log('Error when trying to add username to image data', e)
+    }
+
     // Pass Area data to the page via props
     return {
       props: {
-        area: rs.data.area
-      }
+        area: rs.data.area,
+        mediaListWithUsernames
+      },
+      revalidate: 600
     }
   } catch (e) {
     console.log('GraphQL exception:', e)
     return {
-      notFound: true
+      notFound: true,
+      revalidate: 600
     }
   }
 }

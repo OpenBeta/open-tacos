@@ -9,7 +9,7 @@ import SeoTags from '../../components/SeoTags'
 import ImageTable from '../../components/media/ImageTable'
 import { getTagsByMediaId } from '../../js/graphql/api'
 import { getUserImages } from '../../js/sirv/SirvClient'
-import { MediaTag, MediaType, IUserProfile } from '../../js/types'
+import { MediaTagWithClimb, IUserProfile, MediaType } from '../../js/types'
 import PublicProfile from '../../components/users/PublicProfile'
 import { getUserProfileByNick, getAllUsersMetadata } from '../../js/auth/ManagementClient'
 import usePermissions from '../../js/hooks/auth/usePermissions'
@@ -18,7 +18,7 @@ import { userMediaStore } from '../../js/stores/media'
 interface UserHomeProps {
   uid: string
   mediaList: MediaType[]
-  tagsByMediaId: Dictionary<MediaTag[]>
+  tagsByMediaId: Dictionary<MediaTagWithClimb[]>
   userProfile: IUserProfile
 }
 
@@ -113,8 +113,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
   try {
     const userProfile = await getUserProfileByNick(uid)
     const { mediaList, mediaIdList } = await getUserImages(userProfile.uuid)
-
-    let tagsByMediaId: Dictionary<MediaTag[]> = {}
+    let tagsByMediaId: Dictionary<MediaTagWithClimb[]> = {}
     if (mediaList.length > 0) {
       const tagArray = await getTagsByMediaId(mediaIdList)
       tagsByMediaId = groupBy(tagArray, 'mediaUuid')

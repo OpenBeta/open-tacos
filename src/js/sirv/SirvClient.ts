@@ -91,7 +91,7 @@ export const getUserImages = async (uuid: string, token?: string): Promise<UserI
   const res = await client.post(
     '/files/search',
     {
-      query: `dirname:\\/u\\/${uuid} AND -dirname:\\/.Trash`,
+      query: `(extension:.jpg OR extension:.jpeg OR extension:.png) AND dirname:\\/u\\/${uuid} AND -dirname:\\/.Trash AND -filename:uid.json`,
       sort: {
         ctime: 'desc'
       },
@@ -173,4 +173,41 @@ export const upload = async (filename: string, imageData: Buffer, token?: string
   )
   if (res.status >= 200 && res.status <= 204) { return filename }
   throw new Error('Image API upload() failed')
+}
+
+/**
+ * A hack to store current username in a json file under their media folder.
+ * This way given an image URL, we can load the json file to determine
+ * the username without calling Auth0 API.
+ * @param filename /u/{uuid}/uid.json file
+ * @param uid username to record
+ * @param token API RW token
+ * @returns true if successful
+ */
+export const addUserIdFile = async (filename: string, uid: string, token?: string): Promise<boolean> => {
+  try {
+    const _t = await getAdminTokenIfNotExist(token)
+    const res = await client.post(
+      '/files/upload?filename=' + filename,
+      {
+        uid,
+        ts: Date.now()
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `bearer ${_t}`
+        }
+      }
+    )
+    if (res.status >= 200 && res.status <= 204) {
+      return true
+    }
+    return false
+  } catch (e) {
+    // Since this is not a super critical operation,
+    // we can swallow the exception
+    console.log('Image API create Uid file failed', e)
+    return false
+  }
 }
