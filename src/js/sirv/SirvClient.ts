@@ -175,6 +175,15 @@ export const upload = async (filename: string, imageData: Buffer, token?: string
   throw new Error('Image API upload() failed')
 }
 
+/**
+ * A hack to store current username in a json file under their media folder.
+ * This way given an image URL, we can load the json file to determine
+ * the username without calling Auth0 API.
+ * @param filename /u/{uuid}/uid.json file
+ * @param uid username to record
+ * @param token API RW token
+ * @returns true if successful
+ */
 export const addUserIdFile = async (filename: string, uid: string, token?: string): Promise<boolean> => {
   try {
     const _t = await getAdminTokenIfNotExist(token)

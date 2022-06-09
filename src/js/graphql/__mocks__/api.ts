@@ -1,4 +1,4 @@
-import { MediaTag } from '../../types'
+import { MediaBaseTag } from '../../types'
 
 export const getCragDetailsNear = jest.fn().mockImplementation(() => {
   console.log('## mock graphql')
@@ -9,7 +9,7 @@ export const getCragDetailsNear = jest.fn().mockImplementation(() => {
   }
 })
 
-export const getTagsByMediaId = async (uuidList: string[]): Promise<Array<Partial<MediaTag>>> => ([
+export const getTagsByMediaId = async (uuidList: string[]): Promise<Array<Partial<MediaBaseTag>>> => ([
   {
     mediaUuid: '5a6798c9-12b9-5c2c-aea2-793a1a3a22c0',
     mediaUrl: '/u/abe96612-2742-43b0-a128-6b19d4e4615f/prussik-peak.jpeg',

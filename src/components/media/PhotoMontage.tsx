@@ -1,11 +1,16 @@
+import { useState, useEffect, memo } from 'react'
 import Image from 'next/image'
 import { shuffle } from 'underscore'
 import classNames from 'classnames'
-import { MediaTag } from '../../js/types'
+import Link from 'next/link'
+import { Transition } from '@headlessui/react'
+
+import { MediaBaseTag } from '../../js/types'
 import useResponsive from '../../js/hooks/useResponsive'
 import { DefaultLoader, MobileLoader } from '../../js/sirv/util'
-interface PhotoMontageProps {
-  photoList: Array<Pick<MediaTag, 'mediaUuid'|'mediaUrl'>>
+import { UserCircleIcon } from '@heroicons/react/outline'
+export interface PhotoMontageProps {
+  photoList: Array<Pick<MediaBaseTag, 'mediaUuid'|'mediaUrl'|'uid'>>
   /** set to `true` if gallery is placed above the fold */
   isHero?: boolean
 }
@@ -21,18 +26,23 @@ interface PhotoMontageProps {
  *
  * @see https://nextjs.org/docs/api-reference/next/image
  */
-export default function PhotoMontage ({ photoList, isHero = false }: PhotoMontageProps): JSX.Element | null {
+const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontageProps): JSX.Element | null => {
   const { isMobile } = useResponsive()
+  const [shuffledList, setPhotoList] = useState<Array<Pick<MediaBaseTag, 'mediaUuid'|'mediaUrl'|'uid'>>>([])
+  useEffect(() => {
+    setPhotoList(shuffle(initialList))
+  }, [initialList])
 
-  if (photoList == null || photoList?.length === 0) { return null }
+  const [hover, setHover] = useState(false)
 
-  const shuffledList = shuffle(photoList)
+  if (shuffledList == null || shuffledList?.length === 0) { return null }
+  // const photoList = shuffle(list)
 
   if (isMobile) {
     return (
       <div className='block relative w-full h-60'>
         <Image
-          src={shuffle(shuffledList)[0].mediaUrl}
+          src={shuffledList[0].mediaUrl}
           layout='fill'
           sizes='100vw'
           objectFit='cover'
@@ -46,18 +56,23 @@ export default function PhotoMontage ({ photoList, isHero = false }: PhotoMontag
 
   if (shuffledList.length <= 4) {
     return (
-      <div className='grid grid-cols-2 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80'>
-        {photoList.slice(0, 2).map(({ mediaUrl, mediaUuid }) => {
+      <div
+        className='grid grid-cols-2 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80'
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+      >
+        {shuffledList.slice(0, 2).map(({ mediaUrl, mediaUuid, uid }) => {
           return (
             <div
               key={mediaUuid}
               className={
                 classNames(
                   'block relative',
-                  photoList.length === 1 ? ' overflow-hidden rounded-r-xl' : '')
+                  shuffledList.length === 1 ? ' overflow-hidden rounded-r-xl' : '')
                 }
             >
               <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} />
+              {uid != null && <PhotographerLink uid={uid} hover={hover} />}
             </div>
           )
         })}
@@ -65,17 +80,26 @@ export default function PhotoMontage ({ photoList, isHero = false }: PhotoMontag
     )
   }
 
-  const first = shuffledList[0].mediaUrl
+  const first = shuffledList[0]
   const theRest = shuffledList.slice(1, 5)
   return (
-    <div className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80'>
+    <div
+      className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80'
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
       <div className='block relative col-start-1 col-span-2 row-span-2 col-end-3'>
-        <ResponsiveImage mediaUrl={first} isHero={isHero} />
+        <ResponsiveImage mediaUrl={first.mediaUrl} isHero={isHero} />
+        {first?.uid != null && <PhotographerLink uid={first.uid} hover={hover} />}
       </div>
-      {theRest.map(({ mediaUrl, mediaUuid }, i) => {
+      {theRest.map(({ mediaUrl, mediaUuid, uid }, i) => {
         return (
-          <div key={`${mediaUuid}_${i}`} className='block relative'>
+          <div
+            key={`${mediaUuid}_${i}`}
+            className='block relative'
+          >
             <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} />
+            {uid != null && <PhotographerLink uid={uid} hover={hover} />}
           </div>
         )
       })}
@@ -98,3 +122,22 @@ const ResponsiveImage = ({ mediaUrl, isHero = true }): JSX.Element => (
     objectFit='cover'
     priority={isHero}
   />)
+
+const PhotographerLink = ({ uid, hover }: {uid: string, hover: boolean}): JSX.Element => (
+  <Transition
+    show={hover}
+    enter='transition-opacity duration-500'
+    enterFrom='opacity-20'
+    enterTo='opacity-100'
+  >
+    <Link href={`/u/${uid}`} passHref>
+      <a>
+        <span className='absolute bottom-2 right-2 rounded-full bg-gray-300 hover:ring p-1'>
+          <UserCircleIcon className='text-secondary w-4 h-4' />
+        </span>
+      </a>
+    </Link>
+
+  </Transition>)
+
+export default memo(PhotoMontage)

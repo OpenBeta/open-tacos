@@ -4,19 +4,21 @@ import { useRouter } from 'next/router'
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { Climb } from '../../js/types'
+import { Climb, MediaBaseTag } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
 import InlineEditor from '../../components/editor/InlineEditor'
 import PhotoMontage from '../../components/media/PhotoMontage'
+import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 
 interface ClimbProps {
   climb: Climb
+  mediaListWithUsernames: MediaBaseTag[]
 }
 
-const ClimbPage: NextPage<ClimbProps> = ({ climb }: ClimbProps) => {
+const ClimbPage: NextPage<ClimbProps> = (props) => {
   const router = useRouter()
 
   return (
@@ -30,15 +32,15 @@ const ClimbPage: NextPage<ClimbProps> = ({ climb }: ClimbProps) => {
             <div>Loading...</div>
           </div>
           )
-        : <Body climb={climb} />}
+        : <Body {...props} />}
     </Layout>
   )
 }
 
 export default ClimbPage
 
-const Body = ({ climb }: ClimbProps): JSX.Element => {
-  const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens, media } = climb
+const Body = ({ climb, mediaListWithUsernames }: ClimbProps): JSX.Element => {
+  const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
   const { climbId } = metadata
 
   return (
@@ -57,7 +59,7 @@ const Body = ({ climb }: ClimbProps): JSX.Element => {
           />
 
           <div className='md:flex py-6 mt-32'>
-            <PhotoMontage photoList={media} />
+            <PhotoMontage photoList={mediaListWithUsernames} />
             <div
               id='Title Information'
               style={{ minWidth: '300px' }}
@@ -192,10 +194,26 @@ export const getStaticProps: GetStaticProps<ClimbProps, { id: string}> = async (
     }
   })
 
+  if (rs.data == null || rs.data.climb == null) {
+    return {
+      notFound: true,
+      revalidate: 600
+    }
+  }
+
+  let mediaListWithUsernames = rs.data.climb.media
+  try {
+    mediaListWithUsernames = await enhanceMediaListWithUsernames(mediaListWithUsernames)
+  } catch (e) {
+    console.log('Error when trying to add username to image data', e)
+  }
+
   // Pass climb data to the page via props
   return {
     props: {
-      climb: rs.data.climb
-    }
+      climb: rs.data.climb,
+      mediaListWithUsernames
+    },
+    revalidate: 600
   }
 }
