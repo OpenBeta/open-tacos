@@ -247,6 +247,9 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
         notFound: true
       }
     }
+
+    const urls = rs.data.area.media.map(({ mediaUrl }) => mediaUrl)
+    console.log('#img urls', urls)
     // Pass Area data to the page via props
     return {
       props: {
