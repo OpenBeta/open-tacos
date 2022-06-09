@@ -30,6 +30,6 @@ test('can read uid json', async () => {
     }
   ]
   const list = await enhanceMediaListWithUsernames(paths)
-  expect(list.length).toEqual(1)
+  expect(list.length).toEqual(2)
   expect(list[0].uid).toMatch(/vietnguyen/)
 })
