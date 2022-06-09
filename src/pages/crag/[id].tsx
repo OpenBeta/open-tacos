@@ -5,16 +5,17 @@ import { useRouter } from 'next/router'
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
-import { AreaType } from '../../js/types'
+import { AreaType, MediaBaseTag } from '../../js/types'
 import CragLayout from '../../components/crag/cragLayout'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import AreaMap from '../../components/area/areaMap'
-
+import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 interface CragProps {
   area: AreaType
+  mediaListWithUsernames: MediaBaseTag[]
 }
 
-const CragPage: NextPage<CragProps> = ({ area }) => {
+const CragPage: NextPage<CragProps> = (props) => {
   const router = useRouter()
 
   return (
@@ -25,14 +26,14 @@ const CragPage: NextPage<CragProps> = ({ area }) => {
             <div>Loading...</div>
           </div>
           )
-        : <Body area={area} />}
+        : <Body {...props} />}
     </Layout>
   )
 }
 export default CragPage
 
-const Body = ({ area }: CragProps): JSX.Element => {
-  const { areaName, aggregate, climbs, metadata, content, ancestors, pathTokens, media } = area
+const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
+  const { areaName, aggregate, climbs, metadata, content, ancestors, pathTokens } = area
 
   return (
     <>
@@ -55,7 +56,7 @@ const Body = ({ area }: CragProps): JSX.Element => {
           ancestors={ancestors}
           pathTokens={pathTokens}
           aggregate={aggregate.byGrade}
-          media={media}
+          media={mediaListWithUsernames}
         />
       </div>
 
@@ -169,10 +170,18 @@ export const getStaticProps: GetStaticProps<CragProps, {id: string}> = async ({ 
     }
   }
 
+  let mediaListWithUsernames = rs.data.area.media
+  try {
+    mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.area.media)
+  } catch (e) {
+    console.log('Error when trying to add username to image data', e)
+  }
+
   // Pass post data to the page via props
   return {
     props: {
-      area: rs.data.area
+      area: rs.data.area,
+      mediaListWithUsernames
     }
   }
 }

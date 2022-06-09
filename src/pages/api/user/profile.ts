@@ -2,6 +2,7 @@ import { NextApiHandler } from 'next'
 
 import withAuth from '../withAuth'
 import createMetadataClient, { Auth0UserMetadata } from './metadataClient'
+import { addUserIdFile } from '../../../js/sirv/SirvClient'
 import { checkUsername } from '../../../js/utils'
 
 type Handler = NextApiHandler<Auth0UserMetadata | { message: string }>
@@ -32,9 +33,12 @@ const updateMyProfile: Handler = async (req, res) => {
     if (!checkUsername(req.body?.nick)) {
       throw new Error('Bad username')
     }
-    if (req.body?.name?.length > 150 || req.body?.bio?.length > 150) {
+    if (req.body?.name?.length > 150 || req.body?.bio?.length > 150 || req?.body?.uuid == null) {
       throw new Error('Bad profile data')
     }
+
+    await addUserIdFile(`/u/${req.body.uuid as string}/uid.json`, req.body?.nick)
+
     req.body.nick = (req.body.nick as string).toLowerCase()
     const metadata = await metadataClient.updateUserMetadata(req.body)
 
