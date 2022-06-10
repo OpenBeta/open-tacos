@@ -168,7 +168,8 @@ export interface MediaBaseTag {
   mediaUrl: string
   mediaType: number
   destType: number
-  uid?: string
+  destination: string | null
+  uid: string | null
 }
 
 export interface MediaTagWithClimb extends MediaBaseTag {

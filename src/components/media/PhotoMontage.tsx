@@ -2,15 +2,13 @@ import { useState, useEffect, memo } from 'react'
 import Image from 'next/image'
 import { shuffle } from 'underscore'
 import classNames from 'classnames'
-import Link from 'next/link'
-import { Transition } from '@headlessui/react'
 
+import PhotoFooter from './PhotoFooter'
 import { MediaBaseTag } from '../../js/types'
 import useResponsive from '../../js/hooks/useResponsive'
 import { DefaultLoader, MobileLoader } from '../../js/sirv/util'
-import { UserCircleIcon } from '@heroicons/react/outline'
 export interface PhotoMontageProps {
-  photoList: Array<Pick<MediaBaseTag, 'mediaUuid'|'mediaUrl'|'uid'>>
+  photoList: MediaBaseTag[]
   /** set to `true` if gallery is placed above the fold */
   isHero?: boolean
 }
@@ -28,7 +26,7 @@ export interface PhotoMontageProps {
  */
 const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontageProps): JSX.Element | null => {
   const { isMobile } = useResponsive()
-  const [shuffledList, setPhotoList] = useState<Array<Pick<MediaBaseTag, 'mediaUuid'|'mediaUrl'|'uid'>>>([])
+  const [shuffledList, setPhotoList] = useState<MediaBaseTag[]>([])
   useEffect(() => {
     setPhotoList(shuffle(initialList))
   }, [initialList])
@@ -36,13 +34,13 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
   const [hover, setHover] = useState(false)
 
   if (shuffledList == null || shuffledList?.length === 0) { return null }
-  // const photoList = shuffle(list)
 
   if (isMobile) {
+    const { uid, mediaUrl, destType, destination } = shuffledList[0]
     return (
       <div className='block relative w-full h-60'>
         <Image
-          src={shuffledList[0].mediaUrl}
+          src={mediaUrl}
           layout='fill'
           sizes='100vw'
           objectFit='cover'
@@ -50,6 +48,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
           loader={MobileLoader}
           priority={isHero}
         />
+        <PhotoFooter username={uid} destType={destType} destination={destination} hover />
       </div>
     )
   }
@@ -61,7 +60,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
-        {shuffledList.slice(0, 2).map(({ mediaUrl, mediaUuid, uid }) => {
+        {shuffledList.slice(0, 2).map(({ mediaUrl, mediaUuid, uid, destination, destType }) => {
           return (
             <div
               key={mediaUuid}
@@ -72,7 +71,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
                 }
             >
               <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} />
-              {uid != null && <PhotographerLink uid={uid} hover={hover} />}
+              <PhotoFooter username={uid} destType={destType} destination={destination} hover={hover} />
             </div>
           )
         })}
@@ -90,16 +89,16 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
     >
       <div className='block relative col-start-1 col-span-2 row-span-2 col-end-3'>
         <ResponsiveImage mediaUrl={first.mediaUrl} isHero={isHero} />
-        {first?.uid != null && <PhotographerLink uid={first.uid} hover={hover} />}
+        <PhotoFooter username={first.uid} destType={first.destType} destination={first.destination} hover={hover} />
       </div>
-      {theRest.map(({ mediaUrl, mediaUuid, uid }, i) => {
+      {theRest.map(({ mediaUrl, mediaUuid, uid, destination, destType }, i) => {
         return (
           <div
             key={`${mediaUuid}_${i}`}
             className='block relative'
           >
             <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} />
-            {uid != null && <PhotographerLink uid={uid} hover={hover} />}
+            <PhotoFooter username={uid} destType={destType} destination={destination} hover={hover} />
           </div>
         )
       })}
@@ -122,22 +121,5 @@ const ResponsiveImage = ({ mediaUrl, isHero = true }): JSX.Element => (
     objectFit='cover'
     priority={isHero}
   />)
-
-const PhotographerLink = ({ uid, hover }: {uid: string, hover: boolean}): JSX.Element => (
-  <Transition
-    show={hover}
-    enter='transition-opacity duration-500'
-    enterFrom='opacity-20'
-    enterTo='opacity-100'
-  >
-    <Link href={`/u/${uid}`} passHref>
-      <a>
-        <span className='absolute bottom-2 right-2 rounded-full bg-gray-300 hover:ring p-1'>
-          <UserCircleIcon className='text-secondary w-4 h-4' />
-        </span>
-      </a>
-    </Link>
-
-  </Transition>)
 
 export default memo(PhotoMontage)

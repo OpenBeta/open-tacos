@@ -173,6 +173,8 @@ export const getStaticProps: GetStaticProps<ClimbProps, { id: string}> = async (
       media {
         mediaUrl
         mediaUuid
+        destination
+        destType
       }
       content {
         description

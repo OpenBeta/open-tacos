@@ -113,6 +113,8 @@ export const getStaticProps: GetStaticProps<CragProps, {id: string}> = async ({ 
       media {
         mediaUrl
         mediaUuid
+        destination
+        destType
       }
       totalClimbs
       aggregate {
