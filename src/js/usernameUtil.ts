@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 
 import { SIRV_CONFIG } from './sirv/SirvClient'
 import { MediaBaseTag } from './types'
+import { checkUsername } from './utils'
 
 const genericClient = axios.create({
   headers: {
@@ -30,8 +31,9 @@ export const enhanceMediaListWithUsernames = async (mediaList: MediaBaseTag[]): 
     try {
       res = await genericClient.get<{uid: string}>(`${SIRV_CONFIG.baseUrl}/u/${uuid}/uid.json`)
 
-      if (res.status >= 200 && res.status <= 204) {
-        usernameMap.set(uuid, res.data.uid)
+      const username = res.data?.uid?.toLowerCase() ?? ''
+      if (res.status >= 200 && res.status <= 204 && checkUsername(username)) {
+        usernameMap.set(uuid, username)
       }
     } catch (e) {
       usernameMap.set(uuid, null)

@@ -37,9 +37,10 @@ const updateMyProfile: Handler = async (req, res) => {
       throw new Error('Bad profile data')
     }
 
+    req.body.nick = (req.body.nick as string).toLowerCase()
+
     await addUserIdFile(`/u/${req.body.uuid as string}/uid.json`, req.body?.nick)
 
-    req.body.nick = (req.body.nick as string).toLowerCase()
     const metadata = await metadataClient.updateUserMetadata(req.body)
 
     res.json(metadata)
