@@ -142,7 +142,7 @@ interface SeoTagsHookPros {
 
 const useSeoTags = ({ username = '', fullName = '', list = [] }: SeoTagsHookPros): any => {
   const author = `/u/${username}`
-  const photoCount = `${list.length === 0 ? '' : list.length} Photo${list.length > 0 ? 's' : ''}`
+  const photoCount = `${list.length === 0 ? '' : list.length} Photo${list.length > 1 ? 's' : ''}`
   const pageTitle = `${fullName} (${author}) -  ${photoCount} on OpenTacos`
   const pageImage = list.length > 0 ? getRandomPreviewImage(list) : undefined
   return { author, pageTitle, pageImage }

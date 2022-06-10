@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
@@ -8,12 +9,12 @@ import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import AreaMap from '../../components/area/areaMap'
-import { useMemo, useState } from 'react'
 import SidePanel from '../../components/area/panel/sidePanel'
 import { getSlug } from '../../js/utils'
 import { getNavBarOffset } from '../../components/Header'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
+import { SIRV_CONFIG } from '../../js/sirv/SirvClient'
 interface AreaPageProps {
   area: AreaType
   mediaListWithUsernames: MediaBaseTag[]
@@ -22,19 +23,28 @@ interface AreaPageProps {
 const Area: NextPage<AreaPageProps> = (props) => {
   const router = useRouter()
   return (
-    <Layout
-      showFooter={false}
-      showFilterBar={false}
-      contentContainerClass='content-default'
-    >
-      {router.isFallback
-        ? (
-          <div className='px-4 max-w-screen-md h-screen'>
-            <div>Loading...</div>
-          </div>
-          )
-        : <Body {...props} />}
-    </Layout>
+    <>
+      {!router.isFallback &&
+        <SeoTags
+          title={`${props.area.areaName} • ${props.area.totalClimbs > 1 ? `${props.area.totalClimbs} climbs` : `${props.area.totalClimbs}`}`}
+          description={props.area.content.description}
+          image={props.mediaListWithUsernames.length > 0 ? getRandomPreviewImage(props.mediaListWithUsernames) : undefined}
+        />}
+
+      <Layout
+        showFooter={false}
+        showFilterBar={false}
+        contentContainerClass='content-default'
+      >
+        {router.isFallback
+          ? (
+            <div className='px-4 max-w-screen-md h-screen'>
+              <div>Loading...</div>
+            </div>
+            )
+          : <Body {...props} />}
+      </Layout>
+    </>
   )
 }
 
@@ -64,12 +74,6 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
   const { areaName, children, metadata, content, pathTokens, ancestors } = area
   return (
     <>
-      <SeoTags
-        keywords={[areaName]}
-        title={areaName}
-        description={content.description}
-      />
-
       <div
         className='flex overflow-y-auto'
         style={{ height: `calc(100vh - ${navbarOffset}px)` }}
@@ -194,7 +198,10 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
               total
             }
           }
-        }
+      }
+
+      totalClimbs
+
       children {
         id
         uuid
@@ -276,4 +283,10 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
       revalidate: 600
     }
   }
+}
+
+const getRandomPreviewImage = (list: MediaBaseTag[]): string => {
+  const shortList = list.slice(0, 5)
+  const index = Math.floor(Math.random() * shortList.length)
+  return `${SIRV_CONFIG.baseUrl}${shortList[index].mediaUrl}?w=1200&ch=630&cy=center&format=jpg&q=85`
 }
