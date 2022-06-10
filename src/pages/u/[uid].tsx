@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { NextPage, GetStaticProps } from 'next'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { groupBy, Dictionary } from 'underscore'
 
@@ -8,7 +7,7 @@ import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import ImageTable from '../../components/media/ImageTable'
 import { getTagsByMediaId } from '../../js/graphql/api'
-import { getUserImages } from '../../js/sirv/SirvClient'
+import { getUserImages, SIRV_CONFIG } from '../../js/sirv/SirvClient'
 import { MediaTagWithClimb, IUserProfile, MediaType } from '../../js/types'
 import PublicProfile from '../../components/users/PublicProfile'
 import { getUserProfileByNick, getAllUsersMetadata } from '../../js/auth/ManagementClient'
@@ -36,18 +35,17 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
   const clientSideList = userMediaStore.use.imageList()
   const currentMediaList = authorized ? clientSideList : serverSideList
 
+  const pageTitle = `${userProfile?.name} (/u/${uid}) - Photos`
+  const pageImage = serverSideList?.length > 0 ? getRandomPreviewImage(serverSideList) : undefined
+
   return (
     <>
-      <Head>
-        <title>Climbing Route Catalog</title>
-        <meta name='description' content='Open license climbing route catalog' />
-        <link rel='icon' href='/favicon.ico' />
-        <SeoTags
-          keywords={['openbeta', 'rock climbing', 'climbing api']}
-          description='Climbing route catalog'
-          title={uid}
-        />
-      </Head>
+      <SeoTags
+        keywords={['openbeta', 'rock climbing', 'climbing api']}
+        description='Share your climbing adventure photos on OpenTacos, the rock climbing knowledge Wiki.'
+        title={pageTitle}
+        image={pageImage}
+      />
 
       <Layout
         contentContainerClass='content-default with-standard-y-margin'
@@ -136,4 +134,10 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
       revalidate: 60
     }
   }
+}
+
+const getRandomPreviewImage = (list: MediaType[]): string => {
+  const shortList = list.slice(0, 3)
+  const index = Math.floor(Math.random() * shortList.length)
+  return `${SIRV_CONFIG.baseUrl}${shortList[index].filename}?w=1200`
 }

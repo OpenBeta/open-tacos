@@ -1,5 +1,6 @@
 import React from 'react'
-import { Helmet } from 'react-helmet'
+import Head from 'next/head'
+// import { Helmet } from 'react-helmet'
 
 interface SEOProps {
   title: string
@@ -8,13 +9,12 @@ interface SEOProps {
   image?: string
 }
 
-function SeoTags ({ description = '', keywords = [], title, image = '' }: SEOProps): JSX.Element {
+export default function SeoTags ({ description = '', keywords = [], title, image }: SEOProps): JSX.Element {
   const site = {
     siteMetadata: {
       title: 'OpenTacos',
       description: 'Open collaboration climbing platform',
-      author: 'hello@openbeta.io',
-      content_edit_branch: 'edit-test'
+      author: 'hello@openbeta.io'
     }
   }
 
@@ -22,71 +22,19 @@ function SeoTags ({ description = '', keywords = [], title, image = '' }: SEOPro
   const metaTitle = title ?? site.siteMetadata.title
   const metaImage =
     image ??
-    'https://res.cloudinary.com/openbeta-prod/image/upload/v1639562113/open-tacos/nc9dsf6aoitrnehe1cwo.jpg'
+    'https://tacos.openbeta.io/liberty-bell-hero.jpeg'
 
   return (
-    <Helmet
-      htmlAttributes={{
-        lang: 'en'
-      }}
-      meta={[
-        {
-          name: 'description',
-          content: metaDescription
-        },
-        {
-          property: 'og:title',
-          content: metaTitle
-        },
-        {
-          property: 'og:description',
-          content: metaDescription
-        },
-        {
-          property: 'og:type',
-          content: 'website'
-        },
-        {
-          property: 'og:image',
-          content: metaImage
-        },
-        {
-          name: 'twitter:card',
-          content: 'summary'
-        },
-        {
-          name: 'twitter:creator',
-          content: site.siteMetadata.author
-        },
-        {
-          name: 'twitter:title',
-          content: metaTitle
-        },
-        {
-          name: 'twitter:description',
-          content: metaDescription
-        },
-        {
-          property: 'twitter:image',
-          content: metaImage
-        },
-        {
-          name: 'viewport',
-          content: 'width=device-width, initial-scale=1.0'
-        }
-      ]
-        .concat(
-          keywords.length > 0
-            ? {
-                name: 'keywords',
-                content: keywords.join(', ')
-              }
-            : []
-        )}
-      title={metaTitle}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
-    />
+    <Head>
+      <title>{title}</title>
+      <meta name='viewport' content='initial-scale=1.0, width=device-width' />
+      <meta property='og:title' content={metaTitle} key='og-title' />
+      <meta name='twitter:title' content={metaTitle} key='twt-title' />
+      <meta property='og:image' content={metaImage} key='og-image' />
+      <meta property='twitter:image' content={metaImage} key='twt-image' />
+      <meta name='description' content={metaDescription} />
+      <meta property='og:description' content={metaDescription} />
+      <meta name='twitter:description' content={metaDescription} />
+    </Head>
   )
 }
-
-export default SeoTags
