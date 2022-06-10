@@ -35,16 +35,16 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
   const clientSideList = userMediaStore.use.imageList()
   const currentMediaList = authorized ? clientSideList : serverSideList
 
-  const pageTitle = `${userProfile?.name} (/u/${uid}) - Photos`
+  const pageTitle = `${userProfile?.name} (/u/${uid}) - ${serverSideList?.length ?? ''} Photos on OpenTacos`
   const pageImage = serverSideList?.length > 0 ? getRandomPreviewImage(serverSideList) : undefined
 
   return (
     <>
       <SeoTags
-        keywords={['openbeta', 'rock climbing', 'climbing api']}
-        description='Share your climbing adventure photos on OpenTacos, the rock climbing knowledge Wiki.'
+        description='Share your climbing adventure photos and contribute to the rock climbing knowledge Wiki.'
         title={pageTitle}
         image={pageImage}
+        author={`/u/${uid}`}
       />
 
       <Layout

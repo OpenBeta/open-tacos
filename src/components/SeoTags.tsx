@@ -7,34 +7,46 @@ interface SEOProps {
   description?: string
   keywords?: string[]
   image?: string
+  author?: string
 }
 
-export default function SeoTags ({ description = '', keywords = [], title, image }: SEOProps): JSX.Element {
-  const site = {
-    siteMetadata: {
-      title: 'OpenTacos',
-      description: 'Open collaboration climbing platform',
-      author: 'hello@openbeta.io'
-    }
-  }
+const siteMetadata = {
+  title: 'OpenTacos',
+  description: 'Open collaboration climbing platform',
+  author: 'hello@openbeta.io',
+  keywords: 'rock climbing wiki, climbing api, climbing beta, climbing guidebooks, openbeta, open data'
+}
 
-  const metaDescription = description ?? site.siteMetadata.description
-  const metaTitle = title ?? site.siteMetadata.title
-  const metaImage =
-    image ??
-    'https://tacos.openbeta.io/liberty-bell-hero.jpeg'
+export default function SeoTags ({ description = '', keywords = [], title, image, author }: SEOProps): JSX.Element {
+  const metaDescription = description ?? siteMetadata.description
+  const metaTitle = title ?? siteMetadata.title
+  const metaImage = image ?? 'https://tacos.openbeta.io/liberty-bell-hero.jpeg'
+  const metaAuthor = author ?? siteMetadata.author
+  const metaKeywords = keywords?.length > 0 ? keywords.join(',') : siteMetadata.keywords
 
   return (
     <Head>
       <title>{title}</title>
+
+      <meta content='text/html; charset=UTF-8' name='Content-Type' />
       <meta name='viewport' content='initial-scale=1.0, width=device-width' />
+
+      <meta name='author' content={metaAuthor} />
+      <meta name='keywords' content={metaKeywords} />
+
       <meta property='og:title' content={metaTitle} key='og-title' />
       <meta name='twitter:title' content={metaTitle} key='twt-title' />
+
       <meta property='og:image' content={metaImage} key='og-image' />
       <meta property='twitter:image' content={metaImage} key='twt-image' />
-      <meta name='description' content={metaDescription} />
-      <meta property='og:description' content={metaDescription} />
-      <meta name='twitter:description' content={metaDescription} />
+
+      <meta name='description' content={metaDescription} key='desc' />
+      <meta property='og:description' content={metaDescription} key='og-desc' />
+      <meta name='twitter:description' content={metaDescription} key='twt-desc' />
+
+      <meta name='twitter:card' content='summary_large_image' key='twt-card' />
+
+      <link rel='icon' type='image/x-icon' href='/favicon.ico' />
     </Head>
   )
 }
