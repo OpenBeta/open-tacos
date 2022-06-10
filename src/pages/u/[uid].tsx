@@ -137,7 +137,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
 }
 
 const getRandomPreviewImage = (list: MediaType[]): string => {
-  const shortList = list.slice(0, 3)
+  const shortList = list.slice(0, 5)
   const index = Math.floor(Math.random() * shortList.length)
-  return `${SIRV_CONFIG.baseUrl}${shortList[index].filename}?w=1200`
+  return `${SIRV_CONFIG.baseUrl}${shortList[index].filename}?w=1200&ch=630&format=jpg&q=85`
 }
