@@ -233,6 +233,8 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
       media {
         mediaUrl
         mediaUuid
+        destination
+        destType
       }
     }
   }`

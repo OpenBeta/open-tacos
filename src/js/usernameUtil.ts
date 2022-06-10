@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 import { SIRV_CONFIG } from './sirv/SirvClient'
 import { MediaBaseTag } from './types'
@@ -24,12 +24,18 @@ export const enhanceMediaListWithUsernames = async (mediaList: MediaBaseTag[]): 
     uuidSet.add(_arr[2])
   }
 
-  const usernameMap = new Map<string, string>()
+  const usernameMap = new Map<string, string|null>()
   for await (const uuid of uuidSet.keys()) {
-    const res = await genericClient.get<{uid: string}>(`${SIRV_CONFIG.baseUrl}/u/${uuid}/uid.json`)
+    let res: AxiosResponse<{uid: string}> | undefined
+    try {
+      res = await genericClient.get<{uid: string}>(`${SIRV_CONFIG.baseUrl}/u/${uuid}/uid.json`)
 
-    if (res.status >= 200 && res.status <= 204) {
-      usernameMap.set(uuid, res.data.uid)
+      if (res.status >= 200 && res.status <= 204) {
+        usernameMap.set(uuid, res.data.uid)
+      }
+    } catch (e) {
+      usernameMap.set(uuid, null)
+      console.log(`Error fetching /u/${uuid}/uid.json`, res?.statusText)
     }
   }
 
@@ -38,7 +44,7 @@ export const enhanceMediaListWithUsernames = async (mediaList: MediaBaseTag[]): 
     const { uuid, ...rest } = obj
     enhancedPaths.push({
       ...rest,
-      uid: usernameMap.get(obj.uuid)
+      uid: usernameMap.get(obj.uuid) ?? null
     })
   }
   return enhancedPaths

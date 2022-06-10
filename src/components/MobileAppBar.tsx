@@ -63,7 +63,7 @@ const More = (): JSX.Element => {
   const { status } = useSession()
   return (
     <Popover>
-      <Popover.Button as='div' className='flex center-items'>
+      <Popover.Button as='div' className='z-50 flex center-items'>
         <Button label={<MenuIcon className='text-secondary w-8 h-8' />} />
       </Popover.Button>
 
