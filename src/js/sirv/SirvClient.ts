@@ -185,12 +185,13 @@ export const upload = async (filename: string, imageData: Buffer, token?: string
  * @returns true if successful
  */
 export const addUserIdFile = async (filename: string, uid: string, token?: string): Promise<boolean> => {
+  if (uid == null) return false
   try {
     const _t = await getAdminTokenIfNotExist(token)
     const res = await client.post(
       '/files/upload?filename=' + filename,
       {
-        uid,
+        uid: uid.toLowerCase(),
         ts: Date.now()
       },
       {
