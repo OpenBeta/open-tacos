@@ -35,14 +35,12 @@ export default function SeoTags ({ description = '', keywords = [], title, image
       <meta name='keywords' content={metaKeywords} />
 
       <meta property='og:title' content={metaTitle} key='og-title' />
-      {/* <meta name='twitter:title' content={metaTitle} key='twt-title' /> */}
 
       <meta property='og:image' content={metaImage} key='og-image' />
       <meta name='twitter:image' content={metaImage} key='twt-image' />
 
       <meta name='description' content={metaDescription} key='desc' />
       <meta property='og:description' content={metaDescription} key='og-desc' />
-      {/* <meta name='twitter:description' content={metaDescription} key='twt-desc' /> */}
 
       <meta name='twitter:card' content='summary_large_image' key='twt-card' />
 

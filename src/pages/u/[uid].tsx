@@ -35,16 +35,14 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
   const clientSideList = userMediaStore.use.imageList()
   const currentMediaList = authorized ? clientSideList : serverSideList
 
-  const pageTitle = `${userProfile?.name} (/u/${uid}) - ${serverSideList?.length ?? ''} Photos on OpenTacos`
-  const pageImage = serverSideList?.length > 0 ? getRandomPreviewImage(serverSideList) : undefined
-
+  const { author, pageTitle, pageImage } = useSeoTags({ username: uid, fullName: userProfile?.name, list: serverSideList })
   return (
     <>
       <SeoTags
         description='Share your climbing adventure photos and contribute to the rock climbing knowledge Wiki.'
         title={pageTitle}
         image={pageImage}
-        author={`/u/${uid}`}
+        author={author}
       />
 
       <Layout
@@ -136,8 +134,22 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
   }
 }
 
+interface SeoTagsHookPros {
+  username?: string
+  fullName?: string
+  list: MediaType[]
+}
+
+const useSeoTags = ({ username = '', fullName = '', list = [] }: SeoTagsHookPros): any => {
+  const author = `/u/${username}`
+  const photoCount = `${list.length === 0 ? '' : list.length} Photo${list.length > 0 ? 's' : ''}`
+  const pageTitle = `${fullName} (${author}) -  ${photoCount} on OpenTacos`
+  const pageImage = list.length > 0 ? getRandomPreviewImage(list) : undefined
+  return { author, pageTitle, pageImage }
+}
+
 const getRandomPreviewImage = (list: MediaType[]): string => {
   const shortList = list.slice(0, 5)
   const index = Math.floor(Math.random() * shortList.length)
-  return `${SIRV_CONFIG.baseUrl}${shortList[index].filename}?w=1200&ch=630&format=jpg&q=85`
+  return `${SIRV_CONFIG.baseUrl}${shortList[index].filename}?w=1200&ch=630&cy=center&format=jpg&q=85`
 }
