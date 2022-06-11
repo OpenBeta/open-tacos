@@ -3,16 +3,20 @@ import withAuth from '../withAuth'
 import createMetadataClient from './metadataClient'
 
 const handler: NextApiHandler<any> = async (req, res) => {
-  const metadataClient = await createMetadataClient(req)
-  if (metadataClient != null) {
+  try {
+    const metadataClient = await createMetadataClient(req)
+
+    if (metadataClient == null) throw new Error('Can\'t create ManagementAPI client')
+
     const meta = await metadataClient.getUserMetadata()
     if (meta?.nick != null) {
-      res.redirect(307, `/u/${meta.nick}`)
+      res.writeHead(307, { Location: `/u/${meta.nick}` }).end()
     } else {
-      res.redirect(307, '/') // these extra else is to prevent 'ERR_HTTP_HEADERS_SENT' error
+      res.writeHead(307, { Location: '/' }).end()
     }
-  } else {
-    res.redirect(307, '/')
+  } catch (e) {
+    console.log('##api/user/me', e)
+    res.writeHead(307, { Location: '/' }).end()
   }
 }
 
