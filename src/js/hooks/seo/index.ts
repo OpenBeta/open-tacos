@@ -1,6 +1,6 @@
 import { useUserProfileSeo } from './useUserProfileSeo'
 import { useAreaSeo } from './useAreaSeo'
-
+import { useClimbSeo } from './useClimbSeo'
 export interface SeoHookType {
   author?: string
   pageTitle: string
@@ -8,4 +8,4 @@ export interface SeoHookType {
   pageImages: string[]
 }
 
-export { useUserProfileSeo, useAreaSeo }
+export { useUserProfileSeo, useAreaSeo, useClimbSeo }
