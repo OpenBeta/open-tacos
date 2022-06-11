@@ -45,7 +45,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
   return (
     <>
       <SeoTags
-        description='Share your climbing adventure photos and contribute to the rock climbing knowledge Wiki.'
+        description='Share your climbing adventure photos and contribute to the Wiki.'
         title={pageTitle}
         images={pageImages}
         author={author}

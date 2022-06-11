@@ -192,6 +192,9 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
             boulder {
               total
             }
+            aid {
+              total
+            }
           }
       }
 

@@ -119,6 +119,20 @@ export const getStaticProps: GetStaticProps<CragProps, {id: string}> = async ({ 
           count
           label
         }
+        byDiscipline {
+            sport {
+              total
+            }
+            trad {
+              total
+            }
+            boulder {
+              total
+            }
+            aid {
+              total
+            }
+          }        
       }
       metadata {
         areaId

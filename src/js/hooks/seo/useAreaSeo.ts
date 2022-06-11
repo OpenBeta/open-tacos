@@ -10,7 +10,7 @@ interface AreaSeoProps {
 }
 
 export const useAreaSeo = ({ area, imageList = [] }: AreaSeoProps): SeoHookType => {
-  const { areaName, totalClimbs, aggregate } = area
+  const { areaName, aggregate } = area
   const { byDiscipline } = aggregate
 
   const sportCount = byDiscipline?.sport?.total ?? 0
@@ -25,7 +25,8 @@ export const useAreaSeo = ({ area, imageList = [] }: AreaSeoProps): SeoHookType 
 
   const pageDescription = [sportText, tradText, boulderingext, aidText].filter(entry => entry != null).join(' · ')
 
-  const pageTitle = `${sanitizeName(areaName)}${totalClimbs > 1 ? ` • ${totalClimbs} climbs` : ''}`
+  const total = sportCount + tradCount + boulderingCount + aidCount
+  const pageTitle = `${sanitizeName(areaName)}${total > 1 ? ` • ${total} climbs` : ''}`
 
   const pageImages = imageList.length > 0 ? getRandomPreviewImages(imageList) : []
 
@@ -35,7 +36,7 @@ export const useAreaSeo = ({ area, imageList = [] }: AreaSeoProps): SeoHookType 
 /**
  * Return some most recent photos
  */
-const getRandomPreviewImages = (list: MediaBaseTag[]): string[] => {
+export const getRandomPreviewImages = (list: MediaBaseTag[]): string[] => {
   const shortList = shuffle(list.slice(0, 10)) // shuffle the first 10
   return shortList.slice(0, 4).map(image => (`${SIRV_CONFIG.baseUrl}${image.mediaUrl}?w=1200&ch=630&cy=center&format=jpg&q=85`))
 }

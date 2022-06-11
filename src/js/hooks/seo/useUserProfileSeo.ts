@@ -11,7 +11,7 @@ interface SeoTagsHookProps {
 export const useUserProfileSeo = ({ username = '', fullName = '', imageList = [] }: SeoTagsHookProps): SeoHookType => {
   const author = `/u/${username}`
   const photoCount = `${imageList.length === 0 ? '' : imageList.length} Photo${imageList.length > 1 ? 's' : ''}`
-  const pageTitle = `${fullName} (${author}) -  ${photoCount} on OpenTacos`
+  const pageTitle = `${fullName} (${author}) •  ${photoCount} on OpenTacos`
   const pageImages = imageList.length > 0 ? getRandomPreviewImages(imageList) : []
   return { author, pageTitle, pageImages }
 }
