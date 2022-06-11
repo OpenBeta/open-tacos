@@ -28,7 +28,7 @@ const Area: NextPage<AreaPageProps> = (props) => {
         <SeoTags
           title={`${props.area.areaName} • ${props.area.totalClimbs > 1 ? `${props.area.totalClimbs} climbs` : `${props.area.totalClimbs}`}`}
           description={props.area.content.description}
-          image={props.mediaListWithUsernames.length > 0 ? getRandomPreviewImage(props.mediaListWithUsernames) : undefined}
+          images={props.mediaListWithUsernames.length > 0 ? [getRandomPreviewImage(props.mediaListWithUsernames)] : []}
         />}
 
       <Layout

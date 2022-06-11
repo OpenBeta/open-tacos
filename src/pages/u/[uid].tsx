@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
-import { groupBy, Dictionary } from 'underscore'
+import { groupBy, shuffle, Dictionary } from 'underscore'
 
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
@@ -35,13 +35,13 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
   const clientSideList = userMediaStore.use.imageList()
   const currentMediaList = authorized ? clientSideList : serverSideList
 
-  const { author, pageTitle, pageImage } = useSeoTags({ username: uid, fullName: userProfile?.name, list: serverSideList })
+  const { author, pageTitle, pageImages } = useSeoTags({ username: uid, fullName: userProfile?.name, list: serverSideList })
   return (
     <>
       <SeoTags
         description='Share your climbing adventure photos and contribute to the rock climbing knowledge Wiki.'
         title={pageTitle}
-        image={pageImage}
+        images={pageImages}
         author={author}
       />
 
@@ -144,12 +144,13 @@ const useSeoTags = ({ username = '', fullName = '', list = [] }: SeoTagsHookPros
   const author = `/u/${username}`
   const photoCount = `${list.length === 0 ? '' : list.length} Photo${list.length > 1 ? 's' : ''}`
   const pageTitle = `${fullName} (${author}) -  ${photoCount} on OpenTacos`
-  const pageImage = list.length > 0 ? getRandomPreviewImage(list) : undefined
-  return { author, pageTitle, pageImage }
+  const pageImages = list.length > 0 ? getRandomPreviewImages(list) : undefined
+  return { author, pageTitle, pageImages }
 }
 
-const getRandomPreviewImage = (list: MediaType[]): string => {
-  const shortList = list.slice(0, 5)
-  const index = Math.floor(Math.random() * shortList.length)
-  return `${SIRV_CONFIG.baseUrl}${shortList[index].filename}?w=1200&ch=630&cy=center&format=jpg&q=85`
+const getRandomPreviewImages = (list: MediaType[]): string[] => {
+  const shortList = shuffle(list.slice(0, 10))
+  return shortList.slice(0, 4).map(image =>
+    (`${SIRV_CONFIG.baseUrl}${image.filename}?w=1200&ch=630&cy=center&format=jpg&q=90`)
+  )
 }
