@@ -3,7 +3,6 @@ import { SIRV_CONFIG } from '../../sirv/SirvClient'
 import { Climb, MediaBaseTag, SafetyType } from '../../types'
 import { SeoHookType } from './index'
 import { sanitizeName } from '../../utils'
-// import { getSetTypes } from '../../../components/ui/RouteTypeChips'
 import { disciplineTypeToDisplay } from '../../grades/util'
 
 interface ClimbSeoProps {
@@ -23,7 +22,6 @@ export const useClimbSeo = ({ climb, imageList = [] }: ClimbSeoProps): SeoHookTy
   const pageDescription = `${faText} · Located in ${wall}`
 
   const disciplinesText = disciplineTypeToDisplay(type).join(' ')
-
   const safetyText = safety != null && safety !== SafetyType.UNSPECIFIED ? ' ' + safety : ''
   const gradeText = `${yds}${safetyText}`
 

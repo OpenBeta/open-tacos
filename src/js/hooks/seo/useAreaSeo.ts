@@ -10,7 +10,7 @@ interface AreaSeoProps {
 }
 
 export const useAreaSeo = ({ area, imageList = [] }: AreaSeoProps): SeoHookType => {
-  const { areaName, aggregate } = area
+  const { areaName, aggregate, pathTokens } = area
   const { byDiscipline } = aggregate
 
   const sportCount = byDiscipline?.sport?.total ?? 0
@@ -25,8 +25,13 @@ export const useAreaSeo = ({ area, imageList = [] }: AreaSeoProps): SeoHookType 
 
   const pageDescription = [sportText, tradText, boulderingext, aidText].filter(entry => entry != null).join(' · ')
 
+  let wall = ''
+  if (pathTokens.length >= 2) {
+    wall = sanitizeName(pathTokens[pathTokens.length - 2]) + ' • '
+  }
+
   const total = sportCount + tradCount + boulderingCount + aidCount
-  const pageTitle = `${sanitizeName(areaName)}${total > 1 ? ` • ${total} climbs` : ''}`
+  const pageTitle = `${wall}${sanitizeName(areaName)} Area${total > 1 ? ` • ${total} climbs` : ''}`
 
   const pageImages = imageList.length > 0 ? getRandomPreviewImages(imageList) : []
 
