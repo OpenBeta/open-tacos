@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { useSession, signIn } from 'next-auth/react'
 
 import DesktopNavBar, { NavListItem } from './ui/DesktopNavBar'
@@ -41,10 +42,12 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, s
       <DesktopNavBar
         expanded={expanded}
         branding={
-          <a href='/' className='inline-flex flex-rows justify-start items-center md:gap-x-2'>
-            <Image className='align-middle' src='/tortilla.png' height={32} width={32} />
-            <span className='hidden md:inline-flex items-center font-semibold text-xl lg:text-2xl text-custom-primary pt-1'>OpenTacos</span>
-          </a>
+          <Link href='/' passHref>
+            <a className='inline-flex flex-rows justify-start items-center md:gap-x-2'>
+              <Image className='align-middle' src='/tortilla.png' height={32} width={32} />
+              <span className='hidden md:inline-flex items-center font-semibold text-xl lg:text-2xl text-custom-primary pt-1'>OpenTacos</span>
+            </a>
+          </Link>
       }
         search={
           canary

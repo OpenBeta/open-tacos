@@ -7,11 +7,11 @@ if (AUTH_CONFIG_SERVER == null) throw new Error('AUTH_CONFIG_SERVER not defined'
 
 const { mgmtClientId, mgmtClientSecret, issuer } = AUTH_CONFIG_SERVER
 
-const auth0ManagementClient = new Auth0MgmtClient({
+export const auth0ManagementClient = new Auth0MgmtClient({
   domain: issuer.replace('https://', ''),
   clientId: mgmtClientId,
   clientSecret: mgmtClientSecret,
-  scope: 'read:users'
+  scope: 'read:users update:users'
 })
 
 export const getAllUsersMetadata = async (): Promise<any[]> => {
