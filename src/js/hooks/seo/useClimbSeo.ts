@@ -3,7 +3,8 @@ import { SIRV_CONFIG } from '../../sirv/SirvClient'
 import { Climb, MediaBaseTag, SafetyType } from '../../types'
 import { SeoHookType } from './index'
 import { sanitizeName } from '../../utils'
-import { getSetTypes } from '../../../components/ui/RouteTypeChips'
+// import { getSetTypes } from '../../../components/ui/RouteTypeChips'
+import { disciplineTypeToDisplay } from '../../grades/util'
 
 interface ClimbSeoProps {
   climb: Climb
@@ -21,10 +22,12 @@ export const useClimbSeo = ({ climb, imageList = [] }: ClimbSeoProps): SeoHookTy
 
   const pageDescription = `${faText} · Located in ${wall}`
 
-  const disciplinesText = '· ' + getSetTypes(type).join(' ').toUpperCase()
-  const safetyText = safety != null && safety !== SafetyType.UNSPECIFIED ? safety : null
+  const disciplinesText = disciplineTypeToDisplay(type).join(' ')
 
-  const pageTitle = [sanitizeName(name), yds, safetyText, disciplinesText].filter(entry => entry != null).join(' ')
+  const safetyText = safety != null && safety !== SafetyType.UNSPECIFIED ? ' ' + safety : ''
+  const gradeText = `${yds}${safetyText}`
+
+  const pageTitle = [sanitizeName(name), gradeText, disciplinesText].join(' · ')
 
   const pageImages = imageList.length > 0 ? getRandomPreviewImages(imageList) : []
 

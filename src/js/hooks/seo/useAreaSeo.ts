@@ -13,10 +13,10 @@ export const useAreaSeo = ({ area, imageList = [] }: AreaSeoProps): SeoHookType 
   const { areaName, totalClimbs, aggregate } = area
   const { byDiscipline } = aggregate
 
-  const sportCount = byDiscipline.sport?.total ?? 0
-  const tradCount = byDiscipline.trad?.total ?? 0
-  const boulderingCount = byDiscipline.boulder?.total ?? 0
-  const aidCount = byDiscipline.aid?.total ?? 0
+  const sportCount = byDiscipline?.sport?.total ?? 0
+  const tradCount = byDiscipline?.trad?.total ?? 0
+  const boulderingCount = byDiscipline?.boulder?.total ?? 0
+  const aidCount = byDiscipline?.aid?.total ?? 0
 
   const sportText = sportCount > 0 ? `Sport ${sportCount}` : null
   const tradText = tradCount > 0 ? `Trad ${tradCount}` : null

@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import SeoTags from '../../components/SeoTags'
 import { AreaType, MediaBaseTag } from '../../js/types'
 import CragLayout from '../../components/crag/cragLayout'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
@@ -41,12 +40,6 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
 
   return (
     <>
-      <SeoTags
-        keywords={[areaName]}
-        title={areaName}
-        description='description'
-      />
-
       <div className='p-6 flex-1'>
         <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
         <div className='mt-6' />
