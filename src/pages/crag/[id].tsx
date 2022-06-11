@@ -10,6 +10,8 @@ import CragLayout from '../../components/crag/cragLayout'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import AreaMap from '../../components/area/areaMap'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
+import { PageMeta } from '../areas/[id]'
+
 interface CragProps {
   area: AreaType
   mediaListWithUsernames: MediaBaseTag[]
@@ -17,17 +19,19 @@ interface CragProps {
 
 const CragPage: NextPage<CragProps> = (props) => {
   const router = useRouter()
-
   return (
-    <Layout contentContainerClass='content-default' showFilterBar={false}>
-      {router.isFallback
-        ? (
-          <div className='px-4 max-w-screen-md'>
-            <div>Loading...</div>
-          </div>
-          )
-        : <Body {...props} />}
-    </Layout>
+    <>
+      {!router.isFallback && <PageMeta {...props} />}
+      <Layout contentContainerClass='content-default' showFilterBar={false}>
+        {router.isFallback
+          ? (
+            <div className='px-4 max-w-screen-md'>
+              <div>Loading...</div>
+            </div>
+            )
+          : <Body {...props} />}
+      </Layout>
+    </>
   )
 }
 export default CragPage

@@ -1,18 +1,19 @@
 import { useEffect } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
-import { groupBy, shuffle, Dictionary } from 'underscore'
+import { groupBy, Dictionary } from 'underscore'
 
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import ImageTable from '../../components/media/ImageTable'
 import { getTagsByMediaId } from '../../js/graphql/api'
-import { getUserImages, SIRV_CONFIG } from '../../js/sirv/SirvClient'
+import { getUserImages } from '../../js/sirv/SirvClient'
 import { MediaTagWithClimb, IUserProfile, MediaType } from '../../js/types'
 import PublicProfile from '../../components/users/PublicProfile'
 import { getUserProfileByNick, getAllUsersMetadata } from '../../js/auth/ManagementClient'
 import usePermissions from '../../js/hooks/auth/usePermissions'
 import { userMediaStore } from '../../js/stores/media'
+import { useUserProfileSeo } from '../../js/hooks/seo'
 
 interface UserHomeProps {
   uid: string
@@ -35,7 +36,12 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
   const clientSideList = userMediaStore.use.imageList()
   const currentMediaList = authorized ? clientSideList : serverSideList
 
-  const { author, pageTitle, pageImages } = useSeoTags({ username: uid, fullName: userProfile?.name, list: serverSideList })
+  const { author, pageTitle, pageImages } = useUserProfileSeo({
+    username: uid,
+    fullName: userProfile?.name,
+    imageList: serverSideList
+  })
+
   return (
     <>
       <SeoTags
@@ -132,25 +138,4 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
       revalidate: 60
     }
   }
-}
-
-interface SeoTagsHookPros {
-  username?: string
-  fullName?: string
-  list: MediaType[]
-}
-
-const useSeoTags = ({ username = '', fullName = '', list = [] }: SeoTagsHookPros): any => {
-  const author = `/u/${username}`
-  const photoCount = `${list.length === 0 ? '' : list.length} Photo${list.length > 1 ? 's' : ''}`
-  const pageTitle = `${fullName} (${author}) -  ${photoCount} on OpenTacos`
-  const pageImages = list.length > 0 ? getRandomPreviewImages(list) : undefined
-  return { author, pageTitle, pageImages }
-}
-
-const getRandomPreviewImages = (list: MediaType[]): string[] => {
-  const shortList = shuffle(list.slice(0, 10))
-  return shortList.slice(0, 4).map(image =>
-    (`${SIRV_CONFIG.baseUrl}${image.filename}?w=1200&ch=630&cy=center&format=jpg&q=90`)
-  )
 }

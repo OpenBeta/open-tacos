@@ -14,7 +14,8 @@ import { getSlug } from '../../js/utils'
 import { getNavBarOffset } from '../../components/Header'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
-import { SIRV_CONFIG } from '../../js/sirv/SirvClient'
+import { useAreaSeo } from '../../js/hooks/seo'
+
 interface AreaPageProps {
   area: AreaType
   mediaListWithUsernames: MediaBaseTag[]
@@ -24,13 +25,7 @@ const Area: NextPage<AreaPageProps> = (props) => {
   const router = useRouter()
   return (
     <>
-      {!router.isFallback &&
-        <SeoTags
-          title={`${props.area.areaName} • ${props.area.totalClimbs > 1 ? `${props.area.totalClimbs} climbs` : `${props.area.totalClimbs}`}`}
-          description={props.area.content.description}
-          images={props.mediaListWithUsernames.length > 0 ? [getRandomPreviewImage(props.mediaListWithUsernames)] : []}
-        />}
-
+      {!router.isFallback && <PageMeta {...props} />}
       <Layout
         showFooter={false}
         showFilterBar={false}
@@ -285,8 +280,16 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
   }
 }
 
-const getRandomPreviewImage = (list: MediaBaseTag[]): string => {
-  const shortList = list.slice(0, 5)
-  const index = Math.floor(Math.random() * shortList.length)
-  return `${SIRV_CONFIG.baseUrl}${shortList[index].mediaUrl}?w=1200&ch=630&cy=center&format=jpg&q=85`
+/**
+ * Generate dynamic meta tags for page
+ */
+export const PageMeta = ({ area, mediaListWithUsernames }: AreaPageProps): JSX.Element => {
+  const { pageImages, pageTitle, pageDescription } = useAreaSeo({ area, imageList: mediaListWithUsernames })
+  return (
+    <SeoTags
+      title={pageTitle}
+      description={pageDescription}
+      images={pageImages}
+    />
+  )
 }
