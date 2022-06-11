@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
@@ -8,12 +9,13 @@ import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import AreaMap from '../../components/area/areaMap'
-import { useMemo, useState } from 'react'
 import SidePanel from '../../components/area/panel/sidePanel'
 import { getSlug } from '../../js/utils'
 import { getNavBarOffset } from '../../components/Header'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
+import { useAreaSeo } from '../../js/hooks/seo'
+
 interface AreaPageProps {
   area: AreaType
   mediaListWithUsernames: MediaBaseTag[]
@@ -22,19 +24,22 @@ interface AreaPageProps {
 const Area: NextPage<AreaPageProps> = (props) => {
   const router = useRouter()
   return (
-    <Layout
-      showFooter={false}
-      showFilterBar={false}
-      contentContainerClass='content-default'
-    >
-      {router.isFallback
-        ? (
-          <div className='px-4 max-w-screen-md h-screen'>
-            <div>Loading...</div>
-          </div>
-          )
-        : <Body {...props} />}
-    </Layout>
+    <>
+      {!router.isFallback && <PageMeta {...props} />}
+      <Layout
+        showFooter={false}
+        showFilterBar={false}
+        contentContainerClass='content-default'
+      >
+        {router.isFallback
+          ? (
+            <div className='px-4 max-w-screen-md h-screen'>
+              <div>Loading...</div>
+            </div>
+            )
+          : <Body {...props} />}
+      </Layout>
+    </>
   )
 }
 
@@ -64,12 +69,6 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
   const { areaName, children, metadata, content, pathTokens, ancestors } = area
   return (
     <>
-      <SeoTags
-        keywords={[areaName]}
-        title={areaName}
-        description={content.description}
-      />
-
       <div
         className='flex overflow-y-auto'
         style={{ height: `calc(100vh - ${navbarOffset}px)` }}
@@ -193,8 +192,14 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
             boulder {
               total
             }
+            aid {
+              total
+            }
           }
-        }
+      }
+
+      totalClimbs
+
       children {
         id
         uuid
@@ -276,4 +281,18 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
       revalidate: 600
     }
   }
+}
+
+/**
+ * Generate dynamic meta tags for page
+ */
+export const PageMeta = ({ area, mediaListWithUsernames }: AreaPageProps): JSX.Element => {
+  const { pageImages, pageTitle, pageDescription } = useAreaSeo({ area, imageList: mediaListWithUsernames })
+  return (
+    <SeoTags
+      title={pageTitle}
+      description={pageDescription}
+      images={pageImages}
+    />
+  )
 }

@@ -4,12 +4,13 @@ import { useRouter } from 'next/router'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import SeoTags from '../../components/SeoTags'
 import { AreaType, MediaBaseTag } from '../../js/types'
 import CragLayout from '../../components/crag/cragLayout'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import AreaMap from '../../components/area/areaMap'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
+import { PageMeta } from '../areas/[id]'
+
 interface CragProps {
   area: AreaType
   mediaListWithUsernames: MediaBaseTag[]
@@ -17,17 +18,19 @@ interface CragProps {
 
 const CragPage: NextPage<CragProps> = (props) => {
   const router = useRouter()
-
   return (
-    <Layout contentContainerClass='content-default' showFilterBar={false}>
-      {router.isFallback
-        ? (
-          <div className='px-4 max-w-screen-md'>
-            <div>Loading...</div>
-          </div>
-          )
-        : <Body {...props} />}
-    </Layout>
+    <>
+      {!router.isFallback && <PageMeta {...props} />}
+      <Layout contentContainerClass='content-default' showFilterBar={false}>
+        {router.isFallback
+          ? (
+            <div className='px-4 max-w-screen-md'>
+              <div>Loading...</div>
+            </div>
+            )
+          : <Body {...props} />}
+      </Layout>
+    </>
   )
 }
 export default CragPage
@@ -37,12 +40,6 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
 
   return (
     <>
-      <SeoTags
-        keywords={[areaName]}
-        title={areaName}
-        description='description'
-      />
-
       <div className='p-6 flex-1'>
         <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
         <div className='mt-6' />
@@ -122,6 +119,20 @@ export const getStaticProps: GetStaticProps<CragProps, {id: string}> = async ({ 
           count
           label
         }
+        byDiscipline {
+            sport {
+              total
+            }
+            trad {
+              total
+            }
+            boulder {
+              total
+            }
+            aid {
+              total
+            }
+          }        
       }
       metadata {
         areaId

@@ -1,6 +1,4 @@
 import Header from './Header'
-import Head from 'next/head'
-import SeoTags from '../components/SeoTags'
 
 interface LayoutProps {
   contentContainerClass?: string
@@ -21,7 +19,7 @@ function Layout ({
 }: LayoutProps): JSX.Element {
   return (
     <>
-      <Head>
+      {/* <Head>
         <title>Climbing Route Catalog</title>
         <meta name='description' content='Open license climbing route catalog' />
         <link rel='icon' href='/favicon.ico' />
@@ -31,7 +29,7 @@ function Layout ({
           description='Climbing route catalog'
           title='Home'
         />
-      </Head>
+      </Head> */}
 
       <div className={rootContainerClass}>
         <Header showFilterBar={showFilterBar} />
