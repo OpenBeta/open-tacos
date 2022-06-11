@@ -6,7 +6,7 @@ export default function LandingHero () {
   return (
     <div className='z-0 bg-gray-800 h-screen lg:h-3/5' style={{ display: 'grid', minHeight: '350px' }}>
       <Topography
-        className='w-full h-full opacity-60 z-10' style={{
+        className='w-full h-full opacity-60 z-0' style={{
           gridArea: '1/1'
         }}
       />
