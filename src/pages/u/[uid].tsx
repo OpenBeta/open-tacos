@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { NextPage, GetStaticProps } from 'next'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { groupBy, Dictionary } from 'underscore'
 
@@ -14,6 +13,7 @@ import PublicProfile from '../../components/users/PublicProfile'
 import { getUserProfileByNick, getAllUsersMetadata } from '../../js/auth/ManagementClient'
 import usePermissions from '../../js/hooks/auth/usePermissions'
 import { userMediaStore } from '../../js/stores/media'
+import { useUserProfileSeo } from '../../js/hooks/seo'
 
 interface UserHomeProps {
   uid: string
@@ -36,18 +36,20 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
   const clientSideList = userMediaStore.use.imageList()
   const currentMediaList = authorized ? clientSideList : serverSideList
 
+  const { author, pageTitle, pageImages } = useUserProfileSeo({
+    username: uid,
+    fullName: userProfile?.name,
+    imageList: serverSideList
+  })
+
   return (
     <>
-      <Head>
-        <title>Climbing Route Catalog</title>
-        <meta name='description' content='Open license climbing route catalog' />
-        <link rel='icon' href='/favicon.ico' />
-        <SeoTags
-          keywords={['openbeta', 'rock climbing', 'climbing api']}
-          description='Climbing route catalog'
-          title={uid}
-        />
-      </Head>
+      <SeoTags
+        description='Share your climbing adventure photos and contribute to the Wiki.'
+        title={pageTitle}
+        images={pageImages}
+        author={author}
+      />
 
       <Layout
         contentContainerClass='content-default with-standard-y-margin'

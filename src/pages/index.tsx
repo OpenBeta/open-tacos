@@ -1,5 +1,4 @@
 import type { NextPage, GetStaticProps } from 'next'
-import Head from 'next/head'
 import { gql } from '@apollo/client'
 
 import Layout from '../components/layout'
@@ -21,17 +20,10 @@ const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
   const { areas } = exploreData
   return (
     <>
-      <Head>
-        <title>Climbing Route Catalog</title>
-        <meta name='description' content='Open license climbing route catalog' />
-        <link rel='icon' href='/favicon.ico' />
-        <SeoTags
-          keywords={['openbeta', 'rock climbing', 'climbing api']}
-          description='Climbing route catalog'
-          title='Home'
-        />
-      </Head>
-
+      <SeoTags
+        title='The open source rock climbing wiki'
+        description='Share your climbing adventure photos and contribute to the climbing route wiki.'
+      />
       <Layout
         contentContainerClass='content-default with-standard-y-margin'
         hero={<HomeHero statsProps={stats} />}
