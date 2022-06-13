@@ -131,6 +131,7 @@ Thanks goes to these wonderful people:
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/umaxyon"><img src="https://avatars.githubusercontent.com/u/73870939?v=4?s=100" width="100px;" alt=""/><br /><sub><b>umaxyon</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=umaxyon" title="Code">💻</a></td>
+    <td align="center"><a href="https://jacobstruzik.com"><img src="https://avatars.githubusercontent.com/u/3697804?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jacob Struzik</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=jstruzik" title="Code">💻</a></td>
   </tr>
 </table>
 
