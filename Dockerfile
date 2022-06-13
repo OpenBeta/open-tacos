@@ -1,14 +1,16 @@
 
 FROM node:16-bullseye-slim as builder
 
-ENV GATSBY_TELEMETRY_DISABLED=1
 ENV PATH /app/node_modules/.bin:$PATH
 
 RUN apt-get update -y
-# The port gatsby runs on
-EXPOSE 8000
+# The port next runs on
+EXPOSE 3000
 WORKDIR /app
-COPY ./package.json /app
-COPY ./yarn.lock /app
-COPY . /app
-CMD ["sh", "-c", "yarn install && gatsby develop -H 0.0.0.0"]
+
+# Note: 
+# No COPY commands here.
+# For development we don't want a static version of files under src/
+# See docker-compose.yml for local dir --> container mapping.
+
+CMD ["sh", "-c", "yarn install --network-timeout 300000 && yarn dev"]
