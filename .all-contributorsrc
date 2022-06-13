@@ -146,6 +146,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "jstruzik",
+      "name": "Jacob Struzik",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3697804?v=4",
+      "profile": "https://jacobstruzik.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
