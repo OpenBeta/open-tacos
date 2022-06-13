@@ -32,6 +32,7 @@ jobs:
         run: yarn build
         env:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
+
   test-docker-compose:
     runs-on: ubuntu-latest
     steps:
@@ -43,4 +44,10 @@ jobs:
         env:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
       - name: Test docker-compose up
+        uses: nev7n/wait_for_response@v1
+        with:
+          url: 'http://localhost:3000/'
+          responseCode: 200
+          timeout: 300000
+          interval: 2000
         run: docker run --network container:opentacos-dev-latest appropriate/curl -s --retry 20 --retry-connrefused http://localhost:3000/
