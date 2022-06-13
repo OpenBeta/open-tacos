@@ -32,3 +32,15 @@ jobs:
         run: yarn build
         env:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
+  test-docker-compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: Build the stack
+        run: docker-compose up -d
+        env:
+          SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
+      - name: Test docker-compose up
+        run: docker run --network container:opentacos-dev-latest appropriate/curl -s --retry 20 --retry-connrefused http://localhost:3000/

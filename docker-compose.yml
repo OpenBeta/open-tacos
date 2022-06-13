@@ -4,10 +4,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: openbeta/opentacos-dev:latest
+    container_name: opentacos-dev-latest
     volumes:
-      - ./src:/app/src
-      - ./public:/app/public
+      - ./.cache:/app/.cache
       - ./node_modules:/app/node_modules
+      - ./:/app
     ports:
       - "3000:3000"
     environment:
