@@ -172,7 +172,7 @@ export const upload = async (filename: string, imageData: Buffer, token?: string
     }
   )
   if (res.status >= 200 && res.status <= 204) { return filename }
-  throw new Error('Image API upload() failed')
+  throw new Error(`Image API upload() failed.  Status: ${res.status}`)
 }
 
 /**

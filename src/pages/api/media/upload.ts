@@ -29,13 +29,12 @@ const handler: NextApiHandler<any> = async (req, res) => {
       const { uuid } = session.user.metadata
       const fullFilename = `/u/${uuid}/${filename as string}`
       const rawRes = await getRawBody(req, {
-        length: req.headers['content-length'],
         limit: '8mb'
       })
       const photoUrl = await upload(fullFilename, rawRes)
       return res.status(200).send(photoUrl)
     } catch (e) {
-      console.log('#Uploading to media server fail', e)
+      console.log('#Uploading to media server failed', e)
       return res.status(500).end()
     }
   }
