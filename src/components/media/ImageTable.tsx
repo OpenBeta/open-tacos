@@ -7,6 +7,8 @@ import useImageTagHelper from './useImageTagHelper'
 import { MediaTagWithClimb, MediaType, IUserProfile } from '../../js/types'
 import InitialUploadCTA from './InitialUploadCTA'
 import { userMediaStore, revalidateServePage } from '../../js/stores/media'
+import SimpleModal from '../../components/ui/SimpleModal'
+import { TinyProfile } from '../users/PublicProfile'
 
 interface ImageTableProps {
   isAuthorized: boolean
@@ -23,8 +25,10 @@ export default function ImageTable ({ uid, isAuthorized, userProfile, initialIma
   const imageList = initialImageList
 
   const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
+  const [selectedMediaId, setIsOpen] = useState(-1)
 
   const imageHelper = useImageTagHelper()
+  // eslint-disable-next-line
   const { onClick } = imageHelper
 
   if (imageList == null) return null
@@ -94,14 +98,17 @@ export default function ImageTable ({ uid, isAuthorized, userProfile, initialIma
     <>
       <div className='flex flex-row flex-wrap md:gap-8 justify-center'>
 
-        {imageList.map(imageInfo => {
+        {imageList.map((imageInfo, index) => {
           const tags = tagsByMediaId?.[imageInfo.mediaId] ?? []
           return (
             <UserMedia
               key={imageInfo.mediaId}
               tagList={tags}
               imageInfo={imageInfo}
-              onClick={onClick}
+              onClick={() => {
+                // onClick()
+                setIsOpen(index)
+              }}
               onTagDeleted={onDeletedHandler}
               isAuthorized={isAuthorized}
             />
@@ -116,7 +123,13 @@ export default function ImageTable ({ uid, isAuthorized, userProfile, initialIma
         <ImageTagger
           {...imageHelper} onCompleted={onCompletedHandler}
         />}
-
+      <SimpleModal
+        isOpen={selectedMediaId >= 0}
+        onClose={() => setIsOpen(-1)}
+        initialIndex={selectedMediaId}
+        imageList={imageList}
+        userinfo={<TinyProfile userProfile={userProfile} />}
+      />
     </>
   )
 }

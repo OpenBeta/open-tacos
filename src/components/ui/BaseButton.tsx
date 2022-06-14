@@ -96,5 +96,6 @@ export enum ButtonVariant {
   OUTLINED_DEFAULT = 'border rounded-md border-gray-800 text-black drop-shadow-sm hover:ring-1',
   SOLID_SECONDARY = 'border-0 rounded-md bg-ob-secondary text-black drop-shadow-sm hover:ring-1',
   SOLID_DEFAULT = 'border-0 rounded-md bg-slate-800 text-white drop-shadow-sm hover:ring-1',
-  ROUNDED_ICON_CONTRAST = 'rounded-full text-white hover:ring-1'
+  ROUNDED_ICON_CONTRAST = 'rounded-full text-white hover:ring-1',
+  ROUNDED_ICON_SOLID = 'rounded-full bg-gray-50 bg-opacity-20 hover:bg-gray-100 hover:bg-opacity-100 hover:ring-1 border border-gray-200 py-2.5 px-1'
 }

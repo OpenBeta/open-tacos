@@ -21,6 +21,7 @@ export default function UserMedia ({ imageInfo, onClick, tagList, onTagDeleted, 
   const imgUrl = `${SIRV_CONFIG.baseUrl ?? ''}${imageInfo.filename}?format=webp&thumbnail=300&q=90`
 
   const onClickHandler = useCallback((event) => {
+    // setIsOpen(true)
     onClick({ mouseXY: [event.clientX, event.clientY], imageInfo })
   }, [])
 

@@ -17,12 +17,13 @@ import { useUserProfileSeo } from '../../js/hooks/seo'
 
 interface UserHomeProps {
   uid: string
+  postId: string | null
   mediaList: MediaType[]
   tagsByMediaId: Dictionary<MediaTagWithClimb[]>
   userProfile: IUserProfile
 }
 
-const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList, tagsByMediaId, userProfile }) => {
+const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, mediaList: serverSideList, tagsByMediaId, userProfile }) => {
   const router = useRouter()
   const { authorized } = usePermissions({ ownerProfileOnPage: userProfile })
 
@@ -42,6 +43,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
     imageList: serverSideList
   })
 
+  console.log('#postId', postId)
   return (
     <>
       <SeoTags
@@ -95,7 +97,7 @@ export async function getStaticPaths (): Promise<any> {
   let paths: any = []
   try {
     const users = await getAllUsersMetadata()
-    paths = users.map(user => ({ params: { uid: user.user_metadata.nick } }))
+    paths = users.map(user => ({ params: { slug: [user.user_metadata.nick] } }))
   } catch (e) {
     console.log('Warning: Error fetching user metadata from Auth provider.  User profile pages will not be pre-generated at build time.')
   }
@@ -105,12 +107,15 @@ export async function getStaticPaths (): Promise<any> {
   }
 }
 
-export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = async ({ params }) => {
-  const { uid } = params ?? { uid: null }
+export const getStaticProps: GetStaticProps<UserHomeProps, {slug: string[]}> = async ({ params }) => {
+  console.log('#params', params)
+  const uid = params?.slug?.[0] ?? null
 
   if (uid == null) {
     return { notFound: true }
   }
+
+  const postId = params?.slug?.[1] ?? null
 
   try {
     const userProfile = await getUserProfileByNick(uid)
@@ -123,6 +128,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
 
     const data = {
       uid,
+      postId,
       mediaList,
       tagsByMediaId,
       userProfile
