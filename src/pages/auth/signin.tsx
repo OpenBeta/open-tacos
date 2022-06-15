@@ -2,7 +2,7 @@ import React from 'react'
 import { getNavBarOffset } from '../../components/Header'
 import Layout from '../../components/layout'
 import { ClientSafeProvider, getProviders, signIn } from 'next-auth/react'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
 import { GetServerSideProps } from 'next'
 import { Button, ButtonVariant } from '../../components/ui/BaseButton'
 
@@ -22,19 +22,19 @@ const errors = {
   EmailSignin: 'Check your email address.',
   CredentialsSignin:
     'Sign in failed. Check the details you provided are correct.',
-  default: 'Unable to sign in.',
+  default: 'Unable to sign in.'
 }
 
-const SignInError = ({ error }): JSX.Element => {
-  const errorMessage = error && (errors[error] ?? errors.default);
+const SignInError = ({ error }: { error: string | string[] }): JSX.Element => {
+  const errorMessage = (errors[(typeof error === 'object') ? error[0] : error] ?? errors.default)
 
   return (
     <>
-      <div className="text-red-800">There was an error signing you in.</div>
-      <div className="mb-5">{errorMessage}</div>
+      <div className='text-red-800'>There was an error signing you in.</div>
+      <div className='mb-5'>{errorMessage}</div>
     </>
   )
-};
+}
 
 function SignInPage ({ providers }: SignInPageProps): JSX.Element {
   const navbarOffset = getNavBarOffset()
@@ -44,12 +44,12 @@ function SignInPage ({ providers }: SignInPageProps): JSX.Element {
       <div className='inline-flex flex-col items-center align-middle justify-center h-full' style={{ height: `calc(100vh - ${navbarOffset}px)` }}>
         <h1>Login</h1>
         {/* Error message */}
-        {error && <SignInError error={error} />}
+        {error != null && error && <SignInError error={error} />}
         {/* Login options */}
         {Object.values(providers).map((provider) => (
           <div key={provider.name}>
             <Button
-              onClick={() => signIn(provider.id)}
+              onClick={async () => await signIn(provider.id)}
               label={
                 <>
                   <span className='mt-0.5 pr-4'>Sign in with {provider.name}</span>
@@ -64,7 +64,7 @@ function SignInPage ({ providers }: SignInPageProps): JSX.Element {
   )
 }
 
-export async function getServerSideProps(context: GetServerSideProps): Promise<{ props: { providers } }>  {
+export async function getServerSideProps (context: GetServerSideProps): Promise<{ props: { providers } }> {
   return { props: { providers: await getProviders() } }
 }
 
