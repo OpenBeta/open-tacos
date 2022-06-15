@@ -28,6 +28,9 @@ export default NextAuth({
   ],
   debug: false,
   events: {},
+  pages: {
+    signIn: '/auth/signin'
+  },
   callbacks: {
     async jwt ({ token, account, profile, user }) {
       if (account?.access_token != null) {
