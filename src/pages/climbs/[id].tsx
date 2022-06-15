@@ -56,8 +56,10 @@ const Body = ({ climb, mediaListWithUsernames }: ClimbPageProps): JSX.Element =>
           isClimbPage
         />
 
-        <div className='md:flex py-6 mt-32'>
+        <div className='py-6 mt-32'>
           <PhotoMontage photoList={mediaListWithUsernames} />
+        </div>
+        <div className='md:flex'>
           <div
             id='Title Information'
             style={{ minWidth: '300px' }}
