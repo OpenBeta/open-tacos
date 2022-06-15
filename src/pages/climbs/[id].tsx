@@ -26,7 +26,7 @@ const ClimbPage: NextPage<ClimbPageProps> = (props) => {
       {!router.isFallback && <PageMeta {...props} />}
       <Layout
         showFilterBar={false}
-        contentContainerClass='content-default with-standard-y-margin h-screen'
+        contentContainerClass='content-default with-standard-y-margin'
       >
         {router.isFallback
           ? (
