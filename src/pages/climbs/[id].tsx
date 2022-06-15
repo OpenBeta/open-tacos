@@ -64,7 +64,7 @@ const Body = ({ climb, mediaListWithUsernames }: ClimbPageProps): JSX.Element =>
             id='Title Information'
             style={{ minWidth: '300px' }}
           >
-            <h1 className='text-4xl md:text-5xl'>{name}</h1>
+            <h1 className='text-4xl md:text-5xl mr-10'>{name}</h1>
             <div className='pl-1'>
               <div
                 className='flex items-center space-x-2 mt-6'
