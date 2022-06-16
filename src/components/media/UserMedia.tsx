@@ -6,6 +6,7 @@ import TagList from './TagList'
 import { MediaTagWithClimb, MediaType } from '../../js/types'
 
 interface UserMediaProps {
+  index: number
   imageInfo: MediaType
   onClick: (props: any) => void
   onTagDeleted: (props?: any) => void
@@ -16,18 +17,18 @@ interface UserMediaProps {
 /**
  * Wrapper for user uploaded photo (maybe short video in the future)
  */
-export default function UserMedia ({ imageInfo, onClick, tagList, onTagDeleted, isAuthorized = false }: UserMediaProps): JSX.Element {
+export default function UserMedia ({ index, imageInfo, onClick, tagList, onTagDeleted, isAuthorized = false }: UserMediaProps): JSX.Element {
   const [hovered, setHover] = useState(false)
   const imgUrl = `${SIRV_CONFIG.baseUrl ?? ''}${imageInfo.filename}?format=webp&thumbnail=300&q=90`
 
   const onClickHandler = useCallback((event) => {
     // setIsOpen(true)
-    onClick({ mouseXY: [event.clientX, event.clientY], imageInfo })
+    onClick({ mouseXY: [event.clientX, event.clientY], imageInfo, index })
   }, [])
 
   return (
     <div
-      className='cursor-pointer block w-[300px] h-[300px] relative'
+      className='cursor-inherit block w-[300px] h-[300px] relative hover:brightness-75'
       onClick={onClickHandler}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}

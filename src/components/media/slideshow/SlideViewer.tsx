@@ -73,8 +73,7 @@ export default function SlideViewer ({
           onTagDeleted={onTagDeleted}
           tagList={tagList} auth={auth}
         />
-}
-
+      }
     />
   )
 }

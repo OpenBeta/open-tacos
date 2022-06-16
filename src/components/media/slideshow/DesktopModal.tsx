@@ -31,7 +31,7 @@ export default function DesktopModal ({
       open={isOpen}
       onClose={onClose}
       as='div'
-      className='fixed inset-0 z-10 flex items-center justify-center overflow-y-auto'
+      className='fixed inset-0 z-10 hidden lg:flex items-center justify-center overflow-y-auto'
     >
       <Dialog.Overlay className='pointer-events-none fixed inset-0 bg-black opacity-60' />
       <Dialog.Panel className='relative flex items-center w-full h-full bg-black max-w-screen-2xl'>

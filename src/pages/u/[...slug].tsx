@@ -57,7 +57,8 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, mediaList: 
         contentContainerClass='content-default with-standard-y-margin'
         showFilterBar={false}
       >
-        <div className='max-w-screen-2xl w-full mx-auto'>
+        <div className='max-w-screen-2xl mx-auto '>
+          {/* w-full mx-auto */}
           {router.isFallback && <div>Loading...</div>}
 
           {userProfile != null && <PublicProfile userProfile={userProfile} />}
@@ -72,7 +73,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, mediaList: 
               </ul>
             </div>)}
 
-          <hr className='my-8' />
+          <hr className='mt-16' />
 
           {currentMediaList?.length >= 0 &&
             <ImageTable

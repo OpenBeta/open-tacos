@@ -1,6 +1,6 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useRef } from 'react'
 import { Dictionary } from 'underscore'
-
+import { TagIcon } from '@heroicons/react/outline'
 import UserMedia from './UserMedia'
 import ImageTagger from './ImageTagger'
 import useImageTagHelper from './useImageTagHelper'
@@ -10,6 +10,8 @@ import { userMediaStore, revalidateServePage } from '../../js/stores/media'
 import SlideViewer from './slideshow/SlideViewer'
 import { TinyProfile } from '../users/PublicProfile'
 import { WithPermission } from '../../js/types/User'
+import Bar from '../ui/Bar'
+import Toggle from '../ui/Toggle'
 
 interface ImageTableProps {
   uid: string
@@ -27,6 +29,7 @@ export default function ImageTable ({ uid, auth, userProfile, initialImageList, 
 
   const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
   const [selectedMediaId, setIsOpen] = useState(-1)
+  const [tagModeOn, setTagMode] = useState<boolean>(false)
 
   const imageHelper = useImageTagHelper()
   // eslint-disable-next-line
@@ -92,6 +95,21 @@ export default function ImageTable ({ uid, auth, userProfile, initialImageList, 
     await userMediaStore.set.addImage(uid, uuid, imageUrl, true, true)
   }
 
+  // we need to store tagMode in a ref to give the image's onclick access
+  // to the latest value.
+  // See https://stackoverflow.com/questions/57847594/react-hooks-accessing-up-to-date-state-from-within-a-callback
+  const stateRef = useRef<boolean>()
+  stateRef.current = tagModeOn
+
+  const imageOnClickHandler = useCallback((props: any): void => {
+    if (stateRef?.current ?? false) {
+      onClick(props)
+    } else {
+      const { index } = props
+      setIsOpen(index)
+    }
+  }, [])
+
   const { uuid } = userProfile
 
   // When logged-in user has fewer than 3 photos,
@@ -102,19 +120,30 @@ export default function ImageTable ({ uid, auth, userProfile, initialImageList, 
 
   return (
     <>
-      <div className='flex flex-row flex-wrap md:gap-8 justify-center'>
+      <Bar layoutClass={Bar.JUSTIFY_LEFT} paddingX={Bar.PX_DEFAULT_LG} className='space-x-4'>
+        {isAuthorized &&
+          <Toggle
+            enabled={tagModeOn}
+            label={
+              <div className='flex items-center space-x-1'>
+                <TagIcon className='w-5 h-5' /><span>Tag photo</span>
+              </div>
+            }
+            onClick={() => setTagMode(current => !current)}
+          />}
+        {tagModeOn && <span className='text-secondary align-text-bottom'>Power tagging mode is <b>On</b>.  Click on the photo to tag a climb.</span>}
+      </Bar>
+      <div className={`block md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-3 2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
 
         {imageList.map((imageInfo, index) => {
           const tags = tagsByMediaId?.[imageInfo.mediaId] ?? []
           return (
             <UserMedia
               key={imageInfo.mediaId}
+              index={index}
               tagList={tags}
               imageInfo={imageInfo}
-              onClick={() => {
-                // onClick()
-                setIsOpen(index)
-              }}
+              onClick={imageOnClickHandler}
               onTagDeleted={onDeletedHandler}
               isAuthorized={isAuthorized}
             />
