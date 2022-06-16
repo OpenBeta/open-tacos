@@ -25,17 +25,18 @@ interface UserHomeProps {
 
 const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, mediaList: serverSideList, tagsByMediaId, userProfile }) => {
   const router = useRouter()
-  const { authorized } = usePermissions({ ownerProfileOnPage: userProfile })
+  const auth = usePermissions({ ownerProfileOnPage: userProfile })
 
+  const { isAuthorized } = auth
   useEffect(() => {
-    if (authorized) {
+    if (isAuthorized) {
       // Load server side image data into local state for client-side add/remove
       userMediaStore.set.imageList(serverSideList)
     }
-  }, [authorized])
+  }, [isAuthorized])
 
   const clientSideList = userMediaStore.use.imageList()
-  const currentMediaList = authorized ? clientSideList : serverSideList
+  const currentMediaList = isAuthorized ? clientSideList : serverSideList
 
   const { author, pageTitle, pageImages } = useUserProfileSeo({
     username: uid,
@@ -43,7 +44,6 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, mediaList: 
     imageList: serverSideList
   })
 
-  console.log('#postId', postId)
   return (
     <>
       <SeoTags
@@ -62,7 +62,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, mediaList: 
 
           {userProfile != null && <PublicProfile userProfile={userProfile} />}
 
-          {authorized && (
+          {isAuthorized && (
             <div className='flex justify-center mt-8 text-secondary text-sm'>
               <ul className='list-disc'>
                 {currentMediaList?.length < 3 &&
@@ -76,7 +76,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, mediaList: 
 
           {currentMediaList?.length >= 0 &&
             <ImageTable
-              isAuthorized={authorized}
+              auth={auth}
               uid={uid}
               userProfile={userProfile}
               initialImageList={currentMediaList}
@@ -84,7 +84,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, mediaList: 
             />}
           <hr className='my-8' />
 
-          {!authorized && <div className='mx-auto text-sm text-secondary text-center'>All photos are copyrighted by their respective owners.  All Rights Reserved.</div>}
+          {!isAuthorized && <div className='mx-auto text-sm text-secondary text-center'>All photos are copyrighted by their respective owners.  All Rights Reserved.</div>}
         </div>
       </Layout>
     </>

@@ -1,10 +1,29 @@
-import { PlusIcon } from '@heroicons/react/outline'
 import { signIn } from 'next-auth/react'
+import { PlusIcon } from '@heroicons/react/outline'
+
+import { WithPermission } from '../../../js/types/User'
 import { Button, ButtonVariant } from '../../ui/BaseButton'
-export default function AddTagCta (): JSX.Element {
+
+interface AddTagCtaProps {
+  auth: WithPermission
+  tagCount: number
+}
+export default function AddTagCta ({ auth, tagCount }: AddTagCtaProps): JSX.Element | null {
+  const { isAuthenticated, isAuthorized } = auth
+  if (isAuthorized) return null // the user is looking their own page
+  let message: any
+  if (tagCount === 0 && !isAuthenticated) {
+    message = Messages.TAG_YOUR_OWN
+  } else if (isAuthenticated && !isAuthorized) {
+    message = Messages.TO_YOUR_PROFILE
+    message.href = '/api/user/me'
+  } else {
+    message = Messages.LOGIN
+  }
+
   return (
     <div className='text-sm px-4 py-6 bg-ob-primary bg-opacity-90'>
-      <div className='font-bold mb-2'>Your photo?</div>
+      <div className='font-bold mb-2'>{message.heading}</div>
       <div className='flex items-center space-x-2'>
         <Button
           label={
@@ -15,9 +34,11 @@ export default function AddTagCta (): JSX.Element {
           onClick={onClickHandler}
         />
         <Button
-          label='Log in to tag this climb'
+          label={message.cta}
           variant={ButtonVariant.SOLID_DEFAULT}
-          onClick={onClickHandler}
+          {...message?.href != null
+            ? { href: message.href }
+            : { onClick: { onClickHandler } }}
         />
       </div>
     </div>
@@ -25,3 +46,26 @@ export default function AddTagCta (): JSX.Element {
 }
 
 const onClickHandler = async (): Promise<void> => await signIn('auth0')
+
+const Messages = {
+  TAG_YOUR_OWN: {
+    heading: 'Your photo?',
+    cta: 'Log in to tag this climb',
+    onClick: onClickHandler
+  },
+
+  LOGIN:
+  {
+    heading: '',
+    cta: 'Log in to share a photo',
+    onClick: onClickHandler
+  },
+
+  TO_YOUR_PROFILE:
+  {
+    heading: 'Have a photo to share?',
+    cta: 'Go to your profile',
+    onClick: () => {}
+  }
+
+}

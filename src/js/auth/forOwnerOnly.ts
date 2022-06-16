@@ -11,8 +11,8 @@ import usePermissions from '../hooks/auth/usePermissions'
  */
 const forOwnerOnly = <P extends WithOwnerProfile>(Component: (props: P) => JSX.Element): (props: P) => React.FunctionComponentElement<P> | null => {
   const AuthenticatedFC = (props: P): null | React.FunctionComponentElement<P> => {
-    const { authorized } = usePermissions({ ownerProfileOnPage: props.ownerProfile })
-    if (authorized) {
+    const { isAuthorized } = usePermissions({ ownerProfileOnPage: props.ownerProfile })
+    if (isAuthorized) {
       return React.createElement(Component, props)
     }
     return null

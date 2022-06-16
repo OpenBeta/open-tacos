@@ -9,19 +9,20 @@ import InitialUploadCTA from './InitialUploadCTA'
 import { userMediaStore, revalidateServePage } from '../../js/stores/media'
 import SlideViewer from './slideshow/SlideViewer'
 import { TinyProfile } from '../users/PublicProfile'
+import { WithPermission } from '../../js/types/User'
 
 interface ImageTableProps {
-  isAuthorized: boolean
   uid: string
   userProfile: IUserProfile
   initialImageList: MediaType[]
   initialTagsByMediaId: Dictionary<MediaTagWithClimb[]>
+  auth: WithPermission
 }
 
 /**
  * Image table on user profile
  */
-export default function ImageTable ({ uid, isAuthorized, userProfile, initialImageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
+export default function ImageTable ({ uid, auth, userProfile, initialImageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
   const imageList = initialImageList
 
   const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
@@ -33,6 +34,7 @@ export default function ImageTable ({ uid, isAuthorized, userProfile, initialIma
 
   if (imageList == null) return null
 
+  const { isAuthorized } = auth
   /**
    * Run after a tag has sucessfully added to the backend
    * Todo: move tag handling out of local state and into a global store
@@ -123,10 +125,12 @@ export default function ImageTable ({ uid, isAuthorized, userProfile, initialIma
           <InitialUploadCTA key={index} onUploadFinish={onUploadHandler} />)}
 
       </div>
+
       {isAuthorized && imageList.length > 0 &&
         <ImageTagger
           {...imageHelper} onCompleted={onCompletedHandler}
         />}
+
       <SlideViewer
         isOpen={selectedMediaId >= 0}
         initialIndex={selectedMediaId}
@@ -136,7 +140,7 @@ export default function ImageTable ({ uid, isAuthorized, userProfile, initialIma
         onClose={() => setIsOpen(-1)}
         onTagDeleted={onDeletedHandler}
         onTagAdded={onCompletedHandler}
-        isAuthorized={isAuthorized}
+        auth={auth}
       />
     </>
   )
