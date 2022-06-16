@@ -41,7 +41,7 @@
     "js-yaml": "^4.1.0",
     "mapbox-gl": "^2.7.0",
     "next": "^12.1.7-canary.23",
-    "next-auth": "^4.3.4",
+    "next-auth": "^4.5.0",
     "nprogress": "^0.2.0",
     "query-string": "^7.0.1",
     "raw-body": "^2.5.1",

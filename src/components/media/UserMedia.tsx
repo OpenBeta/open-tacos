@@ -39,7 +39,13 @@ export default function UserMedia ({ imageInfo, onClick, tagList, onTagDeleted, 
       />
       {tagList?.length > 0 &&
         <div className='absolute inset-0 flex flex-col justify-end'>
-          <TagList hovered={hovered} list={tagList} onDeleted={onTagDeleted} isAuthorized={isAuthorized} />
+          <TagList
+            hovered={hovered}
+            list={tagList}
+            onDeleted={onTagDeleted}
+            isAuthorized={isAuthorized}
+            className='px-2'
+          />
         </div>}
     </div>
   )

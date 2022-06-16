@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
-import { XCircleIcon } from '@heroicons/react/outline'
+import { XIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 import { useMutation } from '@apollo/client'
 
@@ -13,9 +13,10 @@ interface TagsProps {
   list: MediaTagWithClimb[]
   onDeleted: (props?: any) => void
   isAuthorized?: boolean
+  className?: string
 }
 
-export default function TagList ({ hovered, list, onDeleted, isAuthorized = false }: TagsProps): JSX.Element {
+export default function TagList ({ hovered, list, onDeleted, isAuthorized = false, className = '' }: TagsProps): JSX.Element {
   const [removeTag] = useMutation(
     MUTATION_REMOVE_MEDIA_TAG, {
       client: graphqlClient,
@@ -34,8 +35,10 @@ export default function TagList ({ hovered, list, onDeleted, isAuthorized = fals
   return (
     <div className={
           classNames(
-            'text-xs px-1.5 py-1 flex flex-wrap justify-start space-x-2 space-y-0.5 bg-neutral-50 bg-opacity-20',
-            hovered ? 'bg-opacity-40' : '')
+            'text-xs flex flex-wrap justify-start space-x-2 space-y-0.5 bg-neutral-50 bg-opacity-20',
+            hovered ? 'bg-opacity-40' : '',
+            className
+          )
           }
     >
       {list.map((tag: MediaTagWithClimb) =>
@@ -61,8 +64,8 @@ export const Tag = ({ tag, highlighted, onDelete, isAuthorized = false }: PhotoT
   const { climb } = tag
   return (
     <span className={classNames(
-      'border-neutral-400 bg-neutral-200 border rounded-xl max-w-[10rem] inline-flex items-center',
-      highlighted ? 'bg-opacity-100' : 'bg-opacity-30'
+      'px-1 py-0.5 border-neutral-400 bg-neutral-200 border rounded-xl max-w-[10rem] inline-flex items-center',
+      highlighted ? 'bg-opacity-100 stroke-gray-800' : 'bg-opacity-30 stroke-neutral-400'
     )}
     >
       <Link href={`/climbs/${climb.id}`} passHref>
@@ -74,7 +77,7 @@ export const Tag = ({ tag, highlighted, onDelete, isAuthorized = false }: PhotoT
           e.stopPropagation()
         }}
         >
-          <XCircleIcon className='w-5 h-5' />
+          <XIcon className='cursor-pointer w-5 h-5 stroke-1 stroke-inherit hover:stroke-2' />
         </span>}
     </span>
   )

@@ -7,7 +7,7 @@ import useImageTagHelper from './useImageTagHelper'
 import { MediaTagWithClimb, MediaType, IUserProfile } from '../../js/types'
 import InitialUploadCTA from './InitialUploadCTA'
 import { userMediaStore, revalidateServePage } from '../../js/stores/media'
-import SimpleModal from '../../components/ui/SimpleModal'
+import SlideViewer from './slideshow/SlideViewer'
 import { TinyProfile } from '../users/PublicProfile'
 
 interface ImageTableProps {
@@ -35,6 +35,8 @@ export default function ImageTable ({ uid, isAuthorized, userProfile, initialIma
 
   /**
    * Run after a tag has sucessfully added to the backend
+   * Todo: move tag handling out of local state and into a global store
+   * to reduce prop drilling
    */
   const onCompletedHandler = useCallback(async (data?: any) => {
     const { setTag } = data
@@ -92,7 +94,9 @@ export default function ImageTable ({ uid, isAuthorized, userProfile, initialIma
 
   // When logged-in user has fewer than 3 photos,
   // create empty slots for the call-to-action upload component.
-  const placeholders = imageList.length < 3 && isAuthorized ? [...Array(3 - imageList.length).keys()] : []
+  const placeholders = imageList.length < 3 && isAuthorized
+    ? [...Array(3 - imageList.length).keys()]
+    : []
 
   return (
     <>
@@ -123,12 +127,16 @@ export default function ImageTable ({ uid, isAuthorized, userProfile, initialIma
         <ImageTagger
           {...imageHelper} onCompleted={onCompletedHandler}
         />}
-      <SimpleModal
+      <SlideViewer
         isOpen={selectedMediaId >= 0}
-        onClose={() => setIsOpen(-1)}
         initialIndex={selectedMediaId}
         imageList={imageList}
+        tagsByMediaId={tagsByMediaId}
         userinfo={<TinyProfile userProfile={userProfile} />}
+        onClose={() => setIsOpen(-1)}
+        onTagDeleted={onDeletedHandler}
+        onTagAdded={onCompletedHandler}
+        isAuthorized={isAuthorized}
       />
     </>
   )
