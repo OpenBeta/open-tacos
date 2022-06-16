@@ -145,7 +145,7 @@ export default function ImageTable ({ uid, auth, userProfile, initialImageList, 
               imageInfo={imageInfo}
               onClick={imageOnClickHandler}
               onTagDeleted={onDeletedHandler}
-              isAuthorized={isAuthorized}
+              isAuthorized={isAuthorized && (stateRef?.current ?? false)}
             />
           )
         })}

@@ -11,28 +11,33 @@ export default function ResponsiveImage ({ mediaUrl, isHero = true }): JSX.Eleme
     setLoading(true)
   }, [mediaUrl])
   return (
-    <Transition
-      show
-      enter='transition duration-500 ease-out'
-      enterFrom='transform opacity-0'
-      enterTo='transform opacity-100'
-    >
-      <Image
-        src={mediaUrl}
-        loader={DefaultLoader}
-        quality={90}
-        layout='fill'
-        sizes='100vw'
-        objectFit='contain'
-        priority={isHero}
-        onLoadingComplete={() => setLoading(false)}
-      />
-      <div className='absolute w-full h-full flex items-center'>
-        {isLoading &&
-          <div className='mx-auto'>
-            <DotsHorizontalIcon className='text-gray-200 w-12 h-12 animate-pulse' />
-          </div>}
-      </div>
-    </Transition>
+    <>
+
+      <Transition
+        show
+        enter='transition duration-500 ease-out'
+        enterFrom='transform opacity-0'
+        enterTo='transform opacity-100'
+        as='div'
+        className='block relative w-full h-full aspect-square'
+      >
+        <Image
+          src={mediaUrl}
+          loader={DefaultLoader}
+          quality={90}
+          layout='fill'
+          sizes='100vw'
+          objectFit='contain'
+          priority={isHero}
+          onLoadingComplete={() => setLoading(false)}
+        />
+        <div className='absolute w-full h-full flex items-center'>
+          {isLoading &&
+            <div className='mx-auto'>
+              <DotsHorizontalIcon className='text-gray-200 w-16 h-16 animate-pulse' />
+            </div>}
+        </div>
+      </Transition>
+    </>
   )
 }

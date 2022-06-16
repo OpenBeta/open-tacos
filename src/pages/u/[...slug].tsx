@@ -109,7 +109,6 @@ export async function getStaticPaths (): Promise<any> {
 }
 
 export const getStaticProps: GetStaticProps<UserHomeProps, {slug: string[]}> = async ({ params }) => {
-  console.log('#params', params)
   const uid = params?.slug?.[0] ?? null
 
   if (uid == null) {
