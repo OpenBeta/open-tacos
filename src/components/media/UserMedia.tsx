@@ -1,11 +1,15 @@
 import { useState, useCallback } from 'react'
-import Image from 'next/image'
+import classNames from 'classnames'
 
-import { SIRV_CONFIG } from '../../js/sirv/SirvClient'
+import { useResponsive } from '../../js/hooks'
 import TagList from './TagList'
 import { MediaTagWithClimb, MediaType } from '../../js/types'
+import ResponsiveImage from '../media/slideshow/ResponsiveImage'
+import { MobileLoader, DesktopPreviewLoader } from '../../js/sirv/util'
 
+const MOBILE_IMAGE_MAX_WIDITH = 914
 interface UserMediaProps {
+  index: number
   imageInfo: MediaType
   onClick: (props: any) => void
   onTagDeleted: (props?: any) => void
@@ -14,32 +18,51 @@ interface UserMediaProps {
 }
 
 /**
- * Wrapper for user uploaded photo (maybe short video in the future)
+ * Wrapper for user uploaded photo (maybe a short video in the future)
+ * @param onClick Desktop only callback
  */
-export default function UserMedia ({ imageInfo, onClick, tagList, onTagDeleted, isAuthorized = false }: UserMediaProps): JSX.Element {
+export default function UserMedia ({ index, imageInfo, onClick, tagList, onTagDeleted, isAuthorized = false }: UserMediaProps): JSX.Element {
   const [hovered, setHover] = useState(false)
-  const imgUrl = `${SIRV_CONFIG.baseUrl ?? ''}${imageInfo.filename}?format=webp&thumbnail=300&q=90`
 
   const onClickHandler = useCallback((event) => {
-    onClick({ mouseXY: [event.clientX, event.clientY], imageInfo })
+    onClick({ mouseXY: [event.clientX, event.clientY], imageInfo, index })
+    event.stopPropagation()
   }, [])
 
+  const { isDesktop } = useResponsive()
+  const loader = isDesktop ? DesktopPreviewLoader : MobileLoader
+
+  const onClickFn = isDesktop ? { onClick: onClickHandler } : null
+
   return (
-    <div
-      className='cursor-pointer block w-[300px] h-[300px] relative'
-      onClick={onClickHandler}
+    <figure
+      className={
+        classNames(
+          'cursor-inherit block relative',
+          isDesktop ? 'w-[300px] h-[300px] hover:brightness-75' : 'max-w-screen-lg py-12'
+        )
+      }
+      {...onClickFn}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <Image
-        src={imgUrl}
-        width={300}
-        height={300}
-      />
+      {isDesktop
+        ? (<ResponsiveImage mediaUrl={imageInfo.filename} isHero={false} loader={loader} />)
+        : (<img
+            src={loader({ src: imageInfo.filename, width: MOBILE_IMAGE_MAX_WIDITH })}
+            width={MOBILE_IMAGE_MAX_WIDITH}
+            sizes='100vw'
+           />)}
       {tagList?.length > 0 &&
-        <div className='absolute inset-0 flex flex-col justify-end'>
-          <TagList hovered={hovered} list={tagList} onDeleted={onTagDeleted} isAuthorized={isAuthorized} />
-        </div>}
-    </div>
+        <figcaption className='absolute inset-0 flex flex-col justify-end'>
+          <TagList
+            hovered={hovered}
+            list={tagList}
+            onDeleted={onTagDeleted}
+            isAuthorized={isAuthorized}
+            className='px-2'
+          />
+        </figcaption>}
+    </figure>
   )
 }

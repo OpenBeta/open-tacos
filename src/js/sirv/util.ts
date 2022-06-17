@@ -9,8 +9,15 @@ export const DefaultLoader = ({ src, width, quality }: ImageLoaderProps): string
 }
 
 /**
+ * Desktop preview loader
+ */
+export const DesktopPreviewLoader = ({ src, width, quality }: ImageLoaderProps): string => {
+  return `${SIRV_CONFIG.baseUrl ?? ''}${src}?format=webp&thumbnail=300&q=${quality ?? '90'}`
+}
+
+/**
  * Custom NextJS image loader for mobile
  */
 export const MobileLoader = ({ src, width, quality }: ImageLoaderProps): string => {
-  return `${SIRV_CONFIG.baseUrl ?? ''}${src}?format=webp&w=640&q=${quality ?? '90'}`
+  return `${SIRV_CONFIG.baseUrl ?? ''}${src}?format=webp&w=914&q=${quality ?? '90'}`
 }

@@ -8,13 +8,14 @@ interface XSearchProps {
   isMobile?: boolean
   placeholder?: string
   onSelect: (props: TypesenseDocumentType) => void
+  className?: string
 }
 
 /**
  * Extended search widget
  * @param XSearchProps
  */
-export default function ClimbSearchForTagging ({ isMobile = true, placeholder = 'Climb search', onSelect }: XSearchProps): JSX.Element {
+export default function ClimbSearchForTagging ({ isMobile = true, placeholder = 'Climb search', onSelect, className }: XSearchProps): JSX.Element {
   return (
     <Autocomplete
       id={CUSTOM_CLASSES.root}
@@ -24,6 +25,7 @@ export default function ClimbSearchForTagging ({ isMobile = true, placeholder = 
         return await Promise.all([await TypesenseClimbNameSource(query, onSelect)])
       }}
       classNames={CUSTOM_CLASSES}
+      containerClassname={className}
       render={({ elements }, root) => {
         const { climbsForTagging } = elements
         reactRender(
@@ -33,6 +35,8 @@ export default function ClimbSearchForTagging ({ isMobile = true, placeholder = 
   )
 }
 
+// For customization see global.css
+// Use component's className layout/margin, etc
 const CUSTOM_CLASSES = {
   panel: 'tag-search-panel',
   item: 'tag-search-item',

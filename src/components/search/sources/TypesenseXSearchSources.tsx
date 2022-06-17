@@ -25,11 +25,11 @@ export const xsearchTypesense = async (query: string): Promise<Array<Autocomplet
     getItemUrl: ({ item }) => item.climbUUID,
 
     onSelect ({ item, setQuery, setIsOpen, refresh }) {
-      console.log('#onSelect', item)
+      // console.log('#onSelect', item)
     },
 
     onActive ({ item, setQuery, setIsOpen, refresh }) {
-      console.log('#onActive', item)
+      // console.log('#onActive', item)
     },
 
     templates: {
