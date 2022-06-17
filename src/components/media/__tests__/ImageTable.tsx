@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { groupBy } from 'underscore'
 
 import type ImageTableType from '../ImageTable'
@@ -30,6 +31,7 @@ beforeAll(async () => {
 })
 
 test('ImageTable can render', async () => {
+  const user = userEvent.setup()
   /* Replicate getStaticProps() in /pages/[uid].tsx */
   const { mediaList } = await sirvClient.getUserImages('coolusername', 'verysecrettoken')
   const tagArray = await graphApi.getTagsByMediaId(['not important'])
@@ -44,7 +46,21 @@ test('ImageTable can render', async () => {
       initialTagsByMediaId={tagsByMediaId}
     />)
 
-  expect(screen.queryAllByRole('img').length).toBe(mediaList.length)
+  const images = screen.getAllByRole('img')
+  expect(images.length).toBe(mediaList.length)
+  await user.click(screen.getAllByRole('img')[0])
+
+  // rerender(<ImageTable
+  //   auth={{ isAuthenticated: true, isAuthorized: true }}
+  //   uid='coolusername'
+  //   userProfile={userProfile}
+  //   initialImageList={mediaList}
+  //   initialTagsByMediaId={tagsByMediaId}
+  //          />)
+
+  screen.debug()
+
+  await waitFor(() => expect(screen.getByRole('dialog')).not.toBeNull())
 })
 
 Object.defineProperty(window, 'matchMedia', {
@@ -59,4 +75,15 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn()
   }))
+})
+
+beforeEach(() => {
+  // IntersectionObserver isn't available in test environment
+  const mockIntersectionObserver = jest.fn()
+  mockIntersectionObserver.mockReturnValue({
+    observe: () => null,
+    unobserve: () => null,
+    disconnect: () => null
+  })
+  window.IntersectionObserver = mockIntersectionObserver
 })

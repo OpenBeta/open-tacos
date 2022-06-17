@@ -118,6 +118,7 @@ export default function ImageTable ({ uid, auth, userProfile, initialImageList, 
     ? [...Array(3 - imageList.length).keys()]
     : []
 
+  console.log('##### selectedMediaId', selectedMediaId)
   return (
     <>
       <Bar layoutClass={Bar.JUSTIFY_LEFT} paddingX={Bar.PX_DEFAULT_LG} className='space-x-4'>

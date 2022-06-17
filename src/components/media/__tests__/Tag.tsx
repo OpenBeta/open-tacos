@@ -37,7 +37,6 @@ test('Default tag', () => {
 
 test('Tag with permission to delete', async () => {
   const user = userEvent.setup()
-
   const onDeleteFn = jest.fn()
   render(
     <Tag
