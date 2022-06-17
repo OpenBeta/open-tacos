@@ -232,6 +232,7 @@ const fetchSortedClimbsInArea = async (uuid: string): Promise<Climb[]> => {
         uuid,
         id,
         metadata {
+          climbId,
           left_right_index
         }
       }
