@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { Climb, MediaBaseTag } from '../../js/types'
+import { AreaType, Climb, MediaBaseTag } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
@@ -17,6 +17,8 @@ import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 interface ClimbPageProps {
   climb: Climb
   mediaListWithUsernames: MediaBaseTag[]
+  leftClimb: Climb | null
+  rightClimb: Climb | null
 }
 
 const ClimbPage: NextPage<ClimbPageProps> = (props) => {
@@ -177,14 +179,67 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = asy
     console.log('Error when trying to add username to image data', e)
   }
 
+  const sortedClimbsInArea = await fetchSortedClimbsInArea(rs.data.climb.ancestors[rs.data.climb.ancestors.length - 1])
+  let leftClimb = null
+  let rightClimb = null
+
+  for (const [index, climb] of sortedClimbsInArea.entries()) {
+    if (climb.id === params.id) {
+      leftClimb = sortedClimbsInArea[index - 1] !== undefined ? sortedClimbsInArea[index - 1] : null
+      rightClimb = sortedClimbsInArea[index + 1] !== undefined ? sortedClimbsInArea[index + 1] : null
+    }
+  }
+
+  console.log(leftClimb, rightClimb)
+
   // Pass climb data to the page via props
   return {
     props: {
       climb: rs.data.climb,
-      mediaListWithUsernames
+      mediaListWithUsernames,
+      leftClimb,
+      rightClimb
     },
     revalidate: 600
   }
+}
+
+/**
+ * Fetch and sort the climbs in the area from left to right
+ */
+const fetchSortedClimbsInArea = async (uuid: string): Promise<Climb[]> => {
+  const query = gql`query SortedNearbyClimbsByAreaUUID($uuid: ID) {
+    area(uuid: $uuid) {
+      uuid,
+      climbs {
+        uuid,
+        id,
+        metadata {
+          left_right_index
+        }
+      }
+    }
+  }`
+
+  const rs = await graphqlClient.query<{area: AreaType}>({
+    query,
+    variables: {
+      uuid: uuid
+    }
+  })
+
+  if (rs.data == null || rs.data.area == null) {
+    return []
+  }
+
+  // Copy readonly array so we can sort
+  const routes = [...rs.data.area.climbs]
+
+  return routes.sort(
+    (a, b) =>
+      parseInt(a.metadata.left_right_index, 10) -
+      parseInt(b.metadata.left_right_index, 10)
+  )
 }
 
 /**
