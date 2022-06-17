@@ -5,7 +5,16 @@ import { DotsHorizontalIcon } from '@heroicons/react/outline'
 
 import { DefaultLoader } from '../../../js/sirv/util'
 
-export default function ResponsiveImage ({ mediaUrl, isHero = true }): JSX.Element {
+interface ResponsiveImageProps {
+  mediaUrl: string
+  isHero: boolean
+  loader?: null | ((props: any) => string)
+}
+
+/**
+ * NextJS image wrapper with loading indicator
+ */
+export default function ResponsiveImage ({ mediaUrl, isHero = true, loader = null }: ResponsiveImageProps): JSX.Element {
   const [isLoading, setLoading] = useState<boolean>(true)
   useEffect(() => {
     setLoading(true)
@@ -21,7 +30,7 @@ export default function ResponsiveImage ({ mediaUrl, isHero = true }): JSX.Eleme
     >
       <Image
         src={mediaUrl}
-        loader={DefaultLoader}
+        loader={loader ?? DefaultLoader}
         quality={90}
         layout='fill'
         sizes='100vw'

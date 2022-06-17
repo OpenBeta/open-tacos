@@ -5,7 +5,7 @@ import { groupBy, Dictionary } from 'underscore'
 
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
-import ImageTable from '../../components/media/ImageTable'
+import UserGallery from '../../components/media/UserGallery'
 import { getTagsByMediaId } from '../../js/graphql/api'
 import { getUserImages } from '../../js/sirv/SirvClient'
 import { MediaTagWithClimb, IUserProfile, MediaType } from '../../js/types'
@@ -76,7 +76,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, mediaList: 
           <hr className='mt-16' />
 
           {currentMediaList?.length >= 0 &&
-            <ImageTable
+            <UserGallery
               auth={auth}
               uid={uid}
               userProfile={userProfile}
