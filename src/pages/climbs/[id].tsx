@@ -26,7 +26,7 @@ const ClimbPage: NextPage<ClimbPageProps> = (props) => {
       {!router.isFallback && <PageMeta {...props} />}
       <Layout
         showFilterBar={false}
-        contentContainerClass='content-default with-standard-y-margin h-screen'
+        contentContainerClass='content-default with-standard-y-margin'
       >
         {router.isFallback
           ? (
@@ -56,7 +56,7 @@ const Body = ({ climb, mediaListWithUsernames }: ClimbPageProps): JSX.Element =>
           isClimbPage
         />
 
-        <div className='py-6 mt-32'>
+        <div className='py-6'>
           <PhotoMontage photoList={mediaListWithUsernames} />
         </div>
         <div className='md:flex'>
@@ -64,7 +64,7 @@ const Body = ({ climb, mediaListWithUsernames }: ClimbPageProps): JSX.Element =>
             id='Title Information'
             style={{ minWidth: '300px' }}
           >
-            <h1 className='text-4xl md:text-5xl'>{name}</h1>
+            <h1 className='text-4xl md:text-5xl mr-10'>{name}</h1>
             <div className='pl-1'>
               <div
                 className='flex items-center space-x-2 mt-6'
