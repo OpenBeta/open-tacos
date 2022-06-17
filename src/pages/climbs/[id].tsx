@@ -14,6 +14,7 @@ import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { useSwipeable } from 'react-swipeable'
 
 interface ClimbPageProps {
   climb: Climb
@@ -52,16 +53,23 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
   const { climbId } = metadata
   useState([leftClimb, rightClimb])
 
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => {
+      leftClimb !== null && router.push(`/climbs/${leftClimb.id}`)
+    },
+    onSwipedRight: () => {
+      rightClimb !== null && router.push(`/climbs/${rightClimb.id}`)
+    }
+  })
   useHotkeys('left', () => {
     leftClimb !== null && router.push(`/climbs/${leftClimb.id}`)
   }, [leftClimb])
   useHotkeys('right', () => {
-    console.log(rightClimb)
     rightClimb !== null && router.push(`/climbs/${rightClimb.id}`)
   }, [rightClimb])
 
   return (
-    <div className='lg:flex lg:justify-center w-full'>
+    <div className='lg:flex lg:justify-center w-full' {...swipeHandlers}>
       <div className='px-4 max-w-screen-xl'>
         <BreadCrumbs
           pathTokens={pathTokens}
@@ -191,12 +199,12 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = asy
   }
 
   const sortedClimbsInArea = await fetchSortedClimbsInArea(rs.data.climb.ancestors[rs.data.climb.ancestors.length - 1])
-  let leftClimb = null
-  let rightClimb = null
+  let leftClimb
+  let rightClimb
 
   for (const [index, climb] of sortedClimbsInArea.entries()) {
     if (climb.id === params.id) {
-      leftClimb = sortedClimbsInArea[index - 1] !== undefined ? sortedClimbsInArea[index - 1] : null
+      leftClimb = (sortedClimbsInArea[index - 1] !== undefined) ? sortedClimbsInArea[index - 1] : null
       rightClimb = sortedClimbsInArea[index + 1] !== undefined ? sortedClimbsInArea[index + 1] : null
     }
   }
