@@ -56,7 +56,7 @@ const Body = ({ climb, mediaListWithUsernames }: ClimbPageProps): JSX.Element =>
           isClimbPage
         />
 
-        <div className='py-6 mt-32'>
+        <div className='py-6'>
           <PhotoMontage photoList={mediaListWithUsernames} />
         </div>
         <div className='md:flex'>
