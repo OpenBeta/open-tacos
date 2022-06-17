@@ -11,6 +11,7 @@ interface AddTagCtaProps {
 export default function AddTagCta ({ auth, tagCount }: AddTagCtaProps): JSX.Element | null {
   const { isAuthenticated, isAuthorized } = auth
   if (isAuthorized) return null // the user is looking their own page
+
   let message: any
   if (tagCount === 0 && !isAuthenticated) {
     message = Messages.TAG_YOUR_OWN
@@ -21,6 +22,9 @@ export default function AddTagCta ({ auth, tagCount }: AddTagCtaProps): JSX.Elem
     message = Messages.LOGIN
   }
 
+  const action = message?.href != null
+    ? { href: message.href }
+    : { onClick: onClickHandler }
   return (
     <div className='text-sm px-4 py-6 bg-ob-primary bg-opacity-90'>
       <div className='font-bold mb-2'>{message.heading}</div>
@@ -31,14 +35,12 @@ export default function AddTagCta ({ auth, tagCount }: AddTagCtaProps): JSX.Elem
               <PlusIcon className='w-8 h-8 stroke-1' />
             </div>
             }
-          onClick={onClickHandler}
+          {...action}
         />
         <Button
           label={message.cta}
           variant={ButtonVariant.SOLID_DEFAULT}
-          {...message?.href != null
-            ? { href: message.href }
-            : { onClick: { onClickHandler } }}
+          {...action}
         />
       </div>
     </div>

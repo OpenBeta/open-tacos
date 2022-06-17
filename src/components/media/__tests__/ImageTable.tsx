@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { groupBy } from 'underscore'
 
@@ -24,43 +24,88 @@ const userProfile: IUserProfile = {
 
 let ImageTable: typeof ImageTableType
 
-beforeAll(async () => {
+describe('Image gallery', () => {
+  let mediaList
+  let tagsByMediaId
+
+  beforeAll(async () => {
   // why async import?  see https://github.com/facebook/jest/issues/10025#issuecomment-716789840
-  const module = await import('../ImageTable')
-  ImageTable = module.default
-})
+    const module = await import('../ImageTable')
+    ImageTable = module.default
 
-test('ImageTable can render', async () => {
-  const user = userEvent.setup()
-  /* Replicate getStaticProps() in /pages/[uid].tsx */
-  const { mediaList } = await sirvClient.getUserImages('coolusername', 'verysecrettoken')
-  const tagArray = await graphApi.getTagsByMediaId(['not important'])
-  const tagsByMediaId = groupBy(tagArray, 'mediaUuid')
+    /* Replicate getStaticProps() in /pages/[uid].tsx */
+    const imageObj = await sirvClient.getUserImages('coolusername', 'verysecrettoken')
+    mediaList = imageObj.mediaList
+    const tagArray = await graphApi.getTagsByMediaId(['not important'])
+    tagsByMediaId = groupBy(tagArray, 'mediaUuid')
+  })
 
-  render(
-    <ImageTable
-      auth={{ isAuthenticated: true, isAuthorized: true }}
-      uid='coolusername'
-      userProfile={userProfile}
-      initialImageList={mediaList}
-      initialTagsByMediaId={tagsByMediaId}
-    />)
+  test('Image can handle clicks and display slideshow', async () => {
+    const user = userEvent.setup()
 
-  const images = screen.getAllByRole('img')
-  expect(images.length).toBe(mediaList.length)
-  await user.click(screen.getAllByRole('img')[0])
+    const username = 'coolusername'
+    render(
+      <ImageTable
+        auth={{ isAuthenticated: false, isAuthorized: false }}
+        uid={username}
+        userProfile={userProfile}
+        initialImageList={mediaList}
+        initialTagsByMediaId={tagsByMediaId}
+      />)
 
-  // rerender(<ImageTable
-  //   auth={{ isAuthenticated: true, isAuthorized: true }}
-  //   uid='coolusername'
-  //   userProfile={userProfile}
-  //   initialImageList={mediaList}
-  //   initialTagsByMediaId={tagsByMediaId}
-  //          />)
+    const images = screen.getAllByRole('figure')
+    expect(images.length).toBe(mediaList.length)
 
-  screen.debug()
+    await user.click(images[0]) // click on the first image
 
-  await waitFor(() => expect(screen.getByRole('dialog')).not.toBeNull())
+    expect(screen.queryAllByRole('dialog', { name: username })).not.toBeNull()
+
+    expect(screen.queryByRole('button', { name: 'previous' })).toBeNull() // Previous button shouldn't be there
+    expect(screen.queryByRole('button', { name: 'next' })).toBeEnabled()
+
+    await user.click(screen.getByRole('button', { name: 'close' }))
+
+    expect(screen.queryByRole('button', { name: 'next' })).toBeNull() // image viewer no longer visiable
+  })
+
+  test('Auuthorized users should see Tag toggle button.', async () => {
+    render(
+      <ImageTable
+        auth={{ isAuthenticated: true, isAuthorized: true }}
+        uid='coolusername1'
+        userProfile={userProfile}
+        initialImageList={mediaList}
+        initialTagsByMediaId={tagsByMediaId}
+      />)
+
+    expect(screen.queryAllByRole('switch').length).toBeGreaterThan(0)
+  })
+
+  test('Signed, but not authorized users should *not* see Tag toggle button.', async () => {
+    render(
+      <ImageTable
+        auth={{ isAuthenticated: true, isAuthorized: false }}
+        uid='coolusername2'
+        userProfile={userProfile}
+        initialImageList={mediaList}
+        initialTagsByMediaId={tagsByMediaId}
+      />)
+
+    expect(screen.queryAllByRole('switch')).toHaveLength(0)
+  })
+
+  test('Public users should *not* see Tag toggle button.', async () => {
+    render(
+      <ImageTable
+        auth={{ isAuthenticated: true, isAuthorized: false }}
+        uid='coolusername3'
+        userProfile={userProfile}
+        initialImageList={mediaList}
+        initialTagsByMediaId={tagsByMediaId}
+      />)
+
+    expect(screen.queryAllByRole('switch')).toHaveLength(0)
+  })
 })
 
 Object.defineProperty(window, 'matchMedia', {

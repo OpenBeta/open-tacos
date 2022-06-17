@@ -10,6 +10,7 @@ interface BaseButtonProps {
   href?: string
   type?: 'button' | 'reset' | 'submit'
   disabled?: boolean
+  ariaLabel?: string
 }
 
 export const BaseButton = React.forwardRef<HTMLInputElement, BaseButtonProps>(({
@@ -18,7 +19,8 @@ export const BaseButton = React.forwardRef<HTMLInputElement, BaseButtonProps>(({
   variant = ButtonVariant.DEFAULT,
   size = 'md',
   type = 'button',
-  disabled: disable = false
+  disabled: disable = false,
+  ariaLabel
 }: BaseButtonProps, ref: any): JSX.Element => {
   let sz: string = size
   if (variant === ButtonVariant.ROUNDED_ICON_CONTRAST) {
@@ -45,6 +47,7 @@ export const BaseButton = React.forwardRef<HTMLInputElement, BaseButtonProps>(({
         SIZE[sz]
       )}
       disabled={disable}
+      aria-label={ariaLabel}
     >
       {label}
     </button>
@@ -58,7 +61,8 @@ export const Button = ({
   href,
   size = 'md',
   type = 'button',
-  disabled: disable = false
+  disabled: disable = false,
+  ariaLabel
 }: BaseButtonProps): JSX.Element => {
   if (href != null) {
     return (
@@ -71,12 +75,17 @@ export const Button = ({
             type={type}
             disabled={disable}
             size={size}
+            ariaLabel={ariaLabel}
           />
         </a>
       </Link>
     )
   }
-  return (<BaseButton onClick={onClick} label={label} variant={variant} type={type} disabled={disable} />)
+  return (
+    <BaseButton
+      onClick={onClick} label={label} variant={variant} type={type} disabled={disable} ariaLabel={ariaLabel}
+    />
+  )
 }
 
 const SIZE = {

@@ -71,7 +71,8 @@ export default function SlideViewer ({
           currentImage={currentImage}
           onTagAdded={onTagAdded}
           onTagDeleted={onTagDeleted}
-          tagList={tagList} auth={auth}
+          tagList={tagList}
+          auth={auth}
         />
       }
     />

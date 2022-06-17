@@ -22,12 +22,12 @@ export default function UserMedia ({ index, imageInfo, onClick, tagList, onTagDe
   const imgUrl = `${SIRV_CONFIG.baseUrl ?? ''}${imageInfo.filename}?format=webp&thumbnail=300&q=90`
 
   const onClickHandler = useCallback((event) => {
-    // setIsOpen(true)
     onClick({ mouseXY: [event.clientX, event.clientY], imageInfo, index })
+    event.stopPropagation()
   }, [])
 
   return (
-    <div
+    <figure
       className='cursor-inherit block w-[300px] h-[300px] relative hover:brightness-75'
       onClick={onClickHandler}
       onMouseEnter={() => setHover(true)}
@@ -39,7 +39,7 @@ export default function UserMedia ({ index, imageInfo, onClick, tagList, onTagDe
         height={300}
       />
       {tagList?.length > 0 &&
-        <div className='absolute inset-0 flex flex-col justify-end'>
+        <figcaption className='absolute inset-0 flex flex-col justify-end'>
           <TagList
             hovered={hovered}
             list={tagList}
@@ -47,7 +47,7 @@ export default function UserMedia ({ index, imageInfo, onClick, tagList, onTagDe
             isAuthorized={isAuthorized}
             className='px-2'
           />
-        </div>}
-    </div>
+        </figcaption>}
+    </figure>
   )
 }

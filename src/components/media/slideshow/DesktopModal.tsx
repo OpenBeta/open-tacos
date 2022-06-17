@@ -40,15 +40,17 @@ export default function DesktopModal ({
         </div>
         <Dialog.Description as='div' className='flex flex-col justify-between max-w-[400px] min-w-[350px] h-full w-full bg-white'>
           <div className='px-4 py-6'>
-            <div>
+            <Dialog.Title>
               {userProfileContainer}
-              <div className='absolute right-3 top-2'>
-                <Button
-                  label={<XIcon className='w-4 h-4' />}
-                  variant={ButtonVariant.ROUNDED_ICON_SOLID}
-                  onClick={onClose}
-                />
-              </div>
+            </Dialog.Title>
+            <div className='absolute right-3 top-2 flex flex-col justify-center hover:font-bold'>
+              <Button
+                ariaLabel='close'
+                label={<XIcon className='w-4 h-4' />}
+                variant={ButtonVariant.ROUNDED_ICON_SOLID}
+                onClick={onClose}
+              />
+              <div className='text-center'>ESC</div>
             </div>
 
             <div className='my-8'>
