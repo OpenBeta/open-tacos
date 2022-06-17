@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { gql } from '@apollo/client'
@@ -13,6 +13,7 @@ import InlineEditor from '../../components/editor/InlineEditor'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 interface ClimbPageProps {
   climb: Climb
@@ -21,7 +22,7 @@ interface ClimbPageProps {
   rightClimb: Climb | null
 }
 
-const ClimbPage: NextPage<ClimbPageProps> = (props) => {
+const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
   const router = useRouter()
   return (
     <>
@@ -45,9 +46,19 @@ const ClimbPage: NextPage<ClimbPageProps> = (props) => {
 
 export default ClimbPage
 
-const Body = ({ climb, mediaListWithUsernames }: ClimbPageProps): JSX.Element => {
+const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
+  const router = useRouter()
   const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
   const { climbId } = metadata
+  useState([leftClimb, rightClimb])
+
+  useHotkeys('left', () => {
+    leftClimb !== null && router.push(`/climbs/${leftClimb.id}`)
+  }, [leftClimb])
+  useHotkeys('right', () => {
+    console.log(rightClimb)
+    rightClimb !== null && router.push(`/climbs/${rightClimb.id}`)
+  }, [rightClimb])
 
   return (
     <div className='lg:flex lg:justify-center w-full'>
@@ -189,8 +200,6 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = asy
       rightClimb = sortedClimbsInArea[index + 1] !== undefined ? sortedClimbsInArea[index + 1] : null
     }
   }
-
-  console.log(leftClimb, rightClimb)
 
   // Pass climb data to the page via props
   return {
