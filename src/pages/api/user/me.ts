@@ -9,6 +9,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
     if (metadataClient == null) throw new Error('Can\'t create ManagementAPI client')
 
     const meta = await metadataClient.getUserMetadata()
+    console.log('#meta', meta)
     if (meta?.nick != null) {
       res.writeHead(307, { Location: `/u/${meta.nick}` }).end()
     } else {

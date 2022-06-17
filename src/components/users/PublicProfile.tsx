@@ -23,3 +23,17 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
     </section>
   )
 }
+
+export const TinyProfile = ({ userProfile }: PublicProfileProps): JSX.Element => {
+  const { nick, avatar } = userProfile
+  return (
+    <section className='flex items-center space-x-4'>
+      <div className='grayscale'>
+        <img className='rounded-full hue-rotate-15' src={avatar} width={32} height={32} />
+      </div>
+      <div className='text-primary font-bold'>
+        {nick}
+      </div>
+    </section>
+  )
+}

@@ -7,6 +7,7 @@ import classNames from 'classnames'
 
 interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
   isMobile: boolean
+  containerClassname?: string
 }
 /**
  * Autocomplete widget based on Algolia Autocomplete
@@ -46,7 +47,9 @@ export const Autocomplete = (props: AutocompleteProps): JSX.Element => {
   return (
     <div
       className={
-        classNames(props.isMobile ? 'w-24 ' : 'max-w-md z-50 mx-auto')
+        classNames(
+          props.isMobile ? 'w-24 ' : 'max-w-md z-50 mx-auto',
+          props?.containerClassname)
       }
       ref={containerRef}
     />

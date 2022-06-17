@@ -5,7 +5,7 @@ import { groupBy, Dictionary } from 'underscore'
 
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
-import ImageTable from '../../components/media/ImageTable'
+import UserGallery from '../../components/media/UserGallery'
 import { getTagsByMediaId } from '../../js/graphql/api'
 import { getUserImages } from '../../js/sirv/SirvClient'
 import { MediaTagWithClimb, IUserProfile, MediaType } from '../../js/types'
@@ -17,24 +17,26 @@ import { useUserProfileSeo } from '../../js/hooks/seo'
 
 interface UserHomeProps {
   uid: string
+  postId: string | null
   mediaList: MediaType[]
   tagsByMediaId: Dictionary<MediaTagWithClimb[]>
   userProfile: IUserProfile
 }
 
-const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList, tagsByMediaId, userProfile }) => {
+const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, mediaList: serverSideList, tagsByMediaId, userProfile }) => {
   const router = useRouter()
-  const { authorized } = usePermissions({ ownerProfileOnPage: userProfile })
+  const auth = usePermissions({ ownerProfileOnPage: userProfile })
 
+  const { isAuthorized } = auth
   useEffect(() => {
-    if (authorized) {
+    if (isAuthorized) {
       // Load server side image data into local state for client-side add/remove
       userMediaStore.set.imageList(serverSideList)
     }
-  }, [authorized])
+  }, [isAuthorized])
 
   const clientSideList = userMediaStore.use.imageList()
-  const currentMediaList = authorized ? clientSideList : serverSideList
+  const currentMediaList = isAuthorized ? clientSideList : serverSideList
 
   const { author, pageTitle, pageImages } = useUserProfileSeo({
     username: uid,
@@ -55,12 +57,13 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
         contentContainerClass='content-default with-standard-y-margin'
         showFilterBar={false}
       >
-        <div className='max-w-screen-2xl w-full mx-auto'>
+        <div className='max-w-screen-2xl mx-auto '>
+          {/* w-full mx-auto */}
           {router.isFallback && <div>Loading...</div>}
 
           {userProfile != null && <PublicProfile userProfile={userProfile} />}
 
-          {authorized && (
+          {isAuthorized && (
             <div className='flex justify-center mt-8 text-secondary text-sm'>
               <ul className='list-disc'>
                 {currentMediaList?.length < 3 &&
@@ -70,11 +73,11 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
               </ul>
             </div>)}
 
-          <hr className='my-8' />
+          <hr className='mt-16' />
 
           {currentMediaList?.length >= 0 &&
-            <ImageTable
-              isAuthorized={authorized}
+            <UserGallery
+              auth={auth}
               uid={uid}
               userProfile={userProfile}
               initialImageList={currentMediaList}
@@ -82,7 +85,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
             />}
           <hr className='my-8' />
 
-          {!authorized && <div className='mx-auto text-sm text-secondary text-center'>All photos are copyrighted by their respective owners.  All Rights Reserved.</div>}
+          {!isAuthorized && <div className='mx-auto text-sm text-secondary text-center'>All photos are copyrighted by their respective owners.  All Rights Reserved.</div>}
         </div>
       </Layout>
     </>
@@ -95,7 +98,7 @@ export async function getStaticPaths (): Promise<any> {
   let paths: any = []
   try {
     const users = await getAllUsersMetadata()
-    paths = users.map(user => ({ params: { uid: user.user_metadata.nick } }))
+    paths = users.map(user => ({ params: { slug: [user.user_metadata.nick] } }))
   } catch (e) {
     console.log('Warning: Error fetching user metadata from Auth provider.  User profile pages will not be pre-generated at build time.')
   }
@@ -105,12 +108,14 @@ export async function getStaticPaths (): Promise<any> {
   }
 }
 
-export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = async ({ params }) => {
-  const { uid } = params ?? { uid: null }
+export const getStaticProps: GetStaticProps<UserHomeProps, {slug: string[]}> = async ({ params }) => {
+  const uid = params?.slug?.[0] ?? null
 
   if (uid == null) {
     return { notFound: true }
   }
+
+  const postId = params?.slug?.[1] ?? null
 
   try {
     const userProfile = await getUserProfileByNick(uid)
@@ -123,6 +128,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
 
     const data = {
       uid,
+      postId,
       mediaList,
       tagsByMediaId,
       userProfile

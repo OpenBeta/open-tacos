@@ -16,7 +16,6 @@ const handler: NextApiHandler<any> = async (req, res) => {
   if (req.method === 'POST') {
     try {
       const session = await getSession({ req })
-
       if (req.query?.filename == null) {
         throw new Error('Missing filename query param')
       }

@@ -19,3 +19,8 @@ export interface IUserProfile extends IUserMetadata {
 export interface WithOwnerProfile {
   ownerProfile: IUserProfile
 }
+
+export interface WithPermission {
+  isAuthorized: boolean
+  isAuthenticated: boolean
+}

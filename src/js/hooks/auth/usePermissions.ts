@@ -1,12 +1,8 @@
 import { useSession } from 'next-auth/react'
-import { IUserProfile } from '../../types'
+import { IUserProfile, WithPermission } from '../../types/User'
 
 interface PermissionsProps {
   ownerProfileOnPage: IUserProfile
-}
-
-interface ReturnType {
-  authorized: boolean
 }
 
 /**
@@ -14,10 +10,11 @@ interface ReturnType {
  * to perform an action on a page or component owned by another user.
  * @param ownerProfileOnPage The page or component owner
  */
-export default function usePermissions ({ ownerProfileOnPage }: PermissionsProps): ReturnType {
+export default function usePermissions ({ ownerProfileOnPage }: PermissionsProps): WithPermission {
   const { status, data } = useSession()
-  const authorized = status === 'authenticated' && data != null && data.id === ownerProfileOnPage?.authProviderId
+  const isAuthorized = status === 'authenticated' && data != null && data.id === ownerProfileOnPage?.authProviderId
   return {
-    authorized
+    isAuthorized,
+    isAuthenticated: status === 'authenticated'
   }
 }
