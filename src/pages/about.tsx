@@ -6,17 +6,11 @@ import Seed from '../assets/icons/seed.png'
 import Watering from '../assets/icons/watering-can.png'
 import SeoTags from '../components/SeoTags'
 
-export const meta = {
-  title: 'About the project',
-  keywords: ['OpenBeta', 'rock climbing']
-}
-
 const About = (): JSX.Element => {
   return (
     <Layout contentContainerClass='content-default with-standard-y-margin' showFilterBar={false} hero={<AboutHero />}>
       <SeoTags
         title='About OpenTacos'
-        description='Share your climbing adventure photos and contribute to the climbing route wiki.'
       />
       <div className='max-w-screen-md mx-auto px-4 md:px-8 md:py-16'>
         <div className='text-center'>
