@@ -19,18 +19,6 @@ function Layout ({
 }: LayoutProps): JSX.Element {
   return (
     <>
-      {/* <Head>
-        <title>Climbing Route Catalog</title>
-        <meta name='description' content='Open license climbing route catalog' />
-        <link rel='icon' href='/favicon.ico' />
-
-        <SeoTags
-          keywords={['openbeta', 'rock climbing', 'climbing api']}
-          description='Climbing route catalog'
-          title='Home'
-        />
-      </Head> */}
-
       <div className={rootContainerClass}>
         <Header showFilterBar={showFilterBar} />
         {hero}
