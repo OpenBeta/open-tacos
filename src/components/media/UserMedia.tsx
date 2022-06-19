@@ -47,7 +47,7 @@ export default function UserMedia ({ index, imageInfo, onClick, tagList, onTagDe
       onMouseLeave={() => setHover(false)}
     >
       {isDesktop
-        ? (<ResponsiveImage mediaUrl={imageInfo.filename} isHero={false} loader={loader} />)
+        ? (<ResponsiveImage mediaUrl={imageInfo.filename} isHero={index === 0} loader={loader} />)
         : (<img
             src={loader({ src: imageInfo.filename, width: MOBILE_IMAGE_MAX_WIDITH })}
             width={MOBILE_IMAGE_MAX_WIDITH}

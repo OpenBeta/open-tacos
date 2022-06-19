@@ -1,6 +1,7 @@
 import { useCallback, useState, useRef } from 'react'
 import { Dictionary } from 'underscore'
 import { TagIcon } from '@heroicons/react/outline'
+
 import UserMedia from './UserMedia'
 import ImageTagger from './ImageTagger'
 import useImageTagHelper from './useImageTagHelper'
@@ -24,7 +25,7 @@ interface ImageTableProps {
 /**
  * Image table on user profile
  */
-export default function ImageTable ({ uid, auth, userProfile, initialImageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
+export default function UserGallery ({ uid, auth, userProfile, initialImageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
   const imageList = initialImageList
 
   const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
@@ -38,6 +39,8 @@ export default function ImageTable ({ uid, auth, userProfile, initialImageList, 
   if (imageList == null) return null
 
   const { isAuthorized } = auth
+
+  const pageUrl = `/u/${uid}`
   /**
    * Run after a tag has sucessfully added to the backend
    * Todo: move tag handling out of local state and into a global store
@@ -170,6 +173,7 @@ export default function ImageTable ({ uid, auth, userProfile, initialImageList, 
         onTagDeleted={onDeletedHandler}
         onTagAdded={onCompletedHandler}
         auth={auth}
+        pageUrl={pageUrl}
       />
     </>
   )

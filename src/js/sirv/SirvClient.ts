@@ -161,8 +161,9 @@ export const createUserDir = async (uuid: string, token?: string): Promise<boole
  */
 export const upload = async (filename: string, imageData: Buffer, token?: string): Promise<string> => {
   const _t = await getAdminTokenIfNotExist(token)
+
   const res = await client.post(
-    '/files/upload?filename=' + filename,
+    `/files/upload?filename=${filename}`,
     imageData,
     {
       headers: {

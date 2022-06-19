@@ -3,17 +3,17 @@ import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import { groupBy, Dictionary } from 'underscore'
 
-import Layout from '../../components/layout'
-import SeoTags from '../../components/SeoTags'
-import UserGallery from '../../components/media/UserGallery'
-import { getTagsByMediaId } from '../../js/graphql/api'
-import { getUserImages } from '../../js/sirv/SirvClient'
-import { MediaTagWithClimb, IUserProfile, MediaType } from '../../js/types'
-import PublicProfile from '../../components/users/PublicProfile'
-import { getUserProfileByNick, getAllUsersMetadata } from '../../js/auth/ManagementClient'
-import usePermissions from '../../js/hooks/auth/usePermissions'
-import { userMediaStore } from '../../js/stores/media'
-import { useUserProfileSeo } from '../../js/hooks/seo'
+import Layout from '../../../components/layout'
+import SeoTags from '../../../components/SeoTags'
+import UserGallery from '../../../components/media/UserGallery'
+import { getTagsByMediaId } from '../../../js/graphql/api'
+import { getUserImages } from '../../../js/sirv/SirvClient'
+import { MediaTagWithClimb, IUserProfile, MediaType } from '../../../js/types'
+import PublicProfile from '../../../components/users/PublicProfile'
+import { getUserProfileByNick } from '../../../js/auth/ManagementClient'
+import usePermissions from '../../../js/hooks/auth/usePermissions'
+import { userMediaStore } from '../../../js/stores/media'
+import { useUserProfileSeo } from '../../../js/hooks/seo'
 
 interface UserHomeProps {
   uid: string
@@ -43,6 +43,8 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, mediaList: 
     fullName: userProfile?.name,
     imageList: serverSideList
   })
+
+  console.log('#sharing')
 
   return (
     <>
@@ -95,27 +97,28 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, mediaList: 
 export default UserHomePage
 
 export async function getStaticPaths (): Promise<any> {
-  let paths: any = []
-  try {
-    const users = await getAllUsersMetadata()
-    paths = users.map(user => ({ params: { slug: [user.user_metadata.nick] } }))
-  } catch (e) {
-    console.log('Warning: Error fetching user metadata from Auth provider.  User profile pages will not be pre-generated at build time.')
-  }
+  // let paths: any = []
+  // try {
+  //   const users = await getAllUsersMetadata()
+  //   paths = users.map(user => ({ params: { uid: user.user_metadata.nick, postId: '2'} }))
+  // } catch (e) {
+  //   console.log('Warning: Error fetching user metadata from Auth provider.  User profile pages will not be pre-generated at build time.')
+  // }
   return {
-    paths,
+    paths: [],
     fallback: true
   }
 }
 
-export const getStaticProps: GetStaticProps<UserHomeProps, {slug: string[]}> = async ({ params }) => {
-  const uid = params?.slug?.[0] ?? null
+export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string, postId?: string}> = async ({ params }) => {
+  console.log('#params', params)
+  const uid = params?.uid ?? null
 
   if (uid == null) {
     return { notFound: true }
   }
 
-  const postId = params?.slug?.[1] ?? null
+  const postId = params?.postId ?? null
 
   try {
     const userProfile = await getUserProfileByNick(uid)
