@@ -12,7 +12,7 @@ interface SEOProps {
 
 const siteMetadata = {
   title: 'OpenTacos',
-  description: 'Open collaboration climbing platform',
+  description: 'Share your climbing adventure photos and contribute to the climbing route wiki.',
   author: 'hello@openbeta.io',
   keywords: 'rock climbing wiki, climbing api, climbing beta, climbing guidebooks, openbeta, open data'
 }
