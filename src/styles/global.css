@@ -89,7 +89,7 @@ body, html {
   }
 
   h1 {
-    @apply text-primary text-5xl tracking-tight mb-4;
+    @apply text-primary text-4xl lg:text-5xl tracking-tight mb-4;
   }
   
   h2 {
