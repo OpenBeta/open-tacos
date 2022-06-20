@@ -149,7 +149,8 @@
     "files": [
       "src/**/*.js",
       "src/**/*.ts",
-      "src/**/*.tsx"
+      "src/**/*.tsx",
+      "src/pages/u/[uid]/[postId].tsx"
     ]
   }
 }

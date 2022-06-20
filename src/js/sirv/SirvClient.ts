@@ -130,6 +130,76 @@ export const getUserImages = async (uuid: string, token?: string): Promise<UserI
   throw new Error('Sirv API.getUserImages() error' + res.statusText)
 }
 
+export const searchUserImage = async (uuid: string, fileId: string, token?: string): Promise <any> => {
+  const _t = await getTokenIfNotExist(token)
+  const res = await client.post(
+    '/files/search',
+    {
+      query:
+        `(extension:.jpg OR extension:.jpeg OR extension:.png) AND dirname:\\/u\\/${uuid} AND -dirname:\\/.Trash AND basename:${fileId} AND contentType:image\\/jpeg`,
+      size: 1
+    },
+    {
+      headers: {
+        ...headers,
+        Authorization: `bearer ${_t}`
+      }
+    }
+  )
+
+  if (res.status === 200 && Array.isArray(res.data.hits) && res.data.hits.length === 1) {
+    const mediaIdList: string[] = []
+    const mediaList = res.data.hits.map(entry => {
+      const { filename, ctime, mtime, contentType, meta } = entry._source
+      const mediaId = uuidv5(filename, uuidv5.URL)
+      mediaIdList.push(mediaId)
+      return ({
+        ownerId: uuid,
+        filename,
+        mediaId,
+        ctime,
+        mtime,
+        contentType,
+        meta
+      })
+    })
+
+    return {
+      media: mediaList[0],
+      mediaId: mediaIdList[0]
+    }
+  }
+  throw new Error('Sirv API.searchUserImage() error' + res.statusText)
+}
+
+export const getFileInfo = async (uuid: string, filename: string, token?: string): Promise<any> => {
+  const _t = await getTokenIfNotExist(token)
+  const res = await client.get(
+    '/files/stat?filename=' + encodeURIComponent(filename),
+    {
+      headers: {
+        ...headers,
+        Authorization: `bearer ${_t}`
+      }
+    }
+  )
+
+  if (res.status === 200) {
+    const { ctime, mtime, contentType, meta } = res.data
+    const mediaId = uuidv5(filename, uuidv5.URL)
+    return ({
+      ownerId: uuid,
+      filename,
+      mediaId,
+      ctime,
+      mtime,
+      contentType,
+      meta
+    })
+  }
+  throw new Error('Sirv API.getFileInfo() error' + res.statusText)
+}
+
 export const createUserDir = async (uuid: string, token?: string): Promise<boolean> => {
   const _t = await getAdminTokenIfNotExist()
   try {

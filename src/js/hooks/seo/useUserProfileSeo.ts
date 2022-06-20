@@ -2,17 +2,22 @@ import { shuffle } from 'underscore'
 import { SIRV_CONFIG } from '../../sirv/SirvClient'
 import { MediaType } from '../../types'
 import { SeoHookType } from './index'
+
 interface SeoTagsHookProps {
   username?: string
   fullName?: string
   imageList: MediaType[]
 }
 
+/**
+ * React hook for generating Html meta tags
+ */
 export const useUserProfileSeo = ({ username = '', fullName = '', imageList = [] }: SeoTagsHookProps): SeoHookType => {
   const author = `/u/${username}`
-  const photoCount = `${imageList.length === 0 ? '' : imageList.length} Photo${imageList.length > 1 ? 's' : ''}`
-  const pageTitle = `${fullName} (${author}) •  ${photoCount} on OpenTacos`
-  const pageImages = imageList.length > 0 ? getRandomPreviewImages(imageList) : []
+  const count = imageList?.length ?? 0
+  const photoCountStr = `${count === 0 ? '' : count} Photo${count > 1 ? 's' : ''}`
+  const pageTitle = `${fullName} (${author}) •  ${photoCountStr} on OpenTacos`
+  const pageImages = count > 0 ? getRandomPreviewImages(imageList) : []
   return { author, pageTitle, pageImages }
 }
 

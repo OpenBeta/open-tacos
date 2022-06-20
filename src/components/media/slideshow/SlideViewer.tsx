@@ -1,7 +1,7 @@
 import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 import { LightBulbIcon } from '@heroicons/react/outline'
 import { Dictionary } from 'underscore'
-import { basename, extname } from 'path'
+import { basename } from 'path'
 
 import { MediaType, MediaTagWithClimb } from '../../../js/types'
 import TagList from '../TagList'
@@ -11,13 +11,14 @@ import ResponsiveImage from './ResponsiveImage'
 import AddTagCta from './AddTagCta'
 import { WithPermission } from '../../../js/types/User'
 import DesktopModal from './DesktopModal'
+import { DefaultLoader } from '../../../js/sirv/util'
 
 interface SlideViewerProps {
   isOpen: boolean
   initialIndex: number
   onTagDeleted: (props?: any) => void
   onTagAdded: (data: any) => void
-  onClose: () => void
+  onClose?: () => void
   imageList: MediaType[]
   tagsByMediaId: Dictionary<MediaTagWithClimb[]>
   userinfo: JSX.Element
@@ -63,8 +64,7 @@ export default function SlideViewer ({
   const navChangeHandler = useCallback((newIndex: number) => {
     setCurrentIndex(newIndex)
     const currentImage = imageList[newIndex]
-    const extToRemove = extname(currentImage.filename)
-    const pathname = `${pageUrl}/${basename(currentImage.filename, extToRemove)}`
+    const pathname = `${pageUrl}/${basename(currentImage.filename)}`
     window.history.replaceState(null, '', pathname)
   }, [imageList])
 
@@ -72,14 +72,27 @@ export default function SlideViewer ({
     <DesktopModal
       isOpen={isOpen}
       onClose={onClose}
-      userProfileContainer={userinfo}
       mediaContainer={currentImageIndex >= 0
         ? <ResponsiveImage
             mediaUrl={imageList[currentImageIndex].filename}
             isHero
           />
         : null}
-      footerContainer={<AddTagCta tagCount={tagList.length} auth={auth} />}
+      rhsContainer={
+        <RhsContainer
+          userinfo={userinfo}
+          content={
+            <InfoContainer
+              currentImage={currentImage}
+              onTagAdded={onTagAdded}
+              onTagDeleted={onTagDeleted}
+              tagList={tagList}
+              auth={auth}
+            />
+          }
+          footer={<AddTagCta tagCount={tagList.length} auth={auth} />}
+        />
+      }
       controlContainer={
         <NextPreviousControl
           currentImageIndex={currentImageIndex}
@@ -87,16 +100,58 @@ export default function SlideViewer ({
           max={imageList.length - 1}
         />
       }
-      infoContainer={
-        <InfoContainer
-          currentImage={currentImage}
-          onTagAdded={onTagAdded}
-          onTagDeleted={onTagDeleted}
-          tagList={tagList}
-          auth={auth}
-        />
-      }
     />
+  )
+}
+
+export const SingleViewer = ({ media, onTagAdded, onTagDeleted, tagList, userinfo, auth }): JSX.Element => {
+  return (
+    <>
+      <div className='block relative overflow-hidden'>
+        <img
+          src={DefaultLoader({ src: media.filename, width: 750 })}
+          width={750}
+          sizes='100vw'
+          className='bg-gray-100 w-auto h-[100%] max-h-[700px]'
+        />
+      </div>
+      <RhsContainer
+        userinfo={userinfo}
+        content={
+          <InfoContainer
+            currentImage={media}
+            onTagAdded={onTagAdded}
+            onTagDeleted={onTagDeleted}
+            tagList={tagList}
+            auth={auth}
+          />
+        }
+      />
+    </>
+  )
+}
+
+interface RhsContainerProps {
+  userinfo: ReactElement
+  content: ReactElement
+  footer?: null | ReactElement
+}
+
+const RhsContainer = ({ userinfo, content, footer = null }: RhsContainerProps): JSX.Element => {
+  return (
+    <div className='flex flex-col justify-start h-[inherit] lg:max-w-[400px] min-w-[350px] bg-white'>
+      <div className='grow'>
+        <div className='border-b px-4 py-4'>
+          {userinfo}
+        </div>
+        <div className='px-4'>
+          {content}
+        </div>
+      </div>
+      <div className='border-t'>
+        {footer}
+      </div>
+    </div>
   )
 }
 
