@@ -3,7 +3,7 @@ import { NextApiHandler } from 'next'
 import { getSession } from 'next-auth/react'
 import { customAlphabet } from 'nanoid'
 import { nolookalikesSafe } from 'nanoid-dictionary'
-import { extname } from 'path/posix'
+import { extname } from 'path'
 
 import withAuth from '../withAuth'
 import { upload } from '../../../js/sirv/SirvClient'
