@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import { groupBy, Dictionary } from 'underscore'
@@ -12,42 +11,29 @@ import { MediaTagWithClimb, IUserProfile, MediaType } from '../../../js/types'
 import PublicProfile from '../../../components/users/PublicProfile'
 import { getUserProfileByNick, getAllUsersMetadata } from '../../../js/auth/ManagementClient'
 import usePermissions from '../../../js/hooks/auth/usePermissions'
-import { userMediaStore } from '../../../js/stores/media'
 import { useUserProfileSeo } from '../../../js/hooks/seo'
-
+import useMediaDataStore from '../../../js/hooks/useMediaDS'
 interface UserHomeProps {
   uid: string
-  mediaList: MediaType[]
-  tagsByMediaId: Dictionary<MediaTagWithClimb[]>
+  serverMediaList: MediaType[]
+  serverTagMap: Dictionary<MediaTagWithClimb[]>
   userProfile: IUserProfile
 }
 
-const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList, tagsByMediaId: serverSideTagMap, userProfile }) => {
+const UserHomePage: NextPage<UserHomeProps> = ({ uid, serverMediaList, serverTagMap, userProfile }) => {
   const router = useRouter()
   const auth = usePermissions({ ownerProfileOnPage: userProfile })
 
   const { isAuthorized } = auth
-  useEffect(() => {
-    if (isAuthorized) {
-      // Load server side image data into local state for client-side add/remove
-      userMediaStore.set.imageList(serverSideList)
-      userMediaStore.set.tagMap(serverSideTagMap)
-      userMediaStore.set.uid(uid)
-    }
-  }, [isAuthorized])
 
-  const clientSideList = userMediaStore.use.imageList()
-  const clientSideTagMap = userMediaStore.use.tagMap()
-  const currentMediaList = isAuthorized ? clientSideList : serverSideList
-  const currentTagMap = isAuthorized ? clientSideTagMap : serverSideTagMap
+  const { mediaList, tagMap } = useMediaDataStore({ isAuthorized, uid, serverMediaList, serverTagMap })
 
   const { author, pageTitle, pageImages } = useUserProfileSeo({
     username: uid,
     fullName: userProfile?.name,
-    imageList: serverSideList
+    imageList: serverMediaList
   })
 
-  console.log('#tagMap', clientSideTagMap)
   return (
     <>
       <SeoTags
@@ -62,7 +48,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
         showFilterBar={false}
       >
         <div className='max-w-screen-2xl mx-auto '>
-          {/* w-full mx-auto */}
+
           {router.isFallback && <div>Loading...</div>}
 
           {userProfile != null && <PublicProfile userProfile={userProfile} />}
@@ -70,7 +56,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
           {isAuthorized && (
             <div className='flex justify-center mt-8 text-secondary text-sm'>
               <ul className='list-disc'>
-                {currentMediaList?.length < 3 &&
+                {mediaList?.length < 3 &&
                   <li>Please upload 3 photos to complete your profile</li>}
                 <li>Only upload your own photos</li>
                 <li>Keep it <b>Safe For Work</b> and climbing-related</li>
@@ -79,13 +65,13 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
 
           <hr className='mt-16' />
 
-          {currentMediaList?.length >= 0 &&
+          {mediaList?.length >= 0 &&
             <UserGallery
               auth={auth}
               uid={uid}
               userProfile={userProfile}
-              initialImageList={currentMediaList}
-              initialTagsByMediaId={currentTagMap}
+              initialImageList={mediaList}
+              initialTagsByMediaId={tagMap}
             />}
           <hr className='my-8' />
 
@@ -113,7 +99,6 @@ export async function getStaticPaths (): Promise<any> {
 }
 
 export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = async ({ params }) => {
-  console.log('#UserGallery', params)
   const uid = params?.uid ?? null
 
   if (uid == null) {
@@ -123,6 +108,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
   try {
     const userProfile = await getUserProfileByNick(uid)
     const { mediaList, mediaIdList } = await getUserImages(userProfile.uuid)
+
     let tagsByMediaId: Dictionary<MediaTagWithClimb[]> = {}
     if (mediaList.length > 0) {
       const tagArray = await getTagsByMediaId(mediaIdList)
@@ -131,8 +117,8 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
 
     const data = {
       uid,
-      mediaList,
-      tagsByMediaId,
+      serverMediaList: mediaList,
+      serverTagMap: tagsByMediaId,
       userProfile
     }
     return {

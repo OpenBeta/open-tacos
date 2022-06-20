@@ -86,14 +86,6 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       })
 
       set.tagMap(newState)
-
-      // updateTag(curr => {
-      //   const currTagList = curr?.[mediaUuid] ?? []
-      //   return ({
-      //     ...curr,
-      //     [mediaUuid]: currTagList.length === 0 ? [setTag] : currTagList.concat([setTag])
-      //   })
-      // })
       await revalidateServePage(get.uid())
     },
 
@@ -114,16 +106,6 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       })
 
       set.tagMap(newState)
-
-      // updateTag(curr => {
-      //   const currTagList = curr[mediaUuid]
-      //   const idx = currTagList.findIndex((tag: MediaTagWithClimb) => tag.climb.id === destinationId)
-      //   currTagList.splice(idx, 1)
-      //   return ({
-      //     ...curr,
-      //     [removeTag.mediaUuid]: currTagList
-      //   })
-      // })
       await revalidateServePage(get.uid())
     }
   }))

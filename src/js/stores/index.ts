@@ -7,6 +7,7 @@ import { getCragDetailsNear, getAreaByUUID } from '../graphql/api'
 import { calculatePagination, NextPaginationProps, geojsonifyCrag } from './util'
 import { BOULDER_DEFS, YDS_DEFS } from '../grades/rangeDefs'
 import { vScoreToBandIndex, freeScoreToBandIndex, BAND_BY_INDEX } from '../grades/bandUtil'
+import { userMediaStore } from './media'
 /**
  * App main data store
  */
@@ -407,7 +408,8 @@ export const cragFiltersStore = createStore('filters')(INITIAL_STATE, {
 // Global store
 export const rootStore = {
   // finder: cragFinderStore,
-  filters: cragFiltersStore
+  filters: cragFiltersStore,
+  media: userMediaStore
 }
 
 // Global hook selectors

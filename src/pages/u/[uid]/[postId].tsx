@@ -4,7 +4,6 @@ import classNames from 'classnames'
 
 import Layout from '../../../components/layout'
 import SeoTags from '../../../components/SeoTags'
-// import UserGallery from '../../../components/media/UserGallery'
 import { getTagsByMediaId } from '../../../js/graphql/api'
 import { getFileInfo } from '../../../js/sirv/SirvClient'
 import { MediaTagWithClimb, IUserProfile, MediaType } from '../../../js/types'
@@ -12,7 +11,8 @@ import { TinyProfile } from '../../../components/users/PublicProfile'
 import { getUserProfileByNick } from '../../../js/auth/ManagementClient'
 import usePermissions from '../../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../../js/hooks/seo'
-import { SingleViewer } from '../../../components/media/slideshow/SlideViewer'
+import { SingleViewer, SingleViewerPlaceholder } from '../../../components/media/slideshow/SlideViewer'
+import useMediaDataStore from '../../../js/hooks/useMediaDS'
 
 interface UserHomeProps {
   uid: string
@@ -25,31 +25,40 @@ interface UserHomeProps {
 const SingleMediaPage: NextPage<UserHomeProps> = ({ uid, postId = null, media, tagList, userProfile }) => {
   const router = useRouter()
 
-  const auth = usePermissions({ ownerProfileOnPage: userProfile })
+  const mediaId = media?.mediaId ?? null
+  const tags = mediaId == null ? {} : { [media.mediaId]: tagList }
 
+  const auth = usePermissions({ ownerProfileOnPage: userProfile })
+  const { isAuthorized } = auth
+  const { mediaList, singleTagList } = useMediaDataStore({
+    isAuthorized,
+    uid,
+    serverMediaList: [media],
+    serverTagMap: tags
+  })
   const { isFallback } = router
+
+  const currentMedia = mediaList?.[0] ?? null
+  const currentTagList = singleTagList
 
   return (
     <>
       {!isFallback && <PageMeta uid={uid} media={media} userProfile={userProfile} />}
       <Layout
-        contentContainerClass={classNames('content-default with-standard-y-margin', isFallback ? 'h-screen-80' : '')}
+        contentContainerClass={classNames('content-default with-standard-y-margin')}
         showFilterBar={false}
       >
-        <div className='max-w-screen-2xl flex flex-col justify-center items-center w-full h-full mx-auto'>
-          {router.isFallback
-            ? <div>Loading...</div> // Todo: Add placeholder components
-            : (
-              <div className='max-w-screen-xl flex flex-col lg:flex-row items-stretch justify-center border rounded-md overflow-hidden drop-shadow-sm'>
-                <SingleViewer
-                  media={media}
-                  tagList={tagList}
+        <div className='max-w-screen-2xl flex flex-col items-center w-full h-full mx-auto'>
+          <div className='max-w-screen-xl flex flex-col lg:flex-row items-stretch justify-center border rounded-md overflow-hidden drop-shadow-sm'>
+            {currentMedia == null || isFallback
+              ? (<SingleViewerPlaceholder />)
+              : (<SingleViewer
+                  media={currentMedia}
+                  tagList={currentTagList}
                   userinfo={<TinyProfile userProfile={userProfile} />}
                   auth={auth}
-                />
-              </div>)}
-          <hr className='mt-16' />
-
+                 />)}
+          </div>
         </div>
       </Layout>
     </>
@@ -66,7 +75,6 @@ export async function getStaticPaths (): Promise<any> {
 }
 
 export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string, postId: string}> = async ({ params }) => {
-  console.log('#PostView page params', params)
   const uid = params?.uid ?? null
   const postId = params?.postId ?? null
 
