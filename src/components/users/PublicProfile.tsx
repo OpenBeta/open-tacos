@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { IUserProfile } from '../../js/types/User'
 import EditProfileButton from './EditProfileButton'
 
@@ -32,7 +34,11 @@ export const TinyProfile = ({ userProfile }: PublicProfileProps): JSX.Element =>
         <img className='rounded-full hue-rotate-15' src={avatar} width={32} height={32} />
       </div>
       <div className='text-primary font-bold'>
-        {nick}
+        <Link href={`/u/${nick}`} passHref>
+          <a>
+            {nick}
+          </a>
+        </Link>
       </div>
     </section>
   )
