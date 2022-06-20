@@ -7,7 +7,7 @@ import ImageTagger from './ImageTagger'
 import useImageTagHelper from './useImageTagHelper'
 import { MediaTagWithClimb, MediaType, IUserProfile } from '../../js/types'
 import InitialUploadCTA from './InitialUploadCTA'
-import { userMediaStore, revalidateServePage } from '../../js/stores/media'
+import { userMediaStore } from '../../js/stores/media'
 import SlideViewer from './slideshow/SlideViewer'
 import { TinyProfile } from '../users/PublicProfile'
 import { WithPermission } from '../../js/types/User'
@@ -25,10 +25,9 @@ interface ImageTableProps {
 /**
  * Image table on user profile
  */
-export default function UserGallery ({ uid, auth, userProfile, initialImageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
+export default function UserGallery ({ uid, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: ImageTableProps): JSX.Element | null {
   const imageList = initialImageList
 
-  const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
   const [selectedMediaId, setIsOpen] = useState(-1)
   const [tagModeOn, setTagMode] = useState<boolean>(false)
 
@@ -47,52 +46,15 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
    * to reduce prop drilling
    */
   const onCompletedHandler = useCallback(async (data?: any) => {
-    const { setTag } = data
-    if (setTag == null) return
-    const { mediaUuid } = setTag
-    const { id } = setTag.climb
-    const currentTagList = tagsByMediaId?.[mediaUuid] ?? []
-
-    if (currentTagList.findIndex((tag: MediaTagWithClimb) => tag.climb.id === id) !== -1) {
-      // Tag for the same climb exists
-      // We only allow 1 climb/area tag per media
-      return
-    }
-
-    updateTag(curr => {
-      const currTagList = curr?.[mediaUuid] ?? []
-      return ({
-        ...curr,
-        [mediaUuid]: currTagList.length === 0 ? [setTag] : currTagList.concat([setTag])
-      })
-    })
-    await revalidateServePage(uid)
+    await userMediaStore.set.addTag(data)
   }, [])
 
   /**
    * Run after a tag has sucessfully deleted from the backend
    */
   const onDeletedHandler = useCallback(async (data: any) => {
-    const { removeTag } = data
-    if (removeTag == null) return
-    const { mediaUuid, destinationId } = removeTag
-
-    if (tagsByMediaId?.[mediaUuid] == null) {
-      // Try to remove a tag that doesn't exist in local state
-      return
-    }
-
-    updateTag(curr => {
-      const currTagList = curr[mediaUuid]
-      const idx = currTagList.findIndex((tag: MediaTagWithClimb) => tag.climb.id === destinationId)
-      currTagList.splice(idx, 1)
-      return ({
-        ...curr,
-        [removeTag.mediaUuid]: currTagList
-      })
-    })
-    await revalidateServePage(uid)
-  }, [tagsByMediaId])
+    await userMediaStore.set.removeTag(data)
+  }, [])
 
   const onUploadHandler = async (imageUrl: string): Promise<void> => {
     await userMediaStore.set.addImage(uid, uuid, imageUrl, true, true)
@@ -139,7 +101,7 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
       <div className={`block w-full xl:grid xl:grid-cols-3 xl:gap-8  2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
 
         {imageList.map((imageInfo, index) => {
-          const tags = tagsByMediaId?.[imageInfo.mediaId] ?? []
+          const tags = initialTagMap?.[imageInfo.mediaId] ?? []
           return (
             <UserMedia
               key={imageInfo.mediaId}
@@ -167,11 +129,9 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
         isOpen={selectedMediaId >= 0}
         initialIndex={selectedMediaId}
         imageList={imageList}
-        tagsByMediaId={tagsByMediaId}
+        tagsByMediaId={initialTagMap}
         userinfo={<TinyProfile userProfile={userProfile} />}
         onClose={() => setIsOpen(-1)}
-        onTagDeleted={onDeletedHandler}
-        onTagAdded={onCompletedHandler}
         auth={auth}
         pageUrl={pageUrl}
       />

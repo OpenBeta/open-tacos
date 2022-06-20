@@ -12,12 +12,11 @@ import AddTagCta from './AddTagCta'
 import { WithPermission } from '../../../js/types/User'
 import DesktopModal from './DesktopModal'
 import { DefaultLoader } from '../../../js/sirv/util'
+import { userMediaStore } from '../../../js/stores/media'
 
 interface SlideViewerProps {
   isOpen: boolean
   initialIndex: number
-  onTagDeleted: (props?: any) => void
-  onTagAdded: (data: any) => void
   onClose?: () => void
   imageList: MediaType[]
   tagsByMediaId: Dictionary<MediaTagWithClimb[]>
@@ -37,8 +36,6 @@ export default function SlideViewer ({
   tagsByMediaId,
   userinfo,
   auth,
-  onTagDeleted,
-  onTagAdded,
   pageUrl
 }: SlideViewerProps): JSX.Element {
   const [currentImageIndex, setCurrentIndex] = useState<number>(initialIndex)
@@ -84,8 +81,6 @@ export default function SlideViewer ({
           content={
             <InfoContainer
               currentImage={currentImage}
-              onTagAdded={onTagAdded}
-              onTagDeleted={onTagDeleted}
               tagList={tagList}
               auth={auth}
             />
@@ -104,7 +99,7 @@ export default function SlideViewer ({
   )
 }
 
-export const SingleViewer = ({ media, onTagAdded, onTagDeleted, tagList, userinfo, auth }): JSX.Element => {
+export const SingleViewer = ({ media, tagList, userinfo, auth }): JSX.Element => {
   return (
     <>
       <div className='block relative overflow-hidden'>
@@ -120,8 +115,6 @@ export const SingleViewer = ({ media, onTagAdded, onTagDeleted, tagList, userinf
         content={
           <InfoContainer
             currentImage={media}
-            onTagAdded={onTagAdded}
-            onTagDeleted={onTagDeleted}
             tagList={tagList}
             auth={auth}
           />
@@ -159,12 +152,23 @@ interface InfoContainerProps {
   currentImage: MediaType
   tagList: MediaTagWithClimb[]
   auth: WithPermission
-  onTagDeleted: (props?: any) => void
-  onTagAdded: (data: any) => void
 }
 
-const InfoContainer = ({ currentImage, tagList, auth, onTagAdded, onTagDeleted }: InfoContainerProps): ReactElement => {
+const InfoContainer = ({ currentImage, tagList, auth }: InfoContainerProps): ReactElement => {
   const { isAuthorized } = auth
+
+  const onTagAddedHanlder = useCallback(async (data) => {
+    if (isAuthorized) { // The UI shouldn't allow this function to be called, but let's check anyway.
+      await userMediaStore.set.addTag(data)
+    }
+  }, [isAuthorized])
+
+  const onTagDeletedHanlder = useCallback(async (data) => {
+    if (isAuthorized) { // The UI shouldn't allow this function to be called, but let's check anyway.
+      await userMediaStore.set.removeTag(data)
+    }
+  }, [isAuthorized])
+
   return (
     <>
       <div className='my-8'>
@@ -175,7 +179,7 @@ const InfoContainer = ({ currentImage, tagList, auth, onTagAdded, onTagDeleted }
           <TagList
             hovered
             list={tagList}
-            onDeleted={onTagDeleted}
+            onDeleted={onTagDeletedHanlder}
             isAuthorized={isAuthorized}
             className='my-2'
           />}
@@ -183,7 +187,7 @@ const InfoContainer = ({ currentImage, tagList, auth, onTagAdded, onTagDeleted }
       {isAuthorized &&
         <div className='my-8'>
           <div className='text-primary text-sm'>Tag this climb</div>
-          <AddTag onTagAdded={onTagAdded} imageInfo={currentImage} className='my-2' />
+          <AddTag onTagAdded={onTagAddedHanlder} imageInfo={currentImage} className='my-2' />
         </div>}
 
       {tagList.length === 0 && isAuthorized &&

@@ -22,7 +22,7 @@ interface UserHomeProps {
   userProfile: IUserProfile
 }
 
-const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList, tagsByMediaId, userProfile }) => {
+const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList, tagsByMediaId: serverSideTagMap, userProfile }) => {
   const router = useRouter()
   const auth = usePermissions({ ownerProfileOnPage: userProfile })
 
@@ -31,11 +31,15 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
     if (isAuthorized) {
       // Load server side image data into local state for client-side add/remove
       userMediaStore.set.imageList(serverSideList)
+      userMediaStore.set.tagMap(serverSideTagMap)
+      userMediaStore.set.uid(uid)
     }
   }, [isAuthorized])
 
   const clientSideList = userMediaStore.use.imageList()
+  const clientSideTagMap = userMediaStore.use.tagMap()
   const currentMediaList = isAuthorized ? clientSideList : serverSideList
+  const currentTagMap = isAuthorized ? clientSideTagMap : serverSideTagMap
 
   const { author, pageTitle, pageImages } = useUserProfileSeo({
     username: uid,
@@ -43,6 +47,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
     imageList: serverSideList
   })
 
+  console.log('#tagMap', clientSideTagMap)
   return (
     <>
       <SeoTags
@@ -80,7 +85,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, mediaList: serverSideList,
               uid={uid}
               userProfile={userProfile}
               initialImageList={currentMediaList}
-              initialTagsByMediaId={tagsByMediaId}
+              initialTagsByMediaId={currentTagMap}
             />}
           <hr className='my-8' />
 

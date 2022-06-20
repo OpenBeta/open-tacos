@@ -46,8 +46,6 @@ const SingleMediaPage: NextPage<UserHomeProps> = ({ uid, postId = null, media, t
                   tagList={tagList}
                   userinfo={<TinyProfile userProfile={userProfile} />}
                   auth={auth}
-                  onTagAdded={() => {}}
-                  onTagDeleted={() => {}}
                 />
               </div>)}
           <hr className='mt-16' />
