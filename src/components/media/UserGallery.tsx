@@ -1,12 +1,13 @@
 import { useCallback, useState, useRef } from 'react'
 import { Dictionary } from 'underscore'
 import { TagIcon } from '@heroicons/react/outline'
+
 import UserMedia from './UserMedia'
 import ImageTagger from './ImageTagger'
 import useImageTagHelper from './useImageTagHelper'
 import { MediaTagWithClimb, MediaType, IUserProfile } from '../../js/types'
 import InitialUploadCTA from './InitialUploadCTA'
-import { userMediaStore, revalidateServePage } from '../../js/stores/media'
+import { actions } from '../../js/stores'
 import SlideViewer from './slideshow/SlideViewer'
 import { TinyProfile } from '../users/PublicProfile'
 import { WithPermission } from '../../js/types/User'
@@ -22,91 +23,58 @@ interface ImageTableProps {
 }
 
 /**
- * Image table on user profile
+ * Image gallery on user profile
  */
-export default function ImageTable ({ uid, auth, userProfile, initialImageList, initialTagsByMediaId }: ImageTableProps): JSX.Element | null {
+export default function UserGallery ({ uid, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: ImageTableProps): JSX.Element | null {
   const imageList = initialImageList
 
-  const [tagsByMediaId, updateTag] = useState(initialTagsByMediaId)
-  const [selectedMediaId, setIsOpen] = useState(-1)
-  const [tagModeOn, setTagMode] = useState<boolean>(false)
+  const [selectedMediaId, setSlideNumber] = useState<number>(-1)
+  const [tagModeOn, setTagMode] = useState<boolean>(false) // Bulk tagging
 
   const imageHelper = useImageTagHelper()
-  // eslint-disable-next-line
+
   const { onClick } = imageHelper
 
   if (imageList == null) return null
 
   const { isAuthorized } = auth
+
+  const pageUrl = `/u/${uid}`
+
   /**
    * Run after a tag has sucessfully added to the backend
-   * Todo: move tag handling out of local state and into a global store
-   * to reduce prop drilling
    */
   const onCompletedHandler = useCallback(async (data?: any) => {
-    const { setTag } = data
-    if (setTag == null) return
-    const { mediaUuid } = setTag
-    const { id } = setTag.climb
-    const currentTagList = tagsByMediaId?.[mediaUuid] ?? []
-
-    if (currentTagList.findIndex((tag: MediaTagWithClimb) => tag.climb.id === id) !== -1) {
-      // Tag for the same climb exists
-      // We only allow 1 climb/area tag per media
-      return
-    }
-
-    updateTag(curr => {
-      const currTagList = curr?.[mediaUuid] ?? []
-      return ({
-        ...curr,
-        [mediaUuid]: currTagList.length === 0 ? [setTag] : currTagList.concat([setTag])
-      })
-    })
-    await revalidateServePage(uid)
+    await actions.media.addTag(data)
   }, [])
 
   /**
    * Run after a tag has sucessfully deleted from the backend
    */
   const onDeletedHandler = useCallback(async (data: any) => {
-    const { removeTag } = data
-    if (removeTag == null) return
-    const { mediaUuid, destinationId } = removeTag
-
-    if (tagsByMediaId?.[mediaUuid] == null) {
-      // Try to remove a tag that doesn't exist in local state
-      return
-    }
-
-    updateTag(curr => {
-      const currTagList = curr[mediaUuid]
-      const idx = currTagList.findIndex((tag: MediaTagWithClimb) => tag.climb.id === destinationId)
-      currTagList.splice(idx, 1)
-      return ({
-        ...curr,
-        [removeTag.mediaUuid]: currTagList
-      })
-    })
-    await revalidateServePage(uid)
-  }, [tagsByMediaId])
+    await actions.media.removeTag(data)
+  }, [])
 
   const onUploadHandler = async (imageUrl: string): Promise<void> => {
-    await userMediaStore.set.addImage(uid, uuid, imageUrl, true, true)
+    await actions.media.addImage(uid, uuid, imageUrl, true, true)
   }
 
-  // we need to store tagMode in a ref to give the image's onclick access
-  // to the latest value.
+  // Why useRef?
+  // The image's onClick callback needs to access the latest value.
   // See https://stackoverflow.com/questions/57847594/react-hooks-accessing-up-to-date-state-from-within-a-callback
   const stateRef = useRef<boolean>()
   stateRef.current = tagModeOn
 
+  /**
+   * What happens to when the user clicks on the image depends on
+   * whether bulk tagging is on/off.
+   */
   const imageOnClickHandler = useCallback((props: any): void => {
     if (stateRef?.current ?? false) {
-      onClick(props)
+      onClick(props) // bulk tagging
     } else {
       const { index } = props
-      setIsOpen(index)
+      setSlideNumber(index) // open slide viewer
     }
   }, [])
 
@@ -136,7 +104,7 @@ export default function ImageTable ({ uid, auth, userProfile, initialImageList, 
       <div className={`block w-full xl:grid xl:grid-cols-3 xl:gap-8  2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
 
         {imageList.map((imageInfo, index) => {
-          const tags = tagsByMediaId?.[imageInfo.mediaId] ?? []
+          const tags = initialTagMap?.[imageInfo.mediaId] ?? []
           return (
             <UserMedia
               key={imageInfo.mediaId}
@@ -164,12 +132,11 @@ export default function ImageTable ({ uid, auth, userProfile, initialImageList, 
         isOpen={selectedMediaId >= 0}
         initialIndex={selectedMediaId}
         imageList={imageList}
-        tagsByMediaId={tagsByMediaId}
+        tagsByMediaId={initialTagMap}
         userinfo={<TinyProfile userProfile={userProfile} />}
-        onClose={() => setIsOpen(-1)}
-        onTagDeleted={onDeletedHandler}
-        onTagAdded={onCompletedHandler}
+        onClose={() => setSlideNumber(-1)}
         auth={auth}
+        pageUrl={pageUrl}
       />
     </>
   )

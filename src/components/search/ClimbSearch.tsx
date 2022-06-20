@@ -50,10 +50,14 @@ const ClimbSearch = ({ expanded, onClick, onClickOutside }: ClimbSearchProps): J
           labels={['Places to climb', 'Climb search']}
           panelCompList={[
             <div key={2} className='pb-2 bg-slate-800'>
-              <CragFinder isMobile={false} />
+              <div className='max-w-screen-sm mx-auto px-16'>
+                <CragFinder isMobile={false} />
+              </div>
             </div>,
             <div key={1} className='pb-2 bg-slate-800'>
-              <ClimbSearchByName isMobile={false} />
+              <div className='max-w-screen-sm mx-auto px-16'>
+                <ClimbSearchByName isMobile={false} />
+              </div>
             </div>
           ]}
         />
