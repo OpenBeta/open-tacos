@@ -6,7 +6,7 @@ interface BaseButtonProps {
   onClick?: any
   label: string | JSX.Element
   variant?: ButtonVariant
-  size?: 'sm'|'md'
+  size?: 'sm'|'md' | 'lg'
   href?: string
   type?: 'button' | 'reset' | 'submit'
   disabled?: boolean
@@ -30,6 +30,9 @@ export const BaseButton = React.forwardRef<HTMLInputElement, BaseButtonProps>(({
         break
       case 'md':
         sz = 'mdRounded'
+        break
+      case 'lg':
+        sz = 'lgRounded'
         break
       default:
         sz = 'mdRounded'
@@ -83,7 +86,7 @@ export const Button = ({
   }
   return (
     <BaseButton
-      onClick={onClick} label={label} variant={variant} type={type} disabled={disable} ariaLabel={ariaLabel}
+      onClick={onClick} label={label} variant={variant} type={type} disabled={disable} ariaLabel={ariaLabel} size={size}
     />
   )
 }
@@ -91,8 +94,10 @@ export const Button = ({
 const SIZE = {
   sm: 'px-2 py-0.5 text-sm',
   md: 'px-2.5 py-1 text-base',
+  lg: 'px-3 py-1.5 text-lg',
   smRounded: 'p-0.5',
-  mdRounded: 'p-1.5'
+  mdRounded: 'p-1.5',
+  lgRounded: 'p-2'
 }
 
 export enum ButtonVariant {
