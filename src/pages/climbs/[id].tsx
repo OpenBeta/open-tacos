@@ -59,8 +59,12 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
     },
     onSwipedRight: () => {
       rightClimb !== null && router.push(`/climbs/${rightClimb.id}`)
-    }
-  })
+    },
+    swipeDuration: 250,
+    // touchEventOptions: { passive: true },
+    preventScrollOnSwipe: false
+  }
+  )
   useHotkeys('left', () => {
     leftClimb !== null && router.push(`/climbs/${leftClimb.id}`)
   }, [leftClimb])
