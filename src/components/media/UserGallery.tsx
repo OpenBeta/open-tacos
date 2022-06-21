@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef } from 'react'
+import { useCallback, useState, useRef, Dispatch, SetStateAction } from 'react'
 import { Dictionary } from 'underscore'
 import { TagIcon } from '@heroicons/react/outline'
 
@@ -6,7 +6,7 @@ import UserMedia from './UserMedia'
 import ImageTagger from './ImageTagger'
 import useImageTagHelper from './useImageTagHelper'
 import { MediaTagWithClimb, MediaType, IUserProfile } from '../../js/types'
-import InitialUploadCTA from './InitialUploadCTA'
+import UploadCTA from './UploadCTA'
 import { actions } from '../../js/stores'
 import SlideViewer from './slideshow/SlideViewer'
 import { TinyProfile } from '../users/PublicProfile'
@@ -88,21 +88,15 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
 
   return (
     <>
-      <Bar layoutClass={Bar.JUSTIFY_LEFT} paddingX={Bar.PX_DEFAULT_LG} className='space-x-4'>
-        {isAuthorized &&
-          <Toggle
-            enabled={tagModeOn}
-            label={
-              <div className='flex items-center space-x-1'>
-                <TagIcon className='w-5 h-5' /><span>Tag photo</span>
-              </div>
-            }
-            onClick={() => setTagMode(current => !current)}
-          />}
-        {tagModeOn && <span className='text-secondary align-text-bottom'>Power tagging mode is <b>On</b>.  Click on the photo to tag a climb.</span>}
-      </Bar>
-      <div className={`block w-full xl:grid xl:grid-cols-3 xl:gap-8  2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
+      <MediaActionToolbar
+        isAuthorized={isAuthorized}
+        imageList={imageList}
+        setTagMode={setTagMode}
+        tagModeOn={tagModeOn}
+      />
 
+      <div className={`block w-full xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
+        {imageList.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
         {imageList.map((imageInfo, index) => {
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []
           return (
@@ -119,7 +113,7 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
         })}
 
         {placeholders.map(index =>
-          <InitialUploadCTA key={index} onUploadFinish={onUploadHandler} />)}
+          <UploadCTA key={index} onUploadFinish={onUploadHandler} />)}
 
       </div>
 
@@ -139,5 +133,36 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
         pageUrl={pageUrl}
       />
     </>
+  )
+}
+
+interface ActionToolbarProps {
+  isAuthorized: boolean
+  imageList: MediaType[]
+  tagModeOn: boolean
+  setTagMode: Dispatch<SetStateAction<boolean>>
+}
+
+const MediaActionToolbar = ({ isAuthorized, imageList, tagModeOn, setTagMode }: ActionToolbarProps): JSX.Element => {
+  return (
+    <Bar layoutClass={Bar.JUSTIFY_LEFT} paddingX={Bar.PX_DEFAULT_LG} className='space-x-4'>
+      {isAuthorized &&
+        <Toggle
+          enabled={tagModeOn}
+          label={
+            <div className='flex items-center space-x-1'>
+              <TagIcon className='w-5 h-5' /><span className='font-semibold'>Tag photo</span>
+            </div>
+          }
+          onClick={() => setTagMode(current => !current)}
+        />}
+      {tagModeOn
+        ? (
+          <span className='hidden md:inline text-secondary align-text-bottom'>
+            Power tagging mode is <b>On</b>.&nbsp;Click on the photo to tag a climb.
+          </span>
+          )
+        : (<>{imageList.length >= 3 && imageList.length < 8 && <span className='hidden md:inline text-secondary mt-0.5'>&#128072;&#127997;&nbsp;Activate Pro mode</span>}</>)}
+    </Bar>
   )
 }

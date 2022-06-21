@@ -26,43 +26,43 @@ export default function UserMedia ({ index, imageInfo, onClick, tagList, onTagDe
 
   const onClickHandler = useCallback((event) => {
     onClick({ mouseXY: [event.clientX, event.clientY], imageInfo, index })
-    event.stopPropagation()
+    event.preventDefault()
   }, [])
 
   const { isDesktop } = useResponsive()
   const loader = isDesktop ? DesktopPreviewLoader : MobileLoader
 
-  const onClickFn = isDesktop ? { onClick: onClickHandler } : null
-
   return (
-    <figure
-      className={
+    <>
+      <figure
+        className={
         classNames(
           'cursor-inherit block relative',
           isDesktop ? 'w-[300px] h-[300px] hover:brightness-75' : 'max-w-screen-lg py-12'
         )
       }
-      {...onClickFn}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
-      {isDesktop
-        ? (<ResponsiveImage mediaUrl={imageInfo.filename} isHero={index === 0} loader={loader} />)
-        : (<img
-            src={loader({ src: imageInfo.filename, width: MOBILE_IMAGE_MAX_WIDITH })}
-            width={MOBILE_IMAGE_MAX_WIDITH}
-            sizes='100vw'
-           />)}
-      {tagList?.length > 0 &&
-        <figcaption className='absolute inset-0 flex flex-col justify-end'>
-          <TagList
-            hovered={hovered}
-            list={tagList}
-            onDeleted={onTagDeleted}
-            isAuthorized={isAuthorized}
-            className='px-2'
-          />
-        </figcaption>}
-    </figure>
+        onClick={onClickHandler}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+      >
+        {isDesktop
+          ? (<ResponsiveImage mediaUrl={imageInfo.filename} isHero={index === 0} loader={loader} />)
+          : (<img
+              src={loader({ src: imageInfo.filename, width: MOBILE_IMAGE_MAX_WIDITH })}
+              width={MOBILE_IMAGE_MAX_WIDITH}
+              sizes='100vw'
+             />)}
+        {tagList?.length > 0 &&
+          <figcaption className='absolute block inset-0 flex flex-col justify-end'>
+            <TagList
+              hovered={hovered}
+              list={tagList}
+              onDeleted={onTagDeleted}
+              isAuthorized={isAuthorized}
+              className='px-2'
+            />
+          </figcaption>}
+      </figure>
+    </>
   )
 }
