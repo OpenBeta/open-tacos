@@ -26,12 +26,12 @@ export default NextAuth({
       }
     })
   ],
-  debug: false,
   events: {},
   pages: {
     signIn: '/auth/signin'
   },
   callbacks: {
+    // See https://next-auth.js.org/configuration/callbacks#jwt-callback
     async jwt ({ token, account, profile, user }) {
       if (account?.access_token != null) {
         token.accessToken = account.access_token
@@ -40,14 +40,16 @@ export default NextAuth({
         token.id = profile.sub
       }
       if (profile?.[CustomClaimUserMetadata] != null) {
+        // null guard needed because profile object is only available once
         token.userMetadata = (profile?.[CustomClaimUserMetadata] as IUserMetadata)
       }
       return token
     },
     async session ({ session, user, token }) {
-      if (token.userMetadata == null) {
-        // we must have user metadata for everything to work
-        throw new Error('Missing user metadata from Auth provider')
+      if (token.userMetadata == null ||
+        token?.userMetadata?.uuid == null || token?.userMetadata?.nick == null) {
+        // we must have user uuid and nickname for everything to work
+        throw new Error('Missing user uuid and nickname from Auth provider')
       }
       session.user.metadata = token.userMetadata
       session.accessToken = token.accessToken
