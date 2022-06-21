@@ -96,7 +96,7 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
       />
 
       <div className={`block w-full xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
-        {imageList.length >= 3 && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
+        {imageList.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
         {imageList.map((imageInfo, index) => {
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []
           return (

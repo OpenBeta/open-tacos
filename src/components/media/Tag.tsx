@@ -14,22 +14,27 @@ interface PhotoTagProps {
 export default function Tag ({ tag, highlighted, onDelete, isAuthorized = false }: PhotoTagProps): JSX.Element {
   const { climb } = tag
   return (
-    <span className={classNames(
-      'px-1 py-0.5 border-neutral-400 bg-neutral-200 border rounded-xl max-w-[10rem] inline-flex items-center',
-      highlighted ? 'bg-opacity-100 stroke-gray-800' : 'bg-opacity-30 stroke-neutral-400'
-    )}
-    >
-      <Link href={`/climbs/${climb.id}`} passHref>
-        <a className='whitespace-nowrap truncate px-1 hover:underline'>{climb.name}</a>
-      </Link>
-      {isAuthorized &&
-        <button onClick={(e) => {
-          onDelete(tag.mediaUuid, tag.climb.id)
-          e.stopPropagation()
-        }}
-        >
-          <XIcon className='cursor-pointer w-5 h-5 stroke-1 stroke-inherit hover:stroke-2' />
-        </button>}
-    </span>
+    <Link href={`/climbs/${climb.id}`} passHref>
+      <a
+        className={classNames(
+          'border-neutral-400 border rounded-full max-w-[10rem] inline-flex items-center hover:underline',
+          highlighted ? 'bg-neutral-200 ' : ''
+        )}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <span className='px-2 whitespace-nowrap truncate'>{climb.name}</span>
+        {isAuthorized &&
+          <button onClick={(e) => {
+            onDelete(tag.mediaUuid, tag.climb.id)
+            e.preventDefault()
+          }}
+          >
+            <div className=' hover:bg-white p-1 rounded-full'>
+              <XIcon className='cursor-pointer stroke-1 hover:stroke-2 w-5 h-5' />
+            </div>
+          </button>}
+      </a>
+    </Link>
+
   )
 }
