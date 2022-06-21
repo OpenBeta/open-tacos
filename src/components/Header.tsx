@@ -47,7 +47,7 @@ export default function Header (props: HeaderProps): JSX.Element {
   }
 
   return (
-    <div id={NAV_BAR_IDENTIFIER}>
+    <div id={NAV_BAR_IDENTIFIER} className='relative z-50'>
       {isTablet || isMobile
         ? <MobileTabletAppBar includeFilters={includeFilters} />
         : <DesktopAppBar
