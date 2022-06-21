@@ -32,8 +32,6 @@ export default function UserMedia ({ index, imageInfo, onClick, tagList, onTagDe
   const { isDesktop } = useResponsive()
   const loader = isDesktop ? DesktopPreviewLoader : MobileLoader
 
-  const onClickFn = isDesktop ? { onClick: onClickHandler } : null
-
   return (
     <figure
       className={
@@ -42,7 +40,7 @@ export default function UserMedia ({ index, imageInfo, onClick, tagList, onTagDe
           isDesktop ? 'w-[300px] h-[300px] hover:brightness-75' : 'max-w-screen-lg py-12'
         )
       }
-      {...onClickFn}
+      onClick={onClickHandler}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >

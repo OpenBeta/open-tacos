@@ -54,16 +54,17 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, serverMediaList, serverTag
           {userProfile != null && <PublicProfile userProfile={userProfile} />}
 
           {isAuthorized && (
-            <div className='flex justify-center mt-8 text-secondary text-sm'>
-              <ul className='list-disc'>
-                {mediaList?.length < 3 &&
-                  <li>Please upload 3 photos to complete your profile</li>}
-                <li>Only upload your own photos</li>
-                <li>Keep it <b>Safe For Work</b> and climbing-related</li>
-              </ul>
+            <div className='flex justify-center mt-8 text-secondary text-sm whitespace-normal px-4 lg:px-0'>
+              <div className='border rounded-md px-6 py-2 shadow'>
+                <ul className='list-disc'>
+                  <li>Please upload 3 photos to complete your profile {mediaList?.length >= 3 && <span>&#10004;</span>}</li>
+                  <li>Remember to only upload your own photos.</li>
+                  <li>Keep it <b>Safe For Work</b> and climbing-related.</li>
+                </ul>
+              </div>
             </div>)}
 
-          <hr className='mt-16' />
+          <hr className='mt-8' />
 
           {mediaList?.length >= 0 &&
             <UserGallery
