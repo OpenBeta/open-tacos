@@ -24,6 +24,9 @@ export const graphqlClient = new ApolloClient({
         },
         ClimbTag: {
           keyFields: ['mediaUuid', 'climb', ['id']]
+        },
+        ClimbMetadata: {
+          keyFields: ['climbId']
         }
       }
     }
