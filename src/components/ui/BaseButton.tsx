@@ -105,7 +105,7 @@ export enum ButtonVariant {
   TEXT_CONTRAST = 'text-white hover:underline',
   OUTLINED_PRIMARY = 'border rounded-md bg-inherit text-ob-primary border-ob-primary drop-shadow-sm hover:ring-2',
   OUTLINED_SECONDARY = 'border rounded-md bg-inherit text-ob-secondary border-ob-secondary drop-shadow-sm hover:ring-2',
-  OUTLINED_CONTRAST = 'border  border-gray-600 rounded-md bg-inherit text-white drop-shadow-md hover:ring-2',
+  OUTLINED_CONTRAST = 'border  border-gray-800 rounded-md bg-inherit text-white drop-shadow-md hover:ring-2',
   SOLID_PRIMARY = 'border  border-gray-600 rounded-md bg-ob-primary text-white drop-shadow-md hover:ring-2',
   OUTLINED_DEFAULT = 'border rounded-md border-gray-800 text-black drop-shadow-sm hover:ring-1',
   SOLID_SECONDARY = 'border-0 rounded-md bg-ob-secondary text-black drop-shadow-sm hover:ring-1',
