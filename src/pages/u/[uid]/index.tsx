@@ -58,8 +58,8 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, serverMediaList, serverTag
               <div className='border rounded-md px-6 py-2 shadow'>
                 <ul className='list-disc'>
                   <li>Please upload 3 photos to complete your profile {mediaList?.length >= 3 && <span>&#10004;</span>}</li>
-                  <li>Remember to only upload your own photos.</li>
-                  <li>Keep it <b>Safe For Work</b> and climbing-related.</li>
+                  <li>Remember to upload only your own photos</li>
+                  <li>Keep it <b>Safe For Work</b> and climbing-related</li>
                 </ul>
               </div>
             </div>)}
