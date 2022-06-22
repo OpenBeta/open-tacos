@@ -56,7 +56,7 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
   }, [])
 
   const onUploadHandler = async (imageUrl: string): Promise<void> => {
-    await actions.media.addImage(uid, uuid, imageUrl, true, true)
+    await actions.media.addImage(uid, uuid, imageUrl, true)
   }
 
   // Why useRef?
@@ -148,7 +148,8 @@ const MediaActionToolbar = ({ isAuthorized, imageList, tagModeOn, setTagMode }: 
     <Bar layoutClass={Bar.JUSTIFY_LEFT} paddingX={Bar.PX_DEFAULT_LG} className='space-x-4'>
       {isAuthorized &&
         <Toggle
-          enabled={tagModeOn}
+          checked={tagModeOn}
+          disabled={imageList.length === 0}
           label={
             <div className='flex items-center space-x-1'>
               <TagIcon className='w-5 h-5' /><span className='font-semibold'>Tag photo</span>

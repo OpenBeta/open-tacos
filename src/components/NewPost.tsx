@@ -23,7 +23,7 @@ export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JS
     const { nick, uuid } = data.user.metadata
 
     if (uuid != null && nick != null) {
-      await userMediaStore.set.addImage(nick, uuid, url, false, true)
+      await userMediaStore.set.addImage(nick, uuid, url, true)
       console.log('uploaded', url)
       await toMyProfile()
     }
