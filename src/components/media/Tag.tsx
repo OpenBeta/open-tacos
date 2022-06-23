@@ -14,7 +14,7 @@ interface PhotoTagProps {
 export default function Tag ({ tag, highlighted, onDelete, isAuthorized = false }: PhotoTagProps): JSX.Element {
   const { climb } = tag
   return (
-    <Link href={`/climbs/${climb.id}`} passHref>
+    <Link href={`/climbs/${climb.id}`}>
       <a
         className={classNames(
           'border-neutral-400 border rounded-full max-w-[10rem] inline-flex items-center hover:underline',

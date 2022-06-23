@@ -1,10 +1,10 @@
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import { groupBy, Dictionary } from 'underscore'
+import dynamic from 'next/dynamic'
 
 import Layout from '../../../components/layout'
 import SeoTags from '../../../components/SeoTags'
-import UserGallery from '../../../components/media/UserGallery'
 import { getTagsByMediaId } from '../../../js/graphql/api'
 import { getUserImages } from '../../../js/sirv/SirvClient'
 import { MediaTagWithClimb, IUserProfile, MediaType } from '../../../js/types'
@@ -13,6 +13,7 @@ import { getUserProfileByNick, getAllUsersMetadata } from '../../../js/auth/Mana
 import usePermissions from '../../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../../js/hooks/seo'
 import useMediaDataStore from '../../../js/hooks/useMediaDS'
+import type { UserGalleryProps } from '../../../components/media/UserGallery'
 interface UserHomeProps {
   uid: string
   serverMediaList: MediaType[]
@@ -48,9 +49,6 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, serverMediaList, serverTag
         showFilterBar={false}
       >
         <div className='max-w-screen-2xl mx-auto '>
-
-          {router.isFallback && <div>Loading...</div>}
-
           {userProfile != null && <PublicProfile userProfile={userProfile} />}
 
           {isAuthorized && (
@@ -66,14 +64,15 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, serverMediaList, serverTag
 
           <hr className='mt-8' />
 
-          {mediaList?.length >= 0 &&
-            <UserGallery
-              auth={auth}
-              uid={uid}
-              userProfile={userProfile}
-              initialImageList={mediaList}
-              initialTagsByMediaId={tagMap}
-            />}
+          <DynamicComponent
+            loaded={!router.isFallback}
+            auth={auth}
+            uid={uid}
+            userProfile={userProfile}
+            initialImageList={mediaList}
+            initialTagsByMediaId={tagMap}
+          />
+
           <hr className='my-8' />
 
           {!isAuthorized && <div className='mx-auto text-sm text-secondary text-center'>All photos are copyrighted by their respective owners.  All Rights Reserved.</div>}
@@ -108,7 +107,12 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
 
   try {
     const userProfile = await getUserProfileByNick(uid)
-    const { mediaList, mediaIdList } = await getUserImages(userProfile.uuid)
+
+    if (userProfile?.uuid == null) {
+      throw new Error('Bad user profile data')
+    }
+
+    const { mediaList, mediaIdList } = await getUserImages(userProfile?.uuid)
 
     let tagsByMediaId: Dictionary<MediaTagWithClimb[]> = {}
     if (mediaList.length > 0) {
@@ -134,3 +138,9 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string}> = asyn
     }
   }
 }
+
+const DynamicComponent = dynamic<UserGalleryProps>(
+  async () =>
+    await import('../../../components/media/UserGallery').then(
+      module => module.default), { ssr: false }
+)

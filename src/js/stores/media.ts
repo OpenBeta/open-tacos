@@ -77,7 +77,6 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       const { mediaUuid } = setTag
       const { id } = setTag.climb
       const currentTagList = get.tagMap()?.[mediaUuid] ?? []
-      console.log('#Add.  current tag', currentTagList)
       if (currentTagList.findIndex((tag: MediaTagWithClimb) => tag.climb.id === id) !== -1) {
         // Tag for the same climb exists
         // We only allow 1 climb/area tag per media

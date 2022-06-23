@@ -5,24 +5,26 @@ import classNames from 'classnames'
 import Layout from '../../../components/layout'
 import SeoTags from '../../../components/SeoTags'
 import { getTagsByMediaId } from '../../../js/graphql/api'
-import { getFileInfo } from '../../../js/sirv/SirvClient'
+import { getFileInfo, getUserImages } from '../../../js/sirv/SirvClient'
 import { MediaTagWithClimb, IUserProfile, MediaType } from '../../../js/types'
 import { TinyProfile } from '../../../components/users/PublicProfile'
 import { getUserProfileByNick } from '../../../js/auth/ManagementClient'
 import usePermissions from '../../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../../js/hooks/seo'
-import { SingleViewer, SingleViewerPlaceholder } from '../../../components/media/slideshow/SlideViewer'
+import { SingleViewer } from '../../../components/media/slideshow/SlideViewer'
 import useMediaDataStore from '../../../js/hooks/useMediaDS'
+import MoreFromThisUser from '../../../components/media/MoreFromThisUser'
 
 interface UserHomeProps {
   uid: string
   postId: string | null
   media: MediaType
+  otherMediaList: MediaType[]
   tagList: MediaTagWithClimb[]
   userProfile: IUserProfile
 }
 
-const SingleMediaPage: NextPage<UserHomeProps> = ({ uid, postId = null, media, tagList, userProfile }) => {
+const SingleMediaPage: NextPage<UserHomeProps> = ({ uid, postId = null, media, tagList, otherMediaList, userProfile }) => {
   const router = useRouter()
 
   const mediaId = media?.mediaId ?? null
@@ -38,7 +40,7 @@ const SingleMediaPage: NextPage<UserHomeProps> = ({ uid, postId = null, media, t
   })
   const { isFallback } = router
 
-  const currentMedia = mediaList?.[0] ?? null
+  // const currentMedia = media
   const currentTagList = singleTagList
 
   return (
@@ -50,15 +52,15 @@ const SingleMediaPage: NextPage<UserHomeProps> = ({ uid, postId = null, media, t
       >
         <div className='max-w-screen-2xl flex flex-col items-center w-full h-full mx-auto'>
           <div className='max-w-screen-xl flex flex-col lg:flex-row items-stretch justify-center border rounded-md overflow-hidden drop-shadow-sm'>
-            {currentMedia == null || isFallback
-              ? (<SingleViewerPlaceholder />)
-              : (<SingleViewer
-                  media={currentMedia}
-                  tagList={currentTagList}
-                  userinfo={<TinyProfile userProfile={userProfile} />}
-                  auth={auth}
-                 />)}
+            <SingleViewer
+              loaded={!isFallback}
+              media={mediaList[0]}
+              tagList={currentTagList}
+              userinfo={<TinyProfile userProfile={userProfile} />}
+              auth={auth}
+            />
           </div>
+          <MoreFromThisUser loaded={!isFallback} uid={uid} mediaList={otherMediaList} />
         </div>
       </Layout>
     </>
@@ -85,16 +87,20 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {uid: string, postId:
   try {
     const userProfile = await getUserProfileByNick(uid)
 
-    const filename = `/u/${userProfile.uuid}/${postId}`
-    const media = await getFileInfo(userProfile.uuid, filename)
+    const { uuid } = userProfile
+    const filename = `/u/${uuid}/${postId}`
 
-    const tagList = await getTagsByMediaId([media.mediaId])
+    const media = await getFileInfo(uuid, filename) // Todo: combine get main image and most recent in 1 call
+    const { mediaList: otherMediaList } = await getUserImages(uuid, 6) // Get most recent
+
+    const tagList = await getTagsByMediaId([media.mediaId]) // For now only get tags for the main image
 
     const data = {
       uid,
       postId,
       media,
       tagList,
+      otherMediaList,
       userProfile
     }
     return {

@@ -14,7 +14,8 @@ import { WithPermission } from '../../js/types/User'
 import Bar from '../ui/Bar'
 import Toggle from '../ui/Toggle'
 
-interface ImageTableProps {
+export interface UserGalleryProps {
+  loaded: boolean
   uid: string
   userProfile: IUserProfile
   initialImageList: MediaType[]
@@ -25,7 +26,7 @@ interface ImageTableProps {
 /**
  * Image gallery on user profile
  */
-export default function UserGallery ({ uid, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: ImageTableProps): JSX.Element | null {
+export default function UserGallery ({ loaded, uid, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: UserGalleryProps): JSX.Element | null {
   const imageList = initialImageList
 
   const [selectedMediaId, setSlideNumber] = useState<number>(-1)
@@ -56,7 +57,7 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
   }, [])
 
   const onUploadHandler = async (imageUrl: string): Promise<void> => {
-    await actions.media.addImage(uid, uuid, imageUrl, true)
+    await actions.media.addImage(uid, userProfile.uuid, imageUrl, true)
   }
 
   // Why useRef?
@@ -78,14 +79,16 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
     }
   }, [])
 
-  const { uuid } = userProfile
+  // const { uuid } = userProfile
 
   // When logged-in user has fewer than 3 photos,
   // create empty slots for the call-to-action upload component.
-  const placeholders = imageList.length < 3 && isAuthorized
-    ? [...Array(3 - imageList.length).keys()]
+  const placeholders = imageList?.length < 3 && isAuthorized
+    ? [...Array(3 - imageList?.length).keys()]
     : []
 
+  // console.log('#Gallery ', loaded, imageList)
+  // console.log('#gallery', loaded, imageList?.length)
   return (
     <>
       <MediaActionToolbar
@@ -95,19 +98,21 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
         tagModeOn={tagModeOn}
       />
 
-      <div className={`block w-full xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
-        {imageList.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
+      <div className={`z-10 block w-full xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
+        {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
         {imageList.map((imageInfo, index) => {
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []
           return (
             <UserMedia
               key={imageInfo.mediaId}
+              uid={uid}
               index={index}
               tagList={tags}
               imageInfo={imageInfo}
               onClick={imageOnClickHandler}
               onTagDeleted={onDeletedHandler}
               isAuthorized={isAuthorized && (stateRef?.current ?? false)}
+              useClassicATag
             />
           )
         })}
@@ -127,7 +132,7 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
         initialIndex={selectedMediaId}
         imageList={imageList}
         tagsByMediaId={initialTagMap}
-        userinfo={<TinyProfile userProfile={userProfile} />}
+        userinfo={<TinyProfile userProfile={userProfile} onClick={() => setSlideNumber(-1)} />}
         onClose={() => setSlideNumber(-1)}
         auth={auth}
         pageUrl={pageUrl}

@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import Link from 'next/link'
 
 import { IUserProfile } from '../../js/types/User'
@@ -5,6 +6,7 @@ import EditProfileButton from './EditProfileButton'
 
 interface PublicProfileProps {
   userProfile: IUserProfile
+  onClick?: () => void
 }
 
 export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX.Element {
@@ -26,20 +28,44 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
   )
 }
 
-export const TinyProfile = ({ userProfile }: PublicProfileProps): JSX.Element => {
+export const TinyProfile = ({ userProfile, onClick }: PublicProfileProps): JSX.Element => {
+  const onClickHandler = useCallback((event) => {
+    if (onClick != null) {
+      event.stopPropagation()
+      event.preventDefault()
+      onClick()
+    }
+  }, [])
   const { nick, avatar } = userProfile
   return (
-    <section className='flex items-center space-x-4'>
-      <div className='grayscale'>
-        <img className='rounded-full hue-rotate-15' src={avatar} width={32} height={32} />
-      </div>
-      <div className='text-primary font-bold'>
-        <Link href={`/u/${nick}`} passHref>
-          <a>
+
+    <Link href={`/u/${nick}`}>
+      <a onClick={onClickHandler}>
+        <section className='flex items-center space-x-2.5'>
+          <div className='grayscale'>
+            <img className='rounded-full' src={avatar} width={32} height={32} />
+          </div>
+          <div className={ProfileATagStyle}>
             {nick}
-          </a>
-        </Link>
-      </div>
-    </section>
+
+          </div>
+        </section>
+      </a>
+    </Link>
+
   )
 }
+
+interface ProfileATagProps {
+  uid: string
+  className?: string
+}
+
+export const ProfileATag = ({ uid, className = ProfileATagStyle }: ProfileATagProps): JSX.Element => (
+  <Link href={`/u/${uid}`}>
+    <a className={className}>
+      <span>{uid}</span>
+    </a>
+  </Link>)
+
+const ProfileATagStyle = 'text-primary font-bold hover:underline'
