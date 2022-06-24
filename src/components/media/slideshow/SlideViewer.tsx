@@ -115,8 +115,8 @@ export const SingleViewer = ({ loaded, media, tagList, userinfo, auth }: SingleV
       <div className='block relative overflow-hidden min-w-[350px] min-h-[300px]'>
         {loaded && media?.filename != null
           ? (<img
-              src={DefaultLoader({ src: media.filename, width: 750 })}
-              width={750}
+              src={DefaultLoader({ src: media.filename, width: 1200 })}
+              width={1200}
               sizes='100vw'
               className='bg-gray-100 w-auto h-[100%] max-h-[700px]'
              />)
@@ -217,9 +217,9 @@ const InfoContainer = ({ currentImage, tagList, auth }: InfoContainerProps): Rea
     <>
       <div className='my-8'>
         <div className='text-primary text-sm'>
-          Climbs: {tagList.length === 0 && <span className='text-tertiary'>none</span>}
+          Climbs: {(tagList?.length ?? 0) === 0 && <span className='text-tertiary'>none</span>}
         </div>
-        {tagList.length > 0 &&
+        {tagList?.length > 0 &&
           <TagList
             hovered
             list={tagList}
@@ -234,7 +234,7 @@ const InfoContainer = ({ currentImage, tagList, auth }: InfoContainerProps): Rea
           <AddTag onTagAdded={onTagAddedHanlder} imageInfo={currentImage} className='my-2' />
         </div>}
 
-      {tagList.length === 0 && isAuthorized &&
+      {tagList?.length === 0 && isAuthorized &&
         <div className='my-8 text-secondary flex items-center space-x-1'>
           <LightBulbIcon className='w-6 h-6 stroke-1 stroke-ob-primary' />
           <span className='mt-1 text-xs'>Your tags help others learn more about the crag</span>

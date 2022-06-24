@@ -14,7 +14,7 @@ import usePermissions from '../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../js/hooks/seo'
 import useMediaDataStore from '../../js/hooks/useMediaDS'
 import type { UserGalleryProps } from '../../components/media/UserGallery'
-import type { UserFeatureViewProps } from '../../components/media/UserFeatureView'
+import type { UserSingleImageViewProps } from '../../components/media/UserSingleImageView'
 
 interface UserHomeProps {
   uid: string
@@ -61,15 +61,16 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
         contentContainerClass='content-default with-standard-y-margin'
         showFilterBar={false}
       >
-        <div className='max-w-screen-2xl mx-auto flex flex-col items-center'>
+        <div className='max-w-screen-2xl mx-auto flex flex-col items-center 2xl:px-8'>
           {isFallback && <div className='h-screen'>Loading...</div>}
           {backBtnFlag == null && postId != null
             ? (<DynamicUserFeatureImageview
                 uid={uid}
                 auth={auth}
                 featureMedia={serverMainMedia}
-                tagList={[]}
+                featureTags={serverMainMedia?.mediaId != null ? tagMap?.[serverMainMedia.mediaId] : []}
                 mostRecentList={mediaList?.slice(0, 6) ?? []}
+                mostRecentTagMap={tagMap}
                 userProfile={userProfile}
                 loaded={!isFallback}
                />)
@@ -102,7 +103,11 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
               </>
               )}
 
-          {!isAuthorized && !isFallback && (<><hr className='my-8' /><div className='mx-auto text-sm text-secondary text-center'>All photos are copyrighted by their respective owners.  All Rights Reserved.</div></>)}
+          {!isAuthorized && !isFallback && (
+            <div className='mt-4 w-full mx-auto text-sm text-secondary text-center'>
+              All photos are copyrighted by their respective owners.  All Rights Reserved.
+            </div>
+          )}
         </div>
       </Layout>
     </>
@@ -158,6 +163,9 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {slug: string[]}> = a
     let tagsByMediaId: Dictionary<MediaTagWithClimb[]> = {}
 
     if (mediaList.length > 0) {
+      if (mainMedia?.mediaId != null) {
+        mediaIdList.push(mainMedia?.mediaId)
+      }
       const tagArray = await getTagsByMediaId(mediaIdList)
       tagsByMediaId = groupBy(tagArray, 'mediaUuid')
     }
@@ -172,13 +180,13 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {slug: string[]}> = a
     }
     return {
       props: data,
-      revalidate: 60
+      revalidate: 120
     }
   } catch (e) {
     console.log('Error in getStaticProps()', e)
     return {
       notFound: true,
-      revalidate: 60
+      revalidate: 120
     }
   }
 }
@@ -189,8 +197,8 @@ const DynamicComponent = dynamic<UserGalleryProps>(
       module => module.default), { ssr: false }
 )
 
-const DynamicUserFeatureImageview = dynamic<UserFeatureViewProps>(
+const DynamicUserFeatureImageview = dynamic<UserSingleImageViewProps>(
   async () =>
-    await import('../../components/media/UserFeatureView').then(
-      module => module.default), { ssr: false }
+    await import('../../components/media/UserSingleImageView').then(
+      module => module.default), { ssr: true }
 )

@@ -91,14 +91,15 @@ export default function UserGallery ({ loaded, uid, auth, userProfile, initialIm
   // console.log('#gallery', loaded, imageList?.length)
   return (
     <>
-      <MediaActionToolbar
-        isAuthorized={isAuthorized}
-        imageList={imageList}
-        setTagMode={setTagMode}
-        tagModeOn={tagModeOn}
-      />
-
-      <div className={`z-10 block w-full xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
+      <div className='self-start border-t border-gray-400 w-full'>
+        <MediaActionToolbar
+          isAuthorized={isAuthorized}
+          imageList={imageList}
+          setTagMode={setTagMode}
+          tagModeOn={tagModeOn}
+        />
+      </div>
+      <div className={`block w-full xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
         {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
         {imageList?.map((imageInfo, index) => {
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []
@@ -164,11 +165,11 @@ const MediaActionToolbar = ({ isAuthorized, imageList, tagModeOn, setTagMode }: 
         />}
       {tagModeOn
         ? (
-          <span className='hidden md:inline text-secondary align-text-bottom'>
+          <span className='hidden md:inline text-secondary align-text-bottom tracking-tight'>
             Power tagging mode is <b>On</b>.&nbsp;Click on the photo to tag a climb.
           </span>
           )
-        : (<>{imageList?.length >= 3 && imageList?.length < 8 && <span className='hidden md:inline text-secondary mt-0.5'>&#128072;&#127997;&nbsp;Activate Pro mode</span>}</>)}
+        : (<>{imageList?.length >= 3 && imageList?.length < 8 && <span className='hidden md:inline text-secondary mt-0.5 tracking-tight'>&#128072;&#127997;&nbsp;Activate Pro mode</span>}</>)}
     </Bar>
   )
 }

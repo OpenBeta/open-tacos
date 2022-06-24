@@ -86,12 +86,3 @@ export const ImagePlaceholder = (props): JSX.Element => (
   >
     <rect rx={0} ry={0} width='40' height='40' />
   </ContentLoader>)
-
-// export const ATagWrapper = ({ uid, imageInfo, useClassicATag, children }): JSX.Element => {
-//   const shareableUrl = `/u/${uid}/${basename(imageInfo.filename)}`
-//   console.log(useClassicATag, shareableUrl)
-//   if (useClassicATag) {
-//     return (<a href={shareableUrl} onClick={event => { event.preventDefault() }} className='z-50'>{children}</a>)
-//   }
-//   return children
-// }
