@@ -34,7 +34,7 @@ export default function TagList ({ hovered, list, onDeleted, isAuthorized = fals
   return (
     <div className={
           classNames(
-            'text-xs flex flex-wrap justify-start space-x-2 space-y-0.5 bg-white',
+            'text-xs flex flex-wrap justify-start space-x-2 space-y-0.5 bg-white ',
             hovered ? 'bg-opacity-100' : 'bg-opacity-20',
             className
           )
