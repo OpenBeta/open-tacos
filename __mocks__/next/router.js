@@ -3,6 +3,7 @@ export function useRouter () {
     route: '/',
     pathname: '',
     query: '',
-    asPath: ''
+    asPath: '',
+    replace: jest.fn()
   }
 }

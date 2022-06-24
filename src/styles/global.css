@@ -46,6 +46,10 @@ body, html {
     @apply py-6;
   }
 
+  .with-standard-y-margin-2x {
+    @apply py-12;
+  }
+
   .content-mobile {
     @apply relative flex flex-col;
   }

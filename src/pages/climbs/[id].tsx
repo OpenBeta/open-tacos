@@ -25,6 +25,10 @@ interface ClimbPageProps {
 
 const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
   const router = useRouter()
+  // useEffect(()=>{
+  //   router.beforePopState()
+
+  // }, [router])
   return (
     <>
       {!router.isFallback && <PageMeta {...props} />}
@@ -216,6 +220,7 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = asy
   // Pass climb data to the page via props
   return {
     props: {
+      key: rs.data.climb.id,
       climb: rs.data.climb,
       mediaListWithUsernames,
       leftClimb,

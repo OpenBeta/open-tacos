@@ -10,17 +10,18 @@ interface PhotoTagProps {
   onDelete: (mediaId: string, destinationId: string) => void
   isAuthorized?: boolean
 }
-
+// onClick={(e) => e.stopPropagation()}
+//
 export default function Tag ({ tag, highlighted, onDelete, isAuthorized = false }: PhotoTagProps): JSX.Element {
   const { climb } = tag
   return (
-    <Link href={`/climbs/${climb.id}`} passHref>
+    <Link href={`/climbs/${climb.id}`} prefetch={false}>
       <a
         className={classNames(
           'border-neutral-400 border rounded-full max-w-[10rem] inline-flex items-center hover:underline',
           highlighted ? 'bg-neutral-200 ' : ''
         )}
-        onClick={(e) => e.stopPropagation()}
+        onClick={stopPropagation}
       >
         <span className='px-2 whitespace-nowrap truncate'>{climb.name}</span>
         {isAuthorized &&
@@ -38,3 +39,5 @@ export default function Tag ({ tag, highlighted, onDelete, isAuthorized = false 
 
   )
 }
+
+const stopPropagation = (event): void => event.stopPropagation()

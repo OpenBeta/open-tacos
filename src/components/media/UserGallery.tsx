@@ -14,7 +14,8 @@ import { WithPermission } from '../../js/types/User'
 import Bar from '../ui/Bar'
 import Toggle from '../ui/Toggle'
 
-interface ImageTableProps {
+export interface UserGalleryProps {
+  loaded: boolean
   uid: string
   userProfile: IUserProfile
   initialImageList: MediaType[]
@@ -25,7 +26,7 @@ interface ImageTableProps {
 /**
  * Image gallery on user profile
  */
-export default function UserGallery ({ uid, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: ImageTableProps): JSX.Element | null {
+export default function UserGallery ({ loaded, uid, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: UserGalleryProps): JSX.Element | null {
   const imageList = initialImageList
 
   const [selectedMediaId, setSlideNumber] = useState<number>(-1)
@@ -35,7 +36,7 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
 
   const { onClick } = imageHelper
 
-  if (imageList == null) return null
+  // if (imageList == null) return null
 
   const { isAuthorized } = auth
 
@@ -56,7 +57,7 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
   }, [])
 
   const onUploadHandler = async (imageUrl: string): Promise<void> => {
-    await actions.media.addImage(uid, uuid, imageUrl, true)
+    await actions.media.addImage(uid, userProfile.uuid, imageUrl, true)
   }
 
   // Why useRef?
@@ -78,36 +79,41 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
     }
   }, [])
 
-  const { uuid } = userProfile
+  // const { uuid } = userProfile
 
   // When logged-in user has fewer than 3 photos,
   // create empty slots for the call-to-action upload component.
-  const placeholders = imageList.length < 3 && isAuthorized
-    ? [...Array(3 - imageList.length).keys()]
+  const placeholders = imageList?.length < 3 && isAuthorized
+    ? [...Array(3 - imageList?.length).keys()]
     : []
 
+  // console.log('#Gallery ', loaded, imageList)
+  // console.log('#gallery', loaded, imageList?.length)
   return (
     <>
-      <MediaActionToolbar
-        isAuthorized={isAuthorized}
-        imageList={imageList}
-        setTagMode={setTagMode}
-        tagModeOn={tagModeOn}
-      />
-
+      <div className='self-start border-t border-gray-400 w-full'>
+        <MediaActionToolbar
+          isAuthorized={isAuthorized}
+          imageList={imageList}
+          setTagMode={setTagMode}
+          tagModeOn={tagModeOn}
+        />
+      </div>
       <div className={`block w-full xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
-        {imageList.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
-        {imageList.map((imageInfo, index) => {
+        {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
+        {imageList?.map((imageInfo, index) => {
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []
           return (
             <UserMedia
               key={imageInfo.mediaId}
+              uid={uid}
               index={index}
               tagList={tags}
               imageInfo={imageInfo}
               onClick={imageOnClickHandler}
               onTagDeleted={onDeletedHandler}
               isAuthorized={isAuthorized && (stateRef?.current ?? false)}
+              useClassicATag
             />
           )
         })}
@@ -117,7 +123,7 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
 
       </div>
 
-      {isAuthorized && imageList.length > 0 &&
+      {isAuthorized && imageList?.length > 0 &&
         <ImageTagger
           {...imageHelper} onCompleted={onCompletedHandler}
         />}
@@ -125,9 +131,9 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
       <SlideViewer
         isOpen={selectedMediaId >= 0}
         initialIndex={selectedMediaId}
-        imageList={imageList}
+        imageList={imageList ?? []}
         tagsByMediaId={initialTagMap}
-        userinfo={<TinyProfile userProfile={userProfile} />}
+        userinfo={<TinyProfile userProfile={userProfile} onClick={() => setSlideNumber(-1)} />}
         onClose={() => setSlideNumber(-1)}
         auth={auth}
         pageUrl={pageUrl}
@@ -159,11 +165,11 @@ const MediaActionToolbar = ({ isAuthorized, imageList, tagModeOn, setTagMode }: 
         />}
       {tagModeOn
         ? (
-          <span className='hidden md:inline text-secondary align-text-bottom'>
+          <span className='hidden md:inline text-secondary align-text-bottom tracking-tight'>
             Power tagging mode is <b>On</b>.&nbsp;Click on the photo to tag a climb.
           </span>
           )
-        : (<>{imageList.length >= 3 && imageList.length < 8 && <span className='hidden md:inline text-secondary mt-0.5'>&#128072;&#127997;&nbsp;Activate Pro mode</span>}</>)}
+        : (<>{imageList?.length >= 3 && imageList?.length < 8 && <span className='hidden md:inline text-secondary mt-0.5 tracking-tight'>&#128072;&#127997;&nbsp;Activate Pro mode</span>}</>)}
     </Bar>
   )
 }
