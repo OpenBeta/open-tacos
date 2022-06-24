@@ -39,7 +39,7 @@ export const TinyProfile = ({ userProfile, onClick }: PublicProfileProps): JSX.E
   const { nick, avatar } = userProfile
   return (
 
-    <Link href={`/u/${nick}`}>
+    <Link as={`/u/${nick}`} href='/u/[uid]'>
       <a onClick={onClickHandler}>
         <section className='flex items-center space-x-2.5'>
           <div className='grayscale'>

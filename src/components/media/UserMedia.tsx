@@ -28,9 +28,10 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
   const [hovered, setHover] = useState(false)
 
   const onClickHandler = useCallback((event) => {
+    event.stopPropagation()
     if (onClick != null) {
       // we want to show URL in browser status bar and let the user open link in a new tab, but we don't want the default behavoir of <a href...>
-      // event.preventDefault()
+      event.stopPropagation()
 
       onClick({ mouseXY: [event.clientX, event.clientY], imageInfo, index })
     }
@@ -62,7 +63,7 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
             sizes='100vw'
            />)}
       {tagList?.length > 0 &&
-        <caption className='absolute block inset-0 flex flex-col justify-end'>
+        <figcaption className='absolute block inset-0 flex flex-col justify-end'>
           <TagList
             hovered={hovered}
             list={tagList}
@@ -70,7 +71,7 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
             isAuthorized={isAuthorized}
             className='px-2'
           />
-        </caption>}
+        </figcaption>}
     </figure>
   )
 }

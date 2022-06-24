@@ -6,6 +6,8 @@ import { groupBy } from 'underscore'
 import type UserGalleryType from '../UserGallery'
 import { IUserProfile } from '../../../js/types'
 
+jest.mock('next/router')
+
 jest.mock('../../../js/hooks/useResponsive')
 jest.mock('../../../js/sirv/SirvClient')
 jest.mock('../../../js/graphql/api')
@@ -14,6 +16,8 @@ jest.mock('../../../js/graphql/Client')
 const sirvClient = jest.requireMock('../../../js/sirv/SirvClient')
 const graphApi = jest.requireMock('../../../js/graphql/api')
 const useResponsive = jest.requireMock('../../../js/hooks/useResponsive')
+
+jest.requireMock('next/router')
 
 const useResponsiveMock = jest.spyOn(useResponsive, 'default')
 useResponsiveMock.mockReturnValue({ isDesktop: false, isMobile: true, isTablet: true })
@@ -54,6 +58,7 @@ describe('Image gallery', () => {
 
     render(
       <UserGallery
+        loaded
         auth={{ isAuthenticated: false, isAuthorized: false }}
         uid={username}
         userProfile={userProfile}

@@ -1,11 +1,10 @@
+import { ReactElement } from 'react'
 import type { AppProps } from 'next/app'
 import Router from 'next/router'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { useSession, SessionProvider } from 'next-auth/react'
-import { ReactElement } from 'react'
-
 import '../styles/global.css'
 import '../../public/fonts/fonts.css'
 

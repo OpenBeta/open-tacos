@@ -1,4 +1,6 @@
 import React, { ReactElement, useCallback, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+
 import { LightBulbIcon } from '@heroicons/react/outline'
 import { Dictionary } from 'underscore'
 import { basename } from 'path'
@@ -39,16 +41,13 @@ export default function SlideViewer ({
   auth,
   pageUrl
 }: SlideViewerProps): JSX.Element {
+  const router = useRouter()
   const [currentImageIndex, setCurrentIndex] = useState<number>(initialIndex)
 
   useEffect(() => {
     setCurrentIndex(initialIndex)
     if (initialIndex >= 0) {
-      navChangeHandler(initialIndex)
-    }
-    return () => {
-      if (initialIndex < 0) return
-      window.history.replaceState(null, '', pageUrl)
+      void navChangeHandler(initialIndex)
     }
   }, [initialIndex, imageList])
 
@@ -59,11 +58,12 @@ export default function SlideViewer ({
   /**
    * Update current image index and sharable URL
    */
-  const navChangeHandler = useCallback((newIndex: number) => {
+  const navChangeHandler = useCallback(async (newIndex: number) => {
     setCurrentIndex(newIndex)
     const currentImage = imageList[newIndex]
     const pathname = `${pageUrl}/${basename(currentImage.filename)}`
-    window.history.replaceState(null, '', pathname)
+
+    await router.replace({ pathname, query: { backBtn: true } }, pathname, { shallow: true })
   }, [imageList])
 
   return (
@@ -103,7 +103,7 @@ export default function SlideViewer ({
 
 interface SingleViewerProps {
   loaded: boolean
-  media: MediaType
+  media: MediaType | null
   tagList: MediaTagWithClimb[]
   userinfo: JSX.Element
   auth: WithPermission
@@ -113,7 +113,7 @@ export const SingleViewer = ({ loaded, media, tagList, userinfo, auth }: SingleV
   return (
     <>
       <div className='block relative overflow-hidden min-w-[350px] min-h-[300px]'>
-        {loaded
+        {loaded && media?.filename != null
           ? (<img
               src={DefaultLoader({ src: media.filename, width: 750 })}
               width={750}
@@ -191,12 +191,12 @@ const RhsContainer = ({ loaded, userinfo, content, footer = null }: RhsContainer
 }
 
 interface InfoContainerProps {
-  currentImage: MediaType
+  currentImage: MediaType | null
   tagList: MediaTagWithClimb[]
   auth: WithPermission
 }
 
-const InfoContainer = ({ currentImage, tagList, auth }: InfoContainerProps): ReactElement => {
+const InfoContainer = ({ currentImage, tagList, auth }: InfoContainerProps): ReactElement | null => {
   const { isAuthorized } = auth
 
   const onTagAddedHanlder = useCallback(async (data) => {
@@ -210,6 +210,8 @@ const InfoContainer = ({ currentImage, tagList, auth }: InfoContainerProps): Rea
       await userMediaStore.set.removeTag(data)
     }
   }, [isAuthorized])
+
+  if (currentImage == null) return null
 
   return (
     <>

@@ -19,7 +19,7 @@ export default function MoreFromThisUser ({ loaded, uid, mediaList = [] }: MoreF
           <div className='mt-4 ml-4 lg:ml-0 font-semibold text-secondary text-lg'>
             {loaded
               ? (<>More photos from <ProfileATag uid={uid} /></>)
-              : (<div className='h-4 w-48 bg-gray-200' />)}
+              : (<div className='h-4 w-48 bg-gray-100' />)}
           </div>
         </div>
         {!loaded && (

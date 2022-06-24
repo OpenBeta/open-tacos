@@ -36,7 +36,7 @@ export default function UserGallery ({ loaded, uid, auth, userProfile, initialIm
 
   const { onClick } = imageHelper
 
-  if (imageList == null) return null
+  // if (imageList == null) return null
 
   const { isAuthorized } = auth
 
@@ -100,7 +100,7 @@ export default function UserGallery ({ loaded, uid, auth, userProfile, initialIm
 
       <div className={`z-10 block w-full xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
         {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
-        {imageList.map((imageInfo, index) => {
+        {imageList?.map((imageInfo, index) => {
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []
           return (
             <UserMedia
@@ -122,7 +122,7 @@ export default function UserGallery ({ loaded, uid, auth, userProfile, initialIm
 
       </div>
 
-      {isAuthorized && imageList.length > 0 &&
+      {isAuthorized && imageList?.length > 0 &&
         <ImageTagger
           {...imageHelper} onCompleted={onCompletedHandler}
         />}
@@ -130,7 +130,7 @@ export default function UserGallery ({ loaded, uid, auth, userProfile, initialIm
       <SlideViewer
         isOpen={selectedMediaId >= 0}
         initialIndex={selectedMediaId}
-        imageList={imageList}
+        imageList={imageList ?? []}
         tagsByMediaId={initialTagMap}
         userinfo={<TinyProfile userProfile={userProfile} onClick={() => setSlideNumber(-1)} />}
         onClose={() => setSlideNumber(-1)}
@@ -168,7 +168,7 @@ const MediaActionToolbar = ({ isAuthorized, imageList, tagModeOn, setTagMode }: 
             Power tagging mode is <b>On</b>.&nbsp;Click on the photo to tag a climb.
           </span>
           )
-        : (<>{imageList.length >= 3 && imageList.length < 8 && <span className='hidden md:inline text-secondary mt-0.5'>&#128072;&#127997;&nbsp;Activate Pro mode</span>}</>)}
+        : (<>{imageList?.length >= 3 && imageList?.length < 8 && <span className='hidden md:inline text-secondary mt-0.5'>&#128072;&#127997;&nbsp;Activate Pro mode</span>}</>)}
     </Bar>
   )
 }
