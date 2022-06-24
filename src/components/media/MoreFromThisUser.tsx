@@ -33,12 +33,7 @@ export default function MoreFromThisUser ({ loaded, uid, mediaList = [] }: MoreF
           const tags = []
           const shareableUrl = `/u/${uid}/${basename(mediaInfo.filename)}`
           return (
-            <Link
-              as={shareableUrl}
-              key={index}
-              href={shareableUrl}
-              prefetch={false}
-            >
+            <Link key={mediaInfo.mediaId} href={shareableUrl} as={shareableUrl} shallow>
               <a>
                 <UserMedia
                   index={index}

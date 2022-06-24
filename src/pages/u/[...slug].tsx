@@ -14,7 +14,7 @@ import usePermissions from '../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../js/hooks/seo'
 import useMediaDataStore from '../../js/hooks/useMediaDS'
 import type { UserGalleryProps } from '../../components/media/UserGallery'
-import UserFeatureView from '../../components/media/UserFeatureView'
+import type { UserFeatureViewProps } from '../../components/media/UserFeatureView'
 
 interface UserHomeProps {
   uid: string
@@ -43,6 +43,11 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
 
   const { isFallback } = router
 
+  if (typeof window !== 'undefined') {
+    const urlParams = new URLSearchParams(window?.location?.search)
+
+    console.log('#', urlParams)
+  }
   return (
     <>
       <SeoTags
@@ -59,7 +64,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
         <div className='max-w-screen-2xl mx-auto flex flex-col items-center'>
           {isFallback && <div className='h-screen'>Loading...</div>}
           {backBtnFlag == null && postId != null
-            ? (<UserFeatureView
+            ? (<DynamicUserFeatureImageview
                 uid={uid}
                 auth={auth}
                 featureMedia={serverMainMedia}
@@ -93,6 +98,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
                   initialImageList={mediaList}
                   initialTagsByMediaId={tagMap}
                 />
+
               </>
               )}
 
@@ -120,6 +126,7 @@ export async function getStaticPaths (): Promise<any> {
 }
 
 export const getStaticProps: GetStaticProps<UserHomeProps, {slug: string[]}> = async ({ params }) => {
+  console.log('#params', params)
   const uid = params?.slug?.[0] ?? null
   const postId = params?.slug?.[1] ?? null
 
@@ -179,5 +186,11 @@ export const getStaticProps: GetStaticProps<UserHomeProps, {slug: string[]}> = a
 const DynamicComponent = dynamic<UserGalleryProps>(
   async () =>
     await import('../../components/media/UserGallery').then(
+      module => module.default), { ssr: false }
+)
+
+const DynamicUserFeatureImageview = dynamic<UserFeatureViewProps>(
+  async () =>
+    await import('../../components/media/UserFeatureView').then(
       module => module.default), { ssr: false }
 )

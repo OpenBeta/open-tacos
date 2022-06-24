@@ -5,7 +5,7 @@ import { MediaType, MediaTagWithClimb, IUserProfile } from '../../js/types'
 import { WithPermission } from '../../js/types/User'
 import { ReactElement } from 'react'
 
-interface UserFeatureViewProps {
+export interface UserFeatureViewProps {
   uid: string
   featureMedia: MediaType | null
   tagList: MediaTagWithClimb[]
