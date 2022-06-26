@@ -43,11 +43,6 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
 
   const { isFallback } = router
 
-  if (typeof window !== 'undefined') {
-    const urlParams = new URLSearchParams(window?.location?.search)
-
-    console.log('#', urlParams)
-  }
   return (
     <>
       <SeoTags

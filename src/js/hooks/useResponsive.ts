@@ -40,8 +40,8 @@ export default function useResponsive (): useResponsiveProps {
   }, [])
 
   return {
-    isDesktop: isClient ? isDesktop : false,
+    isDesktop: isClient ? isDesktop : true,
     isTablet: isClient ? isTablet : false,
-    isMobile: isClient ? isMobile : true
+    isMobile: isClient ? isMobile : false
   }
 }
