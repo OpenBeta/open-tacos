@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver'
 import { ClimbTypeToColor } from './constants'
 import { Climb, ClimbDisciplineRecord, ClimbDiscipline } from './types'
 
@@ -154,3 +155,8 @@ export const checkUsername = (uid: string): boolean =>
   uid != null && uid.length <= 20 &&
   !regUsernameKeywords.test(uid) &&
   regUsername.test(uid)
+
+export const saveAsFile = (data: any, filename: string): void => {
+  const blob = new Blob([data], { type: 'text/plain;charset=utf-8' })
+  saveAs(blob, filename)
+}

@@ -1,5 +1,6 @@
 export interface IReadOnlyUserMetadata {
   uuid: string
+  roles: string[]
 }
 
 export interface IWritableUserMetadata {

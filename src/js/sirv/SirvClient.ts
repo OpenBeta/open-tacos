@@ -14,6 +14,8 @@ export const SIRV_CONFIG = {
   baseUrl: process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? ''
 }
 
+export const userHomeFromUuid = (uuid: string): string => `${SIRV_CONFIG.baseUrl}/u/${uuid}`
+
 const client = axios.create({
   baseURL: 'https://api.sirv.com/v2',
   headers: {
