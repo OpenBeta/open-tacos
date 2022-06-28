@@ -17,7 +17,7 @@ const sirvClient = jest.requireMock('../../../js/sirv/SirvClient')
 const graphApi = jest.requireMock('../../../js/graphql/api')
 const useResponsive = jest.requireMock('../../../js/hooks/useResponsive')
 
-jest.requireMock('next/router')
+const { pushFn, replaceFn } = jest.requireMock('next/router')
 
 const useResponsiveMock = jest.spyOn(useResponsive, 'default')
 useResponsiveMock.mockReturnValue({ isDesktop: false, isMobile: true, isTablet: true })
@@ -61,20 +61,27 @@ describe('Image gallery', () => {
         loaded
         auth={{ isAuthenticated: false, isAuthorized: false }}
         uid={username}
+        postId={null}
         userProfile={userProfile}
         initialImageList={mediaList}
         initialTagsByMediaId={tagsByMediaId}
       />)
 
-    const images = screen.getAllByRole('figure')
+    const images = screen.getAllByRole('img')
     expect(images.length).toBe(mediaList.length)
 
     await user.click(images[0]) // click on the first image
+
+    expect(pushFn).toBeCalled()
 
     expect(screen.queryAllByRole('dialog', { name: username })).not.toBeNull()
 
     expect(screen.queryByRole('button', { name: 'previous' })).toBeNull() // Previous button shouldn't be there
     expect(screen.queryByRole('button', { name: 'next' })).toBeEnabled()
+
+    await user.click(screen.getByRole('button', { name: 'next' }))
+
+    expect(replaceFn).toBeCalled() // router should update browser url
 
     await user.click(screen.getByRole('button', { name: 'close' }))
 
@@ -87,6 +94,7 @@ describe('Image gallery', () => {
         loaded
         auth={{ isAuthenticated: true, isAuthorized: true }}
         uid='coolusername1'
+        postId={null}
         userProfile={userProfile}
         initialImageList={mediaList}
         initialTagsByMediaId={tagsByMediaId}
@@ -95,12 +103,13 @@ describe('Image gallery', () => {
     expect(screen.queryAllByRole('switch').length).toBeGreaterThan(0)
   })
 
-  test('Signed, but not authorized users should *not* see Tag toggle button.', async () => {
+  test('Signed-in/Not-authorized users should *not* see Tag toggle button.', async () => {
     render(
       <UserGallery
         loaded
         auth={{ isAuthenticated: true, isAuthorized: false }}
         uid='coolusername2'
+        postId={null}
         userProfile={userProfile}
         initialImageList={mediaList}
         initialTagsByMediaId={tagsByMediaId}
@@ -115,6 +124,7 @@ describe('Image gallery', () => {
         loaded
         auth={{ isAuthenticated: true, isAuthorized: false }}
         uid='coolusername3'
+        postId={null}
         userProfile={userProfile}
         initialImageList={mediaList}
         initialTagsByMediaId={tagsByMediaId}

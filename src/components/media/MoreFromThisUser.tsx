@@ -1,5 +1,3 @@
-import Link from 'next/link'
-import { basename } from 'path'
 import { Dictionary } from 'underscore'
 
 import { MediaType, MediaTagWithClimb } from '../../js/types'
@@ -33,21 +31,16 @@ export default function MoreFromThisUser ({ loaded, uid, mediaList = [], tagMap 
           </>)}
         {mediaList.map((mediaInfo, index) => {
           const tags = tagMap?.[mediaInfo.mediaId] ?? []
-          const shareableUrl = `/u/${uid}/${basename(mediaInfo.filename)}`
           return (
-            <Link key={mediaInfo.mediaId} href={shareableUrl} as={shareableUrl} shallow>
-              <a>
-                <UserMedia
-                  index={index}
-                  key={mediaInfo.mediaId}
-                  uid={uid}
-                  tagList={tags}
-                  imageInfo={mediaInfo}
-                  onTagDeleted={NoOP}
-                  isAuthorized={false}
-                />
-              </a>
-            </Link>
+            <UserMedia
+              index={index}
+              key={mediaInfo.mediaId}
+              uid={uid}
+              tagList={tags}
+              imageInfo={mediaInfo}
+              onTagDeleted={NoOP}
+              isAuthorized={false}
+            />
           )
         })}
       </div>

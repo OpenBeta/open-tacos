@@ -14,5 +14,19 @@ module.exports = withMDX({
   },
   typescript: {
     ignoreBuildErrors: false
+  },
+  async rewrites () {
+    return [
+      { // A hack to pass ?gallery=true to getStaticProps()
+        source: '/u/:uid/:postid',
+        has: [
+          {
+            type: 'query',
+            key: 'gallery',
+            value: 'true'
+          }],
+        destination: '/u/:uid/:postid/gallery'
+      }
+    ]
   }
 })
