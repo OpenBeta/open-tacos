@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react'
 import ContentLoader from 'react-content-loader'
 import classNames from 'classnames'
+import { basename } from 'path'
+import Link from 'next/link'
 
 import { useResponsive } from '../../js/hooks'
 import TagList from './TagList'
@@ -28,9 +30,10 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
   const [hovered, setHover] = useState(false)
 
   const onClickHandler = useCallback((event) => {
-    event.stopPropagation()
     if (onClick != null) {
-      // we want to show URL in browser status bar and let the user open link in a new tab, but we don't want the default behavoir of <a href...>
+      // we want to show URL in browser status bar and let the user open link in a new tab,
+      // but we don't want the default behavoir of <a href...>
+      event.preventDefault()
       event.stopPropagation()
 
       onClick({ mouseXY: [event.clientX, event.clientY], imageInfo, index })
@@ -39,31 +42,34 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
 
   const { isDesktop } = useResponsive()
   const loader = isDesktop ? DesktopPreviewLoader : MobileLoader
-
+  const shareableUrl = `/p/${uid}/${basename(imageInfo.filename)}`
   return (
     <figure
-      key={imageInfo.mediaId}
+      key={imageInfo.filename}
       className={
         classNames(
           ' block relative',
           isDesktop ? 'w-[300px] h-[300px] hover:brightness-75' : 'max-w-screen-lg py-12'
         )
       }
-      onClick={onClickHandler}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      {isDesktop
-        ? (
-          <ResponsiveImage mediaUrl={imageInfo.filename} isHero={index === 0} loader={loader} />
-          )
-        : (<img
-            src={loader({ src: imageInfo.filename, width: MOBILE_IMAGE_MAX_WIDITH })}
-            width={MOBILE_IMAGE_MAX_WIDITH}
-            sizes='100vw'
-           />)}
+      <Link href={shareableUrl}>
+        <a onClick={onClickHandler}>
+          {isDesktop
+            ? (
+              <ResponsiveImage mediaUrl={imageInfo.filename} isHero={index === 0} loader={loader} />
+              )
+            : (<img
+                src={loader({ src: imageInfo.filename, width: MOBILE_IMAGE_MAX_WIDITH })}
+                width={MOBILE_IMAGE_MAX_WIDITH}
+                sizes='100vw'
+               />)}
+        </a>
+      </Link>
       {tagList?.length > 0 &&
-        <figcaption className='absolute block inset-0 flex flex-col justify-end'>
+        <figcaption className='absolute inset-x-0 bottom-0 flex flex-col justify-end'>
           <TagList
             hovered={hovered}
             list={tagList}
