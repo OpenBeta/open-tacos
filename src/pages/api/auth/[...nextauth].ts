@@ -6,6 +6,7 @@ import { IUserMetadata } from '../../../js/types/User'
 
 const CustomClaimsNS = 'https://tacos.openbeta.io/'
 const CustomClaimUserMetadata = CustomClaimsNS + 'user_metadata'
+const CustomClaimRoles = CustomClaimsNS + 'roles'
 
 if (AUTH_CONFIG_SERVER == null) throw new Error('AUTH_CONFIG_SERVER not defined')
 const { clientSecret, clientId, issuer } = AUTH_CONFIG_SERVER
@@ -26,6 +27,7 @@ export default NextAuth({
       }
     })
   ],
+  debug: false,
   events: {},
   pages: {
     signIn: '/auth/signin'
@@ -42,6 +44,7 @@ export default NextAuth({
       if (profile?.[CustomClaimUserMetadata] != null) {
         // null guard needed because profile object is only available once
         token.userMetadata = (profile?.[CustomClaimUserMetadata] as IUserMetadata)
+        token.userMetadata.roles = profile?.[CustomClaimRoles] as string[] ?? []
       }
       return token
     },

@@ -28,7 +28,6 @@ const Home: NextPage<HomePageType> = ({ exploreData, stats }) => {
         hero={<HomeHero statsProps={stats} />}
       >
         <section>
-          <a href='http://localhost:3000/u/vietnguyen/8TDf6RrndF.jpeg'>link</a>
           <h2 className='mb-4 text-3xl px-4'>Explore</h2>
           <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 lg:gap-x-3 gap-y-3'>
             {areas.map(area => <FeatureCard key={area.id} area={area} />)}
