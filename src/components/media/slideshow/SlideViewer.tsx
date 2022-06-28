@@ -1,9 +1,7 @@
-import React, { ReactElement, useCallback, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import React, { ReactElement, useCallback } from 'react'
 
 import { LightBulbIcon } from '@heroicons/react/outline'
 import { Dictionary } from 'underscore'
-import { basename } from 'path'
 import ContentLoader from 'react-content-loader'
 
 import { MediaType, MediaTagWithClimb } from '../../../js/types'
@@ -25,7 +23,8 @@ interface SlideViewerProps {
   tagsByMediaId: Dictionary<MediaTagWithClimb[]>
   userinfo: JSX.Element
   auth: WithPermission
-  pageUrl: string
+  baseUrl: string
+  onNavigate: (newIndex: number) => void
 }
 
 /**
@@ -39,40 +38,20 @@ export default function SlideViewer ({
   tagsByMediaId,
   userinfo,
   auth,
-  pageUrl
+  baseUrl,
+  onNavigate
 }: SlideViewerProps): JSX.Element {
-  const router = useRouter()
-  const [currentImageIndex, setCurrentIndex] = useState<number>(initialIndex)
-
-  useEffect(() => {
-    setCurrentIndex(initialIndex)
-    if (initialIndex >= 0) {
-      void navChangeHandler(initialIndex)
-    }
-  }, [initialIndex, imageList])
-
-  const currentImage = imageList[currentImageIndex]
+  const currentImage = imageList[initialIndex]
 
   const tagList = tagsByMediaId?.[currentImage?.mediaId] ?? []
-
-  /**
-   * Update current image index and sharable URL
-   */
-  const navChangeHandler = useCallback(async (newIndex: number) => {
-    setCurrentIndex(newIndex)
-    const currentImage = imageList[newIndex]
-    const pathname = `${pageUrl}/${basename(currentImage.filename)}`
-
-    await router.replace({ pathname, query: { backBtn: true } }, pathname, { shallow: true })
-  }, [imageList])
 
   return (
     <DesktopModal
       isOpen={isOpen}
       onClose={onClose}
-      mediaContainer={currentImageIndex >= 0
+      mediaContainer={initialIndex >= 0
         ? <ResponsiveImage
-            mediaUrl={imageList[currentImageIndex].filename}
+            mediaUrl={imageList[initialIndex].filename}
             isHero
           />
         : null}
@@ -92,8 +71,8 @@ export default function SlideViewer ({
       }
       controlContainer={
         <NextPreviousControl
-          currentImageIndex={currentImageIndex}
-          onChange={navChangeHandler}
+          currentImageIndex={initialIndex}
+          onChange={onNavigate}
           max={imageList.length - 1}
         />
       }

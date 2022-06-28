@@ -1,7 +1,8 @@
-import { useCallback, useState, useRef, Dispatch, SetStateAction } from 'react'
+import { useCallback, useState, useRef, Dispatch, SetStateAction, useEffect } from 'react'
 import { Dictionary } from 'underscore'
 import { TagIcon } from '@heroicons/react/outline'
-
+import { useRouter } from 'next/router'
+import { basename } from 'path'
 import UserMedia from './UserMedia'
 import ImageTagger from './ImageTagger'
 import useImageTagHelper from './useImageTagHelper'
@@ -21,12 +22,14 @@ export interface UserGalleryProps {
   initialImageList: MediaType[]
   initialTagsByMediaId: Dictionary<MediaTagWithClimb[]>
   auth: WithPermission
+  postId: string | null
 }
 
 /**
  * Image gallery on user profile
  */
-export default function UserGallery ({ loaded, uid, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: UserGalleryProps): JSX.Element | null {
+export default function UserGallery ({ loaded, uid, postId: initialPostId, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: UserGalleryProps): JSX.Element | null {
+  const router = useRouter()
   const imageList = initialImageList
 
   const [selectedMediaId, setSlideNumber] = useState<number>(-1)
@@ -36,11 +39,42 @@ export default function UserGallery ({ loaded, uid, auth, userProfile, initialIm
 
   const { onClick } = imageHelper
 
-  // if (imageList == null) return null
-
   const { isAuthorized } = auth
 
-  const pageUrl = `/u/${uid}`
+  const baseUrl = `/u/${uid}`
+
+  const isBase = useCallback((url: string) => {
+    return baseUrl === url
+  }, [baseUrl])
+
+  router.beforePopState((e) => {
+    if (isBase(e.as)) {
+      setSlideNumber(-1)
+      return true
+    }
+
+    return true
+  })
+
+  useEffect(() => {
+    if (initialPostId != null) {
+      // we get here when the user navigates to other pages beyond the gallery, then hits the back button
+      const found = imageList?.findIndex(entry => basename(entry.filename) === initialPostId)
+      if (found !== -1) {
+        setSlideNumber(found)
+      }
+      return
+    }
+
+    // Handle browser forward/back button
+    if (router.asPath.length > baseUrl.length && selectedMediaId === -1) {
+      const newPostId = basename(router.asPath)
+      const found = imageList?.findIndex(entry => basename(entry.filename) === newPostId)
+      if (found !== -1) {
+        setSlideNumber(found)
+      }
+    }
+  }, [initialPostId, imageList, router])
 
   /**
    * Run after a tag has sucessfully added to the backend
@@ -70,16 +104,31 @@ export default function UserGallery ({ loaded, uid, auth, userProfile, initialIm
    * What happens to when the user clicks on the image depends on
    * whether bulk tagging is on/off.
    */
-  const imageOnClickHandler = useCallback((props: any): void => {
+  const imageOnClickHandler = useCallback(async (props: any): Promise<void> => {
     if (stateRef?.current ?? false) {
       onClick(props) // bulk tagging
     } else {
-      const { index } = props
-      setSlideNumber(index) // open slide viewer
+      await navigateHandler(props.index)
     }
+  }, [imageList])
+
+  const slideViewerCloseHandler = useCallback(() => {
+    router.back()
+    setSlideNumber(-1)
   }, [])
 
-  // const { uuid } = userProfile
+  const navigateHandler = async (newIndex: number): Promise<void> => {
+    const currentImage = imageList[newIndex]
+    const pathname = `${baseUrl}/${basename(currentImage.filename)}`
+
+    if (selectedMediaId === -1 && newIndex !== selectedMediaId) {
+      await router.push({ pathname, query: { gallery: true } }, pathname, { shallow: true })
+    } else {
+      await router.replace({ pathname, query: { gallery: true } }, pathname, { shallow: true })
+    }
+
+    setSlideNumber(newIndex)
+  }
 
   // When logged-in user has fewer than 3 photos,
   // create empty slots for the call-to-action upload component.
@@ -87,8 +136,6 @@ export default function UserGallery ({ loaded, uid, auth, userProfile, initialIm
     ? [...Array(3 - imageList?.length).keys()]
     : []
 
-  // console.log('#Gallery ', loaded, imageList)
-  // console.log('#gallery', loaded, imageList?.length)
   return (
     <>
       <div className='self-start border-t border-gray-400 w-full'>
@@ -133,10 +180,13 @@ export default function UserGallery ({ loaded, uid, auth, userProfile, initialIm
         initialIndex={selectedMediaId}
         imageList={imageList ?? []}
         tagsByMediaId={initialTagMap}
-        userinfo={<TinyProfile userProfile={userProfile} onClick={() => setSlideNumber(-1)} />}
-        onClose={() => setSlideNumber(-1)}
+        userinfo={<TinyProfile
+          userProfile={userProfile} onClick={slideViewerCloseHandler}
+                  />}
+        onClose={slideViewerCloseHandler}
         auth={auth}
-        pageUrl={pageUrl}
+        baseUrl={baseUrl}
+        onNavigate={navigateHandler}
       />
     </>
   )
@@ -169,7 +219,7 @@ const MediaActionToolbar = ({ isAuthorized, imageList, tagModeOn, setTagMode }: 
             Power tagging mode is <b>On</b>.&nbsp;Click on the photo to tag a climb.
           </span>
           )
-        : (<>{imageList?.length >= 3 && imageList?.length < 8 && <span className='hidden md:inline text-secondary mt-0.5 tracking-tight'>&#128072;&#127997;&nbsp;Activate Pro mode</span>}</>)}
+        : (<>{imageList?.length >= 3 && imageList?.length < 8 && isAuthorized && <span className='hidden md:inline text-secondary mt-0.5 tracking-tight'>&#128072;&#127997;&nbsp;Activate Pro mode</span>}</>)}
     </Bar>
   )
 }

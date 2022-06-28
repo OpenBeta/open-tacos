@@ -1,8 +1,8 @@
 import { Dictionary } from 'underscore'
 
-import { TinyProfile } from '../../components/users/PublicProfile'
-import { SingleViewer } from '../../components/media/slideshow/SlideViewer'
-import MoreFromThisUser from '../../components/media/MoreFromThisUser'
+import { TinyProfile } from '../users/PublicProfile'
+import { SingleViewer } from './slideshow/SlideViewer'
+import MoreFromThisUser from './MoreFromThisUser'
 import { MediaType, MediaTagWithClimb, IUserProfile } from '../../js/types'
 import { WithPermission } from '../../js/types/User'
 import { ReactElement } from 'react'
