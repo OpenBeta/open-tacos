@@ -14,8 +14,12 @@ export const auth0ManagementClient = new Auth0MgmtClient({
   scope: 'read:users update:users'
 })
 
-export const getAllUsersMetadata = async (): Promise<any[]> => {
-  const users = await auth0ManagementClient.getUsers({ q: 'user_metadata.uuid=*' })
+export const getAllUsersMetadata = async (legacy: boolean = false): Promise<any[]> => {
+  let q = 'user_metadata.uuid=*'
+  if (legacy) {
+    q = ''
+  }
+  const users = await auth0ManagementClient.getUsers({ q })
   return users
 }
 
@@ -30,7 +34,6 @@ export const getUserProfileByNick = async (nick: string): Promise<IUserProfile> 
 }
 
 export const reshapeAuth0UserToProfile = (user: User): IUserProfile => {
-  // console.log('##user', user)
   const { user_metadata: umeta } = user
   if (umeta == null || user?.user_id == null || umeta?.uuid == null) throw new Error(`Missing auth provider ID and metadata for  ${user?.name ?? ''}`)
   return {
@@ -40,7 +43,8 @@ export const reshapeAuth0UserToProfile = (user: User): IUserProfile => {
     uuid: umeta.uuid,
     email: user.email ?? '',
     avatar: user?.picture ?? '',
-    bio: umeta?.bio ?? ''
+    bio: umeta?.bio ?? '',
+    roles: umeta?.roles ?? []
   }
 }
 
