@@ -46,6 +46,7 @@ Bar.Z_HIGH = 'z-30'
 Bar.H_DEFAULT = 'h-12 lg:h-16'
 Bar.H_LG = 'h-16' /* Large screen */
 Bar.BG_DEFAULT = 'bg-gray-50'
+Bar.BG_DARK = 'bg-slate-800'
 Bar.JUSTIFY_LEFT = 'flex no-wrap justify-start items-center'
 Bar.JUSTIFY_RIGHT = 'flex no-wrap justify-end items-center'
 Bar.JUSTIFY_BETWEEN = 'flex no-wrap justify-between items-center w-full'

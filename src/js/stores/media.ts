@@ -27,11 +27,10 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
      * @param uid
      * @param uuid
      * @param imageUrl
-     * @param append
      * @param revalidateSSR
      * @returns
      */
-    addImage: async (uid, uuid: string, imageUrl: string, append = false, revalidateSSR: boolean) => {
+    addImage: async (uid, uuid: string, imageUrl: string, revalidateSSR: boolean) => {
       const newMediaUuid = uuidv5(imageUrl, uuidv5.URL)
       const currentList = get.imageList()
       // Image already exists (same URL), don't add to current list
@@ -48,11 +47,21 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
         meta: {}
       }
 
-      if (append) {
-        set.imageList([...currentList, newEntry])
+      const shouldAppend = currentList.length < 3
+
+      let newList: MediaType[] = []
+
+      if (shouldAppend) {
+        newList = produce(currentList, draft => {
+          draft.push(newEntry)
+        })
       } else {
-        set.imageList([newEntry, ...currentList])
+        newList = produce(currentList, draft => {
+          draft.unshift(newEntry)
+        })
       }
+
+      set.imageList(newList)
 
       if (revalidateSSR) {
         await revalidateServePage(uid)
@@ -68,7 +77,6 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       const { mediaUuid } = setTag
       const { id } = setTag.climb
       const currentTagList = get.tagMap()?.[mediaUuid] ?? []
-      console.log('#Add.  current tag', currentTagList)
       if (currentTagList.findIndex((tag: MediaTagWithClimb) => tag.climb.id === id) !== -1) {
         // Tag for the same climb exists
         // We only allow 1 climb/area tag per media

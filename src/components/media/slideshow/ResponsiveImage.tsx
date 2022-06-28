@@ -23,7 +23,7 @@ export default function ResponsiveImage ({ mediaUrl, isHero = true, loader = nul
     <Transition
       show
       enter='transition duration-500 ease-out'
-      enterFrom='transform opacity-0'
+      enterFrom='transform opacity-50'
       enterTo='transform opacity-100'
       as='div'
       className='block relative w-full h-full aspect-square'

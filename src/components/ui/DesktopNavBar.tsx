@@ -16,7 +16,7 @@ interface DesktopAppBarProps {
 export default function DesktopNavBar ({ expanded, branding, search, navList }: DesktopAppBarProps): JSX.Element {
   return (
     <Bar
-      backgroundClass='bg-slate-800'
+      backgroundClass={Bar.BG_DARK}
       heightClass={Bar.H_LG}
       layoutClass={Bar.JUSTIFY_BETWEEN}
     >

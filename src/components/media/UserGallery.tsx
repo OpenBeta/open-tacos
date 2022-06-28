@@ -1,7 +1,8 @@
-import { useCallback, useState, useRef, Dispatch, SetStateAction } from 'react'
+import { useCallback, useState, useRef, Dispatch, SetStateAction, useEffect } from 'react'
 import { Dictionary } from 'underscore'
 import { TagIcon } from '@heroicons/react/outline'
-
+import { useRouter } from 'next/router'
+import { basename } from 'path'
 import UserMedia from './UserMedia'
 import ImageTagger from './ImageTagger'
 import useImageTagHelper from './useImageTagHelper'
@@ -14,18 +15,21 @@ import { WithPermission } from '../../js/types/User'
 import Bar from '../ui/Bar'
 import Toggle from '../ui/Toggle'
 
-interface ImageTableProps {
+export interface UserGalleryProps {
+  loaded: boolean
   uid: string
   userProfile: IUserProfile
   initialImageList: MediaType[]
   initialTagsByMediaId: Dictionary<MediaTagWithClimb[]>
   auth: WithPermission
+  postId: string | null
 }
 
 /**
  * Image gallery on user profile
  */
-export default function UserGallery ({ uid, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: ImageTableProps): JSX.Element | null {
+export default function UserGallery ({ loaded, uid, postId: initialPostId, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: UserGalleryProps): JSX.Element | null {
+  const router = useRouter()
   const imageList = initialImageList
 
   const [selectedMediaId, setSlideNumber] = useState<number>(-1)
@@ -35,11 +39,42 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
 
   const { onClick } = imageHelper
 
-  if (imageList == null) return null
-
   const { isAuthorized } = auth
 
-  const pageUrl = `/u/${uid}`
+  const baseUrl = `/u/${uid}`
+
+  const isBase = useCallback((url: string) => {
+    return baseUrl === url
+  }, [baseUrl])
+
+  router.beforePopState((e) => {
+    if (isBase(e.as)) {
+      setSlideNumber(-1)
+      return true
+    }
+
+    return true
+  })
+
+  useEffect(() => {
+    if (initialPostId != null) {
+      // we get here when the user navigates to other pages beyond the gallery, then hits the back button
+      const found = imageList?.findIndex(entry => basename(entry.filename) === initialPostId)
+      if (found !== -1) {
+        setSlideNumber(found)
+      }
+      return
+    }
+
+    // Handle browser forward/back button
+    if (router.asPath.length > baseUrl.length && selectedMediaId === -1) {
+      const newPostId = basename(router.asPath)
+      const found = imageList?.findIndex(entry => basename(entry.filename) === newPostId)
+      if (found !== -1) {
+        setSlideNumber(found)
+      }
+    }
+  }, [initialPostId, imageList, router])
 
   /**
    * Run after a tag has sucessfully added to the backend
@@ -56,7 +91,7 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
   }, [])
 
   const onUploadHandler = async (imageUrl: string): Promise<void> => {
-    await actions.media.addImage(uid, uuid, imageUrl, true, true)
+    await actions.media.addImage(uid, userProfile.uuid, imageUrl, true)
   }
 
   // Why useRef?
@@ -69,45 +104,63 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
    * What happens to when the user clicks on the image depends on
    * whether bulk tagging is on/off.
    */
-  const imageOnClickHandler = useCallback((props: any): void => {
+  const imageOnClickHandler = useCallback(async (props: any): Promise<void> => {
     if (stateRef?.current ?? false) {
       onClick(props) // bulk tagging
     } else {
-      const { index } = props
-      setSlideNumber(index) // open slide viewer
+      await navigateHandler(props.index)
     }
+  }, [imageList])
+
+  const slideViewerCloseHandler = useCallback(() => {
+    router.back()
+    setSlideNumber(-1)
   }, [])
 
-  const { uuid } = userProfile
+  const navigateHandler = async (newIndex: number): Promise<void> => {
+    const currentImage = imageList[newIndex]
+    const pathname = `${baseUrl}/${basename(currentImage.filename)}`
+
+    if (selectedMediaId === -1 && newIndex !== selectedMediaId) {
+      await router.push({ pathname, query: { gallery: true } }, pathname, { shallow: true })
+    } else {
+      await router.replace({ pathname, query: { gallery: true } }, pathname, { shallow: true })
+    }
+
+    setSlideNumber(newIndex)
+  }
 
   // When logged-in user has fewer than 3 photos,
   // create empty slots for the call-to-action upload component.
-  const placeholders = imageList.length < 3 && isAuthorized
-    ? [...Array(3 - imageList.length).keys()]
+  const placeholders = imageList?.length < 3 && isAuthorized
+    ? [...Array(3 - imageList?.length).keys()]
     : []
 
   return (
     <>
-      <MediaActionToolbar
-        isAuthorized={isAuthorized}
-        imageList={imageList}
-        setTagMode={setTagMode}
-        tagModeOn={tagModeOn}
-      />
-
+      <div className='self-start border-t border-gray-400 w-full'>
+        <MediaActionToolbar
+          isAuthorized={isAuthorized}
+          imageList={imageList}
+          setTagMode={setTagMode}
+          tagModeOn={tagModeOn}
+        />
+      </div>
       <div className={`block w-full xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
-        {imageList.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
-        {imageList.map((imageInfo, index) => {
+        {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
+        {imageList?.map((imageInfo, index) => {
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []
           return (
             <UserMedia
               key={imageInfo.mediaId}
+              uid={uid}
               index={index}
               tagList={tags}
               imageInfo={imageInfo}
               onClick={imageOnClickHandler}
               onTagDeleted={onDeletedHandler}
               isAuthorized={isAuthorized && (stateRef?.current ?? false)}
+              useClassicATag
             />
           )
         })}
@@ -117,7 +170,7 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
 
       </div>
 
-      {isAuthorized && imageList.length > 0 &&
+      {isAuthorized && imageList?.length > 0 &&
         <ImageTagger
           {...imageHelper} onCompleted={onCompletedHandler}
         />}
@@ -125,12 +178,15 @@ export default function UserGallery ({ uid, auth, userProfile, initialImageList,
       <SlideViewer
         isOpen={selectedMediaId >= 0}
         initialIndex={selectedMediaId}
-        imageList={imageList}
+        imageList={imageList ?? []}
         tagsByMediaId={initialTagMap}
-        userinfo={<TinyProfile userProfile={userProfile} />}
-        onClose={() => setSlideNumber(-1)}
+        userinfo={<TinyProfile
+          userProfile={userProfile} onClick={slideViewerCloseHandler}
+                  />}
+        onClose={slideViewerCloseHandler}
         auth={auth}
-        pageUrl={pageUrl}
+        baseUrl={baseUrl}
+        onNavigate={navigateHandler}
       />
     </>
   )
@@ -148,7 +204,8 @@ const MediaActionToolbar = ({ isAuthorized, imageList, tagModeOn, setTagMode }: 
     <Bar layoutClass={Bar.JUSTIFY_LEFT} paddingX={Bar.PX_DEFAULT_LG} className='space-x-4'>
       {isAuthorized &&
         <Toggle
-          enabled={tagModeOn}
+          checked={tagModeOn}
+          disabled={imageList.length === 0}
           label={
             <div className='flex items-center space-x-1'>
               <TagIcon className='w-5 h-5' /><span className='font-semibold'>Tag photo</span>
@@ -158,11 +215,11 @@ const MediaActionToolbar = ({ isAuthorized, imageList, tagModeOn, setTagMode }: 
         />}
       {tagModeOn
         ? (
-          <span className='hidden md:inline text-secondary align-text-bottom'>
+          <span className='hidden md:inline text-secondary align-text-bottom tracking-tight'>
             Power tagging mode is <b>On</b>.&nbsp;Click on the photo to tag a climb.
           </span>
           )
-        : (<>{imageList.length >= 3 && imageList.length < 8 && <span className='hidden md:inline text-secondary mt-0.5'>&#128072;&#127997;&nbsp;Activate Pro mode</span>}</>)}
+        : (<>{imageList?.length >= 3 && imageList?.length < 8 && isAuthorized && <span className='hidden md:inline text-secondary mt-0.5 tracking-tight'>&#128072;&#127997;&nbsp;Activate Pro mode</span>}</>)}
     </Bar>
   )
 }

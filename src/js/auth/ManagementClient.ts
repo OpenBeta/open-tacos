@@ -32,7 +32,7 @@ export const getUserProfileByNick = async (nick: string): Promise<IUserProfile> 
 export const reshapeAuth0UserToProfile = (user: User): IUserProfile => {
   // console.log('##user', user)
   const { user_metadata: umeta } = user
-  if (umeta == null || user.user_id == null) throw new Error(`Missing auth provider ID and metadata for  ${user?.name ?? ''}`)
+  if (umeta == null || user?.user_id == null || umeta?.uuid == null) throw new Error(`Missing auth provider ID and metadata for  ${user?.name ?? ''}`)
   return {
     authProviderId: user.user_id,
     name: umeta?.name ?? '',

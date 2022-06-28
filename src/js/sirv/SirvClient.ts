@@ -86,7 +86,7 @@ export interface UserImageReturnType {
   mediaList: MediaType[]
   mediaIdList: string[]
 }
-export const getUserImages = async (uuid: string, token?: string): Promise<UserImageReturnType> => {
+export const getUserImages = async (uuid: string, size: number = 100, token?: string): Promise<UserImageReturnType> => {
   const _t = await getTokenIfNotExist(token)
   const res = await client.post(
     '/files/search',
@@ -95,7 +95,7 @@ export const getUserImages = async (uuid: string, token?: string): Promise<UserI
       sort: {
         ctime: 'desc'
       },
-      size: 100
+      size
     },
     {
       headers: {
@@ -198,6 +198,28 @@ export const getFileInfo = async (uuid: string, filename: string, token?: string
     })
   }
   throw new Error('Sirv API.getFileInfo() error' + res.statusText)
+}
+
+export const getUserFiles = async (uuid: string, token?: string): Promise<any> => {
+  const _t = await getTokenIfNotExist(token)
+
+  const dir = encodeURIComponent(`/u/${uuid}`)
+  const res = await client.get(
+    '/files/readdir?dirname=' + dir,
+    {
+      headers: {
+        ...headers,
+        Authorization: `bearer ${_t}`
+      }
+    }
+  )
+
+  if (res.status === 200) {
+    console.log(res.data)
+    return null
+  }
+
+  throw new Error('Sirv API.getUserFiles() error' + res.statusText)
 }
 
 export const createUserDir = async (uuid: string, token?: string): Promise<boolean> => {
