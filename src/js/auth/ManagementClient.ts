@@ -44,7 +44,8 @@ export const reshapeAuth0UserToProfile = (user: User): IUserProfile => {
     email: user.email ?? '',
     avatar: user?.picture ?? '',
     bio: umeta?.bio ?? '',
-    roles: umeta?.roles ?? []
+    roles: umeta?.roles ?? [],
+    loginsCount: umeta?.loginsCount ?? 0
   }
 }
 

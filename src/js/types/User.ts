@@ -1,6 +1,7 @@
 export interface IReadOnlyUserMetadata {
   uuid: string
   roles: string[]
+  loginsCount: number
 }
 
 export interface IWritableUserMetadata {
