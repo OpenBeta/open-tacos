@@ -11,9 +11,12 @@ import { saveAsFile } from '../../js/utils'
 import Bar from '../../components/ui/Bar'
 
 export default function Users (): JSX.Element {
-  const session = useSession({ required: true })
+  const session = useSession()
 
   useEffect(() => {
+    if (session.status === 'loading') {
+      return
+    }
     if (session.status !== 'authenticated') {
       void signIn('auth0', { callbackUrl: '/basecamp/users' })
     }
