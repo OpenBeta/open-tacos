@@ -11,7 +11,7 @@ const withAuth = (handler: NextApiHandler): NextApiHandler => {
     if (session != null) {
       await handler(req, res)
     } else {
-      res.redirect(307, '/')
+      res.status(401).redirect(307, '/api/auth/signin')
     }
   }
 }
