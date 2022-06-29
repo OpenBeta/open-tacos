@@ -33,7 +33,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
       void fetchImages()
     } else {
       setImage({
-        url: `${SIRV_CONFIG.baseUrl ?? ''}${shuffle(media)[0].mediaUrl}?format=webp&h=400&q=90`,
+        url: `${SIRV_CONFIG.baseUrl ?? ''}${shuffle(media)[0].mediaUrl}?format=webp&h=300&q=90`,
         license: 'All Rights Reserved',
         creator: '',
         license_url: '',
