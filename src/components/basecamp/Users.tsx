@@ -42,16 +42,16 @@ export default function Users (): JSX.Element {
             <div className='col-span-2' />
 
             <div className='' />
-            <div className='w-full bg-pink-200'>Login</div>
+            <div className='w-full bg-pink-200'>Last Login</div>
             <div className='w-full bg-pink-200'>Counts</div>
             <div className='w-full bg-yellow-200'>Created</div>
-            {users?.map((user, index) => {
+            {users?.map((user, index: number) => {
               // eslint-disable-next-line
               const { user_metadata, last_login, created_at, logins_count, user_id } = user
               const { nick, uuid } = user_metadata as IUserMetadata ?? { nick: null, uuid: null }
               return (
                 <React.Fragment key={user_id}>
-                  <div>{index}</div>
+                  <div>{index + 1}</div>
                   <div className='col-span-2'>{user.email}</div>
                   <div className='col-span-2'>{nick == null ? 'n/a' : <LinkProfile nick={nick} />}</div>
                   <div className=''>
