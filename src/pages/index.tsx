@@ -1,18 +1,25 @@
+import { useState } from 'react'
 import type { NextPage, GetStaticProps } from 'next'
+import * as Tabs from '@radix-ui/react-tabs'
 import { gql } from '@apollo/client'
 
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
 import { graphqlClient } from '../js/graphql/Client'
-import { IndexResponseType } from '../js/types'
-import FeatureCard from '../components/ui/FeatureCard'
+import { getRecentMedia } from '../js/graphql/api'
+import { IndexResponseType, MediaByAuthor } from '../js/types'
 import useCanary from '../js/hooks/useCanary'
+import DenseAreas from '../components/home/DenseAreas'
+import TabsTrigger from '../components/ui/TabsTrigger'
+import RecentMedia from '../components/home/RecentMedia'
 
 interface HomePageType {
   exploreData: IndexResponseType
+  recentMedia: MediaByAuthor[]
 }
-const Home: NextPage<HomePageType> = ({ exploreData }) => {
+const Home: NextPage<HomePageType> = ({ exploreData, recentMedia }) => {
   useCanary()
+  const [activeTab, setTab] = useState<string>('default')
   const { areas } = exploreData
   return (
     <>
@@ -23,11 +30,23 @@ const Home: NextPage<HomePageType> = ({ exploreData }) => {
       <Layout
         contentContainerClass='content-default with-standard-y-margin'
       >
-        <section>
-          <h2 className='mb-4 text-3xl px-4'>Explore</h2>
-          <div className='grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6 lg:gap-x-3 gap-y-3'>
-            {areas.map(area => <FeatureCard key={area.id} area={area} />)}
-          </div>
+        <section className=''>
+          <Tabs.Root defaultValue='default' value={activeTab} onValueChange={setTab} className=''>
+            <Tabs.List aria-label='tabs explore' className='flex flex-row justify-center border-b border-gray-400 mb-4 mx-4'>
+              <TabsTrigger tabKey='default' activeKey={activeTab}>
+                Explore
+              </TabsTrigger>
+              <TabsTrigger tabKey='foo' activeKey={activeTab}>
+                New Tags
+              </TabsTrigger>
+            </Tabs.List>
+            <Tabs.Content value='default' className=''>
+              <DenseAreas areas={areas} />
+            </Tabs.Content>
+            <Tabs.Content value='foo'>
+              <RecentMedia list={recentMedia} />
+            </Tabs.Content>
+          </Tabs.Root>
         </section>
       </Layout>
     </>
@@ -97,14 +116,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   })
 
-  // query = gql`query Stats {
-  //   stats {
-  //       totalClimbs
-  //       totalCrags
-  //   }
-  // }`
-  // const rsStats = await graphqlClient.query<StatsPanelProps>({ query })
-  // Pass post data to the page via props
-  return { props: { exploreData: rs.data } }
+  return { props: { exploreData: rs.data, recentMedia: await getRecentMedia() } }
 }
 export default Home
