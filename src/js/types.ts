@@ -176,6 +176,10 @@ export interface MediaTagWithClimb extends MediaBaseTag {
   climb: Pick<Climb, 'id' | 'name'>
 }
 
+export interface MediaByAuthor {
+  authorUuid: string
+  tagList: MediaBaseTag[]
+}
 export interface WithUid {
   uid: string
 }

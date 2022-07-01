@@ -44,7 +44,7 @@ const DestinationLink = ({ destType, destination }: {destType: number, destinati
   )
 }
 
-const urlResolver = (type: number, dest: string): string | null => {
+export const urlResolver = (type: number, dest: string): string | null => {
   switch (type) {
     case 0:
       return `/climbs/${dest}`

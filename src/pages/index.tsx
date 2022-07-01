@@ -1,18 +1,29 @@
+import { useState } from 'react'
 import type { NextPage, GetStaticProps } from 'next'
+import dynamic from 'next/dynamic'
+import * as Tabs from '@radix-ui/react-tabs'
 import { gql } from '@apollo/client'
+import { groupBy, Dictionary } from 'underscore'
+import { TagIcon, LightBulbIcon } from '@heroicons/react/outline'
 
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
 import { graphqlClient } from '../js/graphql/Client'
-import { IndexResponseType } from '../js/types'
-import FeatureCard from '../components/ui/FeatureCard'
+import { getRecentMedia } from '../js/graphql/api'
+import { IndexResponseType, MediaBaseTag } from '../js/types'
 import useCanary from '../js/hooks/useCanary'
+import { ExploreProps } from '../components/home/DenseAreas'
+import TabsTrigger from '../components/ui/TabsTrigger'
+import { RecentTagsProps } from '../components/home/RecentMedia'
+import { enhanceMediaListWithUsernames } from '../js/usernameUtil'
 
 interface HomePageType {
   exploreData: IndexResponseType
+  tagsByMedia: Dictionary<MediaBaseTag[]>
 }
-const Home: NextPage<HomePageType> = ({ exploreData }) => {
+const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia }) => {
   useCanary()
+  const [activeTab, setTab] = useState<string>('newTags')
   const { areas } = exploreData
   return (
     <>
@@ -23,11 +34,29 @@ const Home: NextPage<HomePageType> = ({ exploreData }) => {
       <Layout
         contentContainerClass='content-default with-standard-y-margin'
       >
-        <section>
-          <h2 className='mb-4 text-3xl px-4'>Explore</h2>
-          <div className='grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6 lg:gap-x-3 gap-y-3'>
-            {areas.map(area => <FeatureCard key={area.id} area={area} />)}
-          </div>
+        <section className=''>
+          <Tabs.Root defaultValue='explore' value={activeTab} onValueChange={setTab}>
+            <Tabs.List aria-label='tabs explore' className='flex flex-row gap-x-6 justify-center mb-6 mx-4'>
+              <TabsTrigger tabKey='explore' activeKey={activeTab}>
+                <div className='flex flex-col justify-center items-center no-underline'>
+                  <div><LightBulbIcon className='w-6 h-6' /></div>
+                  <div className='no-underline my-2 text-xs font-semibold'>Discover</div>
+                </div>
+              </TabsTrigger>
+              <TabsTrigger tabKey='newTags' activeKey={activeTab}>
+                <div className='flex flex-col justify-center items-center'>
+                  <div><TagIcon className='w-6 h-6' /></div>
+                  <div className=' no-underline my-2  text-xs font-semibold'>New tags</div>
+                </div>
+              </TabsTrigger>
+            </Tabs.List>
+            <Tabs.Content value='explore' className=''>
+              <DynamicDenseAreas areas={areas} />
+            </Tabs.Content>
+            <Tabs.Content value='newTags'>
+              <DynamicRecentTags tags={tagsByMedia} />
+            </Tabs.Content>
+          </Tabs.Root>
         </section>
       </Layout>
     </>
@@ -97,14 +126,30 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   })
 
-  // query = gql`query Stats {
-  //   stats {
-  //       totalClimbs
-  //       totalCrags
-  //   }
-  // }`
-  // const rsStats = await graphqlClient.query<StatsPanelProps>({ query })
-  // Pass post data to the page via props
-  return { props: { exploreData: rs.data } }
+  const recentMediaList = await getRecentMedia()
+
+  const allTags = recentMediaList?.flatMap(entry => entry.tagList.slice(0, 10))
+  const tagsWithUsernames = await enhanceMediaListWithUsernames(allTags)
+  const tagsByMedia = groupBy(tagsWithUsernames, 'mediaUrl')
+
+  return {
+    props: {
+      exploreData: rs.data,
+      tagsByMedia
+    },
+    revalidate: 1800
+  }
 }
 export default Home
+
+const DynamicRecentTags = dynamic<RecentTagsProps>(
+  async () =>
+    await import('../components/home/RecentMedia').then(
+      module => module.default), { ssr: false }
+)
+
+const DynamicDenseAreas = dynamic<ExploreProps>(
+  async () =>
+    await import('../components/home/DenseAreas').then(
+      module => module.default), { ssr: false }
+)
