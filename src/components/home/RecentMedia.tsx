@@ -1,27 +1,51 @@
-import { groupBy } from 'underscore'
+import { useState } from 'react'
+import Link from 'next/link'
+import { Dictionary } from 'underscore'
 
-import { MediaByAuthor } from '../../js/types'
-import { SIRV_CONFIG } from '../../js/sirv/SirvClient'
-interface Props {
-  list: MediaByAuthor[]
+import PhotoFooter, { urlResolver } from '../media/PhotoFooter'
+import { MediaBaseTag } from '../../js/types'
+import { MobileLoader } from '../../js/sirv/util'
+
+export interface RecentTagsProps {
+  tags: Dictionary<MediaBaseTag[]>
 }
-export default function RecentMedia ({ list }: Props): JSX.Element {
-  console.log('#recent', list)
-  const tags = list?.flatMap(entry => entry.tagList.slice(0, 10))
-  const tagsByPhoto = groupBy(tags, 'mediaUrl')
 
-  console.log(tagsByPhoto)
-
+export default function RecentTags ({ tags }: RecentTagsProps): JSX.Element {
+  const [hover, setHover] = useState<boolean>(false)
   return (
-    <div className='gap-4 columns-1 md:px-4 md:columns-2 lg:columns-3 xl:columns-4 2xl:columns-6'>
-      {Object.entries(tagsByPhoto).map(([key, entry]) => {
-        return (
-          <div key={key} className='mb-4 rounded-md overflow-hidden'>
-            <img src={`${SIRV_CONFIG.baseUrl}/${key}`} />
-            {/* <div>{authorUuid}</div> */}
-          </div>
-        )
-      })}
-    </div>
+    <>
+      <div className='gap-4 columns-1 md:px-4 md:columns-2 lg:columns-3 xl:columns-4 2xl:columns-6'>
+        {Object.entries(tags).map(([key, entry]) => {
+          if (entry[0].uid == null || entry[0].destination == null) return null
+          const destUrl = urlResolver(entry[0].destType, entry[0].destination)
+          if (destUrl == null) return null
+
+          const mediaUrl = MobileLoader({ src: key, width: 914 })
+          return (
+            <div
+              key={key}
+              className='hover:brightness-75 mb-4 rounded-md overflow-hidden'
+              onMouseEnter={() => setHover(true)}
+              onMouseLeave={() => setHover(false)}
+            >
+              <Link href={destUrl}>
+                <a>
+                  <img src={mediaUrl} />
+                </a>
+              </Link>
+              <PhotoFooter
+                username={entry[0].uid}
+                destType={entry[0].destType}
+                destination={entry[0].destination}
+                hover={hover}
+              />
+            </div>
+          )
+        })}
+      </div>
+      <div className='mt-6 pt-6 w-full  text-xs text-secondary text-center'>
+        All photos are copyrighted by their respective owners.  All Rights Reserved.
+      </div>
+    </>
   )
 }
