@@ -23,15 +23,6 @@ const STORE_OPTS = {}
 
 export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS)
   .extendActions((set, get, api) => ({
-    clear: () => {
-      api.set.state(draft => {
-        const { uid, imageList, tagMap, initialized } = INITIAL_STATE
-        draft.imageList = imageList
-        draft.uid = uid
-        draft.tagMap = tagMap
-        draft.initialized = initialized
-      })
-    },
     /**
      *
      * @param uid
