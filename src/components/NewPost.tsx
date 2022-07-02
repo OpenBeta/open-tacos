@@ -31,11 +31,6 @@ export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JS
 
   const { uploading, getRootProps, getInputProps, openFileDialog } = usePhotoUploader({ onUploaded })
 
-  // const onSubmitHandler = async (): Promise<void> => {
-  //   await toMyProfile()
-  //   openFileDialog()
-  // }
-
   if (status === 'authenticated') {
     if (isMobile) {
       return (
