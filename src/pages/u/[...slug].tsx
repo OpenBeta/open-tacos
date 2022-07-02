@@ -40,6 +40,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
 
   const { isFallback } = router
 
+  console.log('#imageList (server, client)', serverMediaList?.length, mediaList?.length)
   return (
     <>
       <SeoTags
@@ -79,7 +80,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
             initialTagsByMediaId={tagMap}
           />
           {!isAuthorized && !isFallback && (
-            <div className='mt-4 w-full mx-auto text-sm text-secondary text-center'>
+            <div className='mt-4 w-full mx-auto text-xs text-secondary text-center'>
               All photos are copyrighted by their respective owners.  All Rights Reserved.
             </div>
           )}
