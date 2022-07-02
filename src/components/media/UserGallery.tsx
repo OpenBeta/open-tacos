@@ -152,7 +152,7 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []
           return (
             <UserMedia
-              key={imageInfo.mediaId}
+              key={`${imageInfo.mediaId}${index}`}
               uid={uid}
               index={index}
               tagList={tags}
