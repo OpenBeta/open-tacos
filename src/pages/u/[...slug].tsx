@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import { groupBy, Dictionary } from 'underscore'
@@ -14,6 +15,7 @@ import usePermissions from '../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../js/hooks/seo'
 import useMediaDataStore from '../../js/hooks/useMediaDS'
 import type { UserGalleryProps } from '../../components/media/UserGallery'
+import { actions } from '../../js/stores'
 
 interface UserHomeProps {
   uid: string
@@ -25,6 +27,12 @@ interface UserHomeProps {
 
 const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMediaList, serverTagMap, userProfile }) => {
   const router = useRouter()
+  useEffect(() => {
+    return () => {
+      console.log('#user home unmount')
+      actions.media.clear()
+    }
+  }, [])
 
   const auth = usePermissions({ ownerProfileOnPage: userProfile })
 

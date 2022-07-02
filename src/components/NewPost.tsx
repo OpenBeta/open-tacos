@@ -23,13 +23,18 @@ export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JS
     const { nick, uuid } = data.user.metadata
 
     if (uuid != null && nick != null) {
+      await toMyProfile()
       await userMediaStore.set.addImage(nick, uuid, url, true)
       console.log('uploaded', url)
-      await toMyProfile()
     }
   }, [])
 
   const { uploading, getRootProps, getInputProps, openFileDialog } = usePhotoUploader({ onUploaded })
+
+  // const onSubmitHandler = async (): Promise<void> => {
+  //   await toMyProfile()
+  //   openFileDialog()
+  // }
 
   if (status === 'authenticated') {
     if (isMobile) {
