@@ -1,14 +1,17 @@
-/**
- * Regenerate user profile page
- */
-export default async function handler (req, res): Promise<any> {
-  // Check for token to confirm this is a valid request
-  if (req.query.token !== process.env.PAGE_REVALIDATE_TOKEN) {
-    return res.status(401).json({ message: 'Invalid token' })
-  }
+import { NextApiRequest, NextApiHandler } from 'next'
+import withAuth from './withAuth'
+import { checkUsername } from '../../js/utils'
 
+/**
+ * Notify backend to regenerate user profile page
+ */
+const handler: NextApiHandler = async (req: NextApiRequest, res) => {
   try {
-    await res.unstable_revalidate(`/u/${encodeURIComponent(req.query.u as string)}`)
+    const username = req.query?.u as string
+    if (!checkUsername(username)) {
+      throw new Error('Invalid username: ' + username)
+    }
+    await res.revalidate(`/u/${encodeURIComponent(username)}`)
     return res.json({ revalidated: true })
   } catch (err) {
     console.log(err)
@@ -17,3 +20,5 @@ export default async function handler (req, res): Promise<any> {
     return res.status(500).send('Error revalidating')
   }
 }
+
+export default withAuth(handler)
