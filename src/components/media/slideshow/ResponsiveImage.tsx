@@ -2,9 +2,23 @@ import { useEffect, useState } from 'react'
 import { Transition } from '@headlessui/react'
 import Image from 'next/image'
 import { DotsHorizontalIcon } from '@heroicons/react/outline'
-import ContentLoader from 'react-content-loader'
-import classNames from 'classnames'
 import { DefaultLoader, MobileLoader } from '../../../js/sirv/util'
+
+const keyStr =
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
+
+const triplet = (e1, e2, e3): string =>
+  keyStr.charAt(e1 >> 2) +
+  keyStr.charAt(((e1 & 3) << 4) | (e2 >> 4)) +
+  keyStr.charAt(((e2 & 15) << 2) | (e3 >> 6)) +
+  keyStr.charAt(e3 & 63)
+
+const rgbDataURL = (r, g, b): string =>
+  `data:image/gif;base64,R0lGODlhAQABAPAA${
+    triplet(0, r, g) + triplet(b, 255, 255)
+  }/yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==`
+
+const DefaultPlaceholder = rgbDataURL(226, 232, 240)
 
 interface ResponsiveImageProps {
   mediaUrl: string
@@ -49,47 +63,27 @@ export default function ResponsiveImage ({ mediaUrl, isHero = true, loader = nul
   )
 }
 
-export function ResponsiveImage2 ({ mediaUrl, isHero = true, loader = null }: ResponsiveImageProps): JSX.Element {
-  const [dimension, setDimension] = useState({ naturalWidth: 300, naturalHeight: 400 })
-  const [isLoading, setIsLoading] = useState(true)
-  // useEffect(() => {
-  //   setLoaded(false)
-  // }, [mediaUrl])
-  return (
-    <>
-      <div className={classNames('block relative', isLoading ? 'w-[300] h-[400] bg-gray-400' : 'visible')}>
-        <Image
-          src={mediaUrl}
-          loader={MobileLoader}
-          layout='responsive'
-          sizes='100vw'
-          width={dimension.naturalWidth}
-          height={dimension.naturalHeight}
-          objectFit='cover'
-          onLoadingComplete={(d) => {
-            setDimension(d)
-            setIsLoading(false)
-            console.log('#loaded')
-          }}
-        />
-        {/* {isLoading && <ImagePlaceholder uniqueKey={mediaUrl} />} */}
-        {/* {!loaded && <ImagePlaceholder uniqueKey={mediaUrl} />} */}
-
-      </div>
-      {/* <div className='absolute block w-full h-full'> */}
-      {/* </div> */}
-    </>
-  )
+interface SSRResponsiveImageProps extends ResponsiveImageProps {
+  naturalWidth: number
+  naturalHeight: number
 }
 
-const ImagePlaceholder = ({ uniqueKey }): JSX.Element => (
-  <ContentLoader
-    uniqueKey={uniqueKey}
-    // height={400}
-    width={400}
-    speed={0}
-    backgroundColor='rgb(243 244 246)'
-    viewBox='0 0 40 40'
-  >
-    <rect rx={0} ry={0} width='40' height='40' />
-  </ContentLoader>)
+export function ResponsiveImage2 ({ mediaUrl, naturalWidth, naturalHeight, isHero = true, loader = null }: SSRResponsiveImageProps): JSX.Element {
+  const aspectRatio = naturalWidth / naturalHeight
+  const width = 300
+  const height = width / aspectRatio
+  return (
+    <Image
+      src={mediaUrl}
+      loader={MobileLoader}
+      layout='responsive'
+      sizes='50vw'
+      width={width}
+      height={height}
+      objectFit='contain'
+      placeholder='blur'
+      blurDataURL={DefaultPlaceholder}
+    />
+  )
+}
+// style={{ maxWidth: width, maxHeight: height, aspectRatio: aspectRatio as string }}

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { v5 as uuidv5 } from 'uuid'
-import { basename, extname } from 'path'
+import { basename } from 'path'
 
 import { MediaType } from '../types'
 
@@ -137,12 +137,12 @@ export const getUserImages = async (uuid: string, size: number = 100, token?: st
 export const getImagesByFilenames = async (fileList: string[], token?: string): Promise <any> => {
   const _t = await getTokenIfNotExist(token)
 
-  // const _list = fileList.map(s => s.replaceAll(/\//g, '\\/'))
+  const _list = fileList.map(s => `filename:${basename(s).replaceAll('/', '\\/')}`)
   const res = await client.post(
     '/files/search',
     {
       query:
-        `filename:(${fileList.join(' ')}) AND -dirname:\\/.Trash AND dirname:\\/u AND (extension:.jpg OR extension:.jpeg OR extension:.png)`,
+        `(${_list.join(' OR ')}) AND -dirname:\\/.Trash`,
       size: 50
     },
     {
@@ -152,8 +152,6 @@ export const getImagesByFilenames = async (fileList: string[], token?: string): 
       }
     }
   )
-
-  console.log('#sirv', res.data)
 
   if (res.status === 200 && Array.isArray(res.data.hits)) {
     const mediaIdList: string[] = []
@@ -168,7 +166,7 @@ export const getImagesByFilenames = async (fileList: string[], token?: string): 
         ctime,
         mtime,
         contentType,
-        meta
+        meta: stripMeta(meta)
       })
     })
 
@@ -313,3 +311,11 @@ export const addUserIdFile = async (filename: string, uid: string, token?: strin
     return false
   }
 }
+
+const stripMeta = ({
+  width,
+  height,
+  format
+}): any => ({
+  width, height, format
+})
