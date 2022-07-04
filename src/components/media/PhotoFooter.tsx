@@ -7,7 +7,7 @@ export default function PhotoFooter ({ username, destType, destination, hover })
   return (
     <Transition
       show={hover}
-      enter='transition-opacity duration-500'
+      enter='transition-opacity duration-250'
       enterFrom='opacity-20'
       enterTo='opacity-100'
     >

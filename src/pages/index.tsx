@@ -10,18 +10,20 @@ import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
 import { graphqlClient } from '../js/graphql/Client'
 import { getRecentMedia } from '../js/graphql/api'
-import { IndexResponseType, MediaBaseTag } from '../js/types'
+import { IndexResponseType, MediaBaseTag, MediaType } from '../js/types'
 import useCanary from '../js/hooks/useCanary'
 import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import { RecentTagsProps } from '../components/home/RecentMedia'
 import { enhanceMediaListWithUsernames } from '../js/usernameUtil'
+import { getImagesByFilenames } from '../js/sirv/SirvClient'
 
 interface HomePageType {
   exploreData: IndexResponseType
   tagsByMedia: Dictionary<MediaBaseTag[]>
+  mediaList: MediaType[]
 }
-const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia }) => {
+const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) => {
   useCanary()
   const [activeTab, setTab] = useState<string>('newTags')
   const { areas } = exploreData
@@ -32,9 +34,10 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia }) => {
         description='Share your climbing adventure photos and contribute to the climbing route wiki.'
       />
       <Layout
-        contentContainerClass='content-default with-standard-y-margin'
+        contentContainerClass='content-default'
+        showFilterBar={false}
       >
-        <section className=''>
+        <section className='mt-6 xl:mt-20'>
           <Tabs.Root defaultValue='explore' value={activeTab} onValueChange={setTab}>
             <Tabs.List aria-label='tabs explore' className='flex flex-row gap-x-6 justify-center mb-6 mx-4'>
               <TabsTrigger tabKey='explore' activeKey={activeTab}>
@@ -54,7 +57,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia }) => {
               <DynamicDenseAreas areas={areas} />
             </Tabs.Content>
             <Tabs.Content value='newTags'>
-              <DynamicRecentTags tags={tagsByMedia} />
+              <DynamicRecentTags tags={tagsByMedia} mediaList={mediaList} />
             </Tabs.Content>
           </Tabs.Root>
         </section>
@@ -131,11 +134,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const allTags = recentMediaList?.flatMap(entry => entry.tagList.slice(0, 10))
   const tagsWithUsernames = await enhanceMediaListWithUsernames(allTags)
   const tagsByMedia = groupBy(tagsWithUsernames, 'mediaUrl')
-
+  const list = await getImagesByFilenames(Object.keys(tagsByMedia))
   return {
     props: {
       exploreData: rs.data,
-      tagsByMedia
+      tagsByMedia,
+      mediaList: list.mediaList
     },
     revalidate: 1800
   }
