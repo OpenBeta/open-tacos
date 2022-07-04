@@ -40,7 +40,6 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
 
   const { isFallback } = router
 
-  console.log('#imageList (server, client)', serverMediaList?.length, mediaList?.length)
   return (
     <>
       <SeoTags
