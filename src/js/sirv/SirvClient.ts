@@ -140,8 +140,9 @@ export const getImagesByFilenames = async (fileList: string[], token?: string): 
   const _list = fileList.map(file => {
     const name = basename(file)?.trim()
     if (name == null) return null
-    return `filename:${name.replaceAll('/', '\\/')}`
+    return `filename:${name.replace(/\//g, '\\\\//')}`
   })
+
   const res = await client.post(
     '/files/search',
     {
