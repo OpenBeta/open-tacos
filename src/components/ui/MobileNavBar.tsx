@@ -15,7 +15,7 @@ export default function MobileNavBar ({ branding, home, search, profile, more }:
         backgroundClass={Bar.BG_DARK}
         borderBottom
       >
-        <div className='hidden md:block w-12'>{branding}</div>
+        <div className='hidden md:block w-8 h-8'>{branding}</div>
         <div className='md:hidden w-12'>{home}</div>
         {search}
         {profile}

@@ -1,9 +1,13 @@
 import Link from 'next/link'
+import { Popover } from '@headlessui/react'
+import Image from 'next/image'
+
 import CragFinder from './search/CragFinder'
 import MobileNavBar from './ui/MobileNavBar'
 import { HomeIcon, MenuIcon } from '@heroicons/react/outline'
+import OpenBetaLogo from '../assets/brand/openbeta-logo.svg'
+
 import MobileFilterBar from './finder/filters/MobileFilterBar'
-import { Popover } from '@headlessui/react'
 import { Button, ButtonVariant } from './ui/BaseButton'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import ProfileNavButton from './ProfileNavButton'
@@ -47,14 +51,16 @@ const LoginButton = (): JSX.Element => (
 
 const Home = (): JSX.Element => (
   <Button
-    label={<HomeIcon className='w-6 h-6 text-secondary' />}
+    label={<HomeIcon className='w-6 h-6 text-white' />}
     href='/'
   />)
 
 const Branding = (): JSX.Element => {
   return (
     <Link href='/'>
-      <a className='font-semibold text-lg text-secondary pt-1'>OpenTacos</a>
+      <a>
+        <Image src={OpenBetaLogo} layout='responsive' />
+      </a>
     </Link>
   )
 }
@@ -64,7 +70,7 @@ const More = (): JSX.Element => {
   return (
     <Popover>
       <Popover.Button as='div' className='z-50 flex center-items'>
-        <Button label={<MenuIcon className='text-secondary w-8 h-8' />} />
+        <Button label={<MenuIcon className='text-white w-8 h-8' />} />
       </Popover.Button>
 
       <Popover.Panel className='absolute z-20 right-0 mt-2 p-6 bg-white rounded-md'>
