@@ -20,7 +20,7 @@ export default function DesktopNavBar ({ expanded, branding, search, navList }: 
       heightClass={Bar.H_LG}
       layoutClass={Bar.JUSTIFY_BETWEEN}
     >
-      <div>{branding}</div>
+      <div className='shrink'>{branding}</div>
       <div className='block'>{search}</div>
       <nav className='flex items-center justify-between'>
         <div className='flex items-center gap-x-4'>

@@ -13,6 +13,7 @@ import { ButtonVariant } from './ui/BaseButton'
 
 import ProfileNavButton from './ProfileNavButton'
 import NewPost from './NewPost'
+import LogoWithText from '../assets/brand/openbeta-logo-with-text.svg'
 
 interface DesktopAppBarProps {
   expanded: boolean
@@ -42,10 +43,9 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, s
       <DesktopNavBar
         expanded={expanded}
         branding={
-          <Link href='/' passHref>
-            <a className='inline-flex flex-rows justify-start items-center md:gap-x-2'>
-              <Image className='align-middle' src='/tortilla.png' height={32} width={32} />
-              <span className='hidden md:inline-flex items-center font-semibold text-xl lg:text-2xl text-custom-primary pt-1'>OpenTacos</span>
+          <Link href='/'>
+            <a className='h-[32px] w-[112px] block'>
+              <Image src={LogoWithText} layout='responsive' />
             </a>
           </Link>
       }
