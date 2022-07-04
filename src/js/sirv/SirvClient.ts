@@ -137,7 +137,11 @@ export const getUserImages = async (uuid: string, size: number = 100, token?: st
 export const getImagesByFilenames = async (fileList: string[], token?: string): Promise <any> => {
   const _t = await getTokenIfNotExist(token)
 
-  const _list = fileList.map(s => `filename:${basename(s).replaceAll('/', '\\/')}`)
+  const _list = fileList.map(file => {
+    const name = basename(file)?.trim()
+    if (name == null) return null
+    return `filename:${name.replaceAll('/', '\\/')}`
+  })
   const res = await client.post(
     '/files/search',
     {
