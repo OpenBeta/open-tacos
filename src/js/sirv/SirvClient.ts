@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { v5 as uuidv5 } from 'uuid'
+import { basename, extname } from 'path'
+
 import { MediaType } from '../types'
 
 if ((process.env.SIRV_CLIENT_ID_RO ?? null) == null && typeof window === 'undefined') throw new Error('SIRV_CLIENT_ID_RO not set')
@@ -132,14 +134,16 @@ export const getUserImages = async (uuid: string, size: number = 100, token?: st
   throw new Error('Sirv API.getUserImages() error' + res.statusText)
 }
 
-export const searchUserImage = async (uuid: string, fileId: string, token?: string): Promise <any> => {
+export const getImagesByFilenames = async (fileList: string[], token?: string): Promise <any> => {
   const _t = await getTokenIfNotExist(token)
+
+  // const _list = fileList.map(s => s.replaceAll(/\//g, '\\/'))
   const res = await client.post(
     '/files/search',
     {
       query:
-        `(extension:.jpg OR extension:.jpeg OR extension:.png) AND dirname:\\/u\\/${uuid} AND -dirname:\\/.Trash AND basename:${fileId} AND contentType:image\\/jpeg`,
-      size: 1
+        `filename:(${fileList.join(' ')}) AND -dirname:\\/.Trash AND dirname:\\/u AND (extension:.jpg OR extension:.jpeg OR extension:.png)`,
+      size: 50
     },
     {
       headers: {
@@ -149,14 +153,16 @@ export const searchUserImage = async (uuid: string, fileId: string, token?: stri
     }
   )
 
-  if (res.status === 200 && Array.isArray(res.data.hits) && res.data.hits.length === 1) {
+  console.log('#sirv', res.data)
+
+  if (res.status === 200 && Array.isArray(res.data.hits)) {
     const mediaIdList: string[] = []
     const mediaList = res.data.hits.map(entry => {
       const { filename, ctime, mtime, contentType, meta } = entry._source
       const mediaId = uuidv5(filename, uuidv5.URL)
       mediaIdList.push(mediaId)
       return ({
-        ownerId: uuid,
+        ownerId: '',
         filename,
         mediaId,
         ctime,
@@ -167,8 +173,8 @@ export const searchUserImage = async (uuid: string, fileId: string, token?: stri
     })
 
     return {
-      media: mediaList[0],
-      mediaId: mediaIdList[0]
+      mediaList: mediaList,
+      idList: mediaIdList
     }
   }
   throw new Error('Sirv API.searchUserImage() error' + res.statusText)

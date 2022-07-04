@@ -16,6 +16,7 @@ import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import { RecentTagsProps } from '../components/home/RecentMedia'
 import { enhanceMediaListWithUsernames } from '../js/usernameUtil'
+import { getImagesByFilenames } from '../js/sirv/SirvClient'
 
 interface HomePageType {
   exploreData: IndexResponseType
@@ -131,7 +132,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const allTags = recentMediaList?.flatMap(entry => entry.tagList.slice(0, 10))
   const tagsWithUsernames = await enhanceMediaListWithUsernames(allTags)
   const tagsByMedia = groupBy(tagsWithUsernames, 'mediaUrl')
-
+  // Object.keys(tagsByMedia)
+  const test = ['\\/u\\/623f4605-c06c-4ca6-913f-cd2783f3de43\\/8wGr6DLTz7.jpg', '\\/u\\/abe96612-2742-43b0-a128-6b19d4e4615f\\/TLpNdHBGmW.jpeg'] // 'IMG_4416'
+  console.log(test)
+  const mediaList = await getImagesByFilenames(test)
+  console.log(mediaList)
   return {
     props: {
       exploreData: rs.data,
