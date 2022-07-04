@@ -40,7 +40,7 @@ export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JS
             disabled={uploading}
             onClick={openFileDialog}
             label={
-              <span className='border-2 rounded-md border-black'>
+              <span className='border-2 text-white rounded-md border-white'>
                 {uploading ? <DotsHorizontalIcon className='w-6 h-6' /> : <PlusIcon className='w-6 h-6' />}
               </span>
                 }
