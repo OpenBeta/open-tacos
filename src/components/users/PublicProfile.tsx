@@ -13,7 +13,7 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
   const { name, nick, avatar, bio } = userProfile
   return (
     <section className='mx-auto max-w-screen-sm px-4 md:px-0 md:grid md:grid-cols-3'>
-      <div className='hidden md:block grayscale'>
+      <div className='hidden md:block grayscale pr-5'>
         <img className='object-scale-down w-24 h-24 rounded-full hue-rotate-15' src={avatar} />
       </div>
       <div className='md:col-span-2 text-medium text-primary'>
