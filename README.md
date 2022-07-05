@@ -137,6 +137,7 @@ Thanks goes to these wonderful people:
     <td align="center"><a href="https://jacobstruzik.com"><img src="https://avatars.githubusercontent.com/u/3697804?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jacob Struzik</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=jstruzik" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/innub"><img src="https://avatars.githubusercontent.com/u/76929931?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kevin</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=innub" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/osaf96"><img src="https://avatars.githubusercontent.com/u/22621352?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Osaf</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=osaf96" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/xavier-kong"><img src="https://avatars.githubusercontent.com/u/86543341?v=4?s=100" width="100px;" alt=""/><br /><sub><b>xavier-kong</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=xavier-kong" title="Code">💻</a></td>
   </tr>
 </table>
 
