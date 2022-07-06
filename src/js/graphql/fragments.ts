@@ -123,3 +123,18 @@ export const QUERY_RECENT_MEDIA = gql`
     }
   }
 `
+
+export const QUERY_CRAGS_WITHIN = gql`
+  query ($filter: SearchWithinFilter) {
+    cragsWithin(filter: $filter) {
+      areaName
+      uuid
+      totalClimbs
+      metadata {
+        lat
+        lng
+        areaId
+      }
+    }
+  }
+`

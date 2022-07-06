@@ -6,7 +6,7 @@
   "dependencies": {
     "@algolia/autocomplete-js": "^1.6.2",
     "@algolia/autocomplete-theme-classic": "^1.5.1",
-    "@apollo/client": "^3.6.2",
+    "@apollo/client": "^3.6.9",
     "@babel/plugin-proposal-decorators": "^7.15.8",
     "@babel/runtime": "^7.17.2",
     "@danmarshall/deckgl-typings": "^4.9.15",

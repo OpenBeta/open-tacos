@@ -56,6 +56,22 @@ const closeupLayerStyle: LayerProps = {
   }
 }
 
+const closeupLayerStyleBright: LayerProps = {
+  ...closeupLayerStyle,
+  id: 'all-markers-bright',
+  layout: {
+    ...closeupLayerStyle.layout,
+    'text-size': ['interpolate', ['linear'], ['zoom'], 8, 12, 14, 14]
+  },
+  paint: {
+    'icon-color': '#ffffff',
+    'text-halo-blur': 4,
+    'text-halo-width': 4,
+    'text-color': '#000000',
+    'text-halo-color': '#eaeaea'
+  }
+}
+
 interface MarkerLayerProps {
   geojson: FeatureCollection<GeoJSON.Geometry, Properties> | undefined
 }
@@ -71,7 +87,7 @@ export default function MarkerLayer ({ geojson }: MarkerLayerProps): JSX.Element
       type='geojson'
       data={geojson}
     >
-      <Layer {...closeupLayerStyle} />
+      <Layer {...closeupLayerStyleBright} />
       <Layer {...layerStyle} />
     </Source>
   )

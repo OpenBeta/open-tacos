@@ -23,7 +23,7 @@ interface BaseMapProps {
   height: number
   viewstate: ViewState
   onViewStateChange: (vs: XViewStateType) => void
-  children: JSX.Element | JSX.Element[]
+  children: JSX.Element | JSX.Element[] | null
   light: boolean
   onClick?: (event: MapLayerMouseEvent) => void
   onHover?: (event: MapLayerMouseEvent) => void

@@ -37,9 +37,9 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
         contentContainerClass='content-default'
         showFilterBar={false}
       >
-        <section className='mt-6 xl:mt-20 relative bg-white'>
+        <section className='mt-6 xl:mt-20 relative'>
           <Tabs.Root className='z-0 flex flex-col items-center justify-center' defaultValue='explore' value={activeTab} onValueChange={setTab}>
-            <Tabs.List aria-label='tabs explore' className='block z-10 mb-6 mx-4 gap-x-4 relative px-4 bg-white'>
+            <Tabs.List aria-label='tabs explore' className='block z-10 mb-6 mx-4 gap-x-4 relative px-4'>
               <TabsTrigger tabKey='explore' activeKey={activeTab}>
                 <div className='flex flex-col justify-center items-center no-underline'>
                   <div><LightBulbIcon className='w-6 h-6' /></div>

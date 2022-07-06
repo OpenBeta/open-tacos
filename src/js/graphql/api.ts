@@ -1,8 +1,9 @@
 import { gql } from '@apollo/client'
+import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
 import { AreaType, MediaTagWithClimb, MediaByAuthor } from '../types'
 import { graphqlClient } from './Client'
-import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA } from './fragments'
+import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA, QUERY_CRAGS_WITHIN } from './fragments'
 interface CragsDetailsNearType {
   data: AreaType[] // Should use Omit or Pick
   placeId: string | undefined
@@ -118,3 +119,28 @@ export const getRecentMedia = async (userLimit = 10): Promise<MediaByAuthor[]> =
   }
   return []
 }
+
+export const getCragsWithin = async ({ bbox }): Promise<any> => {
+  try {
+    const rs = await graphqlClient.query<{cragsWithin: AreaType[]}>({
+      query: QUERY_CRAGS_WITHIN,
+      variables: {
+        filter: {
+          bbox
+        }
+      },
+      notifyOnNetworkStatusChange: true
+    })
+
+    if (Array.isArray(rs.data?.cragsWithin)) {
+      return rs.data?.cragsWithin
+    }
+    console.log('WARNING: cragsWithin() returns non-array data')
+    return []
+  } catch (e) {
+    console.log('getRecentMedia() error', e)
+  }
+  return []
+}
+
+export const getCragsWithinNicely = AwesomeDebouncePromise(getCragsWithin, 1000)
