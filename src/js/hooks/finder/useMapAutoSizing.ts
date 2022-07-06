@@ -4,22 +4,22 @@ import { bboxFromGeoJson, bbox2Viewport } from '../../../js/GeoHelpers'
 import { DEFAULT_INITIAL_VIEWSTATE } from '../../../components/maps/BaseMap'
 import { store } from '../../stores'
 import { getNavBarOffset } from '../../../components/Header'
-import { ViewState } from 'react-map-gl'
 
+import { XViewStateType } from '../../../js/types'
 /** The return type for our responsive window logic. */
 type useAutoSizingReturn = readonly [
-  ViewState,
+  XViewStateType,
   number,
-  Dispatch<SetStateAction<ViewState>>,
+  Dispatch<SetStateAction<XViewStateType>>,
 ]
 
 /**
  * React hook for auto detecting and calculating div height
  */
-export default function useAutoSizing ({ geojson }): useAutoSizingReturn {
+export default function useAutoSizing ({ geojson, elementId }): useAutoSizingReturn {
   const navbarOffset = getNavBarOffset()
   const [[width, height], setWH] = useState([300, 400])
-  const [viewState, setViewState] = useState<ViewState>(DEFAULT_INITIAL_VIEWSTATE)
+  const [viewState, setViewState] = useState<XViewStateType>(DEFAULT_INITIAL_VIEWSTATE)
 
   const isLoading = store.filters.isLoading()
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function useAutoSizing ({ geojson }): useAutoSizingReturn {
       // Calculate new viewState based on crag search result
       const bbox = bboxFromGeoJson(geojson)
       const vs = bbox2Viewport(bbox, width, height)
-      setViewState({ ...viewState, ...vs })
+      setViewState({ ...viewState, ...vs, ...bbox })
     }
     return () => {
       window.removeEventListener('resize', updateDimensions)
@@ -38,7 +38,7 @@ export default function useAutoSizing ({ geojson }): useAutoSizingReturn {
   }, [geojson, isLoading])
 
   const updateDimensions = useCallback(() => {
-    const { width, height } = getMapDivDimensions('my-area-map', navbarOffset)
+    const { width, height } = getMapDivDimensions(elementId, navbarOffset)
     setWH([width, height])
   }, [width, height])
 

@@ -37,35 +37,35 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
         contentContainerClass='content-default'
         showFilterBar={false}
       >
-        <section className='mt-6 xl:mt-20 relative'>
-          <Tabs.Root className='z-0' defaultValue='explore' value={activeTab} onValueChange={setTab}>
-            <Tabs.List aria-label='tabs explore' className='z-0 flex flex-row gap-x-6 justify-center mb-6 mx-4'>
+        <section className='mt-6 xl:mt-20 relative bg-white'>
+          <Tabs.Root className='z-0 flex flex-col items-center justify-center' defaultValue='explore' value={activeTab} onValueChange={setTab}>
+            <Tabs.List aria-label='tabs explore' className='block z-10 mb-6 mx-4 gap-x-4 relative px-4 bg-white'>
               <TabsTrigger tabKey='explore' activeKey={activeTab}>
-                <div className='flex flex-col justify-center items-center no-underline  w-16'>
+                <div className='flex flex-col justify-center items-center no-underline'>
                   <div><LightBulbIcon className='w-6 h-6' /></div>
                   <div className='no-underline my-2 text-xs font-semibold'>Popular</div>
                 </div>
               </TabsTrigger>
               <TabsTrigger tabKey='newTags' activeKey={activeTab}>
-                <div className='flex flex-col justify-center items-center  w-16'>
+                <div className='flex flex-col justify-center items-center'>
                   <div><TagIcon className='w-6 h-6' /></div>
                   <div className=' no-underline my-2  text-xs font-semibold'>New tags</div>
                 </div>
               </TabsTrigger>
               <TabsTrigger tabKey='map' activeKey={activeTab}>
-                <div className='flex flex-col justify-center items-center w-16'>
+                <div className='flex flex-col justify-center items-center'>
                   <div><LocationMarkerIcon className='w-6 h-6' /></div>
                   <div className=' no-underline my-2  text-xs font-semibold'>Map</div>
                 </div>
               </TabsTrigger>
             </Tabs.List>
-            <Tabs.Content value='explore' className=''>
+            <Tabs.Content value='explore' className='w-full'>
               <DynamicDenseAreas areas={areas} />
             </Tabs.Content>
-            <Tabs.Content value='newTags'>
+            <Tabs.Content value='newTags' className='w-full'>
               <DynamicRecentTags tags={tagsByMedia} mediaList={mediaList} />
             </Tabs.Content>
-            <Tabs.Content value='map' className='z-0'>
+            <Tabs.Content value='map' className='z-0 w-full'>
               <DynamicMap />
             </Tabs.Content>
           </Tabs.Root>
