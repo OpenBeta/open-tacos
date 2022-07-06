@@ -5,6 +5,7 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { gql } from '@apollo/client'
 import { groupBy, Dictionary } from 'underscore'
 import { TagIcon, LightBulbIcon, LocationMarkerIcon } from '@heroicons/react/outline'
+import classNames from 'classnames'
 
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
@@ -39,7 +40,14 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
       >
         <section className='mt-6 xl:mt-20 relative'>
           <Tabs.Root className='z-0 flex flex-col items-center justify-center' defaultValue='explore' value={activeTab} onValueChange={setTab}>
-            <Tabs.List aria-label='tabs explore' className='block z-10 mb-6 mx-4 gap-x-4 relative px-4'>
+            <Tabs.List
+              aria-label='tabs explore'
+              className={
+                classNames(
+                  'block z-10 mb-6 mx-4 gap-x-4 relative px-4',
+                  activeTab === 'map' ? 'drop-shadow-md bg-gray-50 bg-opacity-80 ring-2 ring-gray-600 ring-offset-4 rounded' : '')
+              }
+            >
               <TabsTrigger tabKey='explore' activeKey={activeTab}>
                 <div className='flex flex-col justify-center items-center no-underline'>
                   <div><LightBulbIcon className='w-6 h-6' /></div>

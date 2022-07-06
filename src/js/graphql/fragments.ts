@@ -130,10 +130,12 @@ export const QUERY_CRAGS_WITHIN = gql`
       areaName
       uuid
       totalClimbs
+      density
       metadata {
         lat
         lng
         areaId
+        leaf
       }
     }
   }

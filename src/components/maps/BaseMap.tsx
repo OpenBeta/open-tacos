@@ -5,9 +5,9 @@ import { XViewStateType } from '../../js/types'
 export const DEFAULT_INITIAL_VIEWSTATE: XViewStateType = {
   width: 300,
   height: 600,
-  padding: { top: 5, bottom: 5, left: 5, right: 5 },
+  padding: { top: 10, bottom: 10, left: 10, right: 10 },
   bearing: 0,
-  zoom: 8,
+  zoom: 4,
   pitch: 0,
   latitude: 44.968,
   longitude: -103.77154,

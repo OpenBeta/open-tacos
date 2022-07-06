@@ -120,13 +120,14 @@ export const getRecentMedia = async (userLimit = 10): Promise<MediaByAuthor[]> =
   return []
 }
 
-export const getCragsWithin = async ({ bbox }): Promise<any> => {
+export const getCragsWithin = async ({ bbox, zoom }): Promise<any> => {
   try {
     const rs = await graphqlClient.query<{cragsWithin: AreaType[]}>({
       query: QUERY_CRAGS_WITHIN,
       variables: {
         filter: {
-          bbox
+          bbox,
+          zoom
         }
       },
       notifyOnNetworkStatusChange: true
@@ -138,7 +139,7 @@ export const getCragsWithin = async ({ bbox }): Promise<any> => {
     console.log('WARNING: cragsWithin() returns non-array data')
     return []
   } catch (e) {
-    console.log('getRecentMedia() error', e)
+    console.log('cragsWithin() error', e)
   }
   return []
 }

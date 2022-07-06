@@ -38,7 +38,7 @@ const closeupLayerStyle: LayerProps = {
   filter: ['==', 'isInMyRange', false],
   layout: {
     'icon-size': ['interpolate', ['linear'], ['zoom'], 8, 0.75, 12, 1],
-    'symbol-spacing': 10,
+    'symbol-spacing': 20,
     'text-field': ['get', 'name'],
     'text-variable-anchor': ['bottom', 'left', 'right'],
     'text-radial-offset': 1,
@@ -59,9 +59,49 @@ const closeupLayerStyle: LayerProps = {
 const closeupLayerStyleBright: LayerProps = {
   ...closeupLayerStyle,
   id: 'all-markers-bright',
+  minzoom: 11,
+  filter: ['==', 'leaf', true],
   layout: {
     ...closeupLayerStyle.layout,
-    'text-size': ['interpolate', ['linear'], ['zoom'], 8, 12, 14, 14]
+    'text-size': ['interpolate', ['linear'], ['zoom'], 8, 14, 14, 15]
+  },
+  paint: {
+    'icon-color': '#ffffff',
+    'text-halo-blur': 4,
+    'text-halo-width': 4,
+    'text-color': '#000000',
+    'text-halo-color': '#eaeaea'
+  }
+}
+
+const largeAreaLayerStyleBright: LayerProps = {
+  ...closeupLayerStyle,
+  id: 'area-markers-bright',
+  minzoom: 8,
+  maxzoom: 14,
+  filter: ['all', ['!=', 'leaf', true], ['>', 'totalClimbs', 30], ['<', 'totalClimbs', 500], ['>', 'density', 0.35]],
+  layout: {
+    ...closeupLayerStyle.layout,
+    'text-size': ['interpolate', ['linear'], ['zoom'], 8, 14, 14, 15]
+  },
+  paint: {
+    'icon-color': '#ffffff',
+    'text-halo-blur': 4,
+    'text-halo-width': 4,
+    'text-color': '#000000',
+    'text-halo-color': '#eaeaea'
+  }
+}
+
+const destinationLayerStyleBright: LayerProps = {
+  ...closeupLayerStyle,
+  id: 'destination-markers-bright',
+  minzoom: 5,
+  maxzoom: 8,
+  filter: ['all', ['!=', 'leaf', true], ['>=', 'totalClimbs', 300], ['>', 'density', 0.5]],
+  layout: {
+    ...closeupLayerStyle.layout,
+    'text-size': ['interpolate', ['linear'], ['zoom'], 8, 14, 14, 15]
   },
   paint: {
     'icon-color': '#ffffff',
@@ -89,6 +129,21 @@ export default function MarkerLayer ({ geojson }: MarkerLayerProps): JSX.Element
     >
       <Layer {...closeupLayerStyleBright} />
       <Layer {...layerStyle} />
+    </Source>
+  )
+}
+
+export function MarkerLayer2 ({ geojson }: MarkerLayerProps): JSX.Element | null {
+  if (geojson == null) return null
+  return (
+    <Source
+      id='areas'
+      type='geojson'
+      data={geojson}
+    >
+      <Layer {...destinationLayerStyleBright} />
+      <Layer {...largeAreaLayerStyleBright} />
+      <Layer {...closeupLayerStyleBright} />
     </Source>
   )
 }
