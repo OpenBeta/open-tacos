@@ -6,7 +6,7 @@ export default function TabsTrigger ({ tabKey, activeKey, children }): JSX.Eleme
     <Tabs.Trigger
       value={tabKey}
       className={
-        classNames('border-b-4',
+        classNames('z-40 border-b-4',
           tabKey === activeKey
             ? 'border-gray-800 text-black'
             : 'border-transparent hover:border-gray-400 text-secondary hover:text-black')

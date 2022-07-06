@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import * as Tabs from '@radix-ui/react-tabs'
 import { gql } from '@apollo/client'
 import { groupBy, Dictionary } from 'underscore'
-import { TagIcon, LightBulbIcon } from '@heroicons/react/outline'
+import { TagIcon, LightBulbIcon, LocationMarkerIcon } from '@heroicons/react/outline'
 
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
@@ -37,19 +37,25 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
         contentContainerClass='content-default'
         showFilterBar={false}
       >
-        <section className='mt-6 xl:mt-20'>
-          <Tabs.Root defaultValue='explore' value={activeTab} onValueChange={setTab}>
-            <Tabs.List aria-label='tabs explore' className='flex flex-row gap-x-6 justify-center mb-6 mx-4'>
+        <section className='mt-6 xl:mt-20 relative'>
+          <Tabs.Root className='z-0' defaultValue='explore' value={activeTab} onValueChange={setTab}>
+            <Tabs.List aria-label='tabs explore' className='z-0 flex flex-row gap-x-6 justify-center mb-6 mx-4'>
               <TabsTrigger tabKey='explore' activeKey={activeTab}>
-                <div className='flex flex-col justify-center items-center no-underline'>
+                <div className='flex flex-col justify-center items-center no-underline  w-16'>
                   <div><LightBulbIcon className='w-6 h-6' /></div>
-                  <div className='no-underline my-2 text-xs font-semibold'>Discover</div>
+                  <div className='no-underline my-2 text-xs font-semibold'>Popular</div>
                 </div>
               </TabsTrigger>
               <TabsTrigger tabKey='newTags' activeKey={activeTab}>
-                <div className='flex flex-col justify-center items-center'>
+                <div className='flex flex-col justify-center items-center  w-16'>
                   <div><TagIcon className='w-6 h-6' /></div>
                   <div className=' no-underline my-2  text-xs font-semibold'>New tags</div>
+                </div>
+              </TabsTrigger>
+              <TabsTrigger tabKey='map' activeKey={activeTab}>
+                <div className='flex flex-col justify-center items-center w-16'>
+                  <div><LocationMarkerIcon className='w-6 h-6' /></div>
+                  <div className=' no-underline my-2  text-xs font-semibold'>Map</div>
                 </div>
               </TabsTrigger>
             </Tabs.List>
@@ -58,6 +64,9 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
             </Tabs.Content>
             <Tabs.Content value='newTags'>
               <DynamicRecentTags tags={tagsByMedia} mediaList={mediaList} />
+            </Tabs.Content>
+            <Tabs.Content value='map' className='z-0'>
+              <DynamicMap />
             </Tabs.Content>
           </Tabs.Root>
         </section>
@@ -155,5 +164,11 @@ const DynamicRecentTags = dynamic<RecentTagsProps>(
 const DynamicDenseAreas = dynamic<ExploreProps>(
   async () =>
     await import('../components/home/DenseAreas').then(
+      module => module.default), { ssr: false }
+)
+
+const DynamicMap = dynamic(
+  async () =>
+    await import('../components/home/Map').then(
       module => module.default), { ssr: false }
 )
