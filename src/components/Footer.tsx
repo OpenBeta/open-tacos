@@ -14,6 +14,18 @@ function Footer() {
             </a>
           </p>
 
+          <p className=''>
+            Support Email: {' '}
+            <a
+            className='font-semibold no-underline'
+            href='mailto:support@openbeta.io'
+            target='_blank'
+            rel='noopener noreferrer'
+            >
+              support@openbeta.io
+            </a>
+          </p>
+
           <p>
             <a
             className='font-semibold no-underline'
