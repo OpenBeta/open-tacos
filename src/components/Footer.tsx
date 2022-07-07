@@ -9,7 +9,7 @@ function Footer() {
       <footer className='bg-contrast text-primary'>
         <nav className='xl:flex justify-between max-w-7xl p-4 mx-auto text-sm md:p-8'>
           <p className='md:text-center'>
-            Support Email: {' '}
+            Technical support: {' '}
             <a
             className='font-semibold no-underline'
             href='mailto:support@openbeta.io'
