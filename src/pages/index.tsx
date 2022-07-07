@@ -4,7 +4,8 @@ import dynamic from 'next/dynamic'
 import * as Tabs from '@radix-ui/react-tabs'
 import { gql } from '@apollo/client'
 import { groupBy, Dictionary } from 'underscore'
-import { TagIcon, LightBulbIcon } from '@heroicons/react/outline'
+import { TagIcon, LightBulbIcon, LocationMarkerIcon } from '@heroicons/react/outline'
+import classNames from 'classnames'
 
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
@@ -37,27 +38,50 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
         contentContainerClass='content-default'
         showFilterBar={false}
       >
-        <section className='mt-6 xl:mt-20'>
-          <Tabs.Root defaultValue='explore' value={activeTab} onValueChange={setTab}>
-            <Tabs.List aria-label='tabs explore' className='flex flex-row gap-x-6 justify-center mb-6 mx-4'>
-              <TabsTrigger tabKey='explore' activeKey={activeTab}>
-                <div className='flex flex-col justify-center items-center no-underline'>
-                  <div><LightBulbIcon className='w-6 h-6' /></div>
-                  <div className='no-underline my-2 text-xs font-semibold'>Discover</div>
-                </div>
-              </TabsTrigger>
-              <TabsTrigger tabKey='newTags' activeKey={activeTab}>
-                <div className='flex flex-col justify-center items-center'>
-                  <div><TagIcon className='w-6 h-6' /></div>
-                  <div className=' no-underline my-2  text-xs font-semibold'>New tags</div>
-                </div>
-              </TabsTrigger>
+        <section className='mt-0 xl:mt-[54px] relative'>
+          <Tabs.Root
+            className='z-0 mt-4 xl:mt-6 flex flex-col items-center justify-center'
+            defaultValue='explore'
+            value={activeTab}
+            onValueChange={setTab}
+          >
+            <Tabs.List
+              aria-label='tabs explore'
+              className={
+                classNames(
+                  'z-10 mb-6 mx-4 flex gap-x-4 px-4 py-1',
+                  activeTab === 'map'
+                    ? 'backdrop-blur-sm drop-shadow-md bg-gray-100 bg-opacity-60 ring-2 ring-gray-600 ring-offset-4 rounded'
+                    : '')
+              }
+            >
+              <TabsTrigger
+                tabKey='explore'
+                activeKey={activeTab}
+                icon={<LightBulbIcon className='w-6 h-6' />}
+                label='Popular'
+              />
+              <TabsTrigger
+                tabKey='newTags'
+                activeKey={activeTab}
+                icon={<TagIcon className='w-6 h-6' />}
+                label='New tags'
+              />
+              <TabsTrigger
+                tabKey='map'
+                activeKey={activeTab}
+                icon={<LocationMarkerIcon className='w-6 h-6' />}
+                label='Map'
+              />
             </Tabs.List>
-            <Tabs.Content value='explore' className=''>
+            <Tabs.Content value='explore' className='w-full'>
               <DynamicDenseAreas areas={areas} />
             </Tabs.Content>
-            <Tabs.Content value='newTags'>
+            <Tabs.Content value='newTags' className='w-full'>
               <DynamicRecentTags tags={tagsByMedia} mediaList={mediaList} />
+            </Tabs.Content>
+            <Tabs.Content value='map' className='z-0 h-full'>
+              <DynamicMap />
             </Tabs.Content>
           </Tabs.Root>
         </section>
@@ -155,5 +179,11 @@ const DynamicRecentTags = dynamic<RecentTagsProps>(
 const DynamicDenseAreas = dynamic<ExploreProps>(
   async () =>
     await import('../components/home/DenseAreas').then(
+      module => module.default), { ssr: false }
+)
+
+const DynamicMap = dynamic(
+  async () =>
+    await import('../components/home/Map').then(
       module => module.default), { ssr: false }
 )

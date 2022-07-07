@@ -9,17 +9,14 @@ import InteractiveMarker
   from './InteractiveMarker'
 import useAutoSizing from '../../js/hooks/finder/useMapAutoSizing'
 
+const mapElementId = 'my-area-map'
 /**
  * Make a map of crag markers.
  */
 export default function CragsMap (): JSX.Element {
   const geojson = store.filters.allGeoJson()
 
-  const [viewstate, height, setViewState] = useAutoSizing({ geojson })
-
-  const onViewStateChange = useCallback(({ viewState }) => {
-    setViewState(viewState)
-  }, [])
+  const [viewstate, height, setViewState] = useAutoSizing({ geojson, elementId: mapElementId })
 
   // track current mouseover marker
   const [hoverMarker, setHoverMarker] = useState<null|number[]>(null)
@@ -41,7 +38,7 @@ export default function CragsMap (): JSX.Element {
   return (
     <>
       <div
-        id='my-area-map'
+        id={mapElementId}
         className='w-full absolute top-0 left-0 xl:sticky xl:top-28 xl:m-0 xl:p-0'
         style={{ height }}
       >
@@ -54,7 +51,7 @@ export default function CragsMap (): JSX.Element {
         <BaseMap
           height={height}
           viewstate={viewstate}
-          onViewStateChange={onViewStateChange}
+          onViewStateChange={setViewState}
           light={false}
           onClick={onClickHandler}
           onHover={onHoverHandler}

@@ -22,7 +22,7 @@ export default NextAuth({
       clientId,
       clientSecret,
       issuer,
-      authorization: { params: { audience: `${issuer}/api/v2/`, scope: 'openid email profile read:current_user create:current_user_metadata update:current_user_metadata' } },
+      authorization: { params: { audience: `${issuer}/api/v2/`, scope: 'access_token_authz openid email profile read:current_user create:current_user_metadata update:current_user_metadata read:stats update:area_attrs' } },
       client: {
         token_endpoint_auth_method: clientSecret.length === 0 ? 'none' : 'client_secret_basic'
       }
@@ -38,6 +38,7 @@ export default NextAuth({
     async jwt ({ token, account, profile, user }) {
       if (account?.access_token != null) {
         token.accessToken = account.access_token
+        console.log('#access token', account.access_token)
       }
       if (profile?.sub != null) {
         token.id = profile.sub
@@ -47,6 +48,7 @@ export default NextAuth({
         token.userMetadata = (profile?.[CustomClaimUserMetadata] as IUserMetadata)
         token.userMetadata.roles = profile?.[CustomClaimRoles] as string[] ?? []
       }
+
       return token
     },
     async session ({ session, user, token }) {

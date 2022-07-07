@@ -1,15 +1,17 @@
-import React, { useEffect, useRef } from 'react'
-import { Map, MapLayerMouseEvent, ViewStateChangeEvent, ViewState, MapboxMap } from 'react-map-gl'
+import React, { useRef, useEffect } from 'react'
+import { Map, MapLayerMouseEvent, MapRef } from 'react-map-gl'
+import { BBoxType, XViewStateType } from '../../js/types'
 
-export const DEFAULT_INITIAL_VIEWSTATE = {
+export const DEFAULT_INITIAL_VIEWSTATE: XViewStateType = {
   width: 300,
-  height: 600,
-  padding: { top: 5, bottom: 5, left: 5, right: 5 },
+  height: 1024,
+  padding: { top: 20, bottom: 20, left: 20, right: 20 },
   bearing: 0,
-  zoom: 8,
+  zoom: 9,
   pitch: 0,
-  latitude: 44.968,
-  longitude: -103.77154
+  latitude: 36.079693291728546,
+  longitude: -115.5,
+  bbox: [0, 0, 0, 0]
 }
 
 export const MAP_STYLES = {
@@ -19,9 +21,9 @@ export const MAP_STYLES = {
 
 interface BaseMapProps {
   height: number
-  viewstate: ViewState
-  onViewStateChange: (event: ViewStateChangeEvent) => void
-  children: JSX.Element | JSX.Element[]
+  viewstate: XViewStateType
+  onViewStateChange: (vs: XViewStateType) => void
+  children: JSX.Element | JSX.Element[] | null
   light: boolean
   onClick?: (event: MapLayerMouseEvent) => void
   onHover?: (event: MapLayerMouseEvent) => void
@@ -42,15 +44,52 @@ export default function BaseMap ({
   onHover = (): void => {},
   interactiveLayerIds
 }: BaseMapProps): JSX.Element {
-  const mapRef = useRef(null)
+  const mapRef = useRef<MapRef>(null)
 
   // Map seems to struggle responding to height changes after initial set
   useEffect(() => {
     if (mapRef.current !== null) {
-      const map: MapboxMap = (mapRef.current as any)
+      const map = (mapRef.current)
       map.resize()
     }
   }, [height, mapRef])
+
+  const onMapLoad = React.useCallback((vs) => {
+    if (mapRef.current !== null) {
+      const map = mapRef.current
+
+      const bounds = map.getBounds()
+      const sw = bounds.getSouthWest()
+      const ne = bounds.getNorthEast()
+      const bbox: BBoxType = [sw.lng, sw.lat, ne.lng, ne.lat]
+
+      const center = map.getCenter()
+      const vs = {
+        bearing: 0,
+        zoom: map.getZoom(),
+        padding: map.getPadding(),
+        pitch: 0,
+        latitude: center.lat,
+        longitude: center.lng,
+        bbox
+      }
+      onViewStateChange({ ...viewstate, ...vs, bbox })
+    }
+  }, [viewstate])
+
+  const onMoveHandler = (event): void => {
+    console.log(event)
+    const { viewState } = event
+    const bounds = mapRef.current?.getBounds() ?? null
+
+    let bbox = [0, 0, 0, 0]
+    if (bounds != null) {
+      const sw = bounds.getSouthWest()
+      const ne = bounds.getNorthEast()
+      bbox = [sw.lng, sw.lat, ne.lng, ne.lat]
+    }
+    onViewStateChange({ ...viewState, bbox })
+  }
 
   return (
     <Map
@@ -62,7 +101,8 @@ export default function BaseMap ({
       onMouseMove={onHover}
       onClick={onClick}
       interactiveLayerIds={interactiveLayerIds}
-      onMove={onViewStateChange}
+      onMove={onMoveHandler}
+      onLoad={onMapLoad}
       interactive
       style={{ height: height }}
       ref={mapRef}
