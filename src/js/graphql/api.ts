@@ -134,7 +134,7 @@ export const getCragsWithin = async ({ bbox, zoom }): Promise<any> => {
     })
 
     if (Array.isArray(rs.data?.cragsWithin)) {
-      return rs.data?.cragsWithin
+      return rs.data?.cragsWithin ?? []
     }
     console.log('WARNING: cragsWithin() returns non-array data')
     return []

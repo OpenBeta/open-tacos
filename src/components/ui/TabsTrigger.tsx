@@ -1,7 +1,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import classNames from 'classnames'
 
-export default function TabsTrigger ({ tabKey, activeKey, children }): JSX.Element {
+export default function TabsTrigger ({ tabKey, activeKey, icon, label }): JSX.Element {
   return (
     <Tabs.Trigger
       value={tabKey}
@@ -12,7 +12,10 @@ export default function TabsTrigger ({ tabKey, activeKey, children }): JSX.Eleme
             : 'border-transparent hover:border-gray-400 text-secondary hover:text-black')
       }
     >
-      {children}
+      <div className='flex flex-col justify-center items-center'>
+        <div>{icon}</div>
+        <div className='no-underline my-2 text-xs font-semibold'>{label}</div>
+      </div>
     </Tabs.Trigger>
   )
 }

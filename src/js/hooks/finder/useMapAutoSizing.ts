@@ -18,7 +18,7 @@ type useAutoSizingReturn = readonly [
  */
 export default function useAutoSizing ({ geojson, elementId }): useAutoSizingReturn {
   const navbarOffset = getNavBarOffset()
-  const [[width, height], setWH] = useState([300, 400])
+  const [[width, height], setWH] = useState([DEFAULT_INITIAL_VIEWSTATE.width, DEFAULT_INITIAL_VIEWSTATE.height])
   const [viewState, setViewState] = useState<XViewStateType>(DEFAULT_INITIAL_VIEWSTATE)
 
   const isLoading = store.filters.isLoading()
@@ -31,11 +31,13 @@ export default function useAutoSizing ({ geojson, elementId }): useAutoSizingRet
       const bbox = bboxFromGeoJson(geojson)
       const vs = bbox2Viewport(bbox, width, height)
       setViewState({ ...viewState, ...vs, ...bbox })
+    } else {
+      setViewState(previous => ({ ...previous, width, height }))
     }
     return () => {
       window.removeEventListener('resize', updateDimensions)
     }
-  }, [geojson, isLoading])
+  }, [geojson, isLoading, width, height])
 
   const updateDimensions = useCallback(() => {
     const { width, height } = getMapDivDimensions(elementId, navbarOffset)

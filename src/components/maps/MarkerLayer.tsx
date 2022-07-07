@@ -127,7 +127,7 @@ export default function MarkerLayer ({ geojson }: MarkerLayerProps): JSX.Element
       type='geojson'
       data={geojson}
     >
-      <Layer {...closeupLayerStyleBright} />
+      <Layer {...closeupLayerStyle} />
       <Layer {...layerStyle} />
     </Source>
   )
