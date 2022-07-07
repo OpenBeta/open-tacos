@@ -36,7 +36,7 @@ export default function Map (): JSX.Element {
   return (
     <div
       id={mapElementId}
-      className='z-10 absolute inset-0 w-full h-full'
+      className='z-10 absolute inset-0 w-full h-full bg-gray-100'
       style={{ height: height - 54 }}
     >
 
