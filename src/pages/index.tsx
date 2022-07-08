@@ -37,6 +37,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
       <Layout
         contentContainerClass='content-default'
         showFilterBar={false}
+        showFooter={activeTab !== 'map'}
       >
         <section className='mt-0 xl:mt-[54px] relative'>
           <Tabs.Root
