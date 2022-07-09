@@ -29,7 +29,7 @@ function Layout ({
 
         {showFooter
           ? (
-              <Footer />
+            <Footer />
             )
           : null}
 
