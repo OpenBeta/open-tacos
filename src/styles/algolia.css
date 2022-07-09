@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Autocomplete
+*/
+body {
+  --aa-search-input-height: 100%;
+}
+
+.aa-Form {
+  @apply ring-0 bg-white border-none overflow-hidden rounded-full !important;
+}
+
+.aa-SubmitButton {
+  @apply p-0 h-auto w-auto !important;
+}
+
+.aa-InputWrapperPrefix {
+  @apply text-white m-1 flex items-center justify-center bg-custom-primary rounded-full h-10 w-10 !important;
+}
+
+.aa-LoadingIndicator {
+  @apply stroke-white h-auto w-auto p-0 !important;
+}
+
+.aa-LoadingIcon {
+  @apply text-white !important;
+}
+
+.aa-Label {
+  @apply h-auto mt-1 !important;
+}
+
+/*
+  When detatched queries are enabled, the search input is replaced with a button
+  that triggers a modal. These styles are for the topmost css class in that button.
+*/
+.aa-DetachedSearchButton {
+  @apply border-0 bg-ob-primary sm:bg-white rounded-lg p-1 !important;
+}
+
+.aa-DetachedSearchButton .aa-DetachedSearchButtonIcon {
+  @apply border-0 sm:mr-3 !important;
+}
+
+.aa-DetachedSearchButton .aa-DetachedSearchButtonIcon .aa-SubmitIcon {
+  @apply sm:text-gray-700 text-white !important;
+}
+
+.aa-DetachedSearchButtonPlaceholder {
+  @apply text-base sm:text-gray-700 text-white mr-3;
+}
+
+/*
+aa-DetachedSearchButtonPlaceholder {
+   @apply w-24; 
+}
+End of Aucomplete default classes
+*/
+
+.aa-SubmitIcon {
+  @apply text-white !important;
+}
+
+.aa-InputWrapper {
+  @apply ml-4 !important;
+}
+
+.name-search-item[aria-selected="true"] {
+  @apply bg-white !important;
+}
+
+.crag-finder-item[aria-selected="true"] {
+  @apply bg-slate-100 !important;
+}
+
+.aa-Panel {
+  z-index: 1000;
+  @apply border-2 border-black;
+}
+
+.crag-finder-panelLayout {
+  @apply p-0 !important;
+}
+
+/* XSearch */
+.xsearch-form {
+  @apply w-full !important;
+}
+
+.xsearch-panel {
+  /* Result panel - Tablet and desktop only. We need a mobile specific width and layout */
+  @apply mt-16 sm:mt-2 max-h-screen sm:max-h-[50%] overflow-y-auto shadow-orange-300 
+  sm:shadow-lg border-none p-2 absolute mx-auto bg-white rounded-lg !important;
+
+  /** When detatched queries aren't enabled, use a different width spec */
+  @apply sm:w-auto w-full;
+}
+
+.xsearch-sourceHeader {
+  @apply bg-blue-200;
+}
+
+/* End of XSearch */
