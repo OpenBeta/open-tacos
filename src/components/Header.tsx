@@ -11,7 +11,7 @@ interface HeaderProps {
 }
 
 export default function Header (props: HeaderProps): JSX.Element {
-  const { isTablet, isMobile } = useResponsive()
+  const { isMobile } = useResponsive()
   const includeFilters = Boolean(props.showFilterBar)
 
   const router = useRouter()
@@ -28,7 +28,7 @@ export default function Header (props: HeaderProps): JSX.Element {
 
   return (
     <div id={NAV_BAR_IDENTIFIER} className='relative z-40'>
-      {isTablet || isMobile
+      {isMobile
         ? <MobileTabletAppBar includeFilters={includeFilters} />
         : <DesktopAppBar
             expanded={expanded}

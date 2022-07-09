@@ -4,7 +4,6 @@ import {
   useQuery
 } from '@apollo/client'
 import { graphqlClient } from '../../js/graphql/Client'
-import DensityBar from '../ui/Statistics/DensityBar'
 
 const GET_CRAGS_NEAR = gql`query CragsNear($placeId: String, $lng: Float, $lat: Float, $maxDistance: Int) {
     cragsNear(placeId: $placeId, lnglat: {lat: $lat, lng: $lng}, maxDistance: $maxDistance) {
@@ -42,15 +41,16 @@ export default CragsNearBy
 
 export const CragDensity = ({ crags }: {crags: any[]}): JSX.Element => {
   return (
-    <div className='pl-16 mt-4 w-full'>
-      <span className='text-xs px-2 py-1 bg-slate-500 text-white'>Crags near by</span>
-      <div className='mt-4 flex items-end space-x-4 w-full'>
+    <div className='mt-4 w-full'>
+      <div className='flex items-end space-x-2 w-full'>
         {crags.map(
           ({ _id, count }: {_id: string, count: number}) => {
             return (
-              <div key={_id} className='flex flex-col'>
-                <div className=''><DensityBar level={cragDensityLevel(count)} max={4} /></div>
-                <div className='mt-0.5 border-t border-slate-800 text-xs text-secondary whitespace-nowrap'>{LABELS[_id].label}</div>
+              <div key={_id} className='flex-1'>
+                <div className='text-xl text-center'>{count}</div>
+                <div className='text-center text-xs text-secondary'>
+                  {LABELS[_id].label}
+                </div>
               </div>
             )
           })}
@@ -79,18 +79,5 @@ export const LABELS = {
   theRest: {
     label: 'More than 150 miles',
     width: 20
-  }
-}
-
-const cragDensityLevel = (count: number): number => {
-  const score = count / 20
-  if (score < 1) {
-    return 0
-  } else if (score > 1 && score < 5) {
-    return 1
-  } else if (score > 5 && score < 10) {
-    return 2
-  } else {
-    return 3
   }
 }

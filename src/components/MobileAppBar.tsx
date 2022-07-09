@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { Popover } from '@headlessui/react'
 import Image from 'next/image'
 
-import CragFinder from './search/CragFinder'
 import MobileNavBar from './ui/MobileNavBar'
 import { HomeIcon, MenuIcon } from '@heroicons/react/outline'
 import OpenBetaLogo from '../assets/brand/openbeta-logo.svg'
@@ -12,6 +11,7 @@ import { Button, ButtonVariant } from './ui/BaseButton'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import ProfileNavButton from './ProfileNavButton'
 import NewPost from './NewPost'
+import XSearch from './search/XSearch'
 
 interface HeaderProps {
   includeFilters: boolean
@@ -25,7 +25,7 @@ export default function MobileAppBar (props: HeaderProps): JSX.Element {
       <MobileNavBar
         branding={<Branding />}
         home={<Home />}
-        search={<CragFinder />}
+        search={<XSearch isMobile placeholder='Search' />}
         profile={nav}
         more={<More />}
       />
@@ -65,7 +65,7 @@ const Branding = (): JSX.Element => {
   )
 }
 
-const More = (): JSX.Element => {
+export const More = (): JSX.Element => {
   const { status } = useSession()
   return (
     <Popover>

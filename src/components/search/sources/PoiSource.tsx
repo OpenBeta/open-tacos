@@ -1,7 +1,16 @@
 import { AutocompleteSource } from '@algolia/autocomplete-js'
-
 import { geocoderLookup } from '../../../js/mapbox/Client'
+import { PlaceTemplate } from '../CragFinderTemplates'
 import { DefaultHeader, DefaultNoResult } from '../templates/ClimbResultXSearch'
+import ClientOnly from '../../ClientOnly'
+import { BaseItem } from '@algolia/autocomplete-core'
+
+interface PoiDoc extends BaseItem {
+  text: string
+  id: string
+  place_name: string
+  center: [number, number]
+}
 
 /**
  * Call Mapbox Geocoder to find cities, landmarks, and point-of-interests that
@@ -12,13 +21,26 @@ import { DefaultHeader, DefaultNoResult } from '../templates/ClimbResultXSearch'
  */
 export const searchPoi = async (query: string): Promise<AutocompleteSource<any>> => {
   const rs = await geocoderLookup(query)
+
   return {
     sourceId: 'poi',
     getItems: ({ query }) => rs,
     templates: {
       noResults: DefaultNoResult,
-      item: ({ item }) => {
-        return <div className='text-xs'>{item.place_name}</div>
+      item: ({ item }: {item: PoiDoc}) => {
+        return (
+          <a href={`/finder?shortName=${item.text}&placeId=${item.id}&center=${item.center.join(',')}`}>
+            <ClientOnly>
+              <PlaceTemplate
+                key={item.id}
+                placeName={item.place_name}
+                shortName={item.text}
+                center={item.center}
+                placeId={item.id}
+              />
+            </ClientOnly>
+          </a>
+        )
       },
       header: DefaultHeader // you can also define your own header
     }

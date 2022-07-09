@@ -1,3 +1,4 @@
+import { More } from '../MobileAppBar'
 import Bar from './Bar'
 import { ButtonVariant } from './BaseButton'
 export interface NavListItem {
@@ -20,13 +21,23 @@ export default function DesktopNavBar ({ expanded, branding, search, navList }: 
       heightClass={Bar.H_LG}
       layoutClass={Bar.JUSTIFY_BETWEEN}
     >
-      <div className='shrink'>{branding}</div>
-      <div className='block'>{search}</div>
-      <nav className='flex items-center justify-between'>
-        <div className='flex items-center gap-x-4'>
-          {navList}
+      <div className='flex w-full items-center'>
+        <div className='shrink hidden lg:block mr-2'>{branding}</div>
+
+        <div className='flex-1 lg:px-8 pr-4'>
+          {search}
         </div>
-      </nav>
+
+        <nav className='lg:flex items-center hidden'>
+          <div className='flex items-center lg:gap-x-4'>
+            {navList}
+          </div>
+        </nav>
+
+        <div className='w-12 lg:hidden'>
+          <More />
+        </div>
+      </div>
     </Bar>
   )
 }

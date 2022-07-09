@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 @layer base {
-
 }
 
-body, html {
+body,
+html {
   height: 100%;
   font-size: 16px;
   @apply bg-neutral-900 font-sans text-base text-gray-900;
@@ -24,7 +24,7 @@ body, html {
 /***************************************/
 
 .layout-edit {
-  @apply bg-white  max-w-4xl  2xl:max-w-screen-2xl mx-auto px-4 py-8 mt-8 mb-16 rounded-lg
+  @apply bg-white  max-w-4xl  2xl:max-w-screen-2xl mx-auto px-4 py-8 mt-8 mb-16 rounded-lg;
 }
 
 /* On smaller screens stack forms */
@@ -39,7 +39,7 @@ body, html {
   }
 
   .content-default {
-    @apply relative flex flex-col w-full max-w-full ;
+    @apply relative flex flex-col w-full max-w-full;
   }
 
   .with-standard-y-margin {
@@ -60,72 +60,71 @@ body, html {
   }
 
   .horizontal-center {
-    @apply flex flex-col items-center
+    @apply flex flex-col items-center;
   }
 
   .text-primary {
-    @apply text-neutral-800 
+    @apply text-neutral-800;
   }
   .text-secondary {
-    @apply text-neutral-600
+    @apply text-neutral-600;
   }
   .text-tertiary {
-    @apply text-neutral-400
+    @apply text-neutral-400;
   }
 
   .text-primary-contrast {
-    @apply text-white
+    @apply text-white;
   }
   .text-secondary-contrast {
-    @apply text-gray-300
+    @apply text-gray-300;
   }
   .bg-default {
     @apply bg-neutral-50 dark:bg-slate-900;
   }
 
   .bg-contrast {
-    @apply bg-neutral-200 dark:bg-slate-700
+    @apply bg-neutral-200 dark:bg-slate-700;
   }
 
   /* Add a small horizontal padding for main section headers */
   .h-padding-wide {
-    @apply px-4 2xl:px-0
+    @apply px-4 2xl:px-0;
   }
 
   h1 {
     @apply text-primary text-4xl lg:text-5xl tracking-tight mb-4;
   }
-  
+
   h2 {
     @apply text-primary text-xl font-bold tracking-tight leading-loose;
   }
 
   h3 {
-    @apply text-2xl font-light tracking-tight text-primary
+    @apply text-2xl font-light tracking-tight text-primary;
   }
 
   .home-hero-bg-img {
     background-size: cover;
-    background-image: url('/liberty-bell-hero.jpeg');
+    background-image: url("/liberty-bell-hero.jpeg");
   }
-  
+
   .home-hero {
     min-height: 600px;
-    @apply relative block top-0 left-0 bg-gray-800 home-hero-bg-img xl:min-h-[500px] xl:h-[80vh]
+    @apply relative block top-0 left-0 bg-gray-800 home-hero-bg-img xl:min-h-[500px] xl:h-[80vh];
   }
-  
+
   .height-mobile-portrait {
-    height: 600px
+    height: 600px;
   }
 
   .home-hero-mobile {
-    @apply lg:hidden h-screen portrait:height-mobile-portrait w-screen bg-gray-800
+    @apply lg:hidden h-screen portrait:height-mobile-portrait w-screen bg-gray-800;
   }
 }
 .title {
   @apply text-4xl font-bold font-sans my-4 !important;
 }
-
 
 code {
   @apply text-sm font-mono bg-green-100 -mx-1.5 px-1.5 py-1.5 rounded !important;
@@ -140,24 +139,24 @@ p {
 }
 
 .editor-profile-header {
-  @apply bg-custom-secondary border-custom-secondary border-b py-4 px-4 h-14 bg-gray-100 text-base align-middle rounded-t-lg
+  @apply bg-custom-secondary border-custom-secondary border-b py-4 px-4 h-14 bg-gray-100 text-base align-middle rounded-t-lg;
 }
 
 @layer components {
   .btn-small {
-    @apply whitespace-nowrap py-1 px-4 text-sm !important
+    @apply whitespace-nowrap py-1 px-4 text-sm !important;
   }
 
   .btn-medium {
-    @apply px-6 py-2 text-lg !important
+    @apply px-6 py-2 text-lg !important;
   }
 
   .btn-nav-secondary {
-    @apply bg-ob-tertiary text-black hover:scale-110 duration-300 !important
+    @apply bg-ob-tertiary text-black hover:scale-110 duration-300 !important;
   }
 
   .btn-nav {
-    @apply text-white hover:scale-110 duration-300 !important
+    @apply text-white hover:scale-110 duration-300 !important;
   }
 
   .btn {
@@ -181,13 +180,12 @@ p {
   }
 
   .btn-text {
-    @apply hover:bg-gray-200 underline shadow-none
+    @apply hover:bg-gray-200 underline shadow-none;
   }
 
   .btn-default {
-    @apply bg-gray-200 text-gray-900 border-2 border-gray-700
+    @apply bg-gray-200 text-gray-900 border-2 border-gray-700;
   }
-
 
   .link-primary {
     @apply underline hover:text-yellow-600;
@@ -200,7 +198,7 @@ p {
   .slate-ToolbarButton {
     @apply fill-current text-gray-500 justify-center !important;
   }
-  
+
   .slate-ToolbarButton-active {
     @apply fill-current text-pink-600 !important;
   }
@@ -234,20 +232,19 @@ input:checked + label {
 }
 
 .markdown {
-  @apply font-sans
+  @apply font-sans;
 }
 
-.markdown figure+figure {
-  @apply mt-12
+.markdown figure + figure {
+  @apply mt-12;
 }
-
 
 .markdown figcaption {
-  @apply text-gray-500 text-sm text-center my-4
+  @apply text-gray-500 text-sm text-center my-4;
 }
 
 .markdown pre {
-  @apply text-sm font-mono bg-green-100 -mx-1.5 px-1.5 py-1.5 rounded !important
+  @apply text-sm font-mono bg-green-100 -mx-1.5 px-1.5 py-1.5 rounded !important;
 }
 
 .markdown ul {
@@ -259,7 +256,7 @@ input:checked + label {
 }
 
 .markdown table {
-   @apply table-auto w-full;
+  @apply table-auto w-full;
 }
 
 .markdown table thead {
@@ -274,83 +271,6 @@ input:checked + label {
   @apply p-2;
 }
 
-/*
-  Autocomplete
-*/
-
-.aa-Form {
-  @apply ring-0 bg-white border-black overflow-hidden  !important;
-}
-
-.aa-SubmitButton {
-  @apply bg-custom-primary !important;
-}
-
-/*
-  Autocomplete default classes (before click)
-*/
-.aa-DetachedSearchButton {
-@apply h-8 border-0 ring-0 bg-gray-200 shadow-inner rounded-md !important;
-}
-.aa-DetachedSearchButton .aa-DetachedSearchButtonIcon {
-  @apply border-0 !important;
-}
-
-.aa-DetachedSearchButton .aa-DetachedSearchButtonIcon .aa-SubmitIcon {
-  @apply h-6 w-6 text-gray-700 !important;
-}
-
-aa-DetachedSearchButtonPlaceholder {
-  /* @apply w-24; */
-}
-
-.aa-DetachedSearchButtonPlaceholder {
-  @apply text-xs;
-}
-
-/*
-End of Aucomplete default classes
-*/
-
-.aa-SubmitIcon {
-  @apply text-white !important;
-}
-.aa-InputWrapper {
-  @apply ml-4 !important;
-}
-
-.name-search-item[aria-selected='true'] {
-  @apply bg-white !important;
-}
-
-.crag-finder-item[aria-selected='true'] {
-  @apply bg-slate-100 !important;}
-
-.aa-Panel {
-  z-index: 1000;
-  @apply border-2 border-black;
-}
-
-.crag-finder-panelLayout {
-  @apply p-0 !important;
-}
-
-/* XSearch */
-.xsearch-form {
-  @apply w-32  md:w-96 lg:max-w-xl w-full !important;
-}
-
-.xsearch-panel {
-  /* Result panel - Tablet and desktop only. We need a mobile specific width and layout */
-  transform: translate(-50%, 0);
-  @apply drop-shadow-lg left-[50%] absolute max-w-screen-lg	w-full mx-auto !important;
-}
-
-.xsearch-sourceHeader {
-  @apply bg-blue-200;
-}
-/* End of XSearch */
-
 /* Climb search for tagging */
 .tag-search-form {
   @apply w-80 h-9 ring-2 ring-neutral-200 border-neutral-600 rounded-lg !important;
@@ -362,7 +282,6 @@ End of Aucomplete default classes
 
 .tag-search-inputWrapperPrefix {
   @apply h-9 w-9 !important;
-
 }
 
 .tag-search-submit-button {
@@ -382,7 +301,6 @@ End of Aucomplete default classes
   @apply m-1 px-2 rounded-md hover:bg-ob-secondary hover:bg-opacity-20 !important;
 }
 /* End of search for tagging */
-
 
 .fading-hidden {
   visibility: hidden;
