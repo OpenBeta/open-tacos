@@ -165,3 +165,12 @@ export const saveAsFile = (data: any, filename: string): void => {
   const blob = new Blob([data], { type: 'text/plain;charset=utf-8' })
   saveAs(blob, filename)
 }
+
+/**
+ * Website URL validation
+ * @param url
+ * @returns true if valid website URL
+ */
+export const checkWebsiteUrl = (url: string) => {
+  return !url.includes(' ') && url.length > 2
+}

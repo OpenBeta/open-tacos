@@ -8,7 +8,7 @@ import { Button, ButtonVariant } from '../../ui/BaseButton'
 import Snackbar from '../../ui/Snackbar'
 import { IWritableUserMetadata } from '../../../js/types/User'
 import { doesUsernameExist } from '../../../js/userApi/user'
-import { checkUsername } from '../../../js/utils'
+import { checkUsername, checkWebsiteUrl } from '../../../js/utils'
 
 const UserProfileSchema = Yup.object().shape({
   nick: Yup.string()
@@ -20,15 +20,30 @@ const UserProfileSchema = Yup.object().shape({
     .max(50, 'Maximum 50 characters.'),
   bio: Yup.string()
     .max(150, 'Maximum 150 characters')
-    .test('less-than-3-lines', 'Maximum 2 lines', (text) => text != null && text.split(/\r\n|\r|\n/).length <= 2)
-})
+    .test('less-than-3-lines', 'Maximum 2 lines', (text) => text != null && text.split(/\r\n|\r|\n/).length <= 2),
+  website: Yup.string()
+    .nullable()
+    .notRequired()
+    .max(150, 'Maximum 150 characters')
+    .when('website', {
+      is: val => val?.length > 0,
+      then: rule => {
+        if (rule) {
+          return Yup.string().test('special-rules', 'Invalid URL', checkWebsiteUrl)
+        } else {
+          return Yup.string().notRequired()
+        }
+      }
+    })
+}, [['website', 'website']])
 
 export default function ProfileEditForm (): ReactElement {
   const [justSubmitted, setJustSubmitted] = useState(false)
   const [profile, setProfile] = useState<IWritableUserMetadata>({
     name: '',
     nick: '',
-    bio: ''
+    bio: '',
+    website: undefined
   })
 
   useLayoutEffect(() => {
@@ -72,6 +87,7 @@ export default function ProfileEditForm (): ReactElement {
           />
           <TextField name='name' label='Name' />
           <TextField name='bio' label='Bio' multiline rows={3} spellcheck />
+          <TextField name='website' label='Website (optional)' />
           <div>
             <Button
               label={isSubmitting ? 'Saving...' : 'Save'} type='submit' variant={ButtonVariant.SOLID_DEFAULT}
