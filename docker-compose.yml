@@ -17,6 +17,6 @@ services:
     healthcheck:
       test: curl --fail http://localhost:3000 || exit 1
       interval: 1m
-      retries: 10
+      retries: 30
       start_period: 2m
       timeout: 5m
