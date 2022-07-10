@@ -14,3 +14,9 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
+    healthcheck:
+      test: curl --fail http://localhost:3000 || exit 1
+      interval: 1m
+      retries: 10
+      start_period: 2m
+      timeout: 5m

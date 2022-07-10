@@ -47,13 +47,6 @@ jobs:
         run: docker-compose up -d
         env:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
-      - name: Wait for server
-        uses: nev7n/wait_for_response@v1
-        with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 300000
-          interval: 2000
       - name: Show server log
         run: docker logs --tail 10 opentacos-dev-latest
       - name: Ping home page
