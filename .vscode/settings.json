@@ -3,19 +3,11 @@
   "[typescriptreact]": {
     "editor.formatOnType": true,
     "editor.formatOnSave": true,
-<<<<<<< HEAD
     "editor.defaultFormatter": "standard.vscode-standard"
   },
   "[typescript]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "standard.vscode-standard"
-=======
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
-  "[typescript]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "vscode.typescript-language-features"
->>>>>>> 6f321e1 (added sitemap.xml)
   },
   "standard.enable": true,
   "standard.autoFixOnSave": true,
