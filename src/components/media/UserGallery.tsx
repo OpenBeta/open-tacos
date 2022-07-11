@@ -1,8 +1,9 @@
-import { useCallback, useState, useRef, Dispatch, SetStateAction, useEffect } from 'react'
+import React, { useCallback, useState, useRef, Dispatch, SetStateAction, useEffect } from 'react'
 import { Dictionary } from 'underscore'
 import { TagIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 import { basename } from 'path'
+
 import UserMedia from './UserMedia'
 import ImageTagger from './ImageTagger'
 import useImageTagHelper from './useImageTagHelper'
@@ -14,6 +15,7 @@ import { TinyProfile } from '../users/PublicProfile'
 import { WithPermission } from '../../js/types/User'
 import Bar from '../ui/Bar'
 import Toggle from '../ui/Toggle'
+import { useResponsive } from '../../js/hooks'
 
 export interface UserGalleryProps {
   loaded: boolean
@@ -130,6 +132,8 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
     setSlideNumber(newIndex)
   }
 
+  const { isMobile } = useResponsive()
+
   // When logged-in user has fewer than 3 photos,
   // create empty slots for the call-to-action upload component.
   const placeholders = imageList?.length < 3 && isAuthorized
@@ -151,17 +155,31 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
         {imageList?.map((imageInfo, index) => {
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []
           return (
-            <UserMedia
-              key={`${imageInfo.mediaId}${index}`}
-              uid={uid}
-              index={index}
-              tagList={tags}
-              imageInfo={imageInfo}
-              onClick={imageOnClickHandler}
-              onTagDeleted={onDeletedHandler}
-              isAuthorized={isAuthorized && (stateRef?.current ?? false)}
-              useClassicATag
-            />
+            <div className='relative' key={`${imageInfo.mediaId}${index}`}>
+              <UserMedia
+                key={`${imageInfo.mediaId}${index}`}
+                uid={uid}
+                index={index}
+                tagList={tags}
+                imageInfo={imageInfo}
+                onClick={imageOnClickHandler}
+                onTagDeleted={onDeletedHandler}
+                isAuthorized={isAuthorized && (stateRef?.current ?? false)}
+                useClassicATag
+              />
+              {tagModeOn && imageList?.length > 0 && isAuthorized && isMobile
+                ? (
+                  <div className='absolute top-12'>
+                    <ImageTagger
+                      isMobile
+                      {...imageHelper}
+                      imageInfo={imageInfo}
+                      onCompleted={onCompletedHandler}
+                    />
+                  </div>
+                  )
+                : null}
+            </div>
           )
         })}
 
@@ -170,24 +188,25 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
 
       </div>
 
-      {isAuthorized && imageList?.length > 0 &&
+      {isAuthorized && imageList?.length > 0 && !isMobile &&
         <ImageTagger
           {...imageHelper} onCompleted={onCompletedHandler}
         />}
 
-      <SlideViewer
-        isOpen={selectedMediaId >= 0}
-        initialIndex={selectedMediaId}
-        imageList={imageList ?? []}
-        tagsByMediaId={initialTagMap}
-        userinfo={<TinyProfile
-          userProfile={userProfile} onClick={slideViewerCloseHandler}
-                  />}
-        onClose={slideViewerCloseHandler}
-        auth={auth}
-        baseUrl={baseUrl}
-        onNavigate={navigateHandler}
-      />
+      {!isMobile &&
+        <SlideViewer
+          isOpen={selectedMediaId >= 0}
+          initialIndex={selectedMediaId}
+          imageList={imageList ?? []}
+          tagsByMediaId={initialTagMap}
+          userinfo={<TinyProfile
+            userProfile={userProfile} onClick={slideViewerCloseHandler}
+                    />}
+          onClose={slideViewerCloseHandler}
+          auth={auth}
+          baseUrl={baseUrl}
+          onNavigate={navigateHandler}
+        />}
     </>
   )
 }
