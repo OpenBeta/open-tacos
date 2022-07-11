@@ -78,7 +78,7 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
             .map(({ uuid }) => {
                 return `
                   <url>
-                    <loc>${baseUrl}/areas/${uuid}</loc>
+                    <loc>${baseUrl}areas/${uuid}</loc>
                     <changefreq>monthly</changefreq>
                     <priority>1.0</priority>
                   </url>
