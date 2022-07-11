@@ -2,6 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
+jest.mock('../../../js/graphql/Client')
 jest.mock('../../../js/typesense/TypesenseClient')
 jest.mock('../../../js/mapbox/Client')
 
@@ -28,7 +29,7 @@ beforeAll(async () => {
   ClimbSearchForTagging = module.default
 })
 
-test('XSearch triggers popup window', async () => {
+test('Climb search for tagging', async () => {
   const user = userEvent.setup()
   const climbSearchByNameFn = jest.spyOn(MockedTypesenseClient, 'climbSearchByName')
 
