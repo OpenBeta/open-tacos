@@ -40,7 +40,7 @@ jobs:
         with:
           fetch-depth: 1
       - name: Build the dev container
-        run: docker-compose build --no-cache
+        run: docker-compose build --no-cache --progress plain
         env:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
       - name: Start docker compose
