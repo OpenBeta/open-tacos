@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es6",
-<<<<<<< HEAD
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -20,33 +19,3 @@
   "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"]
 }
-=======
-      "lib": [
-        "dom",
-        "dom.iterable",
-        "esnext"
-      ],
-        "allowJs": true,
-          "skipLibCheck": true,
-            "strict": false,
-              "forceConsistentCasingInFileNames": true,
-                "noEmit": true,
-                  "incremental": true,
-                    "esModuleInterop": true,
-                      "module": "esnext",
-                        "moduleResolution": "node",
-                          "resolveJsonModule": true,
-                            "isolatedModules": true,
-                              "jsx": "preserve",
-                                "strictNullChecks": true
-  },
-  "include": [
-    "next-env.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
-    "exclude": [
-      "node_modules"
-    ]
-}
->>>>>>> a8f01d9 (added sitemap.xml)
