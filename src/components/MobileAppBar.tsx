@@ -15,9 +15,10 @@ import XSearch from './search/XSearch'
 
 interface HeaderProps {
   includeFilters: boolean
+  isTablet: boolean
 }
 
-export default function MobileAppBar (props: HeaderProps): JSX.Element {
+export default function MobileAppBar ({ isTablet, includeFilters }: HeaderProps): JSX.Element {
   const { status } = useSession()
   const nav = status === 'authenticated' ? <AuthenticatedNav /> : <LoginButton />
   return (
@@ -25,11 +26,11 @@ export default function MobileAppBar (props: HeaderProps): JSX.Element {
       <MobileNavBar
         branding={<Branding />}
         home={<Home />}
-        search={<XSearch isMobile placeholder='Search' />}
+        search={<XSearch isMobile={!isTablet} placeholder='Search' />}
         profile={nav}
         more={<More />}
       />
-      {props.includeFilters && <MobileFilterBar />}
+      {includeFilters && <MobileFilterBar />}
     </>
   )
 }
@@ -59,13 +60,13 @@ const Branding = (): JSX.Element => {
   return (
     <Link href='/'>
       <a>
-        <Image src={OpenBetaLogo} layout='responsive' />
+        <Image width={16} height={16} src={OpenBetaLogo} layout='responsive' />
       </a>
     </Link>
   )
 }
 
-export const More = (): JSX.Element => {
+const More = (): JSX.Element => {
   const { status } = useSession()
   return (
     <Popover>

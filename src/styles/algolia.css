@@ -1,24 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /*
   Autocomplete
 */
+
 body {
   --aa-search-input-height: 100%;
 }
 
-.aa-Form {
-  @apply ring-0 bg-white border-none overflow-hidden rounded-full !important;
-}
-
-.aa-SubmitButton {
-  @apply p-0 h-auto w-auto !important;
-}
-
-.aa-InputWrapperPrefix {
-  @apply text-white m-1 flex items-center justify-center bg-custom-primary rounded-full h-10 w-10 !important;
+.xsearch-inputWrapperPrefix {
+  @apply text-white m-0.5 xl:m-1 flex items-center justify-center bg-ob-primary rounded-full h-8 w-8 xl:h-10 xl:w-10 !important;
 }
 
 .aa-LoadingIndicator {
@@ -37,35 +26,37 @@ body {
   When detatched queries are enabled, the search input is replaced with a button
   that triggers a modal. These styles are for the topmost css class in that button.
 */
+
+.aa-DetachedFormContainer {
+  @apply bg-slate-800 !important;
+}
+
 .aa-DetachedSearchButton {
-  @apply border-0 bg-ob-primary sm:bg-white rounded-lg p-1 !important;
+  @apply border border-gray-300 bg-inherit rounded-full p-1 !important;
+}
+
+.aa-DetachedCancelButton{
+  @apply bg-white rounded-lg !important;
 }
 
 .aa-DetachedSearchButton .aa-DetachedSearchButtonIcon {
-  @apply border-0 sm:mr-3 !important;
-}
-
-.aa-DetachedSearchButton .aa-DetachedSearchButtonIcon .aa-SubmitIcon {
-  @apply sm:text-gray-700 text-white !important;
+  @apply -ml-1 border-0 stroke-ob-primary stroke-2 !important;
 }
 
 .aa-DetachedSearchButtonPlaceholder {
-  @apply text-base sm:text-gray-700 text-white mr-3;
+  @apply text-base text-tertiary-contrast mr-3;
 }
 
-/*
-aa-DetachedSearchButtonPlaceholder {
-   @apply w-24; 
-}
-End of Aucomplete default classes
-*/
-
-.aa-SubmitIcon {
-  @apply text-white !important;
+.xsearch-SubmitButton {
+  @apply bg-inherit p-0 h-auto w-auto !important;
 }
 
-.aa-InputWrapper {
-  @apply ml-4 !important;
+.xsearch-submitButton .aa-SubmitIcon {
+  @apply w-6 h-6 text-white !important;
+}
+
+.xsearch-inputWrapper {
+  @apply pl-3 !important;
 }
 
 .name-search-item[aria-selected="true"] {
@@ -78,29 +69,69 @@ End of Aucomplete default classes
 
 .aa-Panel {
   z-index: 1000;
-  @apply border-2 border-black;
+  /* @apply border-2 border-black; */
 }
 
-.crag-finder-panelLayout {
-  @apply p-0 !important;
-}
 
 /* XSearch */
-.xsearch-form {
-  @apply w-full !important;
+.aa-Form.xsearch-form {
+  @apply ring-0 bg-white border-none overflow-hidden rounded-full  !important;
 }
 
 .xsearch-panel {
   /* Result panel - Tablet and desktop only. We need a mobile specific width and layout */
-  @apply mt-16 sm:mt-2 max-h-screen sm:max-h-[50%] overflow-y-auto shadow-orange-300 
-  sm:shadow-lg border-none p-2 absolute mx-auto bg-white rounded-lg !important;
+  @apply w-screen left-0 bg-transparent !important;
 
   /** When detatched queries aren't enabled, use a different width spec */
-  @apply sm:w-auto w-full;
+  /* @apply sm:w-auto w-full; */
 }
 
 .xsearch-sourceHeader {
   @apply bg-blue-200;
 }
 
+
+.xsearch-result-container {
+  @apply h-screen-85 lg:h-screen-80 max-w-3xl mx-auto p-3 bg-white rounded-lg shadow-gray-500 
+  shadow-md border-none overflow-y-auto !important;
+}
 /* End of XSearch */
+
+
+/* Climb search for tagging */
+
+.climb-tag-search {
+  @apply z-50 w-80 !important;
+}
+
+
+.aa-Form.tag-search-form {
+  @apply p-0.5 w-full ring-1  border-0 ring-black rounded-md shadow-gray-500 !important;
+}
+
+.tag-search-inputWrapper {
+  @apply text-sm !important;
+}
+
+.tag-search-inputWrapperPrefix {
+  @apply flex items-center justify-center w-8 h-8 !important;
+}
+
+
+.tag-search-submit-button {
+  @apply bg-inherit p-0 h-auto w-auto !important;
+}
+
+.tag-search-submit-button .aa-SubmitIcon{
+  @apply text-black stroke-2 stroke-black w-4 h-4 !important;
+}
+
+.tag-search-panel {
+  /* Result panel - Tablet and desktop only. We need a mobile specific width and layout */
+  @apply mt-0.5 pt-0 rounded-lg border border-neutral-600 drop-shadow-lg max-w-screen-sm !important;
+}
+
+.tag-search-item {
+  @apply m-1 px-2 rounded-md hover:bg-ob-secondary hover:bg-opacity-20 !important;
+}
+/* End of search for tagging */

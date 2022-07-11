@@ -1,6 +1,7 @@
 import { render } from 'react-dom'
-import { Autocomplete } from './Autocomplete'
+import { AutocompleteClassNames } from '@algolia/autocomplete-js'
 
+import { Autocomplete } from './Autocomplete'
 import { xsearchTypesense, searchPoi } from './sources'
 interface XSearchProps {
   isMobile?: boolean
@@ -28,7 +29,7 @@ export default function XSearch ({ isMobile = true, placeholder = 'Climb search'
       render={({ elements }, root) => {
         const { climbs, areas, fa, poi } = elements
         render(
-          <div className='md:p-3'>
+          <div className='xsearch-result-container'>
             <div>{climbs}</div>
             <div>{poi}</div>
             <div>{areas}</div>
@@ -39,11 +40,14 @@ export default function XSearch ({ isMobile = true, placeholder = 'Climb search'
   )
 }
 
-const CUSTOM_CLASSES = {
+const CUSTOM_CLASSES: Partial<AutocompleteClassNames> = {
   panel: 'xsearch-panel',
   item: 'xsearch-item',
   panelLayout: 'xsearch-panelLayout',
   sourceHeader: 'xsearch-sourceHeader',
   form: 'xsearch-form',
-  root: 'xsearch'
+  root: 'xsearch',
+  inputWrapperPrefix: 'xsearch-inputWrapperPrefix',
+  inputWrapper: 'xsearch-inputWrapper',
+  submitButton: 'xsearch-submitButton'
 }

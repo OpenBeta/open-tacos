@@ -6,7 +6,6 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { useSession, SessionProvider } from 'next-auth/react'
 import '../styles/global.css'
-import '../styles/algolia.css'
 import '../../public/fonts/fonts.css'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
