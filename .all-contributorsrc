@@ -182,6 +182,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Downster",
+      "name": "Brendan Downing",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24400646?v=4",
+      "profile": "https://github.com/Downster",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
