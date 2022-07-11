@@ -52,6 +52,7 @@ const query = gql`query UsaAreas( $filter: Filter) {
 export const getServerSideProps = async ({ res }): Promise<object> => {
   const baseUrl: string = {
     development: 'http://localhost:3000',
+<<<<<<< HEAD
     production: 'https://tacos.openbeta.io'
   }[process.env.NODE_ENV]
 
@@ -65,6 +66,11 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
   const staticPages: string[] = ['https://tacos.openbeta.io/about']
 >>>>>>> e41d63e (Added about, fixed url)
 
+=======
+    production: 'https://tacos.openbeta.io/'
+  }[process.env.NODE_ENV]
+
+>>>>>>> 6f321e1 (added sitemap.xml)
   const { data } = await graphqlClient.query<IndexResponseType>({
     query,
     variables: {
@@ -84,6 +90,7 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
       <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<<<<<<< HEAD
       ${staticPages
         .map((url) => {
           return `
@@ -103,6 +110,8 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
 =======
         .join('')}
 >>>>>>> e41d63e (Added about, fixed url)
+=======
+>>>>>>> 6f321e1 (added sitemap.xml)
         ${data?.areas
             .map(({ uuid }) => {
                 return `
