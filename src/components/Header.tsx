@@ -29,7 +29,7 @@ export default function Header (props: HeaderProps): JSX.Element {
   return (
     <div id={NAV_BAR_IDENTIFIER} className='relative z-40'>
       {isTablet || isMobile
-        ? <MobileTabletAppBar includeFilters={includeFilters} />
+        ? <MobileTabletAppBar isTablet={isTablet} includeFilters={includeFilters} />
         : <DesktopAppBar
             expanded={expanded}
             onExpandSearchBox={() => {
