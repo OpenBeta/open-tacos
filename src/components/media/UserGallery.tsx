@@ -172,7 +172,9 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
                   <div className='absolute top-12'>
                     <ImageTagger
                       isMobile
-                      {...imageHelper} onCompleted={onCompletedHandler}
+                      {...imageHelper}
+                      imageInfo={imageInfo}
+                      onCompleted={onCompletedHandler}
                     />
                   </div>
                   )
