@@ -35,6 +35,7 @@ jobs:
 
   test-docker-compose:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v2
         with:
@@ -44,10 +45,13 @@ jobs:
         env:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
       - name: Start docker compose
-        run: docker-compose up -d
+        run: docker-compose up
         env:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
-      - name: Show server log
-        run: docker logs --tail 10 opentacos-dev-latest
-      - name: Ping home page
-        run: docker run --network container:opentacos-dev-latest appropriate/curl -L -s --retry 10 --retry-connrefused http://localhost:3000/
+      # - name: Show server log
+      #   run: docker logs --tail 10 opentacos-dev-latest
+      # - name: Ping home page
+      #   run: docker run --network container:opentacos-dev-latest appropriate/curl -L -s --retry 10 --retry-connrefused http://localhost:3000/
+      - name: Stop containers
+        if: always()
+        run: docker-compose down
