@@ -53,6 +53,7 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
   const baseUrl: string = {
     development: 'http://localhost:3000',
 <<<<<<< HEAD
+<<<<<<< HEAD
     production: 'https://tacos.openbeta.io'
   }[process.env.NODE_ENV]
 
@@ -71,6 +72,11 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
   }[process.env.NODE_ENV]
 
 >>>>>>> 6f321e1 (added sitemap.xml)
+=======
+    production: 'https://tacos.openbeta.io/'
+  }[process.env.NODE_ENV]
+
+>>>>>>> a8f01d9 (added sitemap.xml)
   const { data } = await graphqlClient.query<IndexResponseType>({
     query,
     variables: {
@@ -90,6 +96,7 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
       <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<<<<<<< HEAD
 <<<<<<< HEAD
       ${staticPages
         .map((url) => {
@@ -112,6 +119,8 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
 >>>>>>> e41d63e (Added about, fixed url)
 =======
 >>>>>>> 6f321e1 (added sitemap.xml)
+=======
+>>>>>>> a8f01d9 (added sitemap.xml)
         ${data?.areas
             .map(({ uuid }) => {
                 return `
