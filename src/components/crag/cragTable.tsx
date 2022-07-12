@@ -1,10 +1,13 @@
 import { getScoreForSort, GradeScales } from '@openbeta/sandbag'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import { Climb } from '../../js/types'
 import { getSetTypes } from '../ui/RouteTypeChips'
 import ButtonGroup from '../../components/ui/ButtonGroup'
 import { Button } from '../../components/ui/Button'
 import { summarize } from './cragSummary'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { useCanary } from '../../js/hooks'
 
 interface CragTableProps {
   climbs: Climb[]
@@ -34,8 +37,9 @@ function sortRoutes (routes: Climb[], sortType: CragSortType): Climb[] {
     }
     case 'grade': {
       return routes.sort(
-        (a, b) => getScoreForSort(a.yds, GradeScales.Yds) -
-        getScoreForSort(b.yds, GradeScales.Yds)
+        (a, b) =>
+          getScoreForSort(a.yds, GradeScales.Yds) -
+          getScoreForSort(b.yds, GradeScales.Yds)
       )
     }
     default:
@@ -43,9 +47,15 @@ function sortRoutes (routes: Climb[], sortType: CragSortType): Climb[] {
   }
 }
 
-function ClimbItem (props: {climb: Climb}): JSX.Element {
-  const { name, yds, type, fa, metadata } = props.climb
-  const [summary] = useMemo(() => summarize(props.climb.content.description, 50), [props.climb])
+function ClimbItem (props: { climb: Climb, hideSummary: boolean }): JSX.Element {
+  const {
+    climb: { name, yds, type, fa, metadata },
+    hideSummary
+  } = props
+  const [summary] = useMemo(
+    () => summarize(props.climb.content.description, 50),
+    [props.climb]
+  )
 
   return (
     <div
@@ -62,15 +72,14 @@ function ClimbItem (props: {climb: Climb}): JSX.Element {
         <div className='text-right flex-1'>Grade: {yds}</div>
       </div>
 
-      <div className='w-full text-sm text-gray-600 mt-2 grow'>
-        {summary}
-      </div>
+      {!hideSummary && (
+        <div className='w-full text-sm text-gray-600 mt-2 grow'>{summary}</div>
+      )}
 
       <div className='text-sm mt-2'>
         Discipline(s): {getSetTypes(type).join(', ')}
       </div>
     </div>
-
   )
 }
 
@@ -79,43 +88,139 @@ const climbSortByOptions: CragSortType[] = [
   { value: 'grade', text: 'Grade' }
 ]
 
+const reorderFromDrag = (
+  climbs: Climb[],
+  startIndex: number,
+  endIndex: number
+): Climb[] => {
+  const [removed] = climbs.splice(startIndex, 1)
+  climbs.splice(endIndex, 0, removed)
+  return climbs
+}
+
 export default function CragTable (props: CragTableProps): JSX.Element {
   // Index for one of climbSortByOptions
   const [selectedClimbSort, setSelectedClimbSort] = useState<number>(0)
-  const sortedRoutes = useMemo(() =>
-    sortRoutes([...props.climbs], climbSortByOptions[selectedClimbSort]), [props.climbs, selectedClimbSort])
+  const [isEditing, setIsEditing] = useState(false)
+  const [sortedRoutes, setSortedRoutes] = useState<Climb[]>([])
+  const canary = useCanary()
+  const { status } = useSession()
+
+  useEffect(() => {
+    setSortedRoutes(
+      sortRoutes([...props.climbs], climbSortByOptions[selectedClimbSort])
+    )
+  }, [props.climbs, selectedClimbSort])
+
+  const canChangeOrder =
+    canary && status === 'authenticated' && selectedClimbSort === 0
 
   return (
     <>
-      <div className='flex mb-4'>
-        {props.title !== undefined ? <h2 className='text-2xl font-normal'>{props.title}</h2> : ''}
-
-        <div className='text-right flex-1'>
-          <ButtonGroup
-            disabled={false}
-            selected={[selectedClimbSort]}
-            onClick={(_: never, index: number) => {
-              setSelectedClimbSort(index)
-            }}
-            className='text-right'
-          >
-            {climbSortByOptions.map(({ text }, index) => {
-              return (
-                <Button
-                  key={index}
-                  label={text}
-                  className={null}
-                  onClick={null}
-                />
+      <div>
+        <div className='flex mb-4'>
+          {props.title !== undefined
+            ? (
+              <h2 className='text-2xl font-normal'>{props.title}</h2>
               )
-            })}
-          </ButtonGroup>
+            : (
+                ''
+              )}
+
+          <div className='flex-1'>
+            <ButtonGroup
+              disabled={false}
+              selected={[selectedClimbSort]}
+              onClick={(_: never, index: number) => {
+                setSelectedClimbSort(index)
+              }}
+              className='text-right'
+            >
+              {climbSortByOptions.map(({ text }, index) => {
+                return (
+                  <Button
+                    key={index}
+                    label={text}
+                    className={null}
+                    onClick={null}
+                  />
+                )
+              })}
+            </ButtonGroup>
+          </div>
         </div>
+        {canChangeOrder && (
+          <div className='flex gap-2 m-1'>
+            <Button
+              label={isEditing ? 'Save Changes' : 'Edit Order'}
+              className=''
+              onClick={() => {
+                if (isEditing) {
+                  console.log('New order: ', sortedRoutes)
+                }
+                setIsEditing(!isEditing)
+              }}
+            />
+            {isEditing && (
+              <Button
+                label='Cancel'
+                className=''
+                onClick={() => {
+                  setSortedRoutes(
+                    sortRoutes([...props.climbs], climbSortByOptions[0])
+                  )
+                  setIsEditing(false)
+                }}
+              />
+            )}
+          </div>
+        )}
       </div>
 
-      <div className='grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-2 fr-2'>
-        {sortedRoutes.map(i => <ClimbItem key={i.id} climb={i} />)}
-      </div>
+      <DragDropContext
+        onDragEnd={(result) =>
+          setSortedRoutes(
+            reorderFromDrag(
+              sortedRoutes,
+              result.source.index,
+              result.destination?.index ?? 0
+            )
+          )}
+      >
+        <Droppable droppableId='cragTable'>
+          {(provided) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className={`grid grid-cols-1 ${
+                isEditing ? '' : 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2'
+              }  fr-2`}
+            >
+              {sortedRoutes.map((i, idx) => (
+                <Draggable
+                  isDragDisabled={!isEditing}
+                  draggableId={i.id}
+                  index={idx}
+                  key={i.id}
+                >
+                  {(provided, snapshot) => (
+                    <div
+                      className={`m-1 ${
+                        snapshot.isDragging ? 'bg-purple-100' : 'bg-white'
+                      }`}
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <ClimbItem hideSummary={isEditing} key={i.id} climb={i} />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </>
   )
 }

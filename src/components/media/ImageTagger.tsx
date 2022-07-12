@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, memo } from 'react'
 import { usePopper } from 'react-popper'
 import { useMutation } from '@apollo/client'
+import { TagIcon } from '@heroicons/react/solid'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import { MUTATION_ADD_CLIMB_TAG_TO_MEDIA } from '../../js/graphql/fragments'
@@ -8,6 +9,7 @@ import ClimbSearchForTagging from '../search/ClimbSearchForTagging'
 import { MediaType } from '../../js/types'
 
 interface ImageTaggerProps {
+  isMobile: boolean
   isOpen: boolean
   mouseXY: number[]
   close: () => void
@@ -15,7 +17,7 @@ interface ImageTaggerProps {
   onCompleted: (data: any) => void
 }
 
-export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close, onCompleted }: ImageTaggerProps): JSX.Element | null {
+export default function ImageTagger ({ isMobile = false, isOpen, mouseXY, imageInfo, close, onCompleted }: ImageTaggerProps): JSX.Element | null {
   const [tagPhotoWithClimb] = useMutation(
     MUTATION_ADD_CLIMB_TAG_TO_MEDIA, {
       client: graphqlClient,
@@ -57,7 +59,40 @@ export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close, onComp
   }, [])
 
   const boxOffset = 16
-  if (!isOpen) return null
+  if (!isOpen && !isMobile) return null
+
+  if (isMobile) {
+    return (
+      <div className='p-2 w-full'>
+        <div className='text-sm px-1 inline-flex items-center bg-gray-100 rounded'>
+          <TagIcon className='w-4 h-4' />
+          <span>Tag a climb</span>
+        </div>
+        <div className='bg-gray-50 rounded-full p-0.5 bg-opacity-90'>
+          <ClimbSuggestion
+            isMobile
+            placeholder='Search for climb'
+            onSelect={async (item) => {
+              const { climbUUID } = item
+              try {
+                await tagPhotoWithClimb({
+                  variables: {
+                    mediaUuid: imageInfo.mediaId,
+                    mediaUrl: imageInfo.filename,
+                    srcUuid: climbUUID
+                  }
+                })
+              } catch (e) {
+                // TODO: Add friendly error message
+                console.log('tagging API error', e)
+              }
+              close()
+            }}
+          />
+        </div>
+      </div>
+    )
+  }
   return (
     <div className='fixed top-0 left-0 select-none' onBlur={close}>
       <div
@@ -71,24 +106,26 @@ export default function ImageTagger ({ isOpen, mouseXY, imageInfo, close, onComp
         tabIndex={0}
         ref={setPopperElement} style={{ ...styles.popper }} {...attributes.popper}
       >
-        <ClimbSuggestion
-          isMobile={false} placeholder='Search for climb' onSelect={async (item) => {
-            const { climbUUID } = item
-            try {
-              await tagPhotoWithClimb({
-                variables: {
-                  mediaUuid: imageInfo.mediaId,
-                  mediaUrl: imageInfo.filename,
-                  srcUuid: climbUUID
-                }
-              })
-            } catch (e) {
+        <div className='bg-gray-100 p-1 rounded-md drop-shadow-md'>
+          <ClimbSuggestion
+            isMobile={false} placeholder='Search for climb' onSelect={async (item) => {
+              const { climbUUID } = item
+              try {
+                await tagPhotoWithClimb({
+                  variables: {
+                    mediaUuid: imageInfo.mediaId,
+                    mediaUrl: imageInfo.filename,
+                    srcUuid: climbUUID
+                  }
+                })
+              } catch (e) {
               // TODO: Add friendly error message
-              console.log('tagging API error', e)
-            }
-            close()
-          }}
-        />
+                console.log('tagging API error', e)
+              }
+              close()
+            }}
+          />
+        </div>
       </div>
     </div>
   )

@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { Popover } from '@headlessui/react'
 import Image from 'next/image'
 
-import CragFinder from './search/CragFinder'
 import MobileNavBar from './ui/MobileNavBar'
 import { HomeIcon, MenuIcon } from '@heroicons/react/outline'
 import OpenBetaLogo from '../assets/brand/openbeta-logo.svg'
@@ -12,12 +11,14 @@ import { Button, ButtonVariant } from './ui/BaseButton'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import ProfileNavButton from './ProfileNavButton'
 import NewPost from './NewPost'
+import XSearch from './search/XSearch'
 
 interface HeaderProps {
   includeFilters: boolean
+  isTablet: boolean
 }
 
-export default function MobileAppBar (props: HeaderProps): JSX.Element {
+export default function MobileAppBar ({ isTablet, includeFilters }: HeaderProps): JSX.Element {
   const { status } = useSession()
   const nav = status === 'authenticated' ? <AuthenticatedNav /> : <LoginButton />
   return (
@@ -25,11 +26,11 @@ export default function MobileAppBar (props: HeaderProps): JSX.Element {
       <MobileNavBar
         branding={<Branding />}
         home={<Home />}
-        search={<CragFinder />}
+        search={<XSearch isMobile={!isTablet} placeholder='Search' />}
         profile={nav}
         more={<More />}
       />
-      {props.includeFilters && <MobileFilterBar />}
+      {includeFilters && <MobileFilterBar />}
     </>
   )
 }
@@ -59,7 +60,7 @@ const Branding = (): JSX.Element => {
   return (
     <Link href='/'>
       <a>
-        <Image src={OpenBetaLogo} layout='responsive' />
+        <Image width={16} height={16} src={OpenBetaLogo} layout='responsive' />
       </a>
     </Link>
   )

@@ -1,0 +1,131 @@
+/* XSearch */
+
+body {
+  --aa-search-input-height: 100%;
+}
+
+.xsearch-inputWrapperPrefix {
+  @apply text-white m-0.5 xl:m-1 flex items-center justify-center bg-ob-primary rounded-full h-8 w-8 xl:h-10 xl:w-10 !important;
+}
+
+.aa-LoadingIndicator {
+  @apply stroke-white h-auto w-auto p-0 !important;
+}
+
+.aa-LoadingIcon {
+  @apply text-white !important;
+}
+
+.aa-Label {
+  @apply h-auto mt-1 !important;
+}
+
+/*
+  When detatched queries are enabled, the search input is replaced with a button
+  that triggers a modal. These styles are for the topmost css class in that button.
+*/
+
+.aa-DetachedFormContainer {
+  @apply bg-slate-800 !important;
+}
+
+.aa-DetachedSearchButton {
+  @apply border border-gray-300 bg-inherit rounded-full p-1 !important;
+}
+
+.aa-DetachedCancelButton{
+  @apply bg-white rounded-lg !important;
+}
+
+.aa-DetachedSearchButton .aa-DetachedSearchButtonIcon {
+  @apply -ml-1 border-0 stroke-ob-primary stroke-2 !important;
+}
+
+.aa-DetachedSearchButtonPlaceholder {
+  @apply text-base text-tertiary-contrast mr-3;
+}
+
+.xsearch-SubmitButton {
+  @apply bg-inherit p-0 h-auto w-auto !important;
+}
+
+.xsearch-submitButton .aa-SubmitIcon {
+  @apply w-6 h-6 text-white !important;
+}
+
+.xsearch-inputWrapper {
+  @apply pl-3 !important;
+}
+
+.name-search-item[aria-selected="true"] {
+  @apply bg-white !important;
+}
+
+.crag-finder-item[aria-selected="true"] {
+  @apply bg-slate-100 !important;
+}
+
+.aa-Panel {
+  z-index: 1000;
+}
+
+.xsearch-form {
+  @apply ring-0 bg-white border-none overflow-hidden rounded-full  !important;
+}
+
+.xsearch-panel {
+  /* Result panel - Tablet and desktop only. We need a mobile specific width and layout */
+  @apply z-10 w-screen h-screen left-0 lg:backdrop-blur-sm bg-gray-600 bg-opacity-50 !important;
+
+  /** When detatched queries aren't enabled, use a different width spec */
+  /* @apply sm:w-auto w-full; */
+}
+
+.xsearch-sourceHeader {
+  @apply bg-blue-200;
+}
+
+
+.xsearch-result-container {
+  @apply z-50 lg:mt-2 lg:border-black lg:border-2 h-screen-85 lg:h-screen-80 max-w-3xl mx-auto p-3 bg-white lg:rounded-lg  overflow-y-auto !important;
+}
+/* End of XSearch */
+
+
+/* Climb search for tagging */
+
+.climb-tag-search {
+  @apply z-50 w-80 !important;
+}
+
+
+.aa-Form.tag-search-form {
+  @apply p-0.5 w-full ring-1  border-0 ring-black rounded-md shadow-gray-500 !important;
+}
+
+.tag-search-inputWrapper {
+  @apply text-sm !important;
+}
+
+.tag-search-inputWrapperPrefix {
+  @apply flex items-center justify-center w-8 h-8 !important;
+}
+
+
+.tag-search-submit-button {
+  @apply bg-inherit p-0 h-auto w-auto !important;
+}
+
+.tag-search-submit-button .aa-SubmitIcon{
+  @apply text-black stroke-2 stroke-black w-4 h-4 !important;
+}
+
+.tag-search-panel {
+  /* Result panel - Tablet and desktop only. We need a mobile specific width and layout */
+  @apply mt-0.5 pt-0 rounded-lg border border-neutral-600 drop-shadow-lg max-w-screen-sm !important;
+}
+
+.tag-search-item {
+  @apply m-1 px-2 rounded-md hover:bg-ob-secondary hover:bg-opacity-20 !important;
+}
+/* End of search for tagging */

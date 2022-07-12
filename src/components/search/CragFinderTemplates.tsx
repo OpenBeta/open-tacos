@@ -1,4 +1,3 @@
-import { NextRouter } from 'next/router'
 import Icon from '../Icon'
 import CragsNearBy from './CragsNearBy'
 interface PlaceTemplateType {
@@ -6,44 +5,12 @@ interface PlaceTemplateType {
   shortName: string
   placeId: string
   center: [number, number]
-  router: NextRouter
 }
 
-// interface CragFinderResultsProps {
-//   features: any[]
-//   router: NextRouter
-// }
-/**
- * Template for rendering indiviual search result item
- * @param param0
- * @returns
- */
-// export const CragFinderResults = ({ features, router }: CragFinderResultsProps): JSX.Element => {
-//   return (
-//     <div>
-//       {/* <PlaceHeader typeKeys={groupKey} /> */}
-//       <div>
-//         {features.map(
-//           ({ feature }) => <PlaceTemplate key={feature.id} placeName={feature.place_name} center={feature.center} router={router} />
-//         )}
-//       </div>
-//     </div>
-//   )
-// }
-
-export const PlaceTemplate = ({ placeName, shortName, center, placeId, router }: PlaceTemplateType): JSX.Element => {
+export const PlaceTemplate = ({ placeName, shortName, center, placeId }: PlaceTemplateType): JSX.Element => {
   return (
     <div
-      className='px-4 py-4'
-      onClick={async () =>
-        await router.push({
-          pathname: '/finder',
-          query: {
-            shortName,
-            placeId,
-            center: center.join(',')
-          }
-        }, undefined, { shallow: true })}
+      className='px-4 py-4 rounded-lg border border-slate-500'
     >
       <div className='space-x-2 lg:space-x-4 flex flex-nowrap items-center'>
         <div className='rounded-md p-2 bg-slate-200'>
@@ -51,7 +18,14 @@ export const PlaceTemplate = ({ placeName, shortName, center, placeId, router }:
         </div>
         <div className='text-base'>{placeName}</div>
       </div>
-      <div><CragsNearBy key={center.join()} center={center} placeId={placeId} /></div>
+
+      <div className='w-full'>
+        <CragsNearBy
+          key={center.join()}
+          center={center}
+          placeId={placeId}
+        />
+      </div>
     </div>
   )
 }
