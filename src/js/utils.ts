@@ -172,5 +172,6 @@ export const saveAsFile = (data: any, filename: string): void => {
  * @returns true if valid website URL
  */
 export const checkWebsiteUrl = (url: string) => {
-  return !url.includes(' ') && url.length > 2
+  const regMatch = /^((http|https):\/\/)?(www.)?(?!.*(http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+(\/)?.([\w\?[a-zA-Z-_%\/@?]+)*([^\/\w\?[a-zA-Z0-9_-]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/;
+  return !url.includes(' ') && url.length > 2 && regMatch.test(url);
 }
