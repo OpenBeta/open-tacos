@@ -1,6 +1,7 @@
 import { graphqlClient } from '../js/graphql/Client'
 import { gql } from '@apollo/client'
 import { IndexResponseType } from '../js/types'
+import fs from 'fs'
 
 const Sitemap = (): void => { }
 
@@ -52,8 +53,10 @@ const query = gql`query UsaAreas( $filter: Filter) {
 export const getServerSideProps = async ({ res }): Promise<object> => {
   const baseUrl: string = {
     development: 'http://localhost:3000',
-    production: 'https://tacos.openbeta.io/'
+    production: 'https://tacos.openbeta.io'
   }[process.env.NODE_ENV]
+
+  const staticPages: Array<string> = ['https://tacos.openbeta.io/about']
 
   const { data } = await graphqlClient.query<IndexResponseType>({
     query,
@@ -74,11 +77,22 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
       <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      ${staticPages
+        .map((url) => {
+          return `
+            <url>
+              <loc>${url}</loc>
+              <changefreq>monthly</changefreq>
+              <priority>1.0</priority>
+            </url>
+          `
+        })
+        .join("")}
         ${data?.areas
             .map(({ uuid }) => {
                 return `
                   <url>
-                    <loc>${baseUrl}areas/${uuid}</loc>
+                    <loc>${baseUrl}/areas/${uuid}</loc>
                     <changefreq>monthly</changefreq>
                     <priority>1.0</priority>
                   </url>
