@@ -1,7 +1,6 @@
 import { graphqlClient } from '../js/graphql/Client'
 import { gql } from '@apollo/client'
 import { IndexResponseType } from '../js/types'
-import fs from 'fs'
 
 const Sitemap = (): void => { }
 
@@ -56,7 +55,7 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
     production: 'https://tacos.openbeta.io'
   }[process.env.NODE_ENV]
 
-  const staticPages: Array<string> = ['https://tacos.openbeta.io/about']
+  const staticPages: string[] = ['https://tacos.openbeta.io/about']
 
   const { data } = await graphqlClient.query<IndexResponseType>({
     query,
@@ -87,7 +86,7 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
             </url>
           `
         })
-        .join("")}
+        .join('')}
         ${data?.areas
             .map(({ uuid }) => {
                 return `
