@@ -10,7 +10,7 @@ interface PublicProfileProps {
 }
 
 export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX.Element {
-  const { name, nick, avatar, bio } = userProfile
+  const { name, nick, avatar, bio, website } = userProfile
   return (
     <section className='mx-auto max-w-screen-sm px-4 md:px-0 md:grid md:grid-cols-3'>
       <div className='hidden md:block grayscale pr-5'>
@@ -23,6 +23,16 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
         </div>
         <div className='mt-6 text-lg font-semibold'>{name}</div>
         <div className=''>{bio}</div>
+        <div className=''>
+          <a
+            className='no-underline hover:underline'
+            href={`//${website}`}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            {website}
+          </a>
+        </div>
       </div>
     </section>
   )
