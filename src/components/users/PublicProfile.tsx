@@ -11,6 +11,10 @@ interface PublicProfileProps {
 
 export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX.Element {
   const { name, nick, avatar, bio, website } = userProfile
+  let websiteWithScheme: string | null = null
+  if (website != null) {
+    websiteWithScheme = website.startsWith('http') ? website : `//${website}`
+  }
   return (
     <section className='mx-auto max-w-screen-sm px-4 md:px-0 md:grid md:grid-cols-3'>
       <div className='hidden md:block grayscale pr-5'>
@@ -23,19 +27,27 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
         </div>
         <div className='mt-6 text-lg font-semibold'>{name}</div>
         <div className=''>{bio}</div>
-        <div className=''>
-          <a
-            className='no-underline hover:underline'
-            href={`//${website}`}
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            {website}
-          </a>
-        </div>
+        {websiteWithScheme != null &&
+          <div className=''>
+            <a
+              className='text-ob-secondary hover:underline'
+              href={websiteWithScheme}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              {prettifyUrl(websiteWithScheme)}
+            </a>
+          </div>}
       </div>
     </section>
   )
+}
+
+/**
+ * Remove leading http(s):// and trailing /
+ */
+const prettifyUrl = (url: string): string => {
+  return url.replace(/^(https?:)?\/\//g, '').replace(/\/$/g, '')
 }
 
 export const TinyProfile = ({ userProfile, onClick }: PublicProfileProps): JSX.Element => {
@@ -57,7 +69,6 @@ export const TinyProfile = ({ userProfile, onClick }: PublicProfileProps): JSX.E
           </div>
           <div className={ProfileATagStyle}>
             {nick}
-
           </div>
         </section>
       </a>

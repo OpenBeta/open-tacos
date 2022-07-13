@@ -9,6 +9,7 @@ import Snackbar from '../../ui/Snackbar'
 import { IWritableUserMetadata } from '../../../js/types/User'
 import { doesUsernameExist } from '../../../js/userApi/user'
 import { checkUsername, checkWebsiteUrl } from '../../../js/utils'
+import { revalidateServePage } from '../../../js/stores/media'
 
 const UserProfileSchema = Yup.object().shape({
   nick: Yup.string()
@@ -28,7 +29,7 @@ const UserProfileSchema = Yup.object().shape({
     .when('website', {
       is: val => val?.length > 0,
       then: rule => {
-        if (rule) {
+        if (rule != null) {
           return Yup.string().test('special-rules', 'Invalid URL', checkWebsiteUrl)
         } else {
           return Yup.string().notRequired()
@@ -58,6 +59,8 @@ export default function ProfileEditForm (): ReactElement {
     const profile = await updateUserProfile(newValues)
     if (profile != null) {
       setJustSubmitted(true)
+      // Also trigger a page rebuild
+      void revalidateServePage(profile.nick)
     }
   }, [])
 

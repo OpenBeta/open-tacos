@@ -42,7 +42,6 @@ const updateMyProfile: Handler = async (req, res) => {
     await addUserIdFile(`/u/${req.body.uuid as string}/uid.json`, req.body?.nick)
 
     const metadata = await metadataClient.updateUserMetadata(req.body)
-
     res.json(metadata)
   } catch (err) {
     console.log(err)
