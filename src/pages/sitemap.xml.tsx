@@ -57,7 +57,7 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
 
   const staticPages: string[] = ['https://tacos.openbeta.io/about']
 
-  //classic climbs pulled from https://www.climbing.com/places/the-50-classic-climbs-of-north-america/
+  //  classic climbs pulled from https://www.climbing.com/places/the-50-classic-climbs-of-north-america/
   const classicClimbs: string[] = [
     'https://tacos.openbeta.io/climbs/1609469e-2b62-558a-acef-f267536f1f3f',
     'https://tacos.openbeta.io/climbs/b31ffdb5-2089-588c-996c-b1a5568670ea',
