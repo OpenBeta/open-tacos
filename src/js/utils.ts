@@ -157,7 +157,7 @@ const regUsernameKeywords = /openbeta|0penbeta|admin/i
  * @returns true if has valid format
  */
 export const checkUsername = (uid: string): boolean =>
-  uid != null && uid.length <= 20 &&
+  uid != null && uid.length <= 30 &&
   !regUsernameKeywords.test(uid) &&
   regUsername.test(uid)
 

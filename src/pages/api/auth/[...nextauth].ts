@@ -39,7 +39,6 @@ export default NextAuth({
     async jwt ({ token, account, profile, user }) {
       if (account?.access_token != null) {
         token.accessToken = account.access_token
-        console.log('#access token', account.access_token)
       }
       if (profile?.sub != null) {
         token.id = profile.sub

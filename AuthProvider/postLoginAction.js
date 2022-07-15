@@ -8,7 +8,7 @@ exports.onExecutePostLogin = async ({ user, authorization, stats }, api) => {
   const { v4: uuidv4 } = require('uuid')
   const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator')
 
-  user.user_metadata.nick = user.user_metadata?.nick ?? uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] }) // big_red_donkey
+  user.user_metadata.nick = user.user_metadata?.nick ?? uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] }).slice(0, 30) // big_red_donkey
   user.user_metadata.bio = user.user_metadata?.bio ?? ''
   user.user_metadata.uuid = user.user_metadata?.uuid ?? uuidv4()
   user.user_metadata.name = user.user_metadata?.name ?? user?.nickname ?? ''
