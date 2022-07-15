@@ -14,14 +14,15 @@ import { revalidateServePage } from '../../../js/stores/media'
 const UserProfileSchema = Yup.object().shape({
   nick: Yup.string()
     .min(2, 'Minimum 2 characters')
-    .max(20, 'Maximum 20 characters')
+    .max(30, 'Maximum 30 characters')
     .required('Minimum 2 characters')
     .test('special-rules', 'Must start and end with a letter or a number.', checkUsername),
   name: Yup.string()
     .max(50, 'Maximum 50 characters.'),
   bio: Yup.string()
+    .notRequired()
     .max(150, 'Maximum 150 characters')
-    .test('less-than-3-lines', 'Maximum 2 lines', (text) => text != null && text.split(/\r\n|\r|\n/).length <= 2),
+    .test('less-than-3-lines', 'Maximum 2 lines', (text) => (text?.split(/\r\n|\r|\n/)?.length ?? 0) <= 2),
   website: Yup.string()
     .nullable()
     .notRequired()

@@ -4,6 +4,7 @@ import Auth0Provider from 'next-auth/providers/auth0'
 import { AUTH_CONFIG_SERVER } from '../../../Config'
 import { IUserMetadata } from '../../../js/types/User'
 import { addUserIdFile } from '../../../js/sirv/SirvClient'
+import { getUserNickFromMediaDir } from '../../../js/usernameUtil'
 
 const CustomClaimsNS = 'https://tacos.openbeta.io/'
 const CustomClaimUserMetadata = CustomClaimsNS + 'user_metadata'
@@ -38,7 +39,6 @@ export default NextAuth({
     async jwt ({ token, account, profile, user }) {
       if (account?.access_token != null) {
         token.accessToken = account.access_token
-        console.log('#access token', account.access_token)
       }
       if (profile?.sub != null) {
         token.id = profile.sub
@@ -59,9 +59,14 @@ export default NextAuth({
       }
 
       const loginsCount = token.userMetadata?.loginsCount ?? 0
+      const { uuid } = token.userMetadata
       if (loginsCount < 2) {
-        console.log('Creating uid.json file for new user')
-        await addUserIdFile(`/u/${token.userMetadata.uuid}/uid.json`, token.userMetadata.nick)
+        const username = await getUserNickFromMediaDir(uuid)
+        if (username == null) {
+          // id file doesn't exist
+          console.log(`Creating uid.json file for new user: ${uuid}`)
+          await addUserIdFile(`/u/${uuid}/uid.json`, token.userMetadata.nick)
+        }
       }
       session.user.metadata = token.userMetadata
       session.accessToken = token.accessToken
