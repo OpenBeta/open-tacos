@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { NextPage, GetStaticProps } from 'next'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 import * as Tabs from '@radix-ui/react-tabs'
 import { gql } from '@apollo/client'
 import { groupBy, Dictionary } from 'underscore'
@@ -26,8 +27,28 @@ interface HomePageType {
 }
 const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) => {
   useCanary()
-  const [activeTab, setTab] = useState<string>('newTags')
+  const router = useRouter();
+  const [activeTab, setTab] = useState<string>()
   const { areas } = exploreData
+
+  useEffect(() => {
+    if (activeTab) {
+      router.push(`/?v=${activeTab}`, undefined, { shallow: true })
+    }
+  }, [activeTab])
+
+  useEffect(() => {
+    if (router.isReady) {
+      const urlViewParam = router.query.v
+      const allowedViews = ['explore', 'newTags', 'map']
+      let tabToSet = 'newTags'
+      if (urlViewParam && typeof urlViewParam === 'string' && allowedViews.includes(urlViewParam)) {
+        tabToSet = urlViewParam
+      }
+      setTab(tabToSet)
+    }
+  }, [router.isReady, router.query])
+
   return (
     <>
       <SeoTags
