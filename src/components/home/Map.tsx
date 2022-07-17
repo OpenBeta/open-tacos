@@ -30,8 +30,8 @@ export default function Map (): JSX.Element {
         data => {
           if (data?.length > 0) {
             setData(data.map(crag => geojsonifyCrag(crag, false)))
+            progressStop()
           }
-          progressStop()
         }
       )
     }
@@ -62,8 +62,8 @@ const progressStart = debounce(NProgress.start, 500)
 
 const progressStop = debounce(NProgress.done, 500)
 
-function checkIfShouldFetchData(viewstate, lastUpdatePosition) {
-    return (Math.abs(viewstate.latitude - lastUpdatePosition.current.latitude) >= 0.1
-      || Math.abs(viewstate.longitude - lastUpdatePosition.current.longitude) > 0.2
-      || Math.abs(viewstate.zoom - lastUpdatePosition.current.zoom) > 1)
+function checkIfShouldFetchData (viewstate, lastUpdatePosition): boolean {
+  return (Math.abs(viewstate.latitude - lastUpdatePosition.current.latitude) >= 0.1 ||
+    Math.abs(viewstate.longitude - lastUpdatePosition.current.longitude) > 0.2 ||
+    Math.abs(viewstate.zoom - lastUpdatePosition.current.zoom) > 1)
 }

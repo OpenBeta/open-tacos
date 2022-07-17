@@ -27,13 +27,13 @@ interface HomePageType {
 }
 const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) => {
   useCanary()
-  const router = useRouter();
+  const router = useRouter()
   const [activeTab, setTab] = useState<string>()
   const { areas } = exploreData
 
   useEffect(() => {
-    if (activeTab) {
-      router.push(`/?v=${activeTab}`, undefined, { shallow: true })
+    if (typeof activeTab === 'string') {
+      void router.push(`/?v=${activeTab}`, undefined, { shallow: true })
     }
   }, [activeTab])
 
@@ -42,7 +42,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
       const urlViewParam = router.query.v
       const allowedViews = ['explore', 'newTags', 'map']
       let tabToSet = 'newTags'
-      if (urlViewParam && typeof urlViewParam === 'string' && allowedViews.includes(urlViewParam)) {
+      if (typeof urlViewParam === 'string' && allowedViews.includes(urlViewParam)) {
         tabToSet = urlViewParam
       }
       setTab(tabToSet)
