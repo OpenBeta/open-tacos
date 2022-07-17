@@ -78,7 +78,7 @@ export default function BaseMap ({
   }, [viewstate])
 
   const onMoveHandler = (event): void => {
-    console.log(event)
+    // console.log(event)
     const { viewState } = event
     const bounds = mapRef.current?.getBounds() ?? null
 
