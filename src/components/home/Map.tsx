@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { featureCollection } from '@turf/helpers'
 import NProgress from 'nprogress'
 import { debounce } from 'underscore'
@@ -16,21 +16,25 @@ export default function Map (): JSX.Element {
 
   const [geojson, setData] = useState([])
 
+  const lastUpdatePosition = useRef({ longitude: 0, latitude: 0, zoom: 0 })
+
   useEffect(() => {
     if (viewstate.bbox[0] === 0 && viewstate.bbox[1] === 0) return
-    progressStart()
-    // Optimization Todo:
-    // Right now even a smallest change in pan/zoom will trigger a backend API call.
-    // Based on viewstate, calculate a change tolerant to reduce the number of calls.
-    // Tip: https://visgl.github.io/react-map-gl/docs/get-started/state-management#custom-camera-constraints
-    void getCragsWithinNicely({ bbox: viewstate.bbox, zoom: viewstate.zoom }).then(
-      data => {
-        if (data?.length > 0) {
-          setData(data.map(crag => geojsonifyCrag(crag, false)))
+
+    const shouldFetchData = checkIfShouldFetchData(viewstate, lastUpdatePosition)
+
+    if (shouldFetchData) {
+      lastUpdatePosition.current = { longitude: viewstate.longitude, latitude: viewstate.latitude, zoom: viewstate.zoom }
+      progressStart()
+      void getCragsWithinNicely({ bbox: viewstate.bbox, zoom: viewstate.zoom }).then(
+        data => {
+          if (data?.length > 0) {
+            setData(data.map(crag => geojsonifyCrag(crag, false)))
+            progressStop()
+          }
         }
-        progressStop()
-      }
-    )
+      )
+    }
   }, [viewstate])
 
   return (
@@ -57,3 +61,9 @@ export default function Map (): JSX.Element {
 const progressStart = debounce(NProgress.start, 500)
 
 const progressStop = debounce(NProgress.done, 500)
+
+function checkIfShouldFetchData (viewstate, lastUpdatePosition): boolean {
+  return (Math.abs(viewstate.latitude - lastUpdatePosition.current.latitude) >= 0.1 ||
+    Math.abs(viewstate.longitude - lastUpdatePosition.current.longitude) > 0.2 ||
+    Math.abs(viewstate.zoom - lastUpdatePosition.current.zoom) > 1)
+}
