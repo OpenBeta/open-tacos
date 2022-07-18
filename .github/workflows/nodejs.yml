@@ -58,7 +58,7 @@ jobs:
         run: docker logs -n 10 opentacos-dev-latest
 
       - name: Wait for the site to be online
-        run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -t 180 -- localhost:3000 -- echo "Site is up"
+        run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -- -t 180 localhost:3000 -- echo "Site is up"
         env:
           WAIT_FOR_VERSION: 4df3f9262d84cab0039c07bf861045fbb3c20ab7 # v2.2.3
 
