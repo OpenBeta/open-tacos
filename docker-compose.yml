@@ -14,6 +14,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
       - SIRV_CLIENT_SECRET_RO=$${SIRV_CLIENT_SECRET_RO}
       - SIRV_CLIENT_SECRET_RW=$${SIRV_CLIENT_SECRET_RW}
       - NEXTAUTH_SECRET=$${NEXTAUTH_SECRET}
