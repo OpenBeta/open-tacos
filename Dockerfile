@@ -3,7 +3,8 @@ FROM node:16-bullseye-slim as builder
 
 ENV PATH /app/node_modules/.bin:$PATH
 
-RUN apt-get update -y
+RUN apt-get update -y && apt-get -y install curl
+
 # The port next runs on
 EXPOSE 3000
 WORKDIR /app
