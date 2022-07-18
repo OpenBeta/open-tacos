@@ -58,16 +58,14 @@ export default NextAuth({
         throw new Error('Missing user uuid and nickname from Auth provider')
       }
 
-      const loginsCount = token.userMetadata?.loginsCount ?? 0
       const { uuid } = token.userMetadata
-      if (loginsCount < 2) {
-        const username = await getUserNickFromMediaDir(uuid)
-        if (username == null) {
-          // id file doesn't exist
-          console.log(`Creating uid.json file for new user: ${uuid}`)
-          await addUserIdFile(`/u/${uuid}/uid.json`, token.userMetadata.nick)
-        }
+      const username = await getUserNickFromMediaDir(uuid)
+      if (username == null) {
+        // id file doesn't exist
+        console.log(`Creating uid.json file for new user: ${uuid}`)
+        await addUserIdFile(`/u/${uuid}/uid.json`, token.userMetadata.nick)
       }
+
       session.user.metadata = token.userMetadata
       session.accessToken = token.accessToken
       session.id = token.id
