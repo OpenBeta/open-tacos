@@ -14,6 +14,11 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
+      - SIRV_CLIENT_SECRET_RO: ${SIRV_CLIENT_SECRET_RO}
+      - SIRV_CLIENT_SECRET_RW: ${SIRV_CLIENT_SECRET_RW}
+      - NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      - AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
+      - AUTH0_MGMT_CLIENT_SECRET: ${AUTH0_MGMT_CLIENT_SECRET}
     healthcheck:
       test: curl --fail http://web:3000 || exit 1
       interval: 1m
