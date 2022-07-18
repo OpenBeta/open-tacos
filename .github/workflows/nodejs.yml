@@ -42,13 +42,6 @@ jobs:
           fetch-depth: 1
       - name: Build the dev container
         run: docker-compose build --no-cache --progress plain
-        env:
-          SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
-          SIRV_CLIENT_SECRET_RW: ${{ secrets.SIRV_CLIENT_SECRET_RW }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
-          AUTH0_MGMT_CLIENT_SECRET: ${{ secrets.AUTH0_MGMT_CLIENT_SECRET }}
-
       - name: Start docker compose
         run: docker-compose up -d
         env:

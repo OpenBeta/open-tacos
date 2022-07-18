@@ -14,7 +14,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - SIRV_CLIENT_SECRET_RO=${secrets.SIRV_CLIENT_SECRET_RO}
+      - SIRV_CLIENT_SECRET_RO=${{secrets.SIRV_CLIENT_SECRET_RO}}
       - SIRV_CLIENT_SECRET_RW=${secrets.SIRV_CLIENT_SECRET_RW}
       - NEXTAUTH_SECRET=${secrets.NEXTAUTH_SECRET}
       - AUTH0_CLIENT_SECRET=${secrets.AUTH0_CLIENT_SECRET}
