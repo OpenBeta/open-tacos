@@ -55,8 +55,8 @@ jobs:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
       # - name: Show server log
       #   run: docker logs --tail 10 opentacos-dev-latest
-      # - name: Ping home page
-      #   run: docker run --network container:opentacos-dev-latest appropriate/curl -L -s --retry 10 --retry-connrefused http://localhost:3000/
+      - name: Ping home page
+        run: docker run --network container:opentacos-dev-latest appropriate/curl -L -s --retry 10 --retry-connrefused http://localhost:3000/
       - name: Stop containers
         if: always()
         run: docker-compose down
