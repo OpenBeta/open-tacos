@@ -29,11 +29,23 @@ export default function XSearch ({ isMobile = true, placeholder = 'Climb search'
       render={({ elements }, root) => {
         const { climbs, areas, fa, poi } = elements
         render(
-          <div className='xsearch-result-container'>
-            <div>{climbs}</div>
-            <div>{poi}</div>
-            <div>{areas}</div>
-            <div>{fa}</div>
+          <div className='xsearch-result-container space-y-4'>
+            <div>
+              <h1 className='text-primary -mb-2'>Climbs</h1>
+              {climbs}
+            </div>
+            <div>
+              <h1 className='text-primary -mb-2'>Climbs Near</h1>
+              {poi}
+            </div>
+            <div>
+              <h1 className='text-primary -mb-2'>Areas</h1>
+              {areas}
+            </div>
+            <div>
+              <h1 className='text-primary -mb-2'>First Ascensionists</h1>
+              {fa}
+            </div>
           </div>, root)
       }}
     />
