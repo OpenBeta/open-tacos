@@ -8,11 +8,11 @@
 </h1>
 <p align="center">
   <strong>
-    Open source. Rock climbing.  Wiki.
+    Open source. Rock climbing.  Catalog.
   </strong>
 </p>
 <p align="center">
-  OpenTacos is a free and open source wiki of rock climbing knowledge.  </br>We are currently in MVP stage looking for feedback from climbers. Chat with the dev team on <a href="https://discord.gg/fY9DbRav8h">Discord</a>.
+  OpenTacos is a free and open source catalog of rock climbing routes.  </br>We are currently in MVP stage looking for feedback from climbers. Chat with the dev team on <a href="https://discord.gg/fY9DbRav8h">Discord</a>.
 </p>
 
 <h2 align="center">
@@ -52,12 +52,14 @@ Learn more about [Jamstack](https://jamstack.org)
 
 ## How to build
 
-Make sure you have the following tools installed on your computer
+Make sure you have the following tools installed on your computer:
 
 - [Git](https://github.com/git-guides/install-git)
 - [Node](https://nodejs.org)
 - [npm](https://www.npmjs.com/get-npm)
 - [yarn](https://classic.yarnpkg.com/en/docs/install)
+
+Important: For frontend development you **don't** need to set up the [Graph API](https://github.com/OpenBeta/openbeta-graphql) server unless you intend to work on both.
 
 1.  Download the repo to your local machine
 
@@ -79,7 +81,11 @@ yarn install
 yarn dev
 ```
 
-5. Optional: Run the app in docker
+The application is now available at http://localhost:3000
+
+### Alternate build method using Docker
+
+If you just want to run the app locally without installing node, npm, etc., you can do so with Docker.
 
 Requirements: [Docker](https://docs.docker.com/get-docker/)
 
@@ -96,15 +102,23 @@ docker compose up --build
 
 The application is now available at `http://localhost:3000`
 
-### Tips
+## Tips
 
-1.  Overriding environment variables
+### API key errors
 
-Default variables are defined in [.env](./.env). You can override default values, eg. pointing the frontend to a different API_SERVER, by defining them in `.env.local`.
+Some parts of the code such as user authentication and photo upload require API keys. Without them you'll see a bunch of errors in the log. If you want to work on those tasks, email viet at openbeta.io for API keys. See https://github.com/OpenBeta/open-tacos/issues/389 for more info.
+
+### Full stack dev
+
+By default, your dev environment connects to our hosted GraphAPI. To connect your environment to the Graph API server running locally:
+
+```
+yarn dev-local
+```
 
 ## How to contribute
 
-See [How to contribute guide](CONTRIBUTING.md) for more details.
+See our general [How to contribute guide](https://docs.openbeta.io/how-to-contribute/overview) for more details.
 
 ## Contributors
 
