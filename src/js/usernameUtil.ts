@@ -27,18 +27,8 @@ export const enhanceMediaListWithUsernames = async (mediaList: MediaBaseTag[]): 
 
   const usernameMap = new Map<string, string|null>()
   for await (const uuid of uuidSet.keys()) {
-    let res: AxiosResponse<{uid: string}> | undefined
-    try {
-      res = await genericClient.get<{uid: string}>(`${SIRV_CONFIG.baseUrl}/u/${uuid}/uid.json`)
-
-      const username = res.data?.uid?.toLowerCase() ?? ''
-      if (res.status >= 200 && res.status <= 204 && checkUsername(username)) {
-        usernameMap.set(uuid, username)
-      }
-    } catch (e) {
-      usernameMap.set(uuid, null)
-      console.log(`Error fetching /u/${uuid}/uid.json`, res?.statusText)
-    }
+    const username = await getUserNickFromMediaDir(uuid)
+    usernameMap.set(uuid, username)
   }
 
   const enhancedPaths: MediaBaseTag[] = []
@@ -50,4 +40,23 @@ export const enhanceMediaListWithUsernames = async (mediaList: MediaBaseTag[]): 
     })
   }
   return enhancedPaths
+}
+
+/**
+ * Given a user uuid, locate the media server for the user home dir and their nick name
+ * @param uuid
+ * @returns user nick name or `null` if not found
+ */
+export const getUserNickFromMediaDir = async (uuid: string): Promise<string|null> => {
+  let res: AxiosResponse<{uid: string}> | undefined
+  try {
+    const res = await genericClient.get<{uid: string}>(`${SIRV_CONFIG.baseUrl}/u/${uuid}/uid.json`)
+    const username = res.data?.uid?.toLowerCase() ?? ''
+    if (res.status >= 200 && res.status <= 204 && checkUsername(username)) {
+      return username
+    } else return null
+  } catch (e) {
+    console.log(`Error fetching /u/${uuid}/uid.json`, res?.statusText)
+    return null
+  }
 }

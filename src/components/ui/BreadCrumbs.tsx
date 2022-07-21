@@ -55,7 +55,7 @@ export interface MiniBreadCrumbsProps {
   skipLast?: boolean
 }
 
-const SEPARATOR = ' \u25BB '
+const SEPARATOR = ' / '
 
 /**
  * Show small and truncated breadcrumbs by trimming items in the middle

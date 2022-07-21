@@ -18,14 +18,16 @@ export default function DesktopNavBar ({ expanded, branding, search, navList }: 
     <Bar
       backgroundClass={Bar.BG_DARK}
       heightClass={Bar.H_LG}
-      layoutClass={Bar.JUSTIFY_BETWEEN}
+      layoutClass={Bar.GRID3}
     >
-      <div>{branding}</div>
-      <div className='block'>{search}</div>
-      <nav className='flex items-center justify-between'>
-        <div className='flex items-center gap-x-4'>
-          {navList}
-        </div>
+      <div className=''>{branding}</div>
+
+      <div className=''>
+        {search}
+      </div>
+
+      <nav className='flex items-center gap-x-4 justify-end'>
+        {navList}
       </nav>
     </Bar>
   )

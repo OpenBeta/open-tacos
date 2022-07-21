@@ -23,9 +23,9 @@ export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JS
     const { nick, uuid } = data.user.metadata
 
     if (uuid != null && nick != null) {
+      await toMyProfile()
       await userMediaStore.set.addImage(nick, uuid, url, true)
       console.log('uploaded', url)
-      await toMyProfile()
     }
   }, [])
 
@@ -40,7 +40,7 @@ export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JS
             disabled={uploading}
             onClick={openFileDialog}
             label={
-              <span className='border-2 rounded-md border-black'>
+              <span className='border-2 text-white rounded-md border-white'>
                 {uploading ? <DotsHorizontalIcon className='w-6 h-6' /> : <PlusIcon className='w-6 h-6' />}
               </span>
                 }

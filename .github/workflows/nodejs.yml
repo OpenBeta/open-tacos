@@ -35,22 +35,30 @@ jobs:
 
   test-docker-compose:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: Build the stack
+      - name: Build the dev container
+        run: docker-compose build --no-cache --progress plain
+        env:
+          SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
+          SIRV_CLIENT_SECRET_RW: ${{ secrets.SIRV_CLIENT_SECRET_RW }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          AUTH0_CLIENT_SECRET: ${$ secrets.AUTH0_CLIENT_SECRET }}
+          AUTH0_MGMT_CLIENT_SECRET: ${$ secrets.AUTH0_MGMT_CLIENT_SECRET }}
+
+      - name: Start docker compose
         run: docker-compose up -d
         env:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
-      - name: Wait for server
-        uses: nev7n/wait_for_response@v1
-        with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 300000
-          interval: 2000
-      - name: Show server log
-        run: docker logs --tail 10 opentacos-dev-latest
-      - name: Ping home page
-        run: docker run --network container:opentacos-dev-latest appropriate/curl -L -s --retry 10 --retry-connrefused http://localhost:3000/
+
+      - name: Wait for the site to be online
+        run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -- -t 180 localhost:3000 -- echo "Site is up"
+        env:
+          WAIT_FOR_VERSION: 4df3f9262d84cab0039c07bf861045fbb3c20ab7 # v2.2.3
+
+      - name: Stop containers
+        if: always()
+        run: docker-compose down

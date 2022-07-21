@@ -1,8 +1,9 @@
 import { gql } from '@apollo/client'
+import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
-import { AreaType, MediaTagWithClimb } from '../types'
+import { AreaType, MediaTagWithClimb, MediaByAuthor } from '../types'
 import { graphqlClient } from './Client'
-import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID } from './fragments'
+import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA, QUERY_CRAGS_WITHIN } from './fragments'
 interface CragsDetailsNearType {
   data: AreaType[] // Should use Omit or Pick
   placeId: string | undefined
@@ -97,3 +98,50 @@ export const getTagsByMediaId = async (uuidList: string[]): Promise<MediaTagWith
   }
   return []
 }
+
+export const getRecentMedia = async (userLimit = 10): Promise<MediaByAuthor[]> => {
+  try {
+    const rs = await graphqlClient.query<{getRecentTags: MediaByAuthor[]}>({
+      query: QUERY_RECENT_MEDIA,
+      variables: {
+        userLimit
+      },
+      notifyOnNetworkStatusChange: true
+    })
+
+    if (Array.isArray(rs.data?.getRecentTags)) {
+      return rs.data?.getRecentTags
+    }
+    console.log('WARNING: getRecentMedia() returns non-array data')
+    return []
+  } catch (e) {
+    console.log('getRecentMedia() error', e)
+  }
+  return []
+}
+
+export const getCragsWithin = async ({ bbox, zoom }): Promise<any> => {
+  try {
+    const rs = await graphqlClient.query<{cragsWithin: AreaType[]}>({
+      query: QUERY_CRAGS_WITHIN,
+      variables: {
+        filter: {
+          bbox,
+          zoom
+        }
+      },
+      notifyOnNetworkStatusChange: true
+    })
+
+    if (Array.isArray(rs.data?.cragsWithin)) {
+      return rs.data?.cragsWithin ?? []
+    }
+    console.log('WARNING: cragsWithin() returns non-array data')
+    return []
+  } catch (e) {
+    console.log('cragsWithin() error', e)
+  }
+  return []
+}
+
+export const getCragsWithinNicely = AwesomeDebouncePromise(getCragsWithin, 1000)

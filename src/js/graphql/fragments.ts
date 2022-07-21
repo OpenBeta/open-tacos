@@ -109,3 +109,34 @@ export const QUERY_TAGS_BY_MEDIA_ID = gql`
     }
   }
 `
+
+export const QUERY_RECENT_MEDIA = gql`
+  query ($userLimit: Int) {
+    getRecentTags(userLimit: $userLimit) {
+      authorUuid
+      tagList {
+        destType
+        mediaUrl
+        mediaType
+        destination
+      }
+    }
+  }
+`
+
+export const QUERY_CRAGS_WITHIN = gql`
+  query ($filter: SearchWithinFilter) {
+    cragsWithin(filter: $filter) {
+      areaName
+      uuid
+      totalClimbs
+      density
+      metadata {
+        lat
+        lng
+        areaId
+        leaf
+      }
+    }
+  }
+`

@@ -47,7 +47,7 @@ export default function AddTagCta ({ auth, tagCount }: AddTagCtaProps): JSX.Elem
   )
 }
 
-const onClickHandler = async (): Promise<void> => await signIn('auth0')
+const onClickHandler = async (): Promise<any> => await signIn('auth0')
 
 const Messages = {
   TAG_YOUR_OWN: {

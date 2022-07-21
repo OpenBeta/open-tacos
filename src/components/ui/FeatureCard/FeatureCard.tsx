@@ -33,7 +33,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
       void fetchImages()
     } else {
       setImage({
-        url: `${SIRV_CONFIG.baseUrl ?? ''}${shuffle(media)[0].mediaUrl}?format=webp&h=400&q=90`,
+        url: `${SIRV_CONFIG.baseUrl ?? ''}${shuffle(media)[0].mediaUrl}?format=webp&h=300&q=90`,
         license: 'All Rights Reserved',
         creator: '',
         license_url: '',
@@ -73,7 +73,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
         {
           Object.keys(aggregate.byDiscipline).map((key: string) => {
             if ((aggByDiscipline?.[key] as DisciplineStatsType)?.total > 5) {
-              return <span key={key} className='bg-slate-700 text-white px-2'>{key}</span>
+              return <span key={key} className='rounded bg-gray-600 text-white px-2'>{key}</span>
             }
             return null
           })
@@ -86,25 +86,23 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
 
   return (
     <div
-      className='card rounded-lg cursor-pointer hover:bg-ob-secondary hover:bg-opacity-50 border'
+      className='rounded-md overflow-hidden cursor-pointer hover:brightness-75 border border-gray-300'
     >
       <Link href={getSlug(metadata.areaId, metadata.leaf)} passHref>
         <a>
-          <div className='m-5'>
+          <div className='m-4 lg:m-0'>
             {image !== DEFAULT_IMAGE && <FeatureImage image={image} />}
             {image === DEFAULT_IMAGE && <DefaultImage />}
 
-            <h3
-              className='font-medium whitespace-normal font-sans my-2 text-base truncate'
-            >
-              <div className='text-lg'>{sanitizeName(areaName)}</div>
-              <div>{totalClimbs} Climbs</div>
-              <div className='text-xs flex flex-row space-x-2'>{formatClimbingTypes(aggregate)}</div>
-              <div className='text-secondary text-sm'>{pathTokens.join(' / ')}</div>
-              {attribution !== '' && <div className='text-xs text-tertiary'>Image By: {attribution}</div>}
-            </h3>
-
-            <div className='mt-4 flex justify-between items-center' />
+            <div className='mx-0 lg:mx-2 my-2.5'>
+              <h3 className='whitespace-normal  font-semibold text-base truncate'>
+                {sanitizeName(areaName)}
+              </h3>
+              <div className='font-semibold text-xs text-secondary'>{totalClimbs} Climbs</div>
+              <div className='my-1 text-xs flex flex-row space-x-2 flex-wrap'>{formatClimbingTypes(aggregate)}</div>
+              <div className='text-secondary text-xs text-tietiary'>{pathTokens.slice(1).join(' / ')}</div>
+              {attribution !== '' && <div className='text-xs tertiary'>Image By: {attribution}</div>}
+            </div>
           </div>
         </a>
       </Link>

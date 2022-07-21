@@ -1,11 +1,14 @@
 export interface IReadOnlyUserMetadata {
   uuid: string
+  roles: string[]
+  loginsCount: number
 }
 
 export interface IWritableUserMetadata {
   name: string
   nick: string
   bio: string
+  website?: string
 }
 
 export type IUserMetadata = IWritableUserMetadata & IReadOnlyUserMetadata

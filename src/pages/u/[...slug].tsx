@@ -61,7 +61,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
               <div className='border rounded-md px-6 py-2 shadow'>
                 <ul className='list-disc'>
                   <li>Please upload 3 photos to complete your profile {mediaList?.length >= 3 && <span>&#10004;</span>}</li>
-                  <li>Remember to upload only your own photos</li>
+                  <li>Upload only your own photos</li>
                   <li>Keep it <b>Safe For Work</b> and climbing-related</li>
                 </ul>
               </div>
@@ -79,7 +79,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
             initialTagsByMediaId={tagMap}
           />
           {!isAuthorized && !isFallback && (
-            <div className='mt-4 w-full mx-auto text-sm text-secondary text-center'>
+            <div className='mt-4 w-full mx-auto text-xs text-secondary text-center'>
               All photos are copyrighted by their respective owners.  All Rights Reserved.
             </div>
           )}

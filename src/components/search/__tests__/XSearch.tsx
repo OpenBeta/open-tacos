@@ -4,9 +4,17 @@ import userEvent from '@testing-library/user-event'
 
 jest.mock('../../../js/typesense/TypesenseClient')
 jest.mock('../../../js/mapbox/Client')
+jest.mock('../../../js/graphql/Client')
 
-const MockedTypesenseClient = jest.requireMock('../../../js/typesense/TypesenseClient')
-const MockedMapboxClient = jest.requireMock('../../../js/mapbox/Client')
+const mockTypesenseClient = jest.requireMock('../../../js/typesense/TypesenseClient')
+const mockMapboxClient = jest.requireMock('../../../js/mapbox/Client')
+
+const mockUseQuery = jest.fn()
+
+jest.mock('@apollo/client', () => ({
+  useQuery: mockUseQuery,
+  gql: jest.fn()
+}))
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -31,8 +39,16 @@ beforeAll(async () => {
 
 test('XSearch triggers popup window', async () => {
   const user = userEvent.setup()
-  const multiSearchFn = jest.spyOn(MockedTypesenseClient, 'multiSearch')
-  const geocoderLookupFn = jest.spyOn(MockedMapboxClient, 'geocoderLookup')
+  const multiSearchFn = jest.spyOn(mockTypesenseClient, 'multiSearch')
+  const geocoderLookupFn = jest.spyOn(mockMapboxClient, 'geocoderLookup')
+
+  mockUseQuery.mockReturnValue({
+    loading: false,
+    cragNear: [{
+      _id: 1,
+      count: 5
+    }]
+  })
 
   render(<XSearch />)
 

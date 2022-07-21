@@ -8,27 +8,44 @@ import { Button, ButtonVariant } from '../../ui/BaseButton'
 import Snackbar from '../../ui/Snackbar'
 import { IWritableUserMetadata } from '../../../js/types/User'
 import { doesUsernameExist } from '../../../js/userApi/user'
-import { checkUsername } from '../../../js/utils'
+import { checkUsername, checkWebsiteUrl } from '../../../js/utils'
+import { revalidateServePage } from '../../../js/stores/media'
 
 const UserProfileSchema = Yup.object().shape({
   nick: Yup.string()
     .min(2, 'Minimum 2 characters')
-    .max(20, 'Maximum 20 characters')
+    .max(30, 'Maximum 30 characters')
     .required('Minimum 2 characters')
     .test('special-rules', 'Must start and end with a letter or a number.', checkUsername),
   name: Yup.string()
     .max(50, 'Maximum 50 characters.'),
   bio: Yup.string()
+    .notRequired()
     .max(150, 'Maximum 150 characters')
-    .test('less-than-3-lines', 'Maximum 2 lines', (text) => text != null && text.split(/\r\n|\r|\n/).length <= 2)
-})
+    .test('less-than-3-lines', 'Maximum 2 lines', (text) => (text?.split(/\r\n|\r|\n/)?.length ?? 0) <= 2),
+  website: Yup.string()
+    .nullable()
+    .notRequired()
+    .max(150, 'Maximum 150 characters')
+    .when('website', {
+      is: val => val?.length > 0,
+      then: rule => {
+        if (rule != null) {
+          return Yup.string().test('special-rules', 'Invalid URL', checkWebsiteUrl)
+        } else {
+          return Yup.string().notRequired()
+        }
+      }
+    })
+}, [['website', 'website']])
 
 export default function ProfileEditForm (): ReactElement {
   const [justSubmitted, setJustSubmitted] = useState(false)
   const [profile, setProfile] = useState<IWritableUserMetadata>({
     name: '',
     nick: '',
-    bio: ''
+    bio: '',
+    website: undefined
   })
 
   useLayoutEffect(() => {
@@ -43,6 +60,8 @@ export default function ProfileEditForm (): ReactElement {
     const profile = await updateUserProfile(newValues)
     if (profile != null) {
       setJustSubmitted(true)
+      // Also trigger a page rebuild
+      void revalidateServePage(profile.nick)
     }
   }, [])
 
@@ -72,6 +91,7 @@ export default function ProfileEditForm (): ReactElement {
           />
           <TextField name='name' label='Name' />
           <TextField name='bio' label='Bio' multiline rows={3} spellcheck />
+          <TextField name='website' label='Website (optional)' />
           <div>
             <Button
               label={isSubmitting ? 'Saving...' : 'Save'} type='submit' variant={ButtonVariant.SOLID_DEFAULT}

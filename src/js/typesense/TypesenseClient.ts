@@ -1,4 +1,5 @@
 import Typesense from 'typesense'
+import { TypesenseDocumentType } from '../types'
 
 const typesenseClient = new Typesense.Client({
   nodes: [
@@ -37,11 +38,17 @@ export const climbSearchByName = async (query: string): Promise<any> => {
   return rs?.hits?.map(hit => hit.document) ?? []
 }
 
+interface multisearchRet {
+  climbs: TypesenseDocumentType[]
+  areas: TypesenseDocumentType[]
+  fa: TypesenseDocumentType[]
+}
+
 /**
  * Search multiple collections in one request
  * @param query
  */
-export async function multiSearch (query: string): Promise<any> {
+export async function multiSearch (query: string): Promise<multisearchRet> {
   // See https://typesense.org/docs/0.19.0/api/documents.html#federated-multi-search
   const commonSearchParams = {
 
@@ -54,7 +61,7 @@ export async function multiSearch (query: string): Promise<any> {
         collection: 'climbs',
         exclude_fields: 'climbDesc',
         page: 1,
-        per_page: 10
+        per_page: 7
       },
       {
         q: query,
@@ -62,7 +69,7 @@ export async function multiSearch (query: string): Promise<any> {
         collection: 'climbs',
         exclude_fields: 'climbDesc',
         page: 1,
-        per_page: 10
+        per_page: 5
       },
       {
         q: query,
@@ -70,16 +77,18 @@ export async function multiSearch (query: string): Promise<any> {
         collection: 'climbs',
         exclude_fields: 'climbDesc',
         page: 1,
-        per_page: 10
+        per_page: 5
       }
     ]
   }
 
   const rs = await typesenseClient.multiSearch.perform(searchRequests, commonSearchParams)
   // FYI: rs.results contains a lot more useful data
-  return {
+  const x: multisearchRet = {
     climbs: rs?.results[0].hits?.map(hit => hit.document) ?? [],
     areas: rs?.results[1].hits?.map(hit => hit.document) ?? [],
     fa: rs?.results[2].hits?.map(hit => hit.document) ?? []
-  }
+  } as any
+
+  return x
 }
