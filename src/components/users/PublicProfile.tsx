@@ -10,11 +10,15 @@ interface PublicProfileProps {
 }
 
 export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX.Element {
-  const { name, nick, avatar, bio } = userProfile
+  const { name, nick, avatar, bio, website } = userProfile
+  let websiteWithScheme: string | null = null
+  if (website != null) {
+    websiteWithScheme = website.startsWith('http') ? website : `//${website}`
+  }
   return (
     <section className='mx-auto max-w-screen-sm px-4 md:px-0 md:grid md:grid-cols-3'>
-      <div className='hidden md:block grayscale'>
-        <img className='rounded-full hue-rotate-15' src={avatar} />
+      <div className='hidden md:block grayscale pr-5'>
+        <img className='object-scale-down w-24 h-24 rounded-full hue-rotate-15' src={avatar} />
       </div>
       <div className='md:col-span-2 text-medium text-primary'>
         <div className='flex flex-row items-center'>
@@ -23,9 +27,27 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
         </div>
         <div className='mt-6 text-lg font-semibold'>{name}</div>
         <div className=''>{bio}</div>
+        {websiteWithScheme != null &&
+          <div className=''>
+            <a
+              className='text-ob-secondary hover:underline'
+              href={websiteWithScheme}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              {prettifyUrl(websiteWithScheme)}
+            </a>
+          </div>}
       </div>
     </section>
   )
+}
+
+/**
+ * Remove leading http(s):// and trailing /
+ */
+const prettifyUrl = (url: string): string => {
+  return url.replace(/^(https?:)?\/\//g, '').replace(/\/$/g, '')
 }
 
 export const TinyProfile = ({ userProfile, onClick }: PublicProfileProps): JSX.Element => {
@@ -47,7 +69,6 @@ export const TinyProfile = ({ userProfile, onClick }: PublicProfileProps): JSX.E
           </div>
           <div className={ProfileATagStyle}>
             {nick}
-
           </div>
         </section>
       </a>

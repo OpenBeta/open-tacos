@@ -15,23 +15,11 @@ export const xsearchTypesense = async (query: string): Promise<Array<Autocomplet
   const rs = await multiSearch(query)
   return await Promise.all([{
     sourceId: 'climbs',
-
     getItems: ({ query }) => rs.climbs,
-
     getItemInputValue: ({ item }) => {
       return item.climbName
     },
-
-    getItemUrl: ({ item }) => item.climbUUID,
-
-    onSelect ({ item, setQuery, setIsOpen, refresh }) {
-      // console.log('#onSelect', item)
-    },
-
-    onActive ({ item, setQuery, setIsOpen, refresh }) {
-      // console.log('#onActive', item)
-    },
-
+    getItemUrl: ({ item }) => `/climbs/${item.climbUUID}`,
     templates: {
       noResults: DefaultNoResult,
       item: ClimbItem,
@@ -42,9 +30,9 @@ export const xsearchTypesense = async (query: string): Promise<Array<Autocomplet
     sourceId: 'areas',
     getItems: ({ query }) => rs.areas,
     getItemInputValue: ({ item }) => {
-      return item.climbUUID
+      return item.areaNames[item.areaNames.length - 1]
     },
-    getItemUrl: ({ item }) => item.climbUUID,
+    getItemUrl: ({ item }) => `/climbs/${item.climbUUID}`,
     templates: {
       noResults: DefaultNoResult,
       item: AreaItem,
@@ -57,7 +45,7 @@ export const xsearchTypesense = async (query: string): Promise<Array<Autocomplet
     getItemInputValue: ({ item }) => {
       return item.fa
     },
-    getItemUrl: ({ item }) => item.climbUUID,
+    getItemUrl: ({ item }) => `/climbs/${item.climbUUID}`,
     templates: {
       noResults: DefaultNoResult,
       item: FAItem,

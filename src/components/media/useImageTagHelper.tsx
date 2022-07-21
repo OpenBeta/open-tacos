@@ -11,7 +11,7 @@ export default function useImageTagHelper (): any {
   const [mouseXY, _setMouseXY] = useState([0, 0])
 
   /* search popover state */
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   /**
    * Record onClick event on image and screen X, Y

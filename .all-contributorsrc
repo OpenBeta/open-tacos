@@ -164,6 +164,42 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "osaf96",
+      "name": "Osaf",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22621352?v=4",
+      "profile": "https://github.com/osaf96",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "xavier-kong",
+      "name": "xavier-kong",
+      "avatar_url": "https://avatars.githubusercontent.com/u/86543341?v=4",
+      "profile": "https://github.com/xavier-kong",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Downster",
+      "name": "Brendan Downing",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24400646?v=4",
+      "profile": "https://github.com/Downster",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "admanny",
+      "name": "admanny",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31676895?v=4",
+      "profile": "https://github.com/admanny",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

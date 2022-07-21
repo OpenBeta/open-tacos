@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver'
 import { ClimbTypeToColor } from './constants'
 import { Climb, ClimbDisciplineRecord, ClimbDiscipline } from './types'
 
@@ -150,7 +151,27 @@ export const disciplineArrayToObj = (types: ClimbDiscipline[]): Partial<ClimbDis
 const regUsername = /^[a-zA-Z0-9]+([_\\.-]?[a-zA-Z0-9])*$/i
 const regUsernameKeywords = /openbeta|0penbeta|admin/i
 
+/**
+ * Username validation
+ * @param uid
+ * @returns true if has valid format
+ */
 export const checkUsername = (uid: string): boolean =>
-  uid != null && uid.length <= 20 &&
+  uid != null && uid.length <= 30 &&
   !regUsernameKeywords.test(uid) &&
   regUsername.test(uid)
+
+export const saveAsFile = (data: any, filename: string): void => {
+  const blob = new Blob([data], { type: 'text/plain;charset=utf-8' })
+  saveAs(blob, filename)
+}
+
+const regValidUrl = /^((http|https):\/\/)?(www.)?(?!.*(http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+(\/)?.([\w?[a-zA-Z-_%\\/@?]+)*([^\\/\w?[a-zA-Z0-9_-]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/
+/**
+ * Website URL validation
+ * @param url
+ * @returns true if valid website URL
+ */
+export const checkWebsiteUrl = (url: string): boolean => {
+  return !url.includes(' ') && url.length > 2 && regValidUrl.test(url)
+}

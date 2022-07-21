@@ -17,7 +17,7 @@ module.exports = {
       },
       colors: {
         'custom-green': '#8BB191',
-        'ob-primary': '#F07933',
+        'ob-primary': '#F15E40',
         'ob-secondary': '#8BB191',
         'ob-tertiary': '#62cae3',
         'ob-dark': '#0f172a', // slate-900

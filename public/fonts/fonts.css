@@ -4,11 +4,25 @@
     font-style: normal;
     font-weight: 100;
   }
+
+  @font-face {
+    font-family: "ISO";
+    src: url("VCTRMonov0.12-ThinItalic.woff2") format('woff2');
+    font-style: italic;
+    font-weight: 100;
+  }
   
   @font-face {
     font-family: "ISO";
     src: url("VCTRMonov0.12-Light.woff2") format('woff2');
     font-style: normal;
+    font-weight: 200;
+  }
+
+  @font-face {
+    font-family: "ISO";
+    src: url("VCTRMonov0.12-LightItalic.woff2") format('woff2');
+    font-style: italic;
     font-weight: 200;
   }
   
@@ -35,7 +49,7 @@
   @font-face {
     font-family: "ISO";
     src: url("VCTRMonov0.12-MediumItalic.woff2") format('woff2');
-    font-style: normal;
+    font-style: italic;
     font-weight: 600;
   }
   
@@ -48,7 +62,21 @@
 
   @font-face {
     font-family: "ISO";
+    src: url("VCTRMonov0.12-BoldItalic.woff2") format('woff2');
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  @font-face {
+    font-family: "ISO";
     src: url("VCTRMonov0.12-Black.woff2") format('woff2');
     font-style: normal;
+    font-weight: 900;
+  }
+
+  @font-face {
+    font-family: "ISO";
+    src: url("VCTRMonov0.12-BlackItalic.woff2") format('woff2');
+    font-style: italic;
     font-weight: 900;
   }

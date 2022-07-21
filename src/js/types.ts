@@ -1,4 +1,5 @@
 import { BBox, Feature } from '@turf/helpers'
+import { ViewState } from 'react-map-gl'
 import { BaseItem } from '@algolia/autocomplete-core'
 
 import { IUserProfile } from './types/User'
@@ -176,6 +177,10 @@ export interface MediaTagWithClimb extends MediaBaseTag {
   climb: Pick<Climb, 'id' | 'name'>
 }
 
+export interface MediaByAuthor {
+  authorUuid: string
+  tagList: MediaBaseTag[]
+}
 export interface WithUid {
   uid: string
 }
@@ -188,4 +193,10 @@ export interface MediaType {
   mtime: Date
   contentType: string
   meta: any
+}
+
+export interface XViewStateType extends ViewState{
+  width: number
+  height: number
+  bbox: BBox
 }

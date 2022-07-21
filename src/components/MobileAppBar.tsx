@@ -1,19 +1,24 @@
 import Link from 'next/link'
-import CragFinder from './search/CragFinder'
+import { Popover } from '@headlessui/react'
+import Image from 'next/image'
+
 import MobileNavBar from './ui/MobileNavBar'
 import { HomeIcon, MenuIcon } from '@heroicons/react/outline'
+import OpenBetaLogo from '../assets/brand/openbeta-logo.svg'
+
 import MobileFilterBar from './finder/filters/MobileFilterBar'
-import { Popover } from '@headlessui/react'
 import { Button, ButtonVariant } from './ui/BaseButton'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import ProfileNavButton from './ProfileNavButton'
 import NewPost from './NewPost'
+import XSearch from './search/XSearch'
 
 interface HeaderProps {
   includeFilters: boolean
+  isTablet: boolean
 }
 
-export default function MobileAppBar (props: HeaderProps): JSX.Element {
+export default function MobileAppBar ({ isTablet, includeFilters }: HeaderProps): JSX.Element {
   const { status } = useSession()
   const nav = status === 'authenticated' ? <AuthenticatedNav /> : <LoginButton />
   return (
@@ -21,11 +26,11 @@ export default function MobileAppBar (props: HeaderProps): JSX.Element {
       <MobileNavBar
         branding={<Branding />}
         home={<Home />}
-        search={<CragFinder />}
+        search={<XSearch isMobile={!isTablet} placeholder='Search' />}
         profile={nav}
         more={<More />}
       />
-      {props.includeFilters && <MobileFilterBar />}
+      {includeFilters && <MobileFilterBar />}
     </>
   )
 }
@@ -47,14 +52,16 @@ const LoginButton = (): JSX.Element => (
 
 const Home = (): JSX.Element => (
   <Button
-    label={<HomeIcon className='w-6 h-6 text-secondary' />}
+    label={<HomeIcon className='w-6 h-6 text-white' />}
     href='/'
   />)
 
 const Branding = (): JSX.Element => {
   return (
     <Link href='/'>
-      <a className='font-semibold text-lg text-secondary pt-1'>OpenTacos</a>
+      <a>
+        <Image width={16} height={16} src={OpenBetaLogo} layout='responsive' />
+      </a>
     </Link>
   )
 }
@@ -64,7 +71,7 @@ const More = (): JSX.Element => {
   return (
     <Popover>
       <Popover.Button as='div' className='z-50 flex center-items'>
-        <Button label={<MenuIcon className='text-secondary w-8 h-8' />} />
+        <Button label={<MenuIcon className='text-white w-8 h-8' />} />
       </Popover.Button>
 
       <Popover.Panel className='absolute z-20 right-0 mt-2 p-6 bg-white rounded-md'>

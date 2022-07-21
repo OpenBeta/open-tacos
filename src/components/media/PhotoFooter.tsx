@@ -7,7 +7,7 @@ export default function PhotoFooter ({ username, destType, destination, hover })
   return (
     <Transition
       show={hover}
-      enter='transition-opacity duration-500'
+      enter='transition-opacity duration-250'
       enterFrom='opacity-20'
       enterTo='opacity-100'
     >
@@ -44,7 +44,7 @@ const DestinationLink = ({ destType, destination }: {destType: number, destinati
   )
 }
 
-const urlResolver = (type: number, dest: string): string | null => {
+export const urlResolver = (type: number, dest: string): string | null => {
   switch (type) {
     case 0:
       return `/climbs/${dest}`

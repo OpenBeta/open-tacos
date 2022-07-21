@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import MobileTabletAppBar from './MobileAppBar'
 import DesktopAppBar from './DesktopAppBar'
@@ -20,26 +20,6 @@ export default function Header (props: HeaderProps): JSX.Element {
   // track expand/collapse of search widget (for large screen only)
   const [expanded, setExpanded] = useState(isIndexPage)
 
-  const controlDirection = useCallback(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
-
-    if (window.scrollY < 150 && isIndexPage) {
-      setExpanded(true)
-    }
-    if (typeof window !== 'undefined' && window.scrollY > 150) {
-      setExpanded(false)
-    }
-  }, [isIndexPage])
-
-  useEffect(() => {
-    window.addEventListener('scroll', controlDirection)
-    return () => {
-      window.removeEventListener('scroll', controlDirection)
-    }
-  }, [])
-
   const handleClose = (): void => {
     if ((typeof window !== 'undefined' && window.scrollY > 150) || !isIndexPage) {
       setExpanded(false)
@@ -49,7 +29,7 @@ export default function Header (props: HeaderProps): JSX.Element {
   return (
     <div id={NAV_BAR_IDENTIFIER} className='relative z-40'>
       {isTablet || isMobile
-        ? <MobileTabletAppBar includeFilters={includeFilters} />
+        ? <MobileTabletAppBar isTablet={isTablet} includeFilters={includeFilters} />
         : <DesktopAppBar
             expanded={expanded}
             onExpandSearchBox={() => {

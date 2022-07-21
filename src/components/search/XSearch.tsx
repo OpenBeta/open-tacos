@@ -1,4 +1,5 @@
 import { render } from 'react-dom'
+import { AutocompleteClassNames } from '@algolia/autocomplete-js'
 
 import { Autocomplete } from './Autocomplete'
 import { xsearchTypesense, searchPoi } from './sources'
@@ -18,31 +19,47 @@ export default function XSearch ({ isMobile = true, placeholder = 'Climb search'
       isMobile={isMobile}
       placeholder={placeholder}
       getSources={async ({ query }) => {
-        const sources = await xsearchTypesense(query)
-        const poiSource = await searchPoi(query)
-        sources.push(poiSource)
-        return await Promise.all(sources)
+        const sources = [...await xsearchTypesense(query), await searchPoi(query)]
+        // This may look a little bizarre, but it's just so that the sources appear
+        // in the same order that we render them (climbs, poi, areas, fa)
+        // If there's a better unified way, I'd love to know how - Coco
+        return [sources[0], sources[3], sources[1], sources[2]]
       }}
       classNames={CUSTOM_CLASSES}
       render={({ elements }, root) => {
         const { climbs, areas, fa, poi } = elements
         render(
-          <div className='flex'>
-            <div>{climbs}</div>
-            <div>{areas}</div>
-            <div>{fa}</div>
-            <div>{poi}</div>
+          <div className='xsearch-result-container space-y-4'>
+            <div>
+              <h1 className='text-primary -mb-2'>Climbs</h1>
+              {climbs}
+            </div>
+            <div>
+              <h1 className='text-primary -mb-2'>Climbs Near</h1>
+              {poi}
+            </div>
+            <div>
+              <h1 className='text-primary -mb-2'>Areas</h1>
+              {areas}
+            </div>
+            <div>
+              <h1 className='text-primary -mb-2'>First Ascensionists</h1>
+              {fa}
+            </div>
           </div>, root)
       }}
     />
   )
 }
 
-const CUSTOM_CLASSES = {
+const CUSTOM_CLASSES: Partial<AutocompleteClassNames> = {
   panel: 'xsearch-panel',
   item: 'xsearch-item',
   panelLayout: 'xsearch-panelLayout',
   sourceHeader: 'xsearch-sourceHeader',
   form: 'xsearch-form',
-  root: 'xsearch'
+  root: 'xsearch',
+  inputWrapperPrefix: 'xsearch-inputWrapperPrefix',
+  inputWrapper: 'xsearch-inputWrapper',
+  submitButton: 'xsearch-submitButton'
 }

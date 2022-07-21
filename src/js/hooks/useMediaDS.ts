@@ -24,8 +24,9 @@ interface MediaStoreHookResult {
  */
 export default function useMediaDS ({ isAuthorized, uid, serverMediaList, serverTagMap }: MediaStoreHookProp): MediaStoreHookResult {
   useEffect(() => {
-    if (isAuthorized) {
+    if (isAuthorized && !userMediaStore.get.initialized()) {
       // Load server side image data into local state for client-side add/remove
+      userMediaStore.set.initialized(true)
       userMediaStore.set.imageList(serverMediaList)
       userMediaStore.set.tagMap(serverTagMap)
       userMediaStore.set.uid(uid)

@@ -9,13 +9,14 @@ interface UserMediaStateProps {
   uid: string | null
   imageList: MediaType[]
   tagMap: Dictionary<MediaTagWithClimb[]>
-
+  initialized: boolean
 }
 
 const INITIAL_STATE: UserMediaStateProps = {
   uid: null,
   imageList: [],
-  tagMap: {}
+  tagMap: {},
+  initialized: false
 }
 
 const STORE_OPTS = {}
@@ -125,4 +126,4 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
  * The token is URL encoded value of .env PAGE_REVALIDATE_TOKEN
  * @param uid user id
  */
-export const revalidateServePage = async (uid: string|null): Promise<any> => uid != null && await fetch(`/api/revalidate?token=8b%26o4t%21xUqAN3Y%239&u=${uid}`)
+export const revalidateServePage = async (uid: string|null): Promise<any> => uid != null && await fetch(`/api/revalidate?&u=${uid}`)
