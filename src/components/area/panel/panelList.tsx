@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ListItem, { ListItemEntity } from './listItem'
 
 interface PanelListProps {
@@ -12,6 +12,16 @@ interface PanelListProps {
 }
 
 export default function PanelList (props: PanelListProps): JSX.Element {
+  const [favs, setFavs] = useState<string[]>([])
+  useEffect(() => {
+    fetch('/api/user/fav')
+      .then(async res => await res.json())
+      .then(collections => {
+        setFavs(collections.areaCollections.favourites)
+      })
+      .catch(console.error)
+  }, [])
+
   useEffect(() => {
     if (props.selected !== null) {
       const selectedElement = document.getElementById(`${props.selected}-xqoops98`)
@@ -49,6 +59,7 @@ export default function PanelList (props: PanelListProps): JSX.Element {
           key={item.id}
         >
           <ListItem
+            isFav={favs.includes(item.id)}
             onFocus={reFocusCheck}
             onClick={reClickCheck}
             selected={props.selected === item.id}

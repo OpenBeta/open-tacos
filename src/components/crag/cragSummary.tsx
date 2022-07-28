@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react'
-import { CountByGroupType } from '../../js/types'
+import { AreaMetadataType, CountByGroupType } from '../../js/types'
+import FavouriteButton from '../users/FavouriteButton'
 
 export interface CragHeroProps {
   title: string
@@ -9,6 +10,7 @@ export interface CragHeroProps {
   galleryRef?: string
   aggregate: CountByGroupType[]
   media: any[]
+  areaMeta: AreaMetadataType
 }
 
 /**  For a given number of allowed words, quantize to the nearest
@@ -139,7 +141,7 @@ function Description ({ cont }: {cont: string}): JSX.Element {
  */
 export default function CragSummary (props: CragHeroProps): JSX.Element {
   return (
-    <div className='max-w-4xl'>
+    <div className=''>
       <h1 className='text-3xl md:text-4xl lg:text-5xl font-bold max-w-sm'>
         {props.title}
       </h1>
@@ -150,12 +152,16 @@ export default function CragSummary (props: CragHeroProps): JSX.Element {
       >
         <div
           className='text-slate-700 tracking-wider hover:underline
-            hover:text-blue-700 cursor-pointer text-sm'
+          hover:text-blue-700 cursor-pointer text-sm'
           title='Click to view on google maps'
         >
           {props.latitude}, {props.longitude}
         </div>
       </a>
+
+      <div className='flex-1 flex justify-end'>
+        <FavouriteButton areaId={props.areaMeta.areaId} />
+      </div>
 
       <div className='mt-6'>
         <Description cont={props.description} />

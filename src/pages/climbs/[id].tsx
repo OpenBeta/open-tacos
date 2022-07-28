@@ -15,6 +15,7 @@ import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useSwipeable } from 'react-swipeable'
+import FavouriteButton from '../../components/users/FavouriteButton'
 
 interface ClimbPageProps {
   climb: Climb
@@ -34,7 +35,7 @@ const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
       {!router.isFallback && <PageMeta {...props} />}
       <Layout
         showFilterBar={false}
-        contentContainerClass='content-default with-standard-y-margin'
+        contentContainerClass='content-default with-standard-y-margin min-h-screen'
       >
         {router.isFallback
           ? (
@@ -107,6 +108,10 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                 className='text-slate-700 mt-4 text-sm'
               >
                 <strong>FA: </strong>{fa}
+              </div>
+
+              <div className='flex pt-8'>
+                <FavouriteButton climbId={climbId} />
               </div>
             </div>
           </div>
