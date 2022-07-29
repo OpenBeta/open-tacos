@@ -155,6 +155,9 @@ Thanks goes to these wonderful people:
     <td align="center"><a href="https://github.com/Downster"><img src="https://avatars.githubusercontent.com/u/24400646?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Brendan Downing</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=Downster" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/admanny"><img src="https://avatars.githubusercontent.com/u/31676895?v=4?s=100" width="100px;" alt=""/><br /><sub><b>admanny</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=admanny" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="http://alexmandrila.com"><img src="https://avatars.githubusercontent.com/u/21322646?v=4?s=100" width="100px;" alt=""/><br /><sub><b>alex</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=amandril" title="Code">💻</a> <a href="#ideas-amandril" title="Ideas, Planning, & Feedback">🤔</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
