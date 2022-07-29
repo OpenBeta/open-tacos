@@ -280,6 +280,28 @@ export const upload = async (filename: string, imageData: Buffer, token?: string
 }
 
 /**
+ * Delete a photo from Sirv
+ * @param filename
+ * @param token
+ * @returns deleted photo filename
+ */
+export const remove = async (filename: string, token?: string): Promise<string> => {
+  const _t = await getAdminTokenIfNotExist(token)
+
+  const res = await client.post(
+    `/files/delete?filename=${filename}`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `bearer ${_t}`
+      }
+    }
+  )
+  if (res.status >= 200 && res.status <= 204) { return filename }
+  throw new Error(`Image API delete() failed.  Status: ${res.status}`)
+}
+
+/**
  * A hack to store current username in a json file under their media folder.
  * This way given an image URL, we can load the json file to determine
  * the username without calling Auth0 API.
