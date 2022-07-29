@@ -222,7 +222,7 @@ const InfoContainer = ({ currentImage, tagList, auth }: InfoContainerProps): Rea
 
       {isAuthorized &&
         <div className='my-8'>
-          <RemoveImage imageInfo={currentImage} tagList={tagList} />
+          <RemoveImage imageInfo={currentImage} tagCount={tagList.length} />
         </div>}
     </>
   )
