@@ -52,9 +52,8 @@ test('can read uid json', async () => {
 
 test('can delete photos', async () => {
   const token = await getAdminToken()
+  expect(token).toBeDefined()
   if (token != null) {
-    const f = await remove('/foo.txt', token)
-    console.log(f)
+    await expect(remove('/foo.txt', token)).rejects.toThrow('Request failed with status code 404')
   }
-}
-)
+})

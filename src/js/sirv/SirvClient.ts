@@ -290,6 +290,7 @@ export const remove = async (filename: string, token?: string): Promise<string> 
 
   const res = await client.post(
     `/files/delete?filename=${filename}`,
+    null,
     {
       headers: {
         'Content-Type': 'application/json',
