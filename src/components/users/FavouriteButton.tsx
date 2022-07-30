@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 
 interface Props {
@@ -9,9 +9,10 @@ interface Props {
 function NoLogin (): JSX.Element {
   return (
     <button
+      onClick={async () => await signIn('auth0', { callbackUrl: '/api/user/me' })}
       disabled
-      className='text-center p-2 px-3 border-2 rounded-xl border-rose-500 transition
-        text-rose-600 hover:bg-slate-700 hover:ring hover:ring-slate-700 ring-offset-2
+      className='text-center p-2 px-3 border-2 rounded-xl border-ob-primary transition
+        text-ob-primary hover:bg-slate-700 hover:ring hover:ring-slate-700 ring-offset-2
         hover:text-white hover:border-slate-700'
     >
       ❤️ Login to Favourite
@@ -75,14 +76,14 @@ export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Elemen
     <button
       disabled={loading}
       onClick={toggle}
-      className='text-center p-2 px-3 border-2 rounded-xl border-rose-500 transition
-        text-rose-600 hover:bg-rose-500 hover:ring hover:ring-rose-500 ring-offset-2
-        hover:text-white w-64'
+      className='text-center p-2 border-2 rounded-xl border-ob-primary transition
+        text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
+        hover:text-white w-64 font-bold'
     >
       {loading
         ? (
           <span className='animate-pulse'>
-            <span className='animate-spin'>💌</span>  Working on it...
+            Working on it...
           </span>
           )
         : (!isFav ? '❤️ Add to Favourites' : '💔 Remove from favourites')}
