@@ -106,7 +106,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
         })
       }
 
-      collections[metaKey] = Array.from(favs)
+      collections[collectionScope][metaKey] = Array.from(favs)
     }
 
     // The two entities we support right now are Climbs and Areas

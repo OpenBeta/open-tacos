@@ -10,7 +10,6 @@ function NoLogin (): JSX.Element {
   return (
     <button
       onClick={async () => await signIn('auth0', { callbackUrl: '/api/user/me' })}
-      disabled
       className='text-center p-2 px-3 border-2 rounded-xl border-ob-primary transition
         text-ob-primary hover:bg-slate-700 hover:ring hover:ring-slate-700 ring-offset-2
         hover:text-white hover:border-slate-700'
@@ -49,6 +48,8 @@ export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Elemen
   }, [climbId, areaId])
 
   const toggle = (): void => {
+    // Choose operation purely on what the current visual
+    // state of the button is.
     setLoading(true)
     let method = 'POST'
     if (isFav) {
@@ -59,10 +60,10 @@ export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Elemen
       method: method,
       body: JSON.stringify({ climbId, areaId, collection: favCollection })
     })
+      .then(() => setIsFav(!isFav))
       .catch(err => console.error({ err }))
       .finally(() => {
         setLoading(false)
-        setIsFav(!isFav)
       })
   }
 
