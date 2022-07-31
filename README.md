@@ -157,6 +157,7 @@ Thanks goes to these wonderful people:
   </tr>
   <tr>
     <td align="center"><a href="http://alexmandrila.com"><img src="https://avatars.githubusercontent.com/u/21322646?v=4?s=100" width="100px;" alt=""/><br /><sub><b>alex</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=amandril" title="Code">💻</a> <a href="#ideas-amandril" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/dlants"><img src="https://avatars.githubusercontent.com/u/1186977?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Denis Lantsman</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=dlants" title="Code">💻</a></td>
   </tr>
 </table>
 
