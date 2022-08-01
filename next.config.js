@@ -28,5 +28,19 @@ module.exports = withMDX({
         destination: '/u/:uid/:postid/gallery'
       }
     ]
+  },
+  async redirects () {
+    return [
+      {
+        source: '/blog',
+        destination: 'https://openbeta.substack.com/',
+        permanent: true
+      },
+      {
+        source: '/blog/openbeta-vs-mountain-project-vs-thecrag',
+        destination: 'https://openbeta.substack.com/p/openbeta-vs-mountainproject-vs-thecrag',
+        permanent: true
+      }
+    ]
   }
 })
