@@ -50,7 +50,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
       />
 
       <Layout
-        contentContainerClass='content-default with-standard-y-margin'
+        contentContainerClass='content-default with-standard-y-margin flex-grow'
         showFilterBar={false}
       >
         <div className='max-w-screen-2xl mx-auto flex flex-col items-center 2xl:px-8'>
