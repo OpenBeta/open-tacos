@@ -1,9 +1,10 @@
-name: 'tests'
+name: 'CI'
 
 on: [push, pull_request]
 
 jobs:
   build:
+    name: Test build
     runs-on: 'ubuntu-latest'
     environment: "Preview"
     steps:
@@ -35,7 +36,7 @@ jobs:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
         if: ${{ github.event_name != 'pull_request' }}
 
-      - name: Test build
+      - name: Build project
         run: yarn build
         env:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
