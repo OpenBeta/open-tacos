@@ -1,9 +1,10 @@
-name: 'tests'
+name: 'CI'
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
+    name: Test build
     runs-on: 'ubuntu-latest'
     environment: "Preview"
     steps:
@@ -24,14 +25,22 @@ jobs:
         run: yarn lint
 
       - name: Run unit tests
+        run: yarn test
+        env:
+          SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
+        if: ${{ github.event_name == 'pull_request' }}
+
+      - name: Run unit & e2e tests
         run: yarn test-all
         env:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
+        if: ${{ github.event_name != 'pull_request' }}
 
-      - name: Test build
+      - name: Build project
         run: yarn build
         env:
           SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
+        if: ${{ github.event_name != 'pull_request' }}
 
   test-docker-compose:
     runs-on: ubuntu-latest
