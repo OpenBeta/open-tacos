@@ -12,7 +12,7 @@ interface LayoutProps {
 
 function Layout ({
   contentContainerClass = 'content-fullscreen-tablet',
-  rootContainerClass = 'root-container-default flex flex-col h-screen',
+  rootContainerClass = 'root-container-default flex flex-col',
   children,
   hero = null,
   showFilterBar = true,
