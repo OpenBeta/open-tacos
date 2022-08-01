@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
+import { APIFavouriteCollections } from '../../../pages/api/user/fav'
 import ListItem, { ListItemEntity } from './listItem'
 
 interface PanelListProps {
@@ -16,8 +17,14 @@ export default function PanelList (props: PanelListProps): JSX.Element {
   useEffect(() => {
     fetch('/api/user/fav')
       .then(async res => await res.json())
-      .then(collections => {
-        setFavs(collections.areaCollections.favourites)
+      .then((collections: APIFavouriteCollections) => {
+        const favourites = collections.areaCollections.favourites
+        if (favourites === undefined) {
+          setFavs([])
+          return
+        }
+
+        setFavs(favourites)
       })
       .catch(console.error)
   }, [])

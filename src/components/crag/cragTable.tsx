@@ -8,6 +8,7 @@ import { Button } from '../../components/ui/Button'
 import { summarize } from './cragSummary'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useCanary } from '../../js/hooks'
+import { APIFavouriteCollections } from '../../pages/api/user/fav'
 
 interface CragTableProps {
   climbs: Climb[]
@@ -120,9 +121,12 @@ export default function CragTable (props: CragTableProps): JSX.Element {
 
   useEffect(() => {
     fetch('/api/user/fav')
-      .then(async res => await res.json())
-      .then(collections => {
-        setFavs(collections.climbCollections.favourites)
+      .then(async (res) => await res.json())
+      .then((collections: APIFavouriteCollections) => {
+        const f = collections.climbCollections.favourites
+        if (f !== undefined) {
+          setFavs(f)
+        }
       })
       .catch(console.error)
   }, [])

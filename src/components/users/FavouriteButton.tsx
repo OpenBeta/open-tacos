@@ -1,5 +1,6 @@
 import { signIn, useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
+import { APIFavouriteCollections } from '../../pages/api/user/fav'
 
 interface Props {
   climbId?: string
@@ -34,11 +35,27 @@ export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Elemen
     setLoading(true)
     fetch('/api/user/fav')
       .then(async res => await res.json())
-      .then(res => {
+      .then((collections: APIFavouriteCollections) => {
         if (climbId !== undefined) {
-          setIsFav(res.climbCollections[favCollection]?.includes(climbId))
-        } else {
-          setIsFav(res.areaCollections[favCollection]?.includes(areaId))
+          const f = collections.climbCollections[favCollection]
+          if (f === undefined) {
+            setIsFav(false)
+            return
+          }
+
+          setIsFav(f.includes(climbId))
+          return // guard block
+        }
+
+        if (areaId !== undefined) {
+          const f = collections.areaCollections[favCollection]
+          if (f === undefined) {
+            setIsFav(false)
+            return
+          }
+
+          setIsFav(f.includes(areaId))
+          // guard block
         }
       })
       .catch(console.error)

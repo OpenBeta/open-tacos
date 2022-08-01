@@ -2,15 +2,46 @@ import { NextApiHandler } from 'next'
 import withAuth from '../withAuth'
 import createMetadataClient, { Auth0UserMetadata } from './metadataClient'
 
-interface ReifiedMetaCollections {
-  climbCollections: {[key: string]: string[]}
-  areaCollections: {[key: string]: string[]}
+type CollectionType = string[]
+type CollectionCollectionType = Map<string, CollectionType>
+/**
+ * Collections are defined as being extremely generic. These are the
+ * specific entity collections that are favourites. Ticks, for example,
+ * may vary in the type of data that needs to be enumerated.
+ */
+interface ReifiedFavouriteCollections {
+  climbCollections: CollectionCollectionType
+  areaCollections: CollectionCollectionType
 }
 
-function reifyCollections (meta: Auth0UserMetadata): ReifiedMetaCollections {
+export interface APIFavouriteCollections {
+  climbCollections: {[key: string]: string[] | undefined }
+  areaCollections: {[key: string]: string[] | undefined}
+}
+
+/** Body params we expect to recieve */
+interface BodyType {
+  climbId?: string | string[]
+  areaId?: string | string[]
+  collection?: string | string[]
+}
+
+function reifyCollections (meta: Auth0UserMetadata): ReifiedFavouriteCollections {
   return {
-    climbCollections: ((meta?.collections?.climbCollections) != null) ? meta?.collections?.climbCollections : {},
-    areaCollections: ((meta?.collections?.areaCollections) != null) ? meta?.collections?.areaCollections : {}
+    climbCollections: ((meta?.collections?.climbCollections) != null)
+      ? new Map(Object.entries(meta?.collections?.climbCollections))
+      : new Map(Object.entries({})) as CollectionCollectionType,
+
+    areaCollections: ((meta?.collections?.areaCollections) != null)
+      ? new Map(Object.entries(meta?.collections?.areaCollections))
+      : new Map(Object.entries({})) as CollectionCollectionType
+  }
+}
+
+function backToJSONSafe (collections: ReifiedFavouriteCollections): APIFavouriteCollections {
+  return {
+    climbCollections: Object.fromEntries(collections.climbCollections),
+    areaCollections: Object.fromEntries(collections.areaCollections)
   }
 }
 
@@ -31,19 +62,19 @@ const handler: NextApiHandler<any> = async (req, res) => {
     if (req.method === 'GET') {
       // This is a bit of a hack. We don't want to return the whole metadata object.
       // We just want to return the favs.
-      res.json(collections)
+      res.json(backToJSONSafe(collections))
       res.end()
       return
     }
 
-    const body = JSON.parse(req.body)
+    const body: BodyType = JSON.parse(req.body)
 
     if (body.climbId === undefined && body.areaId === undefined) {
       throw new Error('No climb or area id provided. At least one must be supplied')
     }
 
     if (body.collection === undefined) {
-      body.collections = 'favourites'
+      body.collection = 'favourites'
     }
 
     // I'm hoping this is an edge-case. Can't say for sure if devs should allow users to functionally
@@ -52,76 +83,66 @@ const handler: NextApiHandler<any> = async (req, res) => {
       throw new Error('Un-authenticated users cannot have favs')
     }
 
-    /** For a given key, compute the value of IDS in that collection,
-     * or initialize it if it doesn't exist. This mutates the meta state rather
-     * than returning results directly.
-     * the reqKey is the pointer to data in the request that we want to inject
+    /** This piece of code operated within the given request context, and does
+     * not know or understand which collections in the 'collections' object are
+     * supposed to be collections of favourites.
+     *
+     * There is therefore nothing except developer oversight to prevent collections
+     * of entites from being conflated.
+     *
+     * _metaKey is the key in the collections object that we want to mutate
+     * [collectionScope][_metaKey] is the general bucket of favourites, for example.
+     * ['areaCollections']['favourites'] is the general bucket of favourites, for example.
+     *
+     * reqKey can be considered the entity type.
      */
-    function addToFavs (reqKey: string, metaKey: string, collectionScope: keyof ReifiedMetaCollections): void {
-      const idToAdd = body[reqKey]
-      if (idToAdd === undefined) {
-        // This is not necessarily an error. not all params need to be extant.
-        // Error handling is done further up, we just return here
-        return
-      }
+    function addRemoveFavourite (
+      reqKey: keyof typeof body,
+      collectionScope: keyof ReifiedFavouriteCollections,
+      metaKey: string
+    ): void {
+      // ensure that an id has been supplied for this entity type
+      const targetEntity = body[reqKey]
+      if (targetEntity === undefined) return
 
-      // reminder: using sets to help guarentee string uniqueness
-      const favs: Set<string> = new Set(collections[collectionScope][metaKey])
-      if (typeof idToAdd === 'string') {
-        favs.add(idToAdd)
+      // we mutate as a set, but store as an array
+      const favs: Set<string> = new Set(collections[collectionScope].get(metaKey))
+      const op = req.method === 'DELETE'
+        ? (id: string) => favs.delete(id)
+        : (id: string) => favs.add(id)
+
+      // Rest params may be lists, we can handle that easily
+      if (typeof targetEntity === 'string') {
+        op(targetEntity)
       } else {
-        idToAdd.forEach((id: string) => {
-          favs.add(id)
+        targetEntity.forEach((id: string) => {
+          op(id)
         })
       }
 
-      // Maximum number of favs is 500.
-      // I have only set this as a guardrail, chosen arbitrarily.
-      if (favs.size >= 500) {
-        return
-      }
-
-      collections[collectionScope][metaKey] = Array.from(favs)
-    }
-
-    /** For a given key (key to request query param as well as key to metadata
-     * json serialization) do the necessary computations to add this ID to the
-     * favourites that this user has previously specified - this one. */
-    function removeFromFavs (reqKey: string, metaKey: string, collectionScope: keyof ReifiedMetaCollections): void {
-      const idToRemove = body[reqKey]
-      if (
-        idToRemove === undefined ||
-        collections[collectionScope][metaKey] === undefined
-      ) {
-        // Nothing to remove.
-        return
-      }
-
-      const favs: Set<string> = new Set(collections[collectionScope][metaKey])
-      if (typeof idToRemove === 'string') {
-        favs.delete(idToRemove)
-      } else {
-        idToRemove.forEach((id: string) => {
-          favs.delete(id)
-        })
-      }
-
-      collections[collectionScope][metaKey] = Array.from(favs)
+      collections[collectionScope].set(metaKey, Array.from(favs))
     }
 
     // The two entities we support right now are Climbs and Areas
     // Just as an intellectual exercise, we could do the following for... media or something:
     // addToFavs('mediaId', 'favMedia')
-    if (req.method === 'POST') {
-      addToFavs('climbId', body.collection, 'climbCollections')
-      addToFavs('areaId', body.collection, 'areaCollections')
-    } else if (req.method === 'DELETE') {
-      removeFromFavs('climbId', body.collection, 'climbCollections')
-      removeFromFavs('areaId', body.collection, 'areaCollections')
+    if (typeof body.collection === 'string') {
+      addRemoveFavourite('climbId', 'climbCollections', body.collection)
+      addRemoveFavourite('areaId', 'areaCollections', body.collection)
+    } else {
+      body.collection.forEach((targetCollection) => {
+        addRemoveFavourite('climbId', 'climbCollections', targetCollection)
+        addRemoveFavourite('areaId', 'areaCollections', targetCollection)
+      })
     }
 
     // make the meta collections object reflect the new one
-    meta.collections = collections // mutate actual meta object
+    // TS should flag if we make any massive mistake here
+    meta.collections = {
+      climbCollections: Object.fromEntries(collections.climbCollections),
+      areaCollections: Object.fromEntries(collections.areaCollections)
+    }
+
     // Commit the changes to the user's metadata
     await metadataClient.updateUserMetadata(meta)
     res.status(200).end()
