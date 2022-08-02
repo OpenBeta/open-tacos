@@ -31,6 +31,8 @@ export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Elemen
   const [isFav, setIsFav] = useState<boolean>(false)
   const session = useSession()
 
+  console.log('session.data', session.data)
+
   useEffect(() => {
     setLoading(true)
     fetch('/api/user/fav')
