@@ -8,6 +8,7 @@ import { Button } from '../../components/ui/Button'
 import { summarize } from './cragSummary'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useCanary } from '../../js/hooks'
+import { APIFavouriteCollections } from '../../pages/api/user/fav'
 
 interface CragTableProps {
   climbs: Climb[]
@@ -47,7 +48,7 @@ function sortRoutes (routes: Climb[], sortType: CragSortType): Climb[] {
   }
 }
 
-function ClimbItem (props: { climb: Climb, hideSummary: boolean }): JSX.Element {
+function ClimbItem (props: { favs: string[], climb: Climb, hideSummary: boolean }): JSX.Element {
   const {
     climb: { name, yds, type, fa, metadata },
     hideSummary
@@ -67,9 +68,20 @@ function ClimbItem (props: { climb: Climb, hideSummary: boolean }): JSX.Element 
       onClick={goTo(metadata.climbId)}
       title={`First assent: ${fa}`}
     >
-      <div className='flex'>
-        <div className='text-lg mt-2'>{name}</div>
-        <div className='text-right flex-1'>Grade: {yds}</div>
+
+      {props.favs.includes(props.climb.metadata.climbId) && (
+        <div className='text-xs w-7 h-7 absolute -mt-5 -ml-10 rounded-full bg-white border border-rose-500
+        flex items-center justify-center shadow-rose-300 shadow'
+        >
+          <div className='pt-1'>
+            ❤️
+          </div>
+        </div>
+      )}
+
+      <div className='flex items-center mt-2'>
+        <div className='text-lg flex-1'> {name}</div>
+        <div className='whitespace-nowrap'>Grade: {yds}</div>
       </div>
 
       {!hideSummary && (
@@ -103,8 +115,21 @@ export default function CragTable (props: CragTableProps): JSX.Element {
   const [selectedClimbSort, setSelectedClimbSort] = useState<number>(0)
   const [isEditing, setIsEditing] = useState(false)
   const [sortedRoutes, setSortedRoutes] = useState<Climb[]>([])
+  const [favs, setFavs] = useState<string[]>([])
   const canary = useCanary()
   const { status } = useSession()
+
+  useEffect(() => {
+    fetch('/api/user/fav')
+      .then(async (res) => await res.json())
+      .then((collections: APIFavouriteCollections) => {
+        const f = collections.climbCollections.favourites
+        if (f !== undefined) {
+          setFavs(f)
+        }
+      })
+      .catch(console.error)
+  }, [])
 
   useEffect(() => {
     setSortedRoutes(
@@ -192,7 +217,7 @@ export default function CragTable (props: CragTableProps): JSX.Element {
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className={`grid grid-cols-1 ${
+              className={`grid grid-cols-1 lg:gap-3 ${
                 isEditing ? '' : 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2'
               }  fr-2`}
             >
@@ -212,7 +237,7 @@ export default function CragTable (props: CragTableProps): JSX.Element {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <ClimbItem hideSummary={isEditing} key={i.id} climb={i} />
+                      <ClimbItem favs={favs} hideSummary={isEditing} key={i.id} climb={i} />
                     </div>
                   )}
                 </Draggable>
