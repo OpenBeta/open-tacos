@@ -11,8 +11,8 @@ interface SEOProps {
 }
 
 const siteMetadata = {
-  title: 'OpenTacos',
-  description: 'Share your climbing adventure photos and contribute to the climbing route wiki.',
+  title: 'OpenBeta',
+  description: 'Share your climbing adventure photos and contribute to the climbing route cataog.',
   author: 'hello@openbeta.io',
   keywords: 'rock climbing wiki, climbing api, climbing beta, climbing guidebooks, openbeta, open data'
 }

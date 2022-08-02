@@ -52,8 +52,8 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
   return (
     <>
       <SeoTags
-        title='The open source rock climbing wiki'
-        description='Share your climbing adventure photos and contribute to the climbing route wiki.'
+        title='OpenBeta'
+        description='Share your climbing adventure photos and contribute to the climbing route catalog.'
       />
       <Layout
         contentContainerClass='content-default'

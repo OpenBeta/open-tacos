@@ -45,7 +45,7 @@ export default function RecentTags ({ tags, mediaList }: RecentTagsProps): JSX.E
           )
         })}
       </div>
-      <div className='mt-6 pt-6 w-full  text-xs text-secondary text-center'>
+      <div className='my-6 w-full text-xs text-secondary text-center'>
         All photos are copyrighted by their respective owners.  All Rights Reserved.
       </div>
     </>
