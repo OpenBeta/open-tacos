@@ -16,7 +16,8 @@ function ImportFromMtnProj ({ modal }: ImportFromMtnProjProps): JSX.Element | nu
       method: 'PUT',
       body: JSON.stringify(mpUID)
     })
-    console.log(ret)
+    const stuff = await ret.json()
+    console.log(stuff)
     if (ret.status === 200) {
       // do the fetch from mtn project and store that data in the Auth0 metadata
     } else {
