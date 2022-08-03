@@ -94,7 +94,6 @@ const handler: NextApiHandler<any> = async (req, res) => {
          */
     const meta = await metadataClient.getUserMetadata()
     const collections = reifyTickCollection(meta)
-    console.log(collections)
     if (req.method === 'GET') {
       // This is a bit of a hack. We don't want to return the whole metadata object.
       // We just want to return the favs.
@@ -123,11 +122,13 @@ const handler: NextApiHandler<any> = async (req, res) => {
         meta.collections = {
           tickCollections: collections.tickCollections
         }
+        console.log(collections)
         await metadataClient.updateUserMetadata(meta)
-        res.status(200).end()
+        res.status(200).json({'message' :'success'})
       }
     }
   } catch (e) {
+    console.log(e)
     res.status(500).json({ error: e.message })
   }
 }
