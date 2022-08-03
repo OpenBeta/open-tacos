@@ -16,6 +16,21 @@ const dataTypeCheck: { [field in AllowedField]: (value: any) => boolean } = {
   website: isString,
   collections: (value: any) => typeof value === 'object' && value != null
 }
+/**
+ * This is the interface for the tick object
+ * We are starting with name, uuid, notes
+ * 
+ */
+
+export interface Tick {
+  name: string,
+  notes: string,
+  uuid: string,
+  style: string,
+  attemptType: string,
+  dateClimbed: string,
+  grade: string
+}
 
 export interface Auth0UserMetadata {
   name?: string
@@ -37,9 +52,18 @@ export interface Auth0UserMetadata {
      * because it seems sensible to me.
      * The key of each collection is its name.
      */
-    areaCollections?: {[key: string]: string[]}
+    areaCollections?: { [key: string]: string[] }
+    /**
+     * This is a collection of user-ticks
+     * These ticks can be imported from mountain project, or created by the user
+     * A climb is ticked when a user completes it, or attempts it and wants to record the attempt 
+     * The key of a tick is the climbs UUID on Open-Tacos
+     * The values are declared above in the tick interface
+     */
+    tickCollections?: { [key: string]: Tick[]}
   }
 }
+
 interface MetadataClient {
   getUserMetadata: () => Promise<Auth0UserMetadata>
   updateUserMetadata: (metadata: Auth0UserMetadata) => Promise<Auth0UserMetadata>

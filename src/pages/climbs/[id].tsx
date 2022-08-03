@@ -16,6 +16,7 @@ import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useSwipeable } from 'react-swipeable'
 import FavouriteButton from '../../components/users/FavouriteButton'
+import ImportFromMtnProj from '../../components/users/ImportFromMtnProj'
 
 interface ClimbPageProps {
   climb: Climb
@@ -101,6 +102,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
               >
                 <RouteGradeChip grade={yds} safety={safety} />
                 <RouteTypeChips type={type} />
+                {/* Tick component goes here */}
               </div>
 
               <div
@@ -113,6 +115,10 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
               <div className='flex pt-8'>
                 <FavouriteButton climbId={climbId} />
               </div>
+            </div>
+
+            <div className='pl-1'>
+            <ImportFromMtnProj />
             </div>
           </div>
 
