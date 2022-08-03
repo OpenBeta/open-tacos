@@ -179,4 +179,3 @@ const regValidUrl = /^((http|https):\/\/)?(www.)?(?!.*(http|https|www.))[a-zA-Z0
 export const checkWebsiteUrl = (url: string): boolean => {
   return !url.includes(' ') && url.length > 2 && regValidUrl.test(url)
 }
-
