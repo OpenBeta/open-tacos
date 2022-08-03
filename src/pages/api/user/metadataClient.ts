@@ -18,6 +18,21 @@ const dataTypeCheck: { [field in AllowedField]: (value: any) => boolean } = {
   ticksImported: isBoolean,
   collections: (value: any) => typeof value === 'object' && value != null
 }
+/**
+ * This is the interface for the tick object
+ * We are starting with name, uuid, notes
+ * 
+ */
+
+export interface Tick {
+  name: string,
+  notes: string,
+  uuid: string,
+  style: string,
+  attemptType: string,
+  dateClimbed: string,
+  grade: string
+}
 
 export interface Auth0UserMetadata {
   name?: string
