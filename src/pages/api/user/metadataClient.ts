@@ -21,16 +21,16 @@ const dataTypeCheck: { [field in AllowedField]: (value: any) => boolean } = {
 /**
  * This is the interface for the tick object
  * We are starting with name, uuid, notes
- * 
+ *
  */
 
 export interface Tick {
-  name: string,
-  notes: string,
-  uuid: string,
-  style: string,
-  attemptType: string,
-  dateClimbed: string,
+  name: string
+  notes: string
+  uuid: string
+  style: string
+  attemptType: string
+  dateClimbed: string
   grade: string
 }
 
