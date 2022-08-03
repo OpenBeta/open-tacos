@@ -19,16 +19,16 @@ const dataTypeCheck: { [field in AllowedField]: (value: any) => boolean } = {
 /**
  * This is the interface for the tick object
  * We are starting with name, uuid, notes
- * 
+ *
  */
 
 export interface Tick {
-  name: string,
-  notes: string,
-  uuid: string,
-  style: string,
-  attemptType: string,
-  dateClimbed: string,
+  name: string
+  notes: string
+  uuid: string
+  style: string
+  attemptType: string
+  dateClimbed: string
   grade: string
 }
 
@@ -56,7 +56,7 @@ export interface Auth0UserMetadata {
     /**
      * This is a collection of user-ticks
      * These ticks can be imported from mountain project, or created by the user
-     * A climb is ticked when a user completes it, or attempts it and wants to record the attempt 
+     * A climb is ticked when a user completes it, or attempts it and wants to record the attempt
      * The key of a tick is the climbs UUID on Open-Tacos
      * The values are declared above in the tick interface
      */
