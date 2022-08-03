@@ -28,7 +28,7 @@
     "@types/underscore": "^1.11.4",
     "@types/uuid": "^8.3.4",
     "@udecode/plate": "^9.1.2",
-    "@udecode/zustood": "^0.4.4",
+    "@udecode/zustood": "^1.1.1",
     "auth0": "^2.42.0",
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.24.0",

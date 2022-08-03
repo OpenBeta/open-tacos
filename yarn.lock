@@ -2567,12 +2567,20 @@
     "@udecode/plate-headless" "9.4.0"
     "@udecode/plate-ui" "9.4.0"
 
-"@udecode/zustood@0.4.4", "@udecode/zustood@^0.4.4":
+"@udecode/zustood@0.4.4":
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/@udecode/zustood/-/zustood-0.4.4.tgz#0f3467f1ec3656623c16bb803d64e6dc55ea7b42"
   integrity sha512-OtkRGu8TKBkidOOf28TY4tqYJRhMAiVt+BF6lHbF/FnXRmOa8eLal8Q/k9sqQcGzQAHBaZYcx0pR1+wlQzaurg==
   dependencies:
     immer "9.0.6"
+
+"@udecode/zustood@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/zustood/-/zustood-1.1.1.tgz#def16fb122fe4173953aecb0fa7f10f22f074015"
+  integrity sha512-EupPWrLliymKLMIdU1SavDQjuqsjGePT5cQwXgq+os3DgF6aU+Xq6XBFT9FkkNOw1KZ2bOy67pA6HOtvgTY4dg==
+  dependencies:
+    immer "^9.0.6"
+    react-tracked "^1.7.9"
 
 "@wry/context@^0.6.0":
   version "0.6.1"
@@ -7120,6 +7128,11 @@ protocol-buffers-schema@^3.3.1:
   resolved "https://registry.yarnpkg.com/protocol-buffers-schema/-/protocol-buffers-schema-3.6.0.tgz#77bc75a48b2ff142c1ad5b5b90c94cd0fa2efd03"
   integrity sha512-TdDRD+/QNdrCGCE7v8340QyuXd4kIWIgapsE2+n/SaGiSSbomYl4TjHlvIoCWRpE7wFt02EpB35VVA2ImcBVqw==
 
+proxy-compare@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/proxy-compare/-/proxy-compare-2.1.0.tgz#5f99b3ed6a265135ce7ec145ce304e6f89b6511b"
+  integrity sha512-wapJ3h/w8fRSyPEG0y2WMV+tf9xwvj3nxM6aHVuPEOwKs/t5xLSKZb44ubNTiqq2T6lmEMHEWGMTaU2L6ddaFA==
+
 proxy-from-env@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
@@ -7464,6 +7477,14 @@ react-textarea-autosize@^8.3.3:
     "@babel/runtime" "^7.10.2"
     use-composed-ref "^1.3.0"
     use-latest "^1.2.1"
+
+react-tracked@^1.7.9:
+  version "1.7.9"
+  resolved "https://registry.yarnpkg.com/react-tracked/-/react-tracked-1.7.9.tgz#8b9acac97ccb7b7a2166c938351f84993bf294d1"
+  integrity sha512-axBJegjdQbsHizZ0DtEpM4g3sDW1SF5mq9j9bk77mRbcFR+OeBR4vLAqO7E6/DOPeGdDDqLBBIFBy5tmjnOd+A==
+  dependencies:
+    proxy-compare "2.1.0"
+    use-context-selector "1.3.10"
 
 react-transition-group@2.9.0:
   version "2.9.0"
@@ -8802,6 +8823,11 @@ use-composed-ref@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/use-composed-ref/-/use-composed-ref-1.3.0.tgz#3d8104db34b7b264030a9d916c5e94fbe280dbda"
   integrity sha512-GLMG0Jc/jiKov/3Ulid1wbv3r54K9HlMW29IWcDFPEqFkSO2nS0MuefWgMJpeHQ9YJeXDL3ZUF+P3jdXlZX/cQ==
+
+use-context-selector@1.3.10:
+  version "1.3.10"
+  resolved "https://registry.yarnpkg.com/use-context-selector/-/use-context-selector-1.3.10.tgz#8cda435e2ebd352518fbccdcf05b9787cbbd6773"
+  integrity sha512-xprS9YQ0F56IPTOjev+Lm+TWZD7Pa20+slBeaClt4YtOOoHKFOF3A9Cfr7LDcX2QIZ9VTyxXCnA6/WhL4Cm47g==
 
 use-deep-compare@1.1.0:
   version "1.1.0"

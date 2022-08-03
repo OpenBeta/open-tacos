@@ -2,6 +2,7 @@ import { ManagementClient as Auth0MgmtClient } from 'auth0'
 import type { User } from 'auth0'
 import { AUTH_CONFIG_SERVER } from '../../Config'
 import { IWritableUserMetadata, IUserProfile } from '../types/User'
+import { INITIAL_STATE } from '../stores/collections'
 
 if (AUTH_CONFIG_SERVER == null) throw new Error('AUTH_CONFIG_SERVER not defined')
 
@@ -81,3 +82,13 @@ export const extractUpdatableMetadataFromProfile = ({ name, nick, bio, website, 
   website,
   collections
 })
+
+export const getUserCollectionsByUuid = async (uuid: string): Promise<any> => {
+  const users = await auth0ManagementClient.getUsers({ q: `user_metadata.uuid="${uuid}"` })
+
+  if (users == null || (users != null && users.length === 0)) throw new Error('User not found')
+
+  if (users != null && users.length > 1) throw new Error('Found multiple users for ' + uuid)
+
+  return users[0].user_metadata?.collections ?? INITIAL_STATE
+}

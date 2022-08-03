@@ -1,7 +1,7 @@
 import { signIn, useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 import { APIFavouriteCollections } from '../../pages/api/user/fav'
-
+import { userCollectionsStore } from '../../js/stores/collections'
 interface Props {
   climbId?: string
   areaId?: string
@@ -31,8 +31,17 @@ export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Elemen
   const [isFav, setIsFav] = useState<boolean>(false)
   const session = useSession()
 
-  console.log('session.data', session.data)
+  // useEffect(() => {
+  //   console.log('#sessions', session)
+  //   if (session?.status === 'authenticated') {
+  //     // void userCollectionsStore.useStore().persist.rehydrate()
+  //     // console.log()
 
+  //     // void userCollectionsStore.set.load(session.data?.user.metadata.uuid)
+  //   }
+  // }, [session])
+
+  console.log('#UI user favs', userCollectionsStore.useStore().climbCollections.favourites)
   useEffect(() => {
     setLoading(true)
     fetch('/api/user/fav')
@@ -67,6 +76,9 @@ export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Elemen
   }, [climbId, areaId])
 
   const toggle = (): void => {
+    if (climbId != null) {
+      userCollectionsStore.set.addClimb(climbId)
+    }
     // Choose operation purely on what the current visual
     // state of the button is.
     setLoading(true)

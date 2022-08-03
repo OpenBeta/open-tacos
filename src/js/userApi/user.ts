@@ -19,3 +19,20 @@ export const doesUsernameExist = AwesomeDebouncePromise(
   _checkUsername,
   350
 )
+
+const _loadCollections = async (): Promise<any> => {
+  try {
+    const res = await client.get('/api/user/fav2')
+    if (res.status === 200) {
+      return res.data
+    }
+    return null
+  } catch (e) {
+    return null
+  }
+}
+
+export const loadCollections = AwesomeDebouncePromise(
+  _loadCollections,
+  5000
+)
