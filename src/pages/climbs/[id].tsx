@@ -118,7 +118,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
             </div>
 
             <div className='pl-1'>
-            <ImportFromMtnProj />
+              <ImportFromMtnProj />
             </div>
           </div>
 
