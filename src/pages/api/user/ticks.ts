@@ -116,7 +116,10 @@ const handler: NextApiHandler<any> = async (req, res) => {
             dateClimbed: tick.Date,
             grade: tick.Rating
           }
-          collections.tickCollections[tick.mp_id].push(newTick)
+          if(tick.mp_id in collections.tickCollections)
+            collections.tickCollections[tick.mp_id].push(newTick)
+          else collections.tickCollections[tick.mp_id] = [newTick]
+          
         })
         // check to see if tick collections exists
         meta.collections = {
