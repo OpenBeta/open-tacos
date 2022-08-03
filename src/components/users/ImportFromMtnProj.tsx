@@ -78,6 +78,24 @@ function ImportFromMtnProj (): JSX.Element | null {
       }).catch(console.error)
   }, [session])
 
+  useEffect(() => {
+    // if the user is authenticated we want to show the import your ticks modal
+    // then we check to see if they have a ticks imported flag set
+    // if it is, set show to the opposite of whatever it is
+    // otherwise don't show the modal
+    fetch('/api/user/profile')
+      .then(async res => await res.json())
+      .then((profile) => {
+        if (profile?.ticksImported !== null) {
+          setShow(profile.ticksImported !== true)
+        } else if (session.status === 'authenticated') {
+          setShow(true)
+        } else {
+          setShow(false)
+        }
+      }).catch(console.error)
+  }, [session])
+
   return (
   // if the modal prop is true we want to render this component as a notification/modal
   // otherwise we want it to be a button
