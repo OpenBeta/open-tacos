@@ -124,11 +124,10 @@ const handler: NextApiHandler<any> = async (req, res) => {
         }
         console.log(collections)
         await metadataClient.updateUserMetadata(meta)
-        res.status(200).json({'message' :'success'})
+        res.status(200).json({ message: 'success' })
       }
     }
   } catch (e) {
-    console.log(e)
     res.status(500).json({ error: e.message })
   }
 }
