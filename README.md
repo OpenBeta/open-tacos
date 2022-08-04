@@ -1,6 +1,6 @@
 <p align="center" style="padding-top:1rem">
   <a href="https://openbeta.io">
-    <img alt="OpenTacos" src="public/tortilla.png" width="60" />
+    <img alt="OpenBeta logo" src="public/openbeta-logo-192x192.png" width="60" />
   </a>
 </p>
 <h1 align="center">
@@ -12,7 +12,8 @@
   </strong>
 </p>
 <p align="center">
-  We're building the first <i>free</i> and <i>open source</i> rock climbing catalog.  </br>The project is currently in MVP stage.  We're looking for feedback from climbers. <br> Chat with the dev team on <a href="https://discord.gg/fY9DbRav8h">Discord</a>.
+  We're building the first <i>free</i> and <i>open source</i> rock climbing catalog.  </br>The project is currently in MVP stage.<br>
+  <b>We'd love to hear your feedback.</b>  Chat with the dev team on <a href="https://discord.gg/fY9DbRav8h">Discord</a>.
 </p>
 
 <h2 align="center">
@@ -118,6 +119,10 @@ yarn dev-local
 ## How to contribute
 
 See our general [How to contribute guide](https://docs.openbeta.io/how-to-contribute/overview) for more details.
+
+## Support Us
+
+OpenBeta is free because we want to make climbing information accessible for everyone.  Please consider [making a donation today](https://opencollective.com/openbeta).
 
 ## Contributors
 
