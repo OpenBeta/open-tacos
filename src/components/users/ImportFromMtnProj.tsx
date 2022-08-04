@@ -1,81 +1,43 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useEffect, useState } from 'react'
 import { Transition } from '@headlessui/react'
 import { DocumentDownloadIcon } from '@heroicons/react/outline'
 import { XIcon } from '@heroicons/react/solid'
-import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
-import { stagingGraphQLClient } from '../../js/graphql/Client'
-import { MUTATION_IMPORT_TICKS } from '../../js/graphql/fragments'
 
 const pattern = /^https:\/\/www.mountainproject.com\/user\/\d{9}\/[a-zA-Z-]*/
 
 function ImportFromMtnProj (): JSX.Element | null {
   const [mpUID, setMPUID] = useState('')
   const session = useSession()
-  const [show, setShow] = useState<boolean>(false)
+  const [show, setShow] = useState(false)
   const [showInput, setShowInput] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [errors, setErrors] = useState<string[]>([])
-  const [addTicks] = useMutation(
-    MUTATION_IMPORT_TICKS, {
-      client: stagingGraphQLClient,
-      errorPolicy: 'none'
-    })
-
-  async function dontShowAgain (): Promise<void> {
-    setLoading(true)
-    const res = await fetch('/api/user/ticks', {
-      method: 'PUT',
-      body: ''
-    })
-    if (res.status === 200) {
-      setShow(false)
-    } else {
-      setErrors(['Sorry, something went wrong. Please try again later'])
-    }
-    setLoading(false)
-  }
 
   async function getTicks (): Promise<void> {
-    // get the ticks and add it to the database
-    if (pattern.test(mpUID)) {
-      const res = await fetch('/api/user/ticks', {
-        method: 'POST',
-        body: JSON.stringify(mpUID)
-      })
-      if (res.status === 200) {
-        setShow(false)
-        const { ticks } = await res.json()
-        await addTicks({
-          variables: {
-            input: ticks
-          }
-        })
-      } else {
-        setErrors(['Sorry, something went wrong. Please try again later'])
-      }
+    // get the ticks and add it to the users metadata
+    // need regex to verify mtn project ID
+    const ret = await fetch('/api/user/ticks', {
+      method: 'PUT',
+      body: JSON.stringify(mpUID)
+    })
+    const collections = await ret.json()
+    if (ret.status === 200) {
+      console.log(collections)
+      setShow(false)
+      // do the fetch from mtn project and store that data in the Auth0 metadata
     } else {
-      // handle errors
-      setErrors(['Please input a valid Mountain Project ID'])
+      console.log(ret)
     }
   }
 
   useEffect(() => {
     // if the user is authenticated we want to show the import your ticks modal
+    console.log(session.data?.user?.metadata?.collections)
+    if (session.status === 'authenticated') setShow(true)
     // then we check to see if they have a ticks imported flag set
     // if it is, set show to the opposite of whatever it is
-    // otherwise don't show the modal
-    fetch('/api/user/profile')
-      .then(async res => await res.json())
-      .then((profile) => {
-        if (profile?.ticksImported !== null) {
-          setShow(profile.ticksImported !== true)
-        } else if (session.status === 'authenticated') {
-          setShow(true)
-        } else {
-          setShow(false)
-        }
-      }).catch(console.error)
+    if (session.data?.user?.metadata?.ticksImported != null) {
+      setShow(!session.data?.user?.metadata?.ticksImported)
+    }
   }, [session])
 
   return (
@@ -97,14 +59,13 @@ function ImportFromMtnProj (): JSX.Element | null {
             leaveFrom='opacity-100'
             leaveTo='opacity-0'
           >
-            <div className='max-w-xl w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden'>
+            <div className='max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden'>
               <div className='p-4'>
                 <div className='flex items-start'>
                   <div className='flex-shrink-0'>
                     <DocumentDownloadIcon className='h-6 w-6 text-gray-400' aria-hidden='true' />
                   </div>
                   <div className='ml-3 w-0 flex-1 pt-0.5'>
-                    {(errors != null) && errors.length > 0 && errors.map((err, i) => <p className='mt-2 text-ob-primary' key={i}>{err}</p>)}
                     <p className='text-sm font-medium text-gray-900'>{showInput ? 'Input your mountain project profile link' : 'Import your ticks from Mtn Project'}</p>
                     {!showInput &&
                       <p className='mt-1 text-sm text-gray-500'>
@@ -120,7 +81,7 @@ function ImportFromMtnProj (): JSX.Element | null {
                             value={mpUID}
                             onChange={(e) => setMPUID(e.target.value)}
                             className='focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
-                            placeholder='https://www.mountainproject.com/user/123456789/username'
+                            placeholder='https://www.mountainproject.com/user/200381859/brendan-downing'
                           />
                         </div>
                       </div>}
@@ -129,9 +90,7 @@ function ImportFromMtnProj (): JSX.Element | null {
                         <button
                           type='button'
                           onClick={() => setShowInput(true)}
-                          className='text-center p-2 border-2 rounded-xl border-ob-primary transition
-                          text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
-                          hover:text-white w-32 font-bold'
+                          className='bg-white rounded-md text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                         >
                           Show me how
                         </button>}
@@ -139,18 +98,15 @@ function ImportFromMtnProj (): JSX.Element | null {
                         <button
                           type='button'
                           onClick={getTicks}
-                          className='text-center p-2 border-2 rounded-xl border-ob-primary transition
-                          text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
-                          hover:text-white w-46 font-bold'
+                          className='bg-white rounded-md text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                         >
                           Get my ticks!
                         </button>}
                       <button
                         type='button'
-                        onClick={dontShowAgain}
                         className='bg-white rounded-md text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                       >
-                        {loading ? 'Working...' : "Don't show again"}
+                        Don't show again
                       </button>
                     </div>
                   </div>

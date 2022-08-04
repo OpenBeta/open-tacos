@@ -70,19 +70,17 @@ const handler: NextApiHandler<any> = async (req, res) => {
           }
           tickCollection.push(newTick)
         })
-        // set the user flag to true, so the popup doesn't show anymore and
-        // update the metadata
-        meta.ticksImported = true
+
+        meta.collections = {
+          tickCollections: collections.tickCollections
+        }
+
+        // check to see if the ticks imported flag exists, if not create it
+        if (meta?.ticksImported != null) meta.ticksImported = true
+        else meta.ticksImported = true
         await metadataClient.updateUserMetadata(meta)
-        // return the new ticks object
-        res.json({ ticks: tickCollection })
-        res.end()
-        return
+        res.status(200).json({ tickCollections: collections.tickCollections })
       }
-    } else if (req.method === 'PUT') {
-      meta.ticksImported = true
-      await metadataClient.updateUserMetadata(meta)
-      res.status(200).end()
     }
   } catch (e) {
     res.status(500).json({ error: e.message })
