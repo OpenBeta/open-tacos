@@ -4,16 +4,18 @@ import { getSession } from 'next-auth/react'
 import { reshapeAuth0UserToProfile, extractUpdatableMetadataFromProfile, auth0ManagementClient } from '../../../js/auth/ManagementClient'
 import { IUserProfile } from '../../../js/types/User'
 
-const allowedFields = ['name', 'nick', 'bio', 'website', 'collections'] as const
+const allowedFields = ['name', 'nick', 'bio', 'website', 'ticksImported', 'collections'] as const
 type AllowedField = typeof allowedFields[number]
 
 const isString = (value: any): value is string => typeof value === 'string'
+const isBoolean = (value: any): value is boolean => typeof value === 'boolean'
 
 const dataTypeCheck: { [field in AllowedField]: (value: any) => boolean } = {
   name: isString,
   nick: isString,
   bio: isString,
   website: isString,
+  ticksImported: isBoolean,
   collections: (value: any) => typeof value === 'object' && value != null
 }
 /**
@@ -38,6 +40,7 @@ export interface Auth0UserMetadata {
   uuid?: string
   bio?: string
   website?: string
+  ticksImported?: boolean
   collections?: {
     /** Users can organize entities into their own 'climbing playlists'
      * Strictly speaking, this should always be mutated as a SET rather than an
