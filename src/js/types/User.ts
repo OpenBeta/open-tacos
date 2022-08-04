@@ -1,3 +1,5 @@
+import { Tick } from '../../pages/api/user/metadataClient'
+
 export interface IReadOnlyUserMetadata {
   uuid: string
   roles: string[]
@@ -9,7 +11,6 @@ export interface IWritableUserMetadata {
   nick: string
   bio: string
   website?: string
-  ticksImported?: boolean
   ticksImported?: boolean
   collections?: {
     /** Users can organize entities into their own 'climbing playlists'
