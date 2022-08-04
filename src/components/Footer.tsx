@@ -35,9 +35,9 @@ function Footer (): JSX.Element {
         <hr className='my-6 md:my-4 border-black' />
         <div className='flex flex-col md:flex-row gap-y-4 md:gap-y-0 items-center justify-between'>
           <div className='flex flex-col items-center md:items-start gap-y-2'>
-            <a
+            <a href='https://docs.openbeta.io'
               className='no-underline hover:underline'
-              href='https://docs.openbeta.io'
+              href='https://collective.openbeta.io/'
             >
               OpenBeta Collective
             </a>
