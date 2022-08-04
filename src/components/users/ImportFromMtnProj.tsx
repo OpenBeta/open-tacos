@@ -5,25 +5,25 @@ import { XIcon } from '@heroicons/react/solid'
 
 // regex: ^\d{9}\/ -- matches the first 9 digits and a slash
 
-function ImportFromMtnProj ({ }): JSX.Element | null {
-  const [mpUID, setMPUID] = useState('')
+function ImportFromMtnProj (): JSX.Element | null {
+  // const [mpUID, setMPUID] = useState('')
   const [show, setShow] = useState(true)
 
-  async function getTicks (): Promise<void> {
-    // get the ticks and add it to the users metadata
-    // need regex to verify mtn project ID
-    const ret = await fetch('/api/user/ticks', {
-      method: 'PUT',
-      body: JSON.stringify(mpUID)
-    })
-    const collections = await ret.json()
-    if (ret.status === 200) {
-      console.log(collections)
-      // do the fetch from mtn project and store that data in the Auth0 metadata
-    } else {
-      console.log(ret)
-    }
-  }
+  // async function getTicks (): Promise<void> {
+  //   // get the ticks and add it to the users metadata
+  //   // need regex to verify mtn project ID
+  //   const ret = await fetch('/api/user/ticks', {
+  //     method: 'PUT',
+  //     body: JSON.stringify(mpUID)
+  //   })
+  //   const collections = await ret.json()
+  //   if (ret.status === 200) {
+  //     console.log(collections)
+  //     // do the fetch from mtn project and store that data in the Auth0 metadata
+  //   } else {
+  //     console.log(ret)
+  //   }
+  // }
 
   return (
   // if the modal prop is true we want to render this component as a notification/modal
