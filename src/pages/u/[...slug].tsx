@@ -9,12 +9,11 @@ import { getTagsByMediaId } from '../../js/graphql/api'
 import { getUserImages } from '../../js/sirv/SirvClient'
 import { MediaTagWithClimb, IUserProfile, MediaType } from '../../js/types'
 import PublicProfile from '../../components/users/PublicProfile'
-import { getUserProfileByNick, getAllUsersMetadata } from '../../js/auth/ManagementClient'
+import { getUserProfileByNick } from '../../js/auth/ManagementClient'
 import usePermissions from '../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../js/hooks/seo'
 import useMediaDataStore from '../../js/hooks/useMediaDS'
 import type { UserGalleryProps } from '../../components/media/UserGallery'
-
 interface UserHomeProps {
   uid: string
   postId: string | null
@@ -92,15 +91,15 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
 export default UserHomePage
 
 export async function getStaticPaths (): Promise<any> {
-  let paths: any = []
-  try {
-    const users = await getAllUsersMetadata()
-    paths = users.map(user => ({ params: { slug: [user.user_metadata.nick] } }))
-  } catch (e) {
-    console.log('Warning: Error fetching user metadata from Auth provider.  User profile pages will not be pre-generated at build time.')
-  }
+  // let paths: any = []
+  // try {
+  //   const users = await getAllUsersMetadata()
+  //   paths = users.map(user => ({ params: { slug: [user.user_metadata.nick] } }))
+  // } catch (e) {
+  //   console.log('Warning: Error fetching user metadata from Auth provider.  User profile pages will not be pre-generated at build time.')
+  // }
   return {
-    paths,
+    paths: [],
     fallback: true
   }
 }
