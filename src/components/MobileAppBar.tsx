@@ -45,7 +45,7 @@ const AuthenticatedNav = (): JSX.Element => (
 
 const LoginButton = (): JSX.Element => (
   <Button
-    label='Login'
+    label={<span><span className='inline md:hidden'>Login</span><span className='hidden md:inline text-sm'>Become A Contributor</span></span>}
     onClick={async () => await signIn('auth0', { callbackUrl: '/api/user/me' })}
     variant={ButtonVariant.SOLID_PRIMARY}
   />)

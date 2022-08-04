@@ -58,7 +58,7 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, s
 const navListDefault: JSX.Element[] = [
   {
     action: async () => await signIn('auth0', { callbackUrl: '/api/user/me' }),
-    title: 'Login',
+    title: 'Become A Contributor',
     variant: ButtonVariant.SOLID_PRIMARY
   },
   {
@@ -75,9 +75,9 @@ const navListDefault: JSX.Element[] = [
     variant: ButtonVariant.OUTLINED_SECONDARY
   }
 ].map(
-  ({ action, variant, title, route }: NavListItem) => (
+  ({ action, variant, title, route }: NavListItem, index) => (
     <NavMenuButton
-      key={title}
+      key={index}
       onClick={action}
       variant={variant}
       label={title}
