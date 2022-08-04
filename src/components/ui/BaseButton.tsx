@@ -46,7 +46,7 @@ export const BaseButton = React.forwardRef<HTMLInputElement, BaseButtonProps>(({
       onClick={onClick}
       ref={ref}
       className={classnames(
-        'inline-flex space-x-2 items-center',
+        'inline-flex space-x-2 items-center whitespace-nowrap',
         'cursor-pointer disabled:cursor-auto disabled:opacity-50',
         variant,
         SIZE[sz]

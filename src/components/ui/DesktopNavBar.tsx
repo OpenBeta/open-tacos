@@ -1,7 +1,7 @@
 import Bar from './Bar'
 import { ButtonVariant } from './BaseButton'
 export interface NavListItem {
-  title: string
+  title: string | JSX.Element
   route?: string
   variant?: ButtonVariant
   action?: () => void
@@ -22,7 +22,7 @@ export default function DesktopNavBar ({ expanded, branding, search, navList }: 
     >
       <div className=''>{branding}</div>
 
-      <div className=''>
+      <div className='w-9/12 2xl:w-full'>
         {search}
       </div>
 
