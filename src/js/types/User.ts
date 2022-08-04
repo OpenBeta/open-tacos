@@ -1,3 +1,5 @@
+import { Tick } from '../../pages/api/user/metadataClient'
+
 export interface IReadOnlyUserMetadata {
   uuid: string
   roles: string[]
