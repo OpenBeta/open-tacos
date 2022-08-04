@@ -53,7 +53,8 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
         showFilterBar={false}
       >
         <div className='max-w-screen-2xl mx-auto flex flex-col items-center 2xl:px-8'>
-          {userProfile != null && <PublicProfile userProfile={userProfile} />}
+
+          <PublicProfile userProfile={userProfile} />
 
           {isAuthorized && (
             <div className='flex justify-center mt-8 text-secondary text-sm whitespace-normal px-4 lg:px-0'>
