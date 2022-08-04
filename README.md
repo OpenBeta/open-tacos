@@ -1,10 +1,10 @@
 <p align="center" style="padding-top:1rem">
   <a href="https://openbeta.io">
-    <img alt="OpenTacos" src="public/tortilla.png" width="60" />
+    <img alt="OpenBeta logo" src="public/openbeta-logo-192x192.png" width="60" />
   </a>
 </p>
 <h1 align="center">
-  OpenTacos v0.3
+  OpenBeta v0.4
 </h1>
 <p align="center">
   <strong>
@@ -12,11 +12,12 @@
   </strong>
 </p>
 <p align="center">
-  OpenTacos is a free and open source catalog of rock climbing routes.  </br>We are currently in MVP stage looking for feedback from climbers. Chat with the dev team on <a href="https://discord.gg/fY9DbRav8h">Discord</a>.
+  We're building the first <i>free</i> and <i>open source</i> rock climbing catalog.  </br>The project is currently in MVP stage.<br>
+  <b>We'd love to hear your feedback.</b>  Chat with the dev team on <a href="https://discord.gg/fY9DbRav8h">Discord</a>.
 </p>
 
 <h2 align="center">
-  <a href="https://tacos.openbeta.io">Take me to the site</a> 🚀
+  <a href="https://openbeta.io">Take me to the site</a> 🚀
 </h2>
 
 <p align="center">
@@ -28,7 +29,7 @@
 
 ## Screenshot
 
-<img alt="OpenTacos screenshot" src="./opentacos-area-explorer.png"/>
+<img alt="OpenBeta screenshot" src="./openbeta-v0.4-screenshot.png"/>
 
 ## Tech stack
 
@@ -87,14 +88,15 @@ The application is now available at http://localhost:3000
 
 If you just want to run the app locally without installing node, npm, etc., you can do so with Docker.
 
-Requirements: [Docker](https://docs.docker.com/get-docker/)
+**Requirements:** [Docker](https://docs.docker.com/get-docker/)
 
 ```
 docker compose up
 ```
 
-Changes in your local ./src file will be available on localhost:3000
-If you install new packages you will need to rebuild the docker image with
+The application is now available at http://localhost:3000.  The project will rebuild automatically when you make changes to files in `./src` dir.
+  
+Note: If you install new NPM packages, you will need to rebuild the docker image with
 
 ```
 docker compose up --build
@@ -119,6 +121,10 @@ yarn dev-local
 ## How to contribute
 
 See our general [How to contribute guide](https://docs.openbeta.io/how-to-contribute/overview) for more details.
+
+## Support Us
+
+OpenBeta is free because we want to make climbing information accessible for everyone.  Please consider [making a donation today](https://opencollective.com/openbeta).
 
 ## Contributors
 
