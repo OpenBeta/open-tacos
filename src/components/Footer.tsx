@@ -7,7 +7,7 @@ import { Button, ButtonVariant } from '../components/ui/BaseButton'
 
 function Footer (): JSX.Element {
   return (
-    <footer className='bg-contrast text-primary text-sm'>
+    <footer className='bg-contrast text-primary text-sm pb-8 lg:pb-24'>
       <nav className='max-w-7xl p-4 text-sm mx-auto'>
         <div className='mt-4 flex flex-col sm:flex-row gap-y-6 md:gap-y-0 items-center md:items-end justify-center md:justify-between'>
           <div className='align-center'>

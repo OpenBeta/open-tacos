@@ -1,7 +1,6 @@
 import Image from 'next/image'
-
+import { PhotographIcon } from '@heroicons/react/outline'
 import { OpenverseImage } from '.'
-import LicenseIcons from './LicenseIcons'
 
 export function DefaultImage (): JSX.Element {
   return (
@@ -17,19 +16,21 @@ export function FeatureImage ({ image }: { image: OpenverseImage }): JSX.Element
     <div className='relative block'>
       <div
         className='z-0 aspect-[4/3] overflow-hidden block relative'
-        data-tooltip={image.attribution}
-      >
-        <Image
-          src={image.url}
-          alt=''
-          objectFit='cover'
-          objectPosition='center'
-          layout='fill'
-          priority={false}
-        />
+      >{image.url == null
+        ? (
+          <div className='bg-contrast h-full flex flex-cols items-center justify-center'>
+            <div><PhotographIcon className='stroke-1 stroke-gray-400 w-12 h-12' /></div>
+          </div>
+          )
+        : <Image
+            src={image.url}
+            alt=''
+            objectFit='cover'
+            objectPosition='center'
+            layout='fill'
+            priority={false}
+          />}
       </div>
-      <LicenseIcons image={image} />
     </div>
-
   )
 }
