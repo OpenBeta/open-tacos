@@ -116,18 +116,15 @@ const handler: NextApiHandler<any> = async (req, res) => {
             dateClimbed: tick.Date,
             grade: tick.Rating
           }
-          if(tick.mp_id in collections.tickCollections)
-            collections.tickCollections[tick.mp_id].push(newTick)
-          else collections.tickCollections[tick.mp_id] = [newTick]
-          
+          // check to see if tick for the climb exists in tick collections
+          if (tick.mp_id in collections.tickCollections) { collections.tickCollections[tick.mp_id].push(newTick) } else collections.tickCollections[tick.mp_id] = [newTick]
         })
-        // check to see if tick collections exists
+
         meta.collections = {
           tickCollections: collections.tickCollections
         }
-        console.log(collections)
         await metadataClient.updateUserMetadata(meta)
-        res.status(200).json({ message: 'success' })
+        res.status(200).json({ tickCollections: collections.tickCollections })
       }
     }
   } catch (e) {
