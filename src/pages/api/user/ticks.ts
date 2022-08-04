@@ -123,6 +123,10 @@ const handler: NextApiHandler<any> = async (req, res) => {
         meta.collections = {
           tickCollections: collections.tickCollections
         }
+
+        // check to see if the ticks imported flag exists, if not create it
+        if (meta?.ticksImported != null) meta.ticksImported = true
+        else meta.ticksImported = true
         await metadataClient.updateUserMetadata(meta)
         res.status(200).json({ tickCollections: collections.tickCollections })
       }
