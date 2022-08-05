@@ -238,6 +238,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "PrajwalBorkar",
+      "name": "Prajwal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/48290911?v=4",
+      "profile": "https://www.prajwalborkar.me/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
