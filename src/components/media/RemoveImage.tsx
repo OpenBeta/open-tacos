@@ -1,6 +1,8 @@
 import { actions } from '../../js/stores'
 import { removePhoto } from '../../js/userApi/media'
 import { MediaType } from '../../js/types'
+import { useSession } from 'next-auth/react'
+import useReturnToProfile from '../../js/hooks/useReturnToProfile'
 
 interface RemoveImageProps {
   imageInfo: MediaType
@@ -8,21 +10,31 @@ interface RemoveImageProps {
 }
 
 export default function RemoveImage ({ imageInfo, tagCount }: RemoveImageProps): JSX.Element | null {
+  const { data } = useSession()
+  const { toMyProfile } = useReturnToProfile()
+
   const onRemove = async (e): Promise<void> => {
+    if (data?.user?.metadata == null) {
+      console.log('## Error: user metadata not found')
+      return
+    }
+    const { nick } = data.user.metadata
+
     const filename: string = imageInfo.filename
     e.preventDefault()
-    console.log(imageInfo)
-    console.log(tagCount)
-    await removePhoto(filename)
-    //   const photo = await remove(imageInfo.filename) // direct to Sirv
-    //   console.log(photo)
-    await actions.media.removeImage(imageInfo.mediaId)
+    if (window.confirm('Are you sure?')) {
+      await actions.media.removeImage(imageInfo.mediaId, nick)
+      await removePhoto(filename)
+      await toMyProfile()
+      console.log('Returned to profile')
+    }
   }
 
   return (
 
     <>
-      {tagCount > 0 ? <span>Remove tags to delete image</span> : <button onClick={onRemove}>Delete Image</button>}
+      <div><button type='button' onClick={onRemove} disabled={tagCount > 0} className='inline-flex space-x-2 items-center bg-custom-primary whitespace-nowrap cursor-pointer disabled:cursor-auto disabled:opacity-20 border rounded-md border-gray-800 text-black drop-shadow-sm hover:ring-1 px-5 py-1 text-sm'>Remove Photo</button></div>
+      {tagCount > 0 ? <p className='text-sm py-2'>Remove tags to delete image</p> : ''}
     </>
 
   )
