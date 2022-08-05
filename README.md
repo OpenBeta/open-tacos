@@ -166,6 +166,7 @@ Thanks goes to these wonderful people:
     <td align="center"><a href="https://github.com/dlants"><img src="https://avatars.githubusercontent.com/u/1186977?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Denis Lantsman</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=dlants" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/BeaulieuC"><img src="https://avatars.githubusercontent.com/u/99035899?v=4?s=100" width="100px;" alt=""/><br /><sub><b>BeaulieuC</b></sub></a><br /><a href="#design-BeaulieuC" title="Design">🎨</a> <a href="#ideas-BeaulieuC" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/atstp"><img src="https://avatars.githubusercontent.com/u/5891072?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Daniel</b></sub></a><br /><a href="#ideas-atstp" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://www.prajwalborkar.me/"><img src="https://avatars.githubusercontent.com/u/48290911?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Prajwal</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=PrajwalBorkar" title="Code">💻</a></td>
   </tr>
 </table>
 
