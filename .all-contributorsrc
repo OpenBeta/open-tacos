@@ -200,6 +200,53 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "amandril",
+      "name": "alex",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21322646?v=4",
+      "profile": "http://alexmandrila.com",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
+    },
+    {
+      "login": "dlants",
+      "name": "Denis Lantsman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1186977?v=4",
+      "profile": "https://github.com/dlants",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "BeaulieuC",
+      "name": "BeaulieuC",
+      "avatar_url": "https://avatars.githubusercontent.com/u/99035899?v=4",
+      "profile": "https://github.com/BeaulieuC",
+      "contributions": [
+        "design",
+        "ideas"
+      ]
+    },
+    {
+      "login": "atstp",
+      "name": "Daniel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5891072?v=4",
+      "profile": "https://github.com/atstp",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "login": "PrajwalBorkar",
+      "name": "Prajwal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/48290911?v=4",
+      "profile": "https://www.prajwalborkar.me/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

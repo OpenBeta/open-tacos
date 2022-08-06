@@ -44,7 +44,7 @@ const UserSinglePostView: NextPage<UserSinglePostViewProps> = ({ uid, postId = n
       <SeoTags
         description='Share your climbing adventure photos and contribute to the Wiki.'
         title={pageTitle}
-        images={pageImages}
+        images={serverMainMedia?.filename != null ? [serverMainMedia.filename] : pageImages}
         author={author}
       />
 

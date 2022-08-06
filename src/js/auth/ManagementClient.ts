@@ -46,7 +46,8 @@ export const reshapeAuth0UserToProfile = (user: User): IUserProfile => {
     bio: umeta?.bio ?? '',
     roles: umeta?.roles ?? [],
     loginsCount: umeta?.loginsCount ?? 0,
-    website: umeta?.website ?? ''
+    website: umeta?.website ?? '',
+    collections: umeta.collections ?? {}
   }
 }
 
@@ -73,9 +74,10 @@ export const doesUserNameExist = async (nick: string): Promise<boolean> => {
   throw new Error('Unable to search the user database')
 }
 
-export const extractUpdatableMetadataFromProfile = ({ name, nick, bio, website }: IWritableUserMetadata): IWritableUserMetadata => ({
+export const extractUpdatableMetadataFromProfile = ({ name, nick, bio, website, collections }: IWritableUserMetadata): IWritableUserMetadata => ({
   name,
   nick,
   bio,
-  website
+  website,
+  collections
 })

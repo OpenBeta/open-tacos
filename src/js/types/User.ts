@@ -9,6 +9,22 @@ export interface IWritableUserMetadata {
   nick: string
   bio: string
   website?: string
+  collections?: {
+    /** Users can organize entities into their own 'climbing playlists'
+     * Strictly speaking, this should always be mutated as a SET rather than an
+     * array. JSON does not support set serialization, but we ideally wish to minimize
+     * the actual space, so do whatever needs to be done to avoid ID duplicates.
+     * The key of each collection is its name.
+     */
+    climbCollections?: {[key: string]: string[]}
+    /**
+     * Areas are seperated into their own collection rather than mixing them in with
+     * the climbs. Partially because they are different entities altogether, and partly
+     * because it seems sensible to me.
+     * The key of each collection is its name.
+     */
+    areaCollections?: {[key: string]: string[]}
+  }
 }
 
 export type IUserMetadata = IWritableUserMetadata & IReadOnlyUserMetadata
