@@ -34,12 +34,12 @@ module.exports = withMDX({
       {
         source: '/blog',
         destination: 'https://openbeta.substack.com/',
-        permanent: true
+        permanent: false
       },
       {
         source: '/blog/openbeta-vs-mountain-project-vs-thecrag',
         destination: 'https://openbeta.substack.com/p/openbeta-vs-mountainproject-vs-thecrag',
-        permanent: true
+        permanent: false
       }
     ]
   }
