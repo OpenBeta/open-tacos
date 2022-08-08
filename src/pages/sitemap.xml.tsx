@@ -55,7 +55,10 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
     production: 'https://openbeta.io'
   }[process.env.NODE_ENV]
 
-  const staticPages: string[] = ['https://openbeta.io/about']
+  const staticPages: string[] = [
+    '/about',
+    '/blog',
+    '/blog/openbeta-vs-mountain-project-vs-thecrag']
 
   //  classic climbs pulled from https://www.climbing.com/places/the-50-classic-climbs-of-north-america/
   const classicClimbs: string[] = [
@@ -105,7 +108,7 @@ export const getServerSideProps = async ({ res }): Promise<object> => {
         .map((url) => {
           return `
             <url>
-              <loc>${url}</loc>
+              <loc>${baseUrl}${url}</loc>
               <changefreq>monthly</changefreq>
               <priority>1.0</priority>
             </url>
