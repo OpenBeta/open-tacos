@@ -12,16 +12,14 @@ interface NavBarProps {
 export default function NextPreviousControl ({ currentImageIndex, onChange, max }: NavBarProps): JSX.Element {
   useHotkeys('left', () => {
     if (currentImageIndex > 0) {
-      currentImageIndex = currentImageIndex - 1
-      onChange(currentImageIndex)
+      onChange(currentImageIndex - 1)
     }
-  })
+  }, [currentImageIndex])
   useHotkeys('right', () => {
     if (currentImageIndex < max) {
-      currentImageIndex = currentImageIndex + 1
-      onChange(currentImageIndex)
+      onChange(currentImageIndex + 1)
     }
-  })
+  }, [currentImageIndex])
   return (
     <div className='absolute w-full flex items-center justify-between px-2'>
       {currentImageIndex > 0

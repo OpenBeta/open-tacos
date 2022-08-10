@@ -15,6 +15,7 @@ interface XSearchProps {
 export default function XSearch ({ isMobile = true, placeholder = 'Climb search' }: XSearchProps): JSX.Element {
   return (
     <Autocomplete
+      forceFocus={false}
       id={CUSTOM_CLASSES.root}
       isMobile={isMobile}
       placeholder={placeholder}
