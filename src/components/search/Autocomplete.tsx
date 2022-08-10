@@ -8,19 +8,22 @@ import classNames from 'classnames'
 interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
   isMobile: boolean
   containerClassname?: string
+  forceFocus: boolean
 }
 /**
  * Autocomplete widget based on Algolia Autocomplete
  * @param props
  * @returns
  */
-export const Autocomplete = (props: AutocompleteProps): JSX.Element => {
+export const Autocomplete = ({ forceFocus = false, ...otherProps }: AutocompleteProps): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    setTimeout(() => {
-      const element = document.querySelectorAll(`.${props.id as string} .aa-Input`)[0] as HTMLInputElement
-      element?.focus()
-    }, 200)
+    if (forceFocus) {
+      setTimeout(() => {
+        const element = document.querySelectorAll(`.${otherProps.id as string} .aa-Input`)[0] as HTMLInputElement
+        element?.focus()
+      }, 200)
+    }
   })
 
   useEffect(() => {
@@ -32,24 +35,24 @@ export const Autocomplete = (props: AutocompleteProps): JSX.Element => {
       defaultActiveItemId: 0,
       container: containerRef.current,
       renderer: { createElement, Fragment },
-      detachedMediaQuery: (props.isMobile) ? '' : 'none',
+      detachedMediaQuery: (otherProps.isMobile) ? '' : 'none',
       render ({ children }, root) {
         reactRender(children as ReactElement, root)
       },
-      ...props
+      ...otherProps
     })
 
     return () => {
       search.destroy()
     }
-  }, [props])
+  }, [otherProps])
 
   return (
     <div
       className={
         classNames(
-          props.isMobile ? '' : 'z-50 mx-auto',
-          props?.containerClassname)
+          otherProps.isMobile ? '' : 'z-50 mx-auto',
+          otherProps?.containerClassname)
       }
       ref={containerRef}
     />

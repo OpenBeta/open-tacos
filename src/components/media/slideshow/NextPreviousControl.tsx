@@ -1,4 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { Button, ButtonVariant } from '../../ui/BaseButton'
 
@@ -9,6 +10,16 @@ interface NavBarProps {
 }
 
 export default function NextPreviousControl ({ currentImageIndex, onChange, max }: NavBarProps): JSX.Element {
+  useHotkeys('left', () => {
+    if (currentImageIndex > 0) {
+      onChange(currentImageIndex - 1)
+    }
+  }, [currentImageIndex])
+  useHotkeys('right', () => {
+    if (currentImageIndex < max) {
+      onChange(currentImageIndex + 1)
+    }
+  }, [currentImageIndex])
   return (
     <div className='absolute w-full flex items-center justify-between px-2'>
       {currentImageIndex > 0

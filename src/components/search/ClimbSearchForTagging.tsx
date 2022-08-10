@@ -21,6 +21,7 @@ export default function ClimbSearchForTagging ({ isMobile = true, placeholder = 
       id={CUSTOM_CLASSES.root}
       isMobile={isMobile}
       placeholder={placeholder}
+      forceFocus
       getSources={async ({ query }) => {
         return await Promise.all([await TypesenseClimbNameSource(query, onSelect)])
       }}
