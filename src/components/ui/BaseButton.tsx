@@ -11,6 +11,8 @@ interface BaseButtonProps {
   type?: 'button' | 'reset' | 'submit'
   disabled?: boolean
   ariaLabel?: string
+  target?: string
+  rel?: string
 }
 
 export const BaseButton = React.forwardRef<HTMLInputElement, BaseButtonProps>(({
@@ -44,7 +46,7 @@ export const BaseButton = React.forwardRef<HTMLInputElement, BaseButtonProps>(({
       onClick={onClick}
       ref={ref}
       className={classnames(
-        'inline-flex space-x-2 items-center',
+        'inline-flex space-x-2 items-center whitespace-nowrap',
         'cursor-pointer disabled:cursor-auto disabled:opacity-50',
         variant,
         SIZE[sz]
@@ -65,11 +67,13 @@ export const Button = ({
   size = 'md',
   type = 'button',
   disabled: disable = false,
+  target = undefined,
+  rel = undefined,
   ariaLabel
 }: BaseButtonProps): JSX.Element => {
   if (href != null) {
     return (
-      <Link href={href} passHref>
+      <Link href={href} passHref target={target} rel={rel}>
         <a>
           <BaseButton
             onClick={onClick}

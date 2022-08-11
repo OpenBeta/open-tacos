@@ -1,63 +1,25 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Link from 'next/link'
-import axios from 'axios'
 import { shuffle } from 'underscore'
 
 import { AggregateType, AreaType, CountByDisciplineType, DisciplineStatsType } from '../../../js/types'
 import { getSlug, sanitizeName } from '../../../js/utils'
-import { OpenverseImage, OpenverseResponse } from '.'
-import { FeatureImage, DefaultImage } from './FeatureImage'
+import { FeatureImage } from './FeatureImage'
 import { SIRV_CONFIG } from '../../../js/sirv/SirvClient'
-
-const DEFAULT_IMAGE = {
-  url: '/tortilla.png',
-  license: '',
-  creator: '',
-  license_url: '',
-  attribution: ''
-}
-
-const RESULT_LIMIT = 10
-
-const LICENSES = 'CC0,BY,BY-NC-SA,BY-SA,BY-NC-ND'
 
 function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
   const { areaName, pathTokens, aggregate, metadata, totalClimbs, media } = area
-  const [image, setImage] = React.useState<OpenverseImage>(DEFAULT_IMAGE)
-
-  const mainQuery = ['rock', 'climbing', ...areaName.split(' ')]
-  const backupQuery = ['rock', 'mountain', ...areaName.split(' ')]
-
-  useEffect(() => {
-    if (media == null || media.length === 0) {
-      void fetchImages()
-    } else {
-      setImage({
-        url: `${SIRV_CONFIG.baseUrl ?? ''}${shuffle(media)[0].mediaUrl}?format=webp&h=300&q=90`,
-        license: 'All Rights Reserved',
-        creator: '',
-        license_url: '',
-        attribution: ''
-      })
-    }
-  }, [])
-
-  const fetchImages = async (): Promise<void> => {
-    let images = await findImages(mainQuery)
-    if (images === null) {
-      images = await findImages(backupQuery)
-    }
-    if (images !== null) {
-      pickOneFrom(images)
-    }
+  let imageUrl
+  if (media != null && media.length > 0) {
+    imageUrl = `${SIRV_CONFIG.baseUrl ?? ''}${shuffle(media)[0].mediaUrl}?format=webp&h=300&q=90`
   }
 
-  const pickOneFrom = (images: OpenverseImage[]): void => {
-    if (images.length > 0) {
-      const randomIndex = Math.floor(Math.random() * Math.min(RESULT_LIMIT, images.length))
-      const image: OpenverseImage = images[randomIndex]
-      setImage(image)
-    }
+  const image = {
+    url: imageUrl,
+    license: 'All Rights Reserved',
+    creator: '',
+    license_url: '',
+    attribution: ''
   }
 
   /**
@@ -91,8 +53,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
       <Link href={getSlug(metadata.areaId, metadata.leaf)} passHref>
         <a>
           <div className='m-4 lg:m-0'>
-            {image !== DEFAULT_IMAGE && <FeatureImage image={image} />}
-            {image === DEFAULT_IMAGE && <DefaultImage />}
+            <FeatureImage image={image} />
 
             <div className='mx-0 lg:mx-2 my-2.5'>
               <h3 className='whitespace-normal  font-semibold text-base truncate'>
@@ -111,19 +72,3 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
 }
 
 export default FeatureCard
-
-const findImages = async (query: string[]): Promise<OpenverseImage[]> => {
-  const queryString = query.join('+')
-  const source = 'wikimedia,flickr'
-  const url = `https://api.openverse.engineering/v1/images/?source=${source}&license=${LICENSES}&page_size=${RESULT_LIMIT}&page=1&q=${queryString}`
-
-  try {
-    const response = await axios.get<OpenverseResponse>(url)
-    if (response.status === 200) {
-      return response.data.results
-    }
-  } catch (e) {
-    console.warn(e)
-  }
-  return [DEFAULT_IMAGE]
-}

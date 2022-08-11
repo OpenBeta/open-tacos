@@ -56,7 +56,7 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
       .filter(i => i.totalClimbs > 0)
       // map the actual data we need into the item entity
       .map(child => ({
-        id: child.id,
+        id: child.metadata.areaId,
         name: child.areaName,
         description: child.content?.description,
         totalClimbs: child.totalClimbs,

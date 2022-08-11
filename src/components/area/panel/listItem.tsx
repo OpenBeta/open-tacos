@@ -33,6 +33,7 @@ export interface ListItemProps extends ListItemEntity {
   onFocus: (id: string) => void
   onClick: (id: string) => void
   selected: boolean
+  isFav: boolean
 }
 
 /** This component by iteself is not generic enough to use in arbitraty accordion
@@ -79,8 +80,11 @@ export default function ListItem (props: ListItemProps): JSX.Element {
       id={id}
     >
       <div className='flex flex-wrap items-baseline'>
-        <h4 className='w-full flex-1 text-lg font-semibold whitespace-nowrap truncate'>
+        <h4 className='w-full flex-1 text-lg font-semibold whitespace-nowrap truncate flex'>
           {name}
+          <span className='text-xs p-1'>
+            {props.isFav && (<div className=''>❤️</div>)}
+          </span>
         </h4>
 
         <div className='text-xs pr-6'>
