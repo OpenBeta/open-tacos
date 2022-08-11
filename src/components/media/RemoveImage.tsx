@@ -1,7 +1,9 @@
+import { useSession } from 'next-auth/react'
+
 import { actions } from '../../js/stores'
 import { removePhoto } from '../../js/userApi/media'
 import { MediaType } from '../../js/types'
-import { useSession } from 'next-auth/react'
+import { Button, ButtonVariant } from '../ui/BaseButton'
 
 interface RemoveImageProps {
   imageInfo: MediaType
@@ -17,13 +19,12 @@ export default function RemoveImage ({ imageInfo, tagCount, onImageDeleted }: Re
       console.log('## Error: user metadata not found')
       return
     }
-    const { nick } = data.user.metadata
 
     const filename: string = imageInfo.filename
     e.preventDefault()
     if (window.confirm('Are you sure?')) {
       const isRemoved = await removePhoto(filename)
-      await actions.media.removeImage(imageInfo.mediaId, nick)
+      await actions.media.removeImage(imageInfo.mediaId)
       if (isRemoved != null) {
         onImageDeleted()
       }
@@ -31,11 +32,14 @@ export default function RemoveImage ({ imageInfo, tagCount, onImageDeleted }: Re
   }
 
   return (
-
     <>
-      <div><button type='button' onClick={onRemove} disabled={tagCount > 0} className='inline-flex space-x-2 items-center bg-custom-primary whitespace-nowrap cursor-pointer disabled:cursor-auto disabled:opacity-20 border rounded-md border-gray-800 text-black drop-shadow-sm hover:ring-1 px-5 py-1 text-sm'>Remove Photo</button></div>
-      {tagCount > 0 ? <p className='text-sm py-2'>Remove tags to delete image</p> : ''}
+      <Button
+        label='Remove Photo'
+        onClick={onRemove}
+        variant={ButtonVariant.OUTLINED_DEFAULT}
+        disabled={tagCount > 0}
+      />
+      {tagCount > 0 && <p className='text-sm py-2'>Remove tags to delete image</p>}
     </>
-
   )
 }

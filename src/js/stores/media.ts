@@ -69,7 +69,7 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
         await revalidateServePage(uid)
       }
     },
-    removeImage: async (mediaId, uid) => {
+    removeImage: async (mediaId: string) => {
       const currentList = await get.imageList()
       let updatedList: MediaType[] = []
 
@@ -79,6 +79,7 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       })
 
       set.imageList(updatedList)
+      await revalidateServePage(get.uid())
     }
   })).extendActions((set, get, api) => ({
     /**
