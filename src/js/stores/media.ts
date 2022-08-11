@@ -70,15 +70,11 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       }
     },
     removeImage: async (mediaId, uid) => {
-      console.log('mediaId: ', mediaId)
-      console.log('uid: ', uid)
-
       const currentList = await get.imageList()
       let updatedList: MediaType[] = []
 
       updatedList = produce(currentList, draft => {
         const imageToRemove = draft.findIndex(image => image.mediaId === mediaId)
-        console.log('Deleting ', mediaId)
         if (imageToRemove !== -1) draft.splice(imageToRemove, 1)
       })
 

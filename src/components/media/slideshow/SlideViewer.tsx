@@ -65,6 +65,7 @@ export default function SlideViewer ({
               currentImage={currentImage}
               tagList={tagList}
               auth={auth}
+              onClose={onClose}
             />
           }
           footer={<><AddTagCta tagCount={tagList.length} auth={auth} /></>}
@@ -87,9 +88,10 @@ interface SingleViewerProps {
   tagList: MediaTagWithClimb[]
   userinfo: JSX.Element
   auth: WithPermission
+  onClose?: () => void
 }
 
-export const SingleViewer = ({ loaded, media, tagList, userinfo, auth }: SingleViewerProps): JSX.Element => {
+export const SingleViewer = ({ loaded, media, tagList, userinfo, auth, onClose }: SingleViewerProps): JSX.Element => {
   return (
     <>
       <div className='block relative overflow-hidden min-w-[350px] min-h-[300px]'>
@@ -110,6 +112,7 @@ export const SingleViewer = ({ loaded, media, tagList, userinfo, auth }: SingleV
             currentImage={media}
             tagList={tagList}
             auth={auth}
+            onClose={onClose}
           />
         }
       />
@@ -174,9 +177,10 @@ interface InfoContainerProps {
   currentImage: MediaType | null
   tagList: MediaTagWithClimb[]
   auth: WithPermission
+  onClose?: () => void
 }
 
-const InfoContainer = ({ currentImage, tagList, auth }: InfoContainerProps): ReactElement | null => {
+const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerProps): ReactElement | null => {
   const { isAuthorized } = auth
 
   const onTagAddedHandler = useCallback(async (data) => {
@@ -189,6 +193,10 @@ const InfoContainer = ({ currentImage, tagList, auth }: InfoContainerProps): Rea
     if (isAuthorized) { // The UI shouldn't allow this function to be called, but let's check anyway.
       await userMediaStore.set.removeTag(data)
     }
+  }, [isAuthorized])
+
+  const onImageDeleted = useCallback (() => {
+    onClose ? onClose() : null
   }, [isAuthorized])
 
   if (currentImage == null) return null
@@ -221,8 +229,8 @@ const InfoContainer = ({ currentImage, tagList, auth }: InfoContainerProps): Rea
         </div>}
 
       {isAuthorized &&
-        <div className='my-8'>
-          <RemoveImage imageInfo={currentImage} tagCount={tagList?.length} />
+        <div className='my-8 '>
+          <RemoveImage imageInfo={currentImage} tagCount={tagList?.length} onImageDeleted={onImageDeleted} />
         </div>}
     </>
   )

@@ -7,9 +7,10 @@ import useReturnToProfile from '../../js/hooks/useReturnToProfile'
 interface RemoveImageProps {
   imageInfo: MediaType
   tagCount: Number
+  onImageDeleted: any
 }
 
-export default function RemoveImage ({ imageInfo, tagCount }: RemoveImageProps): JSX.Element | null {
+export default function RemoveImage ({ imageInfo, tagCount, onImageDeleted }: RemoveImageProps): JSX.Element | null {
   const { data } = useSession()
   const { toMyProfile } = useReturnToProfile()
 
@@ -23,10 +24,11 @@ export default function RemoveImage ({ imageInfo, tagCount }: RemoveImageProps):
     const filename: string = imageInfo.filename
     e.preventDefault()
     if (window.confirm('Are you sure?')) {
+      let isRemoved = await removePhoto(filename)
       await actions.media.removeImage(imageInfo.mediaId, nick)
-      await removePhoto(filename)
-      await toMyProfile()
-      console.log('Returned to profile')
+      if (isRemoved) {
+        onImageDeleted()
+      }
     }
   }
 
