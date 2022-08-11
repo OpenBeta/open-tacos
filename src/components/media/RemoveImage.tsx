@@ -2,7 +2,6 @@ import { actions } from '../../js/stores'
 import { removePhoto } from '../../js/userApi/media'
 import { MediaType } from '../../js/types'
 import { useSession } from 'next-auth/react'
-import useReturnToProfile from '../../js/hooks/useReturnToProfile'
 
 interface RemoveImageProps {
   imageInfo: MediaType
@@ -12,7 +11,6 @@ interface RemoveImageProps {
 
 export default function RemoveImage ({ imageInfo, tagCount, onImageDeleted }: RemoveImageProps): JSX.Element | null {
   const { data } = useSession()
-  const { toMyProfile } = useReturnToProfile()
 
   const onRemove = async (e): Promise<void> => {
     if (data?.user?.metadata == null) {
@@ -24,9 +22,9 @@ export default function RemoveImage ({ imageInfo, tagCount, onImageDeleted }: Re
     const filename: string = imageInfo.filename
     e.preventDefault()
     if (window.confirm('Are you sure?')) {
-      let isRemoved = await removePhoto(filename)
+      const isRemoved = await removePhoto(filename)
       await actions.media.removeImage(imageInfo.mediaId, nick)
-      if (isRemoved) {
+      if (isRemoved != null) {
         onImageDeleted()
       }
     }

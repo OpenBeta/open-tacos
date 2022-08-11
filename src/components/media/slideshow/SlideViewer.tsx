@@ -195,8 +195,10 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
     }
   }, [isAuthorized])
 
-  const onImageDeleted = useCallback (() => {
-    onClose ? onClose() : null
+  const onImageDeleted = useCallback(() => {
+    if (onClose != null) {
+      onClose()
+    }
   }, [isAuthorized])
 
   if (currentImage == null) return null
