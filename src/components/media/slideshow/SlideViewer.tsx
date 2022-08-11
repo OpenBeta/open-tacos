@@ -14,6 +14,7 @@ import { WithPermission } from '../../../js/types/User'
 import DesktopModal from './DesktopModal'
 import { DefaultLoader } from '../../../js/sirv/util'
 import { userMediaStore } from '../../../js/stores/media'
+import RemoveImage from '../RemoveImage'
 
 interface SlideViewerProps {
   isOpen: boolean
@@ -64,9 +65,10 @@ export default function SlideViewer ({
               currentImage={currentImage}
               tagList={tagList}
               auth={auth}
+              onClose={onClose}
             />
           }
-          footer={<AddTagCta tagCount={tagList.length} auth={auth} />}
+          footer={<><AddTagCta tagCount={tagList.length} auth={auth} /></>}
         />
       }
       controlContainer={
@@ -86,9 +88,10 @@ interface SingleViewerProps {
   tagList: MediaTagWithClimb[]
   userinfo: JSX.Element
   auth: WithPermission
+  onClose?: () => void
 }
 
-export const SingleViewer = ({ loaded, media, tagList, userinfo, auth }: SingleViewerProps): JSX.Element => {
+export const SingleViewer = ({ loaded, media, tagList, userinfo, auth, onClose }: SingleViewerProps): JSX.Element => {
   return (
     <>
       <div className='block relative overflow-hidden min-w-[350px] min-h-[300px]'>
@@ -109,6 +112,7 @@ export const SingleViewer = ({ loaded, media, tagList, userinfo, auth }: SingleV
             currentImage={media}
             tagList={tagList}
             auth={auth}
+            onClose={onClose}
           />
         }
       />
@@ -173,20 +177,27 @@ interface InfoContainerProps {
   currentImage: MediaType | null
   tagList: MediaTagWithClimb[]
   auth: WithPermission
+  onClose?: () => void
 }
 
-const InfoContainer = ({ currentImage, tagList, auth }: InfoContainerProps): ReactElement | null => {
+const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerProps): ReactElement | null => {
   const { isAuthorized } = auth
 
-  const onTagAddedHanlder = useCallback(async (data) => {
+  const onTagAddedHandler = useCallback(async (data) => {
     if (isAuthorized) { // The UI shouldn't allow this function to be called, but let's check anyway.
       await userMediaStore.set.addTag(data)
     }
   }, [isAuthorized])
 
-  const onTagDeletedHanlder = useCallback(async (data) => {
+  const onTagDeletedHandler = useCallback(async (data) => {
     if (isAuthorized) { // The UI shouldn't allow this function to be called, but let's check anyway.
       await userMediaStore.set.removeTag(data)
+    }
+  }, [isAuthorized])
+
+  const onImageDeleted = useCallback(() => {
+    if (onClose != null) {
+      onClose()
     }
   }, [isAuthorized])
 
@@ -202,7 +213,7 @@ const InfoContainer = ({ currentImage, tagList, auth }: InfoContainerProps): Rea
           <TagList
             hovered
             list={tagList}
-            onDeleted={onTagDeletedHanlder}
+            onDeleted={onTagDeletedHandler}
             isAuthorized={isAuthorized}
             className='my-2'
           />}
@@ -210,13 +221,18 @@ const InfoContainer = ({ currentImage, tagList, auth }: InfoContainerProps): Rea
       {isAuthorized &&
         <div className='my-8'>
           <div className='text-primary text-sm'>Tag this climb</div>
-          <AddTag onTagAdded={onTagAddedHanlder} imageInfo={currentImage} className='my-2' />
+          <AddTag onTagAdded={onTagAddedHandler} imageInfo={currentImage} className='my-2' />
         </div>}
 
       {tagList?.length === 0 && isAuthorized &&
         <div className='my-8 text-secondary flex items-center space-x-1'>
           <LightBulbIcon className='w-6 h-6 stroke-1 stroke-ob-primary' />
           <span className='mt-1 text-xs'>Your tags help others learn more about the crag</span>
+        </div>}
+
+      {isAuthorized &&
+        <div className='my-8 '>
+          <RemoveImage imageInfo={currentImage} tagCount={tagList?.length} onImageDeleted={onImageDeleted} />
         </div>}
     </>
   )

@@ -55,6 +55,7 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       if (shouldAppend) {
         newList = produce(currentList, draft => {
           draft.push(newEntry)
+          console.log(newEntry)
         })
       } else {
         newList = produce(currentList, draft => {
@@ -67,6 +68,17 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       if (revalidateSSR) {
         await revalidateServePage(uid)
       }
+    },
+    removeImage: async (mediaId, uid) => {
+      const currentList = await get.imageList()
+      let updatedList: MediaType[] = []
+
+      updatedList = produce(currentList, draft => {
+        const imageToRemove = draft.findIndex(image => image.mediaId === mediaId)
+        if (imageToRemove !== -1) draft.splice(imageToRemove, 1)
+      })
+
+      set.imageList(updatedList)
     }
   })).extendActions((set, get, api) => ({
     /**

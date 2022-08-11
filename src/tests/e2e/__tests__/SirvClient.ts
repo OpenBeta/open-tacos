@@ -1,11 +1,21 @@
 import '@testing-library/jest-dom/extend-expect'
-import { getToken, getUserImages, SIRV_CONFIG } from '../../../js/sirv/SirvClient'
+import { getToken, getUserImages, SIRV_CONFIG, remove, getAdminToken } from '../../../js/sirv/SirvClient'
 import { enhanceMediaListWithUsernames } from '../../../js/usernameUtil'
+
+/**
+ * End-to-end tests require Sirv RW secrets.
+ * 1. Make a copy of .env.local for testing
+ * `cp .env.local .env.test.local`
+ * 2. Run e2e tests
+ * `yarn test-all e2e`
+ */
 
 beforeAll(() => {
   expect(SIRV_CONFIG.clientSecret).not.toBeNull()
   expect(SIRV_CONFIG.baseUrl).not.toBeNull()
   expect(SIRV_CONFIG.clientId).not.toBeNull()
+  expect(SIRV_CONFIG.clientAdminId).not.toBeNull()
+  expect(SIRV_CONFIG.clientAdminSecret).not.toBeNull()
 })
 
 test('Sirv API can read photos', async () => {
@@ -38,4 +48,12 @@ test('can read uid json', async () => {
   expect(list[0].uid).toMatch(/vietnguyen/)
 
   // await getUserFiles('abe96612-2742-43b0-a128-6b19d4e4615f')
+})
+
+test('can delete photos', async () => {
+  const token = await getAdminToken()
+  expect(token).toBeDefined()
+  if (token != null) {
+    await expect(remove('/foo.txt', token)).rejects.toThrow('Request failed with status code 404')
+  }
 })
