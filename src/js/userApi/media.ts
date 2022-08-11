@@ -18,3 +18,18 @@ export const uploadPhoto = async (filename: string, rawData: Blob): Promise<stri
   }
   throw new Error('Photo upload from browser failed')
 }
+
+export const removePhoto = async (filename: string): Promise<string> => {
+  const res = await client.post(
+    '/api/media/remove?filename=' + encodeURIComponent(filename),
+    {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  )
+  if (res.status === 200) {
+    return res.data
+  }
+  throw new Error('Delete failed')
+}
