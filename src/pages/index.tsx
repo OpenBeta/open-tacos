@@ -174,12 +174,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       }
     }
   })
-
+  console.log('#getRecentMedia()')
   const recentMediaList = await getRecentMedia()
 
-  const allTags = recentMediaList?.flatMap(entry => entry.tagList.slice(0, 10))
+  const allTags = recentMediaList?.flatMap(entry => entry.tagList.slice(0, 10)) ?? []
+
+  console.log('#enhanceMediaList()')
+
   const tagsWithUsernames = await enhanceMediaListWithUsernames(allTags)
   const tagsByMedia = groupBy(tagsWithUsernames, 'mediaUrl')
+
+  console.log('#getImagesByFilenames()')
   const list = await getImagesByFilenames(Object.keys(tagsByMedia))
   return {
     props: {
