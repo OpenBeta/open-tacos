@@ -140,3 +140,18 @@ export const QUERY_CRAGS_WITHIN = gql`
     }
   }
 `
+
+export const MUTATION_IMPORT_TICKS = gql`
+mutation ImportTicks($input: [Tick]) {
+  importTicks(input: $input) {
+    _id
+    userId
+    name
+    notes
+    climbId
+    style
+    attemptType
+    dateClimbed
+    grade
+  }
+}`
