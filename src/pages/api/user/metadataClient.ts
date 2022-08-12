@@ -27,7 +27,8 @@ const dataTypeCheck: { [field in AllowedField]: (value: any) => boolean } = {
 export interface Tick {
   name: string
   notes: string
-  uuid: string
+  climbId: string
+  userId: string | undefined
   style: string
   attemptType: string
   dateClimbed: string
