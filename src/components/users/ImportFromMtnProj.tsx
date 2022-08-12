@@ -2,42 +2,66 @@ import { Fragment, useEffect, useEffect, useState } from 'react'
 import { Transition } from '@headlessui/react'
 import { DocumentDownloadIcon } from '@heroicons/react/outline'
 import { XIcon } from '@heroicons/react/solid'
+import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
+import { graphqlClient } from '../../js/graphql/Client'
+import { MUTATION_IMPORT_TICKS } from '../../js/graphql/fragments'
 
 const pattern = /^https:\/\/www.mountainproject.com\/user\/\d{9}\/[a-zA-Z-]*/
 
 function ImportFromMtnProj (): JSX.Element | null {
   const [mpUID, setMPUID] = useState('')
   const session = useSession()
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState<boolean>(false)
   const [showInput, setShowInput] = useState(false)
+  const [addTicks] = useMutation(
+    MUTATION_IMPORT_TICKS, {
+      client: graphqlClient,
+      errorPolicy: 'none'
+    })
 
   async function getTicks (): Promise<void> {
     // get the ticks and add it to the users metadata
     // need regex to verify mtn project ID
-    const ret = await fetch('/api/user/ticks', {
-      method: 'PUT',
+    const res = await fetch('/api/user/ticks', {
+      method: 'POST',
       body: JSON.stringify(mpUID)
     })
-    const collections = await ret.json()
-    if (ret.status === 200) {
-      console.log(collections)
+    if (res.status === 200) {
       setShow(false)
+      const { ticks } = await res.json()
+      const dbTicks = await addTicks({
+        variables: {
+          input: ticks
+        }
+      })
+      // put the ticks into the store?
+      console.log(dbTicks)
       // do the fetch from mtn project and store that data in the Auth0 metadata
     } else {
-      console.log(ret)
+      console.log(res)
     }
   }
 
   useEffect(() => {
     // if the user is authenticated we want to show the import your ticks modal
-    console.log(session.data?.user?.metadata?.collections)
-    if (session.status === 'authenticated') setShow(true)
     // then we check to see if they have a ticks imported flag set
     // if it is, set show to the opposite of whatever it is
-    if (session.data?.user?.metadata?.ticksImported != null) {
-      setShow(!session.data?.user?.metadata?.ticksImported)
-    }
+    fetch('/api/user/profile')
+      .then(async res => await res.json())
+      .then((profile) => {
+        if (profile?.ticksImported !== null) {
+          setShow(!profile.ticksImported)
+        } else if (session.status === 'authenticated') {
+          setShow(true)
+        } else {
+          setShow(true)
+        }
+      }).catch(console.error)
+      .finally(() => {
+        // set loading here
+
+      })
   }, [session])
 
   return (

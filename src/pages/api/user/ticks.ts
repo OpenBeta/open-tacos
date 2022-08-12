@@ -53,6 +53,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
       return
     } else if (req.method === 'POST') {
       // fetch data from mountain project here
+      // check to see if the ticks imported flag exists, if not create it
       const uid: string = JSON.parse(req.body)
       const tickCollection: Tick[] = []
       if (uid.length > 0 && meta.uuid !== undefined) {
@@ -70,16 +71,11 @@ const handler: NextApiHandler<any> = async (req, res) => {
           }
           tickCollection.push(newTick)
         })
-
-        meta.collections = {
-          tickCollections: collections.tickCollections
-        }
-
-        // check to see if the ticks imported flag exists, if not create it
-        if (meta?.ticksImported != null) meta.ticksImported = true
-        else meta.ticksImported = true
+        // meta.ticksImported = true
         await metadataClient.updateUserMetadata(meta)
-        res.status(200).json({ tickCollections: collections.tickCollections })
+        res.json({ ticks: tickCollection })
+        res.end()
+        return
       }
     }
   } catch (e) {
