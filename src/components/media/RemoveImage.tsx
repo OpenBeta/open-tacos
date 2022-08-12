@@ -1,4 +1,5 @@
 import { useSession } from 'next-auth/react'
+import { XIcon } from '@heroicons/react/outline'
 
 import { actions } from '../../js/stores'
 import { removePhoto } from '../../js/userApi/media'
@@ -8,13 +9,17 @@ import { Button, ButtonVariant } from '../ui/BaseButton'
 interface RemoveImageProps {
   imageInfo: MediaType
   tagCount: Number
-  onImageDeleted: any
 }
 
-export default function RemoveImage ({ imageInfo, tagCount, onImageDeleted }: RemoveImageProps): JSX.Element | null {
+export default function RemoveImage ({ imageInfo, tagCount }: RemoveImageProps): JSX.Element | null {
   const { data } = useSession()
 
   const onRemove = async (e): Promise<void> => {
+    if (tagCount > 0) {
+      // Additional safe-guard
+      console.log('## Error: Remove tags first')
+      return
+    }
     if (data?.user?.metadata == null) {
       console.log('## Error: user metadata not found')
       return
@@ -24,22 +29,19 @@ export default function RemoveImage ({ imageInfo, tagCount, onImageDeleted }: Re
     e.preventDefault()
     if (window.confirm('Are you sure?')) {
       const isRemoved = await removePhoto(filename)
-      await actions.media.removeImage(imageInfo.mediaId)
       if (isRemoved != null) {
-        onImageDeleted()
+        await actions.media.removeImage(imageInfo.mediaId)
       }
     }
   }
 
   return (
-    <>
-      <Button
-        label='Remove Photo'
-        onClick={onRemove}
-        variant={ButtonVariant.OUTLINED_DEFAULT}
-        disabled={tagCount > 0}
-      />
-      {tagCount > 0 && <p className='text-sm py-2'>Remove tags to delete image</p>}
-    </>
+    <Button
+      ariaLabel='remove'
+      label={<XIcon className='w-4 h-4' />}
+      onClick={onRemove}
+      variant={ButtonVariant.ROUNDED_ICON_SOLID}
+      disabled={tagCount > 0}
+    />
   )
 }

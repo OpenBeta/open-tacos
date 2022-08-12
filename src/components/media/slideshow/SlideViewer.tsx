@@ -14,7 +14,6 @@ import { WithPermission } from '../../../js/types/User'
 import DesktopModal from './DesktopModal'
 import { DefaultLoader } from '../../../js/sirv/util'
 import { userMediaStore } from '../../../js/stores/media'
-import RemoveImage from '../RemoveImage'
 
 interface SlideViewerProps {
   isOpen: boolean
@@ -195,12 +194,6 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
     }
   }, [isAuthorized])
 
-  const onImageDeleted = useCallback(() => {
-    if (onClose != null) {
-      onClose()
-    }
-  }, [isAuthorized])
-
   if (currentImage == null) return null
 
   return (
@@ -228,11 +221,6 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
         <div className='my-8 text-secondary flex items-center space-x-1'>
           <LightBulbIcon className='w-6 h-6 stroke-1 stroke-ob-primary' />
           <span className='mt-1 text-xs'>Your tags help others learn more about the crag</span>
-        </div>}
-
-      {isAuthorized &&
-        <div className='my-8 '>
-          <RemoveImage imageInfo={currentImage} tagCount={tagList?.length} onImageDeleted={onImageDeleted} />
         </div>}
     </>
   )
