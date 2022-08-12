@@ -227,7 +227,7 @@ const MediaActionToolbar = ({ isAuthorized, imageList, tagModeOn, setTagMode }: 
           disabled={imageList.length === 0}
           label={
             <div className='flex items-center space-x-1'>
-              <TagIcon className='w-5 h-5' /><span className='font-semibold'>Tag photo</span>
+              <TagIcon className='w-5 h-5' /><span className='font-semibold'>Power mode</span>
             </div>
           }
           onClick={() => setTagMode(current => !current)}
