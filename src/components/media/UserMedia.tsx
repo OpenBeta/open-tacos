@@ -44,7 +44,6 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
   const { isDesktop } = useResponsive()
   const loader = isDesktop ? DesktopPreviewLoader : MobileLoader
   const shareableUrl = `/p/${uid}/${basename(imageInfo.filename)}`
-  console.log('#taglist', tagList)
   return (
     <figure
       key={imageInfo.filename}
