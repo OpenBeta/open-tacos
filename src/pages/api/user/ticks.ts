@@ -1,19 +1,15 @@
 import { NextApiHandler } from 'next'
 import csv from 'csvtojson'
 import withAuth from '../withAuth'
-import createMetadataClient, { Auth0UserMetadata, Tick } from './metadataClient'
+import createMetadataClient, { Tick } from './metadataClient'
 import axios, { AxiosInstance } from 'axios'
 import { v5 as uuidv5, NIL } from 'uuid'
 
-interface TickObjectType { [key: string]: Tick[] }
 /**
  * Collections are defined as being extremely generic. These are the
  * specific entity collections that are favourites. Ticks, for example,
  * may vary in the type of data that needs to be enumerated.
  */
-interface TickCollection {
-  tickCollections: TickObjectType
-}
 
 export interface APITickCollection {
   tickCollections: {[key: string]: Tick[] | undefined }
@@ -46,19 +42,19 @@ function extractId (mpUrl: string): string | Number {
   }
 }
 
-function reifyTickCollection (meta: Auth0UserMetadata): TickCollection {
-  return {
-    tickCollections: ((meta?.collections?.tickCollections) != null)
-      ? meta?.collections?.tickCollections
-      : Object.create({}) as TickObjectType
-  }
-}
+// function reifyTickCollection (meta: Auth0UserMetadata): TickCollection {
+//   return {
+//     tickCollections: ((meta?.collections?.tickCollections) != null)
+//       ? meta?.collections?.tickCollections
+//       : Object.create({}) as TickObjectType
+//   }
+// }
 
-function backToJSONSafe (ticks: TickCollection): APITickCollection {
-  return {
-    tickCollections: ticks.tickCollections
-  }
-}
+// function backToJSONSafe (ticks: TickCollection): APITickCollection {
+//   return {
+//     tickCollections: ticks.tickCollections
+//   }
+// }
 
 async function getMPTicks (uid: string): Promise<any[]> {
   const mpClient: AxiosInstance = axios.create({
@@ -93,42 +89,36 @@ const handler: NextApiHandler<any> = async (req, res) => {
          * In the case of a PUT request, we will import the users data from mountain project
          */
     const meta = await metadataClient.getUserMetadata()
-    const collections = reifyTickCollection(meta)
     if (req.method === 'GET') {
-      // This is a bit of a hack. We don't want to return the whole metadata object.
-      // We just want to return the favs.
-      res.json(backToJSONSafe(collections))
       res.end()
       return
-    } else if (req.method === 'PUT') {
+    } else if (req.method === 'POST') {
       // fetch data from mountain project here
+      // check to see if the ticks imported flag exists, if not create it
       const uid: string = JSON.parse(req.body)
+      const tickCollection: Tick[] = []
       // build object and store in meta data
-      if (uid.length > 0) {
+      if (uid.length > 0 && meta.uuid !== undefined) {
         const ret = await getMPTicks(uid)
         ret.forEach((tick) => {
           const newTick: Tick = {
             name: tick.Route,
             notes: tick.notes,
-            uuid: tick.mp_id,
-            style: tick.Style,
-            attemptType: tick['Lead Style'],
+            climbId: tick.mp_id,
+            userId: meta.uuid,
+            style: tick.Style === '' ? 'N/A' : tick.Style,
+            attemptType: tick.Style === '' ? 'N/A' : tick.Style,
             dateClimbed: tick.Date,
             grade: tick.Rating
           }
+          tickCollection.push(newTick)
           // check to see if tick for the climb exists in tick collections
-          if (tick.mp_id in collections.tickCollections) { collections.tickCollections[tick.mp_id].push(newTick) } else collections.tickCollections[tick.mp_id] = [newTick]
         })
-
-        meta.collections = {
-          tickCollections: collections.tickCollections
-        }
-
-        // check to see if the ticks imported flag exists, if not create it
-        if (meta?.ticksImported != null) meta.ticksImported = true
-        else meta.ticksImported = true
+        // meta.ticksImported = true
         await metadataClient.updateUserMetadata(meta)
-        res.status(200).json({ tickCollections: collections.tickCollections })
+        res.json({ ticks: tickCollection })
+        res.end()
+        return
       }
     }
   } catch (e) {
