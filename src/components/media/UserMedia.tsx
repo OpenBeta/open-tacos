@@ -9,6 +9,7 @@ import TagList from './TagList'
 import { MediaTagWithClimb, MediaType } from '../../js/types'
 import ResponsiveImage from '../media/slideshow/ResponsiveImage'
 import { MobileLoader, DesktopPreviewLoader } from '../../js/sirv/util'
+import RemoveImage from './RemoveImage'
 
 const MOBILE_IMAGE_MAX_WIDITH = 914
 interface UserMediaProps {
@@ -78,6 +79,13 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
             className='px-2'
           />
         </figcaption>}
+      {tagList?.length === 0 && isAuthorized &&
+        <div className='absolute top-0 right-0 p-1.5'>
+          <RemoveImage
+            imageInfo={imageInfo}
+            tagCount={tagList?.length ?? 0}
+          />
+        </div>}
     </figure>
   )
 }
