@@ -53,6 +53,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
       return
     } else if (req.method === 'POST') {
       // fetch data from mountain project here
+      // check to see if the ticks imported flag exists, if not create it
       const uid: string = JSON.parse(req.body)
       const tickCollection: Tick[] = []
       if (uid.length > 0 && meta.uuid !== undefined) {
