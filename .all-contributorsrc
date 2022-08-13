@@ -247,6 +247,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "JetseVerschuren",
+      "name": "Jetse Verschuren",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22445469?v=4",
+      "profile": "https://github.com/JetseVerschuren",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
