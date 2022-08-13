@@ -14,7 +14,7 @@ jobs:
         uses: fkirc/skip-duplicate-actions@v4
         with:
           paths_ignore: '["**/README.md"]'
-          concurrent_skipping: 'always'
+          concurrent_skipping: 'same_content_newer'
 
 
   build:
