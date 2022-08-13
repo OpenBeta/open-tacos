@@ -3,10 +3,10 @@
     "collect": {
       "numberOfRuns": 3,
       "//": "^ default is 3",
-      "startServerCommand": "npx next start",
+      "startServerCommand": "yarn start",
       "url": [
         "http://localhost:3000",
-	"http://localhost:3000/areas/bea6bf11-de53-5046-a5b4-b89217b7e9bc"
+        "http://localhost:3000/areas/bea6bf11-de53-5046-a5b4-b89217b7e9bc"
       ]
     },
     "upload": {
@@ -14,4 +14,3 @@
     }
   }
 }
-
