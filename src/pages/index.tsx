@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import * as Tabs from '@radix-ui/react-tabs'
 import { gql } from '@apollo/client'
 import { groupBy, Dictionary } from 'underscore'
-import { TagIcon, LightBulbIcon, LocationMarkerIcon } from '@heroicons/react/outline'
+import { TagIcon, LightBulbIcon, LocationMarkerIcon, PencilIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 
 import Layout from '../components/layout'
@@ -15,6 +15,7 @@ import { getRecentMedia } from '../js/graphql/api'
 import { IndexResponseType, MediaBaseTag, MediaType } from '../js/types'
 import useCanary from '../js/hooks/useCanary'
 import { ExploreProps } from '../components/home/DenseAreas'
+import EditsDefaultView from '../components/edits/DefaultView'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import { RecentTagsProps } from '../components/home/RecentMedia'
 import { enhanceMediaListWithUsernames } from '../js/usernameUtil'
@@ -26,7 +27,7 @@ interface HomePageType {
   mediaList: MediaType[]
 }
 const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) => {
-  useCanary()
+  const canaryOn = useCanary()
   const router = useRouter()
   const [activeTab, setTab] = useState<string>()
   const { areas } = exploreData
@@ -40,7 +41,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
   useEffect(() => {
     if (router.isReady) {
       const urlViewParam = router.query.v
-      const allowedViews = ['explore', 'newTags', 'map']
+      const allowedViews = ['explore', 'newTags', 'map', 'edit']
       let tabToSet = 'newTags'
       if (typeof urlViewParam === 'string' && allowedViews.includes(urlViewParam)) {
         tabToSet = urlViewParam
@@ -77,17 +78,24 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
                     : '')
               }
             >
-              <TabsTrigger
-                tabKey='explore'
-                activeKey={activeTab}
-                icon={<LightBulbIcon className='w-6 h-6' />}
-                label='Popular'
-              />
+              {canaryOn &&
+                <TabsTrigger
+                  tabKey='edit'
+                  activeKey={activeTab}
+                  icon={<PencilIcon className='w-6 h-6' />}
+                  label='Edit'
+                />}
               <TabsTrigger
                 tabKey='newTags'
                 activeKey={activeTab}
                 icon={<TagIcon className='w-6 h-6' />}
                 label='New tags'
+              />
+              <TabsTrigger
+                tabKey='explore'
+                activeKey={activeTab}
+                icon={<LightBulbIcon className='w-6 h-6' />}
+                label='Popular'
               />
               <TabsTrigger
                 tabKey='map'
@@ -96,6 +104,10 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
                 label='Map'
               />
             </Tabs.List>
+            {canaryOn &&
+              <Tabs.Content value='edit' className='w-full'>
+                <EditsDefaultView />
+              </Tabs.Content>}
             <Tabs.Content value='explore' className='w-full'>
               <DynamicDenseAreas areas={areas} />
             </Tabs.Content>
