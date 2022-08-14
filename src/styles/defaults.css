@@ -1,23 +1,18 @@
-/* @import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities"; */
-
-
 body,
 html {
   height: 100%;
   font-size: 16px;
-  @apply bg-neutral-900 font-sans text-base text-gray-900;
+  @apply bg-gray-900 font-sans text-base text-gray-900;
 }
 
 /******** App's root container *********/
 /* Max width=3xl */
 .root-container-default {
-  @apply relative max-w-screen-3xl w-full mx-auto bg-neutral-50;
+  @apply relative max-w-screen-3xl w-full mx-auto bg-gray-50;
 }
 /* Full screen */
 .root-container-full {
-  @apply relative w-screen max-w-full bg-neutral-50;
+  @apply relative w-screen max-w-full bg-gray-50;
 }
 /***************************************/
 
@@ -119,13 +114,13 @@ p {
 @layer components {
 
   .text-primary {
-    @apply text-neutral-800;
+    @apply text-gray-800;
   }
   .text-secondary {
-    @apply text-neutral-600;
+    @apply text-gray-600;
   }
   .text-tertiary {
-    @apply text-neutral-400;
+    @apply text-gray-400;
   }
 
   .text-primary-contrast {
@@ -138,11 +133,11 @@ p {
     @apply text-gray-500;
   }
   .bg-default {
-    @apply bg-neutral-50 dark:bg-slate-900;
+    @apply bg-gray-50 dark:bg-slate-900;
   }
 
   .bg-contrast {
-    @apply bg-neutral-200 dark:bg-slate-700;
+    @apply bg-gray-200 dark:bg-slate-700;
   }
 
   .btn-small {

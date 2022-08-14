@@ -2,14 +2,14 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 
 // See https://tailwindcss.com/docs/configuration for details
 module.exports = {
-  darkMode: 'class',
+  // darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/components/**/*.{js,ts,jsx,tsx}'
   ],
-  // purge: ['./src/**/*.js'],
+
   // https://github.com/tailwindlabs/tailwindcss-forms
-  plugins: [],
+  plugins: [require('daisyui')],
   theme: {
     extend: {
       fontFamily: {
@@ -35,5 +35,15 @@ module.exports = {
         '3xl': '2560px'
       }
     }
+  },
+  daisyui: {
+    styled: true,
+    themes: ['light', 'dark'],
+    base: true,
+    utils: true,
+    logs: true,
+    rtl: false,
+    prefix: '',
+    darkTheme: 'dark'
   }
 }

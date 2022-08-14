@@ -24,6 +24,7 @@ export default function DefaultView (): JSX.Element {
           <Button
             label='New country'
             variant={ButtonVariant.OUTLINED_DEFAULT}
+            href='/edits/addCountry'
           />
           <div className='text-xs text-secondary'>Less common</div>
         </div>
