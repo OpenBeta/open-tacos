@@ -155,3 +155,18 @@ mutation ImportTicks($input: [Tick]) {
     grade
   }
 }`
+
+export const MUTATION_ADD_TICK = gql`
+mutation AddTick($input: Tick) {
+  addTick(input: $input) {
+    _id
+    userId
+    name
+    notes
+    climbId
+    style
+    attemptType
+    dateClimbed
+    grade
+  }
+}`
