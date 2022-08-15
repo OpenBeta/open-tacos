@@ -140,13 +140,13 @@ p {
     @apply bg-gray-200 dark:bg-slate-700;
   }
 
-  .btn-small {
+  /* .btn-small {
     @apply whitespace-nowrap py-1 px-4 text-sm !important;
-  }
+  } */
 
-  .btn-medium {
+  /* .btn-medium {
     @apply px-6 py-2 text-lg !important;
-  }
+  } */
 
   .btn-nav-secondary {
     @apply bg-ob-tertiary text-black hover:scale-110 duration-300 !important;
@@ -156,7 +156,7 @@ p {
     @apply text-white hover:scale-110 duration-300 !important;
   }
 
-  .btn {
+  /* .btn {
     @apply no-underline px-6 py-1 text-gray-900 font-medium text-sm drop-shadow-lg rounded-xl;
   }
 
@@ -166,7 +166,7 @@ p {
 
   .btn-secondary {
     @apply bg-white hover:bg-custom-primary border-2 border-black;
-  }
+  } */
 
   .btn-success {
     @apply bg-green-300 hover:bg-green-400;

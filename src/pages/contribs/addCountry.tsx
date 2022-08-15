@@ -1,6 +1,7 @@
 import { NextPage } from 'next'
 import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
+import { XIcon } from '@heroicons/react/outline'
 
 import { MUTATION_ADD_COUNTRY } from '../../js/graphql/contribGQL'
 import { stagingGraphQLClient } from '../../js/graphql/Client'
@@ -21,9 +22,15 @@ const AddNewCountryPage: NextPage<{}> = () => {
   return (
     <div data-theme='light' className='card card-compact bg-base-100 h-screen max-w-md mx-auto'>
       <div className='card-body'>
-        <h2>Add a country</h2>
-        <ul className='steps steps-vertical'>
-          <li className='step step-primary'>
+        <div className='card-actions justify-between items-center align-middle'>
+          <button className='btn btn-circle btn-ghost btn-sm'>
+            <XIcon className='w-6 h-6' />
+          </button>
+          <h2>Add a country</h2>
+          <div className='w-8 h-8' />
+        </div>
+        <ul className='steps step-secondary steps-vertical'>
+          <li className='step'>
             <AddCountryStep
               isoCode={addCountryStore.isoCode()}
               official={addCountryStore.official()}
