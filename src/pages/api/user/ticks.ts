@@ -82,7 +82,6 @@ const handler: NextApiHandler<any> = async (req, res) => {
   try {
     const metadataClient = await createMetadataClient(req)
     if (metadataClient == null) throw new Error('Can\'t create ManagementAPI client')
-
     /**
          * within this closure, this meta object will be mutated a fair bit.
          * At the very end, it will be committed (except in the case of a GET request)
@@ -114,7 +113,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
           tickCollection.push(newTick)
           // check to see if tick for the climb exists in tick collections
         })
-        // meta.ticksImported = true
+        meta.ticksImported = true
         await metadataClient.updateUserMetadata(meta)
         res.json({ ticks: tickCollection })
         res.end()
