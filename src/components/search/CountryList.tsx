@@ -16,8 +16,8 @@ interface XSearchProps {
 }
 
 export interface OnSelectProps {
-  official: string
-  isoCode: string
+  official?: string
+  isoCode?: string
 }
 /**
  * Extended search widget

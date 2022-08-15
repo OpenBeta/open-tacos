@@ -1,6 +1,5 @@
 import {
-  ApolloClient,
-  InMemoryCache
+  ApolloClient, HttpLink, InMemoryCache
 } from '@apollo/client'
 
 const uri: string = process.env.NEXT_PUBLIC_API_SERVER ?? ''
@@ -32,4 +31,11 @@ export const graphqlClient = new ApolloClient({
     }
   ),
   ssrMode: false // We relies on NextJS for SSR data management
+})
+
+const httpLink = new HttpLink({ uri: 'https://stg-api.openbeta.io' })
+
+export const stagingGraphQLClient = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
 })

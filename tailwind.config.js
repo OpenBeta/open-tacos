@@ -1,3 +1,4 @@
+const { neutral } = require('daisyui/src/colors')
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 // See https://tailwindcss.com/docs/configuration for details
@@ -38,7 +39,16 @@ module.exports = {
   },
   daisyui: {
     styled: true,
-    themes: ['light', 'dark'],
+    themes: [{
+      light: {
+        ...require('daisyui/src/colors/themes')['[data-theme=light]'],
+        primary: '#111826',
+        secondary: '#b1c077',
+        accent: '#F15E40', // OB brand
+        neutral: '#111826',
+        '--rounded-box': '0.5rem'
+      }
+    }],
     base: true,
     utils: true,
     logs: true,
