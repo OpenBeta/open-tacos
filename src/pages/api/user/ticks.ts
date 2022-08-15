@@ -71,7 +71,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
           }
           tickCollection.push(newTick)
         })
-        // meta.ticksImported = true
+        meta.ticksImported = true
         await metadataClient.updateUserMetadata(meta)
         res.json({ ticks: tickCollection })
         res.end()
