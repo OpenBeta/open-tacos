@@ -22,7 +22,7 @@ export default function ComboBox ({ options, value, onChange, label }: ComboBoxP
     <Listbox value={value} onChange={onChange}>
       {({ open }) => (
         <>
-          <Listbox.Label className='block text-sm font-medium text-gray-700'>{label}</Listbox.Label>
+          <Listbox.Label className='block text-sm font-medium text-gray-700 mt-2'>{label}</Listbox.Label>
           <div className='mt-1 relative'>
             <Listbox.Button className='relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'>
               <span className='block truncate'>{value.name}</span>
