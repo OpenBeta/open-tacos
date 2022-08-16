@@ -57,14 +57,6 @@ export interface Auth0UserMetadata {
      * The key of each collection is its name.
      */
     areaCollections?: { [key: string]: string[] }
-    /**
-     * This is a collection of user-ticks
-     * These ticks can be imported from mountain project, or created by the user
-     * A climb is ticked when a user completes it, or attempts it and wants to record the attempt
-     * The key of a tick is the climbs UUID on Open-Tacos
-     * The values are declared above in the tick interface
-     */
-    tickCollections?: { [key: string]: Tick[]}
   }
 }
 
