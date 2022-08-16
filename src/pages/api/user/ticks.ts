@@ -71,8 +71,11 @@ const handler: NextApiHandler<any> = async (req, res) => {
           }
           tickCollection.push(newTick)
         })
+        // set the user flag to true, so the popup doesn't show anymore and
+        // update the metadata
         meta.ticksImported = true
         await metadataClient.updateUserMetadata(meta)
+        // return the new ticks object
         res.json({ ticks: tickCollection })
         res.end()
         return

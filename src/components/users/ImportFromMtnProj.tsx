@@ -22,7 +22,7 @@ function ImportFromMtnProj (): JSX.Element | null {
 
   async function getTicks (): Promise<void> {
     // get the ticks and add it to the users metadata
-    // need regex to verify mtn project ID
+    // todo: need regex to verify mtn project ID
     const res = await fetch('/api/user/ticks', {
       method: 'POST',
       body: JSON.stringify(mpUID)
@@ -37,7 +37,6 @@ function ImportFromMtnProj (): JSX.Element | null {
       })
       // put the ticks into the store?
       console.log(dbTicks)
-      // do the fetch from mtn project and store that data in the Auth0 metadata
     } else {
       console.log(res)
     }
@@ -51,7 +50,7 @@ function ImportFromMtnProj (): JSX.Element | null {
       .then(async res => await res.json())
       .then((profile) => {
         if (profile?.ticksImported !== null) {
-          setShow(!profile.ticksImported)
+          setShow(profile.ticksImported !== true)
         } else if (session.status === 'authenticated') {
           setShow(true)
         } else {
