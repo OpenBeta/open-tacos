@@ -1,12 +1,14 @@
+import { useCallback } from 'react'
 import { NextPage } from 'next'
+import { useRouter } from 'next/router'
 import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
-import { XIcon } from '@heroicons/react/outline'
 
 import { MUTATION_ADD_COUNTRY } from '../../js/graphql/contribGQL'
 import { stagingGraphQLClient } from '../../js/graphql/Client'
 
 import CountryList, { OnSelectProps } from '../../components/search/CountryList'
+import MobileCard from '../../components/ui/MobileCard'
 import { Button, ButtonVariant } from '../../components/ui/BaseButton'
 import { wizardActions, useWizardStore, wizardStore } from '../../js/stores/wizards'
 
@@ -19,16 +21,15 @@ const AddNewCountryPage: NextPage<{}> = () => {
     }
   )
   const session = useSession({ required: true })
+  const router = useRouter()
+
+  const onClose = useCallback(async () => {
+    await router.replace('/contribs')
+  }, [])
+
   return (
-    <div data-theme='light' className='card card-compact bg-base-100 h-screen max-w-md mx-auto'>
-      <div className='card-body'>
-        <div className='card-actions justify-between items-center align-middle'>
-          <button className='btn btn-circle btn-ghost btn-sm'>
-            <XIcon className='w-6 h-6' />
-          </button>
-          <h2>Add a country</h2>
-          <div className='w-8 h-8' />
-        </div>
+    <div data-theme='light' className='h-screen max-w-md mx-auto'>
+      <MobileCard title='Add a country' onClose={onClose}>
         <ul className='steps step-secondary steps-vertical'>
           <li className='step'>
             <AddCountryStep
@@ -77,7 +78,7 @@ const AddNewCountryPage: NextPage<{}> = () => {
               </div>
             </div>}
         </div>
-      </div>
+      </MobileCard>
     </div>
   )
 }
