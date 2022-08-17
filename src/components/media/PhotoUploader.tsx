@@ -7,10 +7,14 @@ interface PhotoUploaderProps {
   onUploaded: (url: string) => Promise<void>
 }
 
-export default function PhotoUploader ({ className = '', onUploaded, children }: PhotoUploaderProps): JSX.Element {
-  const { uploading, getRootProps, getInputProps, openFileDialog } = usePhotoUploader({ onUploaded })
+/** A drop-zone for uploading photos, with click-to-open a file explorer operation */
+export default function PhotoUploader ({ className, onUploaded, children }: PhotoUploaderProps): JSX.Element {
+  const { uploading, getRootProps, getInputProps } = usePhotoUploader({ onUploaded })
+
   return (
-    <div {...getRootProps()} className={className} onClick={openFileDialog}>
+    // Fiddling with syntax here seems to make dropzone clicking work.
+    // (tested both FF and Chrome on Ubuntu)
+    <div {...getRootProps({ className: `dropzone ${className}` })}>
       {uploading && <Progress />}
       <input {...getInputProps()} />
       {children}

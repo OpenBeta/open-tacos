@@ -44,13 +44,15 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
   const { isDesktop } = useResponsive()
   const loader = isDesktop ? DesktopPreviewLoader : MobileLoader
   const shareableUrl = `/p/${uid}/${basename(imageInfo.filename)}`
+
   return (
     <figure
       key={imageInfo.filename}
       className={
         classNames(
-          ' block relative',
+          'block relative rounded overflow-hidden hover:shadow transition',
           isDesktop ? 'w-[300px] h-[300px] hover:brightness-75' : 'max-w-screen-lg py-12'
+
         )
       }
       onMouseEnter={() => setHover(true)}
@@ -69,6 +71,7 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
                />)}
         </a>
       </Link>
+
       {tagList?.length > 0 &&
         <figcaption className='absolute inset-x-0 bottom-0 flex flex-col justify-end'>
           <TagList
@@ -79,6 +82,7 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
             className='px-2'
           />
         </figcaption>}
+
       {tagList?.length === 0 && isAuthorized &&
         <div className='absolute top-0 right-0 p-1.5'>
           <RemoveImage

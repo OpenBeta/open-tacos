@@ -14,6 +14,7 @@ import { WithPermission } from '../../../js/types/User'
 import DesktopModal from './DesktopModal'
 import { DefaultLoader } from '../../../js/sirv/util'
 import { userMediaStore } from '../../../js/stores/media'
+import RemoveImage from '../RemoveImage'
 
 interface SlideViewerProps {
   isOpen: boolean
@@ -211,6 +212,7 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
             className='my-2'
           />}
       </div>
+
       {isAuthorized &&
         <div className='my-8'>
           <div className='text-primary text-sm'>Tag this climb</div>
@@ -221,6 +223,14 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
         <div className='my-8 text-secondary flex items-center space-x-1'>
           <LightBulbIcon className='w-6 h-6 stroke-1 stroke-ob-primary' />
           <span className='mt-1 text-xs'>Your tags help others learn more about the crag</span>
+        </div>}
+
+      <div className='flex-1' />
+
+      {isAuthorized &&
+        <div className='my-8 flex items-center hover:bg-rose-50 p-2 rounded-lg transition'>
+          <div className='text-primary text-sm flex-1'>Delete this photo</div>
+          <RemoveImage imageInfo={currentImage} tagCount={tagList?.length ?? 0} />
         </div>}
     </>
   )

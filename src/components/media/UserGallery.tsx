@@ -157,7 +157,6 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
           return (
             <div className='relative' key={`${imageInfo.mediaId}${index}`}>
               <UserMedia
-                key={`${imageInfo.mediaId}${index}`}
                 uid={uid}
                 index={index}
                 tagList={tags}

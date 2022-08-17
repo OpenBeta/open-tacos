@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const client = axios.create()
 
-export const uploadPhoto = async (filename: string, rawData: Blob): Promise<string> => {
+export const uploadPhoto = async (filename: string, rawData: ArrayBuffer): Promise<string> => {
   const res = await client.post(
     '/api/media/upload?filename=' + encodeURIComponent(filename),
     rawData,
