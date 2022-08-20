@@ -211,6 +211,7 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
             className='my-2'
           />}
       </div>
+
       {isAuthorized &&
         <div className='my-8'>
           <div className='text-primary text-sm'>Tag this climb</div>
@@ -221,6 +222,13 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
         <div className='my-8 text-secondary flex items-center space-x-1'>
           <LightBulbIcon className='w-6 h-6 stroke-1 stroke-ob-primary' />
           <span className='mt-1 text-xs'>Your tags help others learn more about the crag</span>
+        </div>}
+
+      <div className='flex-1' />
+
+      {isAuthorized &&
+        <div className='my-8 flex items-center hover:bg-rose-50 p-2 rounded-lg transition'>
+          <div className='text-primary text-sm flex-1'>Enable <b>Power mode</b> to delete this image</div>
         </div>}
     </>
   )

@@ -90,7 +90,13 @@ export const Button = ({
   }
   return (
     <BaseButton
-      onClick={onClick} label={label} variant={variant} type={type} disabled={disable} ariaLabel={ariaLabel} size={size}
+      onClick={onClick}
+      label={label}
+      variant={variant}
+      type={type}
+      disabled={disable}
+      ariaLabel={ariaLabel}
+      size={size}
     />
   )
 }
