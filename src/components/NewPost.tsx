@@ -29,7 +29,7 @@ export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JS
     }
   }, [])
 
-  const { uploading, getRootProps, getInputProps, openFileDialog } = usePhotoUploader({ onUploaded })
+  const { uploading, getRootProps, getInputProps } = usePhotoUploader({ onUploaded })
 
   if (status === 'authenticated') {
     if (isMobile) {
@@ -38,7 +38,6 @@ export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JS
           <input {...getInputProps()} />
           <Button
             disabled={uploading}
-            onClick={openFileDialog}
             label={
               <span className='border-2 text-white rounded-md border-white'>
                 {uploading ? <DotsHorizontalIcon className='w-6 h-6' /> : <PlusIcon className='w-6 h-6' />}
@@ -54,7 +53,6 @@ export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JS
         <input {...getInputProps()} />
         <Button
           disabled={uploading}
-          onClick={openFileDialog}
           label={
             <div className='flex no-wrap items-center space-x-2 px-4'>
               {uploading
