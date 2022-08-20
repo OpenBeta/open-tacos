@@ -24,7 +24,7 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
   return (
     <div aria-label='area-breadcrumbs'>
       <Link href='/'>
-        <a className='hover:underline hover:text-gray-900 text-gray-400 '>Home</a>
+        <a className='hover:underline hover:text-base-content text-base-300'>Home</a>
       </Link>
       {pathTokens.map((place, index, array) => {
         const isLastElement = array.length - 1 === index
@@ -32,12 +32,12 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
         const url = `/areas/${path}`
         const climbPageLastUrl = `/crag/${path}`
         return (
-          <span key={index} className='text-secondary'>
+          <span key={index} className='text-base-300'>
             <span className='mx-1.5'>/</span>
             {(isLastElement && !isClimbPage && <span className=''>{sanitizeName(place)}</span>) ||
             (
               <Link href={isLastElement && isClimbPage ? climbPageLastUrl : url}>
-                <a className='hover:underline hover:text-gray-900'>
+                <a className='hover:underline hover:text-base-content'>
                   {sanitizeName(place)}
                 </a>
               </Link>
@@ -69,7 +69,7 @@ export const MiniCrumbs = ({ pathTokens, end = 2, skipLast = false }: MiniBreadC
   return (
     <div
       aria-label='area-minicrumbs'
-      className='text-xs text-secondary'
+      className='text-xs text-base-300'
     >{tokens.join(SEPARATOR)}
     </div>
   )

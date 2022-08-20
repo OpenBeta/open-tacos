@@ -29,20 +29,28 @@ body {
   @apply bg-slate-800 !important;
 }
 
-.aa-DetachedSearchButton {
+/* .aa-DetachedSearchButton {
   @apply border border-gray-300 bg-inherit rounded-full p-1 !important;
-}
+} */
 
 .aa-DetachedCancelButton{
   @apply bg-white rounded-lg !important;
 }
 
-.aa-DetachedSearchButton .aa-DetachedSearchButtonIcon {
+/* .aa-DetachedSearchButton .aa-DetachedSearchButtonIcon {
   @apply -ml-1 border-0 stroke-ob-primary stroke-2 !important;
-}
+} */
 
 .aa-DetachedSearchButtonPlaceholder {
   @apply text-base text-tertiary-contrast mr-3;
+}
+
+.xsearch-mobile-trigger-btn {
+  @apply input input-bordered input-sm !important;
+}
+
+.xsearch-mobile-trigger-btn-icon {
+  @apply -ml-4 stroke-gray-400 stroke-2 !important;
 }
 
 .xsearch-SubmitButton {
@@ -122,10 +130,24 @@ body {
 
 .tag-search-panel {
   /* Result panel - Tablet and desktop only. We need a mobile specific width and layout */
-  @apply mt-0.5 pt-0 rounded-lg border border-neutral-600 drop-shadow-lg max-w-screen-sm !important;
+  @apply mt-0.5 pt-0 rounded-lg border border-gray-600 drop-shadow-lg max-w-screen-sm !important;
 }
 
 .tag-search-item {
   @apply m-1 px-2 rounded-md hover:bg-ob-secondary hover:bg-opacity-20 !important;
 }
 /* End of search for tagging */
+
+/* For Add area wizard */
+
+.add-area-search-mobile-trigger-btn {
+  @apply input input-bordered input-sm !important;
+}
+
+.add-area-search-mobile-trigger-btn-icon {
+  @apply -ml-3.5 stroke-gray-400 stroke-2 !important;
+}
+
+.add-area-search {
+  @apply rounded w-full !important;
+}

@@ -62,5 +62,7 @@ const CUSTOM_CLASSES: Partial<AutocompleteClassNames> = {
   root: 'xsearch',
   inputWrapperPrefix: 'xsearch-inputWrapperPrefix',
   inputWrapper: 'xsearch-inputWrapper',
-  submitButton: 'xsearch-submitButton'
+  submitButton: 'xsearch-submitButton',
+  detachedSearchButton: 'xsearch-mobile-trigger-btn',
+  detachedSearchButtonIcon: 'xsearch-mobile-trigger-btn-icon'
 }
