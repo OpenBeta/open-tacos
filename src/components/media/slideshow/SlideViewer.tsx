@@ -14,7 +14,6 @@ import { WithPermission } from '../../../js/types/User'
 import DesktopModal from './DesktopModal'
 import { DefaultLoader } from '../../../js/sirv/util'
 import { userMediaStore } from '../../../js/stores/media'
-import RemoveImage from '../RemoveImage'
 
 interface SlideViewerProps {
   isOpen: boolean
@@ -229,8 +228,7 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
 
       {isAuthorized &&
         <div className='my-8 flex items-center hover:bg-rose-50 p-2 rounded-lg transition'>
-          <div className='text-primary text-sm flex-1'>Delete this photo</div>
-          <RemoveImage imageInfo={currentImage} tagCount={tagList?.length ?? 0} />
+          <div className='text-primary text-sm flex-1'>Enable <b>Power mode</b> to delete this image</div>
         </div>}
     </>
   )

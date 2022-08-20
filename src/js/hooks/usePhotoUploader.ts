@@ -12,6 +12,19 @@ interface PhotoUploaderReturnType {
   uploading: boolean
   getInputProps: <T extends DropzoneInputProps>(props?: T) => T
   getRootProps: <T extends DropzoneInputProps>(props?: T) => T
+  openFileDialog: () => void
+}
+
+async function readFile (file: File): Promise<ProgressEvent<FileReader>> {
+  return await new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onabort = () => reject(new Error('file reading was aborted'))
+    reader.onerror = () => reject(new Error('file reading has failed'))
+    reader.onload = async (event) => resolve(event)
+    // Starts reading the contents of the specified Blob, once finished,
+    // the result attribute contains an ArrayBuffer representing the file's data.
+    reader.readAsArrayBuffer(file)
+  })
 }
 
 /**
@@ -50,40 +63,38 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
   }
 
   const onDrop = useCallback(
-    (files: File[], rejections: FileRejection[]) => {
+    async (files: File[], rejections: FileRejection[]) => {
       console.log('#number of files', files.length)
       if (rejections.length > 0) { console.warn('Rejected files: ', rejections) }
 
       // Do something with the files
       setUploading(true)
 
-      files.forEach((file) => {
+      for (const file of files) {
         if (file.size > 5242880) {
           window.alert('You tried to upload a photo larger than 5MB')
           return
         }
 
-        const reader = new FileReader()
-        reader.onabort = () => console.error('file reading was aborted')
-        reader.onerror = () => console.error('file reading has failed')
-        reader.onload = async (event) => await onload(event, file.name)
-        // Starts reading the contents of the specified Blob, once finished,
-        // the result attribute contains an ArrayBuffer representing the file's data.
-        reader.readAsArrayBuffer(file)
-      })
+        await onload(await readFile(file), file.name)
+      }
 
       setUploading(false)
     },
     []
   )
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, open } = useDropzone({
     onDrop,
     multiple: true, // support many
-    maxFiles: 40, // For me, I would be wanting to do way more
+    // When I get back from climbing trips, I have a huge pile of photos
+    // also the queue is handled sequentially, with callbacks individually
+    // for each file uploads... so it interops nicely with existing function
+    maxFiles: 40,
     accept: { 'image/*': [] },
-    useFsAccessApi: false
+    useFsAccessApi: false,
+    noClick: uploading
   })
 
-  return { uploading, getInputProps, getRootProps }
+  return { uploading, getInputProps, getRootProps, openFileDialog: open }
 }
