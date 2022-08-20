@@ -1,15 +1,23 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import classNames from 'classnames'
 
-export default function TabsTrigger ({ tabKey, activeKey, icon, label }): JSX.Element {
+interface TabsTriggerProps {
+  tabKey: string
+  activeKey: string
+  icon: JSX.Element
+  label: string
+  hidden?: boolean
+}
+export default function TabsTrigger ({ tabKey, activeKey, icon, label, hidden = false }: TabsTriggerProps): JSX.Element {
   return (
     <Tabs.Trigger
       value={tabKey}
       className={
-        classNames('relative z-50 border-b-4 w-20',
+        classNames(
+          hidden ? 'hidden' : 'relative z-50 border-b-4 w-20',
           tabKey === activeKey
-            ? 'border-gray-800 text-black'
-            : 'border-transparent hover:border-gray-400 text-secondary hover:text-black')
+            ? 'border-gray-800 text-base-content'
+            : 'border-transparent hover:border-gray-400 text-base-200 hover:text-base-content')
       }
     >
       <div className='flex flex-col justify-center items-center'>

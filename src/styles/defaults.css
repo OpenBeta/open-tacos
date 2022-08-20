@@ -1,23 +1,18 @@
-/* @import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities"; */
-
-
 body,
 html {
   height: 100%;
   font-size: 16px;
-  @apply bg-neutral-900 font-sans text-base text-gray-900;
+  @apply bg-gray-900 font-sans text-base text-gray-900;
 }
 
 /******** App's root container *********/
 /* Max width=3xl */
 .root-container-default {
-  @apply relative max-w-screen-3xl w-full mx-auto bg-neutral-50;
+  @apply relative max-w-screen-3xl w-full mx-auto bg-gray-50;
 }
 /* Full screen */
 .root-container-full {
-  @apply relative w-screen max-w-full bg-neutral-50;
+  @apply relative w-screen max-w-full bg-gray-50;
 }
 /***************************************/
 
@@ -118,15 +113,15 @@ p {
 
 @layer components {
 
-  .text-primary {
-    @apply text-neutral-800;
+  /* .text-primary {
+    @apply text-gray-800;
   }
   .text-secondary {
-    @apply text-neutral-600;
+    @apply text-gray-600;
   }
   .text-tertiary {
-    @apply text-neutral-400;
-  }
+    @apply text-gray-400;
+  } */
 
   .text-primary-contrast {
     @apply text-white;
@@ -138,20 +133,20 @@ p {
     @apply text-gray-500;
   }
   .bg-default {
-    @apply bg-neutral-50 dark:bg-slate-900;
+    @apply bg-gray-50;
   }
 
   .bg-contrast {
-    @apply bg-neutral-200 dark:bg-slate-700;
+    @apply bg-gray-200;
   }
 
-  .btn-small {
+  /* .btn-small {
     @apply whitespace-nowrap py-1 px-4 text-sm !important;
-  }
+  } */
 
-  .btn-medium {
+  /* .btn-medium {
     @apply px-6 py-2 text-lg !important;
-  }
+  } */
 
   .btn-nav-secondary {
     @apply bg-ob-tertiary text-black hover:scale-110 duration-300 !important;
@@ -161,7 +156,7 @@ p {
     @apply text-white hover:scale-110 duration-300 !important;
   }
 
-  .btn {
+  /* .btn {
     @apply no-underline px-6 py-1 text-gray-900 font-medium text-sm drop-shadow-lg rounded-xl;
   }
 
@@ -171,7 +166,7 @@ p {
 
   .btn-secondary {
     @apply bg-white hover:bg-custom-primary border-2 border-black;
-  }
+  } */
 
   .btn-success {
     @apply bg-green-300 hover:bg-green-400;
