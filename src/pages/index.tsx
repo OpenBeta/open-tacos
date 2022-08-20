@@ -15,33 +15,40 @@ import { getRecentMedia } from '../js/graphql/api'
 import { IndexResponseType, MediaBaseTag, MediaType } from '../js/types'
 import useCanary from '../js/hooks/useCanary'
 import { ExploreProps } from '../components/home/DenseAreas'
-import EditsDefaultView from '../components/edits/DefaultView'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import { RecentTagsProps } from '../components/home/RecentMedia'
 import { enhanceMediaListWithUsernames } from '../js/usernameUtil'
 import { getImagesByFilenames } from '../js/sirv/SirvClient'
+
+const allowedViews = ['explore', 'newTags', 'map', 'edit']
 
 interface HomePageType {
   exploreData: IndexResponseType
   tagsByMedia: Dictionary<MediaBaseTag[]>
   mediaList: MediaType[]
 }
+
 const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) => {
   const canaryOn = useCanary()
   const router = useRouter()
-  const [activeTab, setTab] = useState<string>()
+  const [activeTab, setTab] = useState<string>('')
   const { areas } = exploreData
 
   useEffect(() => {
-    if (typeof activeTab === 'string') {
-      void router.push(`/?v=${activeTab}`, undefined, { shallow: true })
+    if (activeTab !== '' && allowedViews.includes(activeTab)) {
+      const query = router.query
+      query.v = activeTab
+      const queryString = Object.keys(query).map((key) => {
+        return encodeURIComponent(key) + '=' + encodeURIComponent(query[key] as string)
+      }).join('&')
+
+      void router.push(`/?${queryString}`, undefined, { shallow: true })
     }
   }, [activeTab])
 
   useEffect(() => {
     if (router.isReady) {
       const urlViewParam = router.query.v
-      const allowedViews = ['explore', 'newTags', 'map', 'edit']
       let tabToSet = 'newTags'
       if (typeof urlViewParam === 'string' && allowedViews.includes(urlViewParam)) {
         tabToSet = urlViewParam
@@ -78,13 +85,14 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
                     : '')
               }
             >
-              {canaryOn &&
-                <TabsTrigger
-                  tabKey='edit'
-                  activeKey={activeTab}
-                  icon={<PencilIcon className='w-6 h-6' />}
-                  label='Edit'
-                />}
+
+              <TabsTrigger
+                tabKey='edit'
+                activeKey={activeTab}
+                icon={<PencilIcon className='w-6 h-6' />}
+                label='Edit'
+                hidden={!canaryOn}
+              />
               <TabsTrigger
                 tabKey='newTags'
                 activeKey={activeTab}
@@ -104,10 +112,9 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
                 label='Map'
               />
             </Tabs.List>
-            {canaryOn &&
-              <Tabs.Content value='edit' className='w-full'>
-                <EditsDefaultView />
-              </Tabs.Content>}
+            <Tabs.Content value='edit' className='w-full'>
+              <DynamicContribsView />
+            </Tabs.Content>
             <Tabs.Content value='explore' className='w-full'>
               <DynamicDenseAreas areas={areas} />
             </Tabs.Content>
@@ -225,5 +232,11 @@ const DynamicDenseAreas = dynamic<ExploreProps>(
 const DynamicMap = dynamic(
   async () =>
     await import('../components/home/Map').then(
+      module => module.default), { ssr: false }
+)
+
+const DynamicContribsView = dynamic(
+  async () =>
+    await import('../components/contribs/DefaultView').then(
       module => module.default), { ssr: false }
 )

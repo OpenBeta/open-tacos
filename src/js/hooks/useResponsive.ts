@@ -1,18 +1,21 @@
 import { useState, useEffect } from 'react'
 import { useMediaQuery } from 'react-responsive'
-import resolveConfig from 'tailwindcss/resolveConfig'
+// import resolveConfig from 'tailwindcss/resolveConfig'
 
-import tailwindConfig from '../../../tailwind.config.js'
+// import tailwindConfig from '../../../tailwind.config.js'
 
 /**
  *  Extract the number portion from '1024px' or similar string
  */
-const parseTailwindScreenValue = (w: string): number => parseInt(w.slice(0, w.indexOf('px')))
+// const parseTailwindScreenValue = (w: string): number => parseInt(w.slice(0, w.indexOf('px')))
 
-const fullConfig = resolveConfig(tailwindConfig)
+// const fullConfig = resolveConfig(tailwindConfig)
 
-const mobileW = parseTailwindScreenValue(fullConfig.theme.screens.sm)
-const desktopW = parseTailwindScreenValue(fullConfig.theme.screens.xl)
+// const mobileW = parseTailwindScreenValue(fullConfig?.theme?.screens?.sm)
+// const desktopW = parseTailwindScreenValue(fullConfig.theme.screens.xl)
+
+const mobileW = 640
+const desktopW = 1280
 
 export interface useResponsiveProps {
   isDesktop: boolean
