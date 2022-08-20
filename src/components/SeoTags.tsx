@@ -52,6 +52,8 @@ export default function SeoTags ({ description = '', keywords = [], title, image
       <meta name='twitter:card' content='summary_large_image' key='twt-card' />
 
       <link rel='icon' type='image/x-icon' href='/favicon.ico' />
+
+      <link rel='manifest' href='/manifest.json' />
     </Head>
   )
 }

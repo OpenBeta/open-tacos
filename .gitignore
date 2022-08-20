@@ -80,3 +80,11 @@ content
 .vscode/launch.json
 
 .lighthouseci
+
+# JetBrains editor
+.idea
+
+# Generated via next-pwa
+public/workbox-*.js*
+public/sw.js*
+public/fallback-*.js

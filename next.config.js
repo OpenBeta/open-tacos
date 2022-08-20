@@ -1,4 +1,4 @@
-
+const withPWA = require('next-pwa')
 const withMDX = require('@next/mdx')({
   reactStrictMode: true,
   extension: /\.mdx?$/,
@@ -7,6 +7,7 @@ const withMDX = require('@next/mdx')({
     rehypePlugins: []
   }
 })
+
 module.exports = withMDX({
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   images: {
@@ -42,5 +43,11 @@ module.exports = withMDX({
         permanent: false
       }
     ]
-  }
+  },
+  ...withPWA({
+    pwa: {
+      dest: 'public',
+      // disable: process.env.NODE_ENV === 'development',
+    }
+  })
 })
