@@ -48,9 +48,11 @@ const CUSTOM_CLASSES = {
   item: 'tag-search-item',
   panelLayout: 'tag-search-panelLayout',
   sourceHeader: 'tag-search-sourceHeader',
-  form: 'tag-search-form',
+  form: 'add-area-search-form',
   inputWrapper: 'tag-search-inputWrapper',
   inputWrapperPrefix: 'tag-search-inputWrapperPrefix',
   submitButton: 'tag-search-submit-button',
-  root: 'climb-tag-search'
+  root: 'add-area-search',
+  detachedSearchButton: 'add-area-search-mobile-trigger-btn',
+  detachedSearchButtonIcon: 'add-area-search-mobile-trigger-btn-icon'
 }

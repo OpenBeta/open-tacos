@@ -113,7 +113,7 @@ p {
 
 @layer components {
 
-  .text-primary {
+  /* .text-primary {
     @apply text-gray-800;
   }
   .text-secondary {
@@ -121,7 +121,7 @@ p {
   }
   .text-tertiary {
     @apply text-gray-400;
-  }
+  } */
 
   .text-primary-contrast {
     @apply text-white;
@@ -133,11 +133,11 @@ p {
     @apply text-gray-500;
   }
   .bg-default {
-    @apply bg-gray-50 dark:bg-slate-900;
+    @apply bg-gray-50;
   }
 
   .bg-contrast {
-    @apply bg-gray-200 dark:bg-slate-700;
+    @apply bg-gray-200;
   }
 
   /* .btn-small {

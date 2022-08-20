@@ -24,7 +24,7 @@ const AddNewCountryPage: NextPage<{}> = () => {
   const router = useRouter()
 
   const onClose = useCallback(async () => {
-    await router.replace('/contribs')
+    await router.replace('/?v=edit')
   }, [])
 
   return (
