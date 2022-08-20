@@ -2,15 +2,8 @@ import { useSession } from 'next-auth/react'
 import { actions } from '../../js/stores'
 import { removePhoto } from '../../js/userApi/media'
 import { MediaType } from '../../js/types'
-import {
-  AlertDialogContent,
-  AlertDialog,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-  AlertDialogDescription,
-  AlertDialogCancel,
-  AlertDialogAction
-} from '../ui/micro/AlertDialogue'
+import AlertDialogue from '../ui/micro/AlertDialogue'
+import { DefaultLoader } from '../../js/sirv/util'
 
 interface RemoveImageProps {
   imageInfo: MediaType
@@ -38,9 +31,36 @@ export default function RemoveImage ({ imageInfo, tagCount }: RemoveImageProps):
     }
   }
 
+  if (tagCount > 0) {
+    return (
+      <AlertDialogue
+        title='Invalid Deletion'
+        hideCancel
+        button={(
+          <button>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              className='h-10 w-10 md:w-8 md:h-8 md:marker:w-8 text-rose-100 bg-rose-500 ring-rose-500 hover:bg-rose-600
+              hover:ring ring-offset-1 rounded-full p-1 transition'
+              fill='none'
+              viewBox='0 0 24 24'
+              stroke='currentColor'
+              strokeWidth={2}
+            >
+              <path strokeLinecap='round' strokeLinejoin='round' d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
+            </svg>
+          </button>)}
+      >
+        {imageInfo.filename} has {tagCount} tags. Remove tags first
+      </AlertDialogue>
+    )
+  }
+
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
+    <AlertDialogue
+      onConfirm={remove}
+      hideTitle
+      button={(
         <button>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -53,66 +73,25 @@ export default function RemoveImage ({ imageInfo, tagCount }: RemoveImageProps):
           >
             <path strokeLinecap='round' strokeLinejoin='round' d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
           </svg>
-        </button>
-      </AlertDialogTrigger>
+        </button>)}
+    >
+      <div className='flex items-center justify-center p-4'>
+        <div className='rounded-xl overflow-hidden shadow'>
+          <img
+            src={DefaultLoader({ src: imageInfo.filename, width: 200 })}
+            width={1200}
+            sizes='100vw'
+            className='bg-gray-100 w-auto h-[100%] max-h-[700px]'
+          />
+        </div>
+      </div>
 
-      {tagCount === 0
-        ? (
-          <AlertDialogContent>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone...
-            </AlertDialogDescription>
-
-            <div className='flex w-full text-center'>
-              <div className='flex-1'>
-                <AlertDialogCancel asChild>
-                  <button>
-                    Cancel
-                  </button>
-                </AlertDialogCancel>
-              </div>
-
-              <div className='flex-1 whitespace-nowrap text-rose-500'>
-                <AlertDialogAction asChild>
-                  <button onClick={remove} className='flex items-center gap-2'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='h-6 w-6'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke='currentColor'
-                      strokeWidth={2}
-                    >
-                      <path strokeLinecap='round' strokeLinejoin='round' d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
-                    </svg>
-
-                    Yes, delete photo
-                  </button>
-                </AlertDialogAction>
-              </div>
-            </div>
-          </AlertDialogContent>
-          )
-        : (
-          <AlertDialogContent>
-
-            <AlertDialogTitle>There are still tags</AlertDialogTitle>
-            <AlertDialogDescription>
-              You need to delete tags from this photo before you can delete it
-            </AlertDialogDescription>
-
-            <div className='flex w-full text-center'>
-              <div className='flex-1'>
-                <AlertDialogCancel asChild>
-                  <button>
-                    Cancel
-                  </button>
-                </AlertDialogCancel>
-              </div>
-            </div>
-          </AlertDialogContent>
-          )}
-    </AlertDialog>
+      <div className='text-center'>
+        Delete photo?
+        <div className='text-rose-600 font-bold text-lg'>
+          This cannot be undone
+        </div>
+      </div>
+    </AlertDialogue>
   )
 }
