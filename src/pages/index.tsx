@@ -19,6 +19,7 @@ import TabsTrigger from '../components/ui/TabsTrigger'
 import { RecentTagsProps } from '../components/home/RecentMedia'
 import { enhanceMediaListWithUsernames } from '../js/usernameUtil'
 import { getImagesByFilenames } from '../js/sirv/SirvClient'
+import ToastContainer from '../components/ui/toast/ToastContainer'
 
 const allowedViews = ['explore', 'newTags', 'map', 'edit']
 
@@ -127,6 +128,8 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
           </Tabs.Root>
         </section>
       </Layout>
+
+      <ToastContainer />
     </>
   )
 }
