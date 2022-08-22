@@ -29,7 +29,6 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
      * @param uuid
      * @param imageUrl
      * @param revalidateSSR
-     * @returns
      */
     addImage: async (uid, uuid: string, imageUrl: string, revalidateSSR: boolean) => {
       const newMediaUuid = uuidv5(imageUrl, uuidv5.URL)
@@ -68,6 +67,8 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       if (revalidateSSR) {
         await revalidateServePage(uid)
       }
+
+      return newList
     },
     removeImage: async (mediaId: string) => {
       const currentList = await get.imageList()
