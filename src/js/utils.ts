@@ -153,13 +153,17 @@ const regUsernameKeywords = /openbeta|0penbeta|admin/i
 
 /**
  * Username validation
+ * Only does format validation, does not check against database
+ * or anything like that.
+ *
  * @param uid
  * @returns true if has valid format
  */
-export const checkUsername = (uid: string): boolean =>
-  uid != null && uid.length <= 30 &&
+export const checkUsername = (uid: string): boolean => {
+  return uid != null && uid.length <= 30 &&
   !regUsernameKeywords.test(uid) &&
   regUsername.test(uid)
+}
 
 export const saveAsFile = (data: any, filename: string): void => {
   const blob = new Blob([data], { type: 'text/plain;charset=utf-8' })

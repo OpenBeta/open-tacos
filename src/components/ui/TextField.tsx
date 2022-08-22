@@ -2,13 +2,19 @@ import React from 'react'
 import { Field, FieldMetaProps } from 'formik'
 
 interface TextFieldProps {
+  /** key name for data */
   name: string
+  /** HTML label rendered for this input */
   label: string
+  /** Is this text input multiple lines? */
   multiline?: boolean
+  /** (If multiline) how many rows should this input have */
   rows?: number
   spellcheck?: boolean
+  /** Wait until submit to validate, or perform the validation immediately */
   validateImmediately?: boolean
-  validate?: (value: any) => Promise<undefined|string> // return an error message or undefined for valid input
+  /** return an error message or undefined for valid input */
+  validate?: (value: any) => Promise<undefined|string>
 }
 
 interface FieldType {
@@ -17,38 +23,40 @@ interface FieldType {
 }
 
 /**
- * Responsive Formik-textfield
- * @param name key name for data
- * @param label text label
- * @param multiline
- * @param validate Optional validate function
- * @param validateImmediately Set to true if you want immediate validation as the user is typing.  Default behvavoir is to run validation on blur.
+ * Responsive Formik-textfield with some added utility for our purposes.
+ * fullwidth by intent, and design. designed to be vertically stacked
+ * and labelled.
  */
-const TextField = ({ name, label, multiline = false, rows = 3, validate, spellcheck = false, validateImmediately = false }: TextFieldProps): JSX.Element => (
-  <div className='edit-form-row '>
-    <label className='font-semibold md:w-36 md:-mt-2' htmlFor={name}>
-      {label}
+const TextField = (props: TextFieldProps): JSX.Element => (
+  <div className='edit-form-row w-full'>
+    <label className='font-semibold md:w-36 md:-mt-2' htmlFor={props.name}>
+      {props.label}
     </label>
-    <Field id={name} name={name} {...validate != null ? { validate } : null}>
+
+    <Field
+      id={props.name}
+      name={props.name}
+      {...props.validate != null ? { validate: props.validate } : null}
+    >
       {({ field, meta }: FieldType) => (
         <div className='w-full'>
 
-          {multiline
+          {props.multiline === true
             ? (<textarea
                 className='w-full edit-input'
-                rows={rows}
+                rows={props.rows}
                 {...field}
-                spellCheck={spellcheck}
+                spellCheck={props.spellcheck}
                />)
             : (<input
                 className='w-full edit-input'
                 type='text'
                 {...field}
-                spellCheck={spellcheck}
+                spellCheck={props.spellcheck}
                />)}
 
           <div className='h-3 text-sm pt-1 px-3 text-pink-600'>
-            {(validateImmediately || meta.touched) && (meta?.error ?? '')}
+            {(props.validateImmediately === true || meta.touched) && (meta?.error ?? '')}
           </div>
         </div>
       )}
