@@ -62,7 +62,9 @@ export const CORE_CRAG_FIELDS = gql`
 `
 
 /**
- * Create a media <--> climb (or area) association
+ * Create a media <--> climb association
+ *
+ * dest type is 0 for climb and 1 for area
  */
 export const MUTATION_ADD_CLIMB_TAG_TO_MEDIA = gql`
   mutation tagPhotoWithClimb($mediaUuid: ID!, $mediaUrl: String!, $srcUuid: ID!) {
@@ -71,6 +73,35 @@ export const MUTATION_ADD_CLIMB_TAG_TO_MEDIA = gql`
         mediaUuid: $mediaUuid,
         mediaUrl: $mediaUrl,
         mediaType: 0,
+        destinationId: $srcUuid,
+        destType: 0
+      }
+    ) {
+        ... on ClimbTag {
+          mediaUuid
+          mediaUrl
+          climb {
+            id
+            name
+          }
+        }
+      }
+  }`
+
+/**
+ * Create a media <-->  area association
+ *
+ * Explanation as to why there are two mutations:
+ *  I don't know why, but the API was not happy with me generalizing the logic.
+ *  I kept getting a 400-code error, I didn't track down why.
+ */
+export const MUTATION_ADD_AREA_TAG_TO_MEDIA = gql`
+  mutation tagPhotoWithArea($mediaUuid: ID!, $mediaUrl: String!, $srcUuid: ID!) {
+    setTag(
+      input: {
+        mediaUuid: $mediaUuid,
+        mediaUrl: $mediaUrl,
+        mediaType: 1,
         destinationId: $srcUuid,
         destType: 0
       }
