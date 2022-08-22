@@ -46,14 +46,14 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
       imageData = Buffer.from(imageData)
     }
 
-    let retry = 3
+    let retry = 1
     while (retry !== 0) {
       try {
         const url = await uploadPhoto(filename, imageData)
         await onUploaded(url)
         return // success, no err
-      } catch {
-
+      } catch (err) {
+        console.error(err)
       } finally {
         retry -= 1
       }

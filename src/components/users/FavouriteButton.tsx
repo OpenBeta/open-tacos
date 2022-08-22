@@ -96,7 +96,7 @@ export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Elemen
       onClick={toggle}
       className='text-center p-2 border-2 rounded-xl border-ob-primary transition
         text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
-        hover:text-white w-64 font-bold'
+        hover:text-white font-bold w-full'
     >
       {loading
         ? (

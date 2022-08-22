@@ -16,6 +16,7 @@ import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useSwipeable } from 'react-swipeable'
 import FavouriteButton from '../../components/users/FavouriteButton'
+import NewPostOnTaggable from '../../components/NewPostOnTaggable'
 
 interface ClimbPageProps {
   climb: Climb
@@ -52,11 +53,18 @@ const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
 
 export default ClimbPage
 
-const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
+const Body = ({
+  climb,
+  mediaListWithUsernames,
+  leftClimb,
+  rightClimb
+}: ClimbPageProps): JSX.Element => {
   const router = useRouter()
   const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
   const { climbId } = metadata
   useState([leftClimb, rightClimb])
+
+  const [addedTags, setAddedTags] = useState<MediaBaseTag[]>([])
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => {
@@ -87,8 +95,9 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
         />
 
         <div className='py-6'>
-          <PhotoMontage photoList={mediaListWithUsernames} />
+          <PhotoMontage photoList={[...mediaListWithUsernames, ...addedTags]} />
         </div>
+
         <div className='md:flex'>
           <div
             id='Title Information'
@@ -110,8 +119,29 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                 <strong>FA: </strong>{fa}
               </div>
 
-              <div className='flex pt-8'>
-                <FavouriteButton climbId={climbId} />
+              <div className='pr-6'>
+
+                <div className='flex pt-8'>
+                  <FavouriteButton climbId={climbId} />
+                </div>
+
+                <div className='pt-4'>
+                  <NewPostOnTaggable
+                    climbId={climb.id}
+                    onTagAdded={(tags) => setAddedTags([...addedTags, tags])}
+                  >
+                    <div className='flex gap-2 justify-center p-2 rounded-xl border-2 border-ob-secondary text-ob-secondary'>
+                      <svg xmlns='http://www.w3.org/2000/svg' className='h-6 w-6' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+                        <path strokeLinecap='round' strokeLinejoin='round' d='M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z' />
+                        <path strokeLinecap='round' strokeLinejoin='round' d='M15 13a3 3 0 11-6 0 3 3 0 016 0z' />
+                      </svg>
+
+                      <div>
+                        Upload Photos of climb
+                      </div>
+                    </div>
+                  </NewPostOnTaggable>
+                </div>
               </div>
             </div>
           </div>

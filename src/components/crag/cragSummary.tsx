@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react'
-import { AreaMetadataType, CountByGroupType } from '../../js/types'
+import { AreaMetadataType, CountByGroupType, MediaBaseTag } from '../../js/types'
 import FavouriteButton from '../users/FavouriteButton'
 
 export interface CragHeroProps {
@@ -11,6 +11,7 @@ export interface CragHeroProps {
   aggregate: CountByGroupType[]
   media: any[]
   areaMeta: AreaMetadataType
+  onTagAdded?: (tag: MediaBaseTag) => void
 }
 
 /**  For a given number of allowed words, quantize to the nearest
@@ -146,21 +147,44 @@ export default function CragSummary (props: CragHeroProps): JSX.Element {
         {props.title}
       </h1>
 
-      <a
-        href={getMapHref(props.latitude, props.longitude)}
-        target='blank'
+      <div
+        className='text-slate-700 tracking-wider text-sm flex'
+        title='Click to view on google maps'
       >
-        <div
-          className='text-slate-700 tracking-wider hover:underline
-          hover:text-blue-700 cursor-pointer text-sm'
-          title='Click to view on google maps'
+        <a
+          className='hover:text-blue-700 hover:underline'
+          href={getMapHref(props.latitude, props.longitude)}
+          target='blank'
         >
           {props.latitude}, {props.longitude}
-        </div>
-      </a>
+        </a>
+      </div>
 
-      <div className='flex-1 flex justify-end'>
-        <FavouriteButton areaId={props.areaMeta.areaId} />
+      <div className='flex-1 flex justify-end gap-2'>
+
+        <div>
+          {/**
+           * The back end does not currently support area image tagging. When it does, this will plug in
+           * without trouble.
+
+           <NewPostOnTaggable areaId={props.areaMeta.areaId} onTagAdded={props.onTagAdded}>
+            <div className='flex gap-2 justify-center p-2 rounded-xl border-2 border-ob-secondary text-ob-secondary'>
+              <svg xmlns='http://www.w3.org/2000/svg' className='h-6 w-6' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+                <path strokeLinecap='round' strokeLinejoin='round' d='M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z' />
+                <path strokeLinecap='round' strokeLinejoin='round' d='M15 13a3 3 0 11-6 0 3 3 0 016 0z' />
+              </svg>
+
+              <div>
+                Upload Photos of area
+              </div>
+            </div>
+          </NewPostOnTaggable>
+        */}
+        </div>
+
+        <div className='w-64'>
+          <FavouriteButton areaId={props.areaMeta.areaId} />
+        </div>
       </div>
 
       <div className='mt-6'>
