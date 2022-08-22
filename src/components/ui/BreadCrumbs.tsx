@@ -22,27 +22,36 @@ interface BreakCrumbsProps {
 
 function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumbsProps): JSX.Element {
   return (
-    <div aria-label='area-breadcrumbs'>
+    <div aria-label='area-breadcrumbs' className='flex-wrap flex gap-2 text-sm items-center'>
+      <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5 text-ob-primary' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+        <path strokeLinecap='round' strokeLinejoin='round' d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z' />
+        <path strokeLinecap='round' strokeLinejoin='round' d='M15 11a3 3 0 11-6 0 3 3 0 016 0z' />
+      </svg>
+
       <Link href='/'>
         <a className='hover:underline hover:text-base-content text-base-300'>Home</a>
       </Link>
+
       {pathTokens.map((place, index, array) => {
         const isLastElement = array.length - 1 === index
         const path = ancestors[index]
         const url = `/areas/${path}`
         const climbPageLastUrl = `/crag/${path}`
+
         return (
-          <span key={index} className='text-base-300'>
-            <span className='mx-1.5'>/</span>
-            {(isLastElement && !isClimbPage && <span className=''>{sanitizeName(place)}</span>) ||
+          <React.Fragment key={`bread-${index}`}>
+            <span className='text-xs'>/</span>
+            <span className='text-base-300'>
+              {(isLastElement && !isClimbPage && <span className='text-ob-primary'>{sanitizeName(place)}</span>) ||
             (
               <Link href={isLastElement && isClimbPage ? climbPageLastUrl : url}>
-                <a className='hover:underline hover:text-base-content'>
+                <a className='hover:underline hover:text-base-content whitespace-nowrap'>
                   {sanitizeName(place)}
                 </a>
               </Link>
             )}
-          </span>
+            </span>
+          </React.Fragment>
         )
       })}
     </div>
