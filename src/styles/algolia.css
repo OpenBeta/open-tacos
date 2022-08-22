@@ -138,10 +138,10 @@ body {
 }
 /* End of search for tagging */
 
-/* For Add area wizard */
+/* For Town, city, country search */
 
 .add-area-search-mobile-trigger-btn {
-  @apply input input-bordered input-sm !important;
+  @apply input input-bordered input-sm text-ellipsis !important;
 }
 
 .add-area-search-mobile-trigger-btn-icon {
@@ -150,4 +150,23 @@ body {
 
 .add-area-search {
   @apply rounded w-full !important;
+}
+
+
+/* For climbing area search */
+
+.area-only-search {
+  @apply rounded w-full !important;
+}
+
+.area-only-search-mobile-trigger-btn {
+  @apply input input-bordered input-sm !important;
+}
+
+.area-only-search-mobile-trigger-btn-icon {
+  @apply -ml-3.5 stroke-gray-400 stroke-2 !important;
+}
+
+.area-only-search-mobile-placeholder {
+  @apply text-base-300 text-sm text-ellipsis overflow-hidden !important;
 }

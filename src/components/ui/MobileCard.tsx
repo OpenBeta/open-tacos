@@ -13,7 +13,7 @@ export default function MobileCard ({ title, children, onClose }: MobileCardProp
           <button className='btn btn-circle btn-ghost btn-sm' onClick={onClose}>
             <XIcon className='w-6 h-6' />
           </button>
-          <h2>{title}</h2>
+          <h2 className='card-title'>{title}</h2>
           <div className='w-8 h-8' />
         </div>
         {children}

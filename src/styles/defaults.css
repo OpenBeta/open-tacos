@@ -2,7 +2,7 @@ body,
 html {
   height: 100%;
   font-size: 16px;
-  @apply bg-gray-900 font-sans text-base text-gray-900;
+  @apply font-sans text-base text-base-content;
 }
 
 /******** App's root container *********/

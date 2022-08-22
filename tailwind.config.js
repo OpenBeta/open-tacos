@@ -45,10 +45,10 @@ module.exports = {
         secondary: '#b1c077', // OB brand secondary
         accent: '#F15E40', // OB primary brand
         neutral: '#111826',
-        'base-content': '#111827', // text-gray-900
-        'base-300': '#4B5563', // text-gray-600
-        'base-200': '#9CA3AF', // text-gray-400
-        'base-100': '#E5E7EB', // text-gray-200
+        'base-content': '#111827', // gray-900
+        'base-300': '#4B5563', // gray-600
+        'base-200': '#9CA3AF', // gray-400
+        'base-100': '#F9FAFB', // gray-50
         '--rounded-box': '0.5rem'
       }
     }],

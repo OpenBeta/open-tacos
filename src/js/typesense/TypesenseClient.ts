@@ -38,6 +38,16 @@ export const climbSearchByName = async (query: string): Promise<any> => {
   return rs?.hits?.map(hit => hit.document) ?? []
 }
 
+export const areaSearchByName = async (query: string, latlng: number[]): Promise<any> => {
+  const rs = await typesenseClient.collections('climbs').documents().search({
+    q: query,
+    query_by: 'areaNames',
+    exclude_fields: 'disciplines, climbName, climbDesc, fa',
+    sort_by: `cragLatLng(${latlng[0]}, ${latlng[1]}):asc`
+  })
+  return rs?.hits?.map(hit => hit.document) ?? []
+}
+
 interface multisearchRet {
   climbs: TypesenseDocumentType[]
   areas: TypesenseDocumentType[]
