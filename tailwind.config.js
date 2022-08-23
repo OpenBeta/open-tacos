@@ -16,45 +16,9 @@ module.exports = {
       },
       colors: {
         'custom-green': '#8BB191',
-        'ob-primary': {
-          DEFAULT: '#F15E40',
-          50: '#fef4f2',
-          100: '#fee7e2',
-          200: '#ffd2c9',
-          300: '#fdb3a4',
-          400: '#fa876f',
-          500: '#f15e40', // Default
-          600: '#de4424',
-          700: '#bb351a',
-          800: '#9b2f19',
-          900: '#802d1c'
-        },
-        'ob-secondary': {
-          DEFAULT: '#8BB191',
-          50: '#f5f8f5',
-          100: '#dee9df',
-          200: '#bcd3bf',
-          300: '#8bb191', // Default
-          400: '#6b9673',
-          500: '#517b59',
-          600: '#3f6247',
-          700: '#35503c',
-          800: '#2e4133',
-          900: '#29382d'
-        },
-        'ob-tertiary': {
-          DEFAULT: '#62CAE3',
-          50: '#eefbfd',
-          100: '#d5f2f8',
-          200: '#b0e6f1',
-          300: '#62cae3', // Default
-          400: '#3bb5d5',
-          500: '#1f98bb',
-          600: '#1d7a9d',
-          700: '#1e6380',
-          800: '#215269',
-          900: '#1f455a'
-        },
+        'ob-primary': '#F15E40',
+        'ob-secondary': '#8BB191',
+        'ob-tertiary': '#62cae3',
         'ob-dark': '#0f172a', // slate-900
         'custom-secondary': '#62cae3',
         'custom-avery': '#a5d9cf',
