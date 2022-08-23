@@ -22,8 +22,6 @@ function NoLogin (): JSX.Element {
   )
 }
 
-
-
 export default function TickButton ({ climbId, areaId, name, grade }: Props): JSX.Element | null {
   const [loading, setLoading] = useState(false)
   const [isTicked, setIsTicked] = useState<boolean>(false)
@@ -31,11 +29,12 @@ export default function TickButton ({ climbId, areaId, name, grade }: Props): JS
   const session = useSession()
 
   useEffect(() => {
-    //query graphQL by climbID and userID and see if there is already a tick
-    //if there is
-        //set it to is ticked
+    // query graphQL by climbID and userID and see if there is already a tick
+    // if there is
+    // set it to is ticked
+    setLoading(false)
+    setIsTicked(false)
   })
-
 
   // If there is some kind of programming error / user is un-authenticated we render the default
   // interaction-devoid button

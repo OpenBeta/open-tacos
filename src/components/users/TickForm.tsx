@@ -45,11 +45,10 @@ const attemptTypes = [
   { id: 4, name: 'Pinkpoint' }
 ]
 
-
 export default function TickForm ({ open, setOpen, climbId, name, grade }): JSX.Element {
   const [style, setStyle] = useState(styles[1])
   const [attemptType, setAttemptType] = useState(attemptTypes[1])
-  //default is today for dateClimbed  
+  // default is today for dateClimbed
   const [dateClimbed, setDateClimbed] = useState<string>(new Date().toISOString().slice(0, 10))
   const [notes, setNotes] = useState<string>('')
   const [errors, setErrors] = useState<string[]>()
@@ -58,17 +57,17 @@ export default function TickForm ({ open, setOpen, climbId, name, grade }): JSX.
     MUTATION_ADD_TICK, {
       client: graphqlClient,
       errorPolicy: 'none'
-  })
-  
-  function resetInputs(): void{
+    })
+
+  function resetInputs (): void {
     setDateClimbed(new Date().toISOString().slice(0, 10))
     setAttemptType(attemptTypes[1])
     setNotes('')
     setStyle(styles[1])
   }
 
-    async function submitTick(): Promise<void> {
-    //build a tick object to send to the GraphQL backend
+  async function submitTick (): Promise<void> {
+    // build a tick object to send to the GraphQL backend
     const tick = {
       name: name,
       notes: notes,
@@ -79,8 +78,8 @@ export default function TickForm ({ open, setOpen, climbId, name, grade }): JSX.
       dateClimbed: dateClimbed,
       grade: grade
     }
-    //validate the tick object using the YUP schema declared above
-    //if it doesn't validate or there is some sort of error, render the errors in the form
+    // validate the tick object using the YUP schema declared above
+    // if it doesn't validate or there is some sort of error, render the errors in the form
     TickSchema.validate(tick)
       .then(async (validTick) => {
         const newTick = await addTick({
@@ -88,7 +87,7 @@ export default function TickForm ({ open, setOpen, climbId, name, grade }): JSX.
             input: validTick
           }
         })
-        //todo: add new tick to store whenever that is setup???
+        // todo: add new tick to store whenever that is setup???
         console.log(newTick)
         setOpen(false)
         resetInputs()
