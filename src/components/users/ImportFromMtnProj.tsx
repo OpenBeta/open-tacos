@@ -19,9 +19,9 @@ function ImportFromMtnProj (): JSX.Element | null {
     MUTATION_IMPORT_TICKS, {
       client: graphqlClient,
       errorPolicy: 'none'
-  })
-  
-  async function dontShowAgain(): Promise<void> {
+    })
+
+  async function dontShowAgain (): Promise<void> {
     setLoading(true)
     const res = await fetch('/api/user/ticks', {
       method: 'PUT',
@@ -149,7 +149,7 @@ function ImportFromMtnProj (): JSX.Element | null {
                         onClick={dontShowAgain}
                         className='bg-white rounded-md text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                       >
-                        {loading ? "Working..." : "Don't show again"}
+                        {loading ? 'Working...' : "Don't show again"}
                       </button>
                     </div>
                   </div>
