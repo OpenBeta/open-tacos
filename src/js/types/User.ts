@@ -1,5 +1,3 @@
-import { Tick } from '../../pages/api/user/metadataClient'
-
 export interface IReadOnlyUserMetadata {
   uuid: string
   roles: string[]
@@ -34,7 +32,6 @@ export interface IWritableUserMetadata {
      * The key of a tick is the climbs UUID on Open-Tacos
      * The values are declared above in the tick interface
      */
-    tickCollections?: { [key: string]: Tick[]}
   }
 }
 

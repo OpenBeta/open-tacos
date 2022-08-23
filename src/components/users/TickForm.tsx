@@ -26,7 +26,10 @@ const TickSchema = Yup.object().shape({
   grade: Yup.string()
     .required('Something went wrong fetching the climbs grade, please try again')
 })
-
+/**
+ * Options for the dropdown comboboxes
+ * Feel free to add any you think are valuable for our users
+ */
 const styles = [
   { id: 1, name: 'Solo' },
   { id: 2, name: 'TR' },
@@ -41,20 +44,31 @@ const attemptTypes = [
   { id: 3, name: 'Redpoint' },
   { id: 4, name: 'Pinkpoint' }
 ]
+
+
 export default function TickForm ({ open, setOpen, climbId, name, grade }): JSX.Element {
   const [style, setStyle] = useState(styles[1])
   const [attemptType, setAttemptType] = useState(attemptTypes[1])
-  const session = useSession()
+  //default is today for dateClimbed  
   const [dateClimbed, setDateClimbed] = useState<string>(new Date().toISOString().slice(0, 10))
-  const [notes, setNotes] = useState<string>()
+  const [notes, setNotes] = useState<string>('')
   const [errors, setErrors] = useState<string[]>()
+  const session = useSession()
   const [addTick] = useMutation(
     MUTATION_ADD_TICK, {
       client: graphqlClient,
       errorPolicy: 'none'
-    })
+  })
+  
+  function resetInputs(): void{
+    setDateClimbed(new Date().toISOString().slice(0, 10))
+    setAttemptType(attemptTypes[1])
+    setNotes('')
+    setStyle(styles[1])
+  }
 
-  async function submitTick (): Promise<void> {
+    async function submitTick(): Promise<void> {
+    //build a tick object to send to the GraphQL backend
     const tick = {
       name: name,
       notes: notes,
@@ -65,15 +79,19 @@ export default function TickForm ({ open, setOpen, climbId, name, grade }): JSX.
       dateClimbed: dateClimbed,
       grade: grade
     }
+    //validate the tick object using the YUP schema declared above
+    //if it doesn't validate or there is some sort of error, render the errors in the form
     TickSchema.validate(tick)
       .then(async (validTick) => {
         const newTick = await addTick({
           variables: {
-            input: tick
+            input: validTick
           }
         })
-        // add new tick to store???
+        //todo: add new tick to store whenever that is setup???
         console.log(newTick)
+        setOpen(false)
+        resetInputs()
       })
       .catch((error) => {
         setErrors([error.message])
@@ -123,7 +141,6 @@ export default function TickForm ({ open, setOpen, climbId, name, grade }): JSX.
                       className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
                     />
                   </div>
-
                   <ComboBox options={styles} value={style} onChange={setStyle} label='Style' />
                   <ComboBox options={attemptTypes} value={attemptType} onChange={setAttemptType} label='Attempt Type' />
                   <div>
@@ -141,7 +158,6 @@ export default function TickForm ({ open, setOpen, climbId, name, grade }): JSX.
                         defaultValue=''
                       />
                     </div>
-
                   </div>
                 </div>
                 <div className='mt-5 sm:mt-6'>

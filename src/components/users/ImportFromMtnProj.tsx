@@ -14,11 +14,26 @@ function ImportFromMtnProj (): JSX.Element | null {
   const session = useSession()
   const [show, setShow] = useState<boolean>(false)
   const [showInput, setShowInput] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [addTicks] = useMutation(
     MUTATION_IMPORT_TICKS, {
       client: graphqlClient,
       errorPolicy: 'none'
+  })
+  
+  async function dontShowAgain(): Promise<void> {
+    setLoading(true)
+    const res = await fetch('/api/user/ticks', {
+      method: 'PUT',
+      body: ''
     })
+    if (res.status === 200) {
+      setShow(false)
+    } else {
+      console.log(res)
+    }
+    setLoading(false)
+  }
 
   async function getTicks (): Promise<void> {
     // get the ticks and add it to the users metadata
@@ -69,15 +84,15 @@ function ImportFromMtnProj (): JSX.Element | null {
     <>
       <div
         aria-live='assertive'
-        className='fixed inset-0 flex items-end px-4 py-6 mt-24 pointer-events-none sm:p-6 sm:items-start'
+        className='fixed inset-0 z-10 flex items-end px-4 py-6 mt-24 pointer-events-none sm:p-6 sm:items-start'
       >
         <div className='w-full flex flex-col items-center space-y-4 sm:items-end'>
-          <Transition
+          <Transition.Root
             show={show}
             as={Fragment}
             enter='transform ease-out duration-300 transition'
             enterFrom='translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2'
-            enterTo='translate-y-6 opacity-100 sm:translate-x-0'
+            enterTo='translate-y-0 opacity-100 sm:translate-x-0'
             leave='transition ease-in duration-100'
             leaveFrom='opacity-100'
             leaveTo='opacity-0'
@@ -113,7 +128,9 @@ function ImportFromMtnProj (): JSX.Element | null {
                         <button
                           type='button'
                           onClick={() => setShowInput(true)}
-                          className='bg-white rounded-md text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                          className='text-center p-2 border-2 rounded-xl border-ob-primary transition
+                          text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
+                          hover:text-white w-32 font-bold'
                         >
                           Show me how
                         </button>}
@@ -121,15 +138,18 @@ function ImportFromMtnProj (): JSX.Element | null {
                         <button
                           type='button'
                           onClick={getTicks}
-                          className='bg-white rounded-md text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                          className='text-center p-2 border-2 rounded-xl border-ob-primary transition
+                          text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
+                          hover:text-white w-46 font-bold'
                         >
                           Get my ticks!
                         </button>}
                       <button
                         type='button'
+                        onClick={dontShowAgain}
                         className='bg-white rounded-md text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                       >
-                        Don't show again
+                        {loading ? "Working..." : "Don't show again"}
                       </button>
                     </div>
                   </div>
@@ -148,7 +168,7 @@ function ImportFromMtnProj (): JSX.Element | null {
                 </div>
               </div>
             </div>
-          </Transition>
+          </Transition.Root>
         </div>
       </div>
     </>
