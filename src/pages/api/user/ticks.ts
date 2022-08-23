@@ -5,6 +5,7 @@ import createMetadataClient, { Tick } from './metadataClient'
 import axios, { AxiosInstance } from 'axios'
 import { v5 as uuidv5, NIL } from 'uuid'
 
+
 const MP_ID_REGEX: RegExp = /route\/(?<id>\d+)\//
 /**
  *
@@ -23,6 +24,7 @@ function extractId (mpUrl: string): string | Number {
     return -1
   }
 }
+
 
 async function getMPTicks (uid: string): Promise<any[]> {
   const mpClient: AxiosInstance = axios.create({
@@ -53,7 +55,6 @@ const handler: NextApiHandler<any> = async (req, res) => {
       return
     } else if (req.method === 'POST') {
       // fetch data from mountain project here
-      // check to see if the ticks imported flag exists, if not create it
       const uid: string = JSON.parse(req.body)
       const tickCollection: Tick[] = []
       if (uid.length > 0 && meta.uuid !== undefined) {
@@ -71,11 +72,11 @@ const handler: NextApiHandler<any> = async (req, res) => {
           }
           tickCollection.push(newTick)
         })
-        // set the user flag to true, so the popup doesn't show anymore and
-        // update the metadata
+        //set the user flag to true, so the popup doesn't show anymore and 
+        //update the metadata
         meta.ticksImported = true
         await metadataClient.updateUserMetadata(meta)
-        // return the new ticks object
+        //return the new ticks object
         res.json({ ticks: tickCollection })
         res.end()
         return

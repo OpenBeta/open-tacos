@@ -56,7 +56,14 @@ export default function TickForm ({ open, setOpen, isTicked, climbId, name, grad
     MUTATION_ADD_TICK, {
       client: stagingGraphQLClient,
       errorPolicy: 'none'
-    })
+  })
+  
+  function resetInputs(): void{
+    setDateClimbed(new Date().toISOString().slice(0, 10))
+    setAttemptType(attemptTypes[1])
+    setNotes('')
+    setStyle(styles[1])
+  }
 
   /**
    * reset our inputs whenever a form is successfully submitted
