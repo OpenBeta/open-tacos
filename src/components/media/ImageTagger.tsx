@@ -51,7 +51,7 @@ export default function ImageTagger ({ isMobile = false, isOpen, mouseXY, imageI
     if (update != null) void update()
   }, [mouseXY])
 
-  const onKeyDown = useCallback((event) => {
+  const onKeyDown = useCallback((event: KeyboardEvent) => {
     if (isOpen && event.key === 'Escape') {
       console.log('Closing search')
       close()

@@ -8,7 +8,7 @@ module.exports = {
   ],
 
   // https://github.com/tailwindlabs/tailwindcss-forms
-  plugins: [require('daisyui'), require('@tailwindcss/typography')],
+  plugins: [require('daisyui'), require('@tailwindcss/typography'), require('tailwindcss-radix')()],
   theme: {
     extend: {
       fontFamily: {

@@ -1,70 +1,138 @@
-import React from 'react'
-import { styled, keyframes } from '@stitches/react'
+import { Transition } from '@headlessui/react'
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
+import cx from 'classnames'
+import React, { Fragment, useState } from 'react'
 
-const overlayShow = keyframes({
-  '0%': { opacity: 0 },
-  '100%': { opacity: 1 }
-})
+interface Props {
+  /** renderable button */
+  button?: string | JSX.Element
+  children?: any
+  /** The title of this alert */
+  title?: string
 
-const contentShow = keyframes({
-  '0%': { opacity: 0, transform: 'translate(-50%, -48%) scale(.96)' },
-  '100%': { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' }
-})
+  /** The text displayed inside the cancel button */
+  cancelText?: string
+  /** The text displayed inside the confirm button */
+  confirmText?: string
+  /** Fired when user clicks cancel */
+  onCancel?: () => void
+  /** Fired when user clicks confirm */
+  onConfirm?: () => void
 
-const StyledOverlay = styled(AlertDialogPrimitive.Overlay, {
-  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-  position: 'fixed',
-  inset: 0,
-  '@media (prefers-reduced-motion: no-preference)': {
-    animation: `${overlayShow()} 150ms cubic-bezier(0.16, 1, 0.3, 1)`
-  }
-})
+  /** if set, cancel button is not shown */
+  hideCancel?: boolean
+  /** if set, confirm button is not shown */
+  hideConfirm?: boolean
+  /** if set, confirm button is not shown */
+  hideTitle?: boolean
+}
 
-const StyledContent = styled(AlertDialogPrimitive.Content, {
-  backgroundColor: 'white',
-  borderRadius: 6,
-  boxShadow: 'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
-  position: 'fixed',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '90vw',
-  maxWidth: '500px',
-  maxHeight: '85vh',
-  padding: 25,
-  '@media (prefers-reduced-motion: no-preference)': {
-    animation: `${contentShow()} 150ms cubic-bezier(0.16, 1, 0.3, 1)`
-  },
-  '&:focus': { outline: 'none' }
-})
+/**
+ * Simple dialogue that asks the user for confimation / acknowledgement of something.
+ * The message, title and button may all be easily subbed for anything you like.
+ *
+ * Supply the body of this dialog as a child
+ * */
+const AlertDialog = (props: Props): JSX.Element => {
+  const [isOpen, setIsOpen] = useState(false)
 
-function Content ({ children, ...props }): JSX.Element {
+  const title = props.title ?? 'Are you sure?'
+  const body = props.children
+  const cancelText = props.cancelText ?? 'Cancel'
+  const confirmText = props.confirmText ?? 'Okay'
+
   return (
-    <AlertDialogPrimitive.Portal>
-      <StyledOverlay />
-      <StyledContent {...props}>{children}</StyledContent>
-    </AlertDialogPrimitive.Portal>
+    <AlertDialogPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
+      <AlertDialogPrimitive.Trigger asChild>
+        <div onClick={() => setIsOpen(true)}>
+          {props.button}
+        </div>
+      </AlertDialogPrimitive.Trigger>
+      <AlertDialogPrimitive.Portal forceMount>
+
+        <Transition.Root show={isOpen}>
+          <Transition.Child
+            as={Fragment}
+            enter='ease-out duration-300'
+            enterFrom='opacity-0'
+            enterTo='opacity-100'
+            leave='ease-in duration-200'
+            leaveFrom='opacity-100'
+            leaveTo='opacity-0'
+          >
+            <AlertDialogPrimitive.Overlay
+              forceMount
+              className='fixed inset-0 z-20 bg-black/50'
+            />
+          </Transition.Child>
+          <Transition.Child
+            as={Fragment}
+            enter='ease-out duration-300'
+            enterFrom='opacity-0 scale-95'
+            enterTo='opacity-100 scale-100'
+            leave='ease-in duration-200'
+            leaveFrom='opacity-100 scale-100'
+            leaveTo='opacity-0 scale-95'
+          >
+            <AlertDialogPrimitive.Content
+              forceMount
+              className={cx(
+                'fixed z-50',
+                'w-[95vw] max-w-md rounded-lg p-4 md:w-full',
+                'top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]',
+                'bg-white dark:bg-gray-800',
+                'focus:outline-none focus-visible:ring focus-visible:ring-ob-primary focus-visible:ring-opacity-75'
+              )}
+            >
+              {props.hideTitle !== true && (
+                <AlertDialogPrimitive.Title className='text-sm font-medium text-gray-900 dark:text-gray-100'>
+                  {title}
+                </AlertDialogPrimitive.Title>
+              )}
+
+              <AlertDialogPrimitive.Description className='mt-2 text-sm font-normal text-gray-700 dark:text-gray-400'>
+                {body}
+              </AlertDialogPrimitive.Description>
+              <div className='mt-4 flex justify-end space-x-2'>
+                {props.hideCancel !== true && (
+
+                  <AlertDialogPrimitive.Cancel
+                    onClick={() => {
+                      if (props.onCancel !== undefined) props.onCancel()
+                    }}
+                    className={cx(
+                      'inline-flex select-none justify-center rounded-md px-4 py-2 text-sm font-medium',
+                      'bg-white text-gray-900 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-100 hover:dark:bg-gray-600',
+                      'border border-gray-300 dark:border-transparent',
+                      'focus:outline-none focus-visible:ring focus-visible:ring-ob-primary focus-visible:ring-opacity-75'
+                    )}
+                  >
+                    {cancelText}
+                  </AlertDialogPrimitive.Cancel>
+                )}
+
+                {props.hideConfirm !== true && (
+                  <AlertDialogPrimitive.Action
+                    onClick={() => {
+                      if (props.onConfirm !== undefined) props.onConfirm()
+                    }}
+                    className={cx(
+                      'inline-flex select-none justify-center rounded-md px-4 py-2 text-sm font-medium',
+                      'bg-ob-primary text-white hover:bg-ob-primary dark:bg-ob-primary',
+                      'border border-transparent',
+                      'focus:outline-none focus-visible:ring focus-visible:ring-ob-primar focus-visible:ring-opacity-75'
+                    )}
+                  >
+                    {confirmText}
+                  </AlertDialogPrimitive.Action>
+                )}
+              </div>
+            </AlertDialogPrimitive.Content>
+          </Transition.Child>
+        </Transition.Root>
+      </AlertDialogPrimitive.Portal>
+    </AlertDialogPrimitive.Root>
   )
 }
 
-const StyledTitle = styled(AlertDialogPrimitive.Title, {
-  margin: 0,
-  fontSize: 17,
-  fontWeight: 500
-})
-
-const StyledDescription = styled(AlertDialogPrimitive.Description, {
-  marginBottom: 20,
-  fontSize: 15,
-  lineHeight: 1.5
-})
-
-// Exports
-export const AlertDialog = AlertDialogPrimitive.Root
-export const AlertDialogTrigger = AlertDialogPrimitive.Trigger
-export const AlertDialogContent = Content
-export const AlertDialogTitle = StyledTitle
-export const AlertDialogDescription = StyledDescription
-export const AlertDialogAction = AlertDialogPrimitive.Action
-export const AlertDialogCancel = AlertDialogPrimitive.Cancel
+export default AlertDialog
