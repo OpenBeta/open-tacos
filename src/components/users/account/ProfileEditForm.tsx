@@ -66,9 +66,12 @@ export default function ProfileEditForm (): ReactElement {
     const profile = await updateUserProfile(newValues)
 
     if (profile != null) {
+      setProfile(profile)
       setJustSubmitted(true)
       // Also trigger a page rebuild
       void revalidateServePage(profile.nick)
+    } else {
+      console.error('Profile object was supposed to not be null!')
     }
   }, [])
 
