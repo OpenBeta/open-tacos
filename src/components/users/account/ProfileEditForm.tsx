@@ -4,7 +4,6 @@ import * as Yup from 'yup'
 
 import { getUserProfile, updateUserProfile } from '../../../js/auth/CurrentUserClient'
 import TextField from '../../ui/TextField'
-import { Button, ButtonVariant } from '../../ui/BaseButton'
 import Snackbar from '../../ui/Snackbar'
 import { IWritableUserMetadata } from '../../../js/types/User'
 import { doesUsernameExist } from '../../../js/userApi/user'
@@ -65,6 +64,7 @@ export default function ProfileEditForm (): ReactElement {
 
   const submitHandler = useCallback(async (newValues: IWritableUserMetadata) => {
     const profile = await updateUserProfile(newValues)
+
     if (profile != null) {
       setJustSubmitted(true)
       // Also trigger a page rebuild
@@ -125,22 +125,27 @@ export default function ProfileEditForm (): ReactElement {
           <TextField name='name' label='Name' />
           <TextField name='bio' label='Bio' multiline rows={3} spellcheck />
           <TextField name='website' label='Website (optional)' />
-          <div className='flex justify-end'>
-            <Button
-              label={isSubmitting ? 'Saving...' : 'Save'}
-              type='submit'
-              variant={ButtonVariant.SOLID_DEFAULT}
-              disabled={(dirty && !isValid) || isSubmitting || loadingName}
+          <div className='flex justify-center pt-6'>
+            <Snackbar
+              open={justSubmitted}
+              message='Profile updated!'
+              onClose={() => setJustSubmitted(false)}
             />
+          </div>
+
+          <div className='flex justify-end pt-4'>
+            <button
+              title='Commit these changes to your profile'
+              type='submit'
+              disabled={(dirty && !isValid) || isSubmitting}
+              className='btn btn-primary w-40'
+            >
+              {isSubmitting ? 'Saving...' : 'Save'}
+            </button>
           </div>
         </Form>)}
       </Formik>
 
-      <Snackbar
-        open={justSubmitted}
-        message='Profile updated!'
-        onClose={() => setJustSubmitted(false)}
-      />
     </div>
   )
 }
