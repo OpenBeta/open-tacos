@@ -1,6 +1,8 @@
+const runtimeCaching = require('./cache')
 const withPWA = require('next-pwa')({
   dest: 'public',
-  // disable: process.env.NODE_ENV === 'development',
+  publicExcludes: ['!logo/*', '!fonts/*', '!manifest\.json'],
+  runtimeCaching,
 })
 const withMDX = require('@next/mdx')({
   reactStrictMode: true,
