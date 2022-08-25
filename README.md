@@ -1,6 +1,6 @@
 <p align="center" style="padding-top:1rem">
   <a href="https://openbeta.io">
-    <img alt="OpenBeta logo" src="public/openbeta-logo-192x192.png" width="60" />
+    <img alt="OpenBeta logo" src="public/logo/openbeta-logo-192x192.png" width="60" />
   </a>
 </p>
 <h1 align="center">

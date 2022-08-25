@@ -3,8 +3,30 @@
   "short_name": "OpenBeta",
   "icons": [
     {
-      "src": "/openbeta-logo-192x192.png",
+      "src": "/logo/openbeta-logo-180x180-maskable.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/logo/openbeta-logo-192x192.png",
       "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo/openbeta-logo-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo/openbeta-logo-512x512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/logo/openbeta-logo-751x751.png",
+      "sizes": "751x751",
       "type": "image/png"
     }
   ],

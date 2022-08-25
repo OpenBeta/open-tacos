@@ -54,6 +54,8 @@ export default function SeoTags ({ description = '', keywords = [], title, image
       <link rel='icon' type='image/x-icon' href='/favicon.ico' />
 
       <link rel='manifest' href='/manifest.json' />
+      <meta name='theme-color' content='#F15E40' />
+      <link rel='apple-touch-icon' sizes='180x180' href='/logo/openbeta-logo-180x180-maskable.png' />
     </Head>
   )
 }
