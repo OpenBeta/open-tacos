@@ -48,11 +48,12 @@ const CUSTOM_CLASSES = {
   item: 'tag-search-item',
   panelLayout: 'tag-search-panelLayout',
   sourceHeader: 'tag-search-sourceHeader',
-  form: 'add-area-search-form',
-  inputWrapper: 'tag-search-inputWrapper',
-  inputWrapperPrefix: 'tag-search-inputWrapperPrefix',
-  submitButton: 'tag-search-submit-button',
-  root: 'add-area-search',
-  detachedSearchButton: 'add-area-search-mobile-trigger-btn',
-  detachedSearchButtonIcon: 'add-area-search-mobile-trigger-btn-icon'
+  form: 'aa-default-mobile-form',
+  // inputWrapper: 'tag-search-inputWrapper',
+  // inputWrapperPrefix: 'tag-search-inputWrapperPrefix',
+  submitButton: 'aa-default-mobile-submit-button',
+  root: 'aa-default-mobile',
+  detachedSearchButton: 'aa-default-mobile-trigger-btn',
+  detachedSearchButtonIcon: 'aa-default-mobile-trigger-btn-icon',
+  detachedCancelButton: 'aa-default-mobile-cancel-button'
 }

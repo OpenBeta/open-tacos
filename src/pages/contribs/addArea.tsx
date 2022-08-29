@@ -1,7 +1,8 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useForm, useFormContext, Controller, FormProvider, UseFormReturn } from 'react-hook-form'
+import classNames from 'classnames'
 
 import NearAreaPoi from '../../components/search/NearAreaPoi'
 import AreaSearch from '../../components/search/AreaSearch'
@@ -17,7 +18,11 @@ const AddAreaPage: NextPage<{}> = () => {
 
   const form = useForm()
   const { handleSubmit } = form
-  const onSubmit = (data): void => console.log(data)
+  const onSubmit = async (data): Promise<void> => {
+    console.log(data)
+    // eslint-disable-next-line
+    await new Promise(r => setTimeout(r, 2000))
+  }
 
   return (
     <div className='max-w-md mx-auto pb-8'>
@@ -34,15 +39,17 @@ const AddAreaPage: NextPage<{}> = () => {
             Submit
           </li>
         </ul>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className='mt-8 text-lg text-content-base font-bold'>Location</div>
-          <Step1 />
-          <Step2 />
-          <div className='mt-8 text-lg text-content-base font-bold'>New area</div>
-          <Step3 form={form} />
-          <div className='mt-8 text-lg text-content-base font-bold'>Submit</div>
-          <Step5 />
-        </form>
+        <FormProvider {...form}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className='mt-8 text-lg text-content-base font-bold'>Location</div>
+            <Step1 />
+            <Step2 />
+            <div className='mt-8 text-lg text-content-base font-bold'>New area</div>
+            <Step3 form={form} />
+            <div className='mt-8 text-lg text-content-base font-bold'>Submit</div>
+            <Step5 />
+          </form>
+        </FormProvider>
       </MobileCard>
     </div>
   )
@@ -50,12 +57,33 @@ const AddAreaPage: NextPage<{}> = () => {
 
 const Step1 = (): JSX.Element => {
   const text = useWizardStore().addAreaStore.refContext()
+  const refLnglat = useWizardStore().addAreaStore.refContextData()
+
+  console.log('#refLonglat', refLnglat)
+
+  const { control } = useFormContext()
+
+  // useEffect(() => {
+
+  // }, [text])
+
   return (
     <div className='form-control w-full'>
       <label className='label'>
         <span className='label-text font-semibold'>Town, city, or landmark: *</span>
       </label>
-      <NearAreaPoi placeholder={text} />
+      <Controller
+        control={control}
+        name='test'
+        render={({ field: { onChange, onBlur, value, ref }, formState, fieldState }) =>
+          <NearAreaPoi placeholder={text} />}
+      />
+      {/* <input
+        {...register('refLnglat', { required: true })}
+        // type='hidden'
+        defaultValue={refLnglat.join(',')}
+        value={refLnglat.join(',')}
+      /> */}
       <label className='label'>
         <span className='label-text-alt text-base-200 text-left'>The more specific the better.</span>
       </label>
@@ -117,9 +145,20 @@ const Step3 = ({ form }: Step3Props): JSX.Element => {
 // }
 
 const Step5 = (): JSX.Element => {
+  const { formState } = useFormContext()
+  const { isSubmitting } = formState
   return (
     <div className='form-control'>
-      <button className='mt-4 btn btn-primary btn-wide btn-sm w-full' type='submit'>Submit</button>
+      <button
+        className={
+          classNames(
+            'mt-4 btn btn-primary btn-wide btn-sm w-full',
+            isSubmitting ? 'loading btn-disabled' : ''
+          )
+        }
+        type='submit'
+      >Submit
+      </button>
       <label className='label'>
         <span className='label-text-alt text-base-content text-opacity-60'>You can update additional attributes later.</span>
       </label>

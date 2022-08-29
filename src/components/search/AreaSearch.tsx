@@ -43,7 +43,7 @@ const CUSTOM_CLASSES = {
   item: 'tag-search-item',
   panelLayout: 'tag-search-panelLayout',
   sourceHeader: 'tag-search-sourceHeader',
-  form: 'add-area-search-form',
+  form: 'aa-default-mobile-form',
   inputWrapper: 'tag-search-inputWrapper',
   inputWrapperPrefix: 'tag-search-inputWrapperPrefix',
   submitButton: 'tag-search-submit-button',

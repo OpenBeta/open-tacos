@@ -124,7 +124,7 @@ body {
   @apply bg-inherit p-0 h-auto w-auto !important;
 }
 
-.tag-search-submit-button .aa-SubmitIcon{
+.tag-search-submit-button .aa-SubmitIcon {
   @apply text-black stroke-2 stroke-black w-4 h-4 !important;
 }
 
@@ -140,16 +140,27 @@ body {
 
 /* For Town, city, country search */
 
-.add-area-search-mobile-trigger-btn {
+.aa-default-mobile-trigger-btn {
   @apply input input-bordered input-sm text-ellipsis !important;
 }
 
-.add-area-search-mobile-trigger-btn-icon {
+.aa-default-mobile-trigger-btn-icon {
   @apply -ml-3.5 stroke-gray-400 stroke-2 !important;
 }
 
-.add-area-search {
-  @apply rounded w-full !important;
+.aa-default-mobile-submit-button .aa-SubmitIcon {
+  @apply text-black stroke-2 stroke-black w-5 h-5 !important;
+}
+
+.aa-default-mobile {
+}
+
+.aa-default-mobile-form {
+  @apply rounded border-0 ring-0 !important;
+}
+
+.aa-default-mobile-cancel-button{
+  @apply btn btn-sm text-sm !important;
 }
 
 
