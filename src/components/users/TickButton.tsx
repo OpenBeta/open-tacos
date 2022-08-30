@@ -1,23 +1,25 @@
-import { signIn, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
+import { getTicksByUserAndClimb } from '../../js/graphql/api'
+import { TickType } from '../../js/types'
 import TickForm from './TickForm'
 
 interface Props {
-  climbId?: string
+  climbId: string
   areaId?: string
   name?: string
   grade?: string
 }
 
-function NoLogin (): JSX.Element {
+function IsTicked ({ loading, onClick }): JSX.Element {
   return (
     <button
-      onClick={async () => await signIn('auth0', { callbackUrl: '/api/user/me' })}
-      className='text-center p-2 px-3 border-2 rounded-xl border-ob-primary transition
-        text-ob-primary hover:bg-slate-700 hover:ring hover:ring-slate-700 ring-offset-2
-        hover:text-white hover:border-slate-700'
-    >
-      Login to tick
+      disabled={loading}
+      onClick={onClick}
+      className='mt-2 text-center p-2 border-2 rounded-xl border-ob-primary transition
+        text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
+        hover:text-white w-64 font-bold'
+    >👀 View Ticks
     </button>
   )
 }
@@ -25,41 +27,60 @@ function NoLogin (): JSX.Element {
 export default function TickButton ({ climbId, areaId, name, grade }: Props): JSX.Element | null {
   const [loading, setLoading] = useState(false)
   const [isTicked, setIsTicked] = useState<boolean>(false)
+  // const [viewTicks, setViewTicks] = useState<boolean>(false)
+  const [ticks, setTicks] = useState<TickType[]>([])
   const [open, setOpen] = useState(false)
   const session = useSession()
 
   useEffect(() => {
-    // query graphQL by climbID and userID and see if there is already a tick
-    // if there is
-    // set it to is ticked
-    setLoading(false)
-    setIsTicked(false)
-  })
+    getTicks()
+  }, [ticks])
 
-  // If there is some kind of programming error / user is un-authenticated we render the default
-  // interaction-devoid button
+  function getTicks (): void {
+    const userId = session.data?.user.metadata.uuid ?? ''
+    if (userId !== '') {
+      setLoading(true)
+      getTicksByUserAndClimb(climbId, userId)
+        .then((data) => {
+          if (data.length > 0) {
+            setTicks(data)
+            setIsTicked(true)
+          } else {
+            setTicks(data)
+          }
+        }
+        )
+        .finally(() => {
+          setLoading(false)
+        })
+    }
+  }
+
+  // If there is some kind of programming error / user is un-authenticated we render nothing
   if ((climbId === undefined && areaId === null) || session.status === 'unauthenticated') {
-    return <NoLogin />
+    return null
   }
 
   return (
     <>
-      <button
-        disabled={loading}
-        onClick={() => setOpen(true)}
-        className='mt-2 text-center p-2 border-2 rounded-xl border-ob-primary transition
+      {!isTicked &&
+        <button
+          disabled={loading}
+          onClick={() => setOpen(true)}
+          className='mt-2 text-center p-2 border-2 rounded-xl border-ob-primary transition
         text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
         hover:text-white w-64 font-bold'
-      >
-        {loading
-          ? (
-            <span className='animate-pulse'>
-              Working on it...
-            </span>
-            )
-          : (!isTicked ? 'Tick this climb' : 'Tick again')}
-      </button>
-      <TickForm open={open} setOpen={setOpen} climbId={climbId} name={name} grade={grade} />
+        >
+          {loading
+            ? (
+              <span className='animate-pulse'>
+                Working on it...
+              </span>
+              )
+            : 'Tick this climb'}
+        </button>}
+      {isTicked && <IsTicked loading={loading} onClick={() => getTicks()} />}
+      <TickForm open={open} setOpen={setOpen} isTicked={setIsTicked} climbId={climbId} name={name} grade={grade} />
     </>
   )
 }

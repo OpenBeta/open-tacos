@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
-import { graphqlClient } from '../../js/graphql/Client'
+import { stagingGraphQLClient } from '../../js/graphql/Client'
 import { MUTATION_ADD_TICK } from '../../js/graphql/fragments'
 import ComboBox from '../ui/ComboBox'
 import * as Yup from 'yup'
@@ -45,7 +45,7 @@ const attemptTypes = [
   { id: 4, name: 'Pinkpoint' }
 ]
 
-export default function TickForm ({ open, setOpen, climbId, name, grade }): JSX.Element {
+export default function TickForm ({ open, setOpen, isTicked, climbId, name, grade }): JSX.Element {
   const [style, setStyle] = useState(styles[1])
   const [attemptType, setAttemptType] = useState(attemptTypes[1])
   // default is today for dateClimbed
@@ -55,7 +55,7 @@ export default function TickForm ({ open, setOpen, climbId, name, grade }): JSX.
   const session = useSession()
   const [addTick] = useMutation(
     MUTATION_ADD_TICK, {
-      client: graphqlClient,
+      client: stagingGraphQLClient,
       errorPolicy: 'none'
     })
 
@@ -87,10 +87,14 @@ export default function TickForm ({ open, setOpen, climbId, name, grade }): JSX.
             input: validTick
           }
         })
-        // todo: add new tick to store whenever that is setup???
-        console.log(newTick)
-        setOpen(false)
-        resetInputs()
+        if (newTick.data !== null) {
+          // if the tick is persisted in the database
+          // change the ticks button to the isticked button
+          isTicked(true)
+          // todo: add new tick to store whenever that is setup???
+          setOpen(false)
+          resetInputs()
+        }
       })
       .catch((error) => {
         setErrors([error.message])
@@ -154,7 +158,6 @@ export default function TickForm ({ open, setOpen, climbId, name, grade }): JSX.
                         onChange={(e) => setNotes(e.target.value)}
                         id='comment'
                         className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
-                        defaultValue=''
                       />
                     </div>
                   </div>

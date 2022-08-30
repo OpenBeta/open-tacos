@@ -4,10 +4,10 @@ import { DocumentDownloadIcon } from '@heroicons/react/outline'
 import { XIcon } from '@heroicons/react/solid'
 import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
-import { graphqlClient } from '../../js/graphql/Client'
+import { stagingGraphQLClient } from '../../js/graphql/Client'
 import { MUTATION_IMPORT_TICKS } from '../../js/graphql/fragments'
 
-// regex: ^\d{9}\/ -- matches the first 9 digits and a slash
+const pattern = /^https:\/\/www.mountainproject.com\/user\/\d{9}\/[a-zA-Z-]*/
 
 function ImportFromMtnProj (): JSX.Element | null {
   const [mpUID, setMPUID] = useState('')
@@ -15,9 +15,10 @@ function ImportFromMtnProj (): JSX.Element | null {
   const [show, setShow] = useState<boolean>(false)
   const [showInput, setShowInput] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState<string[]>([])
   const [addTicks] = useMutation(
     MUTATION_IMPORT_TICKS, {
-      client: graphqlClient,
+      client: stagingGraphQLClient,
       errorPolicy: 'none'
     })
 
@@ -30,30 +31,34 @@ function ImportFromMtnProj (): JSX.Element | null {
     if (res.status === 200) {
       setShow(false)
     } else {
-      console.log(res)
+      setErrors(['Sorry, something went wrong. Please try again later'])
     }
     setLoading(false)
   }
 
   async function getTicks (): Promise<void> {
-    // get the ticks and add it to the users metadata
-    // todo: need regex to verify mtn project ID
-    const res = await fetch('/api/user/ticks', {
-      method: 'POST',
-      body: JSON.stringify(mpUID)
-    })
-    if (res.status === 200) {
-      setShow(false)
-      const { ticks } = await res.json()
-      const dbTicks = await addTicks({
-        variables: {
-          input: ticks
-        }
+    // get the ticks and add it to the database
+    if (pattern.test(mpUID)) {
+      const res = await fetch('/api/user/ticks', {
+        method: 'POST',
+        body: JSON.stringify(mpUID)
       })
-      // put the ticks into the store?
-      console.log(dbTicks)
+      if (res.status === 200) {
+        setShow(false)
+        const { ticks } = await res.json()
+        const dbTicks = await addTicks({
+          variables: {
+            input: ticks
+          }
+        })
+        // put the ticks into the store?
+        console.log(dbTicks)
+      } else {
+        setErrors(['Sorry, something went wrong. Please try again later'])
+      }
     } else {
-      console.log(res)
+      // handle errors
+      setErrors(['Please input a valid Mountain Project ID'])
     }
   }
 
@@ -61,6 +66,7 @@ function ImportFromMtnProj (): JSX.Element | null {
     // if the user is authenticated we want to show the import your ticks modal
     // then we check to see if they have a ticks imported flag set
     // if it is, set show to the opposite of whatever it is
+    // otherwise don't show the modal
     fetch('/api/user/profile')
       .then(async res => await res.json())
       .then((profile) => {
@@ -69,13 +75,9 @@ function ImportFromMtnProj (): JSX.Element | null {
         } else if (session.status === 'authenticated') {
           setShow(true)
         } else {
-          setShow(true)
+          setShow(false)
         }
       }).catch(console.error)
-      .finally(() => {
-        // set loading here
-
-      })
   }, [session])
 
   return (
@@ -97,13 +99,14 @@ function ImportFromMtnProj (): JSX.Element | null {
             leaveFrom='opacity-100'
             leaveTo='opacity-0'
           >
-            <div className='max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden'>
+            <div className='max-w-xl w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden'>
               <div className='p-4'>
                 <div className='flex items-start'>
                   <div className='flex-shrink-0'>
                     <DocumentDownloadIcon className='h-6 w-6 text-gray-400' aria-hidden='true' />
                   </div>
                   <div className='ml-3 w-0 flex-1 pt-0.5'>
+                    {(errors != null) && errors.length > 0 && errors.map((err, i) => <p className='mt-2 text-ob-primary' key={i}>{err}</p>)}
                     <p className='text-sm font-medium text-gray-900'>{showInput ? 'Input your mountain project profile link' : 'Import your ticks from Mtn Project'}</p>
                     {!showInput &&
                       <p className='mt-1 text-sm text-gray-500'>
@@ -119,7 +122,7 @@ function ImportFromMtnProj (): JSX.Element | null {
                             value={mpUID}
                             onChange={(e) => setMPUID(e.target.value)}
                             className='focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
-                            placeholder='https://www.mountainproject.com/user/200381859/brendan-downing'
+                            placeholder='https://www.mountainproject.com/user/123456789/username'
                           />
                         </div>
                       </div>}

@@ -170,3 +170,19 @@ mutation AddTick($input: Tick) {
     grade
   }
 }`
+
+export const QUERY_TICKS_BY_USER_AND_CLIMB = gql`
+query userTicksByClimbId($userId: String, $climbId: String) {
+  userTicksByClimbId(userId: $userId, climbId: $climbId) {
+    _id
+    name
+    notes
+    climbId
+    style
+    attemptType
+    dateClimbed
+    grade
+    userId
+  }
+}
+`
