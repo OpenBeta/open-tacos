@@ -1,9 +1,9 @@
 import { gql } from '@apollo/client'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
-import { AreaType, MediaTagWithClimb, MediaByAuthor } from '../types'
-import { graphqlClient } from './Client'
-import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA, QUERY_CRAGS_WITHIN } from './fragments'
+import { AreaType, TickType, MediaTagWithClimb, MediaByAuthor } from '../types'
+import { graphqlClient, stagingGraphQLClient } from './Client'
+import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB } from './fragments'
 interface CragsDetailsNearType {
   data: AreaType[] // Should use Omit or Pick
   placeId: string | undefined
@@ -142,6 +142,24 @@ export const getCragsWithin = async ({ bbox, zoom }): Promise<any> => {
     console.log('cragsWithin() error', e)
   }
   return []
+}
+
+export const getTicksByUserAndClimb = async (climbId: string, userId: string): Promise<any> => {
+  try {
+    const res = await stagingGraphQLClient.query<{ userTicksByClimbId: TickType[] }>({
+      query: QUERY_TICKS_BY_USER_AND_CLIMB,
+      variables: {
+        climbId,
+        userId
+      }
+    })
+
+    if (Array.isArray(res.data?.userTicksByClimbId)) {
+      return res.data.userTicksByClimbId
+    }
+  } catch (e) {
+    console.error('Error fetching ticks by user and climb id', e)
+  }
 }
 
 export const getCragsWithinNicely = AwesomeDebouncePromise(getCragsWithin, 1000)

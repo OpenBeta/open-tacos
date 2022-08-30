@@ -200,3 +200,15 @@ export interface XViewStateType extends ViewState{
   height: number
   bbox: BBox
 }
+
+export interface TickType{
+  _id: string
+  userId: string
+  name: string
+  notes: string
+  climbId: string
+  style: string
+  attemptType: string
+  dateClimbed: string
+  grade: string
+}
