@@ -89,7 +89,7 @@ function ImportFromMtnProj (): JSX.Element | null {
         if (profile?.ticksImported !== null) {
           setShow(profile.ticksImported !== true)
         } else if (session.status === 'authenticated') {
-          setShow(true)
+          setShow(false)
         } else {
           setShow(false)
         }
