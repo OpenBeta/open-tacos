@@ -225,6 +225,18 @@ export interface TickType{
   grade: string
 }
 
+export interface TickType{
+  _id: string
+  userId: string
+  name: string
+  notes: string
+  climbId: string
+  style: string
+  attemptType: string
+  dateClimbed: string
+  grade: string
+}
+
 export interface UpdateDescriptionType {
   updatedFields?: string[]
   removedFields?: string[]
