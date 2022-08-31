@@ -168,6 +168,7 @@ Thanks goes to these wonderful people:
     <td align="center"><a href="https://github.com/atstp"><img src="https://avatars.githubusercontent.com/u/5891072?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Daniel</b></sub></a><br /><a href="#ideas-atstp" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://www.prajwalborkar.me/"><img src="https://avatars.githubusercontent.com/u/48290911?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Prajwal</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=PrajwalBorkar" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/JetseVerschuren"><img src="https://avatars.githubusercontent.com/u/22445469?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jetse Verschuren</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=JetseVerschuren" title="Code">💻</a> <a href="#ideas-JetseVerschuren" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/siman4457"><img src="https://avatars.githubusercontent.com/u/28658492?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Siman Shrestha</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=siman4457" title="Code">💻</a></td>
   </tr>
 </table>
 
