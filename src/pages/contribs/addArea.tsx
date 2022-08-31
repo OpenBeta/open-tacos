@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useForm, useFormContext, Controller, FormProvider, UseFormReturn } from 'react-hook-form'
@@ -7,7 +7,7 @@ import classNames from 'classnames'
 import NearAreaPoi from '../../components/search/NearAreaPoi'
 import AreaSearch from '../../components/search/AreaSearch'
 import MobileCard from '../../components/ui/MobileCard'
-import { useWizardStore } from '../../js/stores/wizards'
+import { useWizardStore, wizardActions } from '../../js/stores/wizards'
 
 const AddAreaPage: NextPage<{}> = () => {
   const router = useRouter()
@@ -57,15 +57,9 @@ const AddAreaPage: NextPage<{}> = () => {
 
 const Step1 = (): JSX.Element => {
   const text = useWizardStore().addAreaStore.refContext()
-  const refLnglat = useWizardStore().addAreaStore.refContextData()
-
-  console.log('#refLonglat', refLnglat)
+  // const refLnglat = useWizardStore().addAreaStore.refContextData()
 
   const { control } = useFormContext()
-
-  // useEffect(() => {
-
-  // }, [text])
 
   return (
     <div className='form-control w-full'>
@@ -93,12 +87,27 @@ const Step1 = (): JSX.Element => {
 
 const Step2 = (): JSX.Element => {
   const text = useWizardStore().addAreaStore.refAreaName()
+  const query = {
+    text,
+    data: {
+      latlng: useWizardStore().addAreaStore.refContextData()
+    }
+  }
+
+  const handleSelect = useCallback((data): void => {
+    wizardActions.addAreaStore.recordStep2(data.name, data.areaUUID)
+  }, [])
+
+  const handleReset = useCallback((): void => {
+    wizardActions.addAreaStore.resetStep2()
+  }, [])
+
   return (
     <div className='form-control w-full'>
       <label className='label'>
         <span className='label-text font-semibold'>Climbing area:</span>
       </label>
-      <AreaSearch placeholder={text} />
+      <AreaSearch placeholder={text} queryParams={query} onSelect={handleSelect} onReset={handleReset} />
       <label className='label'>
         <span className='label-text-alt text-base-200'>Optional climbing area near by.</span>
       </label>

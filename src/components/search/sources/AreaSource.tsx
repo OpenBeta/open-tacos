@@ -1,30 +1,43 @@
 import { AutocompleteSource } from '@algolia/autocomplete-js'
 
-import { TypesenseDocumentType } from '../../../js/types'
+// import { TypesenseDocumentType } from '../../../js/types'
 import { areaSearchByName } from '../../../js/typesense/TypesenseClient'
-import { wizardActions, wizardStore } from '../../../js/stores/wizards'
+// import { wizardActions, wizardStore } from '../../../js/stores/wizards'
+import { QueryProps } from '../AreaSearch'
 
-export const searchAreas = async (query: string): Promise<AutocompleteSource<TypesenseDocumentType>> => {
-  const latlng = wizardStore.addAreaStore.refContextData()
+export const searchAreas = async (searchQuery: QueryProps, onSelect): Promise<AutocompleteSource<any>> => {
+  // const latlng = wizardStore.addAreaStore.refContextData()
   return {
     sourceId: 'areaSearch',
 
-    getItems: async ({ query }) => await areaSearchByName(query, latlng),
+    getItems: async ({ query }) => await areaSearchByName(query, searchQuery.data.latlng),
 
     getItemInputValue: ({ item }): string => {
-      return item.areaNames[item.areaNames.length - 1]
+      return item.name
     },
 
-    onSelect: ({ item }) => {
-      const s = item.areaNames[item.areaNames.length - 1]
-      wizardActions.addAreaStore.recordStep2(s, item.climbUUID) // should be area id when ready (https://github.com/OpenBeta/openbeta-graphql/issues/83)
+    onSelect: ({ item }): void => {
+      if (onSelect != null) {
+        onSelect(item)
+      }
     },
+    //   // wizardActions.addAreaStore.recordStep2(item.name, item.areaUUID) // should be area id when ready (https://github.com/OpenBeta/openbeta-graphql/issues/83)
+    // },
 
     templates: {
       noResults: () => 'No results',
 
       item: ({ item }) => {
-        return <div>{item.areaNames.join('/')}</div>
+        return (
+          <div>
+            <div>{item.name}</div>
+            <div className='px-4 text-base-300 breadcrumbs text-sm'>
+              <ul className='flex-wrap'>
+                {item.pathTokens.map((token: string, idx: number) => (<li key={idx}>{token}</li>))}
+              </ul>
+            </div>
+          </div>
+        )
       }
     }
   }

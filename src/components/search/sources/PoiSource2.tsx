@@ -38,7 +38,9 @@ export const searchPoi = async (query: string): Promise<AutocompleteSource<any>>
       noResults: () => 'No results',
 
       item: ({ item }: {item: PoiDoc}) => {
-        return <div>{item.place_name}</div>
+        return (
+          <div>{item.place_name}</div>
+        )
       }
     }
   }

@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "author": "OpenBeta <hello@openbeta.io>",
   "dependencies": {
-    "@algolia/autocomplete-js": "^1.6.2",
-    "@algolia/autocomplete-theme-classic": "^1.5.1",
+    "@algolia/autocomplete-js": "1.7.1",
+    "@algolia/autocomplete-theme-classic": "1.7.1",
     "@apollo/client": "^3.6.9",
     "@babel/plugin-proposal-decorators": "^7.15.8",
     "@babel/runtime": "^7.17.2",

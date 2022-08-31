@@ -61,6 +61,13 @@ export const addAreaStore = createStore('addArea')(INITIAL_AREA_STATE, STORE_OPT
         draft.refAreaData = data
         draft.steps[1] = true
       })
+    },
+    resetStep2: () => {
+      api.set.state(draft => {
+        draft.refAreaName = ''
+        draft.refAreaData = ''
+        draft.steps[1] = false
+      })
     }
   }))
 

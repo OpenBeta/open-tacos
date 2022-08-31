@@ -1,54 +1,42 @@
-import { render as reactRender } from 'react-dom'
 
 import { Autocomplete } from './Autocomplete'
 import { searchAreas } from './sources/AreaSource'
 
-interface AreaSearchProps {
+export interface QueryProps<T=any> {
+  text: string
+  data: T
+}
+
+interface AreaSearchProps<T = any> {
   isMobile?: boolean
   placeholder?: string
-  className?: string
+  queryParams: QueryProps<T>
+  onReset?: () => void
+  onSelect?: (data) => void
 }
 
 /**
  * Climbing area autocomplete search box
  */
-export default function AreaSearch ({ isMobile = true, placeholder = 'Try `Smith Rock`', className = '' }: AreaSearchProps): JSX.Element {
+export default function AreaSearch (
+  {
+    queryParams,
+    placeholder = 'Try \u201CSmith Rock\u201D',
+    onReset,
+    onSelect
+  }: AreaSearchProps): JSX.Element {
   return (
     <Autocomplete
-      id={CUSTOM_CLASSES.root}
-      isMobile={isMobile}
+      queryParams={queryParams}
+      isMobile
       placeholder={placeholder}
-      forceFocus
+      onReset={onReset}
       getSources={
         async ({ query }) => {
-          const sources = [await searchAreas(query)]
+          const sources = [await searchAreas(queryParams, onSelect)]
           return sources
         }
       }
-      classNames={CUSTOM_CLASSES}
-      containerClassname={className}
-      render={({ elements }, root) => {
-        const { areaSearch } = elements
-        reactRender(
-          <div>{areaSearch}</div>, root)
-      }}
     />
   )
-}
-
-// For customization see algolia.css
-// Use component's className layout/margin, etc
-const CUSTOM_CLASSES = {
-  panel: 'tag-search-panel',
-  item: 'tag-search-item',
-  panelLayout: 'tag-search-panelLayout',
-  sourceHeader: 'tag-search-sourceHeader',
-  form: 'aa-default-mobile-form',
-  inputWrapper: 'tag-search-inputWrapper',
-  inputWrapperPrefix: 'tag-search-inputWrapperPrefix',
-  submitButton: 'tag-search-submit-button',
-  root: 'area-only-search',
-  detachedSearchButton: 'area-only-search-mobile-trigger-btn',
-  detachedSearchButtonIcon: 'area-only-search-mobile-trigger-btn-icon',
-  detachedSearchButtonPlaceholder: 'area-only-search-mobile-placeholder'
 }

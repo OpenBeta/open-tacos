@@ -6,8 +6,7 @@ import { searchPoi } from './sources/PoiSource2'
 interface XSearchProps {
   isMobile?: boolean
   placeholder?: string
-  className?: string
-  onSelect?: ({ official, isoCode }: OnSelectProps) => void
+  onChange?: (props) => void
 }
 
 export interface OnSelectProps {
@@ -17,10 +16,9 @@ export interface OnSelectProps {
 /**
  * Suggesting an area or city/town/Point-of-interest
  */
-export default function NearAreaPoi ({ isMobile = true, placeholder = 'A city or a climbing area', className = '', onSelect }: XSearchProps): JSX.Element {
+export default function NearAreaPoi ({ isMobile = true, placeholder = 'A city or a climbing area', onChange }: XSearchProps): JSX.Element {
   return (
     <Autocomplete
-      id={CUSTOM_CLASSES.root}
       isMobile={isMobile}
       placeholder={placeholder}
       forceFocus
@@ -30,8 +28,7 @@ export default function NearAreaPoi ({ isMobile = true, placeholder = 'A city or
           return sources
         }
       }
-      classNames={CUSTOM_CLASSES}
-      containerClassname={className}
+      onStateChange={(props) => onChange != null ? onChange(props) : null}
       render={({ elements }, root) => {
         const { poiSearch } = elements
         reactRender(
@@ -39,21 +36,4 @@ export default function NearAreaPoi ({ isMobile = true, placeholder = 'A city or
       }}
     />
   )
-}
-
-// For customization see global.css
-// Use component's className layout/margin, etc
-const CUSTOM_CLASSES = {
-  panel: 'tag-search-panel',
-  item: 'tag-search-item',
-  panelLayout: 'tag-search-panelLayout',
-  sourceHeader: 'tag-search-sourceHeader',
-  form: 'aa-default-mobile-form',
-  // inputWrapper: 'tag-search-inputWrapper',
-  // inputWrapperPrefix: 'tag-search-inputWrapperPrefix',
-  submitButton: 'aa-default-mobile-submit-button',
-  root: 'aa-default-mobile',
-  detachedSearchButton: 'aa-default-mobile-trigger-btn',
-  detachedSearchButtonIcon: 'aa-default-mobile-trigger-btn-icon',
-  detachedCancelButton: 'aa-default-mobile-cancel-button'
 }
