@@ -59,6 +59,7 @@ const AddAreaPage: NextPage<{}> = () => {
             <Step1a />
             <Step1b />
             <div className='mt-8 text-lg text-content-base font-bold'>New area</div>
+            {useWizardStore().addAreaStore.refAreaData() !== '' && <Step2b />}
             <Step2a />
             <div className='mt-8 text-lg text-content-base font-bold'>Submit</div>
             <StepSubmit />
@@ -146,7 +147,7 @@ const Step2a = (): JSX.Element => {
   return (
     <div className='form-control'>
       <label className='label'>
-        <span className='label-text font-medium'>Name: *</span>
+        <span className='label-text font-semibold'>Name: *</span>
       </label>
       <input
         {...register('newAreaName', { required: true })}
@@ -159,6 +160,25 @@ const Step2a = (): JSX.Element => {
          (<span className='label-text-alt text-error'>Name is required.</span>)}
       </label>
     </div>
+  )
+}
+
+const Step2b = (): JSX.Element => {
+  return (
+    <>
+      <div className='form-control'>
+        <label className='label cursor-pointer'>
+          <span className='label-text'>Add as neighbor</span>
+          <input type='radio' name='radio-6' className='radio' checked />
+        </label>
+      </div>
+      <div className='form-control'>
+        <label className='label cursor-pointer'>
+          <span className='label-text'>Add as sub-area</span>
+          <input type='radio' name='radio-6' className='radio' />
+        </label>
+      </div>
+    </>
   )
 }
 
