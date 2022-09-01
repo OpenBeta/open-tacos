@@ -2,8 +2,6 @@ import { AutocompleteSource } from '@algolia/autocomplete-js'
 import { geocoderLookup } from '../../../js/mapbox/Client'
 import { BaseItem } from '@algolia/autocomplete-core'
 
-import { wizardActions } from '../../../js/stores/wizards'
-
 interface PoiDoc extends BaseItem {
   text: string
   id: string
@@ -12,15 +10,10 @@ interface PoiDoc extends BaseItem {
 }
 
 /**
- * Call Mapbox Geocoder to find cities, landmarks, and point-of-interests that
- * match 'query'.  Wrap result in Algolia.Source object to allow Autocomplete component.
+ * Call Mapbox Geocoder to find cities, landmarks, and point-of-interests.
  * See also https://www.algolia.com/doc/ui-libraries/autocomplete/core-concepts/sources/
- * to render the result.
- * @param query search string
  */
-export const searchPoi = async (query: string): Promise<AutocompleteSource<any>> => {
-  // const rs =
-
+export const searchPoi = async (onSelect): Promise<AutocompleteSource<any>> => {
   return {
     sourceId: 'poiSearch',
 
@@ -30,9 +23,7 @@ export const searchPoi = async (query: string): Promise<AutocompleteSource<any>>
       return item.place_name
     },
 
-    onSelect: ({ item }: {item: PoiDoc}) => {
-      wizardActions.addAreaStore.recordStep1a(item.place_name, item.center)
-    },
+    onSelect: ({ item }: {item: PoiDoc}) => onSelect(item),
 
     templates: {
       noResults: () => 'No results',

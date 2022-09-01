@@ -34,7 +34,6 @@ export const Autocomplete = ({ queryParams, forceFocus = false, classNames = AA_
         element?.focus()
       }, 200)
     }
-    console.log()
   })
 
   useEffect(() => {

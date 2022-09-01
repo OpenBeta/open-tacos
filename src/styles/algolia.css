@@ -141,7 +141,7 @@ body {
 /* For Town, city, country search */
 
 .aa-default-mobile-trigger-btn {
-  @apply input input-bordered input-md text-ellipsis !important;
+  @apply input input-bordered input-primary input-md text-ellipsis !important;
 }
 
 .aa-default-mobile-trigger-btn-icon {

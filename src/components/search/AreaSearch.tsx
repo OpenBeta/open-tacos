@@ -12,7 +12,7 @@ interface AreaSearchProps<T = any> {
   placeholder?: string
   queryParams: QueryProps<T>
   onReset?: () => void
-  onSelect?: (data) => void
+  onSelect?: (data: T) => void
 }
 
 /**

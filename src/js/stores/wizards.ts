@@ -30,7 +30,7 @@ const INITIAL_AREA_STATE: AddAreaProps = {
   refContextData: [0, 0],
   refAreaName: '',
   refAreaData: '',
-  steps: [false, false]
+  steps: [false, false, false]
 }
 
 const STORE_OPTS = {}
@@ -52,6 +52,16 @@ export const addAreaStore = createStore('addArea')(INITIAL_AREA_STATE, STORE_OPT
         draft.refContextData = [data[1], data[0]]
         draft.steps[0] = true
       })
+    },
+    resetLocation: () => {
+      api.set.state(draft => {
+        draft.refContext = ''
+        draft.refContextData = [0, 0]
+        draft.steps[0] = false
+        // also reset step 2
+        draft.refAreaName = ''
+        draft.refAreaData = ''
+      })
     }
   }))
   .extendActions((set, get, api) => ({
@@ -59,14 +69,17 @@ export const addAreaStore = createStore('addArea')(INITIAL_AREA_STATE, STORE_OPT
       api.set.state(draft => {
         draft.refAreaName = name
         draft.refAreaData = data
-        draft.steps[1] = true
       })
     },
     resetStep2: () => {
       api.set.state(draft => {
         draft.refAreaName = ''
         draft.refAreaData = ''
-        draft.steps[1] = false
+      })
+    },
+    recordStep3: (complete: boolean) => {
+      api.set.state(draft => {
+        draft.steps[1] = complete
       })
     }
   }))

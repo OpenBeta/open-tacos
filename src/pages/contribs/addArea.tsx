@@ -1,10 +1,10 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useForm, useFormContext, Controller, FormProvider, UseFormReturn } from 'react-hook-form'
-import classNames from 'classnames'
+import { useForm, useFormContext, FormProvider } from 'react-hook-form'
+import clx from 'classnames'
 
-import NearAreaPoi from '../../components/search/NearAreaPoi'
+import { LocationAutocompleteControl } from '../../components/search/LocationAutocomplete'
 import AreaSearch from '../../components/search/AreaSearch'
 import MobileCard from '../../components/ui/MobileCard'
 import { useWizardStore, wizardActions } from '../../js/stores/wizards'
@@ -29,10 +29,24 @@ const AddAreaPage: NextPage<{}> = () => {
       <MobileCard title='Add an Area' onClose={onClose}>
         <div className='text-xs mt-4'>Area can be a crag, boulder, or a destination containing other smaller areas.</div>
         <ul className='steps w-full mt-8'>
-          <li className='step after:!bg-base-200'>
+          <li className={
+            clx('step',
+              useWizardStore().addAreaStore.steps()[0]
+                ? 'step-secondary'
+                : 'after:!bg-base-200'
+            )
+          }
+          >
             Location
           </li>
-          <li className='step after:!bg-base-200 before:!bg-base-200'>
+          <li className={
+            clx('step',
+              useWizardStore().addAreaStore.steps()[1]
+                ? 'step-secondary'
+                : 'step after:!bg-base-200 before:!bg-base-200'
+            )
+          }
+          >
             New area
           </li>
           <li className='step after:!bg-base-200 before:!bg-base-200'>
@@ -42,12 +56,12 @@ const AddAreaPage: NextPage<{}> = () => {
         <FormProvider {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className='mt-8 text-lg text-content-base font-bold'>Location</div>
-            <Step1 />
-            <Step2 />
+            <Step1a />
+            <Step1b />
             <div className='mt-8 text-lg text-content-base font-bold'>New area</div>
-            <Step3 form={form} />
+            <Step2a />
             <div className='mt-8 text-lg text-content-base font-bold'>Submit</div>
-            <Step5 />
+            <StepSubmit />
           </form>
         </FormProvider>
       </MobileCard>
@@ -55,37 +69,44 @@ const AddAreaPage: NextPage<{}> = () => {
   )
 }
 
-const Step1 = (): JSX.Element => {
+const Step1a = (): JSX.Element => {
   const text = useWizardStore().addAreaStore.refContext()
-  // const refLnglat = useWizardStore().addAreaStore.refContextData()
 
-  const { control } = useFormContext()
+  const { formState: { errors } } = useFormContext()
 
+  const handleSelect = useCallback((data): void => {
+    wizardActions.addAreaStore.recordStep1a(data.place_name, data.center)
+  }, [])
+
+  const handleReset = useCallback((): void => {
+    wizardActions.addAreaStore.resetLocation()
+  }, [])
+
+  const queryParams = {
+    text,
+    data: undefined
+  }
   return (
     <div className='form-control w-full'>
       <label className='label'>
         <span className='label-text font-semibold'>Town, city, or landmark: *</span>
       </label>
-      <Controller
-        control={control}
-        name='test'
-        render={({ field: { onChange, onBlur, value, ref }, formState, fieldState }) =>
-          <NearAreaPoi placeholder={text} />}
+      <LocationAutocompleteControl
+        placeholder={text}
+        onSelect={handleSelect}
+        onReset={handleReset}
+        queryParams={queryParams}
       />
-      {/* <input
-        {...register('refLnglat', { required: true })}
-        // type='hidden'
-        defaultValue={refLnglat.join(',')}
-        value={refLnglat.join(',')}
-      /> */}
       <label className='label'>
-        <span className='label-text-alt text-base-200 text-left'>The more specific the better.</span>
+        {errors.placeSearch != null &&
+         (<span className='label-text-alt text-error'>Location is required.</span>)}
+        {errors.placeSearch == null && <span className='label-text-alt text-base-200 text-left'>The more specific the better.</span>}
       </label>
     </div>
   )
 }
 
-const Step2 = (): JSX.Element => {
+const Step1b = (): JSX.Element => {
   const text = useWizardStore().addAreaStore.refAreaName()
   const query = {
     text,
@@ -115,11 +136,13 @@ const Step2 = (): JSX.Element => {
   )
 }
 
-interface Step3Props {
-  form: UseFormReturn
-}
-const Step3 = ({ form }: Step3Props): JSX.Element => {
-  const { register, formState: { errors } } = form
+const Step2a = (): JSX.Element => {
+  const { register, watch, formState: { errors } } = useFormContext()
+
+  useEffect(() => {
+    const subscription = watch((value) => wizardActions.addAreaStore.recordStep3(value.newAreaName.length > 0))
+    return () => subscription.unsubscribe()
+  }, [watch])
   return (
     <div className='form-control'>
       <label className='label'>
@@ -129,7 +152,7 @@ const Step3 = ({ form }: Step3Props): JSX.Element => {
         {...register('newAreaName', { required: true })}
         type='text'
         placeholder='New area name'
-        className='input input-primary input-bordered input-sm'
+        className='input input-primary input-bordered input-md'
       />
       <label className='label'>
         {errors.newAreaName != null &&
@@ -139,28 +162,14 @@ const Step3 = ({ form }: Step3Props): JSX.Element => {
   )
 }
 
-// const Step4 = (): JSX.Element => {
-//   return (
-//     <div className='form-control'>
-//       <label className='label'>
-//         <span className='label-text font-base'>Name check</span>
-//       </label>
-//       <progress className='progress w-56 progress-info' />
-//       <label className='label'>
-//         <span className='label-text-alt text-base-content text-opacity-60'>Area you want to submit.</span>
-//       </label>
-//     </div>
-//   )
-// }
-
-const Step5 = (): JSX.Element => {
+const StepSubmit = (): JSX.Element => {
   const { formState } = useFormContext()
   const { isSubmitting } = formState
   return (
     <div className='form-control'>
       <button
         className={
-          classNames(
+          clx(
             'mt-4 btn btn-primary btn-wide btn-sm w-full',
             isSubmitting ? 'loading btn-disabled' : ''
           )
