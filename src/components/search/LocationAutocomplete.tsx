@@ -2,19 +2,12 @@ import { Controller, useFormContext } from 'react-hook-form'
 
 import { Autocomplete } from './Autocomplete'
 import { searchPoi } from './sources/PoiSource2'
-import { QueryProps } from './AreaSearch'
-
-interface Props<T=any> {
-  queryParams: QueryProps<T>
-  placeholder?: string
-  onReset?: () => void
-  onSelect?: (data: T) => void
-}
+import { AutoCompleteDefaultProps, AutoCompleteFormControlProps } from './AreaSearchAutoComplete'
 
 /**
  * Location search widget (city, town, national park)
  */
-export default function LocationAutocomplete ({ placeholder = 'A city or a well-known location', onReset, onSelect, queryParams }: Props): JSX.Element {
+export default function LocationAutocompleteCore ({ placeholder = 'A city or a well-known location', onReset, onSelect, queryParams }: AutoCompleteDefaultProps): JSX.Element {
   return (
     <Autocomplete
       isMobile
@@ -32,18 +25,21 @@ export default function LocationAutocomplete ({ placeholder = 'A city or a well-
 }
 
 /**
- * Location search widget to be used with React-hook-form
+ * Location search widget to be used as a form control with React-hook-form
  */
-export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, queryParams }: Props): JSX.Element => {
+export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, queryParams, label, errorMesage, tip }: AutoCompleteFormControlProps): JSX.Element => {
   const { control } = useFormContext()
   return (
-    <Controller
-      control={control}
-      name='placeSearch'
-      rules={{ required: true }}
-      render={({ field: { onChange, onBlur, value, ref }, formState, fieldState }) =>
-        <>
-          <LocationAutocomplete
+    <div className='form-control'>
+      <label className='label'>
+        <span className='label-text font-semibold'>{label}</span>
+      </label>
+      <Controller
+        control={control}
+        name='placeSearch'
+        rules={{ required: 'Please select a location' }}
+        render={({ field: { onChange, onBlur } }) =>
+          <LocationAutocompleteCore
             placeholder={placeholder}
             onSelect={(data) => {
               onChange({
@@ -64,8 +60,14 @@ export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, qu
               if (onReset != null) onReset()
             }}
             queryParams={queryParams}
-          />
-        </>}
-    />
+          />}
+      />
+      <label className='label'>
+        {errorMesage != null &&
+          (<span className='label-text-alt text-error'>{errorMesage}</span>)}
+        {errorMesage == null && tip != null &&
+          (<span className='label-text-alt text-base-200 text-left'>{tip}</span>)}
+      </label>
+    </div>
   )
 }

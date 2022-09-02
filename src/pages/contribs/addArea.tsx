@@ -5,7 +5,7 @@ import { useForm, useFormContext, FormProvider } from 'react-hook-form'
 import clx from 'classnames'
 
 import { LocationAutocompleteControl } from '../../components/search/LocationAutocomplete'
-import AreaSearch from '../../components/search/AreaSearch'
+import { AreaSearchAutoCompleteControl } from '../../components/search/AreaSearchAutoComplete'
 import MobileCard from '../../components/ui/MobileCard'
 import { useWizardStore, wizardActions } from '../../js/stores/wizards'
 
@@ -16,7 +16,7 @@ const AddAreaPage: NextPage<{}> = () => {
     await router.replace('/?v=edit')
   }, [])
 
-  const form = useForm()
+  const form = useForm({ mode: 'onBlur' })
   const { handleSubmit } = form
   const onSubmit = async (data): Promise<void> => {
     console.log(data)
@@ -88,22 +88,15 @@ const Step1a = (): JSX.Element => {
     data: undefined
   }
   return (
-    <div className='form-control w-full'>
-      <label className='label'>
-        <span className='label-text font-semibold'>Town, city, or landmark: *</span>
-      </label>
-      <LocationAutocompleteControl
-        placeholder={text}
-        onSelect={handleSelect}
-        onReset={handleReset}
-        queryParams={queryParams}
-      />
-      <label className='label'>
-        {errors.placeSearch != null &&
-         (<span className='label-text-alt text-error'>Location is required.</span>)}
-        {errors.placeSearch == null && <span className='label-text-alt text-base-200 text-left'>The more specific the better.</span>}
-      </label>
-    </div>
+    <LocationAutocompleteControl
+      label='Town, city, or landmark: *'
+      placeholder={text}
+      onSelect={handleSelect}
+      onReset={handleReset}
+      queryParams={queryParams}
+      errorMesage={errors.placeSearch?.message as string}
+      tip='The more specific the better.'
+    />
   )
 }
 
@@ -125,15 +118,14 @@ const Step1b = (): JSX.Element => {
   }, [])
 
   return (
-    <div className='form-control w-full'>
-      <label className='label'>
-        <span className='label-text font-semibold'>Climbing area:</span>
-      </label>
-      <AreaSearch placeholder={text} queryParams={query} onSelect={handleSelect} onReset={handleReset} />
-      <label className='label'>
-        <span className='label-text-alt text-base-200'>Optional climbing area near by.</span>
-      </label>
-    </div>
+    <AreaSearchAutoCompleteControl
+      label='Climbing area:'
+      placeholder={text}
+      queryParams={query}
+      onSelect={handleSelect}
+      onReset={handleReset}
+      tip='Optional climbing area near by.'
+    />
   )
 }
 
@@ -145,21 +137,23 @@ const Step2a = (): JSX.Element => {
     return () => subscription.unsubscribe()
   }, [watch])
   return (
-    <div className='form-control'>
-      <label className='label'>
-        <span className='label-text font-semibold'>Name: *</span>
-      </label>
-      <input
-        {...register('newAreaName', { required: true })}
-        type='text'
-        placeholder='New area name'
-        className='input input-primary input-bordered input-md'
-      />
-      <label className='label'>
-        {errors.newAreaName != null &&
+    <>
+      <div className='form-control'>
+        <label className='label'>
+          <span className='label-text font-semibold'>Name: *</span>
+        </label>
+        <input
+          {...register('newAreaName', { required: true })}
+          type='text'
+          placeholder='New area name'
+          className='input input-primary input-bordered input-md'
+        />
+        <label className='label'>
+          {errors.newAreaName != null &&
          (<span className='label-text-alt text-error'>Name is required.</span>)}
-      </label>
-    </div>
+        </label>
+      </div>
+    </>
   )
 }
 
@@ -186,21 +180,23 @@ const StepSubmit = (): JSX.Element => {
   const { formState } = useFormContext()
   const { isSubmitting } = formState
   return (
-    <div className='form-control'>
-      <button
-        className={
+    <>
+      <div className='form-control'>
+        <button
+          className={
           clx(
-            'mt-4 btn btn-primary btn-wide btn-sm w-full',
+            'mt-4 btn btn-primary btn-wide btn-md w-full',
             isSubmitting ? 'loading btn-disabled' : ''
           )
         }
-        type='submit'
-      >Submit
-      </button>
-      <label className='label'>
-        <span className='label-text-alt text-base-content text-opacity-60'>You can update additional attributes later.</span>
-      </label>
-    </div>
+          type='submit'
+        >Submit
+        </button>
+        <label className='label'>
+          <span className='label-text-alt text-base-content text-opacity-60'>You can update additional attributes later.</span>
+        </label>
+      </div>
+    </>
   )
 }
 

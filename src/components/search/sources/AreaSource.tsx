@@ -1,12 +1,9 @@
 import { AutocompleteSource } from '@algolia/autocomplete-js'
 
-// import { TypesenseDocumentType } from '../../../js/types'
 import { areaSearchByName } from '../../../js/typesense/TypesenseClient'
-// import { wizardActions, wizardStore } from '../../../js/stores/wizards'
-import { QueryProps } from '../AreaSearch'
+import { QueryProps } from '../AreaSearchAutoComplete'
 
 export const searchAreas = async (searchQuery: QueryProps, onSelect): Promise<AutocompleteSource<any>> => {
-  // const latlng = wizardStore.addAreaStore.refContextData()
   return {
     sourceId: 'areaSearch',
 
@@ -21,8 +18,6 @@ export const searchAreas = async (searchQuery: QueryProps, onSelect): Promise<Au
         onSelect(item)
       }
     },
-    //   // wizardActions.addAreaStore.recordStep2(item.name, item.areaUUID) // should be area id when ready (https://github.com/OpenBeta/openbeta-graphql/issues/83)
-    // },
 
     templates: {
       noResults: () => 'No results',
