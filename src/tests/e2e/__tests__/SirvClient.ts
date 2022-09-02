@@ -20,14 +20,14 @@ beforeAll(() => {
 
 test('Sirv API can read photos', async () => {
   const token = await getToken()
-  const list = await getUserImages('abe96612-2742-43b0-a128-6b19d4e4615f', 2, token)
+  const list = await getUserImages('b9f8ab3b-e6e5-4467-9adb-65d91c7ebe7c', 2, token)
   expect(list.mediaList.length).toBeGreaterThan(0)
 })
 
 test('can read uid json', async () => {
   const paths = [
     {
-      mediaUrl: '/u/abe96612-2742-43b0-a128-6b19d4e4615f/1.jpg',
+      mediaUrl: '/u/b9f8ab3b-e6e5-4467-9adb-65d91c7ebe7c/1.jpg',
       mediaUuid: '1',
       mediaType: 0,
       destType: 0,
@@ -35,7 +35,7 @@ test('can read uid json', async () => {
       uid: 'mary'
     },
     {
-      mediaUrl: '/u/abe96612-2742-43b0-a128-6b19d4e4615f/2.jpg',
+      mediaUrl: '/u/b9f8ab3b-e6e5-4467-9adb-65d91c7ebe7c/2.jpg',
       mediaUuid: '2',
       mediaType: 0,
       destType: 0,
@@ -45,7 +45,7 @@ test('can read uid json', async () => {
   ]
   const list = await enhanceMediaListWithUsernames(paths)
   expect(list.length).toEqual(2)
-  expect(list[0].uid).toMatch(/vietnguyen/)
+  expect(list[0].uid).toMatch(/viet-test-profile/)
 
   // await getUserFiles('abe96612-2742-43b0-a128-6b19d4e4615f')
 })
