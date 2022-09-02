@@ -7,7 +7,7 @@ export interface MobileCardProps {
 }
 export default function MobileCard ({ title, children, onClose }: MobileCardProps): any {
   return (
-    <div className='card card-compact bg-base-100 '>
+    <div className='card card-compact bg-base-200'>
       <div className='card-body'>
         <div className='card-actions justify-between items-center align-middle'>
           <button className='btn btn-circle btn-ghost btn-sm' onClick={onClose}>

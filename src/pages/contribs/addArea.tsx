@@ -6,6 +6,7 @@ import clx from 'classnames'
 
 import { LocationAutocompleteControl } from '../../components/search/LocationAutocomplete'
 import { AreaSearchAutoCompleteControl } from '../../components/search/AreaSearchAutoComplete'
+import RadioGroup from '../../components/ui/form/RadioGroup'
 import MobileCard from '../../components/ui/MobileCard'
 import { useWizardStore, wizardActions } from '../../js/stores/wizards'
 
@@ -16,7 +17,7 @@ const AddAreaPage: NextPage<{}> = () => {
     await router.replace('/?v=edit')
   }, [])
 
-  const form = useForm({ mode: 'onBlur' })
+  const form = useForm({ mode: 'onBlur', defaultValues: { locationRefType: 'near' } })
   const { handleSubmit } = form
   const onSubmit = async (data): Promise<void> => {
     console.log(data)
@@ -32,8 +33,8 @@ const AddAreaPage: NextPage<{}> = () => {
           <li className={
             clx('step',
               useWizardStore().addAreaStore.steps()[0]
-                ? 'step-secondary'
-                : 'after:!bg-base-200'
+                ? 'step-success'
+                : ''
             )
           }
           >
@@ -42,14 +43,14 @@ const AddAreaPage: NextPage<{}> = () => {
           <li className={
             clx('step',
               useWizardStore().addAreaStore.steps()[1]
-                ? 'step-secondary'
-                : 'step after:!bg-base-200 before:!bg-base-200'
+                ? 'step-success'
+                : ''
             )
           }
           >
             New area
           </li>
-          <li className='step after:!bg-base-200 before:!bg-base-200'>
+          <li className='step'>
             Submit
           </li>
         </ul>
@@ -143,14 +144,14 @@ const Step2a = (): JSX.Element => {
           <span className='label-text font-semibold'>Name: *</span>
         </label>
         <input
-          {...register('newAreaName', { required: true })}
+          {...register('newAreaName', { required: 'Name is required.' })}
           type='text'
           placeholder='New area name'
           className='input input-primary input-bordered input-md'
         />
         <label className='label'>
-          {errors.newAreaName != null &&
-         (<span className='label-text-alt text-error'>Name is required.</span>)}
+          {errors?.newAreaName != null &&
+         (<span className='label-text-alt text-error'>{errors.newAreaName.message as string}</span>)}
         </label>
       </div>
     </>
@@ -160,18 +161,12 @@ const Step2a = (): JSX.Element => {
 const Step2b = (): JSX.Element => {
   return (
     <>
-      <div className='form-control'>
-        <label className='label cursor-pointer'>
-          <span className='label-text'>Add as neighbor</span>
-          <input type='radio' name='radio-6' className='radio' checked />
-        </label>
-      </div>
-      <div className='form-control'>
-        <label className='label cursor-pointer'>
-          <span className='label-text'>Add as sub-area</span>
-          <input type='radio' name='radio-6' className='radio' />
-        </label>
-      </div>
+      <RadioGroup
+        groupLabel='Location'
+        name='locationRefType'
+        labels={['Near by', 'Add as nested area']}
+        values={['near', 'child']}
+      />
     </>
   )
 }
