@@ -10,6 +10,7 @@ import { MediaTagWithClimb, MediaType } from '../../js/types'
 import ResponsiveImage from '../media/slideshow/ResponsiveImage'
 import { MobileLoader, DesktopPreviewLoader } from '../../js/sirv/util'
 import RemoveImage from './RemoveImage'
+import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
 
 const MOBILE_IMAGE_MAX_WIDITH = 914
 interface UserMediaProps {
@@ -45,6 +46,14 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
   const loader = isDesktop ? DesktopPreviewLoader : MobileLoader
   const shareableUrl = `/p/${uid}/${basename(imageInfo.filename)}`
 
+  const getUploadDate = (dateUploaded: Date): string => {
+    const currentTime = new Date()
+    if (differenceInYears(currentTime, dateUploaded) >= 1) {
+      return format(dateUploaded, 'MMM yyyy')
+    }
+    return formatDistanceToNowStrict(dateUploaded, { addSuffix: true })
+  }
+
   return (
     <figure
       key={imageInfo.filename}
@@ -64,11 +73,16 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
             ? (
               <ResponsiveImage mediaUrl={imageInfo.filename} isHero={index === 0} loader={loader} />
               )
-            : (<img
-                src={loader({ src: imageInfo.filename, width: MOBILE_IMAGE_MAX_WIDITH })}
-                width={MOBILE_IMAGE_MAX_WIDITH}
-                sizes='100vw'
-               />)}
+            : (
+              <>
+                <img
+                  src={loader({ src: imageInfo.filename, width: MOBILE_IMAGE_MAX_WIDITH })}
+                  width={MOBILE_IMAGE_MAX_WIDITH}
+                  sizes='100vw'
+                />
+                <div className='text-zinc-600 indent-1 font-light text-sm'>{getUploadDate(imageInfo.ctime)}</div>
+              </>
+              )}
         </a>
       </Link>
 
