@@ -46,8 +46,7 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
   const loader = isDesktop ? DesktopPreviewLoader : MobileLoader
   const shareableUrl = `/p/${uid}/${basename(imageInfo.filename)}`
 
-  const getUploadDate = (dateUploadedStr: string): string => {
-    const dateUploaded = new Date(dateUploadedStr)
+  const getUploadDate = (dateUploaded: Date): string => {
     const currentTime = new Date()
     if (differenceInYears(currentTime, dateUploaded) >= 1) {
       return format(dateUploaded, 'MMM yyyy')
