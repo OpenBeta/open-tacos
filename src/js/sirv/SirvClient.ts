@@ -135,6 +135,12 @@ export const getUserImages = async (uuid: string, size: number = 100, token?: st
 }
 
 export const getImagesByFilenames = async (fileList: string[], token?: string): Promise <any> => {
+  if (fileList.length === 0) {
+    return {
+      mediaList: [],
+      idList: []
+    }
+  }
   const _t = await getTokenIfNotExist(token)
 
   const _list = fileList.map(file => {
