@@ -20,12 +20,9 @@ jobs:
   
       - name: Build OpenBeta project
         run: yarn build
-        env:
-          SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
 
       - run: npm install -g @lhci/cli@0.8.x
       - name: Run Lighthouse CI
         run: lhci autorun
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-          SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}

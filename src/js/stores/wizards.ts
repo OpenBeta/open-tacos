@@ -9,10 +9,12 @@ interface AddCountryProps {
 }
 
 interface AddAreaProps {
-  name?: string
+  name: string
   shortCode?: string
-  refName: string
-  refData: string | number[]
+  refContext: string
+  refContextData: number[]
+  refAreaName: string
+  refAreaData: string
   relationToRef?: 'in' | 'near'
   steps: boolean[]
 }
@@ -24,9 +26,12 @@ const INITIAL_COUNTRY_STATE: AddCountryProps = {
 }
 
 const INITIAL_AREA_STATE: AddAreaProps = {
-  refName: '',
-  refData: '',
-  steps: [false, false]
+  name: '',
+  refContext: '',
+  refContextData: [0, 0],
+  refAreaName: '',
+  refAreaData: '',
+  steps: [false, false, false]
 }
 
 const STORE_OPTS = {}
@@ -42,11 +47,45 @@ export const addCountryStore = createStore('addCountry')(INITIAL_COUNTRY_STATE, 
 
 export const addAreaStore = createStore('addArea')(INITIAL_AREA_STATE, STORE_OPTS)
   .extendActions((set, get, api) => ({
-    recordStep1a: (name: string, data: string | number[]) => {
+    recordStep1a: (name: string, data: number[]) => {
       api.set.state(draft => {
-        draft.refName = name
-        draft.refData = data
+        draft.refContext = name
+        draft.refContextData = [data[1], data[0]]
         draft.steps[0] = true
+      })
+    },
+    resetLocation: () => {
+      api.set.state(draft => {
+        draft.refContext = ''
+        draft.refContextData = [0, 0]
+        draft.steps[0] = false
+        // also reset step 2
+        draft.refAreaName = ''
+        draft.refAreaData = ''
+      })
+    }
+  }))
+  .extendActions((set, get, api) => ({
+    recordStep1b: (name: string, data: string) => {
+      api.set.state(draft => {
+        draft.refAreaName = name
+        draft.refAreaData = data
+      })
+    },
+    resetStep1b: () => {
+      api.set.state(draft => {
+        draft.refAreaName = ''
+        draft.refAreaData = ''
+      })
+    },
+    recordStep2: (complete: boolean) => {
+      api.set.state(draft => {
+        draft.steps[1] = complete
+      })
+    },
+    recordStepFinal: () => {
+      api.set.state(draft => {
+        draft.steps[2] = true
       })
     }
   }))
