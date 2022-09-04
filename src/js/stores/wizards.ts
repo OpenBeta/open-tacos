@@ -9,7 +9,7 @@ interface AddCountryProps {
 }
 
 interface AddAreaProps {
-  name?: string
+  name: string
   shortCode?: string
   refContext: string
   refContextData: number[]
@@ -26,6 +26,7 @@ const INITIAL_COUNTRY_STATE: AddCountryProps = {
 }
 
 const INITIAL_AREA_STATE: AddAreaProps = {
+  name: '',
   refContext: '',
   refContextData: [0, 0],
   refAreaName: '',
@@ -65,21 +66,26 @@ export const addAreaStore = createStore('addArea')(INITIAL_AREA_STATE, STORE_OPT
     }
   }))
   .extendActions((set, get, api) => ({
-    recordStep2: (name: string, data: string) => {
+    recordStep1b: (name: string, data: string) => {
       api.set.state(draft => {
         draft.refAreaName = name
         draft.refAreaData = data
       })
     },
-    resetStep2: () => {
+    resetStep1b: () => {
       api.set.state(draft => {
         draft.refAreaName = ''
         draft.refAreaData = ''
       })
     },
-    recordStep3: (complete: boolean) => {
+    recordStep2: (complete: boolean) => {
       api.set.state(draft => {
         draft.steps[1] = complete
+      })
+    },
+    recordStepFinal: () => {
+      api.set.state(draft => {
+        draft.steps[2] = true
       })
     }
   }))

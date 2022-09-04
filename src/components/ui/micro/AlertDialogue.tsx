@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react'
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
 import cx from 'classnames'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, ReactNode, useState } from 'react'
 
 interface Props {
   /** renderable button */
@@ -33,7 +33,7 @@ interface Props {
  *
  * Supply the body of this dialog as a child
  * */
-const AlertDialog = (props: Props): JSX.Element => {
+export default function AlertDialog (props: Props): JSX.Element {
   const [isOpen, setIsOpen] = useState(false)
 
   const title = props.title ?? 'Are you sure?'
@@ -135,4 +135,26 @@ const AlertDialog = (props: Props): JSX.Element => {
   )
 }
 
-export default AlertDialog
+interface LeanAlertProps {
+  children: JSX.Element | JSX.Element []
+  actions?: ReactNode
+
+}
+export const LeanAlert = ({ actions, children }: LeanAlertProps): JSX.Element => {
+  return (
+    <AlertDialogPrimitive.Root defaultOpen>
+      <AlertDialogPrimitive.Overlay className='fixed inset-0 bg-black/25' />
+      <AlertDialogPrimitive.Content onEscapeKeyDown={e => e.preventDefault()} className='z-40 fixed inset-0 max-w-md mx-auto flex items-center justify-center p-2 text-center overflow-y-auto'>
+        <div className='p-4 rounded-box bg-base-100'>
+          {/* <AlertDialogPrimitive.Title /> */}
+          <AlertDialogPrimitive.Description>
+            {children}
+          </AlertDialogPrimitive.Description>
+          <div className='flex items-center justify-center gap-x-4'>
+            {actions}
+          </div>
+        </div>
+      </AlertDialogPrimitive.Content>
+    </AlertDialogPrimitive.Root>
+  )
+}

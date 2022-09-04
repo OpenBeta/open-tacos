@@ -1,8 +1,10 @@
 import { XIcon } from '@heroicons/react/outline'
+import { ReactNode } from 'react'
 
 export interface MobileCardProps {
   title?: string
-  children: JSX.Element | JSX.Element []
+  children: ReactNode
+  // children: JSX.Element | JSX.Element [] | ReactElement | ReactElement []
   onClose: () => void
 }
 export default function MobileCard ({ title, children, onClose }: MobileCardProps): any {

@@ -1,4 +1,5 @@
 import { Controller, useFormContext } from 'react-hook-form'
+import clx from 'classnames'
 
 import { Autocomplete } from './Autocomplete'
 import { searchPoi } from './sources/PoiSource2'
@@ -28,9 +29,9 @@ export default function LocationAutocompleteCore ({ placeholder = 'A city or a w
  * Location search widget to be used as a form control with React-hook-form
  */
 export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, queryParams, label, errorMesage, tip }: AutoCompleteFormControlProps): JSX.Element => {
-  const { control } = useFormContext()
+  const { control, formState: { isSubmitSuccessful } } = useFormContext()
   return (
-    <div className='form-control'>
+    <div className={clx('form-control', isSubmitSuccessful ? 'disabled' : '')}>
       <label className='label'>
         <span className='label-text font-semibold'>{label}</span>
       </label>

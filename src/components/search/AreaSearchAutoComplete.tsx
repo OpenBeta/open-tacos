@@ -1,5 +1,7 @@
 
 import { Controller, useFormContext } from 'react-hook-form'
+import clx from 'classnames'
+
 import { Autocomplete } from './Autocomplete'
 import { searchAreas } from './sources/AreaSource'
 
@@ -58,9 +60,9 @@ export const AreaSearchAutoCompleteControl = ({
   errorMesage,
   tip
 }: AutoCompleteFormControlProps): JSX.Element => {
-  const { control } = useFormContext()
+  const { control, formState: { isSubmitSuccessful } } = useFormContext()
   return (
-    <div className='form-control w-full'>
+    <div className={clx('form-control', isSubmitSuccessful ? 'disabled' : '')}>
       <label className='label'>
         <span className='label-text font-semibold'>{label}</span>
       </label>

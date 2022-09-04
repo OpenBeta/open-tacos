@@ -1,7 +1,8 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useForm, useFormContext, FormProvider } from 'react-hook-form'
+import { BadgeCheckIcon } from '@heroicons/react/outline'
 import clx from 'classnames'
 
 import { LocationAutocompleteControl } from '../../components/search/LocationAutocomplete'
@@ -9,6 +10,7 @@ import { AreaSearchAutoCompleteControl } from '../../components/search/AreaSearc
 import RadioGroup from '../../components/ui/form/RadioGroup'
 import Input from '../../components/ui/form/Input'
 import MobileCard from '../../components/ui/MobileCard'
+import { LeanAlert } from '../../components/ui/micro/AlertDialogue'
 import { useWizardStore, wizardActions } from '../../js/stores/wizards'
 
 const AddAreaPage: NextPage<{}> = () => {
@@ -18,60 +20,63 @@ const AddAreaPage: NextPage<{}> = () => {
     await router.replace('/?v=edit')
   }, [])
 
-  const form = useForm({ mode: 'onBlur', defaultValues: { locationRefType: 'near' } })
-  const { handleSubmit } = form
+  const form = useForm({ mode: 'onBlur', defaultValues: { locationRefType: 'near', newAreaName: '' } })
+  const { handleSubmit, formState: { isSubmitSuccessful }, getValues } = form
   const onSubmit = async (data): Promise<void> => {
     console.log(data)
     // eslint-disable-next-line
     await new Promise(r => setTimeout(r, 2000))
+    wizardActions.addAreaStore.recordStepFinal()
   }
+
+  console.log('#formstate', isSubmitSuccessful)
 
   return (
     <div className='max-w-md mx-auto pb-8'>
       <MobileCard title='Add an Area' onClose={onClose}>
         <div className='text-xs mt-4'>Area can be a crag, boulder, or a destination containing other smaller areas.</div>
-        <ul className='steps w-full mt-8'>
-          <li className={
-            clx('step',
-              useWizardStore().addAreaStore.steps()[0]
-                ? 'step-success'
-                : ''
-            )
-          }
-          >
-            Location
-          </li>
-          <li className={
-            clx('step',
-              useWizardStore().addAreaStore.steps()[1]
-                ? 'step-success'
-                : ''
-            )
-          }
-          >
-            New area
-          </li>
-          <li className='step'>
-            Submit
-          </li>
-        </ul>
+        <ProgressSteps />
         <FormProvider {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className='mt-8 text-lg text-content-base font-bold'>Location</div>
             <Step1a />
             <Step1b />
             <div className='mt-8 text-lg text-content-base font-bold'>New area</div>
-            {useWizardStore().addAreaStore.refAreaData() !== '' && <Step2b />}
             <Step2a />
+            {useWizardStore().addAreaStore.refAreaData() !== '' && <Step2b />}
             <div className='mt-8 text-lg text-content-base font-bold'>Submit</div>
             <StepSubmit />
           </form>
         </FormProvider>
+        {isSubmitSuccessful && <SuccessAlert areaName={getValues('newAreaName')} />}
       </MobileCard>
+
     </div>
   )
 }
 
+interface SuccessAlertProps {
+  areaName: string
+}
+const SuccessAlert = ({ areaName }: SuccessAlertProps): JSX.Element => {
+  return (
+    <LeanAlert actions={
+      <>
+        <button className='btn btn-outline btn-sm'>Add more</button>
+        <button className='btn btn-primary btn-sm'>View area</button>
+      </>
+}
+    >
+      <div className='flex flex-col items-center'>
+        <BadgeCheckIcon className='stroke-success w-10 h-10' />Area added
+      </div>
+      <div className='mt-4 text-xs flex flex-col justify-start text-base-300'>
+        <div>Name: {areaName}</div>
+        <div>ID: 123e4567-e89b-12d3-a456-426614174000</div>
+      </div>
+    </LeanAlert>
+  )
+}
 const Step1a = (): JSX.Element => {
   const text = useWizardStore().addAreaStore.refContext()
 
@@ -112,11 +117,11 @@ const Step1b = (): JSX.Element => {
   }
 
   const handleSelect = useCallback((data): void => {
-    wizardActions.addAreaStore.recordStep2(data.name, data.areaUUID)
+    wizardActions.addAreaStore.recordStep1b(data.name, data.areaUUID)
   }, [])
 
   const handleReset = useCallback((): void => {
-    wizardActions.addAreaStore.resetStep2()
+    wizardActions.addAreaStore.resetStep1b()
   }, [])
 
   return (
@@ -132,18 +137,24 @@ const Step1b = (): JSX.Element => {
 }
 
 const Step2a = (): JSX.Element => {
-  // const { register, watch, formState: { errors } } = useFormContext()
+  const context = useFormContext()
+  const { watch } = context
 
-  // useEffect(() => {
-  //   const subscription = watch((value) => wizardActions.addAreaStore.recordStep3(value.newAreaName.length > 0))
-  //   return () => subscription.unsubscribe()
-  // }, [watch])
+  useEffect(() => {
+    const subscription = watch((value) => {
+      wizardActions.addAreaStore.recordStep2(value.newAreaName.length > 0)
+    }
+
+    )
+    return () => subscription.unsubscribe()
+  }, [])
   return (
     <Input
       label='Name: *'
       name='newAreaName'
       placeholder='New area name'
       rules={{ required: 'Name is required.' }}
+      formContext={context}
       className='input input-primary input-bordered input-md'
     />
   )
@@ -173,7 +184,7 @@ const StepSubmit = (): JSX.Element => {
           )
         }
         type='submit'
-      >Submit
+      >Add Area
       </button>
       <label className='label'>
         <span className='label-text-alt text-base-content text-opacity-60'>You can update additional attributes later.</span>
@@ -181,5 +192,36 @@ const StepSubmit = (): JSX.Element => {
     </div>
   )
 }
+
+const ProgressSteps = (): JSX.Element => (
+  <ul className='steps w-full mt-8'>
+    <li className={clx('step',
+      useWizardStore().addAreaStore.steps()[0]
+        ? 'step-success'
+        : ''
+    )}
+    >
+      Location
+    </li>
+    <li className={clx('step',
+      useWizardStore().addAreaStore.steps()[1]
+        ? 'step-success'
+        : ''
+    )}
+    >
+      New area
+    </li>
+    <li
+      className={clx('step',
+        useWizardStore().addAreaStore.steps()[2]
+          ? 'step-success'
+          : ''
+      )}
+      data-content={useWizardStore().addAreaStore.steps()[2] ? '✓' : undefined}
+    >
+      Submit
+    </li>
+  </ul>
+)
 
 export default AddAreaPage
