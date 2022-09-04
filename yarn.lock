@@ -2,40 +2,40 @@
 # yarn lockfile v1
 
 
-"@algolia/autocomplete-core@1.6.3":
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-core/-/autocomplete-core-1.6.3.tgz#76832fffb6405ac2c87bac5a040b8a31a1cdef80"
-  integrity sha512-dqQqRt01fX3YuVFrkceHsoCnzX0bLhrrg8itJI1NM68KjrPYQPYsE+kY8EZTCM4y8VDnhqJErR73xe/ZsV+qAA==
+"@algolia/autocomplete-core@1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-core/-/autocomplete-core-1.7.1.tgz#025538b8a9564a9f3dd5bcf8a236d6951c76c7d1"
+  integrity sha512-eiZw+fxMzNQn01S8dA/hcCpoWCOCwcIIEUtHHdzN5TGB3IpzLbuhqFeTfh2OUhhgkE8Uo17+wH+QJ/wYyQmmzg==
   dependencies:
-    "@algolia/autocomplete-shared" "1.6.3"
+    "@algolia/autocomplete-shared" "1.7.1"
 
-"@algolia/autocomplete-js@^1.6.2":
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-js/-/autocomplete-js-1.6.3.tgz#a5bacfcced057a8587bc7a136a6c4f54052913fe"
-  integrity sha512-WgzufbwaAU6owis5NK/02q21zPyUW5lji+KRr1zgJffxW8nX5SGZ8OWmv73J187klwURHymxqsBEV4fdj0LDuw==
+"@algolia/autocomplete-js@1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-js/-/autocomplete-js-1.7.1.tgz#4cb41eb916cc83d67a96294916ceb86c8200946e"
+  integrity sha512-m8xQiH1qdthovVOD9O8/ur9P5us+sljskIpB1HFQIFmsfchorJNFlpMT+zE8V55tbJOwusUrp85c9t+6lkOllg==
   dependencies:
-    "@algolia/autocomplete-core" "1.6.3"
-    "@algolia/autocomplete-preset-algolia" "1.6.3"
-    "@algolia/autocomplete-shared" "1.6.3"
+    "@algolia/autocomplete-core" "1.7.1"
+    "@algolia/autocomplete-preset-algolia" "1.7.1"
+    "@algolia/autocomplete-shared" "1.7.1"
     htm "^3.0.0"
     preact "^10.0.0"
 
-"@algolia/autocomplete-preset-algolia@1.6.3":
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-preset-algolia/-/autocomplete-preset-algolia-1.6.3.tgz#110e56228aa41e47712bbdeb093b613c5b62ddd5"
-  integrity sha512-IJVyknSDZJRheE5sKffRJN7ukJJDAtvuKiHrk0VLZCJHR/o7XQkowu/6axhUIBRZ6Q2JFzV9hzYZ0PbtSJo9gA==
+"@algolia/autocomplete-preset-algolia@1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-preset-algolia/-/autocomplete-preset-algolia-1.7.1.tgz#7dadc5607097766478014ae2e9e1c9c4b3f957c8"
+  integrity sha512-pJwmIxeJCymU1M6cGujnaIYcY3QPOVYZOXhFkWVM7IxKzy272BwCvMFMyc5NpG/QmiObBxjo7myd060OeTNJXg==
   dependencies:
-    "@algolia/autocomplete-shared" "1.6.3"
+    "@algolia/autocomplete-shared" "1.7.1"
 
-"@algolia/autocomplete-shared@1.6.3":
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-shared/-/autocomplete-shared-1.6.3.tgz#52085ce89a755977841ed0a463aa31ce8f1dea97"
-  integrity sha512-UV46bnkTztyADFaETfzFC5ryIdGVb2zpAoYgu0tfcuYWjhg1KbLXveFffZIrGVoboqmAk1b+jMrl6iCja1i3lg==
+"@algolia/autocomplete-shared@1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-shared/-/autocomplete-shared-1.7.1.tgz#95c3a0b4b78858fed730cf9c755b7d1cd0c82c74"
+  integrity sha512-eTmGVqY3GeyBTT8IWiB2K5EuURAqhnumfktAEoHxfDY2o7vg2rSnO16ZtIG0fMgt3py28Vwgq42/bVEuaQV7pg==
 
-"@algolia/autocomplete-theme-classic@^1.5.1":
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-theme-classic/-/autocomplete-theme-classic-1.6.3.tgz#b659b4535482e1c6195eb1186afe1dc03b237aaa"
-  integrity sha512-TGtErtYlhDa/88jCzmYK2uvPEKEDs073Uj11BAN3W+yrrpDMEjcGXvOFbUGR9Gb+nxlCznM9wK2/j8932DAXXw==
+"@algolia/autocomplete-theme-classic@1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-theme-classic/-/autocomplete-theme-classic-1.7.1.tgz#90613ed21bcc7fdc13b579091352f20f0fe83843"
+  integrity sha512-Uh2AuRMjgbwCgOQX+oZQ5RIaqIDZ2os4EDZd3WClnIYQl03VTvSD/JRPmlz/+agWpfoN/fX8XvmLUGt/d4DbYg==
 
 "@ampproject/remapping@^2.1.0":
   version "2.2.0"
@@ -7305,7 +7305,12 @@ preact-render-to-string@^5.1.19:
   dependencies:
     pretty-format "^3.8.0"
 
-preact@^10.0.0, preact@^10.6.3:
+preact@^10.0.0:
+  version "10.10.6"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.10.6.tgz#1fe62aecf93974b64e6a42e09ba1f00f93207d14"
+  integrity sha512-w0mCL5vICUAZrh1DuHEdOWBjxdO62lvcO++jbzr8UhhYcTbFkpegLH9XX+7MadjTl/y0feoqwQ/zAnzkc/EGog==
+
+preact@^10.6.3:
   version "10.7.2"
   resolved "https://registry.yarnpkg.com/preact/-/preact-10.7.2.tgz#5c632ba194b87345dcaee6598b3b6529b58e6a12"
   integrity sha512-GLjn0I3r6ka+NvxJUppsVFqb4V0qDTEHT/QxHlidPuClGaxF/4AI2Qti4a0cv3XMh5n1+D3hLScW10LRIm5msQ==
@@ -7599,6 +7604,11 @@ react-helmet@6.1.0:
     prop-types "^15.7.2"
     react-fast-compare "^3.1.1"
     react-side-effect "^2.1.0"
+
+react-hook-form@^7.34.2:
+  version "7.34.2"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.34.2.tgz#9ac6d1a309a7c4aaa369d1269357a70e9e9bf4de"
+  integrity sha512-1lYWbEqr0GW7HHUjMScXMidGvV0BE2RJV3ap2BL7G0EJirkqpccTaawbsvBO8GZaB3JjCeFBEbnEWI1P8ZoLRQ==
 
 react-hotkeys-hook@^3.4.7:
   version "3.4.7"

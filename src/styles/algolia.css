@@ -25,25 +25,25 @@ body {
   that triggers a modal. These styles are for the topmost css class in that button.
 */
 
-.aa-DetachedFormContainer {
+/* .aa-DetachedFormContainer {
   @apply bg-slate-800 !important;
-}
+} */
 
 /* .aa-DetachedSearchButton {
   @apply border border-gray-300 bg-inherit rounded-full p-1 !important;
 } */
 
-.aa-DetachedCancelButton{
+/* .aa-DetachedCancelButton{
   @apply bg-white rounded-lg !important;
-}
+} */
 
 /* .aa-DetachedSearchButton .aa-DetachedSearchButtonIcon {
   @apply -ml-1 border-0 stroke-ob-primary stroke-2 !important;
 } */
 
-.aa-DetachedSearchButtonPlaceholder {
+/* .aa-DetachedSearchButtonPlaceholder {
   @apply text-base text-tertiary-contrast mr-3;
-}
+} */
 
 .xsearch-mobile-trigger-btn {
   @apply input input-bordered input-sm !important;
@@ -124,7 +124,7 @@ body {
   @apply bg-inherit p-0 h-auto w-auto !important;
 }
 
-.tag-search-submit-button .aa-SubmitIcon{
+.tag-search-submit-button .aa-SubmitIcon {
   @apply text-black stroke-2 stroke-black w-4 h-4 !important;
 }
 
@@ -138,16 +138,54 @@ body {
 }
 /* End of search for tagging */
 
-/* For Add area wizard */
+/* For Town, city, country search */
 
-.add-area-search-mobile-trigger-btn {
-  @apply input input-bordered input-sm !important;
+.aa-default-mobile-trigger-btn {
+  @apply input input-bordered input-primary input-md text-ellipsis !important;
 }
 
-.add-area-search-mobile-trigger-btn-icon {
+.aa-default-mobile-trigger-btn-icon {
   @apply -ml-3.5 stroke-gray-400 stroke-2 !important;
 }
 
-.add-area-search {
+.aa-default-mobile-submit-button .aa-SubmitIcon {
+  @apply text-black stroke-2 stroke-black w-5 h-5 !important;
+}
+
+
+.aa-default-mobile-form {
+  @apply rounded border-0 ring-0 !important;
+}
+
+.aa-default-mobile-cancel-button {
+  @apply btn btn-primary btn-sm !important;
+}
+
+.aa-default-mobile-item {
+  @apply p-4 !important;
+}
+.aa-default-mobile-item[aria-selected="true"] {
+  @apply bg-base-200 bg-opacity-50 rounded-none !important;
+}
+
+.aa-default-mobile-placeholder {
+  @apply text-base-content !important;
+}
+
+/* For climbing area search */
+
+/* .area-only-search {
   @apply rounded w-full !important;
 }
+
+.area-only-search-mobile-trigger-btn {
+  @apply input input-bordered input-sm !important;
+}
+
+.area-only-search-mobile-trigger-btn-icon {
+  @apply -ml-3.5 stroke-gray-400 stroke-2 !important;
+}
+
+.area-only-search-mobile-placeholder {
+  @apply text-base-300 text-sm text-ellipsis overflow-hidden !important;
+} */

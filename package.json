@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "author": "OpenBeta <hello@openbeta.io>",
   "dependencies": {
-    "@algolia/autocomplete-js": "^1.6.2",
-    "@algolia/autocomplete-theme-classic": "^1.5.1",
+    "@algolia/autocomplete-js": "1.7.1",
+    "@algolia/autocomplete-theme-classic": "1.7.1",
     "@apollo/client": "^3.6.9",
     "@babel/plugin-proposal-decorators": "^7.15.8",
     "@babel/runtime": "^7.17.2",
@@ -63,6 +63,7 @@
     "react-dom": "^18.0.0",
     "react-dropzone": "^14.2.1",
     "react-helmet": "6.1.0",
+    "react-hook-form": "^7.34.2",
     "react-hotkeys-hook": "^3.4.7",
     "react-map-gl": "^7.0.10",
     "react-paginate": "^8.1.3",
@@ -102,7 +103,7 @@
     "local": "NEXT_PUBLIC_API_SERVER=http://localhost:4000 node ./src/server.js ",
     "develop": "next dev",
     "start": "next start",
-    "test": "jest --testPathIgnorePatterns=/tests/e2e/",
+    "test": "jest --testPathIgnorePatterns=/tests/e2e/ --",
     "test-all": "jest",
     "prepare": "husky install"
   },
