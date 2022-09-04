@@ -42,14 +42,14 @@ jobs:
 
       - name: Run unit tests
         run: yarn test
-        env:
-          SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
+        # env:
+        #   SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
         if: ${{ github.event_name == 'pull_request' }}
 
       - name: Run unit & e2e tests
         run: yarn test-all
         env:
-          SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
+          # SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
           SIRV_CLIENT_SECRET_RW: ${{ secrets.SIRV_CLIENT_SECRET_RW }}
         if: ${{ github.event_name != 'pull_request' }}
 
