@@ -55,8 +55,8 @@ jobs:
 
       - name: Build project
         run: yarn build
-        env:
-          SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
+        # env:
+        #   SIRV_CLIENT_SECRET_RO: ${{ secrets.SIRV_CLIENT_SECRET_RO }}
         if: ${{ github.event_name != 'pull_request' }}
 
   test-docker-compose:
