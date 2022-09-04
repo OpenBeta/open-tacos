@@ -1,5 +1,4 @@
 import { useFormContext, UseFormReturn } from 'react-hook-form'
-import clx from 'classnames'
 
 interface InputProps {
   label: string
@@ -13,10 +12,10 @@ interface InputProps {
 
 export default function Input ({ label, name, rules, placeholder = '', className, helper, formContext }: InputProps): JSX.Element {
   const context = formContext == null ? useFormContext() : formContext
-  const { register, formState: { errors, isSubmitSuccessful } } = context
+  const { register, formState: { errors } } = context
   const inputProps = register(name, rules)
   return (
-    <div className={clx('form-control', isSubmitSuccessful ? 'disabled' : '')}>
+    <div className='form-control'>
       <label className='label' htmlFor={name}>
         <span className='label-text font-semibold'>{label}</span>
       </label>

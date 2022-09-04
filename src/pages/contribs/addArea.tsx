@@ -25,11 +25,9 @@ const AddAreaPage: NextPage<{}> = () => {
   const onSubmit = async (data): Promise<void> => {
     console.log(data)
     // eslint-disable-next-line
-    await new Promise(r => setTimeout(r, 2000))
+    await new Promise(r => setTimeout(r, 2000)) // Todo: call gql mutation
     wizardActions.addAreaStore.recordStepFinal()
   }
-
-  console.log('#formstate', isSubmitSuccessful)
 
   return (
     <div className='max-w-md mx-auto pb-8'>
@@ -65,7 +63,7 @@ const SuccessAlert = ({ areaName }: SuccessAlertProps): JSX.Element => {
         <button className='btn btn-outline btn-sm'>Add more</button>
         <button className='btn btn-primary btn-sm'>View area</button>
       </>
-}
+      }
     >
       <div className='flex flex-col items-center'>
         <BadgeCheckIcon className='stroke-success w-10 h-10' />Area added
@@ -77,6 +75,7 @@ const SuccessAlert = ({ areaName }: SuccessAlertProps): JSX.Element => {
     </LeanAlert>
   )
 }
+
 const Step1a = (): JSX.Element => {
   const text = useWizardStore().addAreaStore.refContext()
 
@@ -141,10 +140,9 @@ const Step2a = (): JSX.Element => {
   const { watch } = context
 
   useEffect(() => {
-    const subscription = watch((value) => {
+    // update Step progress
+    const subscription = watch((value) =>
       wizardActions.addAreaStore.recordStep2(value.newAreaName.length > 0)
-    }
-
     )
     return () => subscription.unsubscribe()
   }, [])
