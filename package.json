@@ -103,7 +103,7 @@
     "local": "NEXT_PUBLIC_API_SERVER=http://localhost:4000 node ./src/server.js ",
     "develop": "next dev",
     "start": "next start",
-    "test": "jest --testPathIgnorePatterns=/tests/e2e/",
+    "test": "jest --testPathIgnorePatterns=/tests/e2e/ --",
     "test-all": "jest",
     "prepare": "husky install"
   },
