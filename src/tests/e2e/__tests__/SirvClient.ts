@@ -16,6 +16,7 @@ beforeAll(() => {
   expect(SIRV_CONFIG.clientId).not.toBeNull()
   expect(SIRV_CONFIG.clientAdminId).not.toBeNull()
   expect(SIRV_CONFIG.clientAdminSecret).not.toBeNull()
+  console.log('#Sirv BASE', SIRV_CONFIG.baseUrl)
 })
 
 test('Sirv API can read photos', async () => {
