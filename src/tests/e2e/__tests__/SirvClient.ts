@@ -44,6 +44,7 @@ test('can read uid json', async () => {
     }
   ]
   const list = await enhanceMediaListWithUsernames(paths)
+  console.log(list)
   expect(list.length).toEqual(2)
   expect(list[0].uid).toMatch(/viet-test-profile/)
 
