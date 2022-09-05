@@ -58,6 +58,10 @@ export default function TickForm ({ open, setOpen, isTicked, climbId, name, grad
       errorPolicy: 'none'
     })
 
+  /**
+   * reset our inputs whenever a form is successfully submitted
+   *
+   */
   function resetInputs (): void {
     setDateClimbed(new Date().toISOString().slice(0, 10))
     setAttemptType(attemptTypes[1])
