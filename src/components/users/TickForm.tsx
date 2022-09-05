@@ -48,8 +48,7 @@ const attemptTypes = [
 export default function TickForm ({ open, setOpen, isTicked, climbId, name, grade }): JSX.Element {
   const [style, setStyle] = useState(styles[1])
   const [attemptType, setAttemptType] = useState(attemptTypes[1])
-  // default is today for dateClimbed
-  const [dateClimbed, setDateClimbed] = useState<string>(new Date().toISOString().slice(0, 10))
+  const [dateClimbed, setDateClimbed] = useState<string>(new Date().toISOString().slice(0, 10)) // default is today for dateClimbed
   const [notes, setNotes] = useState<string>('')
   const [errors, setErrors] = useState<string[]>()
   const session = useSession()
@@ -59,6 +58,10 @@ export default function TickForm ({ open, setOpen, isTicked, climbId, name, grad
       errorPolicy: 'none'
     })
 
+  /**
+   * reset our inputs whenever a form is successfully submitted
+   *
+   */
   function resetInputs (): void {
     setDateClimbed(new Date().toISOString().slice(0, 10))
     setAttemptType(attemptTypes[1])
