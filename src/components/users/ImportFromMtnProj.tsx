@@ -46,13 +46,11 @@ function ImportFromMtnProj (): JSX.Element | null {
       if (res.status === 200) {
         setShow(false)
         const { ticks } = await res.json()
-        const dbTicks = await addTicks({
+        await addTicks({
           variables: {
             input: ticks
           }
         })
-        // put the ticks into the store?
-        console.log(dbTicks)
       } else {
         setErrors(['Sorry, something went wrong. Please try again later'])
       }
