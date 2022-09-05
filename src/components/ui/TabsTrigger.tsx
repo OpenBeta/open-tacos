@@ -17,7 +17,7 @@ export default function TabsTrigger ({ tabKey, activeKey, icon, label, hidden = 
           hidden ? 'hidden' : 'relative z-50 border-b-4 w-20',
           tabKey === activeKey
             ? 'border-gray-800 text-base-content'
-            : 'border-transparent hover:border-gray-400 text-base-200 hover:text-base-content')
+            : 'border-transparent hover:border-gray-400 text-base-300 hover:text-base-content')
       }
     >
       <div className='flex flex-col justify-center items-center'>
