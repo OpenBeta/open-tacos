@@ -140,3 +140,49 @@ export const QUERY_CRAGS_WITHIN = gql`
     }
   }
 `
+
+export const MUTATION_IMPORT_TICKS = gql`
+mutation ImportTicks($input: [Tick]) {
+  importTicks(input: $input) {
+    _id
+    userId
+    name
+    notes
+    climbId
+    style
+    attemptType
+    dateClimbed
+    grade
+  }
+}`
+
+export const MUTATION_ADD_TICK = gql`
+mutation AddTick($input: Tick) {
+  addTick(input: $input) {
+    _id
+    userId
+    name
+    notes
+    climbId
+    style
+    attemptType
+    dateClimbed
+    grade
+  }
+}`
+
+export const QUERY_TICKS_BY_USER_AND_CLIMB = gql`
+query userTicksByClimbId($userId: String, $climbId: String) {
+  userTicksByClimbId(userId: $userId, climbId: $climbId) {
+    _id
+    name
+    notes
+    climbId
+    style
+    attemptType
+    dateClimbed
+    grade
+    userId
+  }
+}
+`
