@@ -13,15 +13,25 @@ exports.onExecutePostLogin = async ({ user, authorization, stats }, api) => {
   user.user_metadata.uuid = user.user_metadata?.uuid ?? uuidv4()
   user.user_metadata.name = user.user_metadata?.name ?? user?.nickname ?? ''
   user.user_metadata.loginsCount = stats?.logins_count ?? 0
+  // user.user_metadata.ticksImported = user.user_metadata?.ticksImported ?? false
 
   api.user.setUserMetadata('name', user.user_metadata.name)
   api.user.setUserMetadata('bio', user.user_metadata.bio)
   api.user.setUserMetadata('uuid', user.user_metadata.uuid)
   api.user.setUserMetadata('nick', user.user_metadata.nick)
   api.user.setUserMetadata('loginsCount', user.user_metadata.loginsCount)
+  // api.user.setUserMetadata('ticksImported', user.user_metadata.ticksImported)
+
+  const neededMetaData = {
+    'name': user.user_metadata.name,
+    'bio': user.user_metadata.bio,
+    'uuid': user.user_metadata.uuid,
+    'loginsCount': user.user_metadata.loginsCount,
+    // 'ticksImported': user.user_metadata.ticksImported
+  }
 
   const ns = 'https://tacos.openbeta.io/'
-  api.idToken.setCustomClaim(ns + 'user_metadata', user.user_metadata)
+  api.idToken.setCustomClaim(ns + 'user_metadata', neededMetaData)
 
   if (authorization != null) {
     api.idToken.setCustomClaim(`${ns}roles`, authorization.roles)

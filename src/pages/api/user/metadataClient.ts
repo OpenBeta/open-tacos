@@ -4,17 +4,35 @@ import { getSession } from 'next-auth/react'
 import { reshapeAuth0UserToProfile, extractUpdatableMetadataFromProfile, auth0ManagementClient } from '../../../js/auth/ManagementClient'
 import { IUserProfile } from '../../../js/types/User'
 
-const allowedFields = ['name', 'nick', 'bio', 'website', 'collections'] as const
+const allowedFields = ['name', 'nick', 'bio', 'website', 'ticksImported', 'collections'] as const
 type AllowedField = typeof allowedFields[number]
 
 const isString = (value: any): value is string => typeof value === 'string'
+const isBoolean = (value: any): value is boolean => typeof value === 'boolean'
 
 const dataTypeCheck: { [field in AllowedField]: (value: any) => boolean } = {
   name: isString,
   nick: isString,
   bio: isString,
   website: isString,
+  ticksImported: isBoolean,
   collections: (value: any) => typeof value === 'object' && value != null
+}
+/**
+ * This is the interface for the tick object
+ * We are starting with name, uuid, notes
+ *
+ */
+
+export interface Tick {
+  name: string
+  notes: string
+  climbId: string
+  userId: string | undefined
+  style: string
+  attemptType: string
+  dateClimbed: string
+  grade: string
 }
 
 export interface Auth0UserMetadata {
@@ -23,6 +41,7 @@ export interface Auth0UserMetadata {
   uuid?: string
   bio?: string
   website?: string
+  ticksImported?: boolean
   collections?: {
     /** Users can organize entities into their own 'climbing playlists'
      * Strictly speaking, this should always be mutated as a SET rather than an
@@ -37,9 +56,10 @@ export interface Auth0UserMetadata {
      * because it seems sensible to me.
      * The key of each collection is its name.
      */
-    areaCollections?: {[key: string]: string[]}
+    areaCollections?: { [key: string]: string[] }
   }
 }
+
 interface MetadataClient {
   getUserMetadata: () => Promise<Auth0UserMetadata>
   updateUserMetadata: (metadata: Auth0UserMetadata) => Promise<Auth0UserMetadata>
@@ -97,7 +117,6 @@ const createMetadataClient = async (
       { id },
       metadata
     )
-
     return user?.user_metadata ?? {}
   }
 
