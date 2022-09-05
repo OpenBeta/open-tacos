@@ -81,7 +81,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
                 classNames(
                   'z-10 mb-6 mx-4 flex gap-x-4 px-4 py-1',
                   activeTab === 'map'
-                    ? 'backdrop-blur-sm drop-shadow-md bg-gray-100 bg-opacity-60 ring-2 ring-gray-600 ring-offset-4 rounded'
+                    ? 'bg-white ring-2 ring-gray-600 ring-offset-4 rounded'
                     : '')
               }
             >
