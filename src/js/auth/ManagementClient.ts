@@ -74,6 +74,10 @@ export const doesUserNameExist = async (nick: string): Promise<boolean> => {
   throw new Error('Unable to search the user database')
 }
 
+/**
+ * For an object of any shape, return only those fields that are write-able.
+ * Prevents users from injecting arbitrary data into the medatada object.
+ */
 export const extractUpdatableMetadataFromProfile = ({ name, nick, bio, website, collections }: IWritableUserMetadata): IWritableUserMetadata => ({
   name,
   nick,

@@ -61,19 +61,38 @@ const createMetadataClient = async (
     return reshapeAuth0UserToProfile(user)
   }
 
+  /**
+   * Push new values into the metadata store
+   */
   const updateUserMetadata = async (
     profile: IUserProfile
   ): Promise<Auth0UserMetadata> => {
     const metadata = extractUpdatableMetadataFromProfile(profile)
+
+    // Check again that all fields are above board in terms of their types
+    // and names. prevents a user from injecting arbitrary data into the store
+    // by changing a valid field into an object. (Like submitting an object for
+    // their bio)
     Object.keys(metadata).forEach((field: AllowedField) => {
+      // Check the field is allowed
       if (!allowedFields.includes(field)) {
         throw new Error(`Invalid field ${field}`)
       }
+      // Check the field is above board
       if (!dataTypeCheck[field](metadata[field])) {
         throw new Error(`Invalid data type for field ${field}`)
       }
     })
 
+    // The auth0 management client only touches properties that
+    // are actually specified in metadata. So an undefined property
+    // is passed over, not nulled, by Auth0
+    const currentMeta = await getUserMetadata()
+    if (currentMeta.nick === metadata.nick) {
+      delete currentMeta.nick
+    }
+
+    // Actually write this new data into the users profile.
     const user = await auth0ManagementClient.updateUserMetadata(
       { id },
       metadata
