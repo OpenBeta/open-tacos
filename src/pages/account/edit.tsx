@@ -12,7 +12,10 @@ const edit: INextPageWithAuth = () => {
       </Head>
 
       <Layout contentContainerClass='content-default with-standard-y-margin' showFilterBar={false}>
-        <section className='mx-auto max-w-screen-sm w-full rounded-md md:border p-0 md:p-16'>
+        <section
+          className='mx-auto max-w-screen-sm w-full md:rounded-xl md:shadow-lg md:border p-4 md:p-16'
+          style={{ minHeight: '90vh' }}
+        >
           <ProfileEditForm />
         </section>
       </Layout>

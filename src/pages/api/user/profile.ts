@@ -30,6 +30,7 @@ const updateMyProfile: Handler = async (req, res) => {
   }
 
   try {
+    // Only validate username
     if (!checkUsername(req.body?.nick)) {
       throw new Error('Bad username')
     }
