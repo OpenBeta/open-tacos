@@ -12,6 +12,7 @@ import Input from '../../components/ui/form/Input'
 import MobileCard from '../../components/ui/MobileCard'
 import { LeanAlert } from '../../components/ui/micro/AlertDialogue'
 import { useWizardStore, wizardActions } from '../../js/stores/wizards'
+import { PoiDoc } from '../../components/search/sources/PoiSource2'
 
 const AddAreaPage: NextPage<{}> = () => {
   const router = useRouter()
@@ -78,11 +79,12 @@ const SuccessAlert = ({ areaName }: SuccessAlertProps): JSX.Element => {
 
 const Step1a = (): JSX.Element => {
   const text = useWizardStore().addAreaStore.refContext()
+  const countryCode = useWizardStore().addAreaStore.refContextData().countryCode
 
   const { formState: { errors } } = useFormContext()
 
-  const handleSelect = useCallback((data): void => {
-    wizardActions.addAreaStore.recordStep1a(data.place_name, data.center)
+  const handleSelect = useCallback((data: PoiDoc): void => {
+    wizardActions.addAreaStore.recordStep1a(data.place_name, data.center, data.countryCode)
   }, [])
 
   const handleReset = useCallback((): void => {
@@ -91,7 +93,7 @@ const Step1a = (): JSX.Element => {
 
   const queryParams = {
     text,
-    data: undefined
+    data: countryCode
   }
   return (
     <LocationAutocompleteControl
@@ -111,7 +113,7 @@ const Step1b = (): JSX.Element => {
   const query = {
     text,
     data: {
-      latlng: useWizardStore().addAreaStore.refContextData()
+      latlng: useWizardStore().addAreaStore.refContextData().latlng
     }
   }
 
@@ -146,6 +148,7 @@ const Step2a = (): JSX.Element => {
     )
     return () => subscription.unsubscribe()
   }, [])
+
   return (
     <Input
       label='Name: *'

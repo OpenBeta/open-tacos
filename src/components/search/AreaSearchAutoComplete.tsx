@@ -11,12 +11,12 @@ export interface QueryProps<T=any> {
 
 export interface AutoCompleteDefaultProps<T = any> {
   placeholder?: string
-  queryParams: QueryProps<T>
+  queryParams: QueryProps
   onReset?: () => void
   onSelect?: (data: T) => void
 }
 
-export interface AutoCompleteFormControlProps extends AutoCompleteDefaultProps {
+export interface AutoCompleteFormControlProps<T=any> extends AutoCompleteDefaultProps<T> {
   id?: string
   label: string
   errorMesage?: string

@@ -12,7 +12,10 @@ interface AddAreaProps {
   name: string
   shortCode?: string
   refContext: string
-  refContextData: number[]
+  refContextData: {
+    latlng: number[]
+    countryCode: string
+  }
   refAreaName: string
   refAreaData: string
   relationToRef?: 'in' | 'near'
@@ -28,7 +31,10 @@ const INITIAL_COUNTRY_STATE: AddCountryProps = {
 const INITIAL_AREA_STATE: AddAreaProps = {
   name: '',
   refContext: '',
-  refContextData: [0, 0],
+  refContextData: {
+    latlng: [0, 0],
+    countryCode: ''
+  },
   refAreaName: '',
   refAreaData: '',
   steps: [false, false, false]
@@ -47,17 +53,23 @@ export const addCountryStore = createStore('addCountry')(INITIAL_COUNTRY_STATE, 
 
 export const addAreaStore = createStore('addArea')(INITIAL_AREA_STATE, STORE_OPTS)
   .extendActions((set, get, api) => ({
-    recordStep1a: (name: string, data: number[]) => {
+    recordStep1a: (name: string, lnglat: number[], countryCode: string) => {
       api.set.state(draft => {
         draft.refContext = name
-        draft.refContextData = [data[1], data[0]]
+        draft.refContextData = {
+          latlng: [lnglat[1], lnglat[0]],
+          countryCode: countryCode
+        }
         draft.steps[0] = true
       })
     },
     resetLocation: () => {
       api.set.state(draft => {
         draft.refContext = ''
-        draft.refContextData = [0, 0]
+        draft.refContextData = {
+          latlng: [0, 0],
+          countryCode: ''
+        }
         draft.steps[0] = false
         // also reset step 2
         draft.refAreaName = ''

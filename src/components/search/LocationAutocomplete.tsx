@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form'
 
 import { Autocomplete } from './Autocomplete'
-import { searchPoi } from './sources/PoiSource2'
+import { PoiDoc, searchPoi } from './sources/PoiSource2'
 import { AutoCompleteDefaultProps, AutoCompleteFormControlProps } from './AreaSearchAutoComplete'
 
 /**
@@ -27,7 +27,7 @@ export default function LocationAutocompleteCore ({ placeholder = 'A city or a w
 /**
  * Location search widget to be used as a form control with React-hook-form
  */
-export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, queryParams, label, errorMesage, tip }: AutoCompleteFormControlProps): JSX.Element => {
+export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, queryParams, label, errorMesage, tip }: AutoCompleteFormControlProps<PoiDoc>): JSX.Element => {
   const { control } = useFormContext()
   return (
     <div className='form-control'>
@@ -41,10 +41,10 @@ export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, qu
         render={({ field: { onChange, onBlur } }) =>
           <LocationAutocompleteCore
             placeholder={placeholder}
-            onSelect={(data) => {
+            onSelect={(data: PoiDoc) => {
               onChange({
                 target: {
-                  value: data.center
+                  value: data.countryCode
                 }
               })
               onBlur()
