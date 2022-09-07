@@ -2,8 +2,11 @@ import { useCallback, useEffect } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useForm, useFormContext, FormProvider } from 'react-hook-form'
-import { BadgeCheckIcon } from '@heroicons/react/outline'
+import { BadgeCheckIcon, ExclamationCircleIcon } from '@heroicons/react/outline'
 import clx from 'classnames'
+import { ApolloError, useMutation } from '@apollo/client'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 
 import { LocationAutocompleteControl } from '../../components/search/LocationAutocomplete'
 import { AreaSearchAutoCompleteControl } from '../../components/search/AreaSearchAutoComplete'
@@ -13,21 +16,56 @@ import MobileCard from '../../components/ui/MobileCard'
 import { LeanAlert } from '../../components/ui/micro/AlertDialogue'
 import { useWizardStore, wizardActions } from '../../js/stores/wizards'
 import { PoiDoc } from '../../components/search/sources/PoiSource2'
+import { MUTATION_ADD_AREA, AddAreaProps, AddAreaReturnType } from '../../js/graphql/contribGQL'
+import { graphqlClient } from '../../js/graphql/Client'
+
+interface AddAreaFormProps {
+  newAreaName: string
+  placeSearch: string
+  locationRefType: 'near' | 'child'
+}
 
 const AddAreaPage: NextPage<{}> = () => {
   const router = useRouter()
+  const session = useSession({ required: true })
 
   const onClose = useCallback(async () => {
     await router.replace('/?v=edit')
   }, [])
 
-  const form = useForm({ mode: 'onBlur', defaultValues: { locationRefType: 'near', newAreaName: '' } })
-  const { handleSubmit, formState: { isSubmitSuccessful }, getValues } = form
-  const onSubmit = async (data): Promise<void> => {
-    console.log(data)
-    // eslint-disable-next-line
-    await new Promise(r => setTimeout(r, 2000)) // Todo: call gql mutation
-    wizardActions.addAreaStore.recordStepFinal()
+  const [addArea, { error, data }] = useMutation<{ addArea: AddAreaReturnType }, AddAreaProps>(
+    MUTATION_ADD_AREA, {
+      client: graphqlClient,
+      onCompleted: () => wizardActions.addAreaStore.recordStepFinal()
+    }
+  )
+
+  const form = useForm<AddAreaFormProps>(
+    {
+      mode: 'onBlur',
+      defaultValues: { locationRefType: 'near', newAreaName: '', placeSearch: '' }
+    })
+  const { handleSubmit, formState: { isSubmitSuccessful } } = form
+
+  // Submit form
+  const onSubmit = async (formFields: AddAreaFormProps): Promise<void> => {
+    const { newAreaName, placeSearch } = formFields
+    try {
+      await addArea({
+        variables: {
+          name: newAreaName,
+          parentUuid: null,
+          countryCode: placeSearch
+        },
+        context: {
+          headers: {
+            authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
+          }
+        }
+      })
+    } catch (e) {
+      console.log('Error adding area', e)
+    }
   }
 
   return (
@@ -47,31 +85,48 @@ const AddAreaPage: NextPage<{}> = () => {
             <StepSubmit />
           </form>
         </FormProvider>
-        {isSubmitSuccessful && <SuccessAlert areaName={getValues('newAreaName')} />}
+        {isSubmitSuccessful && error == null && data != null && <SuccessAlert {...data.addArea} />}
+        {error != null && <ErrorAlert {...error} />}
       </MobileCard>
 
     </div>
   )
 }
 
-interface SuccessAlertProps {
-  areaName: string
-}
-const SuccessAlert = ({ areaName }: SuccessAlertProps): JSX.Element => {
+type SuccessAlertProps = AddAreaReturnType
+const SuccessAlert = ({ areaName, uuid }: SuccessAlertProps): JSX.Element => {
+  console.log('Success', areaName, uuid)
   return (
     <LeanAlert actions={
       <>
         <button className='btn btn-outline btn-sm'>Add more</button>
-        <button className='btn btn-primary btn-sm'>View area</button>
+        <Link className='btn' href={`/areas/${uuid}`}><a>View area</a></Link>
       </>
       }
     >
       <div className='flex flex-col items-center'>
-        <BadgeCheckIcon className='stroke-success w-10 h-10' />Area added
+        <BadgeCheckIcon className='stroke-success w-10 h-10' />
       </div>
-      <div className='mt-4 text-xs flex flex-col justify-start text-base-300'>
-        <div>Name: {areaName}</div>
-        <div>ID: 123e4567-e89b-12d3-a456-426614174000</div>
+      <div className='mt-4 text-sm flex flex-col justify-start text-base-300'>
+        <div>Area '{areaName}' added.</div>
+        <div>ID: {uuid}</div>
+      </div>
+    </LeanAlert>
+  )
+}
+
+type ErrorAlertProps = ApolloError
+const ErrorAlert = ({ message }: ErrorAlertProps): JSX.Element => {
+  return (
+    <LeanAlert cancel={
+      <button className='btn btn-outline btn-sm btn-wide'>Ok</button>
+    }
+    >
+      <div className='flex flex-col items-center'>
+        <ExclamationCircleIcon className='stroke-error w-10 h-10' />
+      </div>
+      <div className='mt-4 text-xs text-base-300'>
+        {message} Click Ok and try adding again.
       </div>
     </LeanAlert>
   )

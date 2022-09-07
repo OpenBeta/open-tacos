@@ -138,9 +138,10 @@ export default function AlertDialog (props: Props): JSX.Element {
 interface LeanAlertProps {
   children: JSX.Element | JSX.Element []
   actions?: ReactNode
+  cancel?: ReactNode
 
 }
-export const LeanAlert = ({ actions, children }: LeanAlertProps): JSX.Element => {
+export const LeanAlert = ({ actions, cancel, children }: LeanAlertProps): JSX.Element => {
   return (
     <AlertDialogPrimitive.Root defaultOpen>
       <AlertDialogPrimitive.Overlay className='fixed inset-0 bg-black/25' />
@@ -151,6 +152,10 @@ export const LeanAlert = ({ actions, children }: LeanAlertProps): JSX.Element =>
             {children}
           </AlertDialogPrimitive.Description>
           <div className='flex items-center justify-center gap-x-4'>
+            {cancel != null && (
+              <AlertDialogPrimitive.AlertDialogCancel>
+                {cancel}
+              </AlertDialogPrimitive.AlertDialogCancel>)}
             {actions}
           </div>
         </div>
