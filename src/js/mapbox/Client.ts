@@ -2,7 +2,22 @@ import axios from 'axios'
 import { Feature, Geometry } from 'geojson'
 import { NEXT_PUBLIC_MAPBOX_API_KEY } from '../../Config'
 
-type ArrayOfFeatures = Promise<Array<Feature<Geometry, { [name: string]: object }>>>
+export interface MapboxContext {
+  id: string
+  short_code: string
+}
+
+export interface MapboxDoc {
+  text: string
+  id: string
+  place_name: string
+  center: number[]
+  place_type: string[]
+  context?: MapboxContext[]
+  properties: Record<'short_code', string>
+}
+
+export type ArrayOfFeatures = Array<Feature<Geometry> & MapboxDoc>
 /**
  * Call Mapbox forward geocoder look up
  * @param query Search string. Eg: Smith Rock

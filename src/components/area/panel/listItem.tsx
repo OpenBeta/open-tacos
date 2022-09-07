@@ -117,7 +117,7 @@ export default function ListItem (props: ListItemProps): JSX.Element {
             className='w-full h-32'
             title='How many routes of each discipline are logged in this area'
           >
-            <DisciplineDistribution data={aggregate.byDiscipline} />
+            {aggregate.byDiscipline != null && <DisciplineDistribution data={aggregate.byDiscipline} />}
           </div>
         </div>
 
