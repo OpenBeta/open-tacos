@@ -53,7 +53,7 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
   const items = useMemo(() => {
     return area.children
       // We don't care about empty children
-      .filter(i => i.totalClimbs > 0)
+      // .filter(i => i.totalClimbs > 0)
       // map the actual data we need into the item entity
       .map(child => ({
         id: child.metadata.areaId,

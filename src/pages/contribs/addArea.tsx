@@ -1,9 +1,11 @@
 import { useCallback, useEffect } from 'react'
-import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useForm, useFormContext, FormProvider } from 'react-hook-form'
-import { BadgeCheckIcon } from '@heroicons/react/outline'
+import { BadgeCheckIcon, ExclamationCircleIcon } from '@heroicons/react/outline'
 import clx from 'classnames'
+import { ApolloError, useMutation } from '@apollo/client'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 
 import { LocationAutocompleteControl } from '../../components/search/LocationAutocomplete'
 import { AreaSearchAutoCompleteControl } from '../../components/search/AreaSearchAutoComplete'
@@ -12,21 +14,66 @@ import Input from '../../components/ui/form/Input'
 import MobileCard from '../../components/ui/MobileCard'
 import { LeanAlert } from '../../components/ui/micro/AlertDialogue'
 import { useWizardStore, wizardActions } from '../../js/stores/wizards'
+import { PoiDoc } from '../../components/search/sources/PoiSource2'
+import { MUTATION_ADD_AREA, AddAreaProps, AddAreaReturnType } from '../../js/graphql/contribGQL'
+import { graphqlClient } from '../../js/graphql/Client'
+import { INextPageWithAuth } from '../../js/types/INext'
+interface AddAreaFormProps {
+  newAreaName: string
+  placeSearch: string
+  locationRefType: 'near' | 'child'
+}
 
-const AddAreaPage: NextPage<{}> = () => {
+const AddAreaPage: INextPageWithAuth = () => {
   const router = useRouter()
+  const session = useSession({ required: true })
 
+  const [addArea, { error, data }] = useMutation<{ addArea: AddAreaReturnType }, AddAreaProps>(
+    MUTATION_ADD_AREA, {
+      client: graphqlClient,
+      onCompleted: () => wizardActions.addAreaStore.recordStepFinal()
+    }
+  )
+
+  const form = useForm<AddAreaFormProps>(
+    {
+      mode: 'onBlur',
+      defaultValues: { locationRefType: 'near', newAreaName: '', placeSearch: '' }
+    })
+  const { handleSubmit, formState: { isSubmitSuccessful }, reset } = form
+
+  // Go back to previous screen
   const onClose = useCallback(async () => {
     await router.replace('/?v=edit')
   }, [])
 
-  const form = useForm({ mode: 'onBlur', defaultValues: { locationRefType: 'near', newAreaName: '' } })
-  const { handleSubmit, formState: { isSubmitSuccessful }, getValues } = form
-  const onSubmit = async (data): Promise<void> => {
-    console.log(data)
-    // eslint-disable-next-line
-    await new Promise(r => setTimeout(r, 2000)) // Todo: call gql mutation
-    wizardActions.addAreaStore.recordStepFinal()
+  // Submit form
+  const onSubmit = async (formFields: AddAreaFormProps): Promise<void> => {
+    const { newAreaName, placeSearch } = formFields
+    try {
+      await addArea({
+        variables: {
+          name: newAreaName,
+          parentUuid: null,
+          countryCode: placeSearch
+        },
+        context: {
+          headers: {
+            authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
+          }
+        }
+      })
+    } catch (e) {
+      console.log('Error adding area', e)
+    }
+  }
+
+  const onResetForm = (): void => {
+    // Reset form state
+    reset()
+    // Partially reset wizard state (keeping initial location since users likely add a new area near by)
+    wizardActions.addAreaStore.resetStep1b()
+    wizardActions.addAreaStore.resetStepFinal()
   }
 
   return (
@@ -46,31 +93,56 @@ const AddAreaPage: NextPage<{}> = () => {
             <StepSubmit />
           </form>
         </FormProvider>
-        {isSubmitSuccessful && <SuccessAlert areaName={getValues('newAreaName')} />}
+        {isSubmitSuccessful && error == null && data != null &&
+          <SuccessAlert {...data.addArea} onContinue={onResetForm} />}
+        {error != null && <ErrorAlert {...error} />}
       </MobileCard>
 
     </div>
   )
 }
 
-interface SuccessAlertProps {
-  areaName: string
+interface SuccessAlertProps extends AddAreaReturnType {
+  onContinue: () => void
 }
-const SuccessAlert = ({ areaName }: SuccessAlertProps): JSX.Element => {
+const SuccessAlert = ({ areaName, uuid, onContinue }: SuccessAlertProps): JSX.Element => {
   return (
     <LeanAlert actions={
       <>
-        <button className='btn btn-outline btn-sm'>Add more</button>
-        <button className='btn btn-primary btn-sm'>View area</button>
+        <button className='btn btn-solid btn-sm' onClick={onContinue}>
+          Add more
+        </button>
+        <button className='btn btn-outline btn-sm'>
+          <Link href={`/areas/${uuid}`}>
+            <a target='_blank' rel='noreferrer'>View area</a>
+          </Link>
+        </button>
       </>
       }
     >
       <div className='flex flex-col items-center'>
-        <BadgeCheckIcon className='stroke-success w-10 h-10' />Area added
+        <BadgeCheckIcon className='stroke-success w-10 h-10' />
       </div>
-      <div className='mt-4 text-xs flex flex-col justify-start text-base-300'>
-        <div>Name: {areaName}</div>
-        <div>ID: 123e4567-e89b-12d3-a456-426614174000</div>
+      <div className='mt-4 text-sm flex flex-col justify-start text-base-300'>
+        <div>Area <span className='font-semibold'>{areaName}</span> added.</div>
+        <div>ID: {uuid}</div>
+      </div>
+    </LeanAlert>
+  )
+}
+
+type ErrorAlertProps = ApolloError
+const ErrorAlert = ({ message }: ErrorAlertProps): JSX.Element => {
+  return (
+    <LeanAlert cancel={
+      <button className='btn btn-outline btn-sm btn-wide'>Ok</button>
+    }
+    >
+      <div className='flex flex-col items-center'>
+        <ExclamationCircleIcon className='stroke-error w-10 h-10' />
+      </div>
+      <div className='mt-4 text-xs text-base-300'>
+        {message} Click Ok and try adding again.
       </div>
     </LeanAlert>
   )
@@ -78,11 +150,12 @@ const SuccessAlert = ({ areaName }: SuccessAlertProps): JSX.Element => {
 
 const Step1a = (): JSX.Element => {
   const text = useWizardStore().addAreaStore.refContext()
+  const countryCode = useWizardStore().addAreaStore.refContextData().countryCode
 
   const { formState: { errors } } = useFormContext()
 
-  const handleSelect = useCallback((data): void => {
-    wizardActions.addAreaStore.recordStep1a(data.place_name, data.center)
+  const handleSelect = useCallback((data: PoiDoc): void => {
+    wizardActions.addAreaStore.recordStep1a(data.place_name, data.center, data.countryCode)
   }, [])
 
   const handleReset = useCallback((): void => {
@@ -91,17 +164,17 @@ const Step1a = (): JSX.Element => {
 
   const queryParams = {
     text,
-    data: undefined
+    data: countryCode
   }
   return (
     <LocationAutocompleteControl
-      label='Town, city, or landmark: *'
+      label='Place: *'
       placeholder={text}
       onSelect={handleSelect}
       onReset={handleReset}
       queryParams={queryParams}
       errorMesage={errors.placeSearch?.message as string}
-      tip='The more specific the better.'
+      tip='Town/city/country.  The more specific the better.'
     />
   )
 }
@@ -111,7 +184,7 @@ const Step1b = (): JSX.Element => {
   const query = {
     text,
     data: {
-      latlng: useWizardStore().addAreaStore.refContextData()
+      latlng: useWizardStore().addAreaStore.refContextData().latlng
     }
   }
 
@@ -125,7 +198,7 @@ const Step1b = (): JSX.Element => {
 
   return (
     <AreaSearchAutoCompleteControl
-      label='Climbing area:'
+      label='Reference climbing area:'
       placeholder={text}
       queryParams={query}
       onSelect={handleSelect}
@@ -146,6 +219,7 @@ const Step2a = (): JSX.Element => {
     )
     return () => subscription.unsubscribe()
   }, [])
+
   return (
     <Input
       label='Name: *'
@@ -221,5 +295,7 @@ const ProgressSteps = (): JSX.Element => (
     </li>
   </ul>
 )
+
+AddAreaPage.auth = true
 
 export default AddAreaPage

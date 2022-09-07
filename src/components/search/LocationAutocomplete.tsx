@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form'
 
 import { Autocomplete } from './Autocomplete'
-import { searchPoi } from './sources/PoiSource2'
+import { PoiDoc, searchPoi } from './sources/PoiSource2'
 import { AutoCompleteDefaultProps, AutoCompleteFormControlProps } from './AreaSearchAutoComplete'
 
 /**
@@ -27,7 +27,7 @@ export default function LocationAutocompleteCore ({ placeholder = 'A city or a w
 /**
  * Location search widget to be used as a form control with React-hook-form
  */
-export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, queryParams, label, errorMesage, tip }: AutoCompleteFormControlProps): JSX.Element => {
+export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, queryParams, label, errorMesage, tip }: AutoCompleteFormControlProps<PoiDoc>): JSX.Element => {
   const { control } = useFormContext()
   return (
     <div className='form-control'>
@@ -38,16 +38,15 @@ export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, qu
         control={control}
         name='placeSearch'
         rules={{ required: 'Please select a location' }}
-        render={({ field: { onChange, onBlur } }) =>
+        render={({ field: { onChange } }) =>
           <LocationAutocompleteCore
             placeholder={placeholder}
-            onSelect={(data) => {
+            onSelect={(data: PoiDoc) => {
               onChange({
                 target: {
-                  value: data.center
+                  value: data.countryCode
                 }
               })
-              onBlur()
               if (onSelect != null) onSelect(data)
             }}
             onReset={() => {
@@ -56,7 +55,6 @@ export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, qu
                   value: undefined
                 }
               })
-              onBlur()
               if (onReset != null) onReset()
             }}
             queryParams={queryParams}
@@ -66,7 +64,7 @@ export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, qu
         {errorMesage != null &&
           (<span className='label-text-alt text-error'>{errorMesage}</span>)}
         {errorMesage == null && tip != null &&
-          (<span className='label-text-alt text-base-200 text-left'>{tip}</span>)}
+          (<span className='label-text-alt text-base-300 text-left'>{tip}</span>)}
       </label>
     </div>
   )

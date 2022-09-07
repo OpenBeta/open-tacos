@@ -6,7 +6,7 @@ import { CategoricalChartState } from 'recharts/types/chart/generateCategoricalC
 const CustomTooltip = (data: {label: string, payload: any[] }): JSX.Element => {
   let tags: Array<[string, number]> = []
 
-  if (data.payload.length > 0) {
+  if (data?.payload?.length > 0) {
     const details = data.payload[0].payload.details
     tags = Object.keys(details)
       .map(key => [key, details[key]])
@@ -67,10 +67,7 @@ export default function PanelOverview (props: PanelOverviewProps): JSX.Element {
   }
 
   function handleHover (data: CategoricalChartState): void {
-    if (data === undefined) {
-      return
-    }
-    if (data.activePayload === undefined) {
+    if (data?.activePayload?.length == null) {
       return
     }
     if (data.activePayload.length === 0) {
