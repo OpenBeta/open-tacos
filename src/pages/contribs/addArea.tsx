@@ -1,5 +1,4 @@
 import { useCallback, useEffect } from 'react'
-import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useForm, useFormContext, FormProvider } from 'react-hook-form'
 import { BadgeCheckIcon, ExclamationCircleIcon } from '@heroicons/react/outline'
@@ -18,14 +17,14 @@ import { useWizardStore, wizardActions } from '../../js/stores/wizards'
 import { PoiDoc } from '../../components/search/sources/PoiSource2'
 import { MUTATION_ADD_AREA, AddAreaProps, AddAreaReturnType } from '../../js/graphql/contribGQL'
 import { graphqlClient } from '../../js/graphql/Client'
-
+import { INextPageWithAuth } from '../../js/types/INext'
 interface AddAreaFormProps {
   newAreaName: string
   placeSearch: string
   locationRefType: 'near' | 'child'
 }
 
-const AddAreaPage: NextPage<{}> = () => {
+const AddAreaPage: INextPageWithAuth = () => {
   const router = useRouter()
   const session = useSession({ required: true })
 
@@ -125,7 +124,7 @@ const SuccessAlert = ({ areaName, uuid, onContinue }: SuccessAlertProps): JSX.El
         <BadgeCheckIcon className='stroke-success w-10 h-10' />
       </div>
       <div className='mt-4 text-sm flex flex-col justify-start text-base-300'>
-        <div>Area '{areaName}' added.</div>
+        <div>Area <span className='font-semibold'>{areaName}</span> added.</div>
         <div>ID: {uuid}</div>
       </div>
     </LeanAlert>
@@ -169,13 +168,13 @@ const Step1a = (): JSX.Element => {
   }
   return (
     <LocationAutocompleteControl
-      label='Town, city, or landmark: *'
+      label='Place: *'
       placeholder={text}
       onSelect={handleSelect}
       onReset={handleReset}
       queryParams={queryParams}
       errorMesage={errors.placeSearch?.message as string}
-      tip='The more specific the better.'
+      tip='Town/city/country.  The more specific the better.'
     />
   )
 }
@@ -199,7 +198,7 @@ const Step1b = (): JSX.Element => {
 
   return (
     <AreaSearchAutoCompleteControl
-      label='Climbing area:'
+      label='Reference climbing area:'
       placeholder={text}
       queryParams={query}
       onSelect={handleSelect}
@@ -296,5 +295,7 @@ const ProgressSteps = (): JSX.Element => (
     </li>
   </ul>
 )
+
+AddAreaPage.auth = true
 
 export default AddAreaPage

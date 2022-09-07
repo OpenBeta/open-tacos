@@ -38,7 +38,7 @@ export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, qu
         control={control}
         name='placeSearch'
         rules={{ required: 'Please select a location' }}
-        render={({ field: { onChange, onBlur } }) =>
+        render={({ field: { onChange } }) =>
           <LocationAutocompleteCore
             placeholder={placeholder}
             onSelect={(data: PoiDoc) => {
@@ -47,7 +47,6 @@ export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, qu
                   value: data.countryCode
                 }
               })
-              onBlur()
               if (onSelect != null) onSelect(data)
             }}
             onReset={() => {
@@ -56,7 +55,6 @@ export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, qu
                   value: undefined
                 }
               })
-              onBlur()
               if (onReset != null) onReset()
             }}
             queryParams={queryParams}
@@ -66,7 +64,7 @@ export const LocationAutocompleteControl = ({ placeholder, onReset, onSelect, qu
         {errorMesage != null &&
           (<span className='label-text-alt text-error'>{errorMesage}</span>)}
         {errorMesage == null && tip != null &&
-          (<span className='label-text-alt text-base-200 text-left'>{tip}</span>)}
+          (<span className='label-text-alt text-base-300 text-left'>{tip}</span>)}
       </label>
     </div>
   )

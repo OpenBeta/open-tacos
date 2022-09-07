@@ -13,8 +13,9 @@ export const searchAreas = async (searchQuery: QueryProps, onSelect): Promise<Au
       return item.name
     },
 
-    onSelect: ({ item }): void => {
+    onSelect: async ({ item, refresh }): Promise<void> => {
       if (onSelect != null) {
+        await refresh()
         onSelect(item)
       }
     },

@@ -151,7 +151,7 @@ export const LeanAlert = ({ actions, cancel, children }: LeanAlertProps): JSX.El
           <AlertDialogPrimitive.Description>
             {children}
           </AlertDialogPrimitive.Description>
-          <div className='flex items-center justify-center gap-x-4'>
+          <div className='flex items-center justify-center gap-x-6'>
             {cancel != null && (
               <AlertDialogPrimitive.AlertDialogCancel>
                 {cancel}

@@ -78,7 +78,6 @@ export const AreaSearchAutoCompleteControl = ({
                     value: data.areaUUID
                   }
                 })
-                onBlur()
                 if (onSelect != null) onSelect(data)
               }}
               onReset={() => {
@@ -87,7 +86,6 @@ export const AreaSearchAutoCompleteControl = ({
                     value: undefined
                   }
                 })
-                onBlur()
                 if (onReset != null) onReset()
               }}
               queryParams={queryParams}
@@ -98,7 +96,7 @@ export const AreaSearchAutoCompleteControl = ({
         {errorMesage != null &&
           (<span className='label-text-alt text-error'>{errorMesage}</span>)}
         {errorMesage == null && tip != null &&
-          (<span className='label-text-alt text-base-200 text-left'>{tip}</span>)}
+          (<span className='label-text-alt text-base-300 text-left'>{tip}</span>)}
       </label>
     </div>
   )

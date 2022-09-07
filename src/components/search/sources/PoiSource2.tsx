@@ -28,7 +28,10 @@ export const searchPoi = async (onSelect): Promise<AutocompleteSource<any>> => {
       return item.place_name
     },
 
-    onSelect: ({ item }: {item: PoiDoc}) => onSelect(item),
+    onSelect: async ({ item, refresh }): Promise<void> => {
+      await refresh()
+      onSelect(item)
+    },
 
     templates: {
       noResults: () => 'No results',
