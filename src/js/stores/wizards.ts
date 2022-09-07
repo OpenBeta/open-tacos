@@ -99,6 +99,14 @@ export const addAreaStore = createStore('addArea')(INITIAL_AREA_STATE, STORE_OPT
       api.set.state(draft => {
         draft.steps[2] = true
       })
+    },
+    resetStepFinal: () => {
+      api.set.state(draft => {
+        draft.steps[2] = false
+      })
+    },
+    resetAll: () => {
+      api.set.mergeState(INITIAL_AREA_STATE)
     }
   }))
 

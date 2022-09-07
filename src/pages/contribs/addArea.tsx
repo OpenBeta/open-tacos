@@ -29,10 +29,6 @@ const AddAreaPage: NextPage<{}> = () => {
   const router = useRouter()
   const session = useSession({ required: true })
 
-  const onClose = useCallback(async () => {
-    await router.replace('/?v=edit')
-  }, [])
-
   const [addArea, { error, data }] = useMutation<{ addArea: AddAreaReturnType }, AddAreaProps>(
     MUTATION_ADD_AREA, {
       client: graphqlClient,
@@ -45,7 +41,12 @@ const AddAreaPage: NextPage<{}> = () => {
       mode: 'onBlur',
       defaultValues: { locationRefType: 'near', newAreaName: '', placeSearch: '' }
     })
-  const { handleSubmit, formState: { isSubmitSuccessful } } = form
+  const { handleSubmit, formState: { isSubmitSuccessful }, reset } = form
+
+  // Go back to previous screen
+  const onClose = useCallback(async () => {
+    await router.replace('/?v=edit')
+  }, [])
 
   // Submit form
   const onSubmit = async (formFields: AddAreaFormProps): Promise<void> => {
@@ -68,6 +69,14 @@ const AddAreaPage: NextPage<{}> = () => {
     }
   }
 
+  const onResetForm = (): void => {
+    // Reset form state
+    reset()
+    // Partially reset wizard state (keeping initial location since users likely add a new area near by)
+    wizardActions.addAreaStore.resetStep1b()
+    wizardActions.addAreaStore.resetStepFinal()
+  }
+
   return (
     <div className='max-w-md mx-auto pb-8'>
       <MobileCard title='Add an Area' onClose={onClose}>
@@ -85,7 +94,8 @@ const AddAreaPage: NextPage<{}> = () => {
             <StepSubmit />
           </form>
         </FormProvider>
-        {isSubmitSuccessful && error == null && data != null && <SuccessAlert {...data.addArea} />}
+        {isSubmitSuccessful && error == null && data != null &&
+          <SuccessAlert {...data.addArea} onContinue={onResetForm} />}
         {error != null && <ErrorAlert {...error} />}
       </MobileCard>
 
@@ -93,14 +103,21 @@ const AddAreaPage: NextPage<{}> = () => {
   )
 }
 
-type SuccessAlertProps = AddAreaReturnType
-const SuccessAlert = ({ areaName, uuid }: SuccessAlertProps): JSX.Element => {
-  console.log('Success', areaName, uuid)
+interface SuccessAlertProps extends AddAreaReturnType {
+  onContinue: () => void
+}
+const SuccessAlert = ({ areaName, uuid, onContinue }: SuccessAlertProps): JSX.Element => {
   return (
     <LeanAlert actions={
       <>
-        <button className='btn btn-outline btn-sm'>Add more</button>
-        <Link className='btn' href={`/areas/${uuid}`}><a>View area</a></Link>
+        <button className='btn btn-solid btn-sm' onClick={onContinue}>
+          Add more
+        </button>
+        <button className='btn btn-outline btn-sm'>
+          <Link href={`/areas/${uuid}`}>
+            <a target='_blank' rel='noreferrer'>View area</a>
+          </Link>
+        </button>
       </>
       }
     >
