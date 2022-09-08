@@ -10,7 +10,7 @@ const withMDX = require('@next/mdx')({
 module.exports = withMDX({
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   images: {
-    domains: ['live.staticflickr.com', 'upload.wikimedia.org', 'openbeta.sirv.com']
+    domains: ['live.staticflickr.com', 'upload.wikimedia.org', 'openbeta.sirv.com', 'openbeta-dev.sirv.com']
   },
   typescript: {
     ignoreBuildErrors: false

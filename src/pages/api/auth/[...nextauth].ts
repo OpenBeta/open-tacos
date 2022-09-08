@@ -32,7 +32,13 @@ export default NextAuth({
   debug: false,
   events: {},
   pages: {
-    signIn: '/auth/signin'
+    // signIn: '/auth/signin'
+  },
+  theme: {
+    colorScheme: 'light',
+    brandColor: '#F15E40', // Hex color code
+    logo: 'https://openbeta.io/_next/static/media/openbeta-logo-with-text.3621d038.svg', // Absolute URL to image
+    buttonText: '#111826' // Hex color code
   },
   callbacks: {
     // See https://next-auth.js.org/configuration/callbacks#jwt-callback
@@ -72,5 +78,4 @@ export default NextAuth({
       return session
     }
   }
-
 })
