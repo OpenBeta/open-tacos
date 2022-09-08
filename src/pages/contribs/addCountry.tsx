@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
 
 import { MUTATION_ADD_COUNTRY } from '../../js/graphql/contribGQL'
-import { stagingGraphQLClient } from '../../js/graphql/Client'
+import { graphqlClient } from '../../js/graphql/Client'
 
 import CountryList, { OnSelectProps } from '../../components/search/CountryList'
 import MobileCard from '../../components/ui/MobileCard'
@@ -16,11 +16,10 @@ const AddNewCountryPage: NextPage<{}> = () => {
   const { addCountryStore } = useWizardStore()
   const [addCountry, { loading, error, data }] = useMutation(
     MUTATION_ADD_COUNTRY, {
-      client: stagingGraphQLClient
-      // onCompleted: onDeleted
+      client: graphqlClient
     }
   )
-  const session = useSession({ required: true })
+  const session = useSession()
   const router = useRouter()
 
   const onClose = useCallback(async () => {
