@@ -1,10 +1,10 @@
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import Router from 'next/router'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import { useSession, SessionProvider } from 'next-auth/react'
+import { useSession, SessionProvider, signIn } from 'next-auth/react'
 import '../styles/global.css'
 import '../../public/fonts/fonts.css'
 
@@ -36,8 +36,12 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
 }
 
 function Auth ({ children }): ReactElement {
-  // if `{ required: true }` is supplied, `status` can only be "loading" or "authenticated"
-  const { status } = useSession({ required: true })
+  const { status } = useSession()
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      void signIn('auth0')
+    }
+  }, [])
 
   if (status === 'loading') {
     return <div>Loading...</div>
