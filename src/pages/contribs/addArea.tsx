@@ -26,7 +26,7 @@ interface AddAreaFormProps {
 
 const AddAreaPage: INextPageWithAuth = () => {
   const router = useRouter()
-  const session = useSession({ required: true })
+  const session = useSession()
 
   const [addArea, { error, data }] = useMutation<{ addArea: AddAreaReturnType }, AddAreaProps>(
     MUTATION_ADD_AREA, {
