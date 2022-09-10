@@ -2,11 +2,13 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
+import { TickType } from '../../js/types'
 import { stagingGraphQLClient } from '../../js/graphql/Client'
 import { MUTATION_ADD_TICK } from '../../js/graphql/fragments'
 import ComboBox from '../ui/ComboBox'
 import * as Yup from 'yup'
 
+// validation schema for ticks
 const TickSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Minimum 2 characters')
@@ -45,7 +47,18 @@ const attemptTypes = [
   { id: 4, name: 'Pinkpoint' }
 ]
 
-export default function TickForm ({ open, setOpen, isTicked, climbId, name, grade }): JSX.Element {
+interface Props{
+  open: boolean
+  setOpen: Function
+  setTicks: Function
+  ticks: TickType[]
+  isTicked: Function
+  climbId: string
+  name?: string
+  grade?: string
+}
+
+export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, climbId, name, grade }: Props): JSX.Element {
   const [style, setStyle] = useState(styles[1])
   const [attemptType, setAttemptType] = useState(attemptTypes[1])
   const [dateClimbed, setDateClimbed] = useState<string>(new Date().toISOString().slice(0, 10)) // default is today for dateClimbed
@@ -91,12 +104,16 @@ export default function TickForm ({ open, setOpen, isTicked, climbId, name, grad
           }
         })
         if (newTick.data !== null) {
+          const { data } = newTick
           // if the tick is persisted in the database
           // change the ticks button to the isticked button
           isTicked(true)
           // todo: add new tick to store whenever that is setup???
           setOpen(false)
           resetInputs()
+          // add tick to the previous state
+          const newTicks = [...ticks, data.addTick]
+          setTicks(newTicks)
         }
       })
       .catch((error) => {
@@ -106,7 +123,7 @@ export default function TickForm ({ open, setOpen, isTicked, climbId, name, grad
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as='div' className='relative z-10' onClose={setOpen}>
+      <Dialog as='div' className='relative z-10' onClose={() => setOpen(false)}>
         <Transition.Child
           as={Fragment}
           enter='ease-out duration-300'

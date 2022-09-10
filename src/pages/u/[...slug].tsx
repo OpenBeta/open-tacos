@@ -53,7 +53,6 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
         showFilterBar={false}
       >
         <div className='max-w-screen-2xl mx-auto flex flex-col items-center 2xl:px-8'>
-
           <PublicProfile userProfile={userProfile} />
 
           {isAuthorized && (
