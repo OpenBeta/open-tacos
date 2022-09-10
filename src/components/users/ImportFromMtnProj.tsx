@@ -5,11 +5,24 @@ import { XIcon } from '@heroicons/react/solid'
 import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
 import { stagingGraphQLClient } from '../../js/graphql/Client'
+import { Button, ButtonVariant } from '../ui/BaseButton'
 import { MUTATION_IMPORT_TICKS } from '../../js/graphql/fragments'
 
+interface Props{
+  isButton: boolean
+}
+// regex pattern to validate mountain project input
 const pattern = /^https:\/\/www.mountainproject.com\/user\/\d{9}\/[a-zA-Z-]*/
 
-function ImportFromMtnProj (): JSX.Element | null {
+/**
+ *
+ * @prop isButton -- a true or false value
+ *
+ * if the isButton prop is true, the component will be rendered as a button
+ * if the isButton prop is false, the component will be rendered as a modal
+ * @returns JSX element
+ */
+function ImportFromMtnProj ({ isButton }: Props): JSX.Element | null {
   const [mpUID, setMPUID] = useState('')
   const session = useSession()
   const [show, setShow] = useState<boolean>(false)
@@ -22,6 +35,7 @@ function ImportFromMtnProj (): JSX.Element | null {
       errorPolicy: 'none'
     })
 
+  // this function updates the users metadata
   async function dontShowAgain (): Promise<void> {
     setLoading(true)
     const res = await fetch('/api/user/ticks', {
@@ -36,9 +50,16 @@ function ImportFromMtnProj (): JSX.Element | null {
     setLoading(false)
   }
 
+  // this function is for when the component is rendered as a button and sends the user straight to the input form
+  function straightToInput (): void {
+    setShowInput(true)
+    setShow(true)
+  }
+
   async function getTicks (): Promise<void> {
     // get the ticks and add it to the database
     if (pattern.test(mpUID)) {
+      setLoading(true)
       const res = await fetch('/api/user/ticks', {
         method: 'POST',
         body: JSON.stringify(mpUID)
@@ -58,24 +79,28 @@ function ImportFromMtnProj (): JSX.Element | null {
       // handle errors
       setErrors(['Please input a valid Mountain Project ID'])
     }
+    setLoading(false)
   }
 
   useEffect(() => {
-    // if the user is authenticated we want to show the import your ticks modal
+    // if we aren't rendering this component as a button
+    // and the user is authenticated we want to show the import your ticks modal
     // then we check to see if they have a ticks imported flag set
     // if it is, set show to the opposite of whatever it is
     // otherwise don't show the modal
-    fetch('/api/user/profile')
-      .then(async res => await res.json())
-      .then((profile) => {
-        if (profile?.ticksImported !== null) {
-          setShow(profile.ticksImported !== true)
-        } else if (session.status === 'authenticated') {
-          setShow(true)
-        } else {
-          setShow(false)
-        }
-      }).catch(console.error)
+    if (!isButton) {
+      fetch('/api/user/profile')
+        .then(async res => await res.json())
+        .then((profile) => {
+          if (profile?.ticksImported !== null) {
+            setShow(profile.ticksImported !== true)
+          } else if (session.status === 'authenticated') {
+            setShow(true)
+          } else {
+            setShow(false)
+          }
+        }).catch(console.error)
+    }
   }, [session])
 
   useEffect(() => {
@@ -97,9 +122,8 @@ function ImportFromMtnProj (): JSX.Element | null {
   }, [session])
 
   return (
-  // if the modal prop is true we want to render this component as a notification/modal
-  // otherwise we want it to be a button
     <>
+      {isButton && <Button onClick={straightToInput} label='Import Ticks' variant={ButtonVariant.OUTLINED_DEFAULT} size='sm' />}
       <div
         aria-live='assertive'
         className='fixed inset-0 z-10 flex items-end px-4 py-6 mt-24 pointer-events-none sm:p-6 sm:items-start'
@@ -151,7 +175,7 @@ function ImportFromMtnProj (): JSX.Element | null {
                           text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
                           hover:text-white w-32 font-bold'
                         >
-                          Show me how
+                          {loading ? 'Working...' : 'Show me how'}
                         </button>}
                       {showInput &&
                         <button
@@ -163,13 +187,14 @@ function ImportFromMtnProj (): JSX.Element | null {
                         >
                           Get my ticks!
                         </button>}
-                      <button
-                        type='button'
-                        onClick={dontShowAgain}
-                        className='bg-white rounded-md text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                      >
-                        {loading ? 'Working...' : "Don't show again"}
-                      </button>
+                      {!isButton &&
+                        <button
+                          type='button'
+                          onClick={dontShowAgain}
+                          className='bg-white rounded-md text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                        >
+                          {loading ? 'Working...' : "Don't show again"}
+                        </button>}
                     </div>
                   </div>
                   <div className='ml-4 flex-shrink-0 flex'>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import ContentLoader from 'react-content-loader'
+import ImportFromMtnProj from './ImportFromMtnProj'
 
 import { IUserProfile } from '../../js/types/User'
 import EditProfileButton from './EditProfileButton'
