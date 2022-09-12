@@ -44,7 +44,7 @@ const AddAreaPage: INextPageWithAuth = () => {
 
   // Go back to previous screen
   const onClose = useCallback(async () => {
-    await router.replace('/?v=edit')
+    await router.replace('/contribs')
   }, [])
 
   // Submit form

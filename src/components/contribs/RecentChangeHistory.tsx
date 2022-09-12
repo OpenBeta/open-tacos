@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { PlusIcon, UserCircleIcon, MinusIcon, PencilIcon, PlusSmIcon, PencilAltIcon, MinusCircleIcon } from '@heroicons/react/outline'
 import { formatDistanceToNow } from 'date-fns'
 
@@ -44,18 +45,19 @@ const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
 }
 
 const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element | null => {
-  console.log('#', fullDocument)
   // @ts-expect-error
   // eslint-disable-next-line
   if (fullDocument?.areaName == null) {
     return null
   }
-  const { areaName } = fullDocument as AreaType
+  const { areaName, uuid } = fullDocument as AreaType
 
   return (
     <div className='ml-2 flex gap-x-2 items-center'>
       <div>{dbOpIcon[dbOp]}</div>
-      <div>{areaName}</div>
+      {dbOp === 'delete'
+        ? <div>{areaName}</div>
+        : (<Link href={`/areas/${uuid}`}><a className='link link-hover'>{areaName}</a></Link>)}
     </div>
   )
 }

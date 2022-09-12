@@ -41,11 +41,6 @@ module.exports = withMDX({
         destination: 'https://openbeta.substack.com/p/openbeta-vs-mountainproject-vs-thecrag',
         permanent: false
       }
-      // {
-      //   source: '/contribs',
-      //   destination: '/?v=edit',
-      //   permanent: true
-      // }
     ]
   }
 })

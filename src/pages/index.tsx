@@ -36,6 +36,9 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
 
   useEffect(() => {
     if (activeTab !== '' && allowedViews.includes(activeTab)) {
+      if (activeTab === 'edit') {
+        void router.replace('/contribs')
+      }
       const query = router.query
       query.v = activeTab
       const queryString = Object.keys(query).map((key) => {
@@ -113,7 +116,8 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
               />
             </Tabs.List>
             <Tabs.Content value='edit' className='w-full'>
-              <DynamicContribsView />
+              <div>foo</div>
+              {/* <DynamicContribsView /> */}
             </Tabs.Content>
             <Tabs.Content value='explore' className='w-full'>
               <DynamicDenseAreas areas={areas} />
@@ -235,8 +239,8 @@ const DynamicMap = dynamic(
       module => module.default), { ssr: false }
 )
 
-const DynamicContribsView = dynamic(
-  async () =>
-    await import('../components/contribs/DefaultView').then(
-      module => module.default), { ssr: false }
-)
+// const DynamicContribsView = dynamic(
+//   async () =>
+//     await import('../components/contribs/DefaultView').then(
+//       module => module.default), { ssr: false }
+// )
