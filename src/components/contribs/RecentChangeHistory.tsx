@@ -1,7 +1,7 @@
-import { PlusIcon, UserCircleIcon, MinusIcon, PencilIcon } from '@heroicons/react/outline'
+import { PlusIcon, UserCircleIcon, MinusIcon, PencilIcon, PlusSmIcon, PencilAltIcon, MinusCircleIcon } from '@heroicons/react/outline'
 import { formatDistanceToNow } from 'date-fns'
 
-import { ChangesetType } from '../../js/types'
+import { ChangesetType, ChangeType, AreaType } from '../../js/types'
 
 interface RecentChangeHistoryProps {
   history: ChangesetType[]
@@ -19,11 +19,11 @@ interface ChangsetRowProps {
 }
 
 const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
-  const { createdAt, operation } = changeset
+  const { createdAt, operation, changes } = changeset
 
   const op = operationLabelMap[operation]
   return (
-    <div className='card card-compact w-96 bg-base-100 shadow-xl'>
+    <div className='card card-compact w-full bg-base-100 shadow-xl'>
       <div className='card-body'>
         <div className='card-actions justify-between items-center align-middle'>
           {op?.icon}
@@ -34,19 +34,38 @@ const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
           <div className='w-8 h-8'>
             <UserCircleIcon className='w-6 h-6' />
           </div>
-
+        </div>
+        <div className='mt-4'>
+          {changes.map(change => <AreaChange key={change.changeId} {...change} />)}
         </div>
       </div>
     </div>
   )
 }
 
+const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element | null => {
+  console.log('#', fullDocument)
+  // @ts-expect-error
+  // eslint-disable-next-line
+  if (fullDocument?.areaName == null) {
+    return null
+  }
+  const { areaName } = fullDocument as AreaType
+
+  return (
+    <div className='ml-2 flex gap-x-2 items-center'>
+      <div>{dbOpIcon[dbOp]}</div>
+      <div>{areaName}</div>
+    </div>
+  )
+}
+
 interface ActionIconProps {
   icon: JSX.Element
-  clz?: 'bg-info' | 'bg-warning' | 'bg-success'
+  clz?: 'bg-info' | 'bg-warning' | 'bg-success' | 'bg-error'
 }
 const ActionIcon = ({ icon, clz = 'bg-success' }: ActionIconProps): JSX.Element => (
-  <span className={`bg-opacity-30 rounded-full p-2 ${clz}`}>
+  <span className={`bg-opacity-40 rounded-full p-2 ${clz}`}>
     {icon}
   </span>)
 
@@ -63,10 +82,16 @@ const operationLabelMap = {
   },
   deleteArea: {
     badge: <OpBadge label='Area' />,
-    icon: <ActionIcon icon={<MinusIcon className='w-6 h-6 stroke-base-300' />} clz='bg-warning' />
+    icon: <ActionIcon icon={<MinusIcon className='w-6 h-6 stroke-base-300' />} clz='bg-error' />
   },
   updateDestination: {
     badge: <OpBadge label='Area' />,
     icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} clz='bg-info' />
   }
+}
+
+const dbOpIcon = {
+  insert: <PlusSmIcon className='w-4 h-4 stroke-base-300' />,
+  update: <PencilAltIcon className='w-4 h-4 stroke-base-300' />,
+  delete: <MinusCircleIcon className='w-4 h-4 fill-error' />
 }

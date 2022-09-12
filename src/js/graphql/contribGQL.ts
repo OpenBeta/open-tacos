@@ -28,6 +28,15 @@ query ($filter: AllHistoryFilter) {
     changes {
       dbOp
       changeId
+      updateDescription {
+        updatedFields
+      }
+      fullDocument {
+        ... on Area {
+          areaName
+          uuid
+        }
+      }
     }
   }
 }

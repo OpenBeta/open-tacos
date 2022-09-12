@@ -7,11 +7,12 @@ interface PageProps {
 }
 const Page: NextPage<PageProps> = ({ history }: PageProps) => {
   return (
-    <section>
-      <div>foos</div>
-      <div>{JSON.stringify(history, null, 2)}</div>
-      <RecentChangeHistory history={history} />
-    </section>
+    <>
+      {/* <pre>{JSON.stringify(history, null, 2)}</pre> */}
+      <section className='max-w-sm'>
+        <RecentChangeHistory history={history} />
+      </section>
+    </>
   )
 }
 export default Page
