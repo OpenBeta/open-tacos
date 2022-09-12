@@ -11,7 +11,7 @@ import { LocationAutocompleteControl } from '../../components/search/LocationAut
 import { AreaSearchAutoCompleteControl } from '../../components/search/AreaSearchAutoComplete'
 import RadioGroup from '../../components/ui/form/RadioGroup'
 import Input from '../../components/ui/form/Input'
-import MobileCard from '../../components/ui/MobileCard'
+import MobileScreen from '../../components/ui/MobileScreen'
 import { LeanAlert } from '../../components/ui/micro/AlertDialogue'
 import { useWizardStore, wizardActions } from '../../js/stores/wizards'
 import { PoiDoc } from '../../components/search/sources/PoiSource2'
@@ -78,7 +78,7 @@ const AddAreaPage: INextPageWithAuth = () => {
 
   return (
     <div className='max-w-md mx-auto pb-8'>
-      <MobileCard title='Add an Area' onClose={onClose}>
+      <MobileScreen title='Add an Area' onClose={onClose}>
         <div className='text-xs mt-4'>Area can be a crag, boulder, or a destination containing other smaller areas.</div>
         <ProgressSteps />
         <FormProvider {...form}>
@@ -96,7 +96,7 @@ const AddAreaPage: INextPageWithAuth = () => {
         {isSubmitSuccessful && error == null && data != null &&
           <SuccessAlert {...data.addArea} onContinue={onResetForm} />}
         {error != null && <ErrorAlert {...error} />}
-      </MobileCard>
+      </MobileScreen>
 
     </div>
   )

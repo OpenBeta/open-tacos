@@ -40,12 +40,12 @@ module.exports = withMDX({
         source: '/blog/openbeta-vs-mountain-project-vs-thecrag',
         destination: 'https://openbeta.substack.com/p/openbeta-vs-mountainproject-vs-thecrag',
         permanent: false
-      },
-      {
-        source: '/contribs',
-        destination: '/?v=edit',
-        permanent: true
       }
+      // {
+      //   source: '/contribs',
+      //   destination: '/?v=edit',
+      //   permanent: true
+      // }
     ]
   }
 })

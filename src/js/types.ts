@@ -212,3 +212,17 @@ export interface TickType{
   dateClimbed: string
   grade: string
 }
+
+export interface ChangeType {
+  dbOp: string
+  changeId: string
+  fullDocument: any
+}
+
+export interface ChangesetType {
+  id: string
+  createdAt: number
+  editedBy: string
+  operation: string
+  changes: ChangeType[]
+}
