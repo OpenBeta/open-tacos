@@ -9,7 +9,7 @@ interface RecentChangeHistoryProps {
 }
 export default function RecentChangeHistory ({ history }: RecentChangeHistoryProps): JSX.Element {
   return (
-    <div className='flex flex-col gap-y-4'>
+    <div className='flex flex-col gap-y-4 w-full'>
       {history.map(changetset => <ChangesetRow key={changetset.id} changeset={changetset} />)}
     </div>
   )
@@ -30,7 +30,7 @@ const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
           {op?.icon}
           {op?.badge}
           <div className='text-xs text-base-300'>
-            {formatDistanceToNow(createdAt)}
+            {formatDistanceToNow(createdAt, { addSuffix: true })}
           </div>
           <div className='w-8 h-8'>
             <UserCircleIcon className='w-6 h-6' />

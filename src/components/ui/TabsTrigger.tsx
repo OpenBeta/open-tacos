@@ -14,7 +14,7 @@ export default function TabsTrigger ({ tabKey, activeKey, icon, label, hidden = 
       value={tabKey}
       className={
         classNames(
-          hidden ? 'hidden' : 'relative z-50 border-b-4 w-20',
+          hidden ? 'hidden' : 'block relative z-50 border-b-4 w-20',
           tabKey === activeKey
             ? 'border-gray-800 text-base-content'
             : 'border-transparent hover:border-gray-400 text-base-300 hover:text-base-content')

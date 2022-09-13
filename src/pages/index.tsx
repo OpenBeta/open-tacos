@@ -37,7 +37,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
   useEffect(() => {
     if (activeTab !== '' && allowedViews.includes(activeTab)) {
       if (activeTab === 'edit') {
-        void router.replace('/contribs')
+        if (canaryOn) void router.replace('/contribs')
       }
       const query = router.query
       query.v = activeTab
@@ -47,7 +47,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
 
       void router.push(`/?${queryString}`, undefined, { shallow: true })
     }
-  }, [activeTab])
+  }, [activeTab, canaryOn])
 
   useEffect(() => {
     if (router.isReady) {
@@ -88,13 +88,11 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
                     : '')
               }
             >
-
               <TabsTrigger
                 tabKey='edit'
                 activeKey={activeTab}
                 icon={<PencilIcon className='w-6 h-6' />}
                 label='Edit'
-                hidden={!canaryOn}
               />
               <TabsTrigger
                 tabKey='newTags'
@@ -116,7 +114,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
               />
             </Tabs.List>
             <Tabs.Content value='edit' className='w-full'>
-              <div>foo</div>
+              <div className='alert alert-info shadow-lg'>Sorry this feature is not yet available.</div>
               {/* <DynamicContribsView /> */}
             </Tabs.Content>
             <Tabs.Content value='explore' className='w-full'>

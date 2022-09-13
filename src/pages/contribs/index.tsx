@@ -1,5 +1,7 @@
 import { GetStaticProps, NextPage } from 'next'
 
+import SeoTags from '../../components/SeoTags'
+import Layout from '../../components/layout'
 import { getChangeHistory } from '../../js/graphql/contribAPI'
 import RecentChangeHistory from '../../components/contribs/RecentChangeHistory'
 import DefaultView from '../../components/contribs/DefaultView'
@@ -7,14 +9,26 @@ interface PageProps {
   history: any[]
 }
 const Page: NextPage<PageProps> = ({ history }: PageProps) => {
+  // const canaryOn = useCanary()
   return (
     <>
-      {/* <pre>{JSON.stringify(history, null, 2)}</pre> */}
-      <DefaultView />
-      <section className='max-w-sm mx-auto'>
-        <h2>Recent history</h2>
-        <RecentChangeHistory history={history} />
-      </section>
+      <SeoTags
+        title='Contribute to OpenBeta'
+        description='Share your climbing adventure photos and contribute to the climbing route catalog.'
+      />
+      <Layout
+        contentContainerClass='content-default'
+        showFilterBar={false}
+        showFooter
+      >
+        {/* <pre>{JSON.stringify(history, null, 2)}</pre> */}
+
+        <section className='max-w-lg mx-auto w-full'>
+          <DefaultView />
+          <h2 className='px-4 sm:px-0'>Recent history</h2>
+          <RecentChangeHistory history={history} />
+        </section>
+      </Layout>
     </>
   )
 }
@@ -24,8 +38,8 @@ export const getStaticProps: GetStaticProps<PageProps> = async ({ params }): Pro
   const history = await getChangeHistory()
   return ({
     props: {
-      history,
-      revalidate: 10 // regenerate page when a request comes in but no faster than every 10s
-    }
+      history
+    },
+    revalidate: 10 // regenerate page when a request comes in but no faster than every 10s
   })
 }

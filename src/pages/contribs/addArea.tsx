@@ -31,7 +31,10 @@ const AddAreaPage: INextPageWithAuth = () => {
   const [addArea, { error, data }] = useMutation<{ addArea: AddAreaReturnType }, AddAreaProps>(
     MUTATION_ADD_AREA, {
       client: graphqlClient,
-      onCompleted: () => wizardActions.addAreaStore.recordStepFinal()
+      onCompleted: (data) => {
+        wizardActions.addAreaStore.recordStepFinal()
+        void fetch(`/api/revalidate?a=${data.addArea.uuid}`)
+      }
     }
   )
 
