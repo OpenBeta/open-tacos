@@ -34,6 +34,7 @@ const AddAreaPage: INextPageWithAuth = () => {
       onCompleted: (data) => {
         wizardActions.addAreaStore.recordStepFinal()
         void fetch(`/api/revalidate?a=${data.addArea.uuid}`)
+        void fetch('/api/revalidate?page=/contribs')
       }
     }
   )

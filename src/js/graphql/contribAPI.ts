@@ -1,10 +1,11 @@
 import { RECENT_CHANGE_HISTORY } from './contribGQL'
 import { graphqlClient } from './Client'
 
-export const getChangeHistory = async (): Promise<any> => {
+export const getChangeHistoryServerSide = async (): Promise<any> => {
   try {
     const rs = await graphqlClient.query<{getChangeHistory: any[]}>({
-      query: RECENT_CHANGE_HISTORY
+      query: RECENT_CHANGE_HISTORY,
+      fetchPolicy: 'network-only'
     })
 
     if (Array.isArray(rs.data?.getChangeHistory)) {

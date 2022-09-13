@@ -249,7 +249,8 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
       query,
       variables: {
         uuid: params.id
-      }
+      },
+      fetchPolicy: 'network-only'
     })
 
     if (rs.data.area == null) {

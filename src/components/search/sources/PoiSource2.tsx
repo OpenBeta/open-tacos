@@ -1,7 +1,7 @@
 import { AutocompleteSource } from '@algolia/autocomplete-js'
 import { BaseItem } from '@algolia/autocomplete-core'
 
-import { geocoderLookup, ArrayOfFeatures, MapboxDoc } from '../../../js/mapbox/Client'
+import { geocoderLookup, ArrayOfFeatures, MapboxDoc } from '../../../js/mapbox/MapboxClient'
 
 export interface PoiDoc extends BaseItem {
   text: string

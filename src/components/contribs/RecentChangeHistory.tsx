@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { PlusIcon, UserCircleIcon, MinusIcon, PencilIcon, PlusSmIcon, PencilAltIcon, MinusCircleIcon } from '@heroicons/react/outline'
 import { formatDistanceToNow } from 'date-fns'
+import { useRouter } from 'next/router'
 
 import { ChangesetType, ChangeType, AreaType } from '../../js/types'
 
@@ -8,6 +9,10 @@ interface RecentChangeHistoryProps {
   history: ChangesetType[]
 }
 export default function RecentChangeHistory ({ history }: RecentChangeHistoryProps): JSX.Element {
+  const router = useRouter()
+  if (router.isFallback) {
+    return <div>loading...</div>
+  }
   return (
     <div className='flex flex-col gap-y-4 w-full'>
       {history.map(changetset => <ChangesetRow key={changetset.id} changeset={changetset} />)}

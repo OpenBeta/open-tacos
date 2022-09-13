@@ -2,7 +2,7 @@ import { GetStaticProps, NextPage } from 'next'
 
 import SeoTags from '../../components/SeoTags'
 import Layout from '../../components/layout'
-import { getChangeHistory } from '../../js/graphql/contribAPI'
+import { getChangeHistoryServerSide } from '../../js/graphql/contribAPI'
 import RecentChangeHistory from '../../components/contribs/RecentChangeHistory'
 import DefaultView from '../../components/contribs/DefaultView'
 interface PageProps {
@@ -35,7 +35,7 @@ const Page: NextPage<PageProps> = ({ history }: PageProps) => {
 export default Page
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ params }): Promise<any> => {
-  const history = await getChangeHistory()
+  const history = await getChangeHistoryServerSide()
   return ({
     props: {
       history
