@@ -18,6 +18,30 @@ mutation ($name: String!, $parentUuid: ID, $countryCode: String) {
     }
 }`
 
+export const RECENT_CHANGE_HISTORY = gql`
+query ($filter: AllHistoryFilter) {
+  getChangeHistory(filter: $filter) {
+    id
+    createdAt
+    operation
+    editedBy
+    changes {
+      dbOp
+      changeId
+      updateDescription {
+        updatedFields
+      }
+      fullDocument {
+        ... on Area {
+          areaName
+          uuid
+        }
+      }
+    }
+  }
+}
+`
+
 export interface AddAreaProps {
   name: string
   parentUuid: string | null

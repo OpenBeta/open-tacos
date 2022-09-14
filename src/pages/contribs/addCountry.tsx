@@ -8,7 +8,7 @@ import { MUTATION_ADD_COUNTRY } from '../../js/graphql/contribGQL'
 import { graphqlClient } from '../../js/graphql/Client'
 
 import CountryList, { OnSelectProps } from '../../components/search/CountryList'
-import MobileCard from '../../components/ui/MobileCard'
+import MobileScreen from '../../components/ui/MobileScreen'
 import { Button, ButtonVariant } from '../../components/ui/BaseButton'
 import { wizardActions, useWizardStore, wizardStore } from '../../js/stores/wizards'
 
@@ -23,12 +23,12 @@ const AddNewCountryPage: NextPage<{}> = () => {
   const router = useRouter()
 
   const onClose = useCallback(async () => {
-    await router.replace('/?v=edit')
+    await router.replace('/contribs')
   }, [])
 
   return (
     <div data-theme='light' className='h-screen max-w-md mx-auto'>
-      <MobileCard title='Add a country' onClose={onClose}>
+      <MobileScreen title='Add a country' onClose={onClose}>
         <ul className='steps step-secondary steps-vertical'>
           <li className='step'>
             <AddCountryStep
@@ -77,7 +77,7 @@ const AddNewCountryPage: NextPage<{}> = () => {
               </div>
             </div>}
         </div>
-      </MobileCard>
+      </MobileScreen>
     </div>
   )
 }

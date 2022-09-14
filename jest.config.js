@@ -15,7 +15,8 @@ const customJestConfig = {
   testEnvironment: 'jest-environment-jsdom',
   transform: {
     '^.+\\.tsx?$': 'ts-jest'
-  }
+  },
+  modulePaths: ['<rootDir>/src/']
 }
 
 const projectDir = process.cwd()

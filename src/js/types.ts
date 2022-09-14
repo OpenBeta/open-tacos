@@ -54,6 +54,8 @@ export interface Climb {
   media: MediaBaseTag[]
 }
 
+export type ClimbType = Climb
+
 export interface CountByGroupType {
   count: number
   label: string
@@ -211,4 +213,39 @@ export interface TickType{
   attemptType: string
   dateClimbed: string
   grade: string
+}
+
+export interface UpdateDescriptionType {
+  updatedFields?: string[]
+  removedFields?: string[]
+  truncatedArrays?: any[]
+}
+
+export interface ChangeType {
+  dbOp: string
+  changeId: string
+  fullDocument: AreaType | ClimbType
+  updateDescription: UpdateDescriptionType
+}
+
+export interface ChangesetType {
+  id: string
+  createdAt: number
+  editedBy: string
+  operation: string
+  changes: ChangeType[]
+}
+
+export interface ResumeToken {
+  _data: string
+}
+
+export interface ChangeRecordMetadataType {
+  user: string
+  operation: string
+  historyId: string
+  prevHistoryId?: string
+  seq: number
+  createdAt?: Date
+  updatedAt?: Date
 }

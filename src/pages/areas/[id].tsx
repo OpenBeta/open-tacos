@@ -249,13 +249,14 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
       query,
       variables: {
         uuid: params.id
-      }
+      },
+      fetchPolicy: 'network-only'
     })
 
     if (rs.data.area == null) {
       return {
         notFound: true,
-        revalidate: 600
+        revalidate: 10
       }
     }
 
@@ -272,13 +273,13 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
         area: rs.data.area,
         mediaListWithUsernames
       },
-      revalidate: 600
+      revalidate: 10
     }
   } catch (e) {
     console.log('GraphQL exception:', e)
     return {
       notFound: true,
-      revalidate: 600
+      revalidate: 10
     }
   }
 }
