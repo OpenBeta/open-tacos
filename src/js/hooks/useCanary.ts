@@ -19,5 +19,5 @@ export default function useCanary (): boolean {
       return false
     }
   }
-  return Boolean(sessionStorage.getItem('canary'))
+  return sessionStorage.getItem('canary') === 'true'
 }

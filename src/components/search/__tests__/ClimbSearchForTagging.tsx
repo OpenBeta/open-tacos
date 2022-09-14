@@ -4,12 +4,13 @@ import userEvent from '@testing-library/user-event'
 
 jest.mock('../../../js/graphql/Client')
 jest.mock('../../../js/typesense/TypesenseClient')
-jest.mock('../../../js/mapbox/Client')
+jest.mock('../../../js/mapbox/MapboxClient')
 
 const MockedTypesenseClient = jest.requireMock('../../../js/typesense/TypesenseClient')
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
+  configurable: true,
   value: jest.fn().mockImplementation(query => ({
     matches: false,
     media: query,

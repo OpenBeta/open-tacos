@@ -4,10 +4,13 @@ import { ReactNode } from 'react'
 export interface MobileCardProps {
   title?: string
   children: ReactNode
-  // children: JSX.Element | JSX.Element [] | ReactElement | ReactElement []
   onClose: () => void
 }
-export default function MobileCard ({ title, children, onClose }: MobileCardProps): any {
+
+/**
+ * A full screen card with a title and cancel (back) action
+ */
+export default function MobileScreen ({ title, children, onClose }: MobileCardProps): any {
   return (
     <div className='card card-compact bg-base-200'>
       <div className='card-body'>

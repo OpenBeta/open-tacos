@@ -26,6 +26,9 @@ export const graphqlClient = new ApolloClient({
         },
         ClimbMetadata: {
           keyFields: ['climbId']
+        },
+        History: {
+          keyFields: ['id']
         }
       }
     }

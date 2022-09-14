@@ -13,7 +13,7 @@ Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 NProgress.configure({ showSpinner: false, easing: 'ease-in-out', speed: 250 })
 
-interface AppPropsWithAuth extends AppProps {
+interface AppPropsWithAuth extends AppProps< { session: any }> {
   Component: AppProps['Component'] & { auth: boolean }
 }
 

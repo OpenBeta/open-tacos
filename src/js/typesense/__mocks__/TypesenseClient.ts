@@ -11,10 +11,12 @@ const CLIMB1 = {
   disciplines: ['trad', 'sport']
 }
 
-export const multiSearch = async (query: string): Promise<any> => ({
-  climbs: [CLIMB1],
-  areas: [],
-  fa: []
-})
+export const multiSearch = jest.fn()
+  .mockReturnValue({
+    climbs: [CLIMB1],
+    areas: [],
+    fa: []
+  })
 
-export const climbSearchByName = async (query: string): Promise<any> => ([CLIMB1])
+export const climbSearchByName = jest.fn()
+  .mockReturnValue([CLIMB1])

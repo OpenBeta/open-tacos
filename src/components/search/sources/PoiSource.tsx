@@ -1,5 +1,5 @@
 import { AutocompleteSource } from '@algolia/autocomplete-js'
-import { geocoderLookup } from '../../../js/mapbox/Client'
+import { geocoderLookup } from '../../../js/mapbox/MapboxClient'
 import { PlaceTemplate } from '../CragFinderTemplates'
 import { DefaultHeader, DefaultNoResult } from '../templates/ClimbResultXSearch'
 import ClientOnly from '../../ClientOnly'
