@@ -1,5 +1,4 @@
 import React, { createElement, Fragment, useEffect, useRef } from 'react'
-// import { render as reactRender } from 'react-dom'
 import { createRoot } from 'react-dom/client'
 
 import { autocomplete, AutocompleteOptions, AutocompleteApi } from '@algolia/autocomplete-js'
@@ -47,7 +46,7 @@ export const Autocomplete = ({ queryParams, forceFocus = false, classNames = AA_
       container: containerRef.current,
       renderer: { createElement, Fragment, render: () => {} },
       detachedMediaQuery: (otherProps.isMobile) ? '' : 'none',
-      render ({ children }, root) {
+      render ({ children, elements }, root) {
         if ((panelRootRef.current == null) || rootRef.current !== root) {
           rootRef.current = root
           panelRootRef.current?.unmount()
