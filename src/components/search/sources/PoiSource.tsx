@@ -21,10 +21,9 @@ interface PoiDoc extends BaseItem {
  */
 export const searchPoi = async (query: string): Promise<AutocompleteSource<any>> => {
   const rs = await geocoderLookup(query)
-
   return {
     sourceId: 'poi',
-    getItems: ({ query }) => rs,
+    getItems: async ({ query }) => rs,
     templates: {
       noResults: DefaultNoResult,
       item: ({ item }: {item: PoiDoc}) => {

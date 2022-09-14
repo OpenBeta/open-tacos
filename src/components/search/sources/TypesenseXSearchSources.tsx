@@ -13,7 +13,7 @@ import { TypesenseDocumentType } from '../../../js/types'
 
 export const xsearchTypesense = async (query: string): Promise<Array<AutocompleteSource<TypesenseDocumentType>>> => {
   const rs = await multiSearch(query)
-  return await Promise.all([{
+  return [{
     sourceId: 'climbs',
     getItems: ({ query }) => rs.climbs,
     getItemInputValue: ({ item }) => {
@@ -52,5 +52,5 @@ export const xsearchTypesense = async (query: string): Promise<Array<Autocomplet
       header: DefaultHeader
     }
   }
-  ])
+  ]
 }

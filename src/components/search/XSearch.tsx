@@ -20,13 +20,13 @@ export default function XSearch ({ isMobile = true, placeholder = 'Climb search'
       isMobile={isMobile}
       placeholder={placeholder}
       getSources={async ({ query }) => {
-        const sources = [...await xsearchTypesense(query), await searchPoi(query)]
-        // This may look a little bizarre, but it's just so that the sources appear
-        // in the same order that we render them (climbs, poi, areas, fa)
-        // If there's a better unified way, I'd love to know how - Coco
-        return [sources[0], sources[3], sources[1], sources[2]]
+        const sources = await xsearchTypesense(query)
+        const poiSource = await searchPoi(query)
+        sources.push(poiSource)
+        return sources
       }}
       classNames={CUSTOM_CLASSES}
+      // Todo: reuse Autocomplete's default render
       render={({ elements }, root) => {
         const { climbs, areas, fa, poi } = elements
         render(
