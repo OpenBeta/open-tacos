@@ -4,6 +4,7 @@ import ContentLoader from 'react-content-loader'
 
 import { IUserProfile } from '../../js/types/User'
 import EditProfileButton from './EditProfileButton'
+import APIKey from './APIKey'
 
 interface PublicProfileProps {
   userProfile: IUserProfile
@@ -32,11 +33,12 @@ export default function PublicProfile ({ userProfile: initialUserProfile }: Publ
       <div className='md:col-span-2 text-medium text-primary '>
         {nick == null && <TextPlaceholder uniqueKey={123} />}
 
-        <div className='flex flex-row items-center'>
+        <div className='flex flex-row items-center gap-x-2'>
           <div className='text-2xl font-bold mr-4'>
             {nick}
           </div>
           <EditProfileButton ownerProfile={initialUserProfile} />
+          {userProfile != null && <APIKey />}
         </div>
         <div className='mt-6 text-lg font-semibold'>{name}</div>
         <div className=''>{bio}</div>
