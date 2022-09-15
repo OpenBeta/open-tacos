@@ -38,7 +38,7 @@ export default function PublicProfile ({ userProfile: initialUserProfile }: Publ
             {nick}
           </div>
           <EditProfileButton ownerProfile={initialUserProfile} />
-          {userProfile != null && <APIKey />}
+          {userProfile != null && <APIKey ownerProfile={initialUserProfile} />}
         </div>
         <div className='mt-6 text-lg font-semibold'>{name}</div>
         <div className=''>{bio}</div>
