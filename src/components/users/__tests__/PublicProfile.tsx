@@ -19,7 +19,9 @@ const userProfile: IUserProfile = {
   name: 'cat blue',
   nick: 'cool_nick_2022',
   avatar: 'something',
-  bio: 'totem eatsum'
+  bio: 'totem eatsum',
+  roles: [],
+  loginsCount: 1
 }
 
 let PublicProfile: typeof PublicProfileType
@@ -36,7 +38,7 @@ test('PublicProfile when the user has logged in', async () => {
 
   render(<PublicProfile userProfile={userProfile} />)
 
-  expect(mockedUseSession).toBeCalledTimes(1)
+  expect(mockedUseSession).toBeCalled()
   expect(screen.queryByRole('button')).toBeDefined()
 
   expect(screen.queryByText(userProfile.name)).not.toBeNull()
@@ -51,7 +53,7 @@ test('EditProfileButton null when the user hasn\'t logged in', async () => {
 
   render(<PublicProfile userProfile={userProfile} />)
 
-  expect(mockedUseSession).toBeCalledTimes(1)
+  expect(mockedUseSession).toBeCalled()
   expect(screen.queryByRole('button')).toBeNull()
 
   expect(screen.queryByText(userProfile.name)).not.toBeNull()
