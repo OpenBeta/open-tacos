@@ -1,7 +1,10 @@
 import { KeyIcon } from '@heroicons/react/outline'
 import { useSession } from 'next-auth/react'
 
-export default function APIKey (): JSX.Element | null {
+import { WithOwnerProfile } from '../../js/types/User'
+import forOwnerOnly from '../../js/auth/forOwnerOnly'
+
+const APIKey = (props: WithOwnerProfile): JSX.Element | null => {
   const { data } = useSession({ required: true })
 
   const apiKey: string | undefined = (data?.accessToken as string) ?? undefined
@@ -19,3 +22,5 @@ export default function APIKey (): JSX.Element | null {
     </div>
   )
 }
+
+export default forOwnerOnly<WithOwnerProfile>(APIKey)
