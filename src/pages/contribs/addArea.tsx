@@ -22,7 +22,7 @@ interface AddAreaFormProps {
   newAreaName: string
   placeSearch: string
   locationRefType: 'near' | 'child'
-  areaRefUuid: string
+  refAreaName: string
 }
 
 const AddAreaPage: INextPageWithAuth = () => {
@@ -43,7 +43,7 @@ const AddAreaPage: INextPageWithAuth = () => {
   const form = useForm<AddAreaFormProps>(
     {
       mode: 'onBlur',
-      defaultValues: { locationRefType: 'near', newAreaName: '', placeSearch: '', areaRefUuid: '' }
+      defaultValues: { locationRefType: 'near', newAreaName: '', placeSearch: '', refAreaName: '' }
     })
   const { handleSubmit, formState: { isSubmitSuccessful }, reset } = form
 
@@ -199,7 +199,7 @@ const Step1a = (): JSX.Element => {
 }
 
 const Step1b = (): JSX.Element => {
-  const { resetField, getValues } = useFormContext()
+  const { resetField } = useFormContext()
 
   const text = useWizardStore().addAreaStore.refAreaName()
   const query = {
@@ -216,14 +216,13 @@ const Step1b = (): JSX.Element => {
   const handleReset = (): void => {
     resetField('locationRefType')
     wizardActions.addAreaStore.resetStep1b()
-    console.log('#postReset', getValues())
   }
 
   return (
     <AreaSearchAutoCompleteControl
       label='Reference climbing area:'
-      id='areaRefUuid'
-      placeholder={text}
+      id='refAreaName'
+      placeholder={text == null || text === '' ? 'Area name' : text}
       queryParams={query}
       onSelect={handleSelect}
       onReset={handleReset}
