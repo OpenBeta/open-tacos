@@ -13,7 +13,7 @@ import RadioGroup from '../../components/ui/form/RadioGroup'
 import Input from '../../components/ui/form/Input'
 import MobileScreen from '../../components/ui/MobileScreen'
 import { LeanAlert } from '../../components/ui/micro/AlertDialogue'
-import { useWizardStore, wizardActions } from '../../js/stores/wizards'
+import { useWizardStore, wizardActions, addAreaStore } from '../../js/stores/wizards'
 import { PoiDoc } from '../../components/search/sources/PoiSource2'
 import { MUTATION_ADD_AREA, AddAreaProps, AddAreaReturnType } from '../../js/graphql/contribGQL'
 import { graphqlClient } from '../../js/graphql/Client'
@@ -22,6 +22,7 @@ interface AddAreaFormProps {
   newAreaName: string
   placeSearch: string
   locationRefType: 'near' | 'child'
+  refAreaName: string
 }
 
 const AddAreaPage: INextPageWithAuth = () => {
@@ -42,7 +43,7 @@ const AddAreaPage: INextPageWithAuth = () => {
   const form = useForm<AddAreaFormProps>(
     {
       mode: 'onBlur',
-      defaultValues: { locationRefType: 'near', newAreaName: '', placeSearch: '' }
+      defaultValues: { locationRefType: 'near', newAreaName: '', placeSearch: '', refAreaName: '' }
     })
   const { handleSubmit, formState: { isSubmitSuccessful }, reset } = form
 
@@ -53,12 +54,13 @@ const AddAreaPage: INextPageWithAuth = () => {
 
   // Submit form
   const onSubmit = async (formFields: AddAreaFormProps): Promise<void> => {
-    const { newAreaName, placeSearch } = formFields
+    const { newAreaName, placeSearch, locationRefType } = formFields
+    const refUuid = addAreaStore.get.refAreaData()
     try {
       await addArea({
         variables: {
           name: newAreaName,
-          parentUuid: null,
+          parentUuid: locationRefType === 'child' && refUuid != null ? refUuid : null,
           countryCode: placeSearch
         },
         context: {
@@ -111,44 +113,57 @@ interface SuccessAlertProps extends AddAreaReturnType {
 }
 const SuccessAlert = ({ areaName, uuid, onContinue }: SuccessAlertProps): JSX.Element => {
   return (
-    <LeanAlert actions={
-      <>
-        <button className='btn btn-solid btn-sm' onClick={onContinue}>
-          Add more
-        </button>
-        <button className='btn btn-outline btn-sm'>
-          <Link href={`/areas/${uuid}`}>
-            <a target='_blank' rel='noreferrer'>View area</a>
-          </Link>
-        </button>
-      </>
+    <LeanAlert
+      closeOnEsc={false}
+      title={
+        <div className='flex flex-col items-center'>
+          <BadgeCheckIcon className='stroke-success w-10 h-10' />
+        </div>
       }
-    >
-      <div className='flex flex-col items-center'>
-        <BadgeCheckIcon className='stroke-success w-10 h-10' />
-      </div>
-      <div className='mt-4 text-sm flex flex-col justify-start text-base-300'>
-        <div>Area <span className='font-semibold'>{areaName}</span> added.</div>
-        <div>ID: {uuid}</div>
-      </div>
-    </LeanAlert>
+      description={
+        <span>Area&nbsp;
+          <AreaPageResolver uuid={uuid}>
+            <span className='font-semibold link-accent'>
+              {areaName}
+            </span>
+          </AreaPageResolver> added.  Thank you for your contribution!
+        </span>
+      }
+      actions={
+        <>
+          <button className='btn btn-solid btn-sm' onClick={onContinue}>
+            Add more
+          </button>
+          <AreaPageResolver uuid={uuid}>
+            <button className='btn btn-outline btn-sm'>
+              View area
+            </button>
+          </AreaPageResolver>
+        </>
+      }
+    />
   )
 }
 
 type ErrorAlertProps = ApolloError
 const ErrorAlert = ({ message }: ErrorAlertProps): JSX.Element => {
   return (
-    <LeanAlert cancel={
-      <button className='btn btn-outline btn-sm btn-wide'>Ok</button>
+    <LeanAlert
+      title={
+        <div className='flex flex-col items-center'>
+          <ExclamationCircleIcon className='stroke-error w-10 h-10' />
+        </div>
+      }
+      description={
+        <span>
+          {message}
+          <span><br />Click Ok and try again.</span>
+        </span>
+      }
+      cancel={
+        <button className='btn btn-outline btn-sm btn-wide'>Ok</button>
     }
-    >
-      <div className='flex flex-col items-center'>
-        <ExclamationCircleIcon className='stroke-error w-10 h-10' />
-      </div>
-      <div className='mt-4 text-xs text-base-300'>
-        {message} Click Ok and try adding again.
-      </div>
-    </LeanAlert>
+    />
   )
 }
 
@@ -184,6 +199,8 @@ const Step1a = (): JSX.Element => {
 }
 
 const Step1b = (): JSX.Element => {
+  const { resetField } = useFormContext()
+
   const text = useWizardStore().addAreaStore.refAreaName()
   const query = {
     text,
@@ -196,14 +213,16 @@ const Step1b = (): JSX.Element => {
     wizardActions.addAreaStore.recordStep1b(data.name, data.areaUUID)
   }, [])
 
-  const handleReset = useCallback((): void => {
+  const handleReset = (): void => {
+    resetField('locationRefType')
     wizardActions.addAreaStore.resetStep1b()
-  }, [])
+  }
 
   return (
     <AreaSearchAutoCompleteControl
       label='Reference climbing area:'
-      placeholder={text}
+      id='refAreaName'
+      placeholder={text == null || text === '' ? 'Area name' : text}
       queryParams={query}
       onSelect={handleSelect}
       onReset={handleReset}
@@ -299,6 +318,19 @@ const ProgressSteps = (): JSX.Element => (
     </li>
   </ul>
 )
+
+interface AreaPageResolverProps {
+  uuid: string
+  children: JSX.Element
+}
+
+const AreaPageResolver = ({ uuid, children }: AreaPageResolverProps): JSX.Element => {
+  return (
+    <Link href={`/areas/${uuid}`}>
+      <a target='_blank' rel='noreferrer'>{children}</a>
+    </Link>
+  )
+}
 
 AddAreaPage.auth = true
 

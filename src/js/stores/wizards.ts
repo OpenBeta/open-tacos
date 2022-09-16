@@ -18,7 +18,6 @@ interface AddAreaProps {
   }
   refAreaName: string
   refAreaData: string
-  relationToRef?: 'in' | 'near'
   steps: boolean[]
 }
 
