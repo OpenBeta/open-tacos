@@ -69,7 +69,7 @@ export const AreaSearchAutoCompleteControl = ({
         control={control}
         name={id}
         render={
-          ({ field: { onChange, onBlur } }) =>
+          ({ field: { onChange } }) =>
             <AreaSearchCore
               placeholder={placeholder}
               onSelect={(data) => {
