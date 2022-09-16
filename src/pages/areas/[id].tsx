@@ -15,6 +15,7 @@ import { getNavBarOffset } from '../../components/Header'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useAreaSeo } from '../../js/hooks/seo'
+import AreaTrigger from '../../components/contribs/AreaTrigger'
 
 interface AreaPageProps {
   area: AreaType
@@ -85,6 +86,7 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
             <div className='mt-4' />
             <PhotoMontage isHero photoList={enhancedMediaList} />
           </div>
+          <AreaTrigger />
           <div className='mt-16 snap-start'>
             <SidePanel
               onFocus={d => setFocused(d)}
