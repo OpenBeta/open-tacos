@@ -11,13 +11,14 @@ import { LocationAutocompleteControl } from '../../components/search/LocationAut
 import { AreaSearchAutoCompleteControl } from '../../components/search/AreaSearchAutoComplete'
 import RadioGroup from '../../components/ui/form/RadioGroup'
 import Input from '../../components/ui/form/Input'
-import MobileScreen from '../../components/ui/MobileScreen'
+import { MobileDialog, DialogContent } from '../../components/ui/MobileDialog'
 import { LeanAlert } from '../../components/ui/micro/AlertDialogue'
 import { useWizardStore, wizardActions, addAreaStore } from '../../js/stores/wizards'
 import { PoiDoc } from '../../components/search/sources/PoiSource2'
 import { MUTATION_ADD_AREA, AddAreaProps, AddAreaReturnType } from '../../js/graphql/contribGQL'
 import { graphqlClient } from '../../js/graphql/Client'
 import { INextPageWithAuth } from '../../js/types/INext'
+
 interface AddAreaFormProps {
   newAreaName: string
   placeSearch: string
@@ -83,8 +84,13 @@ const AddAreaPage: INextPageWithAuth = () => {
   }
 
   return (
-    <div className='max-w-md mx-auto pb-8'>
-      <MobileScreen title='Add an Area' onClose={onClose}>
+    <MobileDialog defaultOpen onOpenChange={onClose} modal={false}>
+      <DialogContent
+        title='Add an Area'
+        onInteractOutside={(event) => {
+          event.preventDefault()
+        }}
+      >
         <div className='text-xs mt-4'>Area can be a crag, boulder, or a destination containing other smaller areas.</div>
         <ProgressSteps />
         <FormProvider {...form}>
@@ -102,9 +108,8 @@ const AddAreaPage: INextPageWithAuth = () => {
         {isSubmitSuccessful && error == null && data != null &&
           <SuccessAlert {...data.addArea} onContinue={onResetForm} />}
         {error != null && <ErrorAlert {...error} />}
-      </MobileScreen>
-
-    </div>
+      </DialogContent>
+    </MobileDialog>
   )
 }
 

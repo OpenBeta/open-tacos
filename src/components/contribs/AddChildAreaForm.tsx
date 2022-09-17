@@ -79,8 +79,8 @@ export default function AddChildAreaForm ({ parentUuid, parentName }: ChildAreaB
           <Input
             label='Parent:'
             name='parentName'
-            className='input input-primary input-md'
-            disabled
+            className='input input-bordered input-md'
+            readOnly
           />
           <Input
             label='Name: *'

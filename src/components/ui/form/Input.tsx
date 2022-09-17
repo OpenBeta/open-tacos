@@ -9,9 +9,10 @@ interface InputProps {
   helper?: string | JSX.Element
   formContext?: UseFormReturn
   disabled?: boolean
+  readOnly?: boolean
 }
 
-export default function Input ({ label, name, registerOptions, placeholder = '', className, helper, formContext, disabled = false }: InputProps): JSX.Element {
+export default function Input ({ label, name, registerOptions, placeholder = '', className, helper, formContext, disabled = false, readOnly = false }: InputProps): JSX.Element {
   const context = formContext == null ? useFormContext() : formContext
   const { register, formState: { errors } } = context
   const inputProps = register(name, registerOptions)
@@ -29,6 +30,7 @@ export default function Input ({ label, name, registerOptions, placeholder = '',
         aria-label={label}
         aria-describedby={`${name}-helper`}
         disabled={disabled}
+        readOnly={readOnly}
       />
       <label className='label' id={`${name}-helper`} htmlFor={name}>
         {errors?.[name]?.message != null &&
