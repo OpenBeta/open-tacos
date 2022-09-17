@@ -48,7 +48,9 @@ export const DialogContent = React.forwardRef<any, Props>(
                 <XIcon className='w-6 h-6' />
               </button>
             </DialogPrimitive.Close>
-            <h2 className='card-title' aria-label='title'>{title}</h2>
+            <DialogPrimitive.Title asChild>
+              <h2 className=''>{title}</h2>
+            </DialogPrimitive.Title>
             <div className='w-8 h-8' />
           </div>
           {children}
