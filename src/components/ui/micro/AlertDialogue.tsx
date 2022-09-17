@@ -149,7 +149,7 @@ export const LeanAlert = ({ title, description, actions, cancel, closeOnEsc = tr
       <AlertDialogPrimitive.Overlay className='fixed inset-0 bg-black/25' />
       <AlertDialogPrimitive.Content
         onEscapeKeyDown={e => !closeOnEsc && e.preventDefault()}
-        className='z-40 fixed inset-0 max-w-md mx-auto flex items-center justify-center p-2 text-center overflow-y-auto max-w-lg'
+        className='z-40 fixed inset-0 mx-auto flex items-center justify-center p-2 text-center overflow-y-auto max-w-lg'
       >
         <div className='p-4 rounded-box bg-base-100 w-full'>
           <AlertDialogPrimitive.Title asChild>{title}</AlertDialogPrimitive.Title>

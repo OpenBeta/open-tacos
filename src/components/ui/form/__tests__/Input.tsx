@@ -20,7 +20,7 @@ test('Input sends value to form', async () => {
       <Input
         label='Full name'
         name={inputFieldName}
-        rules={{ required: errorMsg }}
+        registerOptions={{ required: errorMsg }}
       />
       <button type='submit'>OK</button>
     </Form>
