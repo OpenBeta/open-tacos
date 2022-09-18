@@ -1,7 +1,22 @@
+import { useRef, useState, useEffect } from 'react'
 import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
-import AddChildAreaForm, { ChildAreaBaseProps } from './AddChildAreaForm'
+import AddChildAreaForm from './AddChildAreaForm'
 import DeleteAreaForm from './DeleteAreaForm'
-export default function AreaTrigger (props: ChildAreaBaseProps): JSX.Element {
+
+interface AreaEditActionTriggerProps {
+  areaUuid: string
+  areaName: string
+  parentUuid: string
+}
+export default function AreaTrigger ({ areaName, areaUuid, parentUuid }: AreaEditActionTriggerProps): JSX.Element {
+  const refDeleteTrigger = useRef()
+  const [deleteButtonRef, setRef] = useState<any>()
+  useEffect(() => {
+    if (refDeleteTrigger?.current != null) {
+      setRef(refDeleteTrigger)
+    }
+  }, [refDeleteTrigger])
+
   return (
     <div>
       <MobileDialog modal>
@@ -9,15 +24,20 @@ export default function AreaTrigger (props: ChildAreaBaseProps): JSX.Element {
           Add new
         </DialogTrigger>
         <DialogContent title='Add new child area'>
-          <AddChildAreaForm {...props} />
+          <AddChildAreaForm parentName={areaName} parentUuid={areaUuid} />
         </DialogContent>
       </MobileDialog>
       <MobileDialog modal>
-        <DialogTrigger className='btn btn-accent btn-xs'>
+        <DialogTrigger className='btn btn-accent btn-xs' ref={refDeleteTrigger}>
           Delete
         </DialogTrigger>
         <DialogContent title='Delete area'>
-          <DeleteAreaForm areaName={props.parentName} areaUuid={props.parentUuid} />
+          <DeleteAreaForm
+            areaName={areaName}
+            areaUuid={areaUuid}
+            parentUuid={parentUuid}
+            closeButtonRef={deleteButtonRef}
+          />
         </DialogContent>
       </MobileDialog>
     </div>

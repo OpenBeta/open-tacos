@@ -1,24 +1,27 @@
+import { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import clx from 'classnames'
 import { useMutation } from '@apollo/client'
 import { signIn, useSession } from 'next-auth/react'
+import Link from 'next/link'
 
 import { MUTATION_REMOVE_AREA, RemoveAreaReturnType, RemoveAreaProps } from '../../js/graphql/contribGQL'
-import { SuccessAlert, ErrorAlert } from '../../pages/contribs/addArea'
 import { graphqlClient } from '../../js/graphql/Client'
 import Input from '../ui/form/Input'
-import { useEffect } from 'react'
+import { SuccessAlert, AlertAction } from './alerts/Alerts'
 
-export interface Props {
+export interface DeleteAreaProps {
+  parentUuid: string
   areaUuid: string
   areaName: string
+  closeButtonRef: any
 }
 
 interface HtmlFormProps {
   confirmation: string
 }
 
-export default function DeleteAreaForm ({ areaUuid, areaName }: Props): JSX.Element {
+export default function Form ({ areaUuid, areaName, parentUuid, closeButtonRef }: DeleteAreaProps): JSX.Element {
   const session = useSession()
 
   useEffect(() => {
@@ -31,7 +34,7 @@ export default function DeleteAreaForm ({ areaUuid, areaName }: Props): JSX.Elem
     MUTATION_REMOVE_AREA, {
       client: graphqlClient,
       onCompleted: (data) => {
-        void fetch(`/api/revalidate?a=${data.removeArea.uuid}`) // build new area page
+        void fetch(`/api/revalidate?a=${parentUuid}`) // build parent area page
       }
     }
   )
@@ -43,7 +46,7 @@ export default function DeleteAreaForm ({ areaUuid, areaName }: Props): JSX.Elem
       defaultValues: { confirmation: '' }
     })
 
-  const { handleSubmit, formState: { isSubmitSuccessful, isSubmitting }, reset } = form
+  const { handleSubmit, formState: { isSubmitSuccessful, isSubmitting } } = form
 
   const submitHandler = async (): Promise<void> => {
     await removeArea({
@@ -56,10 +59,6 @@ export default function DeleteAreaForm ({ areaUuid, areaName }: Props): JSX.Elem
         }
       }
     })
-  }
-
-  const resetFormHandler = (): void => {
-    reset()
   }
 
   if (session.status !== 'authenticated') {
@@ -99,8 +98,25 @@ export default function DeleteAreaForm ({ areaUuid, areaName }: Props): JSX.Elem
         </form>
       </FormProvider>
       {isSubmitSuccessful && error == null && data != null &&
-        <SuccessAlert {...data.removeArea} onContinue={resetFormHandler} />}
-      {error != null && <ErrorAlert {...error} />}
+        <DeleteSuccessAlert
+          {...data.removeArea}
+          parentUuid={parentUuid}
+          onClick={() => closeButtonRef?.current?.click()}
+        />}
+      {/* {error != null && <ErrorAlert {...error} />} */}
     </>
   )
 }
+
+interface DeleteSuccessAlertProps {
+  parentUuid: string
+  onClick: () => void
+}
+export const DeleteSuccessAlert = ({ areaName, parentUuid, onClick }: DeleteSuccessAlertProps & RemoveAreaReturnType): JSX.Element => (
+  <SuccessAlert description={<span>Area <b>{areaName}</b> deleted.</span>}>
+    <Link href={`/areas/${parentUuid}`}>
+      <a onClick={onClick}>
+        <AlertAction className='btn btn-primary'>Continue</AlertAction>
+      </a>
+    </Link>
+  </SuccessAlert>)
