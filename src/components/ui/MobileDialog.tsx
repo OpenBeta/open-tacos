@@ -36,4 +36,6 @@ export const DialogContent = React.forwardRef<any, Props>(
 )
 
 export const MobileDialog = DialogPrimitive.Root
-export const DialogTrigger = DialogPrimitive.Trigger
+export const DialogTrigger = React.forwardRef<any, any>((props, forwardedRef) =>
+  <DialogPrimitive.Trigger {...props} ref={forwardedRef} />)
+export const MobileDialogClose = DialogPrimitive.Close

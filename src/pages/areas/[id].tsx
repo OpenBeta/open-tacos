@@ -68,6 +68,7 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
   }, [area])
 
   const { uuid, areaName, children, metadata, content, pathTokens, ancestors } = area
+
   return (
     <>
       <div
@@ -86,7 +87,12 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
             <div className='mt-4' />
             <PhotoMontage isHero photoList={enhancedMediaList} />
           </div>
-          <AreaTrigger parentName={areaName} parentUuid={uuid} />
+          {ancestors.length > 1 && // can only delete area below country (length > 1)
+            <AreaTrigger
+              areaName={areaName}
+              areaUuid={uuid}
+              parentUuid={ancestors[ancestors.length - 2]}
+            />}
           <div className='mt-16 snap-start'>
             <SidePanel
               onFocus={d => setFocused(d)}
