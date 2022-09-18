@@ -137,13 +137,19 @@ export default function AlertDialog (props: Props): JSX.Element {
 
 interface LeanAlertProps {
   closeOnEsc?: boolean // prevent Esc to close alert
+  icon?: ReactNode
   title: ReactNode
   description: ReactNode
-  actions?: ReactNode
-  cancel?: ReactNode
-
+  children?: ReactNode
 }
-export const LeanAlert = ({ title, description, actions, cancel, closeOnEsc = true }: LeanAlertProps): JSX.Element => {
+/**
+ * A reusable popup alert
+ * @param icon
+ * @param title
+ * @param cancelAction A button of type `AlertDialogPrimitive.Action` that closes the alert on click.  You can register an `onClick()` to perform some action.
+ * @param noncancelAction Any kind of React component/button that doesn't close the alert on click.  Use this if you want to perform an action on click and keep the alert open.
+ */
+export const LeanAlert = ({ icon = null, title, description, children = DefaultOkButton, closeOnEsc = true }: LeanAlertProps): JSX.Element => {
   return (
     <AlertDialogPrimitive.Root defaultOpen>
       <AlertDialogPrimitive.Overlay className='fixed inset-0 bg-black/25' />
@@ -152,17 +158,20 @@ export const LeanAlert = ({ title, description, actions, cancel, closeOnEsc = tr
         className='z-40 fixed inset-0 mx-auto flex items-center justify-center p-2 text-center overflow-y-auto max-w-lg'
       >
         <div className='p-4 rounded-box bg-base-100 w-full'>
-          <AlertDialogPrimitive.Title asChild>{title}</AlertDialogPrimitive.Title>
+          <AlertDialogPrimitive.Title className='flex flex-col items-center'>
+            {icon}
+            {title}
+          </AlertDialogPrimitive.Title>
           <AlertDialogPrimitive.Description className='my-8'>{description}</AlertDialogPrimitive.Description>
           <div className='flex items-center justify-center gap-x-6'>
-            {cancel != null && (
-              <AlertDialogPrimitive.AlertDialogCancel>
-                {cancel}
-              </AlertDialogPrimitive.AlertDialogCancel>)}
-            {actions}
+            {children}
           </div>
         </div>
       </AlertDialogPrimitive.Content>
     </AlertDialogPrimitive.Root>
   )
 }
+
+const DefaultOkButton = <AlertDialogPrimitive.Action className='btn btn-primary btn-md btn-wide'>OK</AlertDialogPrimitive.Action>
+
+export const AlertAction = AlertDialogPrimitive.Action

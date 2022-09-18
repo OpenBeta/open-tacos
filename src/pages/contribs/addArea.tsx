@@ -1,23 +1,21 @@
 import { useCallback, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useForm, useFormContext, FormProvider } from 'react-hook-form'
-import { BadgeCheckIcon, ExclamationCircleIcon } from '@heroicons/react/outline'
 import clx from 'classnames'
-import { ApolloError, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
-import Link from 'next/link'
 
 import { LocationAutocompleteControl } from '../../components/search/LocationAutocomplete'
 import { AreaSearchAutoCompleteControl } from '../../components/search/AreaSearchAutoComplete'
 import RadioGroup from '../../components/ui/form/RadioGroup'
 import Input from '../../components/ui/form/Input'
 import { MobileDialog, DialogContent } from '../../components/ui/MobileDialog'
-import { LeanAlert } from '../../components/ui/micro/AlertDialogue'
 import { useWizardStore, wizardActions, addAreaStore } from '../../js/stores/wizards'
 import { PoiDoc } from '../../components/search/sources/PoiSource2'
 import { MUTATION_ADD_AREA, AddAreaProps, AddAreaReturnType } from '../../js/graphql/contribGQL'
 import { graphqlClient } from '../../js/graphql/Client'
 import { INextPageWithAuth } from '../../js/types/INext'
+import { AddSucessAlert, AddErrorAlert } from '../../components/contribs/AddChildAreaForm'
 
 interface AddAreaFormProps {
   newAreaName: string
@@ -106,79 +104,11 @@ const AddAreaPage: INextPageWithAuth = () => {
           </form>
         </FormProvider>
         {isSubmitSuccessful && error == null && data != null &&
-          <SuccessAlert {...data.addArea} onContinue={onResetForm} />}
-        {error != null && <ErrorAlert {...error} />}
+          <AddSucessAlert {...data.addArea} onContinue={onResetForm} />}
+        {error != null && <AddErrorAlert {...error} />}
       </DialogContent>
     </MobileDialog>
   )
-}
-
-interface SuccessAlertProps extends AddAreaReturnType {
-  onContinue: () => void
-}
-export const SuccessAlert = ({ areaName, uuid, onContinue }: SuccessAlertProps): JSX.Element => {
-  return (
-    <LeanAlert
-      closeOnEsc={false}
-      title={
-        <div className='flex flex-col items-center'>
-          <BadgeCheckIcon className='stroke-success w-10 h-10' />
-        </div>
-      }
-      description={
-        <span>Area&nbsp;
-          <AreaPageResolver uuid={uuid}>
-            <span className='font-semibold link-accent'>
-              {areaName}
-            </span>
-          </AreaPageResolver> added.  Thank you for your contribution!
-        </span>
-      }
-      actions={
-        <>
-          <button className='btn btn-solid btn-sm' onClick={onContinue}>
-            Add more
-          </button>
-          <AreaPageResolver uuid={uuid}>
-            <button className='btn btn-outline btn-sm'>
-              View area
-            </button>
-          </AreaPageResolver>
-        </>
-      }
-    />
-  )
-}
-
-type ErrorAlertProps = ApolloError
-export const ErrorAlert = ({ message }: ErrorAlertProps): JSX.Element => {
-  return (
-    <LeanAlert
-      title={
-        <div className='flex flex-col items-center'>
-          <ExclamationCircleIcon className='stroke-error w-10 h-10' />
-        </div>
-      }
-      description={
-        <span>
-          {friendlifyErrorMesage(message)}
-          <span><br />Click Ok and try again.</span>
-        </span>
-      }
-      cancel={
-        <button className='btn btn-outline btn-sm btn-wide'>Ok</button>
-    }
-    />
-  )
-}
-
-const friendlifyErrorMesage = (msg: string): string => {
-  console.log('#error', msg)
-  if (msg.startsWith('E11000')) {
-    return 'An area with the same name already exists.'
-  }
-  // TODO:  account for other errors?
-  return msg
 }
 
 const Step1a = (): JSX.Element => {
@@ -332,19 +262,6 @@ const ProgressSteps = (): JSX.Element => (
     </li>
   </ul>
 )
-
-interface AreaPageResolverProps {
-  uuid: string
-  children: JSX.Element
-}
-
-const AreaPageResolver = ({ uuid, children }: AreaPageResolverProps): JSX.Element => {
-  return (
-    <Link href={`/areas/${uuid}`}>
-      <a target='_blank' rel='noreferrer'>{children}</a>
-    </Link>
-  )
-}
 
 AddAreaPage.auth = true
 

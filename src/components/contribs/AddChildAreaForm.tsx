@@ -1,10 +1,11 @@
 import { useForm, FormProvider } from 'react-hook-form'
+import Link from 'next/link'
 import clx from 'classnames'
 import { useMutation } from '@apollo/client'
 import { signIn, useSession } from 'next-auth/react'
 
 import { MUTATION_ADD_AREA, AddAreaReturnType, AddAreaProps } from '../../js/graphql/contribGQL'
-import { SuccessAlert, ErrorAlert } from '../../pages/contribs/addArea'
+import { SuccessAlert, AlertAction, ErrorAlert } from './alerts/Alerts'
 import { graphqlClient } from '../../js/graphql/Client'
 import Input from '../ui/form/Input'
 import { useEffect } from 'react'
@@ -111,8 +112,73 @@ export default function AddChildAreaForm ({ parentUuid, parentName }: ChildAreaB
         </form>
       </FormProvider>
       {isSubmitSuccessful && error == null && data != null &&
-        <SuccessAlert {...data.addArea} onContinue={resetFormHandler} />}
-      {error != null && <ErrorAlert {...error} />}
+        <AddSucessAlert {...data.addArea} onContinue={resetFormHandler} />}
+      {error != null && <AddErrorAlert {...error} />}
     </>
   )
+}
+
+interface SuccessAlertProps extends AddAreaReturnType {
+  onContinue: () => void
+}
+export const AddSucessAlert = ({ areaName, uuid, onContinue }: SuccessAlertProps): JSX.Element => {
+  return (
+    <SuccessAlert
+      description={
+        <span>Area&nbsp;
+          <AreaPageResolver uuid={uuid}>
+            <span className='font-semibold link-accent'>
+              {areaName}
+            </span>
+          </AreaPageResolver> added.  Thank you for your contribution!
+        </span>
+      }
+    >
+      <AlertAction className='btn btn-solid btn-sm' onClick={onContinue}>
+        Add more
+      </AlertAction>
+      <AreaPageResolver uuid={uuid}>
+        <button className='btn btn-outline btn-sm'>View area</button>
+      </AreaPageResolver>
+    </SuccessAlert>
+  )
+}
+
+interface AreaPageResolverProps {
+  uuid: string
+  children: JSX.Element
+}
+
+const AreaPageResolver = ({ uuid, children }: AreaPageResolverProps): JSX.Element => {
+  return (
+    <Link href={`/areas/${uuid}`}>
+      <a target='_blank' rel='noreferrer' onClick={e => e.stopPropagation()}>{children}</a>
+    </Link>
+  )
+}
+
+interface ErrorAlertProps {
+  message: string
+}
+
+export const AddErrorAlert = ({ message }: ErrorAlertProps): JSX.Element => {
+  return (
+    <ErrorAlert
+      description={
+        <span>
+          {friendlifyErrorMesage(message)}
+          <span><br />Click Ok and try again.</span>
+        </span>
+      }
+    />
+  )
+}
+
+const friendlifyErrorMesage = (msg: string): string => {
+  console.log('#error', msg)
+  if (msg.startsWith('E11000')) {
+    return 'An area with the same name already exists.'
+  }
+  // TODO:  account for other errors?
+  return msg
 }

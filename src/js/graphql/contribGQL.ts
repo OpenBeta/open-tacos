@@ -18,6 +18,14 @@ mutation ($name: String!, $parentUuid: ID, $countryCode: String) {
     }
 }`
 
+export const MUTATION_REMOVE_AREA = gql`
+mutation ($uuid: String!) {
+    removeArea(input: { uuid: $uuid } ) {
+      areaName
+      uuid
+    }
+}`
+
 export const RECENT_CHANGE_HISTORY = gql`
 query ($filter: AllHistoryFilter) {
   getChangeHistory(filter: $filter) {
@@ -49,3 +57,9 @@ export interface AddAreaProps {
 }
 
 export type AddAreaReturnType = Pick<AreaType, 'areaName'|'uuid'>
+
+export interface RemoveAreaProps {
+  uuid: string
+}
+
+export type RemoveAreaReturnType = Pick<AreaType, 'areaName'|'uuid'>
