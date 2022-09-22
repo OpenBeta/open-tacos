@@ -4,7 +4,7 @@ import { UserCircleIcon } from '@heroicons/react/outline'
 import { TagIcon } from '@heroicons/react/solid'
 import { urlResolver } from '../../js/utils'
 
-export default function PhotoFooter({
+export default function PhotoFooter ({
   username,
   destType,
   destination,

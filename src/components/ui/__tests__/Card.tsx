@@ -19,8 +19,8 @@ test('Card renders a header and a body', async () => {
           layout='fill'
         />
       }
-      header={'Some Header Content'}
-      body={'Some Body Content'}
+      header='Some Header Content'
+      body='Some Body Content'
     />
   )
   const header = screen.getByText(/Some Header Content/i)

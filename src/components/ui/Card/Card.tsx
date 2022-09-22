@@ -7,11 +7,11 @@ export interface CardProps {
   styles?: string
 }
 
-export default function Card({
+export default function Card ({
   header,
   image,
   body,
-  styles = 'bg-white drop-shadow rounded-lg'
+  styles = 'bg-base-100 drop-shadow rounded-box'
 }: CardProps): JSX.Element {
   return (
     <div className={styles}>
@@ -30,7 +30,7 @@ export interface CardHeaderProps {
 }
 export const CardHeader = ({
   content,
-  styles = 'rounded-t-lg container mx-auto bg-white'
+  styles = 'container mx-auto bg-base-100 rounded-box'
 }: CardHeaderProps): JSX.Element => {
   return (
     <div className={styles}>

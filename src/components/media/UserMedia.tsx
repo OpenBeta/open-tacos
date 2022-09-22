@@ -10,7 +10,6 @@ import { MediaTagWithClimb, MediaType } from '../../js/types'
 import ResponsiveImage from '../media/slideshow/ResponsiveImage'
 import { MobileLoader, DesktopPreviewLoader } from '../../js/sirv/util'
 import RemoveImage from './RemoveImage'
-import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
 
 const MOBILE_IMAGE_MAX_WIDITH = 914
 interface UserMediaProps {
@@ -28,7 +27,7 @@ interface UserMediaProps {
  * Wrapper for user uploaded photo (maybe a short video in the future)
  * @param onClick Desktop only callback.
  */
-export default function UserMedia({
+export default function UserMedia ({
   index,
   uid,
   imageInfo,
@@ -69,27 +68,29 @@ export default function UserMedia({
     >
       <Link href={shareableUrl}>
         <a onClick={onClickHandler}>
-          {isDesktop ? (
-            <ResponsiveImage
-              mediaUrl={imageInfo.filename}
-              isHero={index === 0}
-              loader={loader}
-            />
-          ) : (
-            <>
-              <img
-                src={loader({
-                  src: imageInfo.filename,
-                  width: MOBILE_IMAGE_MAX_WIDITH
-                })}
-                width={MOBILE_IMAGE_MAX_WIDITH}
-                sizes='100vw'
+          {isDesktop
+            ? (
+              <ResponsiveImage
+                mediaUrl={imageInfo.filename}
+                isHero={index === 0}
+                loader={loader}
               />
-              <div className='text-zinc-600 indent-1 font-light text-sm'>
-                {getUploadDateSummary(imageInfo.ctime)}
-              </div>
-            </>
-          )}
+              )
+            : (
+              <>
+                <img
+                  src={loader({
+                    src: imageInfo.filename,
+                    width: MOBILE_IMAGE_MAX_WIDITH
+                  })}
+                  width={MOBILE_IMAGE_MAX_WIDITH}
+                  sizes='100vw'
+                />
+                <div className='text-zinc-600 indent-1 font-light text-sm'>
+                  {getUploadDateSummary(imageInfo.ctime)}
+                </div>
+              </>
+              )}
         </a>
       </Link>
 
