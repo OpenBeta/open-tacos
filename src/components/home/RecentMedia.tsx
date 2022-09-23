@@ -2,9 +2,10 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Dictionary } from 'underscore'
 
-import PhotoFooter, { urlResolver } from '../media/PhotoFooter'
+import PhotoFooter from '../media/PhotoFooter'
 import { MediaBaseTag, MediaType } from '../../js/types'
 import { ResponsiveImage2 } from '../media/slideshow/ResponsiveImage'
+import { urlResolver } from '../../js/utils'
 export interface RecentTagsProps {
   tags: Dictionary<MediaBaseTag[]>
   mediaList: MediaType[]

@@ -1,7 +1,7 @@
 import { saveAs } from 'file-saver'
 import { ClimbTypeToColor } from './constants'
 import { Climb, ClimbDisciplineRecord, ClimbDiscipline } from './types'
-
+import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
 /**
  * Given a path or parent id and the type of the page generate the GitHub URL
  * @param {String} pathOrParentId from createNodeField in gatsby-node.js
@@ -178,4 +178,37 @@ const regValidUrl = /^((http|https):\/\/)?(www.)?(?!.*(http|https|www.))[a-zA-Z0
  */
 export const checkWebsiteUrl = (url: string): boolean => {
   return !url.includes(' ') && url.length > 2 && regValidUrl.test(url)
+}
+
+/**
+ *
+ * @param dateUploaded
+ * @returns string formatted like "9 days ago, 4 months ago, 8 seconds ago, etc."
+ */
+export const getUploadDateSummary = (dateUploaded: Date): string => {
+  dateUploaded = new Date(dateUploaded)
+  const currentTime = new Date()
+  if (differenceInYears(currentTime, dateUploaded) >= 1) {
+    return format(dateUploaded, 'MMM yyyy')
+  }
+  return formatDistanceToNowStrict(dateUploaded, { addSuffix: true })
+}
+
+/**
+ *
+ * @param type
+ * @param dest
+ * @returns url for the given destination type (area or climb) and destination uid
+ */
+export const urlResolver = (type: number, dest: string): string | null => {
+  switch (type) {
+    case 0:
+      return `/climbs/${dest}`
+    case 1:
+      return `/areas/${dest}`
+    case 3:
+      return `/u/${dest}`
+    default:
+      return null
+  }
 }
