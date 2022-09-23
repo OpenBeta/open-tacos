@@ -3,14 +3,13 @@ import ContentLoader from 'react-content-loader'
 import classNames from 'classnames'
 import { basename } from 'path'
 import Link from 'next/link'
-
+import { getUploadDateSummary } from '../../js/utils'
 import { useResponsive } from '../../js/hooks'
 import TagList from './TagList'
 import { MediaTagWithClimb, MediaType } from '../../js/types'
 import ResponsiveImage from '../media/slideshow/ResponsiveImage'
 import { MobileLoader, DesktopPreviewLoader } from '../../js/sirv/util'
 import RemoveImage from './RemoveImage'
-import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
 
 const MOBILE_IMAGE_MAX_WIDITH = 914
 interface UserMediaProps {
@@ -28,7 +27,16 @@ interface UserMediaProps {
  * Wrapper for user uploaded photo (maybe a short video in the future)
  * @param onClick Desktop only callback.
  */
-export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, onTagDeleted, isAuthorized = false, useClassicATag = false }: UserMediaProps): JSX.Element {
+export default function UserMedia ({
+  index,
+  uid,
+  imageInfo,
+  onClick,
+  tagList,
+  onTagDeleted,
+  isAuthorized = false,
+  useClassicATag = false
+}: UserMediaProps): JSX.Element {
   const [hovered, setHover] = useState(false)
 
   const onClickHandler = useCallback((event) => {
@@ -46,25 +54,15 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
   const loader = isDesktop ? DesktopPreviewLoader : MobileLoader
   const shareableUrl = `/p/${uid}/${basename(imageInfo.filename)}`
 
-  const getUploadDate = (dateUploaded: Date): string => {
-    dateUploaded = new Date(dateUploaded)
-    const currentTime = new Date()
-    if (differenceInYears(currentTime, dateUploaded) >= 1) {
-      return format(dateUploaded, 'MMM yyyy')
-    }
-    return formatDistanceToNowStrict(dateUploaded, { addSuffix: true })
-  }
-
   return (
     <figure
       key={imageInfo.filename}
-      className={
-        classNames(
-          'block relative rounded overflow-hidden hover:shadow transition',
-          isDesktop ? 'w-[300px] h-[300px] hover:brightness-75' : 'max-w-screen-lg py-12'
-
-        )
-      }
+      className={classNames(
+        'block relative rounded overflow-hidden hover:shadow transition',
+        isDesktop
+          ? 'w-[300px] h-[300px] hover:brightness-75'
+          : 'max-w-screen-lg py-12'
+      )}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
@@ -72,22 +70,31 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
         <a onClick={onClickHandler}>
           {isDesktop
             ? (
-              <ResponsiveImage mediaUrl={imageInfo.filename} isHero={index === 0} loader={loader} />
+              <ResponsiveImage
+                mediaUrl={imageInfo.filename}
+                isHero={index === 0}
+                loader={loader}
+              />
               )
             : (
               <>
                 <img
-                  src={loader({ src: imageInfo.filename, width: MOBILE_IMAGE_MAX_WIDITH })}
+                  src={loader({
+                    src: imageInfo.filename,
+                    width: MOBILE_IMAGE_MAX_WIDITH
+                  })}
                   width={MOBILE_IMAGE_MAX_WIDITH}
                   sizes='100vw'
                 />
-                <div className='text-zinc-600 indent-1 font-light text-sm'>{getUploadDate(imageInfo.ctime)}</div>
+                <div className='text-zinc-600 indent-1 font-light text-sm'>
+                  {getUploadDateSummary(imageInfo.ctime)}
+                </div>
               </>
               )}
         </a>
       </Link>
 
-      {tagList?.length > 0 &&
+      {tagList?.length > 0 && (
         <figcaption className='absolute inset-x-0 bottom-0 flex flex-col justify-end'>
           <TagList
             hovered={hovered}
@@ -96,15 +103,14 @@ export default function UserMedia ({ index, uid, imageInfo, onClick, tagList, on
             isAuthorized={isAuthorized}
             className='px-2'
           />
-        </figcaption>}
+        </figcaption>
+      )}
 
-      {tagList?.length === 0 && isAuthorized &&
+      {tagList?.length === 0 && isAuthorized && (
         <div className='absolute top-0 right-0 p-1.5'>
-          <RemoveImage
-            imageInfo={imageInfo}
-            tagCount={tagList?.length ?? 0}
-          />
-        </div>}
+          <RemoveImage imageInfo={imageInfo} tagCount={tagList?.length ?? 0} />
+        </div>
+      )}
     </figure>
   )
 }
@@ -118,4 +124,5 @@ export const ImagePlaceholder = (props): JSX.Element => (
     viewBox='0 0 40 40'
   >
     <rect rx={0} ry={0} width='40' height='40' />
-  </ContentLoader>)
+  </ContentLoader>
+)
