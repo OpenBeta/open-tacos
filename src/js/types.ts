@@ -97,6 +97,7 @@ export interface AreaType {
   id: string
   uuid: string
   areaName: string
+  shortCode?: string
   pathTokens: string[]
   metadata: AreaMetadataType
   ancestors: string[]
@@ -109,6 +110,15 @@ export interface AreaType {
   children: AreaType[]
   climbs: Climb[]
   media: MediaBaseTag[]
+}
+
+export interface AreaUpdatableFieldsType {
+  areaName?: string
+  description?: string
+  isDestination?: boolean
+  shortCode?: string
+  lat?: number
+  lng?: number
 }
 
 export interface AreaResponseType {

@@ -53,11 +53,35 @@ const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeT
   const { areaName, uuid } = fullDocument as AreaType
 
   return (
-    <div className='ml-2 flex gap-x-2 items-center'>
-      <div>{dbOpIcon[dbOp]}</div>
-      {dbOp === 'delete'
-        ? <div>{areaName}</div>
-        : (<Link href={`/areas/${uuid}`}><a className='link link-hover'>{areaName}</a></Link>)}
+    <div className='ml-2 flex gap-x-2'>
+      <div className=''>{dbOpIcon[dbOp]}</div>
+
+      <div className=''>
+        <div className=''>
+          {dbOp === 'delete'
+            ? <span>{areaName}</span>
+            : (<Link href={`/areas/${uuid}`}><a className='link link-hover'>{areaName}</a></Link>)}
+        </div>
+        <div className='text-xs text-base-300'>
+          <UpdatedFields fields={updateDescription?.updatedFields} />
+        </div>
+      </div>
+      {/* <div className='row-span-2 col-span-2'>{JSON.stringify(updateDescription?.updatedFields)}</div> */}
+    </div>
+  )
+}
+
+interface UpdatedFieldsProps {
+  fields: string[] | undefined
+}
+const UpdatedFields = ({ fields }: UpdatedFieldsProps): JSX.Element | null => {
+  if (fields == null) return null
+  return (
+    <div>{fields.map(field => {
+      if (field.startsWith('_change')) return null
+      if (field.startsWith('updatedAt')) return null
+      return (<div key={field}>{field}</div>)
+    })}
     </div>
   )
 }
@@ -77,6 +101,10 @@ const operationLabelMap = {
   addArea: {
     badge: <OpBadge label='Area' />,
     icon: <ActionIcon icon={<PlusIcon className='w-6 h-6 stroke-base-300' />} />
+  },
+  updateArea: {
+    badge: <OpBadge label='Area' />,
+    icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} clz='bg-info' />
   },
   addCountry: {
     badge: <OpBadge label='Country' clz='badge-primary' />,

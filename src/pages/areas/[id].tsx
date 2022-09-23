@@ -67,7 +67,7 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
       }))
   }, [area])
 
-  const { uuid, areaName, children, metadata, content, pathTokens, ancestors } = area
+  const { areaName, children, metadata, content, pathTokens, ancestors } = area
 
   return (
     <>
@@ -87,12 +87,9 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
             <div className='mt-4' />
             <PhotoMontage isHero photoList={enhancedMediaList} />
           </div>
-          {ancestors.length > 1 && // can only delete area below country (length > 1)
-            <AreaTrigger
-              areaName={areaName}
-              areaUuid={uuid}
-              parentUuid={ancestors[ancestors.length - 2]}
-            />}
+          <AreaTrigger
+            {...area}
+          />
           <div className='mt-16 snap-start'>
             <SidePanel
               onFocus={d => setFocused(d)}
@@ -171,6 +168,7 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
       id
       uuid
       areaName
+      shortCode
       ancestors
       pathTokens
       metadata {

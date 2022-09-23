@@ -2,13 +2,13 @@ import { useRef, useState, useEffect } from 'react'
 import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
 import AddChildAreaForm from './AddChildAreaForm'
 import DeleteAreaForm from './DeleteAreaForm'
+import AreaEditForm from './AreaEditForm'
+import { AreaType } from '../../js/types'
 
-interface AreaEditActionTriggerProps {
-  areaUuid: string
-  areaName: string
-  parentUuid: string
+interface AreaEditActionTriggerProps extends AreaType {
+
 }
-export default function AreaTrigger ({ areaName, areaUuid, parentUuid }: AreaEditActionTriggerProps): JSX.Element {
+export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Element {
   const refDeleteTrigger = useRef()
   const [deleteButtonRef, setRef] = useState<any>()
   useEffect(() => {
@@ -17,6 +17,8 @@ export default function AreaTrigger ({ areaName, areaUuid, parentUuid }: AreaEdi
     }
   }, [refDeleteTrigger])
 
+  const { areaName, uuid, ancestors } = props
+  const deletable = ancestors.length > 1
   return (
     <div>
       <MobileDialog modal>
@@ -24,20 +26,28 @@ export default function AreaTrigger ({ areaName, areaUuid, parentUuid }: AreaEdi
           Add new
         </DialogTrigger>
         <DialogContent title='Add new child area'>
-          <AddChildAreaForm parentName={areaName} parentUuid={areaUuid} />
+          <AddChildAreaForm parentName={areaName} parentUuid={uuid} />
         </DialogContent>
       </MobileDialog>
       <MobileDialog modal>
-        <DialogTrigger className='btn btn-accent btn-xs' ref={refDeleteTrigger}>
+        <DialogTrigger className='btn btn-accent btn-xs' ref={refDeleteTrigger} disabled={!deletable}>
           Delete
         </DialogTrigger>
         <DialogContent title='Delete area'>
           <DeleteAreaForm
             areaName={areaName}
-            areaUuid={areaUuid}
-            parentUuid={parentUuid}
+            areaUuid={uuid}
+            parentUuid={ancestors[ancestors.length - 2]}
             closeButtonRef={deleteButtonRef}
           />
+        </DialogContent>
+      </MobileDialog>
+      <MobileDialog modal>
+        <DialogTrigger className='btn btn-accent btn-xs'>
+          Edit
+        </DialogTrigger>
+        <DialogContent title='Edit area'>
+          <AreaEditForm {...props} />
         </DialogContent>
       </MobileDialog>
     </div>
