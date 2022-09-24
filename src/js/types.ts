@@ -249,3 +249,24 @@ export interface ChangeRecordMetadataType {
   createdAt?: Date
   updatedAt?: Date
 }
+
+export interface FinancialBackersResponseType {
+  account: {
+    members: {
+      nodes: FinancialBackerAccountType[]
+    }
+    stats: {
+      totalNetAmountReceived: {
+        value: number
+        currency: string
+      }
+    }
+  }
+}
+
+export interface FinancialBackerAccountType {
+  account: {
+    name: string
+    imageUrl: string
+  }
+}
