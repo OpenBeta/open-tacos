@@ -1,4 +1,5 @@
 import * as DropdownPrimitive from '@radix-ui/react-dropdown-menu'
+import clx from 'classnames'
 
 interface DropdownMenuProps {
   children: JSX.Element[]
@@ -6,7 +7,7 @@ interface DropdownMenuProps {
 export function DropdownContent ({ children }: DropdownMenuProps): JSX.Element {
   return (
     <DropdownPrimitive.Portal>
-      <div className='absolute z-50 inset-0 h-screen w-screen bg-black/40'>
+      <div className='absolute z-50 inset-0 h-screen w-screen bg-black/60'>
         <DropdownPrimitive.Content
           sideOffset={10}
           avoidCollisions align='start'
@@ -32,9 +33,14 @@ export const DropdownItem = ({ icon, text, onSelect, disabled = false, className
     <DropdownPrimitive.Item
       disabled={disabled}
       onSelect={onSelect}
-      className={`inline-flex gap-x-2 hover:bg-secondary px-2 py-3 w-full rounded-btn ${className}`}
+      className={
+        clx('outline-none select-none inline-flex items-center gap-x-2 hover:bg-secondary px-2 py-3 w-full rounded-btn ring-0',
+          className,
+          disabled ? 'opacity-75 cursor-not-allowed' : 'cursor-pointer'
+        )
+      }
     >
-      {icon == null ? <span className='w-4 h-4' /> : icon}<span>{text}</span>
+      {icon == null ? <span className='w-5 h-5' /> : icon}<span>{text}</span>
     </DropdownPrimitive.Item>
   )
 }
