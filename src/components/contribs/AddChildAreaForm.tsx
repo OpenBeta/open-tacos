@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import Link from 'next/link'
 import clx from 'classnames'
@@ -8,20 +9,19 @@ import { MUTATION_ADD_AREA, AddAreaReturnType, AddAreaProps } from '../../js/gra
 import { SuccessAlert, AlertAction, ErrorAlert } from './alerts/Alerts'
 import { graphqlClient } from '../../js/graphql/Client'
 import Input from '../ui/form/Input'
-import { useEffect } from 'react'
 
 export interface ChildAreaBaseProps {
   parentUuid: string
   parentName: string
+  formRef: any
 }
 
 interface NewAreaFormProps extends ChildAreaBaseProps {
   newAreaName: string
   shortCode: string
-
 }
 
-export default function AddChildAreaForm ({ parentUuid, parentName }: ChildAreaBaseProps): JSX.Element {
+export default function Form ({ parentUuid, parentName, formRef }: ChildAreaBaseProps): JSX.Element {
   const session = useSession()
 
   useEffect(() => {
@@ -30,10 +30,15 @@ export default function AddChildAreaForm ({ parentUuid, parentName }: ChildAreaB
     }
   }, [session])
 
+  // Track submit count
+  // react-hook-form has a similar prop but it gets reset when we call the form `reset()`
+  const [submitCount, setSubmitCount] = useState(0)
+
   const [addArea, { error, data }] = useMutation<{ addArea: AddAreaReturnType }, AddAreaProps>(
     MUTATION_ADD_AREA, {
       client: graphqlClient,
       onCompleted: (data) => {
+        setSubmitCount(old => old + 1)
         void fetch(`/api/revalidate?a=${data.addArea.uuid}`) // build new area page
         void fetch(`/api/revalidate?a=${parentUuid}`) // rebuild parent page
       }
@@ -67,6 +72,10 @@ export default function AddChildAreaForm ({ parentUuid, parentName }: ChildAreaB
   const resetFormHandler = (): void => {
     reset()
   }
+
+  useEffect(() => {
+    formRef.current = submitCount
+  }, [submitCount])
 
   if (session.status !== 'authenticated') {
     return (

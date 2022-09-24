@@ -87,9 +87,11 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
             <div className='mt-4' />
             <PhotoMontage isHero photoList={enhancedMediaList} />
           </div>
-          <AreaTrigger
-            {...area}
-          />
+          <div className='mt-2'>
+            <AreaTrigger
+              {...area}
+            />
+          </div>
           <div className='mt-16 snap-start'>
             <SidePanel
               onFocus={d => setFocused(d)}

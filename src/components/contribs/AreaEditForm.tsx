@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import clx from 'classnames'
 import { useMutation } from '@apollo/client'
@@ -20,7 +20,7 @@ interface HtmlFormProps extends AreaUpdatableFieldsType {
   latlng: string
 }
 
-export default function AreaEditForm (props: AreaType): JSX.Element {
+export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.Element {
   const session = useSession()
 
   useEffect(() => {
@@ -29,13 +29,20 @@ export default function AreaEditForm (props: AreaType): JSX.Element {
     }
   }, [session])
 
+  // Track submit count
+  // react-hook-form has a similar prop but it gets reset when we call the form `reset()`
+  const [submitCount, setSubmitCount] = useState(0)
+
   const [updateArea, { error }] = useMutation<{ updateArea: UpdateAreaReturnType }, UpdateAreaProps>(
     MUTATION_UPDATE_AREA, {
-      client: graphqlClient
+      client: graphqlClient,
+      onCompleted: () => {
+        setSubmitCount(old => old + 1)
+      }
     }
   )
 
-  const { areaName, shortCode, metadata: { lat, lng } } = props
+  const { areaName, shortCode, metadata: { lat, lng }, formRef } = props
   // Form declaration
   const form = useForm<HtmlFormProps>(
     {
@@ -69,6 +76,10 @@ export default function AreaEditForm (props: AreaType): JSX.Element {
       }
     })
   }
+
+  useEffect(() => {
+    formRef.current = submitCount
+  }, [submitCount])
 
   if (session.status !== 'authenticated') {
     return (
