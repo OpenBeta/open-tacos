@@ -42,3 +42,14 @@ export const stagingGraphQLClient = new ApolloClient({
   link: httpLink,
   cache: new InMemoryCache()
 })
+
+let openCollectiveUri: string = process.env.OPEN_COLLECTIVE_API_URI ?? ''
+const openCollectiveApiKey: string = process.env.OPEN_COLLECTIVE_API_KEY ?? ''
+if (openCollectiveApiKey !== '') {
+  openCollectiveUri = `${openCollectiveUri}/${openCollectiveApiKey}`
+}
+
+export const openCollectiveClient = new ApolloClient({
+  uri: openCollectiveUri,
+  cache: new InMemoryCache()
+})
