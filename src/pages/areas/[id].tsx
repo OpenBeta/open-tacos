@@ -15,7 +15,7 @@ import { getNavBarOffset } from '../../components/Header'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useAreaSeo } from '../../js/hooks/seo'
-import AreaTrigger from '../../components/contribs/AreaTrigger'
+import AreaEditTrigger from '../../components/contribs/AreaEditTrigger'
 
 interface AreaPageProps {
   area: AreaType
@@ -82,17 +82,15 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
             scrollSnapType: 'y mandatory'
           }}
         >
-          <div className='snap-start pt-4'>
+          <div className='pt-4'>
             <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
             <div className='mt-4' />
             <PhotoMontage isHero photoList={enhancedMediaList} />
           </div>
-          <div className='mt-2'>
-            <AreaTrigger
-              {...area}
-            />
+          <div className='mt-4 md:flex md:justify-end'>
+            <AreaEditTrigger {...area} />
           </div>
-          <div className='mt-16 snap-start'>
+          <div className='mt-16'>
             <SidePanel
               onFocus={d => setFocused(d)}
               onSelect={d => setSelected(d)}

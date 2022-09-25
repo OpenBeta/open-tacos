@@ -114,8 +114,8 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
                 label='Map'
               />
             </Tabs.List>
-            <Tabs.Content value='edit' className='w-full'>
-              <div className='alert shadow-lg'>Sorry this feature is not yet available.  <Link href='/?next=true'><a><button className='btn btn-primary'>Enable Preview mode</button></a></Link></div>
+            <Tabs.Content value='edit' className='h-60'>
+              <div className='alert shadow-lg'><b>Sorry this feature is not yet available.</b><span>Activate pre-released features?<Link href='/?next=true'><a><button className='btn btn-primary btn-sm'>Activate</button></a></Link></span></div>
             </Tabs.Content>
             <Tabs.Content value='explore' className='w-full'>
               <DynamicDenseAreas areas={areas} />

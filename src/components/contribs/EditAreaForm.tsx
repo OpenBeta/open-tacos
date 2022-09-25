@@ -8,6 +8,7 @@ import { MUTATION_UPDATE_AREA, UpdateAreaReturnType, UpdateAreaProps } from '../
 import { ErrorAlert } from './alerts/Alerts'
 import { graphqlClient } from '../../js/graphql/Client'
 import Input from '../ui/form/Input'
+import TextArea from '../ui/form/TextArea'
 import Toast from '../ui/Toast'
 import { AreaType, AreaUpdatableFieldsType } from '../../js/types'
 
@@ -30,7 +31,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
   }, [session])
 
   // Track submit count
-  // react-hook-form has a similar prop but it gets reset when we call the form `reset()`
+  // react-hook-form has a similar prop but it gets reset when we call  `form.reset()`
   const [submitCount, setSubmitCount] = useState(0)
 
   const [updateArea, { error }] = useMutation<{ updateArea: UpdateAreaReturnType }, UpdateAreaProps>(
@@ -42,12 +43,13 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
     }
   )
 
-  const { areaName, shortCode, metadata: { lat, lng }, formRef } = props
-  // Form declaration
+  const { areaName, shortCode, pathTokens, content: { description }, metadata: { lat, lng }, formRef } = props
+
+  // React-hook-form declaration
   const form = useForm<HtmlFormProps>(
     {
       mode: 'onBlur',
-      defaultValues: { areaName, shortCode, latlng: `${lat.toString()},${lng.toString()}` }
+      defaultValues: { areaName, shortCode, latlng: `${lat.toString()},${lng.toString()}`, description }
     })
 
   const { handleSubmit, formState: { isSubmitting, isSubmitSuccessful, dirtyFields }, reset, getValues } = form
@@ -60,8 +62,8 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
       dirtyFields?.areaName === true ? { areaName: getValues('areaName') } : undefined,
       dirtyFields?.shortCode === true ? { shortCode: getValues('shortCode') } : undefined,
       dirtyFields?.isDestination === true ? { isDestination: getValues('isDestination') } : undefined,
-      dirtyFields?.description === true ? { isDestination: getValues('description') } : undefined,
-      dirtyFields?.latlng === true ? { ...{ lat: parseFloat(latStr), lng: parseFloat(lngStr) } } : undefined
+      dirtyFields?.latlng === true ? { ...{ lat: parseFloat(latStr), lng: parseFloat(lngStr) } } : undefined,
+      dirtyFields?.description === true ? { description: getValues('description') } : undefined
     )
 
     await updateArea({
@@ -90,6 +92,8 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
   const MIN2PATTERN = /^[a-zA-Z0-9]*$/
   const LATLNG_PATTERN = /(?<lat>^[-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?))\s*,\s*(?<lng>[-+]?(?:180(?:\.0+)?|(?:1[0-7]\d|[1-9]?\d)(?:\.\d+)?))$/
 
+  const isCountry = pathTokens.length === 1
+
   return (
     <>
       <div className='flex justify-end'>
@@ -109,6 +113,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
             label='Name:'
             name='areaName'
             placeholder='Area name'
+            disabled={isCountry}
             registerOptions={{
               required: 'Name is required.',
               minLength: {
@@ -120,12 +125,12 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
                 message: 'Maxium 120 characters'
               }
             }}
-            className='input input-primary input-bordered input-md'
           />
           <Input
             label='Short code:'
             name='shortCode'
             placeholder='Short code'
+            disabled={isCountry}
             registerOptions={{
               maxLength: 5,
               validate: {
@@ -137,7 +142,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
                 }
               }
             }}
-            className='input input-primary input-bordered input-md uppercase'
+            className='uppercase'
           />
           <Input
             label='Latitude, longtitude:'
@@ -152,7 +157,18 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
                 }
               }
             }}
-            className='input input-primary input-bordered input-md'
+          />
+          <TextArea
+            label='Description:'
+            name='description'
+            placeholder='Area description'
+            registerOptions={{
+              maxLength: {
+                value: 3500,
+                message: 'Maxium 3500 characters'
+              }
+            }}
+            rows={8}
           />
           <button
             className={

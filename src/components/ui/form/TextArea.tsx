@@ -12,9 +12,10 @@ interface InputProps {
   formContext?: UseFormReturn
   disabled?: boolean
   readOnly?: boolean
+  rows?: number
 }
 
-export default function Input ({ label, name, registerOptions, placeholder = '', className = '', classDefault = INPUT_DEFAULT_CSS, helper, formContext, disabled = false, readOnly = false }: InputProps): JSX.Element {
+export default function TextArea ({ label, name, rows = 5, registerOptions, placeholder = '', className = '', classDefault = INPUT_DEFAULT_CSS, helper, formContext, disabled = false, readOnly = false }: InputProps): JSX.Element {
   const context = formContext == null ? useFormContext() : formContext
   const { register, formState: { errors } } = context
   const inputProps = register(name, registerOptions)
@@ -24,16 +25,16 @@ export default function Input ({ label, name, registerOptions, placeholder = '',
       <label className='label' htmlFor={name}>
         <span className='label-text font-semibold'>{label}</span>
       </label>
-      <input
+      <textarea
         id={name}
         {...inputProps}
-        type='text'
         placeholder={placeholder}
         className={clx(classDefault, className)}
         aria-label={label}
         aria-describedby={`${name}-helper`}
         disabled={disabled}
         readOnly={readOnly}
+        rows={rows}
       />
       <label className='label' id={`${name}-helper`} htmlFor={name}>
         {error?.message != null &&
@@ -44,4 +45,4 @@ export default function Input ({ label, name, registerOptions, placeholder = '',
   )
 }
 
-export const INPUT_DEFAULT_CSS = 'input input-primary input-bordered input-md focus:outline-0 focus:ring-1 focus:ring-primary'
+export const INPUT_DEFAULT_CSS = 'textarea textarea-primary textarea-bordered focus:outline-0 focus:ring-1 focus:ring-primary'

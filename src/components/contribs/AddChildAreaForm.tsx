@@ -89,8 +89,7 @@ export default function Form ({ parentUuid, parentName, formRef }: ChildAreaBase
           <Input
             label='Parent:'
             name='parentName'
-            className='input input-bordered input-md'
-            readOnly
+            disabled
           />
           <Input
             label='Name: *'
@@ -107,7 +106,6 @@ export default function Form ({ parentUuid, parentName, formRef }: ChildAreaBase
                 message: 'Maxium 120 characters'
               }
             }}
-            className='input input-primary input-bordered input-md'
           />
           <button
             className={
