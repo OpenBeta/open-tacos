@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import clx from 'classnames'
 import { useMutation } from '@apollo/client'
@@ -23,7 +23,7 @@ interface HtmlFormProps extends AreaUpdatableFieldsType {
 
 export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.Element {
   const session = useSession()
-
+  const toastRef = useRef<any>()
   useEffect(() => {
     if (session.status === 'unauthenticated') {
       void signIn('auth0') // send users to Auth0 login screen
@@ -34,7 +34,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
   // react-hook-form has a similar prop but it gets reset when we call  `form.reset()`
   const [submitCount, setSubmitCount] = useState(0)
 
-  const [updateArea, { error }] = useMutation<{ updateArea: UpdateAreaReturnType }, UpdateAreaProps>(
+  const [updateArea, { error: gqlError }] = useMutation<{ updateArea: UpdateAreaReturnType }, UpdateAreaProps>(
     MUTATION_UPDATE_AREA, {
       client: graphqlClient,
       onCompleted: () => {
@@ -52,7 +52,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
       defaultValues: { areaName, shortCode, latlng: `${lat.toString()},${lng.toString()}`, description }
     })
 
-  const { handleSubmit, formState: { isSubmitting, isSubmitSuccessful, dirtyFields }, reset, getValues } = form
+  const { handleSubmit, formState: { isSubmitting, dirtyFields }, reset, getValues } = form
 
   const submitHandler = async ({ areaName, shortCode, latlng, isDestination, description }: HtmlFormProps): Promise<void> => {
     const { uuid } = props
@@ -66,17 +66,27 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
       dirtyFields?.description === true ? { description: getValues('description') } : undefined
     )
 
-    await updateArea({
-      variables: {
-        uuid,
-        ...doc
-      },
-      context: {
-        headers: {
-          authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
+    const isEmptyDoc = Object.keys(doc).length === 0
+    if (isEmptyDoc) {
+      toastRef?.current?.publish('Nothing to save.  Please make some edit.')
+    } else {
+      const rs = await updateArea({
+        variables: {
+          uuid,
+          ...doc
+        },
+        context: {
+          headers: {
+            authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
+          }
         }
+      })
+      if (rs.errors == null) {
+        const values = Object.assign({}, doc, dirtyFields?.latlng === true ? { latlng } : undefined)
+        reset(values)
+        toastRef?.current?.publish('Area updated successfully.')
       }
-    })
+    }
   }
 
   useEffect(() => {
@@ -96,17 +106,6 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
 
   return (
     <>
-      <div className='flex justify-end'>
-        <button
-          className={
-            clx('btn btn-outline btn-sm',
-              isSubmitting ? 'loading btn-disabled' : ''
-            )
-            }
-          onClick={() => reset()}
-        >Undo changes
-        </button>
-      </div>
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(submitHandler)}>
           <Input
@@ -181,8 +180,8 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
           </button>
         </form>
       </FormProvider>
-      {isSubmitSuccessful && error == null && <Toast title='Area updated successfully' desc='view' />}
-      {error != null && <SaveErrorAlert {...error} />}
+      <Toast ref={toastRef} />
+      {gqlError != null && <SaveErrorAlert {...gqlError} />}
     </>
   )
 }

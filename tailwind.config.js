@@ -49,7 +49,8 @@ module.exports = {
         'base-300': '#4B5563', // gray-600
         'base-200': '#E5E7EB', // gray-200
         'base-100': '#ffffff', // white
-        '--rounded-box': '0.5rem'
+        '--rounded-box': '0.5rem',
+        '--btn-text-case': s => s
       }
     }],
     base: true,
