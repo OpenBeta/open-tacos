@@ -40,8 +40,8 @@ module.exports = {
     themes: [{
       light: {
         ...require('daisyui/src/colors/themes')['[data-theme=light]'],
-        primary: '#111826',
-        'primary-focus': '#1f2933',
+        primary: '#111827',
+        'primary-content': '#ffffff',
         secondary: '#b1c077', // OB brand secondary
         accent: '#F15E40', // OB primary brand
         neutral: '#111826',
@@ -49,7 +49,8 @@ module.exports = {
         'base-300': '#4B5563', // gray-600
         'base-200': '#E5E7EB', // gray-200
         'base-100': '#ffffff', // white
-        '--rounded-box': '0.5rem'
+        '--rounded-box': '0.5rem',
+        '--btn-text-case': s => s
       }
     }],
     base: true,

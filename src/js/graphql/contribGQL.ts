@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { AreaType } from '../types'
+import { AreaType, AreaUpdatableFieldsType } from '../types'
 
 export const MUTATION_ADD_COUNTRY = gql`
 mutation ($isoCode: String!) {
@@ -21,6 +21,22 @@ mutation ($name: String!, $parentUuid: ID, $countryCode: String) {
 export const MUTATION_REMOVE_AREA = gql`
 mutation ($uuid: String!) {
     removeArea(input: { uuid: $uuid } ) {
+      areaName
+      uuid
+    }
+}`
+
+export const MUTATION_UPDATE_AREA = gql`
+mutation ($uuid: String!, $areaName: String, $isDestination: Boolean, $shortCode: String, $lat: Float, $lng: Float, $description: String) {
+    updateArea(input: { 
+      uuid: $uuid,
+      areaName: $areaName,
+      isDestination: $isDestination,
+      shortCode: $shortCode,
+      lat: $lat,
+      lng: $lng,
+      description: $description
+    }) {
       areaName
       uuid
     }
@@ -63,3 +79,9 @@ export interface RemoveAreaProps {
 }
 
 export type RemoveAreaReturnType = Pick<AreaType, 'areaName'|'uuid'>
+
+export interface UpdateAreaProps extends AreaUpdatableFieldsType {
+  uuid: string
+}
+
+export type UpdateAreaReturnType = Pick<AreaType, 'areaName'|'uuid'>

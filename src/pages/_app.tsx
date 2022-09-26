@@ -5,8 +5,12 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { useSession, SessionProvider, signIn } from 'next-auth/react'
+import { ToastProvider, ToastViewport } from '@radix-ui/react-toast'
+import clx from 'classnames'
+
 import '../styles/global.css'
 import '../../public/fonts/fonts.css'
+import useResponsive from '../js/hooks/useResponsive'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
@@ -18,9 +22,11 @@ interface AppPropsWithAuth extends AppProps< { session: any }> {
 }
 
 export default function MyApp ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithAuth): JSX.Element {
+  const { isMobile } = useResponsive()
   return (
-    <SessionProvider session={session}>
-      {
+    <ToastProvider duration={4000}>
+      <SessionProvider session={session}>
+        {
         Component?.auth
           ? (
             <Auth>
@@ -31,7 +37,9 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
             <Component {...pageProps} />
             )
       }
-    </SessionProvider>
+      </SessionProvider>
+      <ToastViewport className={clx('fixed p-4 flex flex-col gap-5 z-50', isMobile ? 'top-0 right-0' : 'bottom-0 right-0')} style={{ zIndex: 99999 }} />
+    </ToastProvider>
   )
 }
 
