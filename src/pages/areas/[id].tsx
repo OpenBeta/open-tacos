@@ -15,7 +15,7 @@ import { getNavBarOffset } from '../../components/Header'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useAreaSeo } from '../../js/hooks/seo'
-import AreaTrigger from '../../components/contribs/AreaTrigger'
+import AreaEditTrigger from '../../components/contribs/AreaEditTrigger'
 
 interface AreaPageProps {
   area: AreaType
@@ -67,7 +67,7 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
       }))
   }, [area])
 
-  const { uuid, areaName, children, metadata, content, pathTokens, ancestors } = area
+  const { areaName, children, metadata, content, pathTokens, ancestors } = area
 
   return (
     <>
@@ -82,18 +82,15 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
             scrollSnapType: 'y mandatory'
           }}
         >
-          <div className='snap-start pt-4'>
+          <div className='pt-4'>
             <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
             <div className='mt-4' />
             <PhotoMontage isHero photoList={enhancedMediaList} />
           </div>
-          {ancestors.length > 1 && // can only delete area below country (length > 1)
-            <AreaTrigger
-              areaName={areaName}
-              areaUuid={uuid}
-              parentUuid={ancestors[ancestors.length - 2]}
-            />}
-          <div className='mt-16 snap-start'>
+          <div className='mt-4 md:flex md:justify-end'>
+            <AreaEditTrigger {...area} />
+          </div>
+          <div className='mt-16'>
             <SidePanel
               onFocus={d => setFocused(d)}
               onSelect={d => setSelected(d)}
@@ -171,6 +168,7 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
       id
       uuid
       areaName
+      shortCode
       ancestors
       pathTokens
       metadata {

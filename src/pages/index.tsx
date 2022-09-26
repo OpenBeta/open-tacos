@@ -7,6 +7,7 @@ import { gql } from '@apollo/client'
 import { groupBy, Dictionary } from 'underscore'
 import { TagIcon, LightBulbIcon, LocationMarkerIcon, PencilIcon, CurrencyDollarIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
+import Link from 'next/link'
 
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
@@ -122,9 +123,8 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, don
                 label='Backers'
               />
             </Tabs.List>
-            <Tabs.Content value='edit' className='w-full'>
-              <div className='alert alert-info shadow-lg'>Sorry this feature is not yet available.</div>
-              {/* <DynamicContribsView /> */}
+            <Tabs.Content value='edit' className='h-60'>
+              <div className='alert shadow-lg'><b>Sorry this feature is not yet available.</b><span>Activate pre-released features?<Link href='/?next=true'><a><button className='btn btn-primary btn-sm'>Activate</button></a></Link></span></div>
             </Tabs.Content>
             <Tabs.Content value='explore' className='w-full'>
               <DynamicDenseAreas areas={areas} />
@@ -279,9 +279,3 @@ const DynamicMap = dynamic(
     await import('../components/home/Map').then(
       module => module.default), { ssr: false }
 )
-
-// const DynamicContribsView = dynamic(
-//   async () =>
-//     await import('../components/contribs/DefaultView').then(
-//       module => module.default), { ssr: false }
-// )

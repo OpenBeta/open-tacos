@@ -3,7 +3,6 @@ import { useForm, FormProvider } from 'react-hook-form'
 import clx from 'classnames'
 import { useMutation } from '@apollo/client'
 import { signIn, useSession } from 'next-auth/react'
-import Link from 'next/link'
 
 import { MUTATION_REMOVE_AREA, RemoveAreaReturnType, RemoveAreaProps } from '../../js/graphql/contribGQL'
 import { graphqlClient } from '../../js/graphql/Client'
@@ -14,14 +13,14 @@ export interface DeleteAreaProps {
   parentUuid: string
   areaUuid: string
   areaName: string
-  closeButtonRef: any
+  onClose: (event: any) => void
 }
 
 interface HtmlFormProps {
   confirmation: string
 }
 
-export default function Form ({ areaUuid, areaName, parentUuid, closeButtonRef }: DeleteAreaProps): JSX.Element {
+export default function Form ({ areaUuid, areaName, parentUuid, onClose }: DeleteAreaProps): JSX.Element {
   const session = useSession()
 
   useEffect(() => {
@@ -101,7 +100,7 @@ export default function Form ({ areaUuid, areaName, parentUuid, closeButtonRef }
         <DeleteSuccessAlert
           {...data.removeArea}
           parentUuid={parentUuid}
-          onClick={() => closeButtonRef?.current?.click()}
+          onClose={onClose}
         />}
       {/* {error != null && <ErrorAlert {...error} />} */}
     </>
@@ -110,13 +109,9 @@ export default function Form ({ areaUuid, areaName, parentUuid, closeButtonRef }
 
 interface DeleteSuccessAlertProps {
   parentUuid: string
-  onClick: () => void
+  onClose: (event: any) => void
 }
-export const DeleteSuccessAlert = ({ areaName, parentUuid, onClick }: DeleteSuccessAlertProps & RemoveAreaReturnType): JSX.Element => (
+export const DeleteSuccessAlert = ({ areaName, parentUuid, onClose }: DeleteSuccessAlertProps & RemoveAreaReturnType): JSX.Element => (
   <SuccessAlert description={<span>Area <b>{areaName}</b> deleted.</span>}>
-    <Link href={`/areas/${parentUuid}`}>
-      <a onClick={onClick}>
-        <AlertAction className='btn btn-primary'>Continue</AlertAction>
-      </a>
-    </Link>
+    <AlertAction className='btn btn-primary' onClick={onClose}>Continue</AlertAction>
   </SuccessAlert>)
