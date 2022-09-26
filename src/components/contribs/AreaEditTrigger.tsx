@@ -27,13 +27,19 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
 
   const parentUuid = ancestors[ancestors.length - 2]
 
-  const closeAndReloadHandler = useCallback(() => {
+  const postCreateUpdateHandler = useCallback(() => {
     setAction('none')
     if (submitCountRef.current > 0) {
       // the user has edited something --> let's reload this page
       router.reload()
     }
   }, [])
+
+  const postDeleteHandler = async (): Promise<void> => {
+    setAction('none')
+    await router.replace('/areas/' + parentUuid)
+    router.reload()
+  }
 
   const isCountry = ancestors.length === 1
   const hasChildren = children?.length > 0 || climbs?.length > 0
@@ -71,28 +77,25 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
         </DropdownContent>
       </DropdownMenu>
 
-      <MobileDialog modal open={action === 'edit'} onOpenChange={closeAndReloadHandler}>
+      <MobileDialog modal open={action === 'edit'} onOpenChange={postCreateUpdateHandler}>
         <DialogContent title='Edit area'>
           <EditAreaForm {...props} formRef={submitCountRef} />
         </DialogContent>
       </MobileDialog>
 
-      <MobileDialog modal open={action === 'add'} onOpenChange={closeAndReloadHandler}>
+      <MobileDialog modal open={action === 'add'} onOpenChange={postCreateUpdateHandler}>
         <DialogContent title='Add new child area'>
           <AddChildAreaForm parentName={areaName} parentUuid={uuid} formRef={submitCountRef} />
         </DialogContent>
       </MobileDialog>
 
-      <MobileDialog modal open={action === 'delete'} onOpenChange={closeAndReloadHandler}>
+      <MobileDialog modal open={action === 'delete'} onOpenChange={postCreateUpdateHandler}>
         <DialogContent title='Delete area'>
           <DeleteAreaForm
             areaName={areaName}
             areaUuid={uuid}
             parentUuid={parentUuid}
-            onClose={() => {
-              setAction('none')
-              void router.replace('/areas/' + parentUuid)
-            }}
+            onClose={postDeleteHandler}
           />
         </DialogContent>
       </MobileDialog>
