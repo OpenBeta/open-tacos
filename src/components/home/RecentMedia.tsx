@@ -1,9 +1,7 @@
-import { useState } from 'react'
-import Link from 'next/link'
 import { Dictionary } from 'underscore'
-
-import PhotoFooter from '../media/PhotoFooter'
 import { MediaBaseTag, MediaType } from '../../js/types'
+import Card from '../ui/Card/Card'
+import { PostBody, PostHeader } from './Post'
 import { ResponsiveImage2 } from '../media/slideshow/ResponsiveImage'
 import { urlResolver } from '../../js/utils'
 export interface RecentTagsProps {
@@ -11,43 +9,51 @@ export interface RecentTagsProps {
   mediaList: MediaType[]
 }
 
-export default function RecentTags ({ tags, mediaList }: RecentTagsProps): JSX.Element {
-  const [hover, setHover] = useState<boolean>(false)
+export default function RecentTags({
+  tags,
+  mediaList
+}: RecentTagsProps): JSX.Element {
   return (
     <>
       <div className='md:px-4 gap-4 columns-xs'>
         {mediaList?.map((image, index) => {
           const _tags = tags[image.filename]
-          if (_tags?.[0].uid == null || _tags?.[0].destination == null) return null
+
+          if (_tags?.[0].uid == null || _tags?.[0].destination == null) {
+            return null
+          }
+
           const destUrl = urlResolver(_tags[0].destType, _tags[0].destination)
           if (destUrl == null) return null
 
-          const { filename, meta } = image
+          const { filename, meta, mtime } = image
           return (
             <div
               key={`${filename}-${index}`}
-              className='hover:brightness-75 rounded-md overflow-hidden mt-0 mb-4 break-inside-avoid-column break-inside-avoid relative block'
+              className='p-2 rounded-md overflow-hidden mt-0 mb-4 break-inside-avoid-column break-inside-avoid relative block'
               onClick={(e) => e.preventDefault()}
-              onMouseOver={() => setHover(true)}
-              onMouseOut={() => setHover(false)}
             >
-              <Link href={destUrl}>
-                <a className='block relative w-full h-full'>
-                  <ResponsiveImage2 mediaUrl={filename} naturalWidth={meta.width} naturalHeight={meta.height} isHero={index < 2} />
-                </a>
-              </Link>
-              <PhotoFooter
-                username={_tags[0].uid}
-                destType={_tags[0].destType}
-                destination={_tags[0].destination}
-                hover={hover}
+              <Card
+                image={
+                  <ResponsiveImage2
+                    mediaUrl={filename}
+                    naturalWidth={meta.width}
+                    naturalHeight={meta.height}
+                    isHero={index < 2}
+                  />
+                }
+                header={<PostHeader username={_tags[0].uid} />}
+                body={
+                  <PostBody destUrl={destUrl} mtime={mtime} title={'Route'} />
+                }
               />
             </div>
           )
         })}
       </div>
       <div className='my-6 w-full text-xs text-secondary text-center'>
-        All photos are copyrighted by their respective owners.  All Rights Reserved.
+        All photos are copyrighted by their respective owners. All Rights
+        Reserved.
       </div>
     </>
   )
