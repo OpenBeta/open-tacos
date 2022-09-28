@@ -173,6 +173,7 @@ Thanks goes to these wonderful people:
     </tr>
     <tr>
       <td align="center"><a href="https://marcosarosas.dev/"><img src="https://avatars.githubusercontent.com/u/58452606?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Marcos A Rosas</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=Theakayuki" title="Code">💻</a></td>
+      <td align="center"><a href="https://www.kellenbusbysoftware.com"><img src="https://avatars.githubusercontent.com/u/5056653?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kellen Busby</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=busbyk" title="Code">💻</a> <a href="#ideas-busbyk" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
   </tbody>
 </table>
