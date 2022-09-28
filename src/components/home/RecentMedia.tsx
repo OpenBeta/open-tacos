@@ -9,7 +9,7 @@ export interface RecentTagsProps {
   mediaList: MediaType[]
 }
 
-export default function RecentTags({
+export default function RecentTags ({
   tags,
   mediaList
 }: RecentTagsProps): JSX.Element {
@@ -44,7 +44,7 @@ export default function RecentTags({
                 }
                 header={<PostHeader username={_tags[0].uid} />}
                 body={
-                  <PostBody destUrl={destUrl} mtime={mtime} title={'Route'} />
+                  <PostBody destUrl={destUrl} mtime={mtime} title='Route' />
                 }
               />
             </div>
