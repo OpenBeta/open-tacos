@@ -86,9 +86,9 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, don
               aria-label='tabs explore'
               className={
                 classNames(
-                  'z-10 mb-6 mx-4 flex gap-x-4 px-4 py-1',
+                  'z-10 mb-3 sm:mb-6 mx-4 flex gap-x-1 sm:gap-x-4 px-2 sm:px-4 py-1 w-full sm:w-auto',
                   activeTab === 'map'
-                    ? 'bg-white ring-2 ring-gray-600 ring-offset-4 rounded'
+                    ? 'bg-white ring-2 ring-gray-600 ring-offset-4 rounded w-[96%] sm:w-auto px-0'
                     : '')
               }
             >
