@@ -7,8 +7,10 @@ import { useSession } from 'next-auth/react'
 import { stagingGraphQLClient } from '../../js/graphql/Client'
 import { Button, ButtonVariant } from '../ui/BaseButton'
 import { MUTATION_IMPORT_TICKS } from '../../js/graphql/fragments'
+import forOwnerOnly from '../../js/auth/forOwnerOnly'
+import { WithOwnerProfile } from '../../js/types/User'
 
-interface Props{
+interface Props extends WithOwnerProfile {
   isButton: boolean
 }
 // regex pattern to validate mountain project input
@@ -22,7 +24,7 @@ const pattern = /^https:\/\/www.mountainproject.com\/user\/\d{9}\/[a-zA-Z-]*/
  * if the isButton prop is false, the component will be rendered as a modal
  * @returns JSX element
  */
-function ImportFromMtnProj ({ isButton }: Props): JSX.Element | null {
+function ImportFromMtnProj ({ isButton }: Props): JSX.Element {
   const [mpUID, setMPUID] = useState('')
   const session = useSession()
   const [show, setShow] = useState<boolean>(false)
@@ -202,4 +204,4 @@ function ImportFromMtnProj ({ isButton }: Props): JSX.Element | null {
   )
 }
 
-export default ImportFromMtnProj
+export default forOwnerOnly<Props>(ImportFromMtnProj)

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import ContentLoader from 'react-content-loader'
-// import ImportFromMtnProj from './ImportFromMtnProj'
+import ImportFromMtnProj from './ImportFromMtnProj'
 
 import { IUserProfile } from '../../js/types/User'
 import EditProfileButton from './EditProfileButton'
@@ -38,7 +38,7 @@ export default function PublicProfile ({ userProfile: initialUserProfile }: Publ
             {nick}
           </div>
           <EditProfileButton ownerProfile={initialUserProfile} />
-          {/* <ImportFromMtnProj isButton /> */}
+          <ImportFromMtnProj ownerProfile={initialUserProfile} isButton />
         </div>
         <div className='mt-6 text-lg font-semibold'>{name}</div>
         <div className=''>{bio}</div>
