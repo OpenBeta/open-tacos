@@ -11,6 +11,16 @@ jest.mock('next-auth/react', () => ({
   useSession: mockedUseSession
 }))
 
+// Mock import ticks button beacause we only care whether the button is there
+// and to avoid mocking GQL dependency.
+const ImportFromMtnProjMock = jest.fn()
+jest.mock('../ImportFromMtnProj', () => {
+  return {
+    __esModule: true,
+    default: ImportFromMtnProjMock
+  }
+})
+
 jest.requireMock('next-auth/react')
 
 const userProfile: IUserProfile = {
@@ -19,7 +29,9 @@ const userProfile: IUserProfile = {
   name: 'cat blue',
   nick: 'cool_nick_2022',
   avatar: 'something',
-  bio: 'totem eatsum'
+  bio: 'totem eatsum',
+  roles: [],
+  loginsCount: 2
 }
 
 let PublicProfile: typeof PublicProfileType
