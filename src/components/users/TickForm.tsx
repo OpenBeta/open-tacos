@@ -140,7 +140,12 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
         }
       })
       .catch((error) => {
-        setErrors([error.message])
+        const err = error.graphQLErrors[0]
+        if (err.extensions.exception.code === 11000 || err.extensions.exception.code === 11001) {
+          setErrors(['Error, duplicate tick found'])
+        } else {
+          setErrors([error.message])
+        }
       })
   }
 
@@ -172,7 +177,6 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
             >
               <Dialog.Panel className='relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-sm sm:w-full sm:p-6'>
                 <div>
-
                   {(errors != null) && errors.length > 0 && errors.map((err, i) => <p className='mt-2 text-ob-primary' key={i}>{err}</p>)}
                   <label htmlFor='date' className='block text-sm font-medium text-gray-700'>
                     Date Climbed
