@@ -211,4 +211,5 @@ export interface TickType{
   attemptType: string
   dateClimbed: string
   grade: string
+  source: string
 }

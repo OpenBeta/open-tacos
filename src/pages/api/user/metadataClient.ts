@@ -33,6 +33,7 @@ export interface Tick {
   attemptType: string
   dateClimbed: string
   grade: string
+  source: string
 }
 
 export interface Auth0UserMetadata {
