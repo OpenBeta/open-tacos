@@ -115,7 +115,7 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
       attemptType: attemptType.name,
       dateClimbed: dateClimbed,
       grade: grade,
-      source: "OB" //source manually set as Open Beta
+      source: 'OB' // source manually set as Open Beta
     }
     // validate the tick object using the YUP schema declared above
     // if it doesn't validate or there is some sort of error, render the errors in the form
