@@ -11,7 +11,7 @@ export const auth0ManagementClient = new Auth0MgmtClient({
   domain: issuer.replace('https://', ''),
   clientId: mgmtClientId,
   clientSecret: mgmtClientSecret,
-  scope: 'read:users update:users'
+  scope: 'read:users update:users create:users create:user_tickets'
 })
 
 export const getAllUsersMetadata = async (legacy: boolean = false): Promise<any[]> => {
