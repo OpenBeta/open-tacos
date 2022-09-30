@@ -13,6 +13,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
       res.status(401).end()
     }
   } catch (e) {
+    console.log('/api/basecamp/users', e)
     res.status(200).redirect(401, '/')
   }
 }
