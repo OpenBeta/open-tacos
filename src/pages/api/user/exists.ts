@@ -13,6 +13,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
   }
 
   try {
+    res.setHeader('Cache-Control', 'no-store')
     const found = await doesUserNameExist((req.query?.nick as string).toLowerCase())
     if (found) {
       res.status(200).json({ found: true })
