@@ -11,7 +11,7 @@ export const auth0ManagementClient = new Auth0MgmtClient({
   domain: issuer.replace('https://', ''),
   clientId: mgmtClientId,
   clientSecret: mgmtClientSecret,
-  scope: 'read:users update:users create:users create:user_tickets'
+  scope: 'read:users update:users create:users'
 })
 
 export const getAllUsersMetadata = async (legacy: boolean = false): Promise<any[]> => {
@@ -24,7 +24,7 @@ export const getAllUsersMetadata = async (legacy: boolean = false): Promise<any[
 }
 
 export const getUserProfileByNick = async (nick: string): Promise<IUserProfile> => {
-  const users = await auth0ManagementClient.getUsers({ q: `user_metadata.nick="${nick}", ` })
+  const users = await auth0ManagementClient.getUsers({ q: `user_metadata.nick="${nick}"` })
 
   if (users == null || (users != null && users.length === 0)) throw new Error('User not found')
 
