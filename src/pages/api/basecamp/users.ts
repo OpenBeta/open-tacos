@@ -7,6 +7,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
   try {
     const session = await getSession({ req })
     if (session?.user.metadata?.roles?.includes('user_admin') ?? false) {
+      res.setHeader('Cache-Control', 'no-store')
       const users = await getAllUsersMetadata(true)
       res.json(users)
     } else {
