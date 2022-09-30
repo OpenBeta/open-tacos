@@ -17,7 +17,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useSwipeable } from 'react-swipeable'
 import FavouriteButton from '../../components/users/FavouriteButton'
 import TickButton from '../../components/users/TickButton'
-import ImportFromMtnProj from '../../components/users/ImportFromMtnProj'
+import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
 
 interface ClimbPageProps {
   climb: Climb
@@ -120,7 +120,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
             </div>
 
             <div className='pl-1'>
-              <ImportFromMtnProj />
+              <ImportFromMtnProj isButton={false} />
             </div>
           </div>
 

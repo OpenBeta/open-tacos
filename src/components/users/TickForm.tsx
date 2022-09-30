@@ -2,11 +2,13 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
+import { TickType } from '../../js/types'
 import { stagingGraphQLClient } from '../../js/graphql/Client'
 import { MUTATION_ADD_TICK } from '../../js/graphql/fragments'
 import ComboBox from '../ui/ComboBox'
 import * as Yup from 'yup'
 
+// validation schema for ticks
 const TickSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Minimum 2 characters')
@@ -45,7 +47,18 @@ const attemptTypes = [
   { id: 4, name: 'Pinkpoint' }
 ]
 
-export default function TickForm ({ open, setOpen, isTicked, climbId, name, grade }): JSX.Element {
+interface Props{
+  open: boolean
+  setOpen: Function
+  setTicks: Function
+  ticks: TickType[]
+  isTicked: Function
+  climbId: string
+  name?: string
+  grade?: string
+}
+
+export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, climbId, name, grade }: Props): JSX.Element {
   const [style, setStyle] = useState(styles[1])
   const [attemptType, setAttemptType] = useState(attemptTypes[1])
   const [dateClimbed, setDateClimbed] = useState<string>(new Date().toISOString().slice(0, 10)) // default is today for dateClimbed
@@ -79,7 +92,8 @@ export default function TickForm ({ open, setOpen, isTicked, climbId, name, grad
       style: style.name,
       attemptType: attemptType.name,
       dateClimbed: dateClimbed,
-      grade: grade
+      grade: grade,
+      source: 'OB' // source manually set as Open Beta
     }
     // validate the tick object using the YUP schema declared above
     // if it doesn't validate or there is some sort of error, render the errors in the form
@@ -91,22 +105,31 @@ export default function TickForm ({ open, setOpen, isTicked, climbId, name, grad
           }
         })
         if (newTick.data !== null) {
+          const { data } = newTick
           // if the tick is persisted in the database
           // change the ticks button to the isticked button
           isTicked(true)
           // todo: add new tick to store whenever that is setup???
           setOpen(false)
           resetInputs()
+          // add tick to the previous state
+          const newTicks = [...ticks, data.addTick]
+          setTicks(newTicks)
         }
       })
       .catch((error) => {
-        setErrors([error.message])
+        const err = error.graphQLErrors[0]
+        if (err.extensions.exception.code === 11000 || err.extensions.exception.code === 11001) {
+          setErrors(['Error, duplicate tick found'])
+        } else {
+          setErrors([error.message])
+        }
       })
   }
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as='div' className='relative z-10' onClose={setOpen}>
+      <Dialog as='div' className='relative z-10' onClose={() => setOpen(false)}>
         <Transition.Child
           as={Fragment}
           enter='ease-out duration-300'
@@ -132,7 +155,6 @@ export default function TickForm ({ open, setOpen, isTicked, climbId, name, grad
             >
               <Dialog.Panel className='relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-sm sm:w-full sm:p-6'>
                 <div>
-
                   {(errors != null) && errors.length > 0 && errors.map((err, i) => <p className='mt-2 text-ob-primary' key={i}>{err}</p>)}
                   <label htmlFor='date' className='block text-sm font-medium text-gray-700'>
                     Date Climbed
