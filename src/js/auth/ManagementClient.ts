@@ -24,13 +24,15 @@ export const getAllUsersMetadata = async (legacy: boolean = false): Promise<any[
 }
 
 export const getUserProfileByNick = async (nick: string): Promise<IUserProfile> => {
-  const users = await auth0ManagementClient.getUsers({ q: `user_metadata.nick="${nick}"` })
+  const users = await auth0ManagementClient.getUsers({ q: `user_metadata.nick="${nick}", ` })
 
   if (users == null || (users != null && users.length === 0)) throw new Error('User not found')
 
-  if (users != null && users.length > 1) throw new Error('Found multiple users for ' + nick)
+  // Remove previous passwordless account
+  const newEmailPasswordUsers = users.filter(u => u.user_id?.startsWith('auth0'))
+  if (newEmailPasswordUsers.length > 1) throw new Error('Found multiple users for ' + nick)
 
-  return reshapeAuth0UserToProfile(users[0])
+  return reshapeAuth0UserToProfile(newEmailPasswordUsers[0])
 }
 
 export const reshapeAuth0UserToProfile = (user: User): IUserProfile => {

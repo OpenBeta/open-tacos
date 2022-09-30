@@ -4,8 +4,6 @@ import withAuth from '../withAuth'
 import { CreateUserData } from 'auth0'
 import { customAlphabet } from 'nanoid'
 import { nolookalikesSafe } from 'nanoid-dictionary'
-import axios from 'axios'
-import { AUTH_CONFIG_SERVER } from '../../../Config'
 
 import { auth0ManagementClient } from '../../../js/auth/ManagementClient'
 
@@ -17,32 +15,27 @@ const handler: NextApiHandler<any> = async (req, res) => {
       if (userId == null) throw new Error('Invalid user id')
 
       const oldUser = await auth0ManagementClient.getUser({ id: userId })
-      if (oldUser.email == null) {
-        throw new Error('Missing email in Auth0.')
+      if (oldUser?.email == null || oldUser?.user_metadata == null) {
+        throw new Error('Missing email/user_metadata in Auth0.')
       }
+
+      const newUserMetadata = Object.assign({}, oldUser.user_metadata)
+      delete newUserMetadata.migrated
+      delete newUserMetadata.migratedDate
 
       const newUserData: CreateUserData = {
         connection: 'Username-Password-Authentication',
         email: oldUser.email,
-        user_metadata: oldUser.user_metadata,
+        user_metadata: newUserMetadata,
         email_verified: true,
         password: safeRandomString()
       }
 
       await auth0ManagementClient.createUser(newUserData)
+      oldUser.user_metadata.migratedDate = new Date(Date.now()).toISOString()
 
-      // const passTicket: PasswordChangeTicketParams = {
-      //   result_url: 'https://openbeta.io',
-      //   user_id: rs.user_id,
-      //   mark_email_as_verified: false
-      // }
-      // const rs2 = await auth0ManagementClient.createPasswordChangeTicket(passTicket)
-      const ok = await sendResetPassword(oldUser.email)
-      if (ok) {
-        res.json({ status: 'OK' })
-      } else {
-        res.status(503).json({ message: 'Error initiating reset email', errorCode: 1 })
-      }
+      await auth0ManagementClient.updateUserMetadata({ id: userId }, oldUser.user_metadata)
+      res.json({ message: 'OK' })
     } else {
       res.status(401).json({ message: 'Migration failed: user not authorized', errorCode: 3 })
     }
@@ -54,27 +47,3 @@ const handler: NextApiHandler<any> = async (req, res) => {
 const safeRandomString = customAlphabet(nolookalikesSafe, 20)
 
 export default withAuth(handler)
-
-const sendResetPassword = async (email: string): Promise<boolean> => {
-  if (AUTH_CONFIG_SERVER == null) throw new Error('Missing Auth config')
-  const { issuer, clientId } = AUTH_CONFIG_SERVER
-
-  const headers = {
-    'content-type': 'application/json'
-  }
-
-  const data = {
-    client_id: clientId,
-    email,
-    connection: 'Username-Password-Authentication'
-  }
-
-  try {
-    const rs = await axios.post(issuer, data, { headers })
-    return rs.status === 200
-  } catch (e) {
-    return false
-  }
-}
-
-// https://dev-fmjyader 'content-type: application/json' --data '{"client_id": "3qGOaKjDAL3LmZmoUR7nm6uWY69aI27z", "email": "nachoserrano@lavabit.com", "connection": "Username-Password-Authentication"}'
