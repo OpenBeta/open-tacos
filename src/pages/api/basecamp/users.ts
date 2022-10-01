@@ -8,7 +8,13 @@ const handler: NextApiHandler<any> = async (req, res) => {
     const session = await getSession({ req })
     if (session?.user.metadata?.roles?.includes('user_admin') ?? false) {
       res.setHeader('Cache-Control', 'no-store')
-      const users = await getAllUsersMetadata(true)
+      const page = req.query?.page ?? 1
+      const type = req.query?.type ?? 'auth0'
+      const params = {
+        page: parseInt(page as string),
+        connectionType: type as ('auth0' | 'email')
+      }
+      const users = await getAllUsersMetadata(params)
       res.json(users)
     } else {
       res.status(401).end()
