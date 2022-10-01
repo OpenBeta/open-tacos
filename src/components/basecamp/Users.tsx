@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { formatDistanceToNow, parseISO } from 'date-fns'
 import { useSession, signIn } from 'next-auth/react'
 import useSWR from 'swr'
 import axios from 'axios'
-import { groupBy } from 'underscore'
+import { UserPage } from 'auth0'
 
 import { userHomeFromUuid } from '../../js/sirv/SirvClient'
 import { IUserMetadata } from '../../js/types/User'
@@ -24,21 +24,11 @@ export default function Users (): JSX.Element {
 
   const isAuthorized = session.status === 'authenticated' && session?.data?.user.metadata?.roles?.includes('user_admin')
 
-  const { data: users, error } = useSWR(isAuthorized ? '/api/basecamp/users' : null, fetcher)
-
-  const groups = groupBy(users, entry => entry.user_id.split('|')[0])
   return (
     <>
       {!isAuthorized && <div>You're not authorized to view this page.</div>}
-      {error != null && (<div>Failed to load.</div>)}
-      {users == null && isAuthorized && <div>Loading...</div>}
-      {users != null && isAuthorized &&
-      (
-        <>
-          <UserTable users={groups.auth0} />
-          <PasswordlessUsers users={groups.email} newList={groups.auth0} />
-        </>
-      )}
+      {isAuthorized && <UserTable />}
+      {isAuthorized && <PasswordlessUsers />}
     </>
 
   )
@@ -46,19 +36,27 @@ export default function Users (): JSX.Element {
 
 const LinkProfile = ({ nick }: {nick: string}): JSX.Element => <Link href={`/u/${nick}`}><a className='link-primary'>{nick}</a></Link>
 
-const exportUsers = (users: any[]): string => {
-  return users.map(u => u.email).join('\n')
+const exportUsers = (users: undefined | any[]): string => {
+  if (users == null) return ''
+  return users?.map(u => u.email).join('\n')
 }
 
 const fetcher = async (url: string): Promise<any> => (await axios.get(url)).data
 
-const UserTable = ({ users }): JSX.Element => {
+const UserTable = (): JSX.Element => {
+  const [currentPage, setPage] = useState(0)
+
+  const { data: userPage, error } = useSWR<UserPage>(`/api/basecamp/users?page=${currentPage}&type=auth0`, fetcher)
+  const totalPages = Math.ceil((userPage?.total ?? 0) / (userPage?.limit ?? 0))
+
   return (
     <div className='my-8'>
-      <h2 className='border-b border-t border-primary'>Users</h2>
-      <Bar layoutClass={Bar.JUSTIFY_RIGHT} paddingX={Bar.PX_DEFAULT_LG} className='w-full'><button onClick={() => saveAsFile(exportUsers(users), 'tacos_users.txt')}>Download</button>
+      <h2 className='border-b border-t border-primary'>Users: {userPage?.total}</h2>
+      <Bar layoutClass={Bar.JUSTIFY_RIGHT} paddingX={Bar.PX_DEFAULT_LG} className='w-full'><button onClick={() => saveAsFile(exportUsers(userPage?.users), 'tacos_users.txt')}>Download</button>
       </Bar>
-
+      {error == null && userPage == null && <div>loading...</div>}
+      {error != null && <div>{error}</div>}
+      <Paginate currentPage={currentPage} totalPages={totalPages} setPage={setPage} />
       <div className='mt-8 w-full grid grid-cols-9 gap-4 justify-items-start items-center text-sm'>
         <div className='' />
         <div className='col-span-2' />
@@ -68,7 +66,7 @@ const UserTable = ({ users }): JSX.Element => {
         <div className='w-full bg-pink-200'>Last Login</div>
         <div className='w-full bg-pink-200'>Counts</div>
         <div className='w-full bg-yellow-200'>Created</div>
-        {users?.map((user, index: number) => <UserRow key={user.user_id} index={index} user={user} />)}
+        {userPage?.users?.map((user, index: number) => <UserRow key={user.user_id} index={index} user={user} />)}
       </div>
     </div>
   )
@@ -100,35 +98,64 @@ const UserRow = ({ index, user }: UserRowProps): JSX.Element => {
   )
 }
 
-const PasswordlessUsers = ({ users, newList }): JSX.Element => {
+const PasswordlessUsers = (): JSX.Element => {
+  const [currentPage, setPage] = useState(0)
+  const { data: userPage } = useSWR<UserPage>(`/api/basecamp/users?page=${currentPage}&type=email`, fetcher)
+
   const onClickHandler = async (userId: string): Promise<void> => {
     await axios.get(`/api/basecamp/migrate?id=${userId}`)
   }
+  const totalPages = Math.ceil((userPage?.total ?? 0) / (userPage?.limit ?? 0))
   return (
     <div className='mt-8 w-full'>
-      <h2 className='border-b border-t border-primary'>Passwordless users</h2>
+      <h2 className='border-b border-t border-primary'>Passwordless users: {userPage?.total}</h2>
+      <Paginate currentPage={currentPage} totalPages={totalPages} setPage={setPage} />
       <div className='mt-8 w-full grid grid-cols-4 gap-4 justify-items-start items-center text-sm'>
-        {users?.map((user, index: number) => <UserRowEmail key={user.user_id} index={index} user={user} newList={newList} onClick={onClickHandler} />)}
+        {userPage?.users?.map((user, index: number) => <UserRowEmail key={user.user_id} index={index} user={user} onClick={onClickHandler} />)}
       </div>
 
     </div>
   )
 }
-interface UserRowEmailProps extends UserRowProps {
-  onClick: (userId: string) => void
-  newList: any[]
+
+interface PaginateProps {
+  totalPages: number
+  currentPage: number
+  setPage: React.Dispatch<React.SetStateAction<number>>
+}
+const Paginate = ({ totalPages, currentPage, setPage }: PaginateProps): JSX.Element => {
+  return (
+    <div className='flex items-center w-full'>
+      <div className='flex items-center gap-x-2'>
+        <button
+          disabled={currentPage === 0} onClick={() => setPage(prev => prev - 1)}
+          className='btn btn-xs btn-outline'
+        >Prev
+        </button>
+        <div>{currentPage + 1} of {totalPages}</div>
+        <button
+          disabled={currentPage === totalPages - 1} onClick={() => setPage(prev => prev + 1)}
+          className='btn btn-xs btn-outline'
+        >Next
+        </button>
+      </div>
+    </div>
+  )
 }
 
-const UserRowEmail = ({ index, user, newList, onClick }: UserRowEmailProps): JSX.Element => {
+interface UserRowEmailProps extends UserRowProps {
+  onClick: (userId: string) => void
+}
+
+const UserRowEmail = ({ index, user, onClick }: UserRowEmailProps): JSX.Element => {
   // eslint-disable-next-line
   const { user_metadata, logins_count, user_id: userId, email } = user
   const { uuid } = user_metadata as IUserMetadata ?? { uuid: null }
 
-  const migrated = newList.some(u => u.email === email)
   return (
     <>
       <div>
-        {index + 1} <button disabled={migrated} className='btn btn-primary btn-solid btn-xs' onClick={() => onClick(userId)}>migrate</button>
+        {index + 1} <button className='btn btn-primary btn-solid btn-xs' onClick={() => onClick(userId)}>migrate</button>
       </div>
       <div className=''>{user.email}</div>
       <div className=''>
