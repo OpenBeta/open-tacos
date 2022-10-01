@@ -225,6 +225,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       members(role: BACKER) {
         nodes {
           account {
+            id
             name
             imageUrl
           }
