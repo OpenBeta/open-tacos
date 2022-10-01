@@ -7,7 +7,7 @@ export interface FinancialBackersProps {
   totalRaised: string
 }
 export default function FinancialBackers ({ donors, totalRaised }: FinancialBackersProps): JSX.Element {
-  const uniqDonors = uniq(donors, (donor) => donor.account.name) // Using the underscore library to get unique donors, based on their name
+  const uniqDonors = uniq(donors, (donor) => donor.account.id) // Using the underscore library to get unique donors, based on their name
   return (
     <div className='text-primary text-center pb-10'>
       <h3>Thanks to our financial backers we've raised ${totalRaised}</h3>
