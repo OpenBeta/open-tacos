@@ -285,6 +285,15 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "Balastrong",
+      "name": "Leonardo Montini",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7253929?v=4",
+      "profile": "https://www.youtube.com/c/DevLeonardo",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
