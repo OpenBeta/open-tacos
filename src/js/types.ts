@@ -276,6 +276,7 @@ export interface FinancialBackersResponseType {
 
 export interface FinancialBackerAccountType {
   account: {
+    id: string
     name: string
     imageUrl: string
   }
