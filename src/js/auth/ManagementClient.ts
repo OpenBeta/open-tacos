@@ -1,5 +1,5 @@
 import { ManagementClient as Auth0MgmtClient } from 'auth0'
-import type { User } from 'auth0'
+import type { User, UserPage } from 'auth0'
 import { AUTH_CONFIG_SERVER } from '../../Config'
 import { IWritableUserMetadata, IUserProfile } from '../types/User'
 
@@ -14,13 +14,36 @@ export const auth0ManagementClient = new Auth0MgmtClient({
   scope: 'read:users update:users create:users'
 })
 
-export const getAllUsersMetadata = async (legacy: boolean = false): Promise<any[]> => {
+interface GetAllUserParams {
+  page: number
+  connectionType: string
+  legacy?: boolean
+}
+
+export const getAllUsersMetadata = async ({
+  page = 1,
+  connectionType = 'auth0',
+  legacy = false
+}: GetAllUserParams): Promise<UserPage | null> => {
   let q = 'user_metadata.uuid=*'
   if (legacy) {
     q = ''
   }
-  const users = await auth0ManagementClient.getUsers({ q })
-  return users
+
+  if (['email', 'auth0'].includes(connectionType)) {
+    q = q + ` AND user_id=${connectionType}*`
+  } else {
+    throw new Error('Invalid type.  Expect auth0 or email.')
+  }
+
+  const userPage = await auth0ManagementClient.getUsers({
+    q,
+    page,
+    per_page: 50,
+    search_engine: 'v3',
+    include_totals: true
+  })
+  return userPage
 }
 
 export const getUserProfileByNick = async (nick: string): Promise<IUserProfile> => {
@@ -28,7 +51,7 @@ export const getUserProfileByNick = async (nick: string): Promise<IUserProfile> 
 
   if (users == null || (users != null && users.length === 0)) throw new Error('User not found')
 
-  // Remove previous passwordless account
+  //  previous passwordless account
   const newEmailPasswordUsers = users.filter(u => u.user_id?.startsWith('auth0'))
   if (newEmailPasswordUsers.length > 1) throw new Error('Found multiple users for ' + nick)
 
