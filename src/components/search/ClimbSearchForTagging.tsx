@@ -1,4 +1,3 @@
-import { render as reactRender } from 'react-dom'
 import { TypesenseDocumentType } from '../../js/types'
 
 import { Autocomplete } from './Autocomplete'
@@ -23,15 +22,10 @@ export default function ClimbSearchForTagging ({ isMobile = true, placeholder = 
       placeholder={placeholder}
       forceFocus
       getSources={async ({ query }) => {
-        return await Promise.all([await TypesenseClimbNameSource(query, onSelect)])
+        return [await TypesenseClimbNameSource(query, onSelect)]
       }}
       classNames={CUSTOM_CLASSES}
       containerClassname={className}
-      render={({ elements }, root) => {
-        const { climbsForTagging } = elements
-        reactRender(
-          <div>{climbsForTagging}</div>, root)
-      }}
     />
   )
 }
