@@ -3,17 +3,17 @@ import { getScoreForSort, isVScale, GradeScales } from '@openbeta/sandbag'
 /**
  * Convert grade to band index
  * @param grade yds or v scale
- * @param scale GradeScales.VScale | GradeScales.Yds
+ * @param scale GradeScales.VSCALE | GradeScales.YDS
  * @returns GradeBand
  */
 export const getBandIndex = (grade: string): number => {
   const isV = isVScale(grade)
 
   if (isV) {
-    const score = getScoreForSort(grade, GradeScales.VScale)
+    const score = getScoreForSort(grade, GradeScales.VSCALE)
     return vScoreToBandIndex(score)
   }
-  const score = getScoreForSort(grade, GradeScales.Yds)
+  const score = getScoreForSort(grade, GradeScales.YDS)
   return freeScoreToBandIndex(score)
 }
 
