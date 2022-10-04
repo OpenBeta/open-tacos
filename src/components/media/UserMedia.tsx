@@ -94,8 +94,8 @@ export default function UserMedia ({
         </a>
       </Link>
 
-      {tagList?.length > 0 && (
-        <figcaption className='absolute inset-x-0 bottom-0 flex flex-col justify-end'>
+      {/* <figcaption className='absolute inset-x-0 bottom-0 flex'>
+        {tagList?.length > 0 && (
           <TagList
             hovered={hovered}
             list={tagList}
@@ -103,8 +103,9 @@ export default function UserMedia ({
             isAuthorized={isAuthorized}
             className='px-2'
           />
-        </figcaption>
-      )}
+        )}
+        <AddTagTrigger key={imageInfo.mediaId} id={imageInfo.mediaId} imageInfo={imageInfo} />
+      </figcaption> */}
 
       {tagList?.length === 0 && isAuthorized && (
         <div className='absolute top-0 right-0 p-1.5'>

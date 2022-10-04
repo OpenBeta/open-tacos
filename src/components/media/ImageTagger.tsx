@@ -34,6 +34,12 @@ export default function ImageTagger ({ isMobile = false, isOpen, mouseXY, imageI
       options: {
         padding: 15 // not working
       }
+    },
+    {
+      name: 'preventOverflow',
+      options: {
+        rootBoundary: 'document'
+      }
     }],
     strategy: 'fixed'
   })

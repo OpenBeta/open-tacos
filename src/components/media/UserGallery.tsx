@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { basename } from 'path'
 
 import UserMedia from './UserMedia'
+import MobileMediaCard from './MobileMediaCard'
 import ImageTagger from './ImageTagger'
 import useImageTagHelper from './useImageTagHelper'
 import { MediaTagWithClimb, MediaType, IUserProfile } from '../../js/types'
@@ -16,6 +17,8 @@ import { WithPermission } from '../../js/types/User'
 import Bar from '../ui/Bar'
 import Toggle from '../ui/Toggle'
 import { useResponsive } from '../../js/hooks'
+import { AddTagTrigger } from './AddTag'
+import TagList from './TagList'
 
 export interface UserGalleryProps {
   loaded: boolean
@@ -38,6 +41,7 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
   const [tagModeOn, setTagMode] = useState<boolean>(false) // Bulk tagging
 
   const imageHelper = useImageTagHelper()
+  const { isMobile } = useResponsive()
 
   const { onClick } = imageHelper
 
@@ -107,6 +111,7 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
    * whether bulk tagging is on/off.
    */
   const imageOnClickHandler = useCallback(async (props: any): Promise<void> => {
+    if (isMobile) return
     if (stateRef?.current ?? false) {
       onClick(props) // bulk tagging
     } else {
@@ -132,8 +137,6 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
     setSlideNumber(newIndex)
   }
 
-  const { isMobile } = useResponsive()
-
   // When logged-in user has fewer than 3 photos,
   // create empty slots for the call-to-action upload component.
   const placeholders = imageList?.length < 3 && isAuthorized
@@ -150,12 +153,24 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
           tagModeOn={tagModeOn}
         />
       </div>
-      <div className={`block w-full xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
+      <div className='block w-full xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4'>
         {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
         {imageList?.map((imageInfo, index) => {
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []
+          const key = `${imageInfo.mediaId}${index}`
+          if (isMobile) {
+            return (
+              <MobileMediaCard
+                key={key}
+                tagList={tags}
+                imageInfo={imageInfo}
+                onTagDeleted={onDeletedHandler}
+                isAuthorized={isAuthorized && (stateRef?.current ?? false)}
+              />
+            )
+          }
           return (
-            <div className='relative' key={`${imageInfo.mediaId}${index}`}>
+            <div className='relative' key={key}>
               <UserMedia
                 uid={uid}
                 index={index}
@@ -166,7 +181,19 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
                 isAuthorized={isAuthorized && (stateRef?.current ?? false)}
                 useClassicATag
               />
-              {tagModeOn && imageList?.length > 0 && isAuthorized && isMobile
+              <div className='absolute inset-x-0 bottom-0 flex items-center hover:bg-base-200 hover:bg-opacity-90'>
+                {tags?.length > 0 && (
+                  <TagList
+                    hovered={false}
+                    list={tags}
+                    onDeleted={onDeletedHandler}
+                    isAuthorized={isAuthorized && (stateRef?.current ?? false)}
+                    className='px-2'
+                  />
+                )}
+                <AddTagTrigger key={imageInfo.mediaId} id={imageInfo.mediaId} imageInfo={imageInfo} />
+              </div>
+              {/* {tagModeOn && imageList?.length > 0 && isAuthorized && isMobile
                 ? (
                   <div className='absolute top-12'>
                     <ImageTagger
@@ -177,7 +204,7 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
                     />
                   </div>
                   )
-                : null}
+                : null} */}
             </div>
           )
         })}

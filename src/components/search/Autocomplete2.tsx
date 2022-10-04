@@ -4,36 +4,23 @@ import { createRoot } from 'react-dom/client'
 import { autocomplete, AutocompleteOptions, AutocompleteApi } from '@algolia/autocomplete-js'
 import '@algolia/autocomplete-theme-classic'
 
-import clz from 'classnames'
-
 interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
   queryParams?: {
     text: string
     data: any
   }
-  isMobile: boolean
-  containerClassname?: string
-  forceFocus?: boolean
+  label: string | JSX.Element
 }
 /**
  * Autocomplete widget based on Algolia Autocomplete
  * @param props
  * @returns
  */
-export const Autocomplete = ({ queryParams, forceFocus = false, classNames, ...otherProps }: AutocompleteProps): JSX.Element => {
+export const Autocomplete2 = ({ label, queryParams, classNames, ...otherProps }: AutocompleteProps): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
   const panelRootRef = useRef<any>(null)
   const rootRef = useRef<HTMLElement|null>(null)
   let search: AutocompleteApi<any> | null = null
-
-  useEffect(() => {
-    if (forceFocus) {
-      setTimeout(() => {
-        const element = document.querySelectorAll(`.${otherProps.id as string} .aa-Input`)[0] as HTMLInputElement
-        element?.focus()
-      }, 200)
-    }
-  })
 
   useEffect(() => {
     if (containerRef.current == null) {
@@ -41,11 +28,12 @@ export const Autocomplete = ({ queryParams, forceFocus = false, classNames, ...o
     }
 
     search = autocomplete({
+      openOnFocus: true,
       classNames: { ...AA_DEFAULT_CLASSES, ...classNames },
       defaultActiveItemId: 0,
       container: containerRef.current,
       renderer: { createElement, Fragment, render: () => {} },
-      detachedMediaQuery: (otherProps.isMobile) ? '' : 'none',
+      detachedMediaQuery: '',
       render ({ children, elements }, root) {
         if ((panelRootRef.current == null) || rootRef.current !== root) {
           rootRef.current = root
@@ -63,20 +51,16 @@ export const Autocomplete = ({ queryParams, forceFocus = false, classNames, ...o
     }
   }, [otherProps])
 
+  const onClickHandler = (): void => {
+    if (search != null) {
+      search.setIsOpen(true)
+    }
+  }
+
   return (
-    <div
-      className={
-        clz(
-          otherProps.isMobile ? '' : 'z-50 mx-auto',
-          otherProps?.containerClassname)
-      }
-      ref={containerRef}
-      onClick={() => {
-        if (search != null && queryParams?.text != null) {
-          search.setQuery(queryParams.text)
-        }
-      }}
-    />
+    <div ref={containerRef}>
+      <div onClick={onClickHandler}>{label}</div>
+    </div>
   )
 }
 

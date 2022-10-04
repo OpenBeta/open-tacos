@@ -20,31 +20,6 @@ body {
   @apply h-auto mt-1 !important;
 }
 
-/*
-  When detatched queries are enabled, the search input is replaced with a button
-  that triggers a modal. These styles are for the topmost css class in that button.
-*/
-
-/* .aa-DetachedFormContainer {
-  @apply bg-slate-800 !important;
-} */
-
-/* .aa-DetachedSearchButton {
-  @apply border border-gray-300 bg-inherit rounded-full p-1 !important;
-} */
-
-/* .aa-DetachedCancelButton{
-  @apply bg-white rounded-lg !important;
-} */
-
-/* .aa-DetachedSearchButton .aa-DetachedSearchButtonIcon {
-  @apply -ml-1 border-0 stroke-ob-primary stroke-2 !important;
-} */
-
-/* .aa-DetachedSearchButtonPlaceholder {
-  @apply text-base text-tertiary-contrast mr-3;
-} */
-
 .xsearch-mobile-trigger-btn {
   @apply input input-bordered input-sm !important;
 }
@@ -172,20 +147,17 @@ body {
   @apply text-base-content !important;
 }
 
-/* For climbing area search */
+/**
 
-/* .area-only-search {
-  @apply rounded w-full !important;
+**/
+.aa-hidden-mobile-trigger-btn {
+  @apply hidden !important;
 }
 
-.area-only-search-mobile-trigger-btn {
-  @apply input input-bordered input-sm !important;
+.aa-custom-mobile-placeholder {
+  @apply text-white !important;
+}
+.aa-custom-mobile-trigger-btn-icon {
+  @apply hidden !important;
 }
 
-.area-only-search-mobile-trigger-btn-icon {
-  @apply -ml-3.5 stroke-gray-400 stroke-2 !important;
-}
-
-.area-only-search-mobile-placeholder {
-  @apply text-base-300 text-sm text-ellipsis overflow-hidden !important;
-} */
