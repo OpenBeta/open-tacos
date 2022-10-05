@@ -82,7 +82,7 @@ export default function TickButton ({ climbId, areaId, name, grade }: Props): JS
         </button>}
       {isTicked && <IsTicked loading={loading} onClick={() => setViewTicks(true)} />}
       <TickForm open={open} setTicks={setTicks} ticks={ticks} setOpen={setOpen} isTicked={setIsTicked} climbId={climbId} name={name} grade={grade} />
-      <TicksModal open={viewTicks} setOpen={setViewTicks} climbName={name} ticks={ticks} setOpenForm={setOpen} />
+      <TicksModal open={viewTicks} setOpen={setViewTicks} climbName={name} ticks={ticks} setTicks={setTicks} setOpenForm={setOpen} />
     </>
   )
 }

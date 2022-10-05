@@ -2,7 +2,7 @@ import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import TickCard from './TickCard'
 
-export default function TicksModal ({ open, setOpen, setOpenForm, climbName, ticks }): JSX.Element {
+export default function TicksModal ({ open, setOpen, setTicks, setOpenForm, climbName, ticks }): JSX.Element {
   const cancelButtonRef = useRef(null)
 
   function openFormCloseModal (): void {
@@ -43,7 +43,7 @@ export default function TicksModal ({ open, setOpen, setOpenForm, climbName, tic
                     </Dialog.Title>
                     <div className='mt-2 max-h-96 overflow-auto'>
                       {ticks?.map((tick, idx) => {
-                        return <TickCard key={idx} dateClimbed={tick.dateClimbed} notes={tick.notes} style={tick.style} />
+                        return <TickCard key={idx} tickId={tick._id} setTicks={setTicks} ticks={ticks} dateClimbed={tick.dateClimbed} notes={tick.notes} style={tick.style} />
                       })}
                     </div>
                   </div>
