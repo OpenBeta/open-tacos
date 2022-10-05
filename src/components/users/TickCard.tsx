@@ -26,8 +26,8 @@ export default function TickCard ({ tickId, ticks, setTicks, dateClimbed, notes,
         _id: tickId
       }
     })
-    if (data.deleteTick.removed) {
-      setTicks(ticks.filter((tick => tick._id !== tickId)))
+    if (data?.deleteTick?.removed === true) {
+      setTicks(ticks.filter(tick => tick._id !== tickId))
     }
   }
   return (
