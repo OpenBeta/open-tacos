@@ -175,6 +175,7 @@ Thanks goes to these wonderful people:
       <td align="center"><a href="https://marcosarosas.dev/"><img src="https://avatars.githubusercontent.com/u/58452606?v=4?s=100" width="100px;" alt="Marcos A Rosas"/><br /><sub><b>Marcos A Rosas</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=Theakayuki" title="Code">💻</a></td>
       <td align="center"><a href="https://www.kellenbusbysoftware.com"><img src="https://avatars.githubusercontent.com/u/5056653?v=4?s=100" width="100px;" alt="Kellen Busby"/><br /><sub><b>Kellen Busby</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=busbyk" title="Code">💻</a> <a href="#ideas-busbyk" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center"><a href="https://www.youtube.com/c/DevLeonardo"><img src="https://avatars.githubusercontent.com/u/7253929?v=4?s=100" width="100px;" alt="Leonardo Montini"/><br /><sub><b>Leonardo Montini</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=Balastrong" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/matth3wdsouza"><img src="https://avatars.githubusercontent.com/u/64600706?v=4?s=100" width="100px;" alt="Matthew D'Souza"/><br /><sub><b>Matthew D'Souza</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=matth3wdsouza" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
