@@ -13,7 +13,7 @@ This issue tracker is **ONLY** used for reporting bugs!
 
 ## Steps to Reproduce
 <!--- Provide a link to a live example, or an unambiguous set of steps to -->
-<!--- reproduce this bug. Include code to reproduce, if relevant -->
+<!--- reproduce this bug. Include a screen shot if it's easier. -->
 1.
 2.
 3.
