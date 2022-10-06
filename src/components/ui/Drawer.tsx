@@ -17,10 +17,10 @@ const Drawer = ({ areas, className = '' }: DrawerProps): JSX.Element => {
       <GradeGraph
         grades={a.aggregate.byGrade.filter(g => {
           return !isVScale(g.label) // eslint-disable-line 
-        })} total={a.totalClimbs} bucketType={GradeScales.Yds}
+        })} total={a.totalClimbs} bucketType={GradeScales.YDS}
       />
       <GradeGraph
-        grades={a.aggregate.byGrade.filter((g): boolean => isVScale(g.label))} total={a.totalClimbs} bucketType={GradeScales.VScale}
+        grades={a.aggregate.byGrade.filter((g): boolean => isVScale(g.label))} total={a.totalClimbs} bucketType={GradeScales.VSCALE}
       />
     </div>
   ))

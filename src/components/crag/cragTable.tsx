@@ -39,8 +39,8 @@ function sortRoutes (routes: Climb[], sortType: CragSortType): Climb[] {
     case 'grade': {
       return routes.sort(
         (a, b) =>
-          getScoreForSort(a.yds, GradeScales.Yds) -
-          getScoreForSort(b.yds, GradeScales.Yds)
+          getScoreForSort(a.yds, GradeScales.YDS) -
+          getScoreForSort(b.yds, GradeScales.YDS)
       )
     }
     default:
