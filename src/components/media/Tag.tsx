@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import Link from 'next/link'
 import { XIcon } from '@heroicons/react/outline'
 

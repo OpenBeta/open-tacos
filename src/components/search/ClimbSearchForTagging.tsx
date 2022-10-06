@@ -1,5 +1,5 @@
 import { AutocompleteClassNames } from '@algolia/autocomplete-js'
-import { PlusIcon, TagIcon } from '@heroicons/react/solid'
+import { TagIcon } from '@heroicons/react/solid'
 import { TypesenseDocumentType } from '../../js/types'
 
 import { Autocomplete2 } from './Autocomplete2'
@@ -13,8 +13,7 @@ interface XSearchProps {
 }
 
 /**
- * Extended search widget
- * @param XSearchProps
+ * Climb name search widget
  */
 export default function ClimbSearchForTagging ({ onSelect, label = <TagIconLabel /> }: XSearchProps): JSX.Element {
   const isCustomTrigger = label != null

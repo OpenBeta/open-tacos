@@ -1,35 +1,37 @@
-import { useState } from 'react'
 import { useMutation } from '@apollo/client'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import { MUTATION_ADD_CLIMB_TAG_TO_MEDIA } from '../../js/graphql/fragments'
 import ClimbSearchForTagging from '../search/ClimbSearchForTagging'
 import { MediaType } from '../../js/types'
+import { actions } from '../../js/stores'
 
 interface ImageTaggerProps {
-  id?: string
   imageInfo: MediaType
   onTagAdded?: (data: any) => void
-  className?: string
-  isCustomTrigger?: boolean
-  placeholder?: string
+  label?: JSX.Element
 }
 
-export default function AddTag ({ id, isCustomTrigger = false, placeholder = 'Search for climb', imageInfo, onTagAdded, className = '' }: ImageTaggerProps): JSX.Element | null {
+/**
+ * Allow users to tag an image, ie associate a climb with an image.  Tag data will be recorded in the backend.
+ * @param label A button that opens the climb search
+ * @param imageInfo image info object
+ * @param onTagAdded an optional callback invoked after a tag added to the backend
+ */
+export default function AddTag ({ imageInfo, onTagAdded, label }: ImageTaggerProps): JSX.Element | null {
+  const addTagToLocalStore = async (data: any): Promise<void> => await actions.media.addTag(data)
+
   const [tagPhotoWithClimb] = useMutation(
     MUTATION_ADD_CLIMB_TAG_TO_MEDIA, {
       client: graphqlClient,
       errorPolicy: 'none',
-      onCompleted: onTagAdded
+      onCompleted: addTagToLocalStore
     }
   )
 
   return (
     <ClimbSearchForTagging
-      className={className}
-      isMobile
-      isCustomTrigger={isCustomTrigger}
-      placeholder={placeholder}
+      label={label}
       onSelect={async (item) => {
         const { climbUUID } = item
         try {
@@ -49,24 +51,3 @@ export default function AddTag ({ id, isCustomTrigger = false, placeholder = 'Se
     />
   )
 }
-
-// const ClimbSuggestion = memo(ClimbSearchForTagging)
-
-interface AddTagTriggerProps {
-  id: string
-  imageInfo: MediaType
-  onTagAdded?: (data: any) => void
-  className?: string
-}
-
-export const AddTagTrigger = ({ id, imageInfo, onTagAdded }: AddTagTriggerProps): JSX.Element => {
-  const [open, setOpen] = useState(false)
-  return (
-    <div>
-      {/* <button className='badge badge-outline' onClick={() => setOpen(true)}>+ Add tag </button> */}
-      <AddTag id={id} imageInfo={imageInfo} isCustomTrigger placeholder='+ Add tag' />
-    </div>
-  )
-}
-
-// <button className='btn btn-sm gap-2'><PlusIcon className='w-5 h-5' /></button>

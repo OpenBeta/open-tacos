@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import ContentLoader from 'react-content-loader'
 import classNames from 'classnames'
 import { basename } from 'path'
@@ -36,7 +36,7 @@ export default function UserMedia ({
   isAuthorized = false,
   useClassicATag = false
 }: UserMediaProps): JSX.Element {
-  const [hovered, setHover] = useState(false)
+  // const [hovered, setHover] = useState(false)
 
   const onClickHandler = useCallback((event) => {
     if (onClick != null) {
@@ -62,8 +62,6 @@ export default function UserMedia ({
           ? 'w-[300px] h-[300px] hover:brightness-75'
           : 'max-w-screen-lg py-12'
       )}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
     >
       <Link href={shareableUrl}>
         <a onClick={onClickHandler}>
@@ -92,19 +90,6 @@ export default function UserMedia ({
               )}
         </a>
       </Link>
-
-      {/* <figcaption className='absolute inset-x-0 bottom-0 flex'>
-        {tagList?.length > 0 && (
-          <TagList
-            hovered={hovered}
-            list={tagList}
-            onDeleted={onTagDeleted}
-            isAuthorized={isAuthorized}
-            className='px-2'
-          />
-        )}
-        <AddTagTrigger key={imageInfo.mediaId} id={imageInfo.mediaId} imageInfo={imageInfo} />
-      </figcaption> */}
 
       {tagList?.length === 0 && isAuthorized && (
         <div className='absolute top-0 right-0 p-1.5'>

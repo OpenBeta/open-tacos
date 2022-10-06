@@ -8,14 +8,14 @@ import { MediaTagWithClimb } from '../../js/types'
 import Tag from './Tag'
 
 interface TagsProps {
-  hovered: boolean
   list: MediaTagWithClimb[]
-  onDeleted: (props?: any) => void
+  onDeleted?: (props?: any) => void
   isAuthorized?: boolean
   className?: string
+  children?: JSX.Element
 }
 
-export default function TagList ({ hovered, list, onDeleted, isAuthorized = false, className = '' }: TagsProps): JSX.Element {
+export default function TagList ({ list, onDeleted, isAuthorized = false, children, className = '' }: TagsProps): JSX.Element {
   const [removeTag] = useMutation(
     MUTATION_REMOVE_MEDIA_TAG, {
       client: graphqlClient,
@@ -34,7 +34,7 @@ export default function TagList ({ hovered, list, onDeleted, isAuthorized = fals
   return (
     <div className={
           classNames(
-            'text-xs inline-flex flex-wrap justify-start space-x-2 space-y-0.5 bg-white ',
+            'text-xs inline-flex flex-wrap justify-start items-center bg-white gap-2 ',
             className
           )
           }
@@ -46,6 +46,7 @@ export default function TagList ({ hovered, list, onDeleted, isAuthorized = fals
           onDelete={onDeleteHandler}
           isAuthorized={isAuthorized}
         />)}
+      {children}
     </div>
   )
 }

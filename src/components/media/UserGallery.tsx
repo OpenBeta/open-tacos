@@ -17,7 +17,7 @@ import { WithPermission } from '../../js/types/User'
 import Bar from '../ui/Bar'
 import Toggle from '../ui/Toggle'
 import { useResponsive } from '../../js/hooks'
-import { AddTagTrigger } from './AddTag'
+// import { AddTagTrigger } from './AddTag'
 import TagList from './TagList'
 
 export interface UserGalleryProps {
@@ -164,7 +164,6 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
                 key={key}
                 tagList={tags}
                 imageInfo={imageInfo}
-                onTagDeleted={onDeletedHandler}
                 isAuthorized={isAuthorized && (stateRef?.current ?? false)}
               />
             )
@@ -184,14 +183,13 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
               <div className='absolute inset-x-0 bottom-0 flex items-center hover:bg-base-200 hover:bg-opacity-90'>
                 {tags?.length > 0 && (
                   <TagList
-                    hovered={false}
                     list={tags}
                     onDeleted={onDeletedHandler}
                     isAuthorized={isAuthorized && (stateRef?.current ?? false)}
                     className='px-2'
                   />
                 )}
-                <AddTagTrigger key={imageInfo.mediaId} id={imageInfo.mediaId} imageInfo={imageInfo} />
+                {/* <AddTagTrigger key={imageInfo.mediaId} id={imageInfo.mediaId} imageInfo={imageInfo} /> */}
               </div>
               {/* {tagModeOn && imageList?.length > 0 && isAuthorized && isMobile
                 ? (
