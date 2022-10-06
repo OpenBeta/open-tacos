@@ -66,7 +66,8 @@ const handler: NextApiHandler<any> = async (req, res) => {
             style: tick.Style === '' ? 'N/A' : tick.Style,
             attemptType: tick.Style === '' ? 'N/A' : tick.Style,
             dateClimbed: tick.Date,
-            grade: tick.Rating
+            grade: tick.Rating,
+            source: 'MP'
           }
           tickCollection.push(newTick)
         })

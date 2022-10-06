@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { getTicksByUserAndClimb } from '../../js/graphql/api'
 import { TickType } from '../../js/types'
 import TickForm from './TickForm'
+import TicksModal from './TicksModal'
 
 interface Props {
   climbId: string
@@ -27,14 +28,14 @@ function IsTicked ({ loading, onClick }): JSX.Element {
 export default function TickButton ({ climbId, areaId, name, grade }: Props): JSX.Element | null {
   const [loading, setLoading] = useState(false)
   const [isTicked, setIsTicked] = useState<boolean>(false)
-  // const [viewTicks, setViewTicks] = useState<boolean>(false)
+  const [viewTicks, setViewTicks] = useState<boolean>(false)
   const [ticks, setTicks] = useState<TickType[]>([])
   const [open, setOpen] = useState(false)
   const session = useSession()
 
   useEffect(() => {
     getTicks()
-  }, [ticks])
+  }, [])
 
   function getTicks (): void {
     const userId = session.data?.user.metadata.uuid ?? ''
@@ -79,8 +80,9 @@ export default function TickButton ({ climbId, areaId, name, grade }: Props): JS
               )
             : 'Tick this climb'}
         </button>}
-      {isTicked && <IsTicked loading={loading} onClick={() => getTicks()} />}
-      <TickForm open={open} setOpen={setOpen} isTicked={setIsTicked} climbId={climbId} name={name} grade={grade} />
+      {isTicked && <IsTicked loading={loading} onClick={() => setViewTicks(true)} />}
+      <TickForm open={open} setTicks={setTicks} ticks={ticks} setOpen={setOpen} isTicked={setIsTicked} climbId={climbId} name={name} grade={grade} />
+      <TicksModal open={viewTicks} setOpen={setViewTicks} climbName={name} ticks={ticks} setTicks={setTicks} setOpenForm={setOpen} />
     </>
   )
 }
