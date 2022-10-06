@@ -186,3 +186,12 @@ query userTicksByClimbId($userId: String, $climbId: String) {
   }
 }
 `
+
+export const MUTATION_REMOVE_TICK_BY_ID = gql`
+mutation deleteTick($_id: ID!) {
+  deleteTick(_id: $_id) {
+    _id
+    removed
+  }
+}
+`

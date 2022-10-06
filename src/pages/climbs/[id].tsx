@@ -17,7 +17,8 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useSwipeable } from 'react-swipeable'
 import FavouriteButton from '../../components/users/FavouriteButton'
 import TickButton from '../../components/users/TickButton'
-import ImportFromMtnProj from '../../components/users/ImportFromMtnProj'
+import { useCanary } from '../../js/hooks'
+import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
 
 interface ClimbPageProps {
   climb: Climb
@@ -59,6 +60,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
   const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
   const { climbId } = metadata
   useState([leftClimb, rightClimb])
+  const isCanary = useCanary()
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => {
@@ -115,12 +117,12 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
 
               <div className='flex flex-col pt-8'>
                 <FavouriteButton climbId={climbId} />
-                <TickButton climbId={climbId} name={name} grade={yds} />
+                {isCanary && <TickButton climbId={climbId} name={name} grade={yds} />}
               </div>
             </div>
 
             <div className='pl-1'>
-              <ImportFromMtnProj />
+              {isCanary && <ImportFromMtnProj isButton={false} />}
             </div>
           </div>
 
