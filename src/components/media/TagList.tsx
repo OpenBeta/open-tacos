@@ -34,8 +34,7 @@ export default function TagList ({ hovered, list, onDeleted, isAuthorized = fals
   return (
     <div className={
           classNames(
-            'text-xs flex flex-wrap justify-start space-x-2 space-y-0.5 bg-white ',
-            hovered ? 'bg-opacity-100' : 'bg-opacity-20',
+            'text-xs inline-flex flex-wrap justify-start space-x-2 space-y-0.5 bg-white ',
             className
           )
           }
@@ -43,7 +42,6 @@ export default function TagList ({ hovered, list, onDeleted, isAuthorized = fals
       {list.map((tag: MediaTagWithClimb) =>
         <Tag
           key={`${tag.mediaUuid}-${tag.climb.id}`}
-          highlighted={hovered}
           tag={tag}
           onDelete={onDeleteHandler}
           isAuthorized={isAuthorized}

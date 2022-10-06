@@ -58,9 +58,7 @@ export const Autocomplete2 = ({ label, queryParams, classNames, ...otherProps }:
   }
 
   return (
-    <div ref={containerRef}>
-      <div onClick={onClickHandler}>{label}</div>
-    </div>
+    <div ref={containerRef} onClick={onClickHandler}>{label}</div>
   )
 }
 

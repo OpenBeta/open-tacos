@@ -2,7 +2,7 @@ import React from 'react'
 
 export interface CardProps {
   image: JSX.Element
-  header: string | JSX.Element
+  header?: string | JSX.Element
   imageActions?: JSX.Element | undefined
   body: string | JSX.Element
   styles?: string
