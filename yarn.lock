@@ -1395,10 +1395,10 @@
     "@types/escape-html" "^1.0.0"
     escape-html "^1.0.3"
 
-"@openbeta/sandbag@^0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/@openbeta/sandbag/-/sandbag-0.0.11.tgz#f4ae9e93db236d88c6787e927740aced47658896"
-  integrity sha512-lZ8ENN8c2yDLMgm7HW5jerJBgCztsLZMWYumCP4BrkW1gNRORNRI5plAbzIUGmlYmmFriA2/4F70MzWLPEOaQA==
+"@openbeta/sandbag@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@openbeta/sandbag/-/sandbag-0.0.33.tgz#bb771d94c5a3fc2c9d9e7fcad7e85e6809b89d0e"
+  integrity sha512-YACAVdBU2bn0A7XIilw22yieS/QrAHqmIpiDWHJr/lAw4M3hEDq956SEfw/H0pwukTLy8A6z9K/o4uD84t4OiA==
 
 "@panva/hkdf@^1.0.1":
   version "1.0.2"
