@@ -28,7 +28,9 @@ const userProfile: IUserProfile = {
   name: 'cat blue',
   nick: 'cool_nick_2022',
   avatar: 'something',
-  bio: 'totem eatsum'
+  bio: 'totem eatsum',
+  roles: [],
+  loginsCount: 2
 }
 
 let UserGallery: typeof UserGalleryType
