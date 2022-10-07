@@ -6,7 +6,6 @@ import { basename } from 'path'
 
 import UserMedia from './UserMedia'
 import MobileMediaCard from './MobileMediaCard'
-import ImageTagger from './ImageTagger'
 import useImageTagHelper from './useImageTagHelper'
 import { MediaTagWithClimb, MediaType, IUserProfile } from '../../js/types'
 import UploadCTA from './UploadCTA'
@@ -81,13 +80,6 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
       }
     }
   }, [initialPostId, imageList, router])
-
-  /**
-   * Run after a tag has sucessfully added to the backend
-   */
-  const onCompletedHandler = useCallback(async (data?: any) => {
-    await actions.media.addTag(data)
-  }, [])
 
   /**
    * Run after a tag has sucessfully deleted from the backend
@@ -211,11 +203,6 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
           <UploadCTA key={index} onUploadFinish={onUploadHandler} />)}
 
       </div>
-
-      {isAuthorized && imageList?.length > 0 && !isMobile &&
-        <ImageTagger
-          {...imageHelper} onCompleted={onCompletedHandler}
-        />}
 
       {!isMobile &&
         <SlideViewer

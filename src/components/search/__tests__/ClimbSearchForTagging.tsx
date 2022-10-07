@@ -33,14 +33,17 @@ beforeAll(async () => {
 test('Climb search for tagging', async () => {
   const user = userEvent.setup()
   const climbSearchByNameFn = jest.spyOn(MockedTypesenseClient, 'climbSearchByName')
+  const onSelectFn = jest.fn()
+  render(<ClimbSearchForTagging onSelect={onSelectFn} />)
 
-  render(<ClimbSearchForTagging />)
+  // await user.click(screen.getByRole('button', { name: 'climb-search' }))
 
   // `getByPlaceholderText()` is a bit fragile, but I haven't found a better
-  // way to get the input element
-  await user.type(screen.getByPlaceholderText('Climb search'), 'res{backspace}d')
+  // way to get the Algolia input element
+  await user.type(screen.getByPlaceholderText('Climb search'), 'qw{backspace}{backspace}r')
 
-  expect(climbSearchByNameFn).toBeCalledTimes(5)
+  // Make sure non-empty input triggers an API call
+  expect(climbSearchByNameFn).toBeCalledTimes(4)
 
   // Important - we need to wait for the popup result panel to appear
   await waitFor(() => {

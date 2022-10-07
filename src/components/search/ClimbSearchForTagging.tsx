@@ -20,8 +20,10 @@ export default function ClimbSearchForTagging ({ onSelect, label = <TagIconLabel
   return (
     <Autocomplete2
       label={label}
+      placeholder='Climb search'
       classNames={isCustomTrigger ? { detachedSearchButton: 'aa-hidden-mobile-trigger-btn' } : undefined}
       getSources={async ({ query }) => {
+        if (query?.trim() === '') return []
         return [await TypesenseClimbNameSource(query, onSelect)]
       }}
     />
@@ -29,7 +31,7 @@ export default function ClimbSearchForTagging ({ onSelect, label = <TagIconLabel
 }
 
 const TagIconLabel = (): JSX.Element =>
-  <button className='btn btn-ghost btn-circle'>
+  <button className='btn btn-ghost btn-circle' aria-label='climb-search'>
     <TagIcon className='w-6 h-6' />
   </button>
 

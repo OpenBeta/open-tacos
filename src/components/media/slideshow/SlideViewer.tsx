@@ -204,7 +204,6 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
         </div>
         {tagList?.length > 0 &&
           <TagList
-            hovered
             list={tagList}
             onDeleted={onTagDeletedHandler}
             isAuthorized={isAuthorized}
@@ -215,7 +214,7 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
       {isAuthorized &&
         <div className='my-8'>
           <div className='text-primary text-sm'>Tag this climb</div>
-          <AddTag onTagAdded={onTagAddedHandler} imageInfo={currentImage} className='my-2' />
+          <AddTag onTagAdded={onTagAddedHandler} imageInfo={currentImage} />
         </div>}
 
       {tagList?.length === 0 && isAuthorized &&

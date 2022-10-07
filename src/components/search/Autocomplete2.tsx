@@ -10,6 +10,7 @@ interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
     data: any
   }
   label: string | JSX.Element
+  placeholder?: string
 }
 /**
  * Autocomplete widget based on Algolia Autocomplete
