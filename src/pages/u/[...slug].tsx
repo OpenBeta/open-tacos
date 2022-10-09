@@ -14,6 +14,9 @@ import usePermissions from '../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../js/hooks/seo'
 import useMediaDataStore from '../../js/hooks/useMediaDS'
 import type { UserGalleryProps } from '../../components/media/UserGallery'
+import { PhotoUploadError } from '../../components/media/PhotoUploadError'
+import { userMediaStore } from '../../js/stores/media'
+
 interface UserHomeProps {
   uid: string
   postId: string | null
@@ -26,6 +29,8 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
   const router = useRouter()
 
   const auth = usePermissions({ ownerProfileOnPage: userProfile })
+  const photoUploadErrorMessage = userMediaStore.use.photoUploadErrorMessage()
+  const isPhotoError = photoUploadErrorMessage !== null
 
   const { isAuthorized } = auth
 
@@ -41,6 +46,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
 
   return (
     <>
+      {isPhotoError && <PhotoUploadError photoUploadErrorMessage={photoUploadErrorMessage} />}
       <SeoTags
         description='Share your climbing adventure photos and contribute to the Wiki.'
         title={pageTitle}
@@ -105,7 +111,7 @@ export async function getStaticPaths (): Promise<any> {
   }
 }
 
-export const getStaticProps: GetStaticProps<UserHomeProps, {slug: string[]}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> = async ({ params }) => {
   const uid = params?.slug?.[0] ?? null
   const postId = params?.slug?.[1] ?? null
 
