@@ -16,11 +16,9 @@ import { WithPermission } from '../../js/types/User'
 import Bar from '../ui/Bar'
 import Toggle from '../ui/Toggle'
 import { useResponsive } from '../../js/hooks'
-// import { AddTagTrigger } from './AddTag'
 import TagList from './TagList'
 
 export interface UserGalleryProps {
-  loaded: boolean
   uid: string
   userProfile: IUserProfile
   initialImageList: MediaType[]
@@ -32,7 +30,7 @@ export interface UserGalleryProps {
 /**
  * Image gallery on user profile
  */
-export default function UserGallery ({ loaded, uid, postId: initialPostId, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: UserGalleryProps): JSX.Element | null {
+export default function UserGallery ({ uid, postId: initialPostId, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: UserGalleryProps): JSX.Element | null {
   const router = useRouter()
   const imageList = initialImageList
 
@@ -156,7 +154,7 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
                 key={key}
                 tagList={tags}
                 imageInfo={imageInfo}
-                isAuthorized={isAuthorized && (stateRef?.current ?? false)}
+                isAuthorized={isAuthorized}
               />
             )
           }
@@ -181,7 +179,6 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
                     className='px-2'
                   />
                 )}
-                {/* <AddTagTrigger key={imageInfo.mediaId} id={imageInfo.mediaId} imageInfo={imageInfo} /> */}
               </div>
               {/* {tagModeOn && imageList?.length > 0 && isAuthorized && isMobile
                 ? (

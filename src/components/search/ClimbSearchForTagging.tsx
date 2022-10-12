@@ -6,7 +6,7 @@ import { Autocomplete2 } from './Autocomplete2'
 import { TypesenseClimbNameSource } from './sources'
 
 interface XSearchProps {
-  label?: string | JSX.Element
+  label?: JSX.Element
   placeholder?: string
   onSelect: (props: TypesenseDocumentType) => void
   className?: string
