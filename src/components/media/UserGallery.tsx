@@ -3,6 +3,7 @@ import { Dictionary } from 'underscore'
 import { TagIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 import { basename } from 'path'
+import clx from 'classnames'
 
 import UserMedia from './UserMedia'
 import MobileMediaCard from './MobileMediaCard'
@@ -17,6 +18,7 @@ import Bar from '../ui/Bar'
 import Toggle from '../ui/Toggle'
 import { useResponsive } from '../../js/hooks'
 import TagList from './TagList'
+import AddTag, { DesktopLabel } from './AddTag'
 
 export interface UserGalleryProps {
   uid: string
@@ -28,7 +30,10 @@ export interface UserGalleryProps {
 }
 
 /**
- * Image gallery on user profile
+ * Image gallery on user profile.
+ * Simplifying component Todos:
+ *  - remove bulk taging mode
+ *  - simplify back button logic with NextJS Layout
  */
 export default function UserGallery ({ uid, postId: initialPostId, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: UserGalleryProps): JSX.Element | null {
   const router = useRouter()
@@ -36,6 +41,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
 
   const [selectedMediaId, setSlideNumber] = useState<number>(-1)
   const [tagModeOn, setTagMode] = useState<boolean>(false) // Bulk tagging
+  const [hover, setHover] = useState(false)
 
   const imageHelper = useImageTagHelper()
   const { isMobile } = useResponsive()
@@ -78,13 +84,6 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
       }
     }
   }, [initialPostId, imageList, router])
-
-  /**
-   * Run after a tag has sucessfully deleted from the backend
-   */
-  const onDeletedHandler = useCallback(async (data: any) => {
-    await actions.media.removeTag(data)
-  }, [])
 
   const onUploadHandler = async (imageUrl: string): Promise<void> => {
     await actions.media.addImage(uid, userProfile.uuid, imageUrl, true)
@@ -143,7 +142,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
           tagModeOn={tagModeOn}
         />
       </div>
-      <div className='flex flex-col gap-y-4  xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4'>
+      <div className='flex flex-col gap-y-4 lg:grid lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>
         {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
         {imageList?.map((imageInfo, index) => {
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []
@@ -159,39 +158,35 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
             )
           }
           return (
-            <div className='relative' key={key}>
+            <div
+              className='relative' key={key}
+              onMouseOver={() => setHover(true)}
+              onMouseOut={() => setHover(false)}
+            >
               <UserMedia
                 uid={uid}
                 index={index}
                 tagList={tags}
                 imageInfo={imageInfo}
                 onClick={imageOnClickHandler}
-                onTagDeleted={onDeletedHandler}
                 isAuthorized={isAuthorized && (stateRef?.current ?? false)}
-                useClassicATag
               />
-              <div className='absolute inset-x-0 bottom-0 flex items-center hover:bg-base-200 hover:bg-opacity-90'>
-                {tags?.length > 0 && (
-                  <TagList
-                    list={tags}
-                    onDeleted={onDeletedHandler}
-                    isAuthorized={isAuthorized && (stateRef?.current ?? false)}
-                    className='px-2'
-                  />
-                )}
+              <div
+                className={
+                clx(
+                  'absolute inset-x-0 bottom-0 py-2 flex items-center opacity-80',
+                  hover ? 'opacity-100 bg-base-100 bg-opacity-80' : '')
+                }
+              >
+                <TagList
+                  list={tags}
+                  isAuthorized={isAuthorized}
+                  className='px-2'
+                  showDelete
+                >
+                  {isAuthorized ? <AddTag imageInfo={imageInfo} label={<DesktopLabel />} /> : null}
+                </TagList>
               </div>
-              {/* {tagModeOn && imageList?.length > 0 && isAuthorized && isMobile
-                ? (
-                  <div className='absolute top-12'>
-                    <ImageTagger
-                      isMobile
-                      {...imageHelper}
-                      imageInfo={imageInfo}
-                      onCompleted={onCompletedHandler}
-                    />
-                  </div>
-                  )
-                : null} */}
             </div>
           )
         })}

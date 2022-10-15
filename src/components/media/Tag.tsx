@@ -28,7 +28,7 @@ export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, i
             e.preventDefault()
           }}
           >
-            <div className='hover:bg-white rounded-full'>
+            <div className='rounded-full'>
               <XCircleIcon className={clx('cursor-pointer stroke-1 hover:stroke-2', size === 'lg' ? 'w-6 h-6' : 'w-5 h-5')} />
             </div>
           </button>}

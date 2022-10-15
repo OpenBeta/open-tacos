@@ -38,7 +38,6 @@ export default function MoreFromThisUser ({ loaded, uid, mediaList = [], tagMap 
               uid={uid}
               tagList={tags}
               imageInfo={mediaInfo}
-              onTagDeleted={NoOP}
               isAuthorized={false}
             />
           )
@@ -47,8 +46,4 @@ export default function MoreFromThisUser ({ loaded, uid, mediaList = [], tagMap 
     </>
 
   )
-}
-
-const NoOP = (event): void => {
-  event.preventDefault()
 }

@@ -1,4 +1,4 @@
-import React, { createElement, Fragment, useEffect, useRef } from 'react'
+import React, { createElement, Fragment, useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import { autocomplete, AutocompleteOptions, AutocompleteApi } from '@algolia/autocomplete-js'
@@ -11,29 +11,36 @@ interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
   }
   label: string | JSX.Element
   placeholder?: string
+  open?: boolean
+  onCancel?: () => void
 }
 /**
  * Autocomplete widget based on Algolia Autocomplete
  * @param props
  * @returns
  */
-export const Autocomplete2 = ({ label, queryParams, classNames, ...otherProps }: AutocompleteProps): JSX.Element => {
+export const Autocomplete2 = ({ label, open = false, onCancel, queryParams, classNames, ...otherProps }: AutocompleteProps): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
   const panelRootRef = useRef<any>(null)
   const rootRef = useRef<HTMLElement|null>(null)
-  let search: AutocompleteApi<any> | null = null
+  const [search, setSearch] = useState<AutocompleteApi<any>|null>(null)
 
   useEffect(() => {
     if (containerRef.current == null) {
       return undefined
     }
 
-    search = autocomplete({
+    const search = autocomplete({
       openOnFocus: true,
       classNames: { ...AA_DEFAULT_CLASSES, ...classNames },
       defaultActiveItemId: 0,
       container: containerRef.current,
       renderer: { createElement, Fragment, render: () => {} },
+      onStateChange: props => {
+        if (props.prevState.isOpen && !props.state.isOpen) {
+          if (onCancel != null) onCancel()
+        }
+      },
       detachedMediaQuery: '',
       render ({ children, elements }, root) {
         if ((panelRootRef.current == null) || rootRef.current !== root) {
@@ -47,10 +54,20 @@ export const Autocomplete2 = ({ label, queryParams, classNames, ...otherProps }:
       ...otherProps
     })
 
+    setSearch(search)
+
     return () => {
-      if (search != null) search.destroy()
+      if (search != null) {
+        search.destroy()
+      }
     }
-  }, [otherProps])
+  }, [])
+
+  useEffect(() => {
+    if (search != null) {
+      search.setIsOpen(open)
+    }
+  }, [open])
 
   const onClickHandler = (): void => {
     if (search != null) {

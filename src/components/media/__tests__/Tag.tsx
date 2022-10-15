@@ -39,10 +39,10 @@ test('Tag with permission to delete', async () => {
   const onDeleteFn = jest.fn()
   render(
     <Tag
-      isMobile={false}
       tag={TAG_DATA[0]}
       onDelete={onDeleteFn}
-      isAuthorized // <<-- isAuthorize = true
+      isAuthorized
+      showDelete
     />)
 
   await user.click(screen.getByRole('button'))

@@ -1,25 +1,20 @@
 import { useCallback } from 'react'
 import ContentLoader from 'react-content-loader'
-import classNames from 'classnames'
 import { basename } from 'path'
 import Link from 'next/link'
-import { getUploadDateSummary } from '../../js/utils'
-import { useResponsive } from '../../js/hooks'
+
 import { MediaTagWithClimb, MediaType } from '../../js/types'
 import ResponsiveImage from '../media/slideshow/ResponsiveImage'
-import { MobileLoader, DesktopPreviewLoader } from '../../js/sirv/util'
+import { DesktopPreviewLoader } from '../../js/sirv/util'
 import RemoveImage from './RemoveImage'
 
-const MOBILE_IMAGE_MAX_WIDITH = 914
 interface UserMediaProps {
   uid: string
   index: number
   imageInfo: MediaType
   onClick?: (props: any) => void
-  onTagDeleted: (props?: any) => void
   tagList: MediaTagWithClimb[]
   isAuthorized?: boolean
-  useClassicATag?: boolean
 }
 
 /**
@@ -32,12 +27,8 @@ export default function UserMedia ({
   imageInfo,
   onClick,
   tagList,
-  onTagDeleted,
-  isAuthorized = false,
-  useClassicATag = false
+  isAuthorized = false
 }: UserMediaProps): JSX.Element {
-  // const [hovered, setHover] = useState(false)
-
   const onClickHandler = useCallback((event) => {
     if (onClick != null) {
       // we want to show URL in browser status bar and let the user open link in a new tab,
@@ -49,45 +40,21 @@ export default function UserMedia ({
     }
   }, [])
 
-  const { isDesktop } = useResponsive()
-  const loader = isDesktop ? DesktopPreviewLoader : MobileLoader
   const shareableUrl = `/p/${uid}/${basename(imageInfo.filename)}`
 
   return (
     <figure
       key={imageInfo.filename}
-      className={classNames(
-        'block relative rounded overflow-hidden hover:shadow transition',
-        isDesktop
-          ? 'w-[300px] h-[300px] hover:brightness-75'
-          : 'max-w-screen-lg py-12'
-      )}
+      className='block relative rounded overflow-hidden hover:shadow transition w-[300px] h-[300px] hover:brightness-75'
+
     >
       <Link href={shareableUrl}>
         <a onClick={onClickHandler}>
-          {isDesktop
-            ? (
-              <ResponsiveImage
-                mediaUrl={imageInfo.filename}
-                isHero={index === 0}
-                loader={loader}
-              />
-              )
-            : (
-              <>
-                <img
-                  src={loader({
-                    src: imageInfo.filename,
-                    width: MOBILE_IMAGE_MAX_WIDITH
-                  })}
-                  width={MOBILE_IMAGE_MAX_WIDITH}
-                  sizes='100vw'
-                />
-                <div className='text-zinc-600 indent-1 font-light text-sm'>
-                  {getUploadDateSummary(imageInfo.ctime)}
-                </div>
-              </>
-              )}
+          <ResponsiveImage
+            mediaUrl={imageInfo.filename}
+            isHero={index === 0}
+            loader={DesktopPreviewLoader}
+          />
         </a>
       </Link>
 

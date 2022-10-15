@@ -7,20 +7,24 @@ import { TypesenseClimbNameSource } from './sources'
 
 interface XSearchProps {
   label?: JSX.Element
+  openSearch?: boolean
   placeholder?: string
   onSelect: (props: TypesenseDocumentType) => void
   className?: string
+  onCancel?: () => void
 }
 
 /**
  * Climb name search widget
  */
-export default function ClimbSearchForTagging ({ onSelect, label = <TagIconLabel /> }: XSearchProps): JSX.Element {
+export default function ClimbSearchForTagging ({ openSearch = false, onSelect, onCancel, label = <TagIconLabel /> }: XSearchProps): JSX.Element {
   const isCustomTrigger = label != null
   return (
     <Autocomplete2
       label={label}
       placeholder='Climb search'
+      open={openSearch}
+      onCancel={onCancel}
       classNames={isCustomTrigger ? { detachedSearchButton: 'aa-hidden-mobile-trigger-btn' } : undefined}
       getSources={async ({ query }) => {
         if (query?.trim() === '') return []

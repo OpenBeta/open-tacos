@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback } from 'react'
+import React, { ReactElement } from 'react'
 
 import { LightBulbIcon } from '@heroicons/react/outline'
 import { Dictionary } from 'underscore'
@@ -6,14 +6,13 @@ import ContentLoader from 'react-content-loader'
 
 import { MediaType, MediaTagWithClimb } from '../../../js/types'
 import TagList from '../TagList'
-import AddTag from '../AddTag'
+import AddTag, { DesktopLabel } from '../AddTag'
 import NextPreviousControl from './NextPreviousControl'
 import ResponsiveImage from './ResponsiveImage'
 import AddTagCta from './AddTagCta'
 import { WithPermission } from '../../../js/types/User'
 import DesktopModal from './DesktopModal'
 import { DefaultLoader } from '../../../js/sirv/util'
-import { userMediaStore } from '../../../js/stores/media'
 
 interface SlideViewerProps {
   isOpen: boolean
@@ -182,18 +181,6 @@ interface InfoContainerProps {
 const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerProps): ReactElement | null => {
   const { isAuthorized } = auth
 
-  const onTagAddedHandler = useCallback(async (data) => {
-    if (isAuthorized) { // The UI shouldn't allow this function to be called, but let's check anyway.
-      await userMediaStore.set.addTag(data)
-    }
-  }, [isAuthorized])
-
-  const onTagDeletedHandler = useCallback(async (data) => {
-    if (isAuthorized) { // The UI shouldn't allow this function to be called, but let's check anyway.
-      await userMediaStore.set.removeTag(data)
-    }
-  }, [isAuthorized])
-
   if (currentImage == null) return null
 
   return (
@@ -205,17 +192,13 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
         {tagList?.length > 0 &&
           <TagList
             list={tagList}
-            onDeleted={onTagDeletedHandler}
             isAuthorized={isAuthorized}
+            showDelete
             className='my-2'
-          />}
+          >
+            {isAuthorized ? <AddTag imageInfo={currentImage} label={<DesktopLabel />} /> : null}
+          </TagList>}
       </div>
-
-      {isAuthorized &&
-        <div className='my-8'>
-          <div className='text-primary text-sm'>Tag this climb</div>
-          <AddTag onTagAdded={onTagAddedHandler} imageInfo={currentImage} />
-        </div>}
 
       {tagList?.length === 0 && isAuthorized &&
         <div className='my-8 text-secondary flex items-center space-x-1'>

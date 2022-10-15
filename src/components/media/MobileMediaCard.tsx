@@ -2,7 +2,7 @@ import { PlusIcon } from '@heroicons/react/solid'
 
 import Card from '../ui/Card/Card'
 import AddTag from './AddTag'
-import TagList, { MenuItems } from './TagList'
+import TagList, { MobilePopupTagList } from './TagList'
 // import MobileTagTrigger from './MobileTagTrigger'
 import { MobileLoader } from '../../js/sirv/util'
 import { MediaType, MediaTagWithClimb } from '../../js/types'
@@ -31,7 +31,7 @@ export default function MobileMediaCard ({ isAuthorized, imageInfo, tagList }: M
       imageActions={
         <section className='flex items-center justify-between'>
           <div>&nbsp;</div>
-          <MenuItems list={tagList} isAuthorized={isAuthorized} />
+          <MobilePopupTagList imageInfo={imageInfo} list={tagList} isAuthorized={isAuthorized} />
         </section>
       }
       body={
