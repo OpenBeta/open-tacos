@@ -16,6 +16,8 @@ import { WithPermission } from '../../js/types/User'
 import Bar from '../ui/Bar'
 import Toggle from '../ui/Toggle'
 import { useResponsive } from '../../js/hooks'
+import { userMediaStore } from '../../js/stores/media'
+import PhotoUploadError from './PhotoUploadError'
 
 export interface UserGalleryProps {
   loaded: boolean
@@ -140,8 +142,12 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
     ? [...Array(3 - imageList?.length).keys()]
     : []
 
+  const photoUploadErrorMessage = userMediaStore.use.photoUploadErrorMessage()
+  const isPhotoError = photoUploadErrorMessage !== null
+
   return (
     <>
+      {isPhotoError && <PhotoUploadError photoUploadErrorMessage={photoUploadErrorMessage} />}
       <div className='self-start border-t border-gray-400 w-full'>
         <MediaActionToolbar
           isAuthorized={isAuthorized}

@@ -8,7 +8,7 @@ interface PhotoUploadErrorMessageProps {
 
 const onClose = async (): Promise<void> => await userMediaStore.set.setPhotoUploadErrorMessage(null)
 
-export const PhotoUploadError = ({ photoUploadErrorMessage }: PhotoUploadErrorMessageProps): JSX.Element => (
+const PhotoUploadError = ({ photoUploadErrorMessage }: PhotoUploadErrorMessageProps): JSX.Element => (
   <ErrorAlert description={photoUploadErrorMessage}>
     <AlertAction
       className='text-center p-2 border-2 rounded-xl border-ob-primary transition
@@ -20,3 +20,5 @@ export const PhotoUploadError = ({ photoUploadErrorMessage }: PhotoUploadErrorMe
     </AlertAction>
   </ErrorAlert>
 )
+
+export default PhotoUploadError
