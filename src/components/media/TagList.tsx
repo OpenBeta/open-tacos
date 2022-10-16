@@ -54,9 +54,9 @@ export const MobilePopupTagList = ({ list, imageInfo, isAuthorized = false }: Ta
   const { onDelete } = useDeleteTagBackend()
   const [openSearch, setOpenSearch] = useState(false)
   return (
-    <div>
+    <div aria-label='tag popup'>
       <DropdownMenu>
-        <DropdownTrigger className='btn btn-circle btn-ghost'>
+        <DropdownTrigger className='btn btn-circle btn-ghost' aria-label='tag menu'>
           <TagIcon className='w-8 h-8' />
         </DropdownTrigger>
         <DropdownContent align='end'>

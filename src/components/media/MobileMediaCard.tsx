@@ -3,7 +3,6 @@ import { PlusIcon } from '@heroicons/react/solid'
 import Card from '../ui/Card/Card'
 import AddTag from './AddTag'
 import TagList, { MobilePopupTagList } from './TagList'
-// import MobileTagTrigger from './MobileTagTrigger'
 import { MobileLoader } from '../../js/sirv/util'
 import { MediaType, MediaTagWithClimb } from '../../js/types'
 import { getUploadDateSummary } from '../../js/utils'
@@ -11,7 +10,6 @@ import { getUploadDateSummary } from '../../js/utils'
 const MOBILE_IMAGE_MAX_WIDITH = 914
 interface MobileMediaCardProps {
   imageInfo: MediaType
-  // onTagDeleted: (props?: any) => void
   tagList: MediaTagWithClimb[]
   isAuthorized?: boolean
 }
@@ -19,7 +17,6 @@ interface MobileMediaCardProps {
 export default function MobileMediaCard ({ isAuthorized, imageInfo, tagList }: MobileMediaCardProps): JSX.Element {
   return (
     <Card
-      // header='header'
       image={<img
         src={MobileLoader({
           src: imageInfo.filename,
@@ -49,7 +46,7 @@ export default function MobileMediaCard ({ isAuthorized, imageInfo, tagList }: M
                 />
               </TagList>)}
           </section>
-          <section className='mt-2 uppercase text-base-300'>
+          <section className='mt-2 uppercase text-base-300' aria-label='timestamp'>
             {getUploadDateSummary(imageInfo.ctime)}
           </section>
         </>
