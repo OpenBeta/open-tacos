@@ -13,7 +13,7 @@ interface DropdownMenuProps {
 export function DropdownContent ({ align = 'center', children }: DropdownMenuProps): JSX.Element {
   return (
     <DropdownPrimitive.Portal>
-      <div className='absolute z-50 inset-0 h-screen w-screen bg-black/60'>
+      <div className='fixed z-50 inset-0 h-screen w-screen bg-black/60'>
         <DropdownPrimitive.Content
           sideOffset={10}
           avoidCollisions align={align}

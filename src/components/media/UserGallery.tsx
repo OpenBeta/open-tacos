@@ -3,9 +3,10 @@ import { Dictionary } from 'underscore'
 import { TagIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 import { basename } from 'path'
+import clx from 'classnames'
 
 import UserMedia from './UserMedia'
-import ImageTagger from './ImageTagger'
+import MobileMediaCard from './MobileMediaCard'
 import useImageTagHelper from './useImageTagHelper'
 import { MediaTagWithClimb, MediaType, IUserProfile } from '../../js/types'
 import UploadCTA from './UploadCTA'
@@ -16,9 +17,9 @@ import { WithPermission } from '../../js/types/User'
 import Bar from '../ui/Bar'
 import Toggle from '../ui/Toggle'
 import { useResponsive } from '../../js/hooks'
+import TagList from './TagList'
 
 export interface UserGalleryProps {
-  loaded: boolean
   uid: string
   userProfile: IUserProfile
   initialImageList: MediaType[]
@@ -28,16 +29,21 @@ export interface UserGalleryProps {
 }
 
 /**
- * Image gallery on user profile
+ * Image gallery on user profile.
+ * Simplifying component Todos:
+ *  - remove bulk taging mode
+ *  - simplify back button logic with NextJS Layout
  */
-export default function UserGallery ({ loaded, uid, postId: initialPostId, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: UserGalleryProps): JSX.Element | null {
+export default function UserGallery ({ uid, postId: initialPostId, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: UserGalleryProps): JSX.Element | null {
   const router = useRouter()
   const imageList = initialImageList
 
   const [selectedMediaId, setSlideNumber] = useState<number>(-1)
   const [tagModeOn, setTagMode] = useState<boolean>(false) // Bulk tagging
+  const [hover, setHover] = useState(false)
 
   const imageHelper = useImageTagHelper()
+  const { isMobile } = useResponsive()
 
   const { onClick } = imageHelper
 
@@ -78,20 +84,6 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
     }
   }, [initialPostId, imageList, router])
 
-  /**
-   * Run after a tag has sucessfully added to the backend
-   */
-  const onCompletedHandler = useCallback(async (data?: any) => {
-    await actions.media.addTag(data)
-  }, [])
-
-  /**
-   * Run after a tag has sucessfully deleted from the backend
-   */
-  const onDeletedHandler = useCallback(async (data: any) => {
-    await actions.media.removeTag(data)
-  }, [])
-
   const onUploadHandler = async (imageUrl: string): Promise<void> => {
     await actions.media.addImage(uid, userProfile.uuid, imageUrl, true)
   }
@@ -107,6 +99,7 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
    * whether bulk tagging is on/off.
    */
   const imageOnClickHandler = useCallback(async (props: any): Promise<void> => {
+    if (isMobile) return
     if (stateRef?.current ?? false) {
       onClick(props) // bulk tagging
     } else {
@@ -132,8 +125,6 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
     setSlideNumber(newIndex)
   }
 
-  const { isMobile } = useResponsive()
-
   // When logged-in user has fewer than 3 photos,
   // create empty slots for the call-to-action upload component.
   const placeholders = imageList?.length < 3 && isAuthorized
@@ -150,34 +141,51 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
           tagModeOn={tagModeOn}
         />
       </div>
-      <div className={`block w-full xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4 ${tagModeOn ? 'cursor-cell' : 'cursor-pointer'}`}>
+      <div className='flex flex-col gap-y-4 lg:grid lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>
         {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
         {imageList?.map((imageInfo, index) => {
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []
+          const key = `${imageInfo.mediaId}${index}`
+          if (isMobile) {
+            return (
+              <MobileMediaCard
+                key={key}
+                tagList={tags}
+                imageInfo={imageInfo}
+                {...auth}
+              />
+            )
+          }
           return (
-            <div className='relative' key={`${imageInfo.mediaId}${index}`}>
+            <div
+              className='relative' key={key}
+              onMouseOver={() => setHover(true)}
+              onMouseOut={() => setHover(false)}
+            >
               <UserMedia
                 uid={uid}
                 index={index}
                 tagList={tags}
                 imageInfo={imageInfo}
                 onClick={imageOnClickHandler}
-                onTagDeleted={onDeletedHandler}
                 isAuthorized={isAuthorized && (stateRef?.current ?? false)}
-                useClassicATag
               />
-              {tagModeOn && imageList?.length > 0 && isAuthorized && isMobile
-                ? (
-                  <div className='absolute top-12'>
-                    <ImageTagger
-                      isMobile
-                      {...imageHelper}
-                      imageInfo={imageInfo}
-                      onCompleted={onCompletedHandler}
-                    />
-                  </div>
-                  )
-                : null}
+              <div
+                className={
+                clx(
+                  !isAuthorized && tags.length === 0 ? 'hidden' : '',
+                  'absolute inset-x-0 bottom-0 p-2 flex items-center opacity-90',
+                  hover ? 'opacity-100 bg-base-100 bg-opacity-90' : ''
+                )
+                }
+              >
+                <TagList
+                  list={tags}
+                  imageInfo={imageInfo}
+                  {...auth}
+                  showDelete
+                />
+              </div>
             </div>
           )
         })}
@@ -186,11 +194,6 @@ export default function UserGallery ({ loaded, uid, postId: initialPostId, auth,
           <UploadCTA key={index} onUploadFinish={onUploadHandler} />)}
 
       </div>
-
-      {isAuthorized && imageList?.length > 0 && !isMobile &&
-        <ImageTagger
-          {...imageHelper} onCompleted={onCompletedHandler}
-        />}
 
       {!isMobile &&
         <SlideViewer

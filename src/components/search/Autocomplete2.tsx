@@ -1,51 +1,47 @@
-import React, { createElement, Fragment, useEffect, useRef } from 'react'
+import React, { createElement, Fragment, useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import { autocomplete, AutocompleteOptions, AutocompleteApi } from '@algolia/autocomplete-js'
 import '@algolia/autocomplete-theme-classic'
-
-import clz from 'classnames'
 
 interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
   queryParams?: {
     text: string
     data: any
   }
-  isMobile: boolean
-  containerClassname?: string
-  forceFocus?: boolean
+  label: string | JSX.Element
+  placeholder?: string
+  open?: boolean
+  onCancel?: () => void
 }
 /**
  * Autocomplete widget based on Algolia Autocomplete
  * @param props
  * @returns
  */
-export const Autocomplete = ({ queryParams, forceFocus = false, classNames, ...otherProps }: AutocompleteProps): JSX.Element => {
+export const Autocomplete2 = ({ label, open = false, onCancel, queryParams, classNames, ...otherProps }: AutocompleteProps): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
   const panelRootRef = useRef<any>(null)
   const rootRef = useRef<HTMLElement|null>(null)
-  let search: AutocompleteApi<any> | null = null
-
-  useEffect(() => {
-    if (forceFocus) {
-      setTimeout(() => {
-        const element = document.querySelectorAll(`.${otherProps.id as string} .aa-Input`)[0] as HTMLInputElement
-        element?.focus()
-      }, 200)
-    }
-  })
+  const [search, setSearch] = useState<AutocompleteApi<any>|null>(null)
 
   useEffect(() => {
     if (containerRef.current == null) {
       return undefined
     }
 
-    search = autocomplete({
+    const search = autocomplete({
+      openOnFocus: true,
       classNames: { ...AA_DEFAULT_CLASSES, ...classNames },
       defaultActiveItemId: 0,
       container: containerRef.current,
       renderer: { createElement, Fragment, render: () => {} },
-      detachedMediaQuery: (otherProps.isMobile) ? '' : 'none',
+      onStateChange: props => {
+        if (props.prevState.isOpen && !props.state.isOpen) {
+          if (onCancel != null) onCancel()
+        }
+      },
+      detachedMediaQuery: '',
       render ({ children, elements }, root) {
         if ((panelRootRef.current == null) || rootRef.current !== root) {
           rootRef.current = root
@@ -58,25 +54,29 @@ export const Autocomplete = ({ queryParams, forceFocus = false, classNames, ...o
       ...otherProps
     })
 
+    setSearch(search)
+
     return () => {
-      if (search != null) search.destroy()
+      if (search != null) {
+        search.destroy()
+      }
     }
-  }, [otherProps])
+  }, [])
+
+  useEffect(() => {
+    if (search != null) {
+      search.setIsOpen(open)
+    }
+  }, [open])
+
+  const onClickHandler = (): void => {
+    if (search != null) {
+      search.setIsOpen(true)
+    }
+  }
 
   return (
-    <div
-      className={
-        clz(
-          otherProps.isMobile ? '' : 'z-50 mx-auto',
-          otherProps?.containerClassname)
-      }
-      ref={containerRef}
-      onClick={() => {
-        if (search != null && queryParams?.text != null) {
-          search.setQuery(queryParams.text)
-        }
-      }}
-    />
+    <div className='inline-flex' ref={containerRef} onClick={onClickHandler}>{label}</div>
   )
 }
 

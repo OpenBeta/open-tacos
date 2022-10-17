@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback } from 'react'
+import React, { ReactElement } from 'react'
 
 import { LightBulbIcon } from '@heroicons/react/outline'
 import { Dictionary } from 'underscore'
@@ -6,14 +6,12 @@ import ContentLoader from 'react-content-loader'
 
 import { MediaType, MediaTagWithClimb } from '../../../js/types'
 import TagList from '../TagList'
-import AddTag from '../AddTag'
 import NextPreviousControl from './NextPreviousControl'
 import ResponsiveImage from './ResponsiveImage'
 import AddTagCta from './AddTagCta'
 import { WithPermission } from '../../../js/types/User'
 import DesktopModal from './DesktopModal'
 import { DefaultLoader } from '../../../js/sirv/util'
-import { userMediaStore } from '../../../js/stores/media'
 
 interface SlideViewerProps {
   isOpen: boolean
@@ -180,20 +178,6 @@ interface InfoContainerProps {
 }
 
 const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerProps): ReactElement | null => {
-  const { isAuthorized } = auth
-
-  const onTagAddedHandler = useCallback(async (data) => {
-    if (isAuthorized) { // The UI shouldn't allow this function to be called, but let's check anyway.
-      await userMediaStore.set.addTag(data)
-    }
-  }, [isAuthorized])
-
-  const onTagDeletedHandler = useCallback(async (data) => {
-    if (isAuthorized) { // The UI shouldn't allow this function to be called, but let's check anyway.
-      await userMediaStore.set.removeTag(data)
-    }
-  }, [isAuthorized])
-
   if (currentImage == null) return null
 
   return (
@@ -204,21 +188,15 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
         </div>
         {tagList?.length > 0 &&
           <TagList
-            hovered
             list={tagList}
-            onDeleted={onTagDeletedHandler}
-            isAuthorized={isAuthorized}
+            imageInfo={currentImage}
+            {...auth}
+            showDelete
             className='my-2'
           />}
       </div>
 
-      {isAuthorized &&
-        <div className='my-8'>
-          <div className='text-primary text-sm'>Tag this climb</div>
-          <AddTag onTagAdded={onTagAddedHandler} imageInfo={currentImage} className='my-2' />
-        </div>}
-
-      {tagList?.length === 0 && isAuthorized &&
+      {tagList?.length === 0 &&
         <div className='my-8 text-secondary flex items-center space-x-1'>
           <LightBulbIcon className='w-6 h-6 stroke-1 stroke-ob-primary' />
           <span className='mt-1 text-xs'>Your tags help others learn more about the crag</span>
@@ -226,7 +204,7 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
 
       <div className='flex-1' />
 
-      {isAuthorized &&
+      {auth.isAuthorized &&
         <div className='my-8 flex items-center hover:bg-rose-50 p-2 rounded-lg transition'>
           <div className='text-primary text-sm flex-1'>Enable <b>Power mode</b> to delete this image</div>
         </div>}

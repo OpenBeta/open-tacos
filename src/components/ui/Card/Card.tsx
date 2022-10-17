@@ -2,7 +2,8 @@ import React from 'react'
 
 export interface CardProps {
   image: JSX.Element
-  header: string | JSX.Element
+  header?: string | JSX.Element
+  imageActions?: JSX.Element | undefined
   body: string | JSX.Element
   styles?: string
 }
@@ -10,14 +11,16 @@ export interface CardProps {
 export default function Card ({
   header,
   image,
+  imageActions,
   body,
   styles = 'bg-base-100 drop-shadow rounded-box'
 }: CardProps): JSX.Element {
   return (
     <div className={styles}>
       <CardHeader content={header} />
-      <div className='card'>
+      <div className='card card-compact rounded-none'>
         {image}
+        {imageActions}
         <CardBody content={body} />
       </div>
     </div>
@@ -45,7 +48,7 @@ export interface CardBodyProps {
 }
 export const CardBody = ({
   content,
-  styles = 'card-body pt-2 pb-4'
+  styles = 'card-body'
 }: CardBodyProps): JSX.Element => {
   return (
     <div data-test='cardBody' className={styles}>

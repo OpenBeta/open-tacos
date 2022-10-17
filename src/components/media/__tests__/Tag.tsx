@@ -23,7 +23,6 @@ test('Default tag', () => {
   render(
     <Tag
       tag={TAG_DATA[0]}
-      highlighted
       onDelete={jest.fn()}
     />)
 
@@ -41,9 +40,9 @@ test('Tag with permission to delete', async () => {
   render(
     <Tag
       tag={TAG_DATA[0]}
-      highlighted
       onDelete={onDeleteFn}
-      isAuthorized // <<-- isAuthorize = true
+      isAuthorized
+      showDelete
     />)
 
   await user.click(screen.getByRole('button'))
