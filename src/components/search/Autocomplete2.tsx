@@ -76,7 +76,7 @@ export const Autocomplete2 = ({ label, open = false, onCancel, queryParams, clas
   }
 
   return (
-    <div ref={containerRef} onClick={onClickHandler}>{label}</div>
+    <div className='inline-flex' ref={containerRef} onClick={onClickHandler}>{label}</div>
   )
 }
 

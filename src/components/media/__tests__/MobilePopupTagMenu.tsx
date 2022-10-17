@@ -57,12 +57,10 @@ describe('MobilePopupTagMenu', () => {
   test('Tag with permission to delete', async () => {
     const user = userEvent.setup()
     render(
-      <div>
-        <PopupTagList
-          list={TAG_DATA}
-          imageInfo={IMAGE_DATA}
-        />
-      </div>
+      <PopupTagList
+        list={TAG_DATA}
+        imageInfo={IMAGE_DATA}
+      />
     )
 
     expect(AddTagMock).toHaveBeenCalledTimes(1)

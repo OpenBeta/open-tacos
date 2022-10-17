@@ -1,7 +1,5 @@
-import { PlusIcon } from '@heroicons/react/solid'
 
 import Card from '../ui/Card/Card'
-import AddTag from './AddTag'
 import TagList, { MobilePopupTagList } from './TagList'
 import { MobileLoader } from '../../js/sirv/util'
 import { MediaType, MediaTagWithClimb } from '../../js/types'
@@ -12,9 +10,10 @@ interface MobileMediaCardProps {
   imageInfo: MediaType
   tagList: MediaTagWithClimb[]
   isAuthorized?: boolean
+  isAuthenticated?: boolean
 }
 
-export default function MobileMediaCard ({ isAuthorized, imageInfo, tagList }: MobileMediaCardProps): JSX.Element {
+export default function MobileMediaCard ({ isAuthorized = false, isAuthenticated = false, imageInfo, tagList }: MobileMediaCardProps): JSX.Element {
   return (
     <Card
       image={<img
@@ -39,18 +38,16 @@ export default function MobileMediaCard ({ isAuthorized, imageInfo, tagList }: M
               <TagList
                 list={tagList}
                 isAuthorized={isAuthorized}
-              >
-                <AddTag
-                  imageInfo={imageInfo}
-                  label={<div className='badge gap-1'><PlusIcon className='w-4 h-4 inline-block' /> New tag</div>}
-                />
-              </TagList>)}
+                isAuthenticated={isAuthenticated}
+                imageInfo={imageInfo}
+              />
+            )}
           </section>
           <section className='mt-2 uppercase text-base-300' aria-label='timestamp'>
             {getUploadDateSummary(imageInfo.ctime)}
           </section>
         </>
-}
+      }
     />
   )
 }

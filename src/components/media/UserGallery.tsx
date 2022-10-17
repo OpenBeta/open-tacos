@@ -18,7 +18,6 @@ import Bar from '../ui/Bar'
 import Toggle from '../ui/Toggle'
 import { useResponsive } from '../../js/hooks'
 import TagList from './TagList'
-import AddTag, { DesktopLabel } from './AddTag'
 
 export interface UserGalleryProps {
   uid: string
@@ -153,7 +152,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
                 key={key}
                 tagList={tags}
                 imageInfo={imageInfo}
-                isAuthorized={isAuthorized}
+                {...auth}
               />
             )
           }
@@ -180,12 +179,10 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
               >
                 <TagList
                   list={tags}
-                  isAuthorized={isAuthorized}
-                  className='px-2'
+                  imageInfo={imageInfo}
+                  {...auth}
                   showDelete
-                >
-                  {isAuthorized ? <AddTag imageInfo={imageInfo} label={<DesktopLabel />} /> : null}
-                </TagList>
+                />
               </div>
             </div>
           )

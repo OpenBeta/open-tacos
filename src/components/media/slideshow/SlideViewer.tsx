@@ -6,7 +6,6 @@ import ContentLoader from 'react-content-loader'
 
 import { MediaType, MediaTagWithClimb } from '../../../js/types'
 import TagList from '../TagList'
-import AddTag, { DesktopLabel } from '../AddTag'
 import NextPreviousControl from './NextPreviousControl'
 import ResponsiveImage from './ResponsiveImage'
 import AddTagCta from './AddTagCta'
@@ -179,8 +178,6 @@ interface InfoContainerProps {
 }
 
 const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerProps): ReactElement | null => {
-  const { isAuthorized } = auth
-
   if (currentImage == null) return null
 
   return (
@@ -192,15 +189,14 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
         {tagList?.length > 0 &&
           <TagList
             list={tagList}
-            isAuthorized={isAuthorized}
+            imageInfo={currentImage}
+            {...auth}
             showDelete
             className='my-2'
-          >
-            {isAuthorized ? <AddTag imageInfo={currentImage} label={<DesktopLabel />} /> : null}
-          </TagList>}
+          />}
       </div>
 
-      {tagList?.length === 0 && isAuthorized &&
+      {tagList?.length === 0 &&
         <div className='my-8 text-secondary flex items-center space-x-1'>
           <LightBulbIcon className='w-6 h-6 stroke-1 stroke-ob-primary' />
           <span className='mt-1 text-xs'>Your tags help others learn more about the crag</span>
@@ -208,7 +204,7 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
 
       <div className='flex-1' />
 
-      {isAuthorized &&
+      {auth.isAuthorized &&
         <div className='my-8 flex items-center hover:bg-rose-50 p-2 rounded-lg transition'>
           <div className='text-primary text-sm flex-1'>Enable <b>Power mode</b> to delete this image</div>
         </div>}

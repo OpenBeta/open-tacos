@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, MouseEventHandler } from 'react'
 import classNames from 'classnames'
 import { TagIcon, PlusIcon } from '@heroicons/react/outline'
 import { DropdownMenuItem as PrimitiveDropdownMenuItem } from '@radix-ui/react-dropdown-menu'
@@ -8,22 +8,23 @@ import { DropdownMenu, DropdownContent, DropdownTrigger, DropdownItem, DropdownS
 import useDeleteTagBackend from '../../js/hooks/useDeleteTagBackend'
 import { MediaTagWithClimb, MediaType } from '../../js/types'
 import Tag from './Tag'
+import { signIn } from 'next-auth/react'
 
 interface TagsProps {
   list: MediaTagWithClimb[]
   isAuthorized?: boolean
+  isAuthenticated?: boolean
   showDelete?: boolean
   className?: string
-  children?: JSX.Element | null
+  imageInfo: MediaType
 }
 
 /**
- * A horizontal tag list
- * @param children children componenents to be rendered in the same layout as list items
+ * A horizontal tag list.  The last item is a CTA.
  */
-export default function TagList ({ list, isAuthorized = false, showDelete = false, children, className = '' }: TagsProps): JSX.Element | null {
+export default function TagList ({ list, isAuthorized = false, isAuthenticated = false, showDelete = false, imageInfo, className = '' }: TagsProps): JSX.Element | null {
   const { onDelete } = useDeleteTagBackend()
-  if (list == null && children == null) {
+  if (list == null) {
     return null
   }
   return (
@@ -42,9 +43,22 @@ export default function TagList ({ list, isAuthorized = false, showDelete = fals
           isAuthorized={isAuthorized}
           showDelete={showDelete}
         />)}
-      {children}
+      {isAuthorized &&
+        <AddTag
+          imageInfo={imageInfo}
+          label={<AddTagBadge />}
+        />}
+      {!isAuthenticated &&
+        <AddTagBadge onClick={() => { void signIn('auth0') }} />}
     </div>
   )
+}
+
+interface TagListProps {
+  list: MediaTagWithClimb[]
+  isAuthorized?: boolean
+  children?: JSX.Element
+  imageInfo: MediaType
 }
 
 /**
@@ -78,7 +92,13 @@ export const MobilePopupTagList = ({ list, imageInfo, isAuthorized = false }: Ta
             icon={<PlusIcon className='w-5 h-5' />}
             text='Add new tag'
             className='font-bold'
-            onSelect={() => setOpenSearch(true)}
+            onSelect={() => {
+              if (isAuthorized) {
+                setOpenSearch(true)
+              } else {
+                void signIn('auth0')
+              }
+            }}
           />
           <DropdownSeparator />
           <DropdownItem text='Cancel' />
@@ -94,9 +114,11 @@ export const MobilePopupTagList = ({ list, imageInfo, isAuthorized = false }: Ta
   )
 }
 
-interface TagListProps {
-  list: MediaTagWithClimb[]
-  isAuthorized?: boolean
-  children?: JSX.Element
-  imageInfo: MediaType
+interface AddTagBadgeProps {
+  onClick?: MouseEventHandler<HTMLButtonElement>
 }
+
+const AddTagBadge = ({ onClick = () => {} }: AddTagBadgeProps): JSX.Element =>
+  <button className='inline-flex badge gap-1' onClick={onClick}>
+    <PlusIcon className='w-4 h-4 inline-block' /> New tag
+  </button>

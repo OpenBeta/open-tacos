@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
-
 import { PlusIcon } from '@heroicons/react/outline'
+
 import { graphqlClient } from '../../js/graphql/Client'
 import { MUTATION_ADD_CLIMB_TAG_TO_MEDIA } from '../../js/graphql/fragments'
 import ClimbSearchForTagging from '../search/ClimbSearchForTagging'
