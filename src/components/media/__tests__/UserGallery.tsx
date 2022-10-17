@@ -93,7 +93,6 @@ describe('Image gallery', () => {
   test('Auuthorized users should see Tag toggle button.', async () => {
     render(
       <UserGallery
-        loaded
         auth={{ isAuthenticated: true, isAuthorized: true }}
         uid='coolusername1'
         postId={null}
@@ -108,7 +107,6 @@ describe('Image gallery', () => {
   test('Signed-in/Not-authorized users should *not* see Tag toggle button.', async () => {
     render(
       <UserGallery
-        loaded
         auth={{ isAuthenticated: true, isAuthorized: false }}
         uid='coolusername2'
         postId={null}
@@ -123,7 +121,6 @@ describe('Image gallery', () => {
   test('Public users should *not* see Tag toggle button.', async () => {
     render(
       <UserGallery
-        loaded
         auth={{ isAuthenticated: true, isAuthorized: false }}
         uid='coolusername3'
         postId={null}

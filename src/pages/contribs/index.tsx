@@ -9,7 +9,6 @@ interface PageProps {
   history: any[]
 }
 const Page: NextPage<PageProps> = ({ history }: PageProps) => {
-  // const canaryOn = useCanary()
   return (
     <>
       <SeoTags
@@ -21,8 +20,6 @@ const Page: NextPage<PageProps> = ({ history }: PageProps) => {
         showFilterBar={false}
         showFooter
       >
-        {/* <pre>{JSON.stringify(history, null, 2)}</pre> */}
-
         <section className='max-w-lg mx-auto w-full'>
           <DefaultView />
           <h2 className='px-4 sm:px-0'>Recent history</h2>

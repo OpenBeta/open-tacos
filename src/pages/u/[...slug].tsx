@@ -70,7 +70,6 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
           <hr className='mt-8' />
 
           <DynamicComponent
-            loaded={!router.isFallback}
             auth={auth}
             uid={uid}
             postId={postId}

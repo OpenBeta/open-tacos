@@ -1,37 +1,35 @@
-import classNames from 'classnames'
 import Link from 'next/link'
-import { XIcon } from '@heroicons/react/outline'
+import { XCircleIcon } from '@heroicons/react/solid'
+import clx from 'classnames'
 
 import { MediaTagWithClimb } from '../../js/types'
 
 interface PhotoTagProps {
-  highlighted: boolean
   tag: MediaTagWithClimb // only handle climb tag for now
   onDelete: (mediaId: string, destinationId: string) => void
   isAuthorized?: boolean
+  showDelete?: boolean
+  size?: 'md' | 'lg'
 }
-// onClick={(e) => e.stopPropagation()}
-//
-export default function Tag ({ tag, highlighted, onDelete, isAuthorized = false }: PhotoTagProps): JSX.Element {
+
+export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, isAuthorized = false }: PhotoTagProps): JSX.Element {
   const { climb } = tag
   return (
     <Link href={`/climbs/${climb.id}`} prefetch={false}>
       <a
-        className={classNames(
-          'border-neutral-400 border rounded-full max-w-[10rem] inline-flex items-center hover:underline',
-          highlighted ? 'bg-neutral-200 ' : ''
-        )}
+        className={clx('badge badge-outline hover:underline',
+          size === 'lg' ? 'badge-lg gap-2' : 'gap-1')}
         onClick={stopPropagation}
       >
-        <span className='px-2 whitespace-nowrap truncate'>{climb.name}</span>
-        {isAuthorized &&
+        <span className='whitespace-nowrap truncate text-sm'>{climb.name}</span>
+        {isAuthorized && showDelete &&
           <button onClick={(e) => {
             onDelete(tag.mediaUuid, tag.climb.id)
             e.preventDefault()
           }}
           >
-            <div className=' hover:bg-white p-1 rounded-full'>
-              <XIcon className='cursor-pointer stroke-1 hover:stroke-2 w-5 h-5' />
+            <div className='rounded-full'>
+              <XCircleIcon className={clx('cursor-pointer stroke-1 hover:stroke-2', size === 'lg' ? 'w-6 h-6' : 'w-5 h-5')} />
             </div>
           </button>}
       </a>

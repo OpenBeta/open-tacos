@@ -1,51 +1,47 @@
-import { render as reactRender } from 'react-dom'
+import { AutocompleteClassNames } from '@algolia/autocomplete-js'
+import { TagIcon } from '@heroicons/react/solid'
 import { TypesenseDocumentType } from '../../js/types'
 
-import { Autocomplete } from './Autocomplete'
+import { Autocomplete2 } from './Autocomplete2'
 import { TypesenseClimbNameSource } from './sources'
 
 interface XSearchProps {
-  isMobile?: boolean
+  label?: JSX.Element
+  openSearch?: boolean
   placeholder?: string
   onSelect: (props: TypesenseDocumentType) => void
   className?: string
+  onCancel?: () => void
 }
 
 /**
- * Extended search widget
- * @param XSearchProps
+ * Climb name search widget
  */
-export default function ClimbSearchForTagging ({ isMobile = true, placeholder = 'Climb search', onSelect, className }: XSearchProps): JSX.Element {
+export default function ClimbSearchForTagging ({ openSearch = false, onSelect, onCancel, label = <TagIconLabel /> }: XSearchProps): JSX.Element {
+  const isCustomTrigger = label != null
   return (
-    <Autocomplete
-      id={CUSTOM_CLASSES.root}
-      isMobile={isMobile}
-      placeholder={placeholder}
-      forceFocus
+    <Autocomplete2
+      label={label}
+      placeholder='Climb search'
+      open={openSearch}
+      onCancel={onCancel}
+      classNames={isCustomTrigger ? { detachedSearchButton: 'aa-hidden-mobile-trigger-btn' } : undefined}
       getSources={async ({ query }) => {
-        return await Promise.all([await TypesenseClimbNameSource(query, onSelect)])
-      }}
-      classNames={CUSTOM_CLASSES}
-      containerClassname={className}
-      render={({ elements }, root) => {
-        const { climbsForTagging } = elements
-        reactRender(
-          <div>{climbsForTagging}</div>, root)
+        if (query?.trim() === '') return []
+        return [await TypesenseClimbNameSource(query, onSelect)]
       }}
     />
   )
 }
 
-// For customization see global.css
-// Use component's className layout/margin, etc
-const CUSTOM_CLASSES = {
-  panel: 'tag-search-panel',
-  item: 'tag-search-item',
-  panelLayout: 'tag-search-panelLayout',
-  sourceHeader: 'tag-search-sourceHeader',
-  form: 'tag-search-form',
-  inputWrapper: 'tag-search-inputWrapper',
-  inputWrapperPrefix: 'tag-search-inputWrapperPrefix',
-  submitButton: 'tag-search-submit-button',
-  root: 'climb-tag-search'
+const TagIconLabel = (): JSX.Element =>
+  <button className='btn btn-ghost btn-circle' aria-label='climb-search'>
+    <TagIcon className='w-6 h-6' />
+  </button>
+
+// For customization see algolia.css
+export const AA_CUSTOM_TRIGGER_CLASSES: Partial<AutocompleteClassNames> = {
+  detachedSearchButton: 'aa-custom-mobile-trigger-btn',
+  detachedSearchButtonIcon: 'aa-custom-mobile-trigger-btn-icon',
+  detachedSearchButtonPlaceholder: 'aa-custom-mobile-placeholder'
 }
