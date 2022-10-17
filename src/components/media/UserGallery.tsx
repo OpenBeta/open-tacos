@@ -173,8 +173,10 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
               <div
                 className={
                 clx(
-                  'absolute inset-x-0 bottom-0 py-2 flex items-center opacity-80',
-                  hover ? 'opacity-100 bg-base-100 bg-opacity-80' : '')
+                  !isAuthorized && tags.length === 0 ? 'hidden' : '',
+                  'absolute inset-x-0 bottom-0 p-2 flex items-center opacity-90',
+                  hover ? 'opacity-100 bg-base-100 bg-opacity-90' : ''
+                )
                 }
               >
                 <TagList
