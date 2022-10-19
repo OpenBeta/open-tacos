@@ -10,6 +10,13 @@ interface TicksIndexPageProps {
   ticks: TickType[]
 }
 
+/**
+ * Why create a separate /u2/<userid> ?
+ * - The current `/u/<userid/<imageid>` page is a big of a mess due to the way Next handles nested route.
+ * - We probably want to support multiple views of ticks in the future.
+ * Ex: `/u/<userid>/ticks` or `/u/<userid>/ticks/progress` etc.
+ * - Incrementally adopt nested layout https://nextjs.org/blog/layouts-rfc
+ */
 const Index: NextPage<TicksIndexPageProps> = ({ uid, ticks }) => {
   return (
     <section className='max-w-lg mx-auto w-full px-4 py-8'>
