@@ -55,6 +55,15 @@ export default function PublicProfile ({ userProfile: initialUserProfile }: Publ
               {prettifyUrl(websiteWithScheme)}
             </a>
           </div>}
+        <div className='mt-2'>{nick != null
+          ? (
+            <Link href={`/u2/${nick}`}>
+              <a className='text-xs'>
+                <div className='btn btn-info btn-xs'> View ticks</div>
+              </a>
+            </Link>)
+          : null}
+        </div>
       </div>
     </section>
   )
