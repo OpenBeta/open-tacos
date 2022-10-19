@@ -3,7 +3,7 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
 import { AreaType, TickType, MediaTagWithClimb, MediaByAuthor } from '../types'
 import { graphqlClient, stagingGraphQLClient } from './Client'
-import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB } from './fragments'
+import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER } from './fragments'
 interface CragsDetailsNearType {
   data: AreaType[] // Should use Omit or Pick
   placeId: string | undefined
@@ -160,6 +160,25 @@ export const getTicksByUserAndClimb = async (climbId: string, userId: string): P
   } catch (e) {
     console.error('Error fetching ticks by user and climb id', e)
   }
+  return []
+}
+
+export const getTicksByUser = async (userId: string): Promise<TickType[]> => {
+  try {
+    const res = await stagingGraphQLClient.query<{ userTicks: TickType[] }>({
+      query: QUERY_TICKS_BY_USER,
+      variables: {
+        userId
+      }
+    })
+
+    if (Array.isArray(res.data?.userTicks)) {
+      return res.data.userTicks
+    }
+  } catch (e) {
+    console.error('Error fetching ticks by user and climb id', e)
+  }
+  return []
 }
 
 export const getCragsWithinNicely = AwesomeDebouncePromise(getCragsWithin, 1000)

@@ -187,6 +187,22 @@ query userTicksByClimbId($userId: String, $climbId: String) {
 }
 `
 
+export const QUERY_TICKS_BY_USER = gql`
+query userTicks($userId: String) {
+  userTicks(userId: $userId) {
+    _id
+    name
+    notes
+    climbId
+    style
+    attemptType
+    dateClimbed
+    grade
+    userId
+  }
+}
+`
+
 export const MUTATION_REMOVE_TICK_BY_ID = gql`
 mutation deleteTick($_id: ID!) {
   deleteTick(_id: $_id) {
