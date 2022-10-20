@@ -152,7 +152,7 @@ interface LeanAlertProps {
 export const LeanAlert = ({ icon = null, title, description, children = DefaultOkButton, closeOnEsc = true }: LeanAlertProps): JSX.Element => {
   return (
     <AlertDialogPrimitive.Root defaultOpen>
-      <AlertDialogPrimitive.Overlay className='fixed inset-0 bg-black/25' />
+      <AlertDialogPrimitive.Overlay className='fixed inset-0 bg-black bg-opacity-5' />
       <AlertDialogPrimitive.Content
         onEscapeKeyDown={e => !closeOnEsc && e.preventDefault()}
         className='z-40 fixed inset-0 mx-auto flex items-center justify-center p-2 text-center overflow-y-auto max-w-lg'
