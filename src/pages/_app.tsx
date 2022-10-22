@@ -30,7 +30,6 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
 
   return (
     <>
-      {isPhotoError && <PhotoUploadError photoUploadErrorMessage={photoUploadErrorMessage} />}
       <ToastProvider duration={4000}>
         <SessionProvider session={session}>
           {
@@ -41,7 +40,10 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
                 </Auth>
                 )
               : (
-                <Component {...pageProps} />
+                <>
+                  {isPhotoError && <PhotoUploadError photoUploadErrorMessage={photoUploadErrorMessage} />}
+                  <Component {...pageProps} />
+                </>
                 )
           }
         </SessionProvider>
