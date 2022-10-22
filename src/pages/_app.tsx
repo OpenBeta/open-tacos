@@ -7,12 +7,10 @@ import 'nprogress/nprogress.css'
 import { useSession, SessionProvider, signIn } from 'next-auth/react'
 import { ToastProvider, ToastViewport } from '@radix-ui/react-toast'
 import clx from 'classnames'
-import { userMediaStore } from '../js/stores/media'
 
 import '../styles/global.css'
 import '../../public/fonts/fonts.css'
 import useResponsive from '../js/hooks/useResponsive'
-import PhotoUploadError from '../components/media/PhotoUploadError'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
@@ -25,8 +23,6 @@ interface AppPropsWithAuth extends AppProps<{ session: any }> {
 
 export default function MyApp ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithAuth): JSX.Element {
   const { isMobile } = useResponsive()
-  const photoUploadErrorMessage = userMediaStore.use.photoUploadErrorMessage()
-  const isPhotoError = photoUploadErrorMessage !== null
 
   return (
     <>
@@ -40,10 +36,7 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
                 </Auth>
                 )
               : (
-                <>
-                  {isPhotoError && <PhotoUploadError photoUploadErrorMessage={photoUploadErrorMessage} />}
-                  <Component {...pageProps} />
-                </>
+                <Component {...pageProps} />
                 )
           }
         </SessionProvider>

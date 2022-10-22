@@ -3,6 +3,8 @@ import { useRouter } from 'next/router'
 import MobileTabletAppBar from './MobileAppBar'
 import DesktopAppBar from './DesktopAppBar'
 import useResponsive from '../js/hooks/useResponsive'
+import PhotoUploadError from './media/PhotoUploadError'
+import { userMediaStore } from '../js/stores/media'
 
 const NAV_BAR_IDENTIFIER = 'tacos-nav-bar'
 
@@ -13,6 +15,8 @@ interface HeaderProps {
 export default function Header (props: HeaderProps): JSX.Element {
   const { isTablet, isMobile } = useResponsive()
   const includeFilters = Boolean(props.showFilterBar)
+  const photoUploadErrorMessage = userMediaStore.use.photoUploadErrorMessage()
+  const isPhotoError = photoUploadErrorMessage !== null
 
   const router = useRouter()
   const isIndexPage = router.pathname === '/'
@@ -27,18 +31,21 @@ export default function Header (props: HeaderProps): JSX.Element {
   }
 
   return (
-    <div id={NAV_BAR_IDENTIFIER} className='relative z-40'>
-      {isTablet || isMobile
-        ? <MobileTabletAppBar isTablet={isTablet} includeFilters={includeFilters} />
-        : <DesktopAppBar
-            expanded={expanded}
-            onExpandSearchBox={() => {
-              setExpanded(true)
-            }}
-            onClose={handleClose}
-            showFilterBar={includeFilters}
-          />}
-    </div>
+    <>
+      {isPhotoError && <PhotoUploadError photoUploadErrorMessage={photoUploadErrorMessage} />}
+      <div id={NAV_BAR_IDENTIFIER} className='relative z-40'>
+        {isTablet || isMobile
+          ? <MobileTabletAppBar isTablet={isTablet} includeFilters={includeFilters} />
+          : <DesktopAppBar
+              expanded={expanded}
+              onExpandSearchBox={() => {
+                setExpanded(true)
+              }}
+              onClose={handleClose}
+              showFilterBar={includeFilters}
+            />}
+      </div>
+    </>
   )
 }
 
