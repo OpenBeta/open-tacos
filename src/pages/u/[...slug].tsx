@@ -14,6 +14,7 @@ import usePermissions from '../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../js/hooks/seo'
 import useMediaDataStore from '../../js/hooks/useMediaDS'
 import type { UserGalleryProps } from '../../components/media/UserGallery'
+
 interface UserHomeProps {
   uid: string
   postId: string | null
@@ -104,7 +105,7 @@ export async function getStaticPaths (): Promise<any> {
   }
 }
 
-export const getStaticProps: GetStaticProps<UserHomeProps, {slug: string[]}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> = async ({ params }) => {
   const uid = params?.slug?.[0] ?? null
   const postId = params?.slug?.[1] ?? null
 

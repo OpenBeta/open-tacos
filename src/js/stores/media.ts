@@ -10,13 +10,15 @@ interface UserMediaStateProps {
   imageList: MediaType[]
   tagMap: Dictionary<MediaTagWithClimb[]>
   initialized: boolean
+  photoUploadErrorMessage: string | null
 }
 
 const INITIAL_STATE: UserMediaStateProps = {
   uid: null,
   imageList: [],
   tagMap: {},
-  initialized: false
+  initialized: false,
+  photoUploadErrorMessage: null
 }
 
 const STORE_OPTS = {}
@@ -129,6 +131,15 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
 
       set.tagMap(newState)
       await revalidateServePage(get.uid())
+    }
+  })).extendActions((set, get, api) => ({
+    /**
+     *
+     * @param errorMessage
+     * @returns
+     */
+    setPhotoUploadErrorMessage: async (errorMessage: string | null) => {
+      set.photoUploadErrorMessage(errorMessage)
     }
   }))
 
