@@ -1,5 +1,3 @@
-console.log('### MOCK')
-export function MobileAppBar (): any {
-  return 'hello'
-  // return jest.fn()
+export default function MobileAppBar (): any {
+  return 'mobile app bar'
 }

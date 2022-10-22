@@ -17,29 +17,32 @@ Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 NProgress.configure({ showSpinner: false, easing: 'ease-in-out', speed: 250 })
 
-interface AppPropsWithAuth extends AppProps< { session: any }> {
+interface AppPropsWithAuth extends AppProps<{ session: any }> {
   Component: AppProps['Component'] & { auth: boolean }
 }
 
 export default function MyApp ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithAuth): JSX.Element {
   const { isMobile } = useResponsive()
+
   return (
-    <ToastProvider duration={4000}>
-      <SessionProvider session={session}>
-        {
-        Component?.auth
-          ? (
-            <Auth>
-              <Component {...pageProps} />
-            </Auth>
-            )
-          : (
-            <Component {...pageProps} />
-            )
-      }
-      </SessionProvider>
-      <ToastViewport className={clx('fixed p-4 flex flex-col gap-5 z-50', isMobile ? 'top-0 right-0' : 'bottom-0 right-0')} style={{ zIndex: 99999 }} />
-    </ToastProvider>
+    <>
+      <ToastProvider duration={4000}>
+        <SessionProvider session={session}>
+          {
+            Component?.auth
+              ? (
+                <Auth>
+                  <Component {...pageProps} />
+                </Auth>
+                )
+              : (
+                <Component {...pageProps} />
+                )
+          }
+        </SessionProvider>
+        <ToastViewport className={clx('fixed p-4 flex flex-col gap-5 z-50', isMobile ? 'top-0 right-0' : 'bottom-0 right-0')} style={{ zIndex: 99999 }} />
+      </ToastProvider>
+    </>
   )
 }
 
