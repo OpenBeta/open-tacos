@@ -20,7 +20,6 @@ jest.mock('../../../js/stores/media', () => ({
       setPhotoUploadErrorMessage: setPhotoUploadErrorMessageFn
     }
   }
-
 }))
 
 let HeaderComponent
@@ -33,12 +32,14 @@ describe('Test photo upload error popup', () => {
   })
 
   it('shows popup', async () => {
+    // why skipHover=true? https://github.com/testing-library/user-event/issues/922
     const user = userEvent.setup({ skipHover: true })
 
     getPhotoUploadErrorMessageFn.mockReturnValue(null)
 
     render(<HeaderComponent />)
 
+    // no popup
     expect(screen.queryByText('Woof!')).not.toBeInTheDocument()
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
 
