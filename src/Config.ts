@@ -14,6 +14,7 @@ interface AUTH_CONFIG_SERVER_TYPE {
   clientSecret: string
   mgmtClientId: string
   mgmtClientSecret: string
+  nextauthSecret: string
 }
 
 let AUTH_CONFIG_SERVER: AUTH_CONFIG_SERVER_TYPE | undefined
@@ -24,7 +25,8 @@ if (typeof window === 'undefined') {
     clientId: checkAndPrintWarning('AUTH0_CLIENT_ID', process.env.AUTH0_CLIENT_ID),
     clientSecret: checkAndPrintWarning('AUTH0_CLIENT_SECRET', process.env.AUTH0_CLIENT_SECRET),
     mgmtClientId: checkAndPrintWarning('AUTH0_MGMT_CLIENT_ID', process.env.AUTH0_MGMT_CLIENT_ID),
-    mgmtClientSecret: checkAndPrintWarning('AUTH0_MGMT_CLIENT_SECRET', process.env.AUTH0_MGMT_CLIENT_SECRET)
+    mgmtClientSecret: checkAndPrintWarning('AUTH0_MGMT_CLIENT_SECRET', process.env.AUTH0_MGMT_CLIENT_SECRET),
+    nextauthSecret: checkAndPrintWarning('NEXTAUTH_SECRET', process.env.NEXTAUTH_SECRET)
   }
 } else {
   AUTH_CONFIG_SERVER = undefined
