@@ -5,7 +5,7 @@ import { IWritableUserMetadata, IUserProfile } from '../types/User'
 
 if (AUTH_CONFIG_SERVER == null) throw new Error('AUTH_CONFIG_SERVER not defined')
 
-const { mgmtClientId, mgmtClientSecret, issuer } = AUTH_CONFIG_SERVER
+const { mgmtClientId, mgmtClientSecret, issuer, clientId } = AUTH_CONFIG_SERVER
 
 export const auth0ManagementClient = new Auth0MgmtClient({
   domain: issuer.replace('https://', ''),
@@ -108,3 +108,11 @@ export const extractUpdatableMetadataFromProfile = ({ name, nick, bio, website, 
   ticksImported,
   collections
 })
+
+/**
+ * See https://auth0.com/docs/api/management/v2#!/Jobs/post_verification_email
+ * @param userId Auth0 internal user id. Ex: auth0|234879238023482995
+ */
+export const sendEmailVerification = async (userId: string): Promise<void> => {
+  await auth0ManagementClient.sendEmailVerification({ user_id: userId, client_id: clientId })
+}

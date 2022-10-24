@@ -33,6 +33,7 @@ export default NextAuth({
   events: {},
   pages: {
     // signIn: '/auth/signin'
+    verifyRequest: '/auth/verify-request'
   },
   theme: {
     colorScheme: 'light',
