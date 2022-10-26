@@ -10,7 +10,7 @@ const byDisciplineAggBoulderSport = {
         beginner: 4,
         intermediate: 6,
         expert: 0,
-        advance: 0
+        advanced: 0
       }
     },
   trad: null,
@@ -21,7 +21,7 @@ const byDisciplineAggBoulderSport = {
         beginner: 2,
         intermediate: 0,
         expert: 0,
-        advance: 1
+        advanced: 1
       }
     },
   tr: null
