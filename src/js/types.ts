@@ -79,7 +79,7 @@ export interface DisciplineStatsType {
 export interface CountByGradeBandType {
   beginner: number
   intermediate: number
-  advance: number
+  advanced: number
   expert: number
 }
 
