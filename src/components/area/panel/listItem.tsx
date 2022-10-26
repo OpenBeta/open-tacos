@@ -64,7 +64,7 @@ export default function ListItem (props: ListItemProps): JSX.Element {
   const gradeDist = [
     aggregate.byGradeBand.beginner,
     aggregate.byGradeBand.intermediate,
-    aggregate.byGradeBand.advance,
+    aggregate.byGradeBand.advanced,
     aggregate.byGradeBand.expert
   ]
 

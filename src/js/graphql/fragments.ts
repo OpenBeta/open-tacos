@@ -17,7 +17,7 @@ export const CORE_CRAG_FIELDS = gql`
         sport {
           total
           bands {
-            advance
+            advanced
             beginner
             expert
             intermediate
@@ -26,7 +26,7 @@ export const CORE_CRAG_FIELDS = gql`
         trad {
           total
           bands {
-            advance
+            advanced
             beginner
             expert
             intermediate
@@ -35,7 +35,7 @@ export const CORE_CRAG_FIELDS = gql`
         boulder {
           total
           bands {
-            advance
+            advanced
             beginner
             expert
             intermediate
@@ -44,7 +44,7 @@ export const CORE_CRAG_FIELDS = gql`
         tr {
           total
           bands {
-            advance
+            advanced
             beginner
             expert
             intermediate
@@ -52,7 +52,7 @@ export const CORE_CRAG_FIELDS = gql`
         }
       }
       byGradeBand {
-        advance
+        advanced
         beginner
         expert
         intermediate

@@ -186,7 +186,7 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
             intermediate
             expert
             beginner
-            advance
+            advanced
           }
           byDiscipline {
             sport {
@@ -215,7 +215,7 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
             intermediate
             expert
             beginner
-            advance
+            advanced
           }
           byDiscipline {
             sport {
@@ -250,8 +250,9 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
     }
   }`
 
+  let rs
   try {
-    const rs = await graphqlClient.query<{area: AreaType}>({
+    rs = await graphqlClient.query<{area: AreaType}>({
       query,
       variables: {
         uuid: params.id
@@ -282,7 +283,8 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
       revalidate: 10
     }
   } catch (e) {
-    console.log('GraphQL exception:', e)
+    console.log('#GraphQL exception:', e)
+    console.log('#', e?.result)
     return {
       notFound: true,
       revalidate: 10

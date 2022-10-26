@@ -14,6 +14,8 @@ interface TokenHelperType {
 function VerifyEmailPendingPage (): JSX.Element {
   const session = useSession()
 
+  console.log('#verify-request page')
+
   const [sending, setSending] = useState(false)
   const router = useRouter()
   const token = router.query?.session_token as string

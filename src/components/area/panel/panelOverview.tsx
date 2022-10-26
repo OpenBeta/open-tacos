@@ -45,7 +45,7 @@ export default function PanelOverview (props: PanelOverviewProps): JSX.Element {
       details: {
         beginner: item.aggregate.byGradeBand.beginner,
         intermediate: item.aggregate.byGradeBand.intermediate,
-        advance: item.aggregate.byGradeBand.advance,
+        advance: item.aggregate.byGradeBand.advanced,
         expert: item.aggregate.byGradeBand.expert
       }
     }
