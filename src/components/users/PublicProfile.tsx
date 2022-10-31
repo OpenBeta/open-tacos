@@ -6,6 +6,7 @@ import { IUserProfile } from '../../js/types/User'
 import EditProfileButton from './EditProfileButton'
 import ImportFromMtnProj from './ImportFromMtnProj'
 import APIKey from './APIKey'
+import usePermissions from '../../js/hooks/auth/usePermissions'
 
 interface PublicProfileProps {
   userProfile: IUserProfile
@@ -13,7 +14,8 @@ interface PublicProfileProps {
 }
 
 export default function PublicProfile ({ userProfile: initialUserProfile }: PublicProfileProps): JSX.Element {
-  const [userProfile, setUserProfile] = useState<IUserProfile|null>(initialUserProfile)
+  const [userProfile, setUserProfile] = useState<IUserProfile | null>(initialUserProfile)
+  const { isAuthorized } = usePermissions({ ownerProfileOnPage: initialUserProfile })
 
   useEffect(() => {
     setUserProfile(initialUserProfile)
@@ -39,7 +41,7 @@ export default function PublicProfile ({ userProfile: initialUserProfile }: Publ
             {nick}
           </div>
           <EditProfileButton ownerProfile={initialUserProfile} />
-          {userProfile != null && <ImportFromMtnProj isButton />}
+          {userProfile != null && isAuthorized && <ImportFromMtnProj isButton />}
           {userProfile != null && <APIKey ownerProfile={initialUserProfile} />}
         </div>
         <div className='mt-6 text-lg font-semibold'>{name}</div>
