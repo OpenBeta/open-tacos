@@ -303,6 +303,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Shaglock",
+      "name": "Ilya Shaplyko",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15055321?v=4",
+      "profile": "https://github.com/Shaglock",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -310,5 +319,6 @@
   "projectOwner": "OpenBeta",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "angular"
 }
