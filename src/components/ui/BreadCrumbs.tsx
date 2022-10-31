@@ -26,7 +26,7 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
     <div aria-label='area-breadcrumbs' className='flex-wrap flex gap-2 text-sm items-center'>
       <LocationMarkerIcon className='text-ob-primary w-5 h-5' />
 
-      <Link href='/'>
+      <Link href='/a'>
         <a className='hover:underline hover:text-base-content text-base-300'>Home</a>
       </Link>
 

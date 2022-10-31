@@ -110,6 +110,7 @@ export interface AreaType {
   children: AreaType[]
   climbs: Climb[]
   media: MediaBaseTag[]
+  updatedAt?: number
 }
 
 export interface AreaUpdatableFieldsType {
@@ -282,3 +283,5 @@ export interface FinancialBackerAccountType {
     imageUrl: string
   }
 }
+
+export type CountrySummaryType = Pick<AreaType, 'areaName' | 'uuid' | 'totalClimbs' | 'updatedAt' | 'metadata'> & { metadata: Pick<AreaMetadataType, 'lat' | 'lng' | 'areaId'> }

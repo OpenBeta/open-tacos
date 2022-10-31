@@ -211,3 +211,19 @@ mutation deleteTick($_id: ID!) {
   }
 }
 `
+
+export const QUERY_ALL_COUNTRIES = gql`
+  query countries {
+    countries {
+      areaName
+      uuid
+      totalClimbs
+      updatedAt
+      metadata {
+        lat
+        lng
+        areaId
+      }
+    }
+  }
+`
