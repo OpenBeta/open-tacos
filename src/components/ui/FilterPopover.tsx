@@ -28,7 +28,7 @@ export default function FilterPopover ({ label, mobileLabel, header, shortHeader
   }
   return (
     <LeanPopover
-      btnClz='border-2 rounded-2xl btn-small border-neutral-100 lg:text-neutral-100 flex flex-row space-x-1.5 center-items'
+      btnClz='border-2 rounded-2xl whitespace-nowrap py-1 px-4 border-primary-contrast lg:text-primary-contrast flex flex-row space-x-1.5 items-center'
       btnLabel={label}
     >
       <LeanPopover.ContentPanel
