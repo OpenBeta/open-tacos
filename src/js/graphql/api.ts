@@ -1,9 +1,9 @@
 import { gql } from '@apollo/client'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
-import { AreaType, TickType, MediaTagWithClimb, MediaByAuthor } from '../types'
+import { AreaType, TickType, MediaTagWithClimb, MediaByAuthor, CountrySummaryType } from '../types'
 import { graphqlClient, stagingGraphQLClient } from './Client'
-import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER } from './fragments'
+import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './fragments'
 interface CragsDetailsNearType {
   data: AreaType[] // Should use Omit or Pick
   placeId: string | undefined
@@ -144,6 +144,8 @@ export const getCragsWithin = async ({ bbox, zoom }): Promise<any> => {
   return []
 }
 
+export const getCragsWithinNicely = AwesomeDebouncePromise(getCragsWithin, 1000)
+
 export const getTicksByUserAndClimb = async (climbId: string, userId: string): Promise<any> => {
   try {
     const res = await stagingGraphQLClient.query<{ userTicksByClimbId: TickType[] }>({
@@ -181,4 +183,17 @@ export const getTicksByUser = async (userId: string): Promise<TickType[]> => {
   return []
 }
 
-export const getCragsWithinNicely = AwesomeDebouncePromise(getCragsWithin, 1000)
+export const getAllCountries = async (): Promise<CountrySummaryType[]> => {
+  try {
+    const res = await graphqlClient.query<{ countries: CountrySummaryType[] }>({
+      query: QUERY_ALL_COUNTRIES
+    })
+
+    if (Array.isArray(res.data?.countries)) {
+      return res.data.countries
+    }
+  } catch (e) {
+    console.error('Error fetching all countries', e)
+  }
+  return []
+}
