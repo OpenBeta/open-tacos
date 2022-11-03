@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSession, signIn } from 'next-auth/react'
-import { MailIcon, ArrowSmRightIcon } from '@heroicons/react/outline'
+import { EnvelopeIcon, ArrowSmallRightIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import useSWR from 'swr'
@@ -50,7 +50,7 @@ function VerifyEmailPendingPage (): JSX.Element {
       <div className='bg-base-content h-screen pt-8'>
         <section className='bg-base-100 max-w-sm mx-auto px-4 py-12 rounded-box'>
           <div className='flex flex-col gap-4 items-center'>
-            <MailIcon className='w-8 h-8 animate-bounce stroke-accent' />
+            <EnvelopeIcon className='w-8 h-8 animate-bounce stroke-accent' />
             <hr className='w-full py-1 border-base-300' />
             <div className='text-center'>Look for a verification email in your inbox. <strong>Don't forget to check your spam folder </strong>🙂</div>
             <div className='mt-4 flex flex-col gap-4 items-center w-full'>
@@ -62,7 +62,7 @@ function VerifyEmailPendingPage (): JSX.Element {
                   Resend verification email
                 </button>}
               <button className='btn btn-ghost btn-sm text-sm text-base-300' onClick={() => { void signIn('auth0') }}>
-                Already verified? Login <ArrowSmRightIcon className='ml-2 w-5 h-5' />
+                Already verified? Login <ArrowSmallRightIcon className='ml-2 w-5 h-5' />
               </button>
             </div>
           </div>

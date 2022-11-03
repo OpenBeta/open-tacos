@@ -1,5 +1,5 @@
 import { AutocompleteClassNames } from '@algolia/autocomplete-js'
-import { TagIcon } from '@heroicons/react/solid'
+import { TagIcon } from '@heroicons/react/24/outline'
 import { TypesenseDocumentType } from '../../js/types'
 
 import { Autocomplete2 } from './Autocomplete2'

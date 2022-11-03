@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react'
-import { XIcon } from '@heroicons/react/outline'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ReactElement } from 'react'
 
 import { Button, ButtonVariant } from '../../ui/BaseButton'
@@ -37,7 +37,7 @@ export default function DesktopModal ({
         <div className='z-50 absolute right-3 top-2 flex flex-col justify-center hover:font-bold'>
           <Button
             ariaLabel='close'
-            label={<XIcon className='w-4 h-4' />}
+            label={<XMarkIcon className='w-4 h-4' />}
             variant={ButtonVariant.ROUNDED_ICON_SOLID}
             onClick={onClose}
           />

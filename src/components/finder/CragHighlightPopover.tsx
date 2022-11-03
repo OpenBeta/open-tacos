@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import Link from 'next/link'
 import { Popover } from '@headlessui/react'
-import { XIcon } from '@heroicons/react/solid'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
 import { sanitizeName } from '../../js/utils'
 import { AreaType } from '../../js/types'
@@ -32,7 +32,7 @@ function CragHighlightPopover (props: AreaType | undefined): JSX.Element | null 
                   }}
                   className='-mt-0.5 p-1 rounded-full hover:bg-slate-200'
                 >
-                  <XIcon className='w-4 h-4 text-slate-600' />
+                  <XMarkIcon className='w-4 h-4 text-slate-600' />
                 </button>
               </header>
               <hr className='' />

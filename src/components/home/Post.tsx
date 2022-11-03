@@ -4,8 +4,8 @@ import { MediaType } from '../../js/types'
 import {
   UserCircleIcon,
   TagIcon,
-  DotsHorizontalIcon
-} from '@heroicons/react/outline'
+  EllipsisHorizontalIcon
+} from '@heroicons/react/24/outline'
 import { getUploadDateSummary, urlResolver } from '../../js/utils'
 
 export interface PostBodyProps {
@@ -75,7 +75,7 @@ export const PostHeader = ({
       </div>
       <div>
         <div className='dropdown dropdown-end'>
-          <DotsHorizontalIcon
+          <EllipsisHorizontalIcon
             tabIndex={0}
             className='px-2 cursor-pointer h-6 rounded-box'
           />

@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { sanitizeName } from '../../js/utils'
-import { LocationMarkerIcon } from '@heroicons/react/outline'
+import { MapPinIcon } from '@heroicons/react/24/outline'
 /**
  * Turn each element of `pathTokens` to a gatsby-link.
  *
@@ -24,7 +24,7 @@ interface BreakCrumbsProps {
 function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumbsProps): JSX.Element {
   return (
     <div aria-label='area-breadcrumbs' className='flex-wrap flex gap-2 text-sm items-center'>
-      <LocationMarkerIcon className='text-ob-primary w-5 h-5' />
+      <MapPinIcon className='text-ob-primary w-5 h-5' />
 
       <Link href='/a'>
         <a className='hover:underline hover:text-base-content text-base-300'>Home</a>

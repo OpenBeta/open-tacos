@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import * as Tabs from '@radix-ui/react-tabs'
 import { gql } from '@apollo/client'
 import { groupBy, Dictionary } from 'underscore'
-import { TagIcon, LightBulbIcon, LocationMarkerIcon, PencilIcon, CurrencyDollarIcon } from '@heroicons/react/outline'
+import { TagIcon, LightBulbIcon, MapPinIcon, PencilIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 import Link from 'next/link'
 
@@ -113,7 +113,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, don
               <TabsTrigger
                 tabKey='map'
                 activeKey={activeTab}
-                icon={<LocationMarkerIcon className='w-6 h-6' />}
+                icon={<MapPinIcon className='w-6 h-6' />}
                 label='Map'
               />
               <TabsTrigger

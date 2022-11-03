@@ -1,4 +1,4 @@
-import { BadgeCheckIcon, ExclamationCircleIcon } from '@heroicons/react/outline'
+import { CheckBadgeIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { ReactNode } from 'react'
 import { LeanAlert, AlertAction } from '../../ui/micro/AlertDialogue'
 
@@ -6,7 +6,7 @@ export const SuccessAlert = ({ description, children }): JSX.Element => {
   return (
     <LeanAlert
       closeOnEsc={false}
-      icon={<BadgeCheckIcon className='stroke-success w-10 h-10' />}
+      icon={<CheckBadgeIcon className='stroke-success w-10 h-10' />}
       title='Success'
       description={description}
     >

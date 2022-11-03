@@ -1,5 +1,5 @@
 import { useSession, signOut } from 'next-auth/react'
-import { UserCircleIcon, ChatIcon } from '@heroicons/react/outline'
+import { UserCircleIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/outline'
 
 import { Menu } from '@headlessui/react'
 import { Button, ButtonVariant } from './ui/BaseButton'
@@ -84,7 +84,7 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
               <a
                 className='flex items-center space-x-2 text-secondary' href='https://discord.gg/2A2F6kUtyh'
               >
-                <ChatIcon className='w-4 h-4 stroke-gray-500' />
+                <ChatBubbleOvalLeftEllipsisIcon className='w-4 h-4 stroke-gray-500' />
                 <span className='mt-0.5'>Discord community</span>
               </a>
             </Menu.Item>

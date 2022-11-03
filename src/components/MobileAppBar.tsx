@@ -3,7 +3,7 @@ import { Popover } from '@headlessui/react'
 import Image from 'next/image'
 
 import MobileNavBar from './ui/MobileNavBar'
-import { HomeIcon, MenuIcon } from '@heroicons/react/outline'
+import { HomeIcon, Bars3Icon } from '@heroicons/react/24/outline'
 import OpenBetaLogo from '../assets/brand/openbeta-logo.svg'
 
 import MobileFilterBar from './finder/filters/MobileFilterBar'
@@ -71,7 +71,7 @@ const More = (): JSX.Element => {
   return (
     <Popover>
       <Popover.Button as='div' className='z-50 flex center-items'>
-        <Button label={<MenuIcon className='text-white w-8 h-8' />} />
+        <Button label={<Bars3Icon className='text-white w-8 h-8' />} />
       </Popover.Button>
 
       <Popover.Panel className='absolute z-20 right-0 mt-2 p-6 bg-white rounded-md'>

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useSession } from 'next-auth/react'
-import { PlusIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
+import { PlusIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
 
 import usePhotoUploader from '../js/hooks/usePhotoUploader'
 import { Button, ButtonVariant } from './ui/BaseButton'
@@ -40,7 +40,7 @@ export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JS
             disabled={uploading}
             label={
               <span className='border-2 text-white rounded-md border-white'>
-                {uploading ? <DotsHorizontalIcon className='w-6 h-6' /> : <PlusIcon className='w-6 h-6' />}
+                {uploading ? <EllipsisHorizontalIcon className='w-6 h-6' /> : <PlusIcon className='w-6 h-6' />}
               </span>
                 }
           />
@@ -56,7 +56,7 @@ export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JS
           label={
             <div className='flex no-wrap items-center space-x-2 px-4'>
               {uploading
-                ? <DotsHorizontalIcon className='w-5 h-5 stroke-white stroke-2 animate-pulse' />
+                ? <EllipsisHorizontalIcon className='w-5 h-5 stroke-white stroke-2 animate-pulse' />
                 : <PlusIcon className='stroke-white stroke-2 w-5 h-5' />}
               <span className='mt-0.5 px-2'>Photo</span>
             </div>

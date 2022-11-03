@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
-import { XIcon } from '@heroicons/react/outline'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
 interface Props {
   title?: string | ReactNode
@@ -22,7 +22,7 @@ export const DialogContent = React.forwardRef<any, Props>(
             <div className='flex justify-between items-center align-middle mb-4'>
               <DialogPrimitive.Close aria-label='Close' asChild>
                 <button className='btn btn-circle btn-ghost btn-sm'>
-                  <XIcon className='w-6 h-6' />
+                  <XMarkIcon className='w-6 h-6' />
                 </button>
               </DialogPrimitive.Close>
               <DialogPrimitive.Title asChild>
