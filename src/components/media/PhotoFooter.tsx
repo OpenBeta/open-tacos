@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { Transition } from '@headlessui/react'
-import { UserCircleIcon } from '@heroicons/react/outline'
-import { TagIcon } from '@heroicons/react/solid'
+import { UserCircleIcon, TagIcon } from '@heroicons/react/24/outline'
 import { urlResolver } from '../../js/utils'
 
 export default function PhotoFooter ({

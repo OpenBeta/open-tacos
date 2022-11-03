@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { PhotographIcon } from '@heroicons/react/outline'
+import { PhotoIcon } from '@heroicons/react/24/outline'
 import { OpenverseImage } from '.'
 
 export function DefaultImage (): JSX.Element {
@@ -19,7 +19,7 @@ export function FeatureImage ({ image }: { image: OpenverseImage }): JSX.Element
       >{image.url == null
         ? (
           <div className='bg-contrast h-full flex flex-cols items-center justify-center'>
-            <div><PhotographIcon className='stroke-1 stroke-gray-400 w-12 h-12' /></div>
+            <div><PhotoIcon className='stroke-1 stroke-gray-400 w-12 h-12' /></div>
           </div>
           )
         : <Image

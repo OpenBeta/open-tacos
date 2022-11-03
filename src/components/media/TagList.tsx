@@ -1,6 +1,6 @@
 import { useState, MouseEventHandler } from 'react'
 import classNames from 'classnames'
-import { TagIcon, PlusIcon } from '@heroicons/react/outline'
+import { TagIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { DropdownMenuItem as PrimitiveDropdownMenuItem } from '@radix-ui/react-dropdown-menu'
 
 import AddTag from './AddTag'

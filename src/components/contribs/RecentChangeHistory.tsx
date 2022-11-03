@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { PlusIcon, UserCircleIcon, MinusIcon, PencilIcon, PlusSmIcon, PencilAltIcon, MinusCircleIcon } from '@heroicons/react/outline'
+import { PlusIcon, UserCircleIcon, MinusIcon, PencilIcon, PlusSmallIcon, MinusCircleIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
 
 import { ChangesetType, ChangeType, AreaType } from '../../js/types'
@@ -121,7 +121,7 @@ const operationLabelMap = {
 }
 
 const dbOpIcon = {
-  insert: <PlusSmIcon className='w-4 h-4 stroke-base-300' />,
-  update: <PencilAltIcon className='w-4 h-4 stroke-base-300' />,
+  insert: <PlusSmallIcon className='w-4 h-4 stroke-base-300' />,
+  update: <PencilIcon className='w-4 h-4 stroke-base-300' />,
   delete: <MinusCircleIcon className='w-4 h-4 fill-error' />
 }

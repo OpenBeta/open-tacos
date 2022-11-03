@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { AdjustmentsIcon } from '@heroicons/react/outline'
+import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline'
 import { actions, cragFiltersStore } from '../../../js/stores'
 import { RadiusRangeSlider, radiusRangeToString, prettifyLabel } from '../../ui/RadiusRangeSlider'
 import FilterPopover, { MinMax } from '../../ui/FilterPopover'
@@ -21,7 +21,7 @@ const RadiusFilter = ({ isMobile = true }: RadiusFilterProps): JSX.Element => {
   const { min, max } = radiusRangeToString(range)
   return (
     <FilterPopover
-      mobileLabel={<AdjustmentsIcon className='w-4 h-4' />}
+      mobileLabel={<AdjustmentsHorizontalIcon className='w-4 h-4' />}
       label={prettifyLabel(initial)}
       shortHeader='Search radius'
       header='Select a search radius'

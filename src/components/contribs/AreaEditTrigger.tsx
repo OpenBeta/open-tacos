@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from 'react'
-import { PencilIcon, FolderAddIcon, FolderRemoveIcon, ChevronDoubleDownIcon } from '@heroicons/react/outline'
+import { PencilIcon, FolderPlusIcon, FolderMinusIcon, ChevronDoubleDownIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 
 import { MobileDialog, DialogContent } from '../ui/MobileDialog'
@@ -61,13 +61,13 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
           <DropdownSeparator />
           <DropdownItem
             className='font-bold'
-            icon={<FolderAddIcon className='w-5 h-5' />}
+            icon={<FolderPlusIcon className='w-5 h-5' />}
             text='Add new area'
             onSelect={() => setAction('add')}
           />
           <DropdownSeparator />
           <DropdownItem
-            icon={<FolderRemoveIcon className='w-5 h-5' />}
+            icon={<FolderMinusIcon className='w-5 h-5' />}
             text='Delete this area'
             onSelect={() => setAction('delete')}
             disabled={!deletable}

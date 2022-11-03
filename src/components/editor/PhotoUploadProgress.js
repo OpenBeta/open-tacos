@@ -1,6 +1,6 @@
 import React from 'react'
 import { Dialog } from '@headlessui/react'
-import { UploadIcon } from '@heroicons/react/outline'
+import { UploadIcon } from '@heroicons/react/24/outline'
 
 export default function PhotoUploadProgress ({ open }) {
   return (

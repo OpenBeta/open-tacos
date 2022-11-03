@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useRef, Dispatch, SetStateAction, useEffect } from 'react'
 import { Dictionary } from 'underscore'
-import { TagIcon } from '@heroicons/react/outline'
+import { TagIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { basename } from 'path'
 import clx from 'classnames'

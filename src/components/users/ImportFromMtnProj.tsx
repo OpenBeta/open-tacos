@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useState } from 'react'
 import { Transition } from '@headlessui/react'
-import { DocumentDownloadIcon } from '@heroicons/react/outline'
-import { XIcon } from '@heroicons/react/solid'
+import { FolderArrowDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
 import { stagingGraphQLClient } from '../../js/graphql/Client'
@@ -126,7 +125,7 @@ export function ImportFromMtnProj ({ isButton }: Props): JSX.Element {
               <div className='p-4'>
                 <div className='flex items-start'>
                   <div className='flex-shrink-0'>
-                    <DocumentDownloadIcon className='h-6 w-6 text-gray-400' aria-hidden='true' />
+                    <FolderArrowDownIcon className='h-6 w-6 text-gray-400' aria-hidden='true' />
                   </div>
                   <div className='ml-3 w-0 flex-1 pt-0.5'>
                     {(errors != null) && errors.length > 0 && errors.map((err, i) => <p className='mt-2 text-ob-primary' key={i}>{err}</p>)}
@@ -189,7 +188,7 @@ export function ImportFromMtnProj ({ isButton }: Props): JSX.Element {
                       }}
                     >
                       <span className='sr-only'>Close</span>
-                      <XIcon className='h-5 w-5' aria-hidden='true' />
+                      <XMarkIcon className='h-5 w-5' aria-hidden='true' />
                     </button>
                   </div>
                 </div>
