@@ -1,5 +1,5 @@
 import { signIn } from 'next-auth/react'
-import { PlusIcon } from '@heroicons/react/outline'
+import { PlusIcon } from '@heroicons/react/24/outline'
 
 import { WithPermission } from '../../../js/types/User'
 import { Button, ButtonVariant } from '../../ui/BaseButton'

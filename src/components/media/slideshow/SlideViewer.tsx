@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 
-import { LightBulbIcon } from '@heroicons/react/outline'
+import { LightBulbIcon } from '@heroicons/react/24/outline'
 import { Dictionary } from 'underscore'
 import ContentLoader from 'react-content-loader'
 

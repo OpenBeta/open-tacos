@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react'
-import { ChevronLeftIcon } from '@heroicons/react/outline'
+import { ChevronLeftIcon } from '@heroicons/react/24/outline'
 import Bar from './Bar'
 interface MobilePageProps {
   isOpen: boolean

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, ButtonVariant } from './BaseButton'
-import { ArrowRightIcon } from '@heroicons/react/outline'
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
 export default function LandingHero () {
   return (
     <section className='z-0 bg-ob-primary bg-opacity-80 flex items-center flex-col justify-center  gap-y-8 py-8 lg:py-24'>

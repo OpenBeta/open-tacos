@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { XCircleIcon } from '@heroicons/react/solid'
+import { XCircleIcon } from '@heroicons/react/20/solid'
 import clx from 'classnames'
 
 import { MediaTagWithClimb } from '../../js/types'
