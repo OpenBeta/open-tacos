@@ -39,10 +39,10 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, s
       <DesktopNavBar
         expanded={expanded}
         branding={
-          <Link href='/'>
-            <a className='h-[32px] w-[112px] block'>
-              <Image src={LogoWithText} layout='responsive' />
-            </a>
+          <Link href='/' className='h-[32px] w-[112px] block'>
+
+            <Image src={LogoWithText} layout='responsive' />
+
           </Link>
       }
         search={

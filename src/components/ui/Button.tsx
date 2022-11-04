@@ -38,12 +38,14 @@ export const LinkButton = ({ href, children, className, theRest }: LinkButtonPro
     )
   }
   return (
-    <Link href={href} {...theRest}>
-      <a>
+    (
+      <Link href={href} {...theRest}>
+
         <button className={className}>
           {children}
         </button>
-      </a>
-    </Link>
+
+      </Link>
+    )
   )
 }

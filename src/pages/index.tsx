@@ -85,12 +85,12 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, don
             <Tabs.List
               aria-label='tabs explore'
               className={
-                classNames(
-                  'z-10 mb-3 sm:mb-6 mx-4 flex gap-x-1 sm:gap-x-4 px-2 sm:px-4 py-1 w-full sm:w-auto',
-                  activeTab === 'map'
-                    ? 'bg-white ring-2 ring-gray-600 ring-offset-4 rounded w-[96%] sm:w-auto px-0'
-                    : '')
-              }
+              classNames(
+                'z-10 mb-3 sm:mb-6 mx-4 flex gap-x-1 sm:gap-x-4 px-2 sm:px-4 py-1 w-full sm:w-auto',
+                activeTab === 'map'
+                  ? 'bg-white ring-2 ring-gray-600 ring-offset-4 rounded w-[96%] sm:w-auto px-0'
+                  : '')
+            }
             >
               <TabsTrigger
                 tabKey='edit'
@@ -124,7 +124,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, don
               />
             </Tabs.List>
             <Tabs.Content value='edit' className='h-60'>
-              <div className='alert shadow-lg'><b>Sorry this feature is not yet available.</b><span>Activate pre-released features?<Link href='/?next=true'><a><button className='btn btn-primary btn-sm'>Activate</button></a></Link></span></div>
+              <div className='alert shadow-lg'><b>Sorry this feature is not yet available.</b><span>Activate pre-released features?<Link href='/?next=true'><button className='btn btn-primary btn-sm'>Activate</button></Link></span></div>
             </Tabs.Content>
             <Tabs.Content value='explore' className='w-full'>
               <DynamicDenseAreas areas={areas} />

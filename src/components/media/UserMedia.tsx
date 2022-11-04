@@ -48,14 +48,14 @@ export default function UserMedia ({
       className='block relative rounded overflow-hidden hover:shadow transition w-[300px] h-[300px] hover:brightness-75'
 
     >
-      <Link href={shareableUrl}>
-        <a onClick={onClickHandler}>
-          <ResponsiveImage
-            mediaUrl={imageInfo.filename}
-            isHero={index === 0}
-            loader={DesktopPreviewLoader}
-          />
-        </a>
+      <Link href={shareableUrl} onClick={onClickHandler}>
+
+        <ResponsiveImage
+          mediaUrl={imageInfo.filename}
+          isHero={index === 0}
+          loader={DesktopPreviewLoader}
+        />
+
       </Link>
 
       {tagList?.length === 0 && isAuthorized && (

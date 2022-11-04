@@ -58,11 +58,13 @@ const Home = (): JSX.Element => (
 
 const Branding = (): JSX.Element => {
   return (
-    <Link href='/'>
-      <a>
+    (
+      <Link href='/'>
+
         <Image width={16} height={16} src={OpenBetaLogo} layout='responsive' />
-      </a>
-    </Link>
+
+      </Link>
+    )
   )
 }
 

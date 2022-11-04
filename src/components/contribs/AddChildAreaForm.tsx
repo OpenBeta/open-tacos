@@ -158,8 +158,13 @@ interface AreaPageResolverProps {
 
 const AreaPageResolver = ({ uuid, children }: AreaPageResolverProps): JSX.Element => {
   return (
-    <Link href={`/areas/${uuid}`}>
-      <a target='_blank' rel='noreferrer' onClick={e => e.stopPropagation()}>{children}</a>
+    <Link
+      href={`/areas/${uuid}`}
+      target='_blank'
+      rel='noreferrer'
+      onClick={e => e.stopPropagation()}
+    >
+      {children}
     </Link>
   )
 }

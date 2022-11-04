@@ -60,7 +60,7 @@ const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeT
         <div className=''>
           {dbOp === 'delete'
             ? <span>{areaName}</span>
-            : (<Link href={`/areas/${uuid}`}><a className='link link-hover'>{areaName}</a></Link>)}
+            : (<Link href={`/areas/${uuid}`} className='link link-hover'>{areaName}</Link>)}
         </div>
         <div className='text-xs text-base-300'>
           <UpdatedFields fields={updateDescription?.updatedFields} />

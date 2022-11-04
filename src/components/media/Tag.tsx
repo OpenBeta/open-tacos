@@ -15,12 +15,15 @@ interface PhotoTagProps {
 export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, isAuthorized = false }: PhotoTagProps): JSX.Element {
   const { climb } = tag
   return (
-    <Link href={`/climbs/${climb.id}`} prefetch={false}>
-      <a
+    (
+      <Link
+        href={`/climbs/${climb.id}`}
+        prefetch={false}
         className={clx('badge badge-outline hover:underline',
           size === 'lg' ? 'badge-lg gap-2' : 'gap-1')}
         onClick={stopPropagation}
       >
+
         <span className='whitespace-nowrap truncate text-sm'>{climb.name}</span>
         {isAuthorized && showDelete &&
           <button onClick={(e) => {
@@ -32,9 +35,9 @@ export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, i
               <XCircleIcon className={clx('cursor-pointer stroke-1 hover:stroke-2', size === 'lg' ? 'w-6 h-6' : 'w-5 h-5')} />
             </div>
           </button>}
-      </a>
-    </Link>
 
+      </Link>
+    )
   )
 }
 

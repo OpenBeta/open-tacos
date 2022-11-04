@@ -28,7 +28,10 @@ SubAreaItemProps): JSX.Element {
   }
 
   return (
-    <Link href={getSlug(subArea.metadata.areaId, subArea.metadata.leaf)}>
+    <Link
+      href={getSlug(subArea.metadata.areaId, subArea.metadata.leaf)}
+      legacyBehavior
+    >
       <div
         onClick={focus}
         onMouseEnter={focus}
@@ -97,6 +100,7 @@ SubAreaItemProps): JSX.Element {
         <Link
           href={getSlug(subArea.metadata.areaId, subArea.metadata.leaf)}
           passHref
+          legacyBehavior
         >
           <button
             className='text-center p-2 px-6 hover:font-bold'

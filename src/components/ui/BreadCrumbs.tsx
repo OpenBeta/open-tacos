@@ -25,11 +25,12 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
   return (
     <div aria-label='area-breadcrumbs' className='flex-wrap flex gap-2 text-sm items-center'>
       <MapPinIcon className='text-ob-primary w-5 h-5' />
-
-      <Link href='/a'>
-        <a className='hover:underline hover:text-base-content text-base-300'>Home</a>
+      <Link
+        href='/a'
+        className='hover:underline hover:text-base-content text-base-300'
+      >
+        Home
       </Link>
-
       {pathTokens.map((place, index, array) => {
         const isLastElement = array.length - 1 === index
         const path = ancestors[index]
@@ -40,14 +41,18 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
           <React.Fragment key={`bread-${index}`}>
             <span className='text-xs'>/</span>
             <span className='text-base-300'>
-              {(isLastElement && !isClimbPage && <span className='text-ob-primary'>{sanitizeName(place)}</span>) ||
-            (
-              <Link href={isLastElement && isClimbPage ? climbPageLastUrl : url}>
-                <a className='hover:underline hover:text-base-content whitespace-nowrap'>
-                  {sanitizeName(place)}
-                </a>
-              </Link>
-            )}
+              {isLastElement && !isClimbPage
+                ? (
+                  <span className='text-ob-primary'>{sanitizeName(place)}</span>
+                  )
+                : (
+                  <Link
+                    href={isLastElement && isClimbPage ? climbPageLastUrl : url}
+                    className='hover:underline hover:text-base-content whitespace-nowrap'
+                  >
+                    {sanitizeName(place)}
+                  </Link>
+                  )}
             </span>
           </React.Fragment>
         )
