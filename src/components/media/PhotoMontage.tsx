@@ -1,5 +1,5 @@
 import { useState, useEffect, memo } from 'react'
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import { shuffle } from 'underscore'
 import classNames from 'classnames'
 

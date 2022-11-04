@@ -2,7 +2,7 @@ import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import Card from '../Card/Card'
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 
 test('Card renders a header and a body', async () => {
   // Using a random image hosted on placeimg.com to render an image.

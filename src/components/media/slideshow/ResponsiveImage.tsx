@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Transition } from '@headlessui/react'
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
 import { DefaultLoader, MobileLoader } from '../../../js/sirv/util'
 

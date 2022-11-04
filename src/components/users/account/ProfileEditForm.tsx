@@ -87,7 +87,7 @@ export default function ProfileEditForm (): ReactElement {
     }
 
     // only check if nick has changed from the original
-    if (profile.nick !== value && await doesUsernameExist(value)) {
+    if (profile.nick !== value && (await doesUsernameExist(value))) {
       setLoadingUser(false)
       return 'User name is already taken!'
     }

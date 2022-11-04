@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import Layout from '../components/layout'
 import AboutHero from '../components/ui/AboutHero'
 import Cairn from '../assets/icons/stones.png'

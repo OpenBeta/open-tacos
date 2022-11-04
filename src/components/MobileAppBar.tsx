@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Popover } from '@headlessui/react'
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 
 import MobileNavBar from './ui/MobileNavBar'
 import { HomeIcon, Bars3Icon } from '@heroicons/react/24/outline'

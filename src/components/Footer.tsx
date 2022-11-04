@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import LinkedIn from '../assets/icons/li.inline.svg'
 import Instagram from '../assets/icons/ig.inline.svg'
 import Github from '../assets/icons/github.inline.svg'

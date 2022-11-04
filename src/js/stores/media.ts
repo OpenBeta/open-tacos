@@ -150,4 +150,4 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
  * The token is URL encoded value of .env PAGE_REVALIDATE_TOKEN
  * @param uid user id
  */
-export const revalidateServePage = async (uid: string|null): Promise<any> => uid != null && await fetch(`/api/revalidate?&u=${uid}`)
+export const revalidateServePage = async (uid: string|null): Promise<any> => uid != null && (await fetch(`/api/revalidate?&u=${uid}`))
