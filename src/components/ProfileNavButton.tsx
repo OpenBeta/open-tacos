@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { UserCircleIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/outline'
 
@@ -16,10 +17,11 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
   if (status === 'authenticated') {
     if (isMobile) {
       return (
-        <Button
-          label={<UserCircleIcon className='text-white w-8 h-8' />}
-          href='/api/user/me'
-        />
+        <Link href='/api/user/me'>
+          <button className='inline-flex btn btn-ghost btn-square'>
+            <UserCircleIcon className='stroke-1 stroke-white w-8 h-8' />
+          </button>
+        </Link>
       )
     }
     return (

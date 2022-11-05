@@ -9,17 +9,17 @@ interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
     text: string
     data: any
   }
-  label: string | JSX.Element
+  label?: string | JSX.Element
   placeholder?: string
   open?: boolean
   onCancel?: () => void
+  detached?: boolean
 }
 /**
- * Autocomplete widget based on Algolia Autocomplete
+ * Autocomplete widget based on Algolia Autocomplete.
  * @param props
- * @returns
  */
-export const Autocomplete2 = ({ label, open = false, onCancel, queryParams, classNames, ...otherProps }: AutocompleteProps): JSX.Element => {
+export const Autocomplete2 = ({ label, open = false, onCancel, detached = true, queryParams, classNames, ...otherProps }: AutocompleteProps): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
   const panelRootRef = useRef<any>(null)
   const rootRef = useRef<HTMLElement|null>(null)
@@ -41,7 +41,7 @@ export const Autocomplete2 = ({ label, open = false, onCancel, queryParams, clas
           if (onCancel != null) onCancel()
         }
       },
-      detachedMediaQuery: '',
+      detachedMediaQuery: detached ? '' : 'none',
       render ({ children, elements }, root) {
         if ((panelRootRef.current == null) || rootRef.current !== root) {
           rootRef.current = root
@@ -76,7 +76,7 @@ export const Autocomplete2 = ({ label, open = false, onCancel, queryParams, clas
   }
 
   return (
-    <div className='inline-flex' ref={containerRef} onClick={onClickHandler}>{label}</div>
+    <div className='z-40 inline-flex xl:w-full' ref={containerRef} onClick={onClickHandler}>{label}</div>
   )
 }
 

@@ -2,31 +2,9 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-// const CLIMB1 = {
-//   areaNames: ['US', 'Utah', 'West Desert', 'Ibex', 'Corral Crags', 'North Corral Crag'],
-//   climbId: '625f2835ebeebbbc783a907f',
-//   climbName: 'Red Rock',
-//   climbUUID: '973ebc07-e475-5533-8671-8c4235cb93fc',
-//   cragLatLng: [38.98536, -113.3912],
-//   fa: 'Jason Stevens and Noah Stevens (6 years old), 2003',
-//   grade: '5.4',
-//   id: '175019',
-//   safety: 'UNSPECIFIED',
-//   disciplines: ['trad', 'sport']
-// }
-
+// See TypesenseClient/__mocks__/TypesenseClient.tsx for mock data
 jest.mock('../../../js/typesense/TypesenseClient')
 
-// jest.mock('../../../js/typesense/TypesenseClient', () => {
-//   return {
-//     __esModule: true,
-//     multiSearch: () => ({
-//       climbs: [CLIMB1],
-//       areas: [],
-//       fa: []
-//     })
-//   }
-// })
 jest.mock('../../../js/mapbox/MapboxClient')
 jest.mock('../../../js/graphql/Client')
 
@@ -74,14 +52,18 @@ test('XSearch triggers popup window', async () => {
     }]
   })
 
-  render(<XSearch />)
+  const placeholderTxt = 'climbsearch'
+
+  render(<XSearch placeholder={placeholderTxt} />)
 
   // `getByPlaceholderText()` is a bit fragile, but I haven't found a better
   // way to get the input element
-  await user.type(screen.getByPlaceholderText('Climb search'), 'res{backspace}d')
+  await user.type(screen.getByPlaceholderText(placeholderTxt), 'res{backspace}d')
 
-  expect(multiSearchFn).toBeCalledTimes(5)
-  expect(geocoderLookupFn).toBeCalledTimes(5)
+  // The search functions will get called n times the number of keystrokes + 2
+  // '2' extra renderings are due to empty query being sent to the search functions
+  expect(multiSearchFn).toBeCalledTimes(7)
+  expect(geocoderLookupFn).toBeCalledTimes(7)
 
   // Important - we need to wait for the popup result panel to appear
   await waitFor(() => {

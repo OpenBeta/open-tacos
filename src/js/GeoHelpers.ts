@@ -1,5 +1,4 @@
 import { fitBounds } from '@math.gl/web-mercator'
-import { Bounds } from '@math.gl/web-mercator/src/fit-bounds'
 import bbox from '@turf/bbox'
 import { FeatureCollection, Feature } from '@turf/helpers'
 
@@ -20,7 +19,7 @@ export const bboxFromGeoJson = (geojson: FeatureCollection | Feature): BBoxType 
   return [_bbox[0], _bbox[1], _bbox[2], _bbox[3]]
 }
 
-export const bbox2Viewport = (bbox: BBoxType, width: number, height: number): Bounds => {
+export const bbox2Viewport = (bbox: BBoxType, width: number, height: number): any => {
   return fitBounds({
     width: width,
     height: height,

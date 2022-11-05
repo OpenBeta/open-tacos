@@ -17,8 +17,8 @@ interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
 }
 /**
  * Autocomplete widget based on Algolia Autocomplete
+ * @deprecated This version is deprecated. Use Autocomplete2 instead.
  * @param props
- * @returns
  */
 export const Autocomplete = ({ queryParams, forceFocus = false, classNames, ...otherProps }: AutocompleteProps): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
