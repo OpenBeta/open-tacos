@@ -11,7 +11,7 @@ import { Button, ButtonVariant } from './ui/BaseButton'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import ProfileNavButton from './ProfileNavButton'
 import NewPost from './NewPost'
-import XSearch from './search/XSearch'
+import { XSearchMobile } from './search/XSearch'
 
 interface HeaderProps {
   includeFilters: boolean
@@ -26,7 +26,7 @@ export default function MobileAppBar ({ isTablet, includeFilters }: HeaderProps)
       <MobileNavBar
         branding={<Branding />}
         home={<Home />}
-        search={<XSearch isMobile={!isTablet} placeholder='Search' />}
+        search={<XSearchMobile />}
         profile={nav}
         more={<More />}
       />
@@ -37,7 +37,7 @@ export default function MobileAppBar ({ isTablet, includeFilters }: HeaderProps)
 
 const AuthenticatedNav = (): JSX.Element => (
   <>
-    <NewPost />
+    <NewPost className='inline-flex' />
     <ProfileNavButton />
   </>
 
@@ -51,10 +51,11 @@ const LoginButton = (): JSX.Element => (
   />)
 
 const Home = (): JSX.Element => (
-  <Button
-    label={<HomeIcon className='w-6 h-6 text-white' />}
-    href='/'
-  />)
+  <Link href='/'>
+    <button className='btn btn-square btn-ghost'>
+      <HomeIcon className='w-6 h-6 text-white' />
+    </button>
+  </Link>)
 
 const Branding = (): JSX.Element => {
   return (

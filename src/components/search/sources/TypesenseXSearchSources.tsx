@@ -14,7 +14,7 @@ import { TypesenseDocumentType } from '../../../js/types'
 export const xsearchTypesense = async (query: string): Promise<Array<AutocompleteSource<TypesenseDocumentType>>> => {
   const rs = await multiSearch(query)
   return [{
-    sourceId: 'climbs',
+    sourceId: 'Climbs',
     getItems: ({ query }) => rs.climbs,
     getItemInputValue: ({ item }) => {
       return item.climbName
@@ -27,7 +27,7 @@ export const xsearchTypesense = async (query: string): Promise<Array<Autocomplet
     }
   },
   {
-    sourceId: 'areas',
+    sourceId: 'Areas',
     getItems: ({ query }) => rs.areas,
     getItemInputValue: ({ item }) => {
       return item.areaNames[item.areaNames.length - 1]
@@ -40,7 +40,7 @@ export const xsearchTypesense = async (query: string): Promise<Array<Autocomplet
     }
   },
   {
-    sourceId: 'fa',
+    sourceId: 'FA',
     getItems: ({ query }) => rs.fa,
     getItemInputValue: ({ item }) => {
       return item.fa

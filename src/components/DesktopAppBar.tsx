@@ -27,9 +27,6 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, s
     case 'authenticated':
       navList = navListAuthenticated
       break
-    case 'loading':
-      navList = null
-      break
     default:
       navList = navListDefault
   }
@@ -46,7 +43,7 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, s
           </Link>
       }
         search={
-          <XSearch isMobile={false} />
+          <XSearch />
       }
         navList={navList}
       />

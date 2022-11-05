@@ -8,9 +8,10 @@ import { userMediaStore } from '../js/stores/media'
 import useReturnToProfile from '../js/hooks/useReturnToProfile'
 interface ProfileNavButtonProps {
   isMobile?: boolean
+  className?: string
 }
 
-export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JSX.Element | null {
+export default function NewPost ({ isMobile = true, className = '' }: ProfileNavButtonProps): JSX.Element | null {
   const { status, data } = useSession()
 
   const { toMyProfile } = useReturnToProfile()
@@ -34,16 +35,11 @@ export default function NewPost ({ isMobile = true }: ProfileNavButtonProps): JS
   if (status === 'authenticated') {
     if (isMobile) {
       return (
-        <div {...getRootProps()}>
+        <div {...getRootProps()} className={className}>
           <input {...getInputProps()} />
-          <Button
-            disabled={uploading}
-            label={
-              <span className='border-2 text-white rounded-md border-white'>
-                {uploading ? <EllipsisHorizontalIcon className='w-6 h-6' /> : <PlusIcon className='w-6 h-6' />}
-              </span>
-                }
-          />
+          <button disabled={uploading} className='btn btn-square btn-ghost'>
+            {uploading ? <EllipsisHorizontalIcon className='w-6 h-6 stroke-white' /> : <PlusIcon className='border-2 rounded-md w-6 h-6 stroke-white stroke-2' />}
+          </button>
         </div>
 
       )

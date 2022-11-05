@@ -150,4 +150,4 @@ export function MarkerLayer2 ({ geojson }: MarkerLayerProps): JSX.Element | null
 
 // Important! Pass these IDs to Mapbox GL so that onClick/onHover receives
 // the active Geojson object
-export const InteractiveLayerIDs = [layerStyle.id, closeupLayerStyle.id]
+export const InteractiveLayerIDs = [layerStyle.id, closeupLayerStyle.id] as string[]
