@@ -1,23 +1,19 @@
-import { render } from 'react-dom'
 import { AutocompleteClassNames } from '@algolia/autocomplete-js'
-
-import { Autocomplete } from './Autocomplete'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { Autocomplete2 } from './Autocomplete2'
 import { xsearchTypesense, searchPoi } from './sources'
+
 interface XSearchProps {
-  isMobile?: boolean
   placeholder?: string
 }
-
 /**
  * Extended search widget
  * @param XSearchProps
  */
-export default function XSearch ({ isMobile = true, placeholder = 'Climb search' }: XSearchProps): JSX.Element {
+export default function XSearch ({ placeholder = 'Try "Cat In the Hat" or "Las Vegas"' }: XSearchProps): JSX.Element {
   return (
-    <Autocomplete
-      forceFocus={false}
+    <Autocomplete2
       id={CUSTOM_CLASSES.root}
-      isMobile={isMobile}
       placeholder={placeholder}
       getSources={async ({ query }) => {
         const sources = await xsearchTypesense(query)
@@ -26,34 +22,12 @@ export default function XSearch ({ isMobile = true, placeholder = 'Climb search'
         return sources
       }}
       classNames={CUSTOM_CLASSES}
-      // Todo: reuse Autocomplete's default render
-      render={({ elements }, root) => {
-        const { climbs, areas, fa, poi } = elements
-        render(
-          <div className='xsearch-result-container space-y-4'>
-            <div>
-              <h1 className='text-primary -mb-2'>Climbs</h1>
-              {climbs}
-            </div>
-            <div>
-              <h1 className='text-primary -mb-2'>Climbs Near</h1>
-              {poi}
-            </div>
-            <div>
-              <h1 className='text-primary -mb-2'>Areas</h1>
-              {areas}
-            </div>
-            <div>
-              <h1 className='text-primary -mb-2'>First Ascensionists</h1>
-              {fa}
-            </div>
-          </div>, root)
-      }}
     />
   )
 }
 
 const CUSTOM_CLASSES: Partial<AutocompleteClassNames> = {
+  detachedFormContainer: 'xsearch-detachedFormContainer',
   panel: 'xsearch-panel',
   item: 'xsearch-item',
   panelLayout: 'xsearch-panelLayout',
@@ -62,7 +36,29 @@ const CUSTOM_CLASSES: Partial<AutocompleteClassNames> = {
   root: 'xsearch',
   inputWrapperPrefix: 'xsearch-inputWrapperPrefix',
   inputWrapper: 'xsearch-inputWrapper',
-  submitButton: 'xsearch-submitButton',
-  detachedSearchButton: 'xsearch-mobile-trigger-btn',
-  detachedSearchButtonIcon: 'xsearch-mobile-trigger-btn-icon'
+  detachedSearchButton: 'xsearch-trigger-btn',
+  detachedSearchButtonIcon: 'xsearch-trigger-btn-icon',
+  detachedSearchButtonPlaceholder: 'xsearch-detachedSearchButtonPlaceholder',
+  submitButton: 'xsearch-submitButton'
+}
+
+export const XSearchMobile = (): JSX.Element => {
+  return (
+    <Autocomplete2
+      label={
+        <button className='btn btn-ghost btn-square'>
+          <MagnifyingGlassIcon className='stroke-white w-6 h-6 stroke-2' />
+        </button>
+      }
+      placeholder='Climb search'
+      classNames={{ detachedSearchButton: 'aa-hidden-mobile-trigger-btn' }}
+      getSources={async ({ query }) => {
+        if (query?.trim() === '') return []
+        const sources = await xsearchTypesense(query)
+        const poiSource = await searchPoi(query)
+        sources.push(poiSource)
+        return sources
+      }}
+    />
+  )
 }

@@ -21,15 +21,23 @@ body {
 }
 
 .xsearch-mobile-trigger-btn {
-  @apply input input-bordered input-sm !important;
+  @apply w-8 h-8 !important;
 }
 
-.xsearch-mobile-trigger-btn-icon {
-  @apply -ml-4 stroke-gray-400 stroke-2 !important;
+.xsearch-trigger-btn {
+  @apply p-1 ring-0 border-none rounded-full !important;
 }
 
-.xsearch-SubmitButton {
-  @apply bg-inherit p-0 h-auto w-auto !important;
+.xsearch-trigger-btn-icon {
+  @apply w-7 h-7 bg-ob-primary rounded-full text-white !important;
+}
+
+.xsearch-trigger-btn-icon .aa-SubmitIcon {
+  @apply w-4 h-4 !important;
+}
+
+.xsearch-detachedSearchButtonPlaceholder {
+  @apply ml-2 text-sm text-base-300 !important;
 }
 
 .xsearch-submitButton .aa-SubmitIcon {
@@ -48,29 +56,19 @@ body {
   @apply bg-slate-100 !important;
 }
 
-.aa-Panel {
-  z-index: 1000;
-}
-
 .xsearch-form {
-  @apply ring-0 bg-white border-none overflow-hidden rounded-full  !important;
-}
-
-.xsearch-panel {
-  /* Result panel - Tablet and desktop only. We need a mobile specific width and layout */
-  @apply z-10 w-screen h-screen left-0 lg:backdrop-blur-sm bg-gray-600 bg-opacity-50 !important;
-
-  /** When detatched queries aren't enabled, use a different width spec */
-  /* @apply sm:w-auto w-full; */
+  @apply ring-0 bg-white border-none overflow-hidden rounded-full !important;
 }
 
 .xsearch-sourceHeader {
-  @apply bg-blue-200;
 }
 
+.xsearch {
+  @apply w-full max-w-xl !important;
+}
 
-.xsearch-result-container {
-  @apply z-50 lg:mt-2 lg:border-black lg:border-2 h-screen-85 lg:h-screen-80 max-w-3xl mx-auto p-3 bg-white lg:rounded-lg  overflow-y-auto !important;
+.xsearch-detachedFormContainer {
+  @apply flex items-center !important;
 }
 /* End of XSearch */
 
@@ -116,7 +114,7 @@ body {
 /* For Town, city, country search */
 
 .aa-default-mobile-trigger-btn {
-  @apply input input-bordered input-primary input-md text-ellipsis !important;
+  @apply overflow-hidden input input-bordered input-primary input-md text-ellipsis !important;
 }
 
 .aa-default-mobile-trigger-btn-icon {
@@ -160,4 +158,3 @@ body {
 .aa-custom-mobile-trigger-btn-icon {
   @apply hidden !important;
 }
-

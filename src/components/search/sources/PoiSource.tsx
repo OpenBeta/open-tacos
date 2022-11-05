@@ -22,7 +22,7 @@ interface PoiDoc extends BaseItem {
 export const searchPoi = async (query: string): Promise<AutocompleteSource<any>> => {
   const rs = await geocoderLookup(query)
   return {
-    sourceId: 'poi',
+    sourceId: 'Near',
     getItems: async ({ query }) => rs,
     templates: {
       noResults: DefaultNoResult,
