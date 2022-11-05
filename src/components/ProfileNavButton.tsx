@@ -1,10 +1,10 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useSession, signOut } from 'next-auth/react'
 import { UserCircleIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/outline'
 
-import { Menu } from '@headlessui/react'
-import { Button, ButtonVariant } from './ui/BaseButton'
-import Dropdown from './ui/Dropdown'
+import { DropdownMenu, DropdownTrigger, DropdownContent, DropdownItem, DropdownSeparator } from './ui/DropdownMenu'
+
 interface ProfileNavButtonProps {
   isMobile?: boolean
 }
@@ -13,6 +13,7 @@ interface ProfileNavButtonProps {
  * Render user dropdown menu if the user has logged in.  Return null otherwise.
  */
 export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonProps): JSX.Element | null {
+  const router = useRouter()
   const { status } = useSession()
   if (status === 'authenticated') {
     if (isMobile) {
@@ -26,72 +27,36 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
     }
     return (
       <div className='block relative'>
-        <Dropdown
-          button={
-            <Button
-              label={
-                <>
-                  <UserCircleIcon className='stroke-white w-6 h-6 rounded-full' />
-                  <span className='mt-0.5'>Profile</span>
-                </>
-              }
-              variant={ButtonVariant.ROUNDED_ICON_CONTRAST}
+        <DropdownMenu>
+          <DropdownTrigger asChild>
+            <button className='btn btn-outline btn-secondary gap-2'>
+              <UserCircleIcon className='w-6 h-6 rounded-full' />
+              <span className='mt-0.5'>Profile</span>
+            </button>
+          </DropdownTrigger>
+
+          <DropdownContent>
+            <DropdownItem
+              icon={<UserCircleIcon className='w-4 h-4' />}
+              text='Profile'
+              onSelect={async () => await router.push('/api/user/me')}
             />
-          }
-          activeClz='rounded-full ring-1 ring-gray-500'
-        >
-          <>
-            <Menu.Item>
-              <a
-                className='flex items-center space-x-2 font-semibold'
-                href='/api/user/me'
-              >
-                <UserCircleIcon className='w-4 h-4' /> <span className='mt-0.5'>Profile</span>
-              </a>
-            </Menu.Item>
 
-            <hr className='py-0 my-1' />
+            <DropdownSeparator />
 
-            <Menu.Item>
-              {({ active }: {active: boolean}) => (
-                <a
-                  className='block text-secondary'
-                  href='/about'
-                >
-                  About
-                </a>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              <a
-                className='block text-secondary'
-                href='https://docs.openbeta.io'
-              >
-                Documentation
-              </a>
-            </Menu.Item>
+            <DropdownItem text='About' onSelect={async () => await router.push('/about')} />
+            <DropdownItem text='Documentation' onSelect={async () => await router.push('https://docs.openbeta.io')} />
 
-            <Menu.Item>
-              <button
-                className='block w-full text-left text-secondary'
-                onClick={async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })}
-              >
-                Logout
-              </button>
-            </Menu.Item>
+            <DropdownSeparator />
 
-            <hr className='py-0 my-1' />
-
-            <Menu.Item>
-              <a
-                className='flex items-center space-x-2 text-secondary' href='https://discord.gg/2A2F6kUtyh'
-              >
-                <ChatBubbleOvalLeftEllipsisIcon className='w-4 h-4 stroke-gray-500' />
-                <span className='mt-0.5'>Discord community</span>
-              </a>
-            </Menu.Item>
-          </>
-        </Dropdown>
+            <DropdownItem text='Logout' onSelect={async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })} />
+            <DropdownItem
+              icon={<ChatBubbleOvalLeftEllipsisIcon className='w-4 h-4' />}
+              text='Discord community'
+              onSelect={async () => await router.push('https://discord.gg/2A2F6kUtyh')}
+            />
+          </DropdownContent>
+        </DropdownMenu>
       </div>
     )
   }

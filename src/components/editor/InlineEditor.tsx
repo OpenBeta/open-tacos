@@ -1,33 +1,13 @@
 import React from 'react'
 
-import { Plate, createParagraphPlugin, createListPlugin, createImagePlugin, createPlugins, createPlateUI } from '@udecode/plate'
-
-import { mdToSlate } from './md-utils'
-
-// customize the editor inner container
-const editableProps = {
-  style: {
-    // backgroundColor: '#FEF9E7'
-  },
-  readOnly: true
+interface InlineEditorProps {
+  p: string
 }
-const InlineEditor = ({ markdown, readOnly, id }): JSX.Element => {
-  const plugins = createPlugins([
-    createParagraphPlugin(),
-    createImagePlugin(),
-    createListPlugin()
-  ], {
-    components: createPlateUI()
-  })
-  const ast = mdToSlate(markdown)
-  return (
-    <Plate
-      id={id}
-      editableProps={editableProps}
-      plugins={plugins}
-      initialValue={ast}
-    />
+
+export default function InlineEditor ({ p }: InlineEditorProps): JSX.Element {
+  return (<div>{p}</div>
+  // <>
+  //   {/* {lines.map((line, index) => <div key={index}>{line}</div>)} */}
+  // </>
   )
 }
-
-export default InlineEditor

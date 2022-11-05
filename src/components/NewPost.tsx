@@ -3,9 +3,9 @@ import { useSession } from 'next-auth/react'
 import { PlusIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
 
 import usePhotoUploader from '../js/hooks/usePhotoUploader'
-import { Button, ButtonVariant } from './ui/BaseButton'
 import { userMediaStore } from '../js/stores/media'
 import useReturnToProfile from '../js/hooks/useReturnToProfile'
+
 interface ProfileNavButtonProps {
   isMobile?: boolean
   className?: string
@@ -47,18 +47,12 @@ export default function NewPost ({ isMobile = true, className = '' }: ProfileNav
     return (
       <div {...getRootProps()}>
         <input {...getInputProps()} />
-        <Button
-          disabled={uploading}
-          label={
-            <div className='flex no-wrap items-center space-x-2 px-4'>
-              {uploading
-                ? <EllipsisHorizontalIcon className='w-5 h-5 stroke-white stroke-2 animate-pulse' />
-                : <PlusIcon className='stroke-white stroke-2 w-5 h-5' />}
-              <span className='mt-0.5 px-2'>Photo</span>
-            </div>
-          }
-          variant={ButtonVariant.SOLID_PRIMARY}
-        />
+        <button disabled={uploading} className='btn btn-accent gap-2 px-8'>
+          {uploading
+            ? <EllipsisHorizontalIcon className='w-5 h-5 stroke-white stroke-2 animate-pulse' />
+            : <PlusIcon className='stroke-white stroke-2 w-6 h-6' />}
+          <span className='mt-0.5'>Photo</span>
+        </button>
       </div>
 
     )

@@ -131,19 +131,19 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
           <div id='Climb Content' />
           <div className='md:px-16 mb-16'>
             <h3 className='mb-3'>Description</h3>
-            <InlineEditor id={`climb-desc-${climbId}`} markdown={content.description} readOnly />
+            <InlineEditor p={content.description} />
 
             {content.location !== ''
               ? (
                 <>
                   <h3 className='mb-3 mt-6'>Location</h3>
-                  <InlineEditor id={`climb-loc-${climbId}`} markdown={content.location} readOnly />
+                  <InlineEditor p={content.location} />
                 </>
                 )
               : ''}
 
             <h3 className='mb-3 mt-6'>Protection</h3>
-            <InlineEditor id={`climb-pro-${climbId}`} markdown={content.protection} readOnly />
+            <InlineEditor p={content.protection} />
           </div>
         </div>
       </div>
