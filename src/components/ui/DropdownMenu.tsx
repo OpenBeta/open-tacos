@@ -48,7 +48,7 @@ export const DropdownItem = ({ icon, text, onSelect, disabled = false, className
         )
       }
     >
-      {icon == null ? <span className='w-5 h-5' /> : icon}<span>{text}</span>
+      {icon == null ? <span className='w-4 h-4' /> : icon}<span>{text}</span>
     </DropdownPrimitive.Item>
   )
 }
