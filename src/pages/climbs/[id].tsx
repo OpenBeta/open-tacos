@@ -9,7 +9,6 @@ import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
-import InlineEditor from '../../components/editor/InlineEditor'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
@@ -29,10 +28,6 @@ interface ClimbPageProps {
 
 const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
   const router = useRouter()
-  // useEffect(()=>{
-  //   router.beforePopState()
-
-  // }, [router])
   return (
     <>
       {!router.isFallback && <PageMeta {...props} />}
@@ -131,19 +126,17 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
           <div id='Climb Content' />
           <div className='md:px-16 mb-16'>
             <h3 className='mb-3'>Description</h3>
-            <InlineEditor p={content.description} />
-
+            <div className='whitespace-pre-line'>{content.description}</div>
             {content.location !== ''
               ? (
                 <>
                   <h3 className='mb-3 mt-6'>Location</h3>
-                  <InlineEditor p={content.location} />
+                  <div className='whitespace-pre-line'>{content.location}</div>
                 </>
                 )
               : ''}
-
             <h3 className='mb-3 mt-6'>Protection</h3>
-            <InlineEditor p={content.protection} />
+            <div className='whitespace-pre-line'>{content.protection}</div>
           </div>
         </div>
       </div>

@@ -1,14 +1,4 @@
-
-const withMDX = require('@next/mdx')({
-  reactStrictMode: true,
-  extension: /\.mdx?$/,
-  options: {
-    remarkPlugins: [],
-    rehypePlugins: []
-  }
-})
-module.exports = withMDX({
-  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+module.exports = {
   images: {
     domains: ['live.staticflickr.com', 'upload.wikimedia.org', 'openbeta.sirv.com', 'openbeta-dev.sirv.com']
   },
@@ -43,4 +33,4 @@ module.exports = withMDX({
       }
     ]
   }
-})
+}
