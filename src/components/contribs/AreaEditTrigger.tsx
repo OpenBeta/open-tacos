@@ -33,7 +33,7 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
       // the user has edited something --> let's reload this page
       router.reload()
     }
-  }, [])
+  }, [action])
 
   const postDeleteHandler = async (): Promise<void> => {
     setAction('none')
