@@ -1,6 +1,5 @@
 import React from 'react'
 import Head from 'next/head'
-// import { Helmet } from 'react-helmet'
 
 interface SEOProps {
   title: string

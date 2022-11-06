@@ -64,7 +64,7 @@ export function PanelHeader (props: PanelHeaderProps): JSX.Element {
         ? (
           <div className='mt-2'>
             <h3 className='font-semibold tracking-tight'>Description</h3>
-            <div className='my-2'>
+            <div className='my-2 whitespace-pre-line'>
               {content}
             </div>
           </div>
