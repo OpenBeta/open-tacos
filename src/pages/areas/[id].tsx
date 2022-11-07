@@ -99,8 +99,8 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
               focused={focused}
               title={areaName}
               description={content.description}
-              longitude={Number(metadata.lng.toFixed(5))}
-              latitude={Number(metadata.lat.toFixed(5))}
+              longitude={metadata.lng}
+              latitude={metadata.lat}
             />
           </div>
         </div>
