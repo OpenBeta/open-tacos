@@ -312,6 +312,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "christophermorin",
+      "name": "Chris Morin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/78628697?v=4",
+      "profile": "https://www.linkedin.com/in/chrisjmorin/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
