@@ -50,7 +50,7 @@ export function PanelHeader (props: PanelHeaderProps): JSX.Element {
             text-sm'
             title='Click to view on google maps'
           >
-            {props.latitude}, {props.longitude}
+            {props.latitude.toFixed(5)}, {props.longitude.toFixed(5)}
           </div>
         </a>
       </div>
