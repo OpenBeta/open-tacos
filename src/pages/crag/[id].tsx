@@ -46,8 +46,8 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
         <CragLayout
           title={areaName}
           description={content.description}
-          latitude={metadata.lng}
-          longitude={metadata.lat}
+          latitude={Number(metadata.lng.toFixed(5))}
+          longitude={Number(metadata.lat.toFixed(5))}
           climbs={climbs}
           areaMeta={metadata}
           ancestors={ancestors}
