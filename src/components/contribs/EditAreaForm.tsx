@@ -4,7 +4,7 @@ import clx from 'classnames'
 import { useMutation } from '@apollo/client'
 import { signIn, useSession } from 'next-auth/react'
 
-import { MUTATION_UPDATE_AREA, UpdateAreaReturnType, UpdateAreaProps } from '../../js/graphql/contribGQL'
+import { MUTATION_UPDATE_AREA, UpdateAreaReturnType, UpdateAreaProps } from '../../js/graphql/gql/contribs'
 import { ErrorAlert } from './alerts/Alerts'
 import { graphqlClient } from '../../js/graphql/Client'
 import Input from '../ui/form/Input'
