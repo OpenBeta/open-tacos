@@ -42,9 +42,11 @@ mutation ($uuid: String!, $areaName: String, $isDestination: Boolean, $shortCode
     }
 }`
 
-export const RECENT_CHANGE_HISTORY = gql`
-query ($filter: AllHistoryFilter) {
-  getChangeHistory(filter: $filter) {
+/**
+ * A reusable fragment
+ */
+export const FRAGMENT_CHANGE_HISTORY = gql`
+  fragment ChangeHistoryFields on History {
     id
     createdAt
     operation
@@ -62,6 +64,12 @@ query ($filter: AllHistoryFilter) {
         }
       }
     }
+  }`
+
+export const RECENT_CHANGE_HISTORY = gql`
+query ($filter: AllHistoryFilter) {
+  getChangeHistory(filter: $filter) {
+    ...ChangeHistoryFields
   }
 }
 `
