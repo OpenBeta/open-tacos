@@ -3,7 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
 import { TickType } from '../../js/types'
-import { stagingGraphQLClient } from '../../js/graphql/Client'
+import { graphqlClient } from '../../js/graphql/Client'
 import { MUTATION_ADD_TICK } from '../../js/graphql/gql/fragments'
 import ComboBox from '../ui/ComboBox'
 import * as Yup from 'yup'
@@ -67,7 +67,7 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
   const session = useSession()
   const [addTick] = useMutation(
     MUTATION_ADD_TICK, {
-      client: stagingGraphQLClient,
+      client: graphqlClient,
       errorPolicy: 'none'
     })
 

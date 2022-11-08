@@ -1,5 +1,5 @@
 import { MUTATION_REMOVE_TICK_BY_ID } from '../../js/graphql/gql/fragments'
-import { stagingGraphQLClient } from '../../js/graphql/Client'
+import { graphqlClient } from '../../js/graphql/Client'
 import { useMutation } from '@apollo/client'
 import AlertDialogue from '../ui/micro/AlertDialogue'
 import { TickType } from '../../js/types'
@@ -16,7 +16,7 @@ interface Props{
 export default function TickCard ({ tickId, ticks, setTicks, dateClimbed, notes, style }: Props): JSX.Element {
   const [deleteTick] = useMutation(
     MUTATION_REMOVE_TICK_BY_ID, {
-      client: stagingGraphQLClient,
+      client: graphqlClient,
       errorPolicy: 'none'
     })
 

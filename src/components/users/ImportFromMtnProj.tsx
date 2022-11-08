@@ -3,7 +3,7 @@ import { Transition } from '@headlessui/react'
 import { FolderArrowDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
-import { stagingGraphQLClient } from '../../js/graphql/Client'
+import { graphqlClient } from '../../js/graphql/Client'
 import { Button, ButtonVariant } from '../ui/BaseButton'
 import { MUTATION_IMPORT_TICKS } from '../../js/graphql/gql/fragments'
 
@@ -30,7 +30,7 @@ export function ImportFromMtnProj ({ isButton }: Props): JSX.Element {
   const [errors, setErrors] = useState<string[]>([])
   const [addTicks] = useMutation(
     MUTATION_IMPORT_TICKS, {
-      client: stagingGraphQLClient,
+      client: graphqlClient,
       errorPolicy: 'none'
     })
 
