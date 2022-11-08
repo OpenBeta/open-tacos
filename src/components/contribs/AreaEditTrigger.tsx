@@ -55,8 +55,9 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
 
         <DropdownContent align={isMobile ? 'center' : 'end'}>
           <DropdownItem
-            text='Change history'
+            text={`Change history (${history.length})`}
             onSelect={() => setAction('history')}
+            disabled={history.length === 0}
           />
           <DropdownSeparator />
           <DropdownItem
@@ -75,7 +76,6 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
           <DropdownSeparator />
           <DropdownItem
             icon={<FolderMinusIcon className='w-5 h-5' />}
-            className='text-content-200 font-light'
             text='Delete this area'
             onSelect={() => setAction('delete')}
             disabled={!deletable}
