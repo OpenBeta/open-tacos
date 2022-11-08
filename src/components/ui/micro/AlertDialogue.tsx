@@ -141,6 +141,7 @@ interface LeanAlertProps {
   title: ReactNode
   description: ReactNode
   children?: ReactNode
+  className?: string
 }
 /**
  * A reusable popup alert
@@ -149,20 +150,20 @@ interface LeanAlertProps {
  * @param cancelAction A button of type `AlertDialogPrimitive.Action` that closes the alert on click.  You can register an `onClick()` to perform some action.
  * @param noncancelAction Any kind of React component/button that doesn't close the alert on click.  Use this if you want to perform an action on click and keep the alert open.
  */
-export const LeanAlert = ({ icon = null, title, description, children = DefaultOkButton, closeOnEsc = true }: LeanAlertProps): JSX.Element => {
+export const LeanAlert = ({ icon = null, title, description, children = DefaultOkButton, closeOnEsc = true, className = '' }: LeanAlertProps): JSX.Element => {
   return (
     <AlertDialogPrimitive.Root defaultOpen>
-      <AlertDialogPrimitive.Overlay className='fixed inset-0 bg-black bg-opacity-5' />
+      <AlertDialogPrimitive.Overlay className='fixed inset-0 bg-black/60' />
       <AlertDialogPrimitive.Content
         onEscapeKeyDown={e => !closeOnEsc && e.preventDefault()}
-        className='z-40 fixed inset-0 mx-auto flex items-center justify-center p-2 text-center overflow-y-auto max-w-lg'
+        className='z-40 fixed inset-0 mx-auto flex items-center justify-center px-2 lg:px-0 text-center overflow-y-auto max-w-xs md:max-w-md lg:max-w-lg'
       >
-        <div className='p-4 rounded-box bg-base-100 w-full'>
+        <div className={`p-4 rounded-box bg-base-100 w-full ${className}`}>
           <AlertDialogPrimitive.Title className='flex flex-col items-center'>
             {icon}
             {title}
           </AlertDialogPrimitive.Title>
-          <AlertDialogPrimitive.Description className='my-8'>{description}</AlertDialogPrimitive.Description>
+          <AlertDialogPrimitive.Description className='my-8 text-inherit'>{description}</AlertDialogPrimitive.Description>
           <div className='flex items-center justify-center gap-x-6'>
             {children}
           </div>
