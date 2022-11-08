@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, MediaBaseTag } from '../../js/types'
+import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
 import CragLayout from '../../components/crag/cragLayout'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import AreaMap from '../../components/area/areaMap'
@@ -13,6 +13,7 @@ import { PageMeta } from '../areas/[id]'
 
 interface CragProps {
   area: AreaType
+  history: ChangesetType[]
   mediaListWithUsernames: MediaBaseTag[]
 }
 
@@ -194,6 +195,7 @@ export const getStaticProps: GetStaticProps<CragProps, {id: string}> = async ({ 
   return {
     props: {
       area: rs.data.area,
+      history: [],
       mediaListWithUsernames
     }
   }

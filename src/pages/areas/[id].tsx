@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
 import { NextPage, GetStaticProps } from 'next'
-import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
 
-import { AreaType, MediaBaseTag } from '../../js/types'
+import { QUERY_AREA_BY_ID } from '../../js/graphql/queries/areaById'
+import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
@@ -19,6 +19,7 @@ import AreaEditTrigger from '../../components/contribs/AreaEditTrigger'
 
 interface AreaPageProps {
   area: AreaType
+  history: ChangesetType[]
   mediaListWithUsernames: MediaBaseTag[]
 }
 
@@ -46,7 +47,7 @@ const Area: NextPage<AreaPageProps> = (props) => {
 
 export default Area
 
-const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps): JSX.Element => {
+const Body = ({ area, mediaListWithUsernames: enhancedMediaList, history }: AreaPageProps): JSX.Element => {
   const [focused, setFocused] = useState<null | string>(null)
   const [selected, setSelected] = useState<null | string>(null)
   const navbarOffset = getNavBarOffset()
@@ -88,7 +89,7 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList }: AreaPageProps
             <PhotoMontage isHero photoList={enhancedMediaList} />
           </div>
           <div className='mt-4 md:flex md:justify-end'>
-            <AreaEditTrigger {...area} />
+            <AreaEditTrigger {...area} history={history} />
           </div>
           <div className='mt-16'>
             <SidePanel
@@ -163,97 +164,10 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
     }
   }
 
-  const query = gql`query getAreaById($uuid: ID) {
-    area(uuid: $uuid) {
-      id
-      uuid
-      areaName
-      shortCode
-      ancestors
-      pathTokens
-      metadata {
-        lat
-        lng 
-        leaf
-        bbox
-        areaId
-      } 
-      content {
-        description 
-      } 
-      aggregate {
-          byGradeBand {
-            intermediate
-            expert
-            beginner
-            advanced
-          }
-          byDiscipline {
-            sport {
-              total
-            }
-            trad {
-              total
-            }
-            boulder {
-              total
-            }
-            aid {
-              total
-            }
-          }
-      }
-
-      totalClimbs
-
-      children {
-        id
-        uuid
-        areaName
-        aggregate {
-          byGradeBand {
-            intermediate
-            expert
-            beginner
-            advanced
-          }
-          byDiscipline {
-            sport {
-              total
-            }
-            trad {
-              total
-            }
-            boulder {
-              total
-            }
-          }
-        }
-        totalClimbs
-        content {
-          description 
-        } 
-        metadata {
-          areaId
-          leaf
-          lat
-          lng
-        }
-      }
-
-      media {
-        mediaUrl
-        mediaUuid
-        destination
-        destType
-      }
-    }
-  }`
-
   let rs
   try {
-    rs = await graphqlClient.query<{area: AreaType}>({
-      query,
+    rs = await graphqlClient.query<{ area: AreaType, getAreaHistory: ChangesetType[] }>({
+      query: QUERY_AREA_BY_ID,
       variables: {
         uuid: params.id
       },
@@ -274,10 +188,11 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
       console.log('Error when trying to add username to image data', e)
     }
 
-    // Pass Area data to the page via props
+    // Pass Area & edit history data to the page via props
     return {
       props: {
         area: rs.data.area,
+        history: rs.data.getAreaHistory,
         mediaListWithUsernames
       },
       revalidate: 10
@@ -286,7 +201,10 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
     console.log('#GraphQL exception:', e)
     console.log('#', e?.result)
     return {
+      // TODO: the area may be in the db but we're having some issue.
+      // As an improvement, maybe return empty props and display a friendlier error page than 404
       notFound: true,
+
       revalidate: 10
     }
   }

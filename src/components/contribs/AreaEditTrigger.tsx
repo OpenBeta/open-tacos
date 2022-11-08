@@ -8,9 +8,11 @@ import AddChildAreaForm from './AddChildAreaForm'
 import DeleteAreaForm from './DeleteAreaForm'
 import EditAreaForm from './EditAreaForm'
 import { useResponsive } from '../../js/hooks'
-import { AreaType } from '../../js/types'
+import { AreaType, ChangesetType } from '../../js/types'
+import RecentChangeHistory from '../../components/contribs/RecentChangeHistory'
 
 interface AreaEditActionTriggerProps extends AreaType {
+  history: ChangesetType[]
 
 }
 
@@ -22,7 +24,7 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
   const submitCountRef = useRef<number>(0)
   const [action, setAction] = useState('none')
 
-  const { areaName, uuid, children, climbs, ancestors } = props
+  const { areaName, uuid, children, climbs, ancestors, history } = props
   const router = useRouter()
 
   const parentUuid = ancestors[ancestors.length - 2]
@@ -53,6 +55,11 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
 
         <DropdownContent align={isMobile ? 'center' : 'end'}>
           <DropdownItem
+            text='Change history'
+            onSelect={() => setAction('history')}
+          />
+          <DropdownSeparator />
+          <DropdownItem
             className='font-bold'
             icon={<PencilIcon className='w-5 h-5' />}
             text='Edit'
@@ -68,6 +75,7 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
           <DropdownSeparator />
           <DropdownItem
             icon={<FolderMinusIcon className='w-5 h-5' />}
+            className='text-content-200 font-light'
             text='Delete this area'
             onSelect={() => setAction('delete')}
             disabled={!deletable}
@@ -97,6 +105,12 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
             parentUuid={parentUuid}
             onClose={postDeleteHandler}
           />
+        </DialogContent>
+      </MobileDialog>
+
+      <MobileDialog modal open={action === 'history'} onOpenChange={postCreateUpdateHandler}>
+        <DialogContent title='Change history'>
+          <RecentChangeHistory history={history} />
         </DialogContent>
       </MobileDialog>
     </>
