@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
 import { AreaType, TickType, MediaTagWithClimb, MediaByAuthor, CountrySummaryType } from '../types'
-import { graphqlClient, stagingGraphQLClient } from './Client'
+import { graphqlClient } from './Client'
 import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
 interface CragsDetailsNearType {
   data: AreaType[] // Should use Omit or Pick
@@ -148,7 +148,7 @@ export const getCragsWithinNicely = AwesomeDebouncePromise(getCragsWithin, 1000)
 
 export const getTicksByUserAndClimb = async (climbId: string, userId: string): Promise<any> => {
   try {
-    const res = await stagingGraphQLClient.query<{ userTicksByClimbId: TickType[] }>({
+    const res = await graphqlClient.query<{ userTicksByClimbId: TickType[] }>({
       query: QUERY_TICKS_BY_USER_AND_CLIMB,
       variables: {
         climbId,
@@ -167,7 +167,7 @@ export const getTicksByUserAndClimb = async (climbId: string, userId: string): P
 
 export const getTicksByUser = async (userId: string): Promise<TickType[]> => {
   try {
-    const res = await stagingGraphQLClient.query<{ userTicks: TickType[] }>({
+    const res = await graphqlClient.query<{ userTicks: TickType[] }>({
       query: QUERY_TICKS_BY_USER,
       variables: {
         userId
