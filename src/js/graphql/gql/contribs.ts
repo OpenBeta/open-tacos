@@ -1,6 +1,10 @@
 import { gql } from '@apollo/client'
 
-import { AreaType, AreaUpdatableFieldsType } from '../types'
+import { AreaType, AreaUpdatableFieldsType } from '../../types'
+
+/**
+ * Queries and Mutations for edits
+ */
 
 export const MUTATION_ADD_COUNTRY = gql`
 mutation ($isoCode: String!) {
@@ -66,12 +70,13 @@ export const FRAGMENT_CHANGE_HISTORY = gql`
     }
   }`
 
-export const RECENT_CHANGE_HISTORY = gql`
-query ($filter: AllHistoryFilter) {
-  getChangeHistory(filter: $filter) {
-    ...ChangeHistoryFields
+export const QUERY_RECENT_CHANGE_HISTORY = gql`
+  ${FRAGMENT_CHANGE_HISTORY}
+  query ($filter: AllHistoryFilter) {
+    getChangeHistory(filter: $filter) {
+      ...ChangeHistoryFields
+    }
   }
-}
 `
 
 export interface AddAreaProps {

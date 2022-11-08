@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
 import { TickType } from '../../js/types'
 import { stagingGraphQLClient } from '../../js/graphql/Client'
-import { MUTATION_ADD_TICK } from '../../js/graphql/fragments'
+import { MUTATION_ADD_TICK } from '../../js/graphql/gql/fragments'
 import ComboBox from '../ui/ComboBox'
 import * as Yup from 'yup'
 

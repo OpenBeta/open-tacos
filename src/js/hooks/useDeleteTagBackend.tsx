@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 
-import { MUTATION_REMOVE_MEDIA_TAG } from '../graphql/fragments'
+import { MUTATION_REMOVE_MEDIA_TAG } from '../graphql/gql/fragments'
 import { graphqlClient } from '../graphql/Client'
 import { actions } from '../../js/stores'
 

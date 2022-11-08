@@ -1,5 +1,10 @@
 import { gql } from '@apollo/client'
 
+/**
+ * A place for all reusable GQL queries and mutation.
+ * Todo: separate them by feature/function
+ */
+
 export const CORE_CRAG_FIELDS = gql`
   fragment CoreCragFields on Area {
     areaName

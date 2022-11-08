@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 
-import { QUERY_AREA_BY_ID } from '../../js/graphql/queries/areaById'
+import { QUERY_AREA_BY_ID } from '../../js/graphql/gql/areaById'
 import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
