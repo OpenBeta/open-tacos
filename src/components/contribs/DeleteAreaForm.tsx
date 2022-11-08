@@ -4,7 +4,7 @@ import clx from 'classnames'
 import { useMutation } from '@apollo/client'
 import { signIn, useSession } from 'next-auth/react'
 
-import { MUTATION_REMOVE_AREA, RemoveAreaReturnType, RemoveAreaProps } from '../../js/graphql/contribGQL'
+import { MUTATION_REMOVE_AREA, RemoveAreaReturnType, RemoveAreaProps } from '../../js/graphql/gql/contribs'
 import { graphqlClient } from '../../js/graphql/Client'
 import Input from '../ui/form/Input'
 import { SuccessAlert, AlertAction } from './alerts/Alerts'

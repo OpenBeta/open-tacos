@@ -1,10 +1,10 @@
-import { RECENT_CHANGE_HISTORY } from './contribGQL'
+import { QUERY_RECENT_CHANGE_HISTORY } from './gql/contribs'
 import { graphqlClient } from './Client'
 
 export const getChangeHistoryServerSide = async (): Promise<any> => {
   try {
     const rs = await graphqlClient.query<{getChangeHistory: any[]}>({
-      query: RECENT_CHANGE_HISTORY,
+      query: QUERY_RECENT_CHANGE_HISTORY,
       fetchPolicy: 'network-only'
     })
 

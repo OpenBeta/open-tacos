@@ -3,7 +3,7 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
 import { AreaType, TickType, MediaTagWithClimb, MediaByAuthor, CountrySummaryType } from '../types'
 import { graphqlClient, stagingGraphQLClient } from './Client'
-import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './fragments'
+import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
 interface CragsDetailsNearType {
   data: AreaType[] // Should use Omit or Pick
   placeId: string | undefined

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_CHANGE_HISTORY } from '../contribGQL'
+import { FRAGMENT_CHANGE_HISTORY } from './contribs'
 
 export const QUERY_AREA_BY_ID = gql`
   ${FRAGMENT_CHANGE_HISTORY}
