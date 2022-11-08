@@ -44,7 +44,7 @@ export const DropdownItem = ({ icon, text, onSelect, disabled = false, className
       className={
         clx('outline-none select-none inline-flex items-center gap-x-2 hover:bg-secondary px-2 py-3 w-full rounded-btn ring-0',
           className,
-          disabled ? 'opacity-75 cursor-not-allowed' : 'cursor-pointer'
+          disabled ? 'opacity-75 cursor-not-allowed font-light' : 'cursor-pointer'
         )
       }
     >
