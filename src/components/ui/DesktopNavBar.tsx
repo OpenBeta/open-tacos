@@ -7,13 +7,12 @@ export interface NavListItem {
   action?: () => void
 }
 interface DesktopAppBarProps {
-  expanded: boolean
   branding: JSX.Element
   search: JSX.Element
   navList: JSX.Element[] | JSX.Element | null
 }
 
-export default function DesktopNavBar ({ expanded, branding, search, navList }: DesktopAppBarProps): JSX.Element {
+export default function DesktopNavBar ({ branding, search, navList }: DesktopAppBarProps): JSX.Element {
   return (
     <Bar
       backgroundClass={Bar.BG_DARK}
