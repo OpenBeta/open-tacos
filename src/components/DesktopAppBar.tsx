@@ -13,13 +13,10 @@ import NewPost from './NewPost'
 import LogoWithText from '../assets/brand/openbeta-logo-with-text.svg'
 
 interface DesktopAppBarProps {
-  expanded: boolean
-  onExpandSearchBox: Function
-  onClose: Function
   showFilterBar?: boolean
 }
 
-export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, showFilterBar = true }: DesktopAppBarProps): JSX.Element {
+export default function DesktopAppBar ({ showFilterBar = true }: DesktopAppBarProps): JSX.Element {
   const { status } = useSession()
 
   let navList: JSX.Element | null | JSX.Element[]
@@ -34,7 +31,6 @@ export default function DesktopAppBar ({ expanded, onExpandSearchBox, onClose, s
   return (
     <header className='sticky top-0 z-10'>
       <DesktopNavBar
-        expanded={expanded}
         branding={
           <Link href='/'>
             <a className='h-[32px] w-[112px] block'>

@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
-import { useRouter } from 'next/router'
+import React from 'react'
+import { ExclamationTriangleIcon } from '@heroicons/react/20/solid'
+
 import MobileTabletAppBar from './MobileAppBar'
 import DesktopAppBar from './DesktopAppBar'
 import useResponsive from '../js/hooks/useResponsive'
 import PhotoUploadError from './media/PhotoUploadError'
 import { userMediaStore } from '../js/stores/media'
+import AppAlert from './broadcast/AppAlert'
 
 const NAV_BAR_IDENTIFIER = 'tacos-nav-bar'
 
@@ -18,18 +20,6 @@ export default function Header (props: HeaderProps): JSX.Element {
   const photoUploadErrorMessage = userMediaStore.use.photoUploadErrorMessage()
   const isPhotoError = photoUploadErrorMessage !== null
 
-  const router = useRouter()
-  const isIndexPage = router.pathname === '/'
-
-  // track expand/collapse of search widget (for large screen only)
-  const [expanded, setExpanded] = useState(isIndexPage)
-
-  const handleClose = (): void => {
-    if ((typeof window !== 'undefined' && window.scrollY > 150) || !isIndexPage) {
-      setExpanded(false)
-    }
-  }
-
   return (
     <>
       {isPhotoError && <PhotoUploadError photoUploadErrorMessage={photoUploadErrorMessage} />}
@@ -37,14 +27,17 @@ export default function Header (props: HeaderProps): JSX.Element {
         {isTablet || isMobile
           ? <MobileTabletAppBar isTablet={isTablet} includeFilters={includeFilters} />
           : <DesktopAppBar
-              expanded={expanded}
-              onExpandSearchBox={() => {
-                setExpanded(true)
-              }}
-              onClose={handleClose}
               showFilterBar={includeFilters}
             />}
       </div>
+      <AppAlert
+        message={
+          <>
+            <ExclamationTriangleIcon className='h-5 w-5 inline-block' /> Test mode alert!  Data may be inaccurate.  Consult guidebooks & local community for latest conditions.
+            &nbsp;<a className='btn btn-xs font-light' href='https://openbeta.substack.com/p/beta-testers-wanted'>Learn more</a>
+          </>
+        }
+      />
     </>
   )
 }
