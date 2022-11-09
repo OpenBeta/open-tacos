@@ -6,7 +6,7 @@ jest.mock('next/router')
 
 jest.mock('../../DesktopAppBar')
 jest.mock('../../MobileAppBar')
-jest.mock('../../broadcast/MiniAlert')
+jest.mock('../../broadcast/AppAlert')
 
 const getPhotoUploadErrorMessageFn = jest.fn()
 const setPhotoUploadErrorMessageFn = jest.fn()
@@ -32,7 +32,7 @@ describe('Test photo upload error popup', () => {
     HeaderComponent = module.default
   })
 
-  it('shows popup', async () => {
+  it('shows photo upload error popup', async () => {
     // why skipHover=true? https://github.com/testing-library/user-event/issues/922
     const user = userEvent.setup({ skipHover: true })
 

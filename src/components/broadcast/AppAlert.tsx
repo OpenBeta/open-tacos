@@ -8,7 +8,7 @@ interface Props {
 }
 
 /**
- * Main alert to be display under the nav bar.  Users can disable or snooze the alert.
+ * Main alert to be displayed under the nav bar.  Users can disable or snooze the alert.
  * @param message alert content
  */
 export default function MiniAlert ({ message }: Props): JSX.Element | null {
@@ -25,11 +25,11 @@ export default function MiniAlert ({ message }: Props): JSX.Element | null {
   })
   return open
     ? (
-      <div className='w-full z-40 alert alert-info lg:px-4 lg:py-0.5 rounded-none'>
+      <div className='w-full z-40 alert alert-info flex-wrap justify-center xl:px-4 xl:py-0.5 rounded-none gap-6'>
         <div className='inline-block text-center'>
           {message}
         </div>
-        <div className='inline-flex w-[210]px'>
+        <div className='inline-flex w-[210]px grow-1'>
           <button
             className='btn btn-link btn-sm btn-primary font-light text-opacity-60'
             onClick={() => {
@@ -46,7 +46,7 @@ export default function MiniAlert ({ message }: Props): JSX.Element | null {
               setOpen(false)
             }}
           >
-            <XMarkIcon className='w-4 h4' />
+            <XMarkIcon className='w-4 h-4' />
           </button>
         </div>
       </div>

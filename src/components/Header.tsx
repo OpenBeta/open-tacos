@@ -6,7 +6,7 @@ import DesktopAppBar from './DesktopAppBar'
 import useResponsive from '../js/hooks/useResponsive'
 import PhotoUploadError from './media/PhotoUploadError'
 import { userMediaStore } from '../js/stores/media'
-import MiniAlert from './broadcast/MiniAlert'
+import AppAlert from './broadcast/AppAlert'
 
 const NAV_BAR_IDENTIFIER = 'tacos-nav-bar'
 
@@ -30,11 +30,11 @@ export default function Header (props: HeaderProps): JSX.Element {
               showFilterBar={includeFilters}
             />}
       </div>
-      <MiniAlert
+      <AppAlert
         message={
           <>
             <ExclamationTriangleIcon className='h-5 w-5 inline-block' /> Test mode alert!  Data may be inaccurate.  Consult guidebooks & local community for latest conditions.
-            &nbsp;<a className='inline-block underline font-light' href='https://openbeta.substack.com/p/beta-testers-wanted'>Learn more</a>
+            &nbsp;<a className='btn btn-xs font-light' href='https://openbeta.substack.com/p/beta-testers-wanted'>Learn more</a>
           </>
         }
       />
