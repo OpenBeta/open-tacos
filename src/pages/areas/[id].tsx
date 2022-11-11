@@ -15,7 +15,7 @@ import { getNavBarOffset } from '../../components/Header'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useAreaSeo } from '../../js/hooks/seo'
-import AreaEditTrigger from '../../components/contribs/AreaEditTrigger'
+import AreaEditTrigger from '../../components/edit/AreaEditTrigger'
 
 interface AreaPageProps {
   area: AreaType

@@ -15,7 +15,7 @@ import { PoiDoc } from '../../components/search/sources/PoiSource2'
 import { MUTATION_ADD_AREA, AddAreaProps, AddAreaReturnType } from '../../js/graphql/gql/contribs'
 import { graphqlClient } from '../../js/graphql/Client'
 import { INextPageWithAuth } from '../../js/types/INext'
-import { AddSucessAlert, AddErrorAlert } from '../../components/contribs/AddChildAreaForm'
+import { AddSucessAlert, AddErrorAlert } from '../../components/edit/AddChildAreaForm'
 
 interface AddAreaFormProps {
   newAreaName: string

@@ -38,7 +38,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, don
   useEffect(() => {
     if (activeTab !== '' && allowedViews.includes(activeTab)) {
       if (activeTab === 'edit') {
-        void router.replace('/contribs')
+        void router.replace('/edit')
       }
       const query = router.query
       query.v = activeTab
