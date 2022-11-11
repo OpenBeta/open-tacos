@@ -3,8 +3,8 @@ import { GetStaticProps, NextPage } from 'next'
 import SeoTags from '../../components/SeoTags'
 import Layout from '../../components/layout'
 import { getChangeHistoryServerSide } from '../../js/graphql/contribAPI'
-import RecentChangeHistory from '../../components/contribs/RecentChangeHistory'
-import DefaultView from '../../components/contribs/DefaultView'
+import RecentChangeHistory from '../../components/edit/RecentChangeHistory'
+import DefaultView from '../../components/edit/DefaultView'
 interface PageProps {
   history: any[]
 }
@@ -37,6 +37,6 @@ export const getStaticProps: GetStaticProps<PageProps> = async ({ params }): Pro
     props: {
       history
     },
-    revalidate: 10 // regenerate page when a request comes in but no faster than every 10s
+    revalidate: 5 // regenerate page when a request comes in but no faster than every 5s
   })
 }

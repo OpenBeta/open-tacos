@@ -18,6 +18,9 @@ const handler: NextApiHandler = async (req: NextApiRequest, res) => {
   }
 }
 
+/**
+ * Send a fetch('/api/revalidate?u=<username>') to regenerate the user page
+ */
 const profileHandler = async (req: NextApiRequest, res: NextApiResponse): Promise<any> => {
   if (!res.writable) return
   const username = req.query?.u as string
@@ -27,6 +30,9 @@ const profileHandler = async (req: NextApiRequest, res: NextApiResponse): Promis
   }
 }
 
+/**
+ * Send a fetch('/api/revalidate?a=<areaID>') to regenerate the area page
+ */
 const areaHandler = async (req: NextApiRequest, res: NextApiResponse): Promise<any> => {
   if (!res.writable) return
   const areaUuid = req.query?.a as string
@@ -36,10 +42,14 @@ const areaHandler = async (req: NextApiRequest, res: NextApiResponse): Promise<a
   }
 }
 
+/**
+ * Send a fetch('/api/revalidate?page=edit') to regenerate the edit history.
+ * Need to whitelist the page in `ALLOWS` array.
+ */
 const otherPagesHandler = async (req: NextApiRequest, res: NextApiResponse): Promise<any> => {
   if (!res.writable) return
   const page = req.query?.page as string
-  const ALLOWS = ['/contribs']
+  const ALLOWS = ['/edit']
   if (ALLOWS.includes(page)) {
     await res.status(200).revalidate(page)
     res.json({ revalidated: true })

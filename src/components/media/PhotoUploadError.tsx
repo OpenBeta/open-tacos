@@ -1,5 +1,5 @@
 import { userMediaStore } from '../../js/stores/media'
-import { ErrorAlert } from '../contribs/alerts/Alerts'
+import { ErrorAlert } from '../edit/alerts/Alerts'
 import { AlertAction } from '../ui/micro/AlertDialogue'
 
 interface PhotoUploadErrorMessageProps {
