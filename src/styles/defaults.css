@@ -192,14 +192,6 @@ p {
     @apply rounded-full py-1 px-4;
   }
 
-  .slate-ToolbarButton {
-    @apply fill-current text-gray-500 justify-center !important;
-  }
-
-  .slate-ToolbarButton-active {
-    @apply fill-current text-pink-600 !important;
-  }
-
   .edit-input {
     @apply px-2 py-1 flex-grow w-full	outline-none bg-transparent	border border-gray-300 rounded-md focus:outline-none;
   }
