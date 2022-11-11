@@ -34,7 +34,7 @@ const AddAreaPage: INextPageWithAuth = () => {
       onCompleted: (data) => {
         wizardActions.addAreaStore.recordStepFinal()
         void fetch(`/api/revalidate?a=${data.addArea.uuid}`)
-        void fetch('/api/revalidate?page=/contribs')
+        void fetch('/api/revalidate?page=/edit')
       }
     }
   )
@@ -48,7 +48,7 @@ const AddAreaPage: INextPageWithAuth = () => {
 
   // Go back to previous screen
   const onClose = useCallback(async () => {
-    await router.replace('/contribs')
+    await router.replace('/edit')
   }, [])
 
   // Submit form

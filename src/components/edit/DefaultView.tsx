@@ -5,7 +5,7 @@ export default function DefaultView (): JSX.Element {
     <div className='flex flex-col gap-y-12 items-center mt-0 md:mt-6 mb-6 bg-base-100 rounded-box py-6'>
       <div className='text-primary font-bold'>Quick edit</div>
       <div className='flex flex-col items-center gap-y-2'>
-        <LinkButton href='/contribs/addArea' className='btn btn-primary btn-wide'>
+        <LinkButton href='/edit/addArea' className='btn btn-primary btn-wide'>
           Add New Area
         </LinkButton>
         <div className='text-xs'>Area: a crag, boulder, or a well-known destination</div>
