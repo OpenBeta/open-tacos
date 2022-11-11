@@ -9,7 +9,7 @@ import DeleteAreaForm from './DeleteAreaForm'
 import EditAreaForm from './EditAreaForm'
 import { useResponsive } from '../../js/hooks'
 import { AreaType, ChangesetType } from '../../js/types'
-import RecentChangeHistory from '../../components/contribs/RecentChangeHistory'
+import RecentChangeHistory from './RecentChangeHistory'
 
 interface AreaEditActionTriggerProps extends AreaType {
   history: ChangesetType[]

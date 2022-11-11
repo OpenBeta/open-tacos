@@ -15,7 +15,7 @@ import { PoiDoc } from '../../components/search/sources/PoiSource2'
 import { MUTATION_ADD_AREA, AddAreaProps, AddAreaReturnType } from '../../js/graphql/gql/contribs'
 import { graphqlClient } from '../../js/graphql/Client'
 import { INextPageWithAuth } from '../../js/types/INext'
-import { AddSucessAlert, AddErrorAlert } from '../../components/contribs/AddChildAreaForm'
+import { AddSucessAlert, AddErrorAlert } from '../../components/edit/AddChildAreaForm'
 
 interface AddAreaFormProps {
   newAreaName: string
@@ -34,7 +34,7 @@ const AddAreaPage: INextPageWithAuth = () => {
       onCompleted: (data) => {
         wizardActions.addAreaStore.recordStepFinal()
         void fetch(`/api/revalidate?a=${data.addArea.uuid}`)
-        void fetch('/api/revalidate?page=/contribs')
+        void fetch('/api/revalidate?page=/edit')
       }
     }
   )
@@ -48,7 +48,7 @@ const AddAreaPage: INextPageWithAuth = () => {
 
   // Go back to previous screen
   const onClose = useCallback(async () => {
-    await router.replace('/contribs')
+    await router.replace('/edit')
   }, [])
 
   // Submit form
