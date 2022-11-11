@@ -5,12 +5,12 @@ import { signIn } from 'next-auth/react'
 
 import { LeanAlert, AlertAction } from '../ui/micro/AlertDialogue'
 
-import CatchingBugs from '../../assets/media/bug-beta-testing.png'
+import CatchingBugs from '../../assets/media/hackathon-2022.png'
 
 const STORAGE_KEY = 'edit.beta.cta'
 
 /**
- * A delayed Call-to-action
+ * Main Call-to-action popup
  */
 export default function MainCta (): JSX.Element | null {
   const [open, setOpen] = useState(false)
@@ -30,7 +30,7 @@ export default function MainCta (): JSX.Element | null {
       <LeanAlert
         closeOnEsc
         title={<Image src={CatchingBugs} objectFit='fill' />}
-        description={<span>Help us test the new <span className='underline decoration-wavy decoration-secondary underline-offset-2'>edit feature</span>.  Sign in and edit an area description!</span>}
+        description={<span>Help us test the new <span className='underline decoration-wavy decoration-secondary underline-offset-2'>edit feature</span>.  Sign in and change an area description!</span>}
         className='bg-primary text-base-100'
       >
         <div>
@@ -41,7 +41,7 @@ export default function MainCta (): JSX.Element | null {
             Sign in <ArrowRightIcon className='h-4 w-4' />
           </AlertAction>
           <AlertAction
-            className='w-full btn btn-link text-base-300 text-xs lg:text-sm'
+            className='mt-3 w-full btn btn-link text-base-200 text-xs lg:text-sm'
             onClick={() => { localStorage.setItem(STORAGE_KEY, '1') }}
           >
             Don't show this again

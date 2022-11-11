@@ -7,14 +7,12 @@ import { gql } from '@apollo/client'
 import { groupBy, Dictionary } from 'underscore'
 import { TagIcon, LightBulbIcon, MapPinIcon, PencilIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
-import Link from 'next/link'
 
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
 import { graphqlClient, openCollectiveClient } from '../js/graphql/Client'
 import { getRecentMedia } from '../js/graphql/api'
 import { IndexResponseType, MediaBaseTag, MediaType, FinancialBackerAccountType, FinancialBackersResponseType } from '../js/types'
-import useCanary from '../js/hooks/useCanary'
 import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import { RecentTagsProps } from '../components/home/RecentMedia'
@@ -33,7 +31,6 @@ interface HomePageType {
 }
 
 const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, donors, totalRaised }) => {
-  const canaryOn = useCanary()
   const router = useRouter()
   const [activeTab, setTab] = useState<string>('')
   const { areas } = exploreData
@@ -41,7 +38,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, don
   useEffect(() => {
     if (activeTab !== '' && allowedViews.includes(activeTab)) {
       if (activeTab === 'edit') {
-        if (canaryOn) void router.replace('/contribs')
+        void router.replace('/contribs')
       }
       const query = router.query
       query.v = activeTab
@@ -51,7 +48,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, don
 
       void router.push(`/?${queryString}`, undefined, { shallow: true })
     }
-  }, [activeTab, canaryOn])
+  }, [activeTab])
 
   useEffect(() => {
     if (router.isReady) {
@@ -123,9 +120,6 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, don
                 label='Backers'
               />
             </Tabs.List>
-            <Tabs.Content value='edit' className='h-60'>
-              <div className='alert shadow-lg'><b>Sorry this feature is not yet available.</b><span>Activate pre-released features?<Link href='/?next=true'><a><button className='btn btn-primary btn-sm'>Activate</button></a></Link></span></div>
-            </Tabs.Content>
             <Tabs.Content value='explore' className='w-full'>
               <DynamicDenseAreas areas={areas} />
             </Tabs.Content>
