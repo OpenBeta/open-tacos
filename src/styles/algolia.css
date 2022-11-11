@@ -4,6 +4,12 @@ body {
   --aa-search-input-height: 100%;
 }
 
+/* Undo defaults set in the theme */
+.aa-Panel button {
+  border: 1px solid !important;
+  @apply btn rounded-full btn-sm btn-outline text-xs !important;
+}
+
 .xsearch-inputWrapperPrefix {
   @apply text-white m-0.5 xl:m-1 flex items-center justify-center bg-ob-primary rounded-full h-8 w-8 xl:h-10 xl:w-10 !important;
 }

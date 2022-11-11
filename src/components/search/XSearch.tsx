@@ -22,6 +22,7 @@ export default function XSearch ({ placeholder = 'Try "Cat In the Hat" or "Las V
         return sources
       }}
       classNames={CUSTOM_CLASSES}
+      resultContainer={ResultContainer}
     />
   )
 }
@@ -59,6 +60,48 @@ export const XSearchMobile = (): JSX.Element => {
         sources.push(poiSource)
         return sources
       }}
+      resultContainer={ResultContainer}
     />
+  )
+}
+
+const ResultContainer = (sections: any[]): JSX.Element | null => {
+  const climbsSection = document.getElementById('Climbs')
+  const areasSection = document.getElementById('Areas')
+  const faSection = document.getElementById('FA')
+  const nearbySection = document.getElementById('Address')
+
+  return (
+    <div className='aa-PanelLayout aa-Panel--scrollable'>
+      <section className='my-4 flex gap-x-4'>
+        <button
+          onClick={() => {
+            climbsSection?.scrollIntoView({ behavior: 'smooth' })
+          }}
+        >
+          Climbs
+        </button>
+        <button
+          onClick={() => {
+            areasSection?.scrollIntoView({ behavior: 'smooth' })
+          }}
+        >
+          Areas
+        </button>
+        <button
+          onClick={() => {
+            faSection?.scrollIntoView({ behavior: 'smooth' })
+          }}
+        >&nbsp;FA&nbsp;
+        </button>
+        <button
+          onClick={() => {
+            nearbySection?.scrollIntoView({ behavior: 'smooth' })
+          }}
+        >Address
+        </button>
+      </section>
+      {sections}
+    </div>
   )
 }

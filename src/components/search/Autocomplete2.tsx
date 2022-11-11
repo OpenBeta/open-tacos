@@ -14,12 +14,13 @@ interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
   open?: boolean
   onCancel?: () => void
   detached?: boolean
+  resultContainer?: (children, sections) => React.ReactNode
 }
 /**
  * Autocomplete widget based on Algolia Autocomplete.
  * @param props
  */
-export const Autocomplete2 = ({ label, open = false, onCancel, detached = true, queryParams, classNames, ...otherProps }: AutocompleteProps): JSX.Element => {
+export const Autocomplete2 = ({ label, open = false, onCancel, detached = true, queryParams, classNames, resultContainer, ...otherProps }: AutocompleteProps): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
   const panelRootRef = useRef<any>(null)
   const rootRef = useRef<HTMLElement|null>(null)
@@ -42,14 +43,18 @@ export const Autocomplete2 = ({ label, open = false, onCancel, detached = true, 
         }
       },
       detachedMediaQuery: detached ? '' : 'none',
-      render ({ children, elements }, root) {
+      render ({ children, html, render, sections }, root) {
         if ((panelRootRef.current == null) || rootRef.current !== root) {
           rootRef.current = root
           panelRootRef.current?.unmount()
           panelRootRef.current = createRoot(root)
         }
 
-        panelRootRef.current.render(children)
+        if (resultContainer != null) {
+          panelRootRef.current.render(resultContainer(sections, children))
+        } else {
+          panelRootRef.current.render(children)
+        }
       },
       ...otherProps
     })

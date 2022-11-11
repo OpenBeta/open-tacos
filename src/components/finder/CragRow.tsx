@@ -23,7 +23,7 @@ export default function CragRow ({ areaName, totalClimbs, metadata, aggregate, p
             // Todo set some state to highlight this crag on the map
           }}
         >
-          <div><MiniCrumbs pathTokens={pathTokens} end={2} skipLast /></div>
+          <div><MiniCrumbs pathTokens={pathTokens} skipLast /></div>
           <div className='flex justify-between items-center'>
             <div className='text-lg font-semibold text-primary'>
               {name}

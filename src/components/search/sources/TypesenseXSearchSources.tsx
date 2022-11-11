@@ -2,7 +2,7 @@ import { AutocompleteSource } from '@algolia/autocomplete-js'
 
 import { multiSearch } from '../../../js/typesense/TypesenseClient'
 import { DefaultHeader, DefaultNoResult, ClimbItem, AreaItem, FAItem } from '../templates/ClimbResultXSearch'
-import { TypesenseDocumentType } from '../../../js/types'
+import { TypesenseDocumentType, TypesenseAreaType } from '../../../js/types'
 
 /**
  * Call Typesense multi-sources search API and wrap the result in an array of Algolia.Source objects which contains matching climbs, areas, fa.
@@ -11,9 +11,10 @@ import { TypesenseDocumentType } from '../../../js/types'
  * @see TypesenseClient.multiSearch()
  */
 
-export const xsearchTypesense = async (query: string): Promise<Array<AutocompleteSource<TypesenseDocumentType>>> => {
+export const xsearchTypesense = async (query: string): Promise<Array<AutocompleteSource<TypesenseDocumentType | TypesenseAreaType>>> => {
   const rs = await multiSearch(query)
-  return [{
+
+  const climbs: AutocompleteSource<TypesenseDocumentType> = {
     sourceId: 'Climbs',
     getItems: ({ query }) => rs.climbs,
     getItemInputValue: ({ item }) => {
@@ -25,21 +26,23 @@ export const xsearchTypesense = async (query: string): Promise<Array<Autocomplet
       item: ClimbItem,
       header: DefaultHeader
     }
-  },
-  {
+  }
+
+  const areas: AutocompleteSource<TypesenseAreaType> = {
     sourceId: 'Areas',
     getItems: ({ query }) => rs.areas,
     getItemInputValue: ({ item }) => {
-      return item.areaNames[item.areaNames.length - 1]
+      return item.name
     },
-    getItemUrl: ({ item }) => `/climbs/${item.climbUUID}`,
+    getItemUrl: ({ item }) => `/areas/${item.id}`,
     templates: {
       noResults: DefaultNoResult,
       item: AreaItem,
       header: DefaultHeader
     }
-  },
-  {
+  }
+
+  const faList: AutocompleteSource<TypesenseDocumentType> = {
     sourceId: 'FA',
     getItems: ({ query }) => rs.fa,
     getItemInputValue: ({ item }) => {
@@ -52,5 +55,6 @@ export const xsearchTypesense = async (query: string): Promise<Array<Autocomplet
       header: DefaultHeader
     }
   }
-  ]
+
+  return [climbs, areas, faList]
 }

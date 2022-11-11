@@ -1,5 +1,6 @@
 import Typesense from 'typesense'
-import { TypesenseDocumentType } from '../types'
+import { SearchResponseHit } from 'typesense/lib/Typesense/Documents'
+import { TypesenseDocumentType, TypesenseAreaType } from '../types'
 
 const typesenseClient = new Typesense.Client({
   nodes: [
@@ -50,7 +51,7 @@ export const areaSearchByName = async (query: string, latlng: number[]): Promise
 
 interface multisearchRet {
   climbs: TypesenseDocumentType[]
-  areas: TypesenseDocumentType[]
+  areas: TypesenseAreaType[]
   fa: TypesenseDocumentType[]
 }
 
@@ -75,9 +76,9 @@ export async function multiSearch (query: string): Promise<multisearchRet> {
       },
       {
         q: query,
-        query_by: 'areaNames',
-        collection: 'climbs',
-        exclude_fields: 'climbDesc',
+        query_by: 'name,pathTokens',
+        collection: 'areas',
+        sort_by: '_text_match:desc,totalClimbs:desc',
         page: 1,
         per_page: 5
       },
@@ -96,9 +97,30 @@ export async function multiSearch (query: string): Promise<multisearchRet> {
   // FYI: rs.results contains a lot more useful data
   const x: multisearchRet = {
     climbs: rs?.results[0].hits?.map(hit => hit.document) ?? [],
-    areas: rs?.results[1].hits?.map(hit => hit.document) ?? [],
+    areas: rs?.results[1].hits?.map(reshapAreaDoc) ?? [],
     fa: rs?.results[2].hits?.map(hit => hit.document) ?? []
   } as any
 
   return x
+}
+
+/**
+ * Extract hit's document and simplify Typense highlight object that
+ * contains indices of matching area(s) or subarea(s).
+ * @param hit Typesense hit
+ */
+const reshapAreaDoc = (hit: SearchResponseHit<any>): TypesenseAreaType => {
+  let highlightIndices: number[] = []
+  // @ts-expect-error
+  if (hit.highlights?.length > 0) {
+    const found = hit.highlights?.find(item => item.field === 'pathTokens')
+    if (found != null) {
+      // @ts-expect-error
+      highlightIndices = found.indices as number[]
+    }
+  }
+  return {
+    ...hit.document,
+    highlightIndices
+  }
 }

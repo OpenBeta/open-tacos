@@ -1,5 +1,5 @@
-import { MiniCrumbs } from '../../ui/BreadCrumbs'
-import { TypesenseDocumentType } from '../../../js/types'
+import { TextOnlyCrumbs } from '../../ui/BreadCrumbs'
+import { TypesenseDocumentType, TypesenseAreaType } from '../../../js/types'
 
 interface ItemProps {
   item: TypesenseDocumentType
@@ -10,7 +10,7 @@ export const ClimbItem = ({ item }: ItemProps): JSX.Element => {
   return (
     <a className='px-2 py-3' href={`/climbs/${item.climbUUID}`}>
       <div className='text-xs'>
-        <MiniCrumbs pathTokens={areaNames} />
+        <TextOnlyCrumbs pathTokens={areaNames} highlightIndices={[]} />
       </div>
 
       <div className='pt-1 text-sm flex flex-wrap items-center'>
@@ -43,11 +43,23 @@ export const ClimbItem = ({ item }: ItemProps): JSX.Element => {
   )
 }
 
-export const AreaItem = ({ item }: ItemProps): JSX.Element => {
-  const { areaNames } = item
+interface AreaItemProps {
+  item: TypesenseAreaType
+}
+export const AreaItem = ({ item }: AreaItemProps): JSX.Element => {
+  const { pathTokens, highlightIndices, name } = item
   return (
-    <a className='my-4 text-xs' href={`/climbs/${item.climbUUID}`}>
-      <MiniCrumbs pathTokens={areaNames} />
+    <a className='py-4 text-xs flex flex-col gap-2' href={`/areas/${item.id}`}>
+      {pathTokens.length === 1 &&
+        <>
+          <div className='badge badge-success bg-opacity-50 badge-sm'>country</div>
+          <div className='badge badge-outline badge-lg'>{name} →</div>
+        </>}
+      {pathTokens.length > 1 &&
+        <>
+          <div className='badge badge-info badge-sm'>area</div>
+          <TextOnlyCrumbs pathTokens={pathTokens} highlightIndices={highlightIndices} />
+        </>}
     </a>
   )
 }
@@ -55,8 +67,8 @@ export const AreaItem = ({ item }: ItemProps): JSX.Element => {
 export const FAItem = ({ item }: ItemProps): JSX.Element => {
   const { climbName, areaNames, fa } = item
   return (
-    <a className='my-4 text-xs' href={`/climbs/${item.climbUUID}`}>
-      <MiniCrumbs pathTokens={areaNames} />
+    <a className='py-4 text-xs' href={`/climbs/${item.climbUUID}`}>
+      <TextOnlyCrumbs pathTokens={areaNames} highlightIndices={[]} />
       <div>
         Route: <b>{climbName}</b>
       </div>
@@ -68,13 +80,13 @@ export const FAItem = ({ item }: ItemProps): JSX.Element => {
 }
 
 interface DefaultHeaderProps {
-  items: TypesenseDocumentType[]
+  items: TypesenseDocumentType[] | TypesenseAreaType[]
   source?: any
   state?: any
 }
 
-export const DefaultHeader = ({ source }: DefaultHeaderProps): JSX.Element => {
-  return <h2 className='border-b pt-4'>{source?.sourceId}</h2>
+export const DefaultHeader = ({ source, ...props }: DefaultHeaderProps): JSX.Element => {
+  return <h2 className='border-b pt-4' id={source?.sourceId}>{source?.sourceId}</h2>
 }
 
 export const DefaultNoResult = (props: any): JSX.Element => {
