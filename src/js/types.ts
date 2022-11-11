@@ -154,6 +154,13 @@ export interface TypesenseDocumentType extends BaseItem {
   areaNames: string[]
 }
 
+export interface TypesenseAreaType extends BaseItem {
+  id: string
+  name: string
+  pathTokens: string[]
+  highlightIndices: number[]
+}
+
 export enum GradeBand {
   beginner = '0',
   intermediate = '1',
