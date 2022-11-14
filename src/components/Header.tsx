@@ -34,7 +34,7 @@ export default function Header (props: HeaderProps): JSX.Element {
         message={
           <>
             <ExclamationTriangleIcon className='h-5 w-5 inline-block' /> Test mode alert!  Data may be inaccurate.  Consult guidebooks & local community for latest conditions.
-            &nbsp;<a className='btn btn-xs font-light' href='https://openbeta.substack.com/p/beta-testers-wanted'>Learn more</a>
+            &nbsp;<a className='btn btn-xs font-light' href='https://openbeta.substack.com/p/hackathon-2022'>Learn more</a>
           </>
         }
       />
