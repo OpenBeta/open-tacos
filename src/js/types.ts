@@ -141,9 +141,15 @@ export type GeojsonFeatureType = Feature
 export interface AlgoliaResultType {
   objectID: string
 }
-export type ClimbAlgoliaType = Climb & AlgoliaResultType
+
+export enum EntityType {
+  climb = 'climb',
+  area = 'area',
+  crag = 'crag',
+}
 
 export interface TypesenseDocumentType extends BaseItem {
+  type: EntityType
   climbUUID: string
   climbDesc: string
   climbName: string
@@ -155,6 +161,7 @@ export interface TypesenseDocumentType extends BaseItem {
 }
 
 export interface TypesenseAreaType extends BaseItem {
+  type: EntityType
   id: string
   name: string
   pathTokens: string[]
@@ -213,6 +220,11 @@ export interface MediaType {
   mtime: Date
   contentType: string
   meta: any
+}
+
+export enum TagTargetType {
+  climb = 0,
+  area = 1
 }
 
 export interface XViewStateType extends ViewState{

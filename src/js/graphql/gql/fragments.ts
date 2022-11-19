@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client'
+import { TagTargetType } from '../../types'
 
 /**
  * A place for all reusable GQL queries and mutation.
@@ -66,18 +67,24 @@ export const CORE_CRAG_FIELDS = gql`
   }
 `
 
+export interface SetTagType {
+  mediaUuid: string
+  mediaUrl: string
+  destinationId: string
+  destType: TagTargetType
+}
 /**
  * Create a media <--> climb (or area) association
  */
 export const MUTATION_ADD_CLIMB_TAG_TO_MEDIA = gql`
-  mutation tagPhotoWithClimb($mediaUuid: ID!, $mediaUrl: String!, $srcUuid: ID!) {
+  mutation tagPhotoWithClimb($mediaUuid: ID!, $mediaUrl: String!, $destinationUuid: ID!, $destType: Int!) {
     setTag(
       input: {
         mediaUuid: $mediaUuid,
         mediaUrl: $mediaUrl,
         mediaType: 0,
-        destinationId: $srcUuid,
-        destType: 0
+        destinationId: $destinationUuid,
+        destType: $destType
       }
     ) {
         ... on ClimbTag {
