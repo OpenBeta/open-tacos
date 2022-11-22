@@ -1,6 +1,6 @@
 import { Dictionary } from 'underscore'
 
-import { MediaType, MediaTagWithClimb } from '../../js/types'
+import { MediaType, HybridMediaTag } from '../../js/types'
 import UserMedia, { ImagePlaceholder } from './UserMedia'
 import { ProfileATag } from '../users/PublicProfile'
 
@@ -8,7 +8,7 @@ interface MoreFromThisUserProps {
   loaded: boolean
   uid: string
   mediaList?: MediaType[]
-  tagMap: Dictionary<MediaTagWithClimb[]>
+  tagMap: Dictionary<HybridMediaTag[]>
 }
 
 export default function MoreFromThisUser ({ loaded, uid, mediaList = [], tagMap = {} }: MoreFromThisUserProps): JSX.Element {

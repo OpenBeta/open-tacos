@@ -6,12 +6,12 @@ import { DropdownMenuItem as PrimitiveDropdownMenuItem } from '@radix-ui/react-d
 import AddTag from './AddTag'
 import { DropdownMenu, DropdownContent, DropdownTrigger, DropdownItem, DropdownSeparator } from '../ui/DropdownMenu'
 import useDeleteTagBackend from '../../js/hooks/useDeleteTagBackend'
-import { MediaTagWithClimb, MediaType } from '../../js/types'
+import { HybridMediaTag, MediaType } from '../../js/types'
 import Tag from './Tag'
 import { signIn } from 'next-auth/react'
 
 interface TagsProps {
-  list: MediaTagWithClimb[]
+  list: HybridMediaTag[]
   isAuthorized?: boolean
   isAuthenticated?: boolean
   showDelete?: boolean
@@ -27,6 +27,7 @@ export default function TagList ({ list, isAuthorized = false, isAuthenticated =
   if (list == null) {
     return null
   }
+
   return (
     <div className={
           classNames(
@@ -35,9 +36,9 @@ export default function TagList ({ list, isAuthorized = false, isAuthenticated =
           )
           }
     >
-      {list.map((tag: MediaTagWithClimb) =>
+      {list.map((tag: HybridMediaTag) =>
         <Tag
-          key={`${tag.mediaUuid}-${tag.climb.id}`}
+          key={`${tag.id}`}
           tag={tag}
           onDelete={onDelete}
           isAuthorized={isAuthorized}
@@ -55,7 +56,7 @@ export default function TagList ({ list, isAuthorized = false, isAuthenticated =
 }
 
 interface TagListProps {
-  list: MediaTagWithClimb[]
+  list: HybridMediaTag[]
   isAuthorized?: boolean
   children?: JSX.Element
   imageInfo: MediaType
@@ -75,8 +76,8 @@ export const MobilePopupTagList = ({ list, imageInfo, isAuthorized = false }: Ta
         </DropdownTrigger>
         <DropdownContent align='end'>
           <>
-            {list.map((tag: MediaTagWithClimb) => (
-              <PrimitiveDropdownMenuItem key={`${tag.mediaUuid}-${tag.climb.id}`} className='px-2 py-3'>
+            {list.map((tag: HybridMediaTag) => (
+              <PrimitiveDropdownMenuItem key={`${tag.id}`} className='px-2 py-3'>
                 <Tag
                   tag={tag}
                   isAuthorized={isAuthorized}
@@ -119,6 +120,6 @@ interface AddTagBadgeProps {
 }
 
 const AddTagBadge = ({ onClick = () => {} }: AddTagBadgeProps): JSX.Element =>
-  <button className='inline-flex badge gap-1' onClick={onClick}>
-    <PlusIcon className='w-4 h-4 inline-block' /> New tag
+  <button className='inline-flex flex-nowrap badge gap-1' onClick={onClick}>
+    <PlusIcon className='w-4 h-4 inline-block' /> <span className='whitespace-nowrap'>New tag</span>
   </button>

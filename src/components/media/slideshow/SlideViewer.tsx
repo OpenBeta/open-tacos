@@ -4,7 +4,7 @@ import { LightBulbIcon } from '@heroicons/react/24/outline'
 import { Dictionary } from 'underscore'
 import ContentLoader from 'react-content-loader'
 
-import { MediaType, MediaTagWithClimb } from '../../../js/types'
+import { MediaType, HybridMediaTag } from '../../../js/types'
 import TagList from '../TagList'
 import NextPreviousControl from './NextPreviousControl'
 import ResponsiveImage from './ResponsiveImage'
@@ -18,7 +18,7 @@ interface SlideViewerProps {
   initialIndex: number
   onClose?: () => void
   imageList: MediaType[]
-  tagsByMediaId: Dictionary<MediaTagWithClimb[]>
+  tagsByMediaId: Dictionary<HybridMediaTag[]>
   userinfo: JSX.Element
   auth: WithPermission
   baseUrl: string
@@ -82,7 +82,7 @@ export default function SlideViewer ({
 interface SingleViewerProps {
   loaded: boolean
   media: MediaType | null
-  tagList: MediaTagWithClimb[]
+  tagList: HybridMediaTag[]
   userinfo: JSX.Element
   auth: WithPermission
   onClose?: () => void
@@ -172,7 +172,7 @@ const RhsContainer = ({ loaded, userinfo, content, footer = null }: RhsContainer
 
 interface InfoContainerProps {
   currentImage: MediaType | null
-  tagList: MediaTagWithClimb[]
+  tagList: HybridMediaTag[]
   auth: WithPermission
   onClose?: () => void
 }

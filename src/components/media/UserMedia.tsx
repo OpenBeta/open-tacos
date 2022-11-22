@@ -3,7 +3,7 @@ import ContentLoader from 'react-content-loader'
 import { basename } from 'path'
 import Link from 'next/link'
 
-import { MediaTagWithClimb, MediaType } from '../../js/types'
+import { HybridMediaTag, MediaType } from '../../js/types'
 import ResponsiveImage from '../media/slideshow/ResponsiveImage'
 import { DesktopPreviewLoader } from '../../js/sirv/util'
 import RemoveImage from './RemoveImage'
@@ -13,7 +13,7 @@ interface UserMediaProps {
   index: number
   imageInfo: MediaType
   onClick?: (props: any) => void
-  tagList: MediaTagWithClimb[]
+  tagList: HybridMediaTag[]
   isAuthorized?: boolean
 }
 

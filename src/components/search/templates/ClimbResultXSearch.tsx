@@ -8,7 +8,7 @@ interface ItemProps {
 export const ClimbItem = ({ item }: ItemProps): JSX.Element => {
   const { climbName, areaNames } = item
   return (
-    <a className='px-2 py-3' href={`/climbs/${item.climbUUID}`}>
+    <div className='px-2 py-3'>
       <div className='text-xs'>
         <TextOnlyCrumbs pathTokens={areaNames} highlightIndices={[]} />
       </div>
@@ -39,7 +39,7 @@ export const ClimbItem = ({ item }: ItemProps): JSX.Element => {
         </div>
 
       </div>
-    </a>
+    </div>
   )
 }
 
@@ -49,7 +49,7 @@ interface AreaItemProps {
 export const AreaItem = ({ item }: AreaItemProps): JSX.Element => {
   const { pathTokens, highlightIndices, name } = item
   return (
-    <a className='py-4 text-xs flex flex-col gap-2' href={`/areas/${item.id}`}>
+    <div className='py-4 text-xs flex flex-col gap-2'>
       {pathTokens.length === 1 &&
         <>
           <div className='badge badge-success bg-opacity-50 badge-sm'>country</div>
@@ -60,7 +60,7 @@ export const AreaItem = ({ item }: AreaItemProps): JSX.Element => {
           <div className='badge badge-info badge-sm'>area</div>
           <TextOnlyCrumbs pathTokens={pathTokens} highlightIndices={highlightIndices} />
         </>}
-    </a>
+    </div>
   )
 }
 

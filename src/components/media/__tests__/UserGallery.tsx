@@ -60,7 +60,6 @@ describe('Image gallery', () => {
 
     render(
       <UserGallery
-        loaded
         auth={{ isAuthenticated: false, isAuthorized: false }}
         uid={username}
         postId={null}

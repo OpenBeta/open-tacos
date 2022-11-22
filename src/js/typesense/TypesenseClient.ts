@@ -1,6 +1,6 @@
 import Typesense from 'typesense'
 import { SearchResponseHit } from 'typesense/lib/Typesense/Documents'
-import { TypesenseDocumentType, TypesenseAreaType } from '../types'
+import { TypesenseDocumentType, TypesenseAreaType, EntityType } from '../types'
 
 const typesenseClient = new Typesense.Client({
   nodes: [
@@ -49,7 +49,7 @@ export const areaSearchByName = async (query: string, latlng: number[]): Promise
   return rs?.hits?.map(hit => hit.document) ?? []
 }
 
-interface multisearchRet {
+export interface MultisearchReturnType {
   climbs: TypesenseDocumentType[]
   areas: TypesenseAreaType[]
   fa: TypesenseDocumentType[]
@@ -59,7 +59,7 @@ interface multisearchRet {
  * Search multiple collections in one request
  * @param query
  */
-export async function multiSearch (query: string): Promise<multisearchRet> {
+export async function multiSearch (query: string): Promise<MultisearchReturnType> {
   // See https://typesense.org/docs/0.19.0/api/documents.html#federated-multi-search
   const commonSearchParams = {
 
@@ -95,8 +95,8 @@ export async function multiSearch (query: string): Promise<multisearchRet> {
 
   const rs = await typesenseClient.multiSearch.perform(searchRequests, commonSearchParams)
   // FYI: rs.results contains a lot more useful data
-  const x: multisearchRet = {
-    climbs: rs?.results[0].hits?.map(hit => hit.document) ?? [],
+  const x: MultisearchReturnType = {
+    climbs: rs?.results[0].hits?.map(hit => ({ ...hit.document, type: EntityType.climb })) ?? [],
     areas: rs?.results[1].hits?.map(reshapAreaDoc) ?? [],
     fa: rs?.results[2].hits?.map(hit => hit.document) ?? []
   } as any
@@ -121,6 +121,7 @@ const reshapAreaDoc = (hit: SearchResponseHit<any>): TypesenseAreaType => {
   }
   return {
     ...hit.document,
-    highlightIndices
+    highlightIndices,
+    type: hit.document.leaf === 'true' ? EntityType.crag : EntityType.area
   }
 }
