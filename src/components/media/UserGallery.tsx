@@ -8,7 +8,7 @@ import clx from 'classnames'
 import UserMedia from './UserMedia'
 import MobileMediaCard from './MobileMediaCard'
 import useImageTagHelper from './useImageTagHelper'
-import { MediaTagWithClimb, MediaType, IUserProfile } from '../../js/types'
+import { HybridMediaTag, MediaType, IUserProfile } from '../../js/types'
 import UploadCTA from './UploadCTA'
 import { actions } from '../../js/stores'
 import SlideViewer from './slideshow/SlideViewer'
@@ -23,7 +23,7 @@ export interface UserGalleryProps {
   uid: string
   userProfile: IUserProfile
   initialImageList: MediaType[]
-  initialTagsByMediaId: Dictionary<MediaTagWithClimb[]>
+  initialTagsByMediaId: Dictionary<HybridMediaTag[]>
   auth: WithPermission
   postId: string | null
 }

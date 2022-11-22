@@ -205,11 +205,11 @@ export interface MediaTagWithClimb extends MediaBaseTag {
   climb: Pick<Climb, 'id' | 'name'>
 }
 
-export interface MediaTagForArea extends MediaBaseTag {
-  area: Pick<AreaType, 'uuid' | 'areaName'>
+export interface MediaTagWithArea extends MediaBaseTag {
+  area: Pick<AreaType, 'uuid' | 'areaName' | 'metadata'> & { metadata: Pick<AreaMetadataType, 'leaf'|'areaId'> }
 }
 
-export type HybridMediaTag = MediaTagForArea | MediaTagWithClimb
+export type HybridMediaTag = MediaTagWithArea | MediaTagWithClimb
 
 export interface MediaByAuthor {
   authorUuid: string

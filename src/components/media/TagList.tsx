@@ -28,7 +28,6 @@ export default function TagList ({ list, isAuthorized = false, isAuthenticated =
     return null
   }
 
-  console.log('#taglist', list)
   return (
     <div className={
           classNames(

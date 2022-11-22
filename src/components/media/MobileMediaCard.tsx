@@ -2,13 +2,13 @@
 import Card from '../ui/Card/Card'
 import TagList, { MobilePopupTagList } from './TagList'
 import { MobileLoader } from '../../js/sirv/util'
-import { MediaType, MediaTagWithClimb } from '../../js/types'
+import { MediaType, HybridMediaTag } from '../../js/types'
 import { getUploadDateSummary } from '../../js/utils'
 
 const MOBILE_IMAGE_MAX_WIDITH = 914
 interface MobileMediaCardProps {
   imageInfo: MediaType
-  tagList: MediaTagWithClimb[]
+  tagList: HybridMediaTag[]
   isAuthorized?: boolean
   isAuthenticated?: boolean
 }

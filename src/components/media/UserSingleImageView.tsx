@@ -3,16 +3,16 @@ import { Dictionary } from 'underscore'
 import { TinyProfile } from '../users/PublicProfile'
 import { SingleViewer } from './slideshow/SlideViewer'
 import MoreFromThisUser from './MoreFromThisUser'
-import { MediaType, MediaTagWithClimb, IUserProfile } from '../../js/types'
+import { MediaType, HybridMediaTag, IUserProfile } from '../../js/types'
 import { WithPermission } from '../../js/types/User'
 import { ReactElement } from 'react'
 
 export interface UserSingleImageViewProps {
   uid: string
   featureMedia: MediaType | null
-  featureTags: MediaTagWithClimb[]
+  featureTags: HybridMediaTag[]
   mostRecentList: MediaType[]
-  mostRecentTagMap: Dictionary<MediaTagWithClimb[]>
+  mostRecentTagMap: Dictionary<HybridMediaTag[]>
 
   userProfile: IUserProfile
   auth: WithPermission

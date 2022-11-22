@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Dictionary } from 'underscore'
-import { MediaTagWithClimb, MediaType } from '../types'
+import { HybridMediaTag, MediaType } from '../types'
 
 import { userMediaStore } from '../stores/media'
 
@@ -8,13 +8,13 @@ interface MediaStoreHookProp {
   isAuthorized: boolean
   uid: string
   serverMediaList: MediaType[]
-  serverTagMap: Dictionary<MediaTagWithClimb[]>
+  serverTagMap: Dictionary<HybridMediaTag[]>
 }
 
 interface MediaStoreHookResult {
   mediaList: MediaType[]
-  tagMap: Dictionary<MediaTagWithClimb[]>
-  singleTagList: MediaTagWithClimb[] // For single view page
+  tagMap: Dictionary<HybridMediaTag[]>
+  singleTagList: HybridMediaTag[] // For single view page
 }
 /**
  * A React hook for initializing user media datastore.

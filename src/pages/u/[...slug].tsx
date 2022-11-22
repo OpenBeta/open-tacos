@@ -140,8 +140,6 @@ export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> =
     const tagArray = await getTagsByMediaId(mediaIdList)
     tagsByMediaId = groupBy(tagArray, 'mediaUuid')
 
-    console.log('#tags by media id', tagsByMediaId)
-
     const data = {
       uid,
       postId,

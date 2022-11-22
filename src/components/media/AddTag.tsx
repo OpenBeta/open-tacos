@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client'
 import { PlusIcon } from '@heroicons/react/24/outline'
 
 import { graphqlClient } from '../../js/graphql/Client'
-import { MUTATION_ADD_CLIMB_TAG_TO_MEDIA, SetTagType } from '../../js/graphql/gql/fragments'
+import { MUTATION_ADD_CLIMB_TAG_TO_MEDIA, SetTagType } from '../../js/graphql/gql/tags'
 import ClimbSearchForTagging from '../search/ClimbSearchForTagging'
 import { EntityType, MediaType, TagTargetType, TypesenseAreaType, TypesenseDocumentType } from '../../js/types'
 import { actions } from '../../js/stores'

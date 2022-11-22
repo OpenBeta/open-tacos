@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { XCircleIcon } from '@heroicons/react/20/solid'
+import { XCircleIcon, MapPinIcon } from '@heroicons/react/20/solid'
 import clx from 'classnames'
 
-import { HybridMediaTag, MediaTagForArea, MediaTagWithClimb, TagTargetType } from '../../js/types'
+import { HybridMediaTag, MediaTagWithArea, MediaTagWithClimb, TagTargetType } from '../../js/types'
 
 interface PhotoTagProps {
   tag: HybridMediaTag
@@ -15,17 +15,19 @@ interface PhotoTagProps {
 export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, isAuthorized = false }: PhotoTagProps): JSX.Element | null {
   const [url, name] = resolver(tag)
   if (url == null || name == null) return null
+  const isArea = tag.destType === TagTargetType.area
   return (
     <Link href={url} prefetch={false}>
       <a
         className={
           clx('badge hover:underline',
-            tag.destType === TagTargetType.area ? 'badge-secondary' : 'badge-outline',
+            isArea ? 'badge-info bg-opacity-60' : 'badge-outline',
             size === 'lg' ? 'badge-lg gap-2' : 'gap-1')
         }
         onClick={stopPropagation}
       >
-        <span className='whitespace-nowrap truncate text-sm'>{name}</span>
+        {isArea && <MapPinIcon className='w-4 h-4' />}
+        <div className='mt-0.5 whitespace-nowrap truncate text-sm'>{name}</div>
         {isAuthorized && showDelete &&
           <button onClick={(e) => {
             onDelete(tag.id)
@@ -44,6 +46,11 @@ export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, i
 
 const stopPropagation = (event): void => event.stopPropagation()
 
+/**
+ * Extract entity url and name from a tag
+ * @param tag HybridMediaTag
+ * @returns [url, name]
+ */
 const resolver = (tag: HybridMediaTag): [string, string] | [null, null] => {
   switch (tag.destType) {
     case TagTargetType.climb: {
@@ -51,7 +58,10 @@ const resolver = (tag: HybridMediaTag): [string, string] | [null, null] => {
       return [`/climbs/${climb.id}`, climb.name]
     }
     case TagTargetType.area: {
-      const area = (tag as MediaTagForArea).area
+      const area = (tag as MediaTagWithArea).area
+      if (area.metadata?.leaf) { // not sure why leaf may be undefined?
+        return [`/crag/${area.uuid}`, area.areaName]
+      }
       return [`/areas/${area.uuid}`, area.areaName]
     }
     default: return [null, null]
