@@ -77,32 +77,43 @@ export interface SetTagType {
  * Create a media <--> climb (or area) association
  */
 export const MUTATION_ADD_CLIMB_TAG_TO_MEDIA = gql`
-  mutation tagPhotoWithClimb($mediaUuid: ID!, $mediaUrl: String!, $destinationUuid: ID!, $destType: Int!) {
+  mutation tagPhotoWithClimb($mediaUuid: ID!, $mediaUrl: String!, $destinationId: ID!, $destType: Int!) {
     setTag(
       input: {
         mediaUuid: $mediaUuid,
         mediaUrl: $mediaUrl,
         mediaType: 0,
-        destinationId: $destinationUuid,
+        destinationId: $destinationId,
         destType: $destType
       }
     ) {
         ... on ClimbTag {
+          id
           mediaUuid
           mediaUrl
+          destType
           climb {
             id
             name
+          }
+        }
+        ... on AreaTag {
+          id
+          mediaUuid
+          mediaUrl
+          destType
+          area {
+            uuid
+            areaName
           }
         }
       }
   }`
 
 export const MUTATION_REMOVE_MEDIA_TAG = gql`
-  mutation removeTag($mediaUuid: ID!, $destinationId: ID!) {
-    removeTag(mediaUuid: $mediaUuid, destinationId: $destinationId) {
-      mediaUuid
-      destinationId
+  mutation removeTag($tagId: ID!) {
+    removeTag(tagId: $tagId) {
+      id
       removed
     }
   }`
@@ -111,11 +122,23 @@ export const QUERY_TAGS_BY_MEDIA_ID = gql`
   query getTagsByMediaIdList($uuidList: [ID!]) {
     getTagsByMediaIdList(uuidList: $uuidList) {
       ... on ClimbTag {
+        id
         mediaUuid
         mediaUrl
+        destType
         climb {
           id
           name
+        }
+      }
+      ... on AreaTag {
+        id
+        mediaUuid
+        mediaUrl
+        destType
+        area {
+          uuid
+          areaName
         }
       }
     }

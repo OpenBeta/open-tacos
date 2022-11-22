@@ -192,6 +192,7 @@ export interface MarkerStateType {
 // Media tags
 
 export interface MediaBaseTag {
+  id: string
   mediaUuid: string
   mediaUrl: string
   mediaType: number
@@ -203,6 +204,12 @@ export interface MediaBaseTag {
 export interface MediaTagWithClimb extends MediaBaseTag {
   climb: Pick<Climb, 'id' | 'name'>
 }
+
+export interface MediaTagForArea extends MediaBaseTag {
+  area: Pick<AreaType, 'uuid' | 'areaName'>
+}
+
+export type HybridMediaTag = MediaTagForArea | MediaTagWithClimb
 
 export interface MediaByAuthor {
   authorUuid: string

@@ -8,6 +8,13 @@ import type { MediaType, MediaTagWithClimb } from '../../js/types'
 interface UserMediaStateProps {
   uid: string | null
   imageList: MediaType[]
+  /**
+   * A map of \<mediaUuid\>: \<array of tags\>
+   *
+   * Why use array of tags where JS `Set` would have been a better choice
+   * for handling dups?
+   * Because we use `underscore.groupBy()` to process server-side tags.
+   */
   tagMap: Dictionary<MediaTagWithClimb[]>
   initialized: boolean
   photoUploadErrorMessage: string | null
@@ -91,13 +98,7 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       const { setTag } = data
       if (setTag == null) return
       const { mediaUuid } = setTag
-      const { id } = setTag.climb
-      const currentTagList = get.tagMap()?.[mediaUuid] ?? []
-      if (currentTagList.findIndex((tag: MediaTagWithClimb) => tag.climb.id === id) !== -1) {
-        // Tag for the same climb exists
-        // We only allow 1 climb/area tag per media
-        return
-      }
+      console.log('#setTag', data)
 
       const newState = produce<Dictionary<MediaTagWithClimb[]>>(get.tagMap(), draft => {
         const currentTagList = draft?.[mediaUuid] ?? []

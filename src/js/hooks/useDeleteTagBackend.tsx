@@ -5,7 +5,7 @@ import { graphqlClient } from '../graphql/Client'
 import { actions } from '../../js/stores'
 
 interface ReturnType {
-  onDelete: (mediaUuid: string, destinationId: string) => Promise<void>
+  onDelete: (tagId: string) => Promise<void>
 }
 
 /**
@@ -25,11 +25,10 @@ export default function useDeleteTagBackend (): ReturnType {
     }
   )
 
-  const onDelete = async (mediaUuid: string, destinationId: string): Promise<void> => {
+  const onDelete = async (tagId: string): Promise<void> => {
     await removeTag({
       variables: {
-        mediaUuid,
-        destinationId
+        tagId
       }
     })
   }
