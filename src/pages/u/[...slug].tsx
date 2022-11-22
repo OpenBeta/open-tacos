@@ -7,7 +7,7 @@ import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import { getTagsByMediaId } from '../../js/graphql/api'
 import { getUserImages } from '../../js/sirv/SirvClient'
-import { MediaTagWithClimb, IUserProfile, MediaType } from '../../js/types'
+import { IUserProfile, MediaType, HybridMediaTag } from '../../js/types'
 import PublicProfile from '../../components/users/PublicProfile'
 import { getUserProfileByNick } from '../../js/auth/ManagementClient'
 import usePermissions from '../../js/hooks/auth/usePermissions'
@@ -19,7 +19,7 @@ interface UserHomeProps {
   uid: string
   postId: string | null
   serverMediaList: MediaType[]
-  serverTagMap: Dictionary<MediaTagWithClimb[]>
+  serverTagMap: Dictionary<HybridMediaTag[]>
   userProfile: IUserProfile
 }
 
@@ -135,7 +135,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> =
 
     const { mediaList, mediaIdList } = await getUserImages(uuid, 100)
 
-    let tagsByMediaId: Dictionary<MediaTagWithClimb[]> = {}
+    let tagsByMediaId: Dictionary<HybridMediaTag[]> = {}
 
     const tagArray = await getTagsByMediaId(mediaIdList)
     tagsByMediaId = groupBy(tagArray, 'mediaUuid')

@@ -66,69 +66,6 @@ export const CORE_CRAG_FIELDS = gql`
   }
 `
 
-/**
- * Create a media <--> climb (or area) association
- */
-export const MUTATION_ADD_CLIMB_TAG_TO_MEDIA = gql`
-  mutation tagPhotoWithClimb($mediaUuid: ID!, $mediaUrl: String!, $srcUuid: ID!) {
-    setTag(
-      input: {
-        mediaUuid: $mediaUuid,
-        mediaUrl: $mediaUrl,
-        mediaType: 0,
-        destinationId: $srcUuid,
-        destType: 0
-      }
-    ) {
-        ... on ClimbTag {
-          mediaUuid
-          mediaUrl
-          climb {
-            id
-            name
-          }
-        }
-      }
-  }`
-
-export const MUTATION_REMOVE_MEDIA_TAG = gql`
-  mutation removeTag($mediaUuid: ID!, $destinationId: ID!) {
-    removeTag(mediaUuid: $mediaUuid, destinationId: $destinationId) {
-      mediaUuid
-      destinationId
-      removed
-    }
-  }`
-
-export const QUERY_TAGS_BY_MEDIA_ID = gql`
-  query getTagsByMediaIdList($uuidList: [ID!]) {
-    getTagsByMediaIdList(uuidList: $uuidList) {
-      ... on ClimbTag {
-        mediaUuid
-        mediaUrl
-        climb {
-          id
-          name
-        }
-      }
-    }
-  }
-`
-
-export const QUERY_RECENT_MEDIA = gql`
-  query ($userLimit: Int) {
-    getRecentTags(userLimit: $userLimit) {
-      authorUuid
-      tagList {
-        destType
-        mediaUrl
-        mediaType
-        destination
-      }
-    }
-  }
-`
-
 export const QUERY_CRAGS_WITHIN = gql`
   query ($filter: SearchWithinFilter) {
     cragsWithin(filter: $filter) {

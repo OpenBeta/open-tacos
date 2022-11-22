@@ -7,7 +7,7 @@ import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import { getTagsByMediaId } from '../../js/graphql/api'
 import { getUserImages, getFileInfo } from '../../js/sirv/SirvClient'
-import { MediaTagWithClimb, IUserProfile, MediaType } from '../../js/types'
+import { IUserProfile, MediaType, HybridMediaTag } from '../../js/types'
 import { getUserProfileByNick } from '../../js/auth/ManagementClient'
 import usePermissions from '../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../js/hooks/seo'
@@ -19,7 +19,7 @@ interface UserSinglePostViewProps {
   postId: string | null
   serverMainMedia: MediaType | null
   serverMediaList: MediaType[]
-  serverTagMap: Dictionary<MediaTagWithClimb[]>
+  serverTagMap: Dictionary<HybridMediaTag[]>
   userProfile: IUserProfile
 }
 
@@ -108,7 +108,7 @@ export const getStaticProps: GetStaticProps<UserSinglePostViewProps, {slug: stri
 
     const { mediaList, mediaIdList } = await getUserImages(uuid, 100)
 
-    let tagsByMediaId: Dictionary<MediaTagWithClimb[]> = {}
+    let tagsByMediaId: Dictionary<HybridMediaTag[]> = {}
 
     if (mediaList.length > 0) {
       if (mainMedia?.mediaId != null) {

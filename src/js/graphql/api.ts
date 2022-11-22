@@ -1,9 +1,11 @@
 import { gql } from '@apollo/client'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
-import { AreaType, TickType, MediaTagWithClimb, MediaByAuthor, CountrySummaryType } from '../types'
+import { AreaType, TickType, HybridMediaTag, MediaByAuthor, CountrySummaryType } from '../types'
 import { graphqlClient } from './Client'
-import { CORE_CRAG_FIELDS, QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
+import { CORE_CRAG_FIELDS, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
+import { QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA } from './gql/tags'
+
 interface CragsDetailsNearType {
   data: AreaType[] // Should use Omit or Pick
   placeId: string | undefined
@@ -79,7 +81,7 @@ export const getAreaByUUID = (uuid: string): AreaType | null => {
   return null
 }
 
-export const getTagsByMediaId = async (uuidList: string[]): Promise<MediaTagWithClimb[]> => {
+export const getTagsByMediaId = async (uuidList: string[]): Promise<HybridMediaTag[]> => {
   try {
     const rs = await graphqlClient.query({
       query: QUERY_TAGS_BY_MEDIA_ID,

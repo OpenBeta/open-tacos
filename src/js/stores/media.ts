@@ -3,12 +3,20 @@ import { v5 as uuidv5 } from 'uuid'
 import { Dictionary } from 'underscore'
 import produce from 'immer'
 
-import type { MediaType, MediaTagWithClimb } from '../../js/types'
+import type { MediaType, HybridMediaTag } from '../../js/types'
+import { DeleteTagResult } from '../hooks/useDeleteTagBackend'
 
 interface UserMediaStateProps {
   uid: string | null
   imageList: MediaType[]
-  tagMap: Dictionary<MediaTagWithClimb[]>
+  /**
+   * A map of \<mediaUuid\>: \<array of tags\>
+   *
+   * Why use array of tags where JS `Set` would have been a better choice
+   * for handling dups?
+   * Because we use `underscore.groupBy()` to process server-side tags.
+   */
+  tagMap: Dictionary<HybridMediaTag[]>
   initialized: boolean
   photoUploadErrorMessage: string | null
 }
@@ -91,15 +99,8 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       const { setTag } = data
       if (setTag == null) return
       const { mediaUuid } = setTag
-      const { id } = setTag.climb
-      const currentTagList = get.tagMap()?.[mediaUuid] ?? []
-      if (currentTagList.findIndex((tag: MediaTagWithClimb) => tag.climb.id === id) !== -1) {
-        // Tag for the same climb exists
-        // We only allow 1 climb/area tag per media
-        return
-      }
 
-      const newState = produce<Dictionary<MediaTagWithClimb[]>>(get.tagMap(), draft => {
+      const newState = produce<Dictionary<HybridMediaTag[]>>(get.tagMap(), draft => {
         const currentTagList = draft?.[mediaUuid] ?? []
         if (currentTagList.length === 0) {
           draft[mediaUuid] = [setTag]
@@ -112,24 +113,27 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       set.tagMap(newState)
       await revalidateServePage(get.uid())
     },
-
-    removeTag: async (data: any) => {
-      const { removeTag } = data
-      if (removeTag == null) return
-      const { mediaUuid, destinationId } = removeTag
-
+    /**
+     * Remove a tag from local store
+     */
+    removeTag: async ({ id, mediaUuid }: DeleteTagResult) => {
+      // Let's see if the media exists in local store?
       if ((get.tagMap()?.[mediaUuid] ?? null) == null) {
-        // Try to remove a tag that doesn't exist in local state. Do nothing.
+        // Media doesn't exist. Do nothing.
         return
       }
 
-      const newState = produce<Dictionary<MediaTagWithClimb[]>>(get.tagMap(), draft => {
-        const idx = draft[mediaUuid].findIndex((tag: MediaTagWithClimb) => tag.climb.id === destinationId)
-        draft[mediaUuid].splice(idx, 1)
+      // find the tag by id and remove it
+      const newState = produce<Dictionary<HybridMediaTag[]>>(get.tagMap(), draft => {
+        const idx = draft[mediaUuid].findIndex((tag: HybridMediaTag) => tag.id === id)
+        if (idx > -1) {
+          draft[mediaUuid].splice(idx, 1)
+        }
         return draft
       })
 
       set.tagMap(newState)
+      // rebuild user home page
       await revalidateServePage(get.uid())
     }
   })).extendActions((set, get, api) => ({

@@ -27,7 +27,7 @@ export default function XSearch ({ placeholder = 'Try "Cat In the Hat" or "Las V
   )
 }
 
-const CUSTOM_CLASSES: Partial<AutocompleteClassNames> = {
+export const CUSTOM_CLASSES: Partial<AutocompleteClassNames> = {
   detachedFormContainer: 'xsearch-detachedFormContainer',
   panel: 'xsearch-panel',
   item: 'xsearch-item',
@@ -65,11 +65,11 @@ export const XSearchMobile = (): JSX.Element => {
   )
 }
 
-const ResultContainer = (sections: any[]): JSX.Element | null => {
+export const ResultContainer = (sections: any[]): JSX.Element | null => {
   const climbsSection = document.getElementById('Climbs')
   const areasSection = document.getElementById('Areas')
   const faSection = document.getElementById('FA')
-  const nearbySection = document.getElementById('Address')
+  const addressSection = document.getElementById('Address')
 
   return (
     <div className='aa-PanelLayout aa-Panel--scrollable'>
@@ -88,18 +88,20 @@ const ResultContainer = (sections: any[]): JSX.Element | null => {
         >
           Areas
         </button>
-        <button
-          onClick={() => {
-            faSection?.scrollIntoView({ behavior: 'smooth' })
-          }}
-        >&nbsp;FA&nbsp;
-        </button>
-        <button
-          onClick={() => {
-            nearbySection?.scrollIntoView({ behavior: 'smooth' })
-          }}
-        >Address
-        </button>
+        {(faSection != null) &&
+          <button
+            onClick={() => {
+              faSection?.scrollIntoView({ behavior: 'smooth' })
+            }}
+          >&nbsp;FA&nbsp;
+          </button>}
+        {(addressSection != null) &&
+          <button
+            onClick={() => {
+              addressSection?.scrollIntoView({ behavior: 'smooth' })
+            }}
+          >Address
+          </button>}
       </section>
       {sections}
     </div>
