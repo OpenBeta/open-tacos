@@ -1,3 +1,5 @@
+import { PlusCircleIcon } from '@heroicons/react/20/solid'
+
 import { TextOnlyCrumbs } from '../../ui/BreadCrumbs'
 import { TypesenseDocumentType, TypesenseAreaType } from '../../../js/types'
 
@@ -86,9 +88,20 @@ interface DefaultHeaderProps {
 }
 
 export const DefaultHeader = ({ source, ...props }: DefaultHeaderProps): JSX.Element => {
-  return <h2 className='border-b pt-4' id={source?.sourceId}>{source?.sourceId}</h2>
+  return (
+    <div className='flex items-center justify-between border-b border-base-content pt-4'>
+      <h2 id={source?.sourceId}>{source?.sourceId}</h2>
+      <AddNewButton />
+    </div>
+  )
 }
 
 export const DefaultNoResult = (props: any): JSX.Element => {
   return <div>No results for {props.source.sourceId}</div>
 }
+
+const AddNewButton = (): JSX.Element =>
+  <a href='/edit' className='flex items-center text-opacity-60 text-sm align-middle gap-1'>
+    <PlusCircleIcon className='w-5 h-5 text-accent' />
+    <span className='mt-0.5 hover:underline'>Add new</span>
+  </a>

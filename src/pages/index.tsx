@@ -252,7 +252,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       donors,
       totalRaised
     },
-    revalidate: 1800
+    revalidate: 60
   }
 }
 export default Home
