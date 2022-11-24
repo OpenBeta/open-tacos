@@ -2,7 +2,7 @@ import { AutocompleteClassNames } from '@algolia/autocomplete-js'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { Autocomplete2 } from './Autocomplete2'
 import { xsearchTypesense, searchPoi } from './sources'
-
+import { AddNewButton } from './templates/ClimbResultXSearch'
 interface XSearchProps {
   placeholder?: string
 }
@@ -65,7 +65,7 @@ export const XSearchMobile = (): JSX.Element => {
   )
 }
 
-export const ResultContainer = (sections: any[]): JSX.Element | null => {
+export const ResultContainer = (sections: any[], children): JSX.Element | null => {
   const climbsSection = document.getElementById('Climbs')
   const areasSection = document.getElementById('Areas')
   const faSection = document.getElementById('FA')
@@ -103,7 +103,14 @@ export const ResultContainer = (sections: any[]): JSX.Element | null => {
           >Address
           </button>}
       </section>
-      {sections}
+      {sections?.length === 0 ?? true
+        ? (
+          <section className='alert flex-col'>
+            <div className='text-base-300 text-sm'>Can't find what you're looking for?</div>
+            <AddNewButton />
+          </section>
+          )
+        : (<>{sections}</>)}
     </div>
   )
 }

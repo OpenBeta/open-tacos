@@ -16,25 +16,8 @@ interface XSearchProps {
 }
 
 /**
- * Climb name search widget
+ * Search box for tagging
  */
-// export default function ClimbSearchForTagging ({ openSearch = false, onSelect, onCancel, label = <TagIconLabel /> }: XSearchProps): JSX.Element {
-//   const isCustomTrigger = label != null
-//   return (
-//     <Autocomplete2
-//       label={label}
-//       placeholder='Climb search'
-//       open={openSearch}
-//       onCancel={onCancel}
-//       classNames={isCustomTrigger ? { detachedSearchButton: 'aa-hidden-mobile-trigger-btn' } : undefined}
-//       getSources={async ({ query }) => {
-//         if (query?.trim() === '') return []
-//         return [await TypesenseClimbNameSource(query, onSelect)]
-//       }}
-//     />
-//   )
-// }
-
 export default function ClimbSearchForTagging ({ openSearch = false, onSelect, onCancel, label = <TagIconLabel /> }: XSearchProps): JSX.Element {
   return (
     <Autocomplete2

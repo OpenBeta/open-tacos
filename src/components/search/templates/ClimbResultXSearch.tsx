@@ -100,7 +100,7 @@ export const DefaultNoResult = (props: any): JSX.Element => {
   return <div>No results for {props.source.sourceId}</div>
 }
 
-const AddNewButton = (): JSX.Element =>
+export const AddNewButton = (): JSX.Element =>
   <a href='/edit' className='flex items-center text-opacity-60 text-sm align-middle gap-1'>
     <PlusCircleIcon className='w-5 h-5 text-accent' />
     <span className='mt-0.5 hover:underline'>Add new</span>
