@@ -4,7 +4,7 @@ import { PlusIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
 import { validate as isValidUuid } from 'uuid'
 
 import usePhotoUploader from '../js/hooks/usePhotoUploader'
-import { userMediaStore } from '../js/stores/media'
+import { userMediaStore, revalidateUserHomePage } from '../js/stores/media'
 import useReturnToProfile from '../js/hooks/useReturnToProfile'
 import usePhotoTag from '../js/hooks/usePhotoTagCmd'
 import { mediaUrlHash } from '../js/sirv/util'
@@ -45,7 +45,7 @@ export default function NewPost ({ isMobile = true, className = '' }: ProfileNav
 
       // Regenerate user profile page as well
       if (nick != null) {
-        void fetch(`/api/revalidate?&u=${nick}`)
+        await revalidateUserHomePage(nick)
       }
       router.reload()
     }

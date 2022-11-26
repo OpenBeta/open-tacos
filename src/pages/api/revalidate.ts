@@ -25,7 +25,7 @@ const profileHandler = async (req: NextApiRequest, res: NextApiResponse): Promis
   if (!res.writable) return
   const username = req.query?.u as string
   if (checkUsername(username)) {
-    await res.status(200).revalidate(`/u/${encodeURIComponent(username)}`)
+    await res.revalidate(`/u/${encodeURIComponent(username)}`)
     res.json({ revalidated: true })
   }
 }
@@ -39,15 +39,15 @@ const areaAndClimbHandler = async (req: NextApiRequest, res: NextApiResponse): P
   const sectorUuid = req.query?.s as string
   const climbUuid = req.query?.c as string
   if (isValid(areaUuid)) {
-    await res.status(200).revalidate(`/areas/${areaUuid}`)
+    await res.revalidate(`/areas/${areaUuid}`)
     res.json({ revalidated: true })
   }
   if (isValid(sectorUuid)) {
-    await res.status(200).revalidate(`/crag/${sectorUuid}`)
+    await res.revalidate(`/crag/${sectorUuid}`)
     res.json({ revalidated: true })
   }
   if (isValid(climbUuid)) {
-    await res.status(200).revalidate(`/climbs/${climbUuid}`)
+    await res.revalidate(`/climbs/${climbUuid}`)
     res.json({ revalidated: true })
   }
 }

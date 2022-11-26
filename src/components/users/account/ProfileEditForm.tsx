@@ -8,7 +8,7 @@ import Snackbar from '../../ui/Snackbar'
 import { IWritableUserMetadata } from '../../../js/types/User'
 import { doesUsernameExist } from '../../../js/userApi/user'
 import { checkUsername, checkWebsiteUrl } from '../../../js/utils'
-import { revalidateServePage } from '../../../js/stores/media'
+import { revalidateUserHomePage } from '../../../js/stores/media'
 
 const UserProfileSchema = Yup.object().shape({
   nick: Yup.string()
@@ -69,7 +69,7 @@ export default function ProfileEditForm (): ReactElement {
       setProfile(profile)
       setJustSubmitted(true)
       // Also trigger a page rebuild
-      void revalidateServePage(profile.nick)
+      void revalidateUserHomePage(profile.nick)
     } else {
       console.error('Profile object was supposed to not be null!')
     }

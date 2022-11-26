@@ -76,7 +76,7 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       set.imageList(newList)
 
       if (revalidateSSR) {
-        await revalidateServePage(uid)
+        await revalidateUserHomePage(uid)
       }
     },
     removeImage: async (mediaId: string) => {
@@ -89,7 +89,7 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       })
 
       set.imageList(updatedList)
-      await revalidateServePage(get.uid())
+      await revalidateUserHomePage(get.uid())
     }
   })).extendActions((set, get, api) => ({
     /**
@@ -111,7 +111,7 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       })
 
       set.tagMap(newState)
-      await revalidateServePage(get.uid())
+      await revalidateUserHomePage(get.uid())
     },
     /**
      * Remove a tag from local store
@@ -134,7 +134,7 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
 
       set.tagMap(newState)
       // rebuild user home page
-      await revalidateServePage(get.uid())
+      await revalidateUserHomePage(get.uid())
     }
   })).extendActions((set, get, api) => ({
     /**
@@ -154,4 +154,4 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
  * The token is URL encoded value of .env PAGE_REVALIDATE_TOKEN
  * @param uid user id
  */
-export const revalidateServePage = async (uid: string|null): Promise<any> => uid != null && await fetch(`/api/revalidate?&u=${uid}`)
+export const revalidateUserHomePage = async (uid: string|null): Promise<any> => uid != null && await fetch(`/api/revalidate?&u=${uid}`)
