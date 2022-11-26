@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { PlusIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, StopIcon } from '@heroicons/react/24/outline'
 import { validate as isValidUuid } from 'uuid'
 
 import usePhotoUploader from '../js/hooks/usePhotoUploader'
@@ -8,6 +8,7 @@ import { userMediaStore, revalidateUserHomePage } from '../js/stores/media'
 import useReturnToProfile from '../js/hooks/useReturnToProfile'
 import usePhotoTag from '../js/hooks/usePhotoTagCmd'
 import { mediaUrlHash } from '../js/sirv/util'
+import { BlockingAlert } from '../components/ui/micro/AlertDialogue'
 
 interface ProfileNavButtonProps {
   isMobile?: boolean
@@ -65,23 +66,29 @@ export default function NewPost ({ isMobile = true, className = '' }: ProfileNav
         <div {...getRootProps()} className={className}>
           <input {...getInputProps()} />
           <button disabled={uploading} className='btn btn-square btn-ghost'>
-            {uploading ? <EllipsisHorizontalIcon className='w-6 h-6 stroke-white' /> : <PlusIcon className='border-2 rounded-md w-6 h-6 stroke-white stroke-2' />}
+            <PlusIcon className='border-2 rounded-md w-6 h-6 stroke-white stroke-2' />
           </button>
+          {uploading &&
+            <BlockingAlert
+              icon={<StopIcon className='w-12 h-12 stroke-2 animate-spin' />}
+              description='Uploading'
+            />}
         </div>
-
       )
     }
     return (
       <div {...getRootProps()}>
         <input {...getInputProps()} />
         <button disabled={uploading} className='btn btn-accent gap-2 px-8'>
-          {uploading
-            ? <EllipsisHorizontalIcon className='w-5 h-5 stroke-white stroke-2 animate-pulse' />
-            : <PlusIcon className='stroke-white stroke-2 w-6 h-6' />}
+          <PlusIcon className='stroke-white stroke-2 w-6 h-6' />
           <span className='mt-0.5'>Photo</span>
         </button>
+        {uploading &&
+          <BlockingAlert
+            icon={<StopIcon className='w-12 h-12 stroke-2 animate-spin' />}
+            description='Uploading'
+          />}
       </div>
-
     )
   }
 
