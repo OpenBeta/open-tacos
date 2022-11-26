@@ -1,14 +1,18 @@
 import { useMutation } from '@apollo/client'
 
-import { graphqlClient } from '../../js/graphql/Client'
-import { MUTATION_ADD_CLIMB_TAG_TO_MEDIA, SetTagType } from '../../js/graphql/gql/tags'
-import { actions } from '../../js/stores'
+import { graphqlClient } from '../graphql/Client'
+import { MUTATION_ADD_CLIMB_TAG_TO_MEDIA, SetTagType } from '../graphql/gql/tags'
+import { actions } from '../stores'
 
 export interface UsePhotTagReturn {
   tagPhotoCmd: (props: SetTagType) => Promise<void>
 }
 
-export default function usePhotoTag (): UsePhotTagReturn {
+/**
+ * A React hook for handling photo tagging.
+ * Todo: Move `useDeleteTagBanckend()` here.
+ */
+export default function usePhotoTagCmd (): UsePhotTagReturn {
   const addTagToLocalStore = async (data: any): Promise<void> => await actions.media.addTag(data)
 
   const [tagPhoto] = useMutation<any, SetTagType>(

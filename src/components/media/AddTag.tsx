@@ -2,7 +2,7 @@ import { PlusIcon } from '@heroicons/react/24/outline'
 
 import ClimbSearchForTagging from '../search/ClimbSearchForTagging'
 import { EntityType, MediaType, TagTargetType, TypesenseAreaType, TypesenseDocumentType } from '../../js/types'
-import usePhotoTag from '../../js/hooks/usePhotoTag'
+import usePhotoTagCmd from '../../js/hooks/usePhotoTagCmd'
 
 interface ImageTaggerProps {
   imageInfo: MediaType
@@ -17,7 +17,7 @@ interface ImageTaggerProps {
  * @param imageInfo image info object
  */
 export default function AddTag ({ imageInfo, onCancel, label, openSearch = false }: ImageTaggerProps): JSX.Element | null {
-  const { tagPhotoCmd } = usePhotoTag()
+  const { tagPhotoCmd } = usePhotoTagCmd()
   return (
     <ClimbSearchForTagging
       onCancel={onCancel}

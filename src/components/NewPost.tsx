@@ -6,7 +6,7 @@ import { validate as isValidUuid } from 'uuid'
 import usePhotoUploader from '../js/hooks/usePhotoUploader'
 import { userMediaStore } from '../js/stores/media'
 import useReturnToProfile from '../js/hooks/useReturnToProfile'
-import usePhotoTag from '../js/hooks/usePhotoTag'
+import usePhotoTag from '../js/hooks/usePhotoTagCmd'
 import { mediaUrlHash } from '../js/sirv/util'
 
 interface ProfileNavButtonProps {
@@ -27,25 +27,28 @@ export default function NewPost ({ isMobile = true, className = '' }: ProfileNav
       return
     }
 
-    console.log('#ROUTER', url, router)
+    const { nick, uuid } = data.user.metadata
 
-    // const id = router.query?.id as string
     const [id, destType, pageToInvalidate] = pagePathToEntityType(router.asPath)
 
-    console.log('# uploaded', id, destType, pageToInvalidate)
-
+    // let's see if we're viewing the climb or area page
     if (id != null && isValidUuid(id) && (destType === 0 || destType === 1)) {
+      // yes! let's tag it
       await tagPhotoCmd({
         mediaUrl: url,
         mediaUuid: mediaUrlHash(url),
         destinationId: id,
         destType
       })
+      // Tell Next to regenerate the page being tagged
       await fetch(pageToInvalidate)
+
+      // Regenerate user profile page as well
+      if (nick != null) {
+        void fetch(`/api/revalidate?&u=${nick}`)
+      }
       router.reload()
-      return
     }
-    const { nick, uuid } = data.user.metadata
 
     if (uuid != null && nick != null) {
       await toMyProfile()
