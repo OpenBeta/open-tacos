@@ -45,15 +45,15 @@ export default function NewPost ({ isMobile = true, className = '' }: ProfileNav
 
       // Regenerate user profile page as well
       if (nick != null) {
-        await revalidateUserHomePage(nick)
+        void revalidateUserHomePage(nick)
       }
       router.reload()
-    }
-
-    if (uuid != null && nick != null) {
-      await toMyProfile()
-      await userMediaStore.set.addImage(nick, uuid, url, true)
-      console.log('uploaded', url)
+    } else {
+      if (uuid != null && nick != null) {
+        await toMyProfile()
+        await userMediaStore.set.addImage(nick, uuid, url, true)
+        console.log('uploaded', url)
+      }
     }
   }
 

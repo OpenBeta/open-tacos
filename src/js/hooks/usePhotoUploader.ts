@@ -5,7 +5,7 @@ import { userMediaStore } from '../stores/media'
 import { uploadPhoto } from '../userApi/media'
 
 interface UploaderProps {
-  /** what to do with the newly available image URL */
+  /** Called after a succesful upload */
   onUploaded: (url: string) => Promise<void>
 }
 
@@ -49,7 +49,7 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
 
     try {
       const url = await uploadPhoto(filename, imageData)
-      await onUploaded(url)
+      void onUploaded(url)
     } catch (e) {
       console.log('#upload error', e)
       await userMediaStore.set.setPhotoUploadErrorMessage('Failed to upload: Exceeded retry limit.')
