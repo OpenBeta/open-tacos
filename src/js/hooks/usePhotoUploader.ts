@@ -47,20 +47,16 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
       imageData = Buffer.from(imageData)
     }
 
-    let retry = 3
-    while (retry !== 0) {
-      try {
-        const url = await uploadPhoto(filename, imageData)
-        await onUploaded(url)
-        return // success, no err
-      } catch {
-
-      } finally {
-        retry -= 1
-      }
+    // let retry = 3
+    // while (retry !== 0) {
+    try {
+      const url = await uploadPhoto(filename, imageData)
+      await onUploaded(url)
+      // return // success, no err
+    } catch (e) {
+      console.log('#upload error', e)
+      await userMediaStore.set.setPhotoUploadErrorMessage('Failed to upload: Exceeded retry limit.')
     }
-
-    await userMediaStore.set.setPhotoUploadErrorMessage('Failed to upload: Exceeded retry limit.')
   }
 
   const onDrop = useCallback(
