@@ -7,7 +7,7 @@ import usePhotoUploader from '../js/hooks/usePhotoUploader'
 import { userMediaStore, revalidateUserHomePage } from '../js/stores/media'
 import useReturnToProfile from '../js/hooks/useReturnToProfile'
 import usePhotoTag from '../js/hooks/usePhotoTagCmd'
-import { mediaUrlHash } from '../js/sirv/util'
+import { mediaUrlHash } from '../js/sirv/SirvClient'
 import { BlockingAlert } from '../components/ui/micro/AlertDialogue'
 
 interface ProfileNavButtonProps {

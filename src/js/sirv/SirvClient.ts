@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { basename } from 'path'
+import { v5 as uuidv5 } from 'uuid'
 
-import { mediaUrlHash } from './util'
 import { MediaType } from '../types'
 
 if ((process.env.SIRV_CLIENT_ID_RO ?? null) == null && typeof window === 'undefined') throw new Error('SIRV_CLIENT_ID_RO not set')
@@ -355,3 +355,5 @@ const stripMeta = ({
 }): any => ({
   width, height, format
 })
+
+export const mediaUrlHash = (mediaUrl: string): string => uuidv5(mediaUrl, uuidv5.URL)
