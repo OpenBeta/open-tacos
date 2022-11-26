@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { v5 as uuidv5 } from 'uuid'
 import { basename } from 'path'
+import { v5 as uuidv5 } from 'uuid'
 
 import { MediaType } from '../types'
 
@@ -112,7 +112,7 @@ export const getUserImages = async (uuid: string, size: number = 100, token?: st
     const mediaIdList: string[] = []
     const mediaList = res.data.hits.map(entry => {
       const { filename, ctime, mtime, contentType, meta } = entry._source
-      const mediaId = uuidv5(filename, uuidv5.URL)
+      const mediaId = mediaUrlHash(filename)
       mediaIdList.push(mediaId)
       return ({
         ownerId: uuid,
@@ -168,7 +168,7 @@ export const getImagesByFilenames = async (fileList: string[], token?: string): 
     const mediaIdList: string[] = []
     const mediaList = res.data.hits.map(entry => {
       const { filename, ctime, mtime, contentType, meta } = entry._source
-      const mediaId = uuidv5(filename, uuidv5.URL)
+      const mediaId = mediaUrlHash(filename)
       mediaIdList.push(mediaId)
       return ({
         ownerId: '',
@@ -203,7 +203,7 @@ export const getFileInfo = async (uuid: string, filename: string, token?: string
 
   if (res.status === 200) {
     const { ctime, mtime, contentType, meta } = res.data
-    const mediaId = uuidv5(filename, uuidv5.URL)
+    const mediaId = mediaUrlHash(filename)
     return ({
       ownerId: uuid,
       filename,
@@ -281,7 +281,9 @@ export const upload = async (filename: string, imageData: Buffer, token?: string
       }
     }
   )
-  if (res.status >= 200 && res.status <= 204) { return filename }
+  if (res.status >= 200 && res.status <= 204) {
+    return filename
+  }
   throw new Error(`Image API upload() failed.  Status: ${res.status}`)
 }
 
@@ -353,3 +355,5 @@ const stripMeta = ({
 }): any => ({
   width, height, format
 })
+
+export const mediaUrlHash = (mediaUrl: string): string => uuidv5(mediaUrl, uuidv5.URL)

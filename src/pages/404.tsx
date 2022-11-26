@@ -5,7 +5,7 @@ import Layout from '../components/layout'
 function NotFoundPage (): JSX.Element {
   const navbarOffset = getNavBarOffset()
   return (
-    <Layout contentContainerClass=''>
+    <Layout contentContainerClass='' showFilterBar={false}>
       <div className='w-full  bg-gray-50 p-2' style={{ height: `calc(100vh - ${navbarOffset}px)` }}>
         <div className='flex items-center align-middle justify-center h-full'>
           <div className='text-center mt-8'>

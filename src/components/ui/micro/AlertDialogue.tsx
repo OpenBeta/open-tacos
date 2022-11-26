@@ -138,8 +138,8 @@ export default function AlertDialog (props: Props): JSX.Element {
 interface LeanAlertProps {
   closeOnEsc?: boolean // prevent Esc to close alert
   icon?: ReactNode
-  title: ReactNode
-  description: ReactNode
+  title?: ReactNode
+  description?: ReactNode
   children?: ReactNode
   className?: string
 }
@@ -150,13 +150,13 @@ interface LeanAlertProps {
  * @param cancelAction A button of type `AlertDialogPrimitive.Action` that closes the alert on click.  You can register an `onClick()` to perform some action.
  * @param noncancelAction Any kind of React component/button that doesn't close the alert on click.  Use this if you want to perform an action on click and keep the alert open.
  */
-export const LeanAlert = ({ icon = null, title, description, children = DefaultOkButton, closeOnEsc = true, className = '' }: LeanAlertProps): JSX.Element => {
+export const LeanAlert = ({ icon = null, title = null, description = null, children = DefaultOkButton, closeOnEsc = true, className = '' }: LeanAlertProps): JSX.Element => {
   return (
     <AlertDialogPrimitive.Root defaultOpen>
       <AlertDialogPrimitive.Overlay className='fixed inset-0 bg-black/60' />
       <AlertDialogPrimitive.Content
         onEscapeKeyDown={e => !closeOnEsc && e.preventDefault()}
-        className='z-40 fixed inset-0 mx-auto flex items-center justify-center px-2 lg:px-0 text-center overflow-y-auto max-w-xs md:max-w-md lg:max-w-lg'
+        className='z-50 fixed h-screen inset-0 mx-auto flex items-center justify-center px-2 lg:px-0 text-center overflow-y-auto max-w-xs md:max-w-md lg:max-w-lg'
       >
         <div className={`p-4 rounded-box bg-base-100 w-full ${className}`}>
           <AlertDialogPrimitive.Title className='flex flex-col items-center'>
@@ -176,3 +176,8 @@ export const LeanAlert = ({ icon = null, title, description, children = DefaultO
 const DefaultOkButton = <AlertDialogPrimitive.Action className='btn btn-primary btn-md btn-wide'>OK</AlertDialogPrimitive.Action>
 
 export const AlertAction = AlertDialogPrimitive.Action
+
+/**
+ * An alert with no close button.  Use this to temporarily block the screen during important operation such as photo uploading.
+ */
+export const BlockingAlert = ({ icon, description }): JSX.Element => <LeanAlert icon={icon} description={description}><div /></LeanAlert>
