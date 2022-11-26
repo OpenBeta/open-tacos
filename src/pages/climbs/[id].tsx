@@ -203,7 +203,7 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = asy
   if (rs.data == null || rs.data.climb == null) {
     return {
       notFound: true,
-      revalidate: 600
+      revalidate: 10
     }
   }
 
@@ -234,7 +234,7 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = asy
       leftClimb,
       rightClimb
     },
-    revalidate: 600
+    revalidate: 10
   }
 }
 

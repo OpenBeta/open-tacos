@@ -8,7 +8,6 @@ import { userMediaStore } from '../js/stores/media'
 import useReturnToProfile from '../js/hooks/useReturnToProfile'
 import usePhotoTag from '../js/hooks/usePhotoTag'
 import { mediaUrlHash } from '../js/sirv/util'
-import { EntityType } from '../js/types'
 
 interface ProfileNavButtonProps {
   isMobile?: boolean
@@ -22,27 +21,28 @@ export default function NewPost ({ isMobile = true, className = '' }: ProfileNav
 
   const { toMyProfile } = useReturnToProfile()
 
-  console.log('#ROUTER', router.query)
-
   const onUploaded = async (url: string): Promise<void> => {
     if (data?.user?.metadata == null) {
       console.log('## Error: user metadata not found')
       return
     }
 
-    const id = router.query?.id as string
-    const destType = pagePathToEntityType(router.pathname)
+    console.log('#ROUTER', url, router)
 
-    console.log('#onuploaded', router, id, destType)
+    // const id = router.query?.id as string
+    const [id, destType, pageToInvalidate] = pagePathToEntityType(router.asPath)
+
+    console.log('# uploaded', id, destType, pageToInvalidate)
 
     if (id != null && isValidUuid(id) && (destType === 0 || destType === 1)) {
-      console.log('#tagging photo')
-      void tagPhotoCmd({
+      await tagPhotoCmd({
         mediaUrl: url,
         mediaUuid: mediaUrlHash(url),
         destinationId: id,
         destType
       })
+      await fetch(pageToInvalidate)
+      router.reload()
       return
     }
     const { nick, uuid } = data.user.metadata
@@ -86,23 +86,25 @@ export default function NewPost ({ isMobile = true, className = '' }: ProfileNav
 }
 
 /**
- * Convert current page path to a destination type for tagging.  Expect URL to be in /areas|crag|climb/[id].
- * @param path
+ * Convert current page path to a destination type for tagging.  Expect `path` to be in /areas|crag|climb/[id].
+ * @param path `path` property as return from `Next.router()`
  * @returns 0 if current page is climb, 1 for area and crag, null otherwise
  */
-const pagePathToEntityType = (path: string): number | null => {
-  if (path == null) return null
+const pagePathToEntityType = (path: string): [string, number, string] | [null, null, null] => {
+  if (path == null) return [null, null, null]
   const tokens = path.split('/')
   if (tokens.length >= 3) {
+    const id = tokens[2]
     switch (tokens[1]) {
       case 'climbs':
-        return 0
+        return [id, 0, `/api/revalidate?c=${id}`]
       case 'areas':
+        return [id, 1, `/api/revalidate?a=${id}`]
       case 'crag':
-        return 1
+        return [id, 1, `/api/revalidate?s=${id}`]
       default:
-        return null
+        return [null, null, null]
     }
   }
-  return null
+  return [null, null, null]
 }

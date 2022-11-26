@@ -51,7 +51,7 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
     // while (retry !== 0) {
     try {
       const url = await uploadPhoto(filename, imageData)
-      await onUploaded(url)
+      void onUploaded(url)
       // return // success, no err
     } catch (e) {
       console.log('#upload error', e)
