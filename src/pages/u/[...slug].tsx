@@ -149,7 +149,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> =
     }
     return {
       props: data,
-      revalidate: 240
+      revalidate: 10
     }
   } catch (e) {
     console.log('Error in getStaticProps()', e)

@@ -1,4 +1,5 @@
 import { ImageLoaderProps } from 'next/image'
+
 import { SIRV_CONFIG } from './SirvClient'
 
 /**

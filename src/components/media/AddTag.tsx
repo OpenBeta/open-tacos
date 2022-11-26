@@ -1,11 +1,8 @@
-import { useMutation } from '@apollo/client'
 import { PlusIcon } from '@heroicons/react/24/outline'
 
-import { graphqlClient } from '../../js/graphql/Client'
-import { MUTATION_ADD_CLIMB_TAG_TO_MEDIA, SetTagType } from '../../js/graphql/gql/tags'
 import ClimbSearchForTagging from '../search/ClimbSearchForTagging'
 import { EntityType, MediaType, TagTargetType, TypesenseAreaType, TypesenseDocumentType } from '../../js/types'
-import { actions } from '../../js/stores'
+import usePhotoTagCmd from '../../js/hooks/usePhotoTagCmd'
 
 interface ImageTaggerProps {
   imageInfo: MediaType
@@ -20,17 +17,7 @@ interface ImageTaggerProps {
  * @param imageInfo image info object
  */
 export default function AddTag ({ imageInfo, onCancel, label, openSearch = false }: ImageTaggerProps): JSX.Element | null {
-  const addTagToLocalStore = async (data: any): Promise<void> => await actions.media.addTag(data)
-
-  const [tagPhotoWithClimb] = useMutation<any, SetTagType>(
-    MUTATION_ADD_CLIMB_TAG_TO_MEDIA, {
-      client: graphqlClient,
-      errorPolicy: 'none',
-      onError: error => console.log('Error adding tag: ', error.message), // Todo: send a Toast message
-      onCompleted: addTagToLocalStore // Todo: send a Toast message
-    }
-  )
-
+  const { tagPhotoCmd } = usePhotoTagCmd()
   return (
     <ClimbSearchForTagging
       onCancel={onCancel}
@@ -42,13 +29,11 @@ export default function AddTag ({ imageInfo, onCancel, label, openSearch = false
             ? (props as TypesenseDocumentType).climbUUID
             : (props as TypesenseAreaType).id
 
-          await tagPhotoWithClimb({
-            variables: {
-              mediaUuid: imageInfo.mediaId,
-              mediaUrl: imageInfo.filename,
-              destinationId: linkedEntityId,
-              destType: props.type === EntityType.climb ? TagTargetType.climb : TagTargetType.area
-            }
+          await tagPhotoCmd({
+            mediaUuid: imageInfo.mediaId,
+            mediaUrl: imageInfo.filename,
+            destinationId: linkedEntityId,
+            destType: props.type === EntityType.climb ? TagTargetType.climb : TagTargetType.area
           })
         } catch (e) {
           // TODO: Add friendly error message
