@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useDropzone, DropzoneInputProps, FileRejection } from 'react-dropzone'
-import { userMediaStore } from '../stores/media'
 
+import { userMediaStore } from '../stores/media'
 import { uploadPhoto } from '../userApi/media'
 
 interface UploaderProps {
@@ -52,7 +52,7 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
       void onUploaded(url)
     } catch (e) {
       console.log('#upload error', e)
-      await userMediaStore.set.setPhotoUploadErrorMessage('Failed to upload: Exceeded retry limit.')
+      await userMediaStore.set.setPhotoUploadErrorMessage('Failed to upload')
     }
   }
 
@@ -65,7 +65,7 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
       setUploading(true)
 
       for (const file of files) {
-        if (file.size > 5242880) {
+        if (file.size > 10485760) {
           await userMediaStore.set.setPhotoUploadErrorMessage('Failed to upload: max file size 5MB.')
           setUploading(false)
           return

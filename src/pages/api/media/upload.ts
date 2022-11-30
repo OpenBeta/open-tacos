@@ -4,9 +4,13 @@ import { getSession } from 'next-auth/react'
 import { customAlphabet } from 'nanoid'
 import { nolookalikesSafe } from 'nanoid-dictionary'
 import { extname } from 'path'
+import sharp from 'sharp'
 
 import withAuth from '../withAuth'
 import { upload } from '../../../js/sirv/SirvClient'
+
+const MAX_THRESHOLD_SIZE_KB = 2097152 // size at which we apply size reduction
+const MAX_HARD_LIMIT_SIZE = '10mb' // size at which we will flat out reject the image
 
 // We need to disable the default body parser
 export const config = {
@@ -35,9 +39,12 @@ const handler: NextApiHandler<any> = async (req, res) => {
       const { uuid } = session.user.metadata
       const fullFilename = `/u/${uuid}/${safeFilename(filename)}`
       const rawRes = await getRawBody(req, {
-        limit: '8mb'
+        limit: MAX_HARD_LIMIT_SIZE
       })
-      const photoUrl = await upload(fullFilename, rawRes)
+
+      const newImage = await reduceImage(rawRes)
+
+      const photoUrl = await upload(fullFilename, newImage)
       return res.status(200).send(photoUrl)
     } catch (e) {
       console.log('#Uploading to media server failed', e)
@@ -55,5 +62,32 @@ const safeFilename = (original: string): string => {
 }
 
 const safeRandomString = customAlphabet(nolookalikesSafe, 10)
+
+/**
+ * Reduce image size if it exceeds the
+ * @param original
+ * @returns new image
+ */
+export const reduceImage = async (original: Buffer): Promise<Buffer> => {
+  const newImage = await sharp(original)
+    .metadata()
+    .then(({ width, height, size }) => {
+      if (size < MAX_THRESHOLD_SIZE_KB) return original
+
+      const options: any = { withoutEnlargement: true }
+      if (width >= height) {
+        options.width = 2560
+      } else {
+        options.height = 2560
+      }
+
+      return sharp(original)
+        .resize(options)
+        .jpeg()
+        .toBuffer()
+    })
+
+  return newImage
+}
 
 export default withAuth(handler)
