@@ -22,6 +22,7 @@
     "@udecode/zustood": "^0.4.4",
     "auth0": "^2.42.0",
     "awesome-debounce-promise": "^2.1.0",
+    "aws-sdk": "^2.1265.0",
     "axios": "^0.24.0",
     "classnames": "^2.3.1",
     "csvtojson": "^2.0.10",

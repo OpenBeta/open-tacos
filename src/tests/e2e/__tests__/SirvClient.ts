@@ -28,6 +28,7 @@ test('Sirv API can read photos', async () => {
 test('can read uid json', async () => {
   const paths = [
     {
+      id: '1',
       mediaUrl: '/u/b9f8ab3b-e6e5-4467-9adb-65d91c7ebe7c/1.jpg',
       mediaUuid: '1',
       mediaType: 0,
@@ -36,6 +37,7 @@ test('can read uid json', async () => {
       uid: 'mary'
     },
     {
+      id: '2',
       mediaUrl: '/u/b9f8ab3b-e6e5-4467-9adb-65d91c7ebe7c/2.jpg',
       mediaUuid: '2',
       mediaType: 0,

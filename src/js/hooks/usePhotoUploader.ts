@@ -65,8 +65,8 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
       setUploading(true)
 
       for (const file of files) {
-        if (file.size > 5242880) {
-          await userMediaStore.set.setPhotoUploadErrorMessage('Failed to upload: max file size 5MB.')
+        if (file.size > 11534336) {
+          await userMediaStore.set.setPhotoUploadErrorMessage('¡Ay, caramba! your photo is too large (max=11MB).')
           setUploading(false)
           return
         }
