@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { basename } from 'path'
 import { v5 as uuidv5 } from 'uuid'
+import AWS from 'aws-sdk'
 
 import { MediaType } from '../types'
 
@@ -13,10 +14,23 @@ export const SIRV_CONFIG = {
   clientSecret: process.env.SIRV_CLIENT_SECRET_RO ?? null,
   clientAdminId: process.env.SIRV_CLIENT_ID_RW ?? null,
   clientAdminSecret: process.env.SIRV_CLIENT_SECRET_RW ?? null,
-  baseUrl: process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? ''
+  baseUrl: process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? '',
+  s3Key: process.env.S3_KEY ?? '',
+  s3Secret: process.env.S3_SECRET ?? '',
+  s3Bucket: process.env.S3_BUCKET ?? ''
 }
 
 export const userHomeFromUuid = (uuid: string): string => `${SIRV_CONFIG.baseUrl}/u/${uuid}`
+
+AWS.config.update({
+  accessKeyId: SIRV_CONFIG.s3Key,
+  secretAccessKey: SIRV_CONFIG.s3Secret
+})
+
+export const s3Client = new AWS.S3({
+  endpoint: new AWS.Endpoint('https://s3.sirv.com'),
+  s3ForcePathStyle: true
+})
 
 const client = axios.create({
   baseURL: 'https://api.sirv.com/v2',
@@ -259,32 +273,6 @@ export const createUserDir = async (uuid: string, token?: string): Promise<boole
     console.log(e)
     return false
   }
-}
-
-/**
- * Upload a photo to Sirv
- * @param filename
- * @param imageData
- * @param token
- * @returns Full path to the photo
- */
-export const upload = async (filename: string, imageData: Buffer, token?: string): Promise<string> => {
-  const _t = await getAdminTokenIfNotExist(token)
-
-  const res = await client.post(
-    `/files/upload?filename=${filename}`,
-    imageData,
-    {
-      headers: {
-        'Content-Type': 'image/jpeg',
-        Authorization: `bearer ${_t}`
-      }
-    }
-  )
-  if (res.status >= 200 && res.status <= 204) {
-    return filename
-  }
-  throw new Error(`Image API upload() failed.  Status: ${res.status}`)
 }
 
 /**
