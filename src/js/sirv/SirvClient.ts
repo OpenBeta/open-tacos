@@ -104,7 +104,7 @@ export interface UserImageReturnType {
   mediaList: MediaType[]
   mediaIdList: string[]
 }
-export const getUserImages = async (uuid: string, size: number = 100, token?: string): Promise<UserImageReturnType> => {
+export const getUserImages = async (uuid: string, size: number = 200, token?: string): Promise<UserImageReturnType> => {
   const _t = await getTokenIfNotExist(token)
   const res = await client.post(
     '/files/search',
