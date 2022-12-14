@@ -302,6 +302,11 @@ export interface FinancialBackersResponseType {
   }
 }
 
+export interface FinancialReportType {
+  totalRaised: number
+  donors: FinancialBackerAccountType[]
+}
+
 export interface FinancialBackerAccountType {
   account: {
     id: string

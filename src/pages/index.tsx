@@ -10,9 +10,11 @@ import classNames from 'classnames'
 
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
-import { graphqlClient, openCollectiveClient } from '../js/graphql/Client'
+import { graphqlClient } from '../js/graphql/Client'
 import { getRecentMedia } from '../js/graphql/api'
-import { IndexResponseType, MediaBaseTag, MediaType, FinancialBackerAccountType, FinancialBackersResponseType } from '../js/types'
+import { getSummaryReport } from '../js/graphql/opencollective'
+
+import { IndexResponseType, MediaBaseTag, MediaType, FinancialReportType } from '../js/types'
 import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import { RecentTagsProps } from '../components/home/RecentMedia'
@@ -26,11 +28,10 @@ interface HomePageType {
   exploreData: IndexResponseType
   tagsByMedia: Dictionary<MediaBaseTag[]>
   mediaList: MediaType[]
-  donors: FinancialBackerAccountType[]
-  totalRaised: string
+  donationSummary: FinancialReportType
 }
 
-const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, donors, totalRaised }) => {
+const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, donationSummary }) => {
   const router = useRouter()
   const [activeTab, setTab] = useState<string>('')
   const { areas } = exploreData
@@ -130,7 +131,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, don
               <DynamicMap />
             </Tabs.Content>
             <Tabs.Content value='backers' className='z-0 h-full'>
-              <FinancialBackers donors={donors} totalRaised={totalRaised} />
+              <FinancialBackers {...donationSummary} />
             </Tabs.Content>
           </Tabs.Root>
         </section>
@@ -214,43 +215,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const list = await getImagesByFilenames(Object.keys(tagsByMedia).slice(0, 30))
   console.log('#getImagesByFilenames() ', Object.keys(tagsByMedia).length)
 
-  const openCollectiveQuery = gql`query account($slug: String) {
-    account(slug: $slug) {
-      members(role: BACKER) {
-        nodes {
-          account {
-            id
-            name
-            imageUrl
-          }
-        }
-      }
-      stats {
-        totalNetAmountReceived {
-          value
-          currency
-        }
-      }
-    }
-  }
-  `
-  const ocResponse = await openCollectiveClient.query<FinancialBackersResponseType>({
-    query: openCollectiveQuery,
-    variables: {
-      slug: 'openbeta'
-    }
-  })
-
-  const donors = ocResponse.data.account.members.nodes
-  const totalRaised = ocResponse.data.account.stats.totalNetAmountReceived.value.toString()
+  const openCollectiveReport = await getSummaryReport()
 
   return {
     props: {
       exploreData: rs.data,
       tagsByMedia,
       mediaList: list.mediaList,
-      donors,
-      totalRaised
+      donationSummary: openCollectiveReport
     },
     revalidate: 60
   }
