@@ -1,4 +1,3 @@
-import { saveAs } from 'file-saver'
 import { ClimbTypeToColor } from './constants'
 import { Climb, ClimbDisciplineRecord, ClimbDiscipline } from './types'
 import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
@@ -163,11 +162,6 @@ export const checkUsername = (uid: string): boolean => {
   return uid != null && uid.length <= 30 &&
   !regUsernameKeywords.test(uid) &&
   regUsername.test(uid)
-}
-
-export const saveAsFile = (data: any, filename: string): void => {
-  const blob = new Blob([data], { type: 'text/plain;charset=utf-8' })
-  saveAs(blob, filename)
 }
 
 const regValidUrl = /^((http|https):\/\/)?(www.)?(?!.*(http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+(\/)?.([\w?[a-zA-Z-_%\\/@?]+)*([^\\/\w?[a-zA-Z0-9_-]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/
