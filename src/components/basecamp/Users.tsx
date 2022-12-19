@@ -8,7 +8,7 @@ import { UserPage } from 'auth0'
 
 import { userHomeFromUuid } from '../../js/sirv/SirvClient'
 import { IUserMetadata } from '../../js/types/User'
-import { saveAsFile } from '../../js/utils'
+import { usersToCsv, saveAsCSVFile } from '../../js/utils/csv'
 import Bar from '../ui/Bar'
 
 export default function Users (): JSX.Element {
@@ -36,11 +36,6 @@ export default function Users (): JSX.Element {
 
 const LinkProfile = ({ nick }: {nick: string}): JSX.Element => <Link href={`/u/${nick}`}><a className='link-primary'>{nick}</a></Link>
 
-const exportUsers = (users: undefined | any[]): string => {
-  if (users == null) return ''
-  return users?.map(u => u.email).join('\n')
-}
-
 const fetcher = async (url: string): Promise<any> => (await axios.get(url)).data
 
 const UserTable = (): JSX.Element => {
@@ -52,7 +47,7 @@ const UserTable = (): JSX.Element => {
   return (
     <div className='my-8'>
       <h2 className='border-b border-t border-primary'>Users: {userPage?.total}</h2>
-      <Bar layoutClass={Bar.JUSTIFY_RIGHT} paddingX={Bar.PX_DEFAULT_LG} className='w-full'><button onClick={() => saveAsFile(exportUsers(userPage?.users), 'tacos_users.txt')}>Download</button>
+      <Bar layoutClass={Bar.JUSTIFY_RIGHT} paddingX={Bar.PX_DEFAULT_LG} className='w-full'><button onClick={() => saveAsCSVFile(usersToCsv(userPage?.users), `openbeta_user_p${currentPage}.csv`)}>Download</button>
       </Bar>
       {error == null && userPage == null && <div>loading...</div>}
       {error != null && <div>{error}</div>}
