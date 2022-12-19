@@ -27,8 +27,8 @@ const replacer = (key, value): string => value == null ? '' : value // specify h
  */
 const processUser = (user: any): string => {
   return fields.map(field => {
-    let value = user[field]
-    if (field === 'created_at' || field === 'last_login') {
+    let value = user?.[field] ?? ''
+    if (value !== '' && (field === 'created_at' || field === 'last_login')) {
       value = format(parseISO(user[field]), 'P')
     }
     return JSON.stringify(value, replacer) // calling JSON.strigify() to get value quoted
