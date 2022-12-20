@@ -16,7 +16,7 @@ export const getTagsLeaderboard = async (): Promise<TagsLeaderboardType> => {
 
     const list = await Promise.all(rs.data.getTagsLeaderboard.map(resolveUsername))
 
-    // Better to have the backend gives us a grand total, but it's okay to calculate it here
+    // Better to have the backend give us a grand total, but it's okay to calculate it here
     const grandTotal = list.reduce((acc, curr) => {
       return acc + curr.total
     }, 0)

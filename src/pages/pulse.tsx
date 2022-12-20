@@ -15,6 +15,9 @@ interface HomePageType {
   tagsLeaderboard: TagsLeaderboardType
 }
 
+/**
+ *  Display key metrics and statistics
+ */
 const Page: NextPage<HomePageType> = ({ donationSummary, tagsLeaderboard }) => {
   return (
     <>
@@ -73,7 +76,7 @@ const LeaderboardRow = (value: TagsByUserType, index: number): JSX.Element => {
         <span className={
           clz(
             'p-1 rounded',
-            index <= 2 ? 'bg-pink-500' : '') // a naive ranking highlight.  It can't handle the situation where there are ties.
+            index <= 2 ? 'bg-pink-500' : '') // a naive ranking highlight.  It can't handle ties.
           }
         >
           {index + 1}
