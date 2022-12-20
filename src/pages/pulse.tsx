@@ -19,15 +19,15 @@ const Page: NextPage<HomePageType> = ({ donationSummary, tagsLeaderboard }) => {
   return (
     <>
       <SeoTags
-        title='OpenBeta'
-        description='Pulse: stats and activities'
+        title='OpenBeta pulse'
+        description='Stats and activities'
       />
       <Layout
-        contentContainerClass='content-default bg-gradient-to-br from-cyan-600 to-sky-400 py-8'
+        contentContainerClass='content-default bg-gradient-to-br from-cyan-600 to-sky-400 py-6'
         showFilterBar={false}
         showFooter
       >
-        <div className='lg:columns-2 mx-auto'>
+        <div className='lg:columns-2 sm:mx-auto sm:block flex flex-col items-center'>
           <TagsSummary tagsLeaderboard={tagsLeaderboard} />
           <TagsLeaderboard tagsLeaderboard={tagsLeaderboard} />
           <FinancialReport donationSummary={donationSummary} />
@@ -45,7 +45,7 @@ const TagsSummary = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => 
         <div className='stat-value'>
           {tagsLeaderboard.grandTotal}
         </div>
-        <div className='stat-desc'>Tags help others learn more about the climbing areas.</div>
+        <div className='stat-desc whitespace-normal'>Tags help others learn more about the climbing areas.</div>
       </div>
     </Box>
   )
@@ -112,7 +112,7 @@ const FinancialReport = ({ donationSummary }: FinancialReportProps): ReactElemen
 
 const Box = ({ className, children }): ReactElement => {
   return (
-    <section className={clz('break-inside-avoid-column break-inside-avoid relative block max-w-lg  border-4 p-4 mb-4 border-black rounded-box', className)}>
+    <section className={clz('break-inside-avoid-column break-inside-avoid relative block max-w-md  border-4 p-4 mb-4 border-black rounded-box', className)}>
       {children}
     </section>
   )
