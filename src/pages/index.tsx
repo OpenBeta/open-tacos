@@ -5,33 +5,30 @@ import { useRouter } from 'next/router'
 import * as Tabs from '@radix-ui/react-tabs'
 import { gql } from '@apollo/client'
 import { groupBy, Dictionary } from 'underscore'
-import { TagIcon, LightBulbIcon, MapPinIcon, PencilIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline'
+import { TagIcon, LightBulbIcon, MapPinIcon, PencilIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
 import { graphqlClient } from '../js/graphql/Client'
 import { getRecentMedia } from '../js/graphql/api'
-import { getSummaryReport } from '../js/graphql/opencollective'
 
-import { IndexResponseType, MediaBaseTag, MediaType, FinancialReportType } from '../js/types'
+import { IndexResponseType, MediaBaseTag, MediaType } from '../js/types'
 import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import { RecentTagsProps } from '../components/home/RecentMedia'
 import { enhanceMediaListWithUsernames } from '../js/usernameUtil'
 import { getImagesByFilenames } from '../js/sirv/SirvClient'
-import FinancialBackers from '../components/home/FinancialBackers'
 
-const allowedViews = ['explore', 'newTags', 'map', 'edit', 'backers']
+const allowedViews = ['explore', 'newTags', 'map', 'edit', 'pulse']
 
 interface HomePageType {
   exploreData: IndexResponseType
   tagsByMedia: Dictionary<MediaBaseTag[]>
   mediaList: MediaType[]
-  donationSummary: FinancialReportType
 }
 
-const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, donationSummary }) => {
+const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) => {
   const router = useRouter()
   const [activeTab, setTab] = useState<string>('')
   const { areas } = exploreData
@@ -40,6 +37,11 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, don
     if (activeTab !== '' && allowedViews.includes(activeTab)) {
       if (activeTab === 'edit') {
         void router.replace('/edit')
+        return
+      }
+      if (activeTab === 'pulse') {
+        void router.replace('/pulse')
+        return
       }
       const query = router.query
       query.v = activeTab
@@ -115,10 +117,10 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, don
                 label='Map'
               />
               <TabsTrigger
-                tabKey='backers'
+                tabKey='pulse'
                 activeKey={activeTab}
-                icon={<CurrencyDollarIcon className='w-6 h-6' />}
-                label='Backers'
+                icon={<ArrowTrendingUpIcon className='w-6 h-6' />}
+                label='Pulse'
               />
             </Tabs.List>
             <Tabs.Content value='explore' className='w-full'>
@@ -129,9 +131,6 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList, don
             </Tabs.Content>
             <Tabs.Content value='map' className='z-0 h-full'>
               <DynamicMap />
-            </Tabs.Content>
-            <Tabs.Content value='backers' className='z-0 h-full'>
-              <FinancialBackers {...donationSummary} />
             </Tabs.Content>
           </Tabs.Root>
         </section>
@@ -215,14 +214,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const list = await getImagesByFilenames(Object.keys(tagsByMedia).slice(0, 30))
   console.log('#getImagesByFilenames() ', Object.keys(tagsByMedia).length)
 
-  const openCollectiveReport = await getSummaryReport()
-
   return {
     props: {
       exploreData: rs.data,
       tagsByMedia,
-      mediaList: list.mediaList,
-      donationSummary: openCollectiveReport
+      mediaList: list.mediaList
     },
     revalidate: 60
   }

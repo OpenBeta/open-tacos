@@ -35,6 +35,11 @@ html {
     @apply relative flex flex-col w-full max-w-full;
   }
 
+  /* Bold background */
+  .content-default-bold {
+    @apply relative flex flex-col w-full max-w-full bg-sky-400;
+  }
+
   .with-standard-y-margin {
     @apply py-6;
   }

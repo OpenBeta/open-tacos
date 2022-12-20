@@ -316,3 +316,13 @@ export interface FinancialBackerAccountType {
 }
 
 export type CountrySummaryType = Pick<AreaType, 'areaName' | 'uuid' | 'totalClimbs' | 'updatedAt' | 'metadata'> & { metadata: Pick<AreaMetadataType, 'lat' | 'lng' | 'areaId'> }
+
+export interface TagsByUserType {
+  username: string | null
+  total: number
+}
+
+export interface TagsLeaderboardType {
+  grandTotal: number
+  list: TagsByUserType[]
+}
