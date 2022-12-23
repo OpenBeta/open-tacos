@@ -66,6 +66,11 @@ export const FRAGMENT_CHANGE_HISTORY = gql`
           areaName
           uuid
         }
+        ... on Climb {
+          id
+          name
+          uuid
+        }
       }
     }
   }`
