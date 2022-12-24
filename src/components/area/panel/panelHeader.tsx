@@ -18,7 +18,7 @@ export interface PanelHeaderProps{
  * a query lookup
  */
 function getMapHref (lat: number, lng: number): string {
-  return `https://www.google.com/maps/search/${lng},+${lat}`
+  return `https://www.google.com/maps/place/${lat},${lng}`
 }
 
 export function PanelHeader (props: PanelHeaderProps): JSX.Element {
