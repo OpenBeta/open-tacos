@@ -212,6 +212,10 @@ p {
   .dropdown-item > *:last-child {
     @apply mb-1;
   }
+
+  .editor-input {
+    @apply border-none rounded-lg bg-opacity-80 focus:outline-none focus:bg-yellow-200 focus:transition-colors focus:duration-500 focus:ease-in !important;
+  }
 }
 
 /* for climb profile form */

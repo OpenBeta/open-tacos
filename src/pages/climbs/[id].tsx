@@ -18,7 +18,7 @@ import FavouriteButton from '../../components/users/FavouriteButton'
 import TickButton from '../../components/users/TickButton'
 import { useCanary } from '../../js/hooks'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
-
+import Editor from '../../components/editor/InplaceEditor'
 interface ClimbPageProps {
   climb: Climb
   mediaListWithUsernames: MediaBaseTag[]
@@ -126,17 +126,22 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
           <div id='Climb Content' />
           <div className='md:px-16 mb-16'>
             <h3 className='mb-3'>Description</h3>
-            <div className='whitespace-pre-line'>{content.description}</div>
+            {/* <div className='whitespace-pre-line'>{content.description}</div> */}
+            <div><Editor initialValue={content.description} /></div>
             {content.location !== ''
               ? (
                 <>
                   <h3 className='mb-3 mt-6'>Location</h3>
-                  <div className='whitespace-pre-line'>{content.location}</div>
+                  {/* <div className='whitespace-pre-line'>{content.location}</div> */}
+                  <div><Editor initialValue={content.location} /></div>
+
                 </>
                 )
               : ''}
             <h3 className='mb-3 mt-6'>Protection</h3>
-            <div className='whitespace-pre-line'>{content.protection}</div>
+            {/* <div className='whitespace-pre-line'>{content.protection}</div> */}
+            <div><Editor initialValue={content.protection} /></div>
+
           </div>
         </div>
       </div>
