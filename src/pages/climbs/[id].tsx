@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { gql } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
+import { useForm, FormProvider } from 'react-hook-form'
+import { useSession } from 'next-auth/react'
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import { AreaType, Climb, MediaBaseTag } from '../../js/types'
@@ -19,6 +21,8 @@ import TickButton from '../../components/users/TickButton'
 import { useCanary } from '../../js/hooks'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
 import Editor from '../../components/editor/InplaceEditor'
+import LockToggle from '../../components/ui/LockToggle'
+import { MUTATION_UPDATE_CLIMBS, ChangesInput } from '../../js/graphql/gql/contribs'
 interface ClimbPageProps {
   climb: Climb
   mediaListWithUsernames: MediaBaseTag[]
@@ -51,8 +55,12 @@ const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
 export default ClimbPage
 
 const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
+  const [editMode, setEditMode] = useState(false)
+
   const router = useRouter()
-  const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
+  const session = useSession()
+
+  const { id, name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
   const { climbId } = metadata
   useState([leftClimb, rightClimb])
   const isCanary = useCanary()
@@ -75,6 +83,43 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
   useHotkeys('right', () => {
     rightClimb !== null && router.push(`/climbs/${rightClimb.id}`)
   }, [rightClimb])
+
+  // Form declaration
+  const form = useForm(
+    {
+      mode: 'onBlur',
+      defaultValues: { description: content.description, protection: content.protection, location: content.location }
+    })
+
+  const { handleSubmit, formState: { isSubmitting, isDirty }, reset } = form
+
+  const submitHandler = async (p): Promise<void> => {
+    // console.log('#submit', p)
+    const { description, location, protection } = p
+    await updateClimbsApi({
+      variables: {
+        input: {
+          parentId: ancestors[ancestors.length - 1],
+          changes: [{ id, description, location, protection }]
+        }
+      },
+      context: {
+        headers: {
+          authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
+        }
+      }
+    })
+  }
+
+  const [updateClimbsApi] = useMutation<{ updateClimbsApi: string[] }, { input: ChangesInput }>(
+    MUTATION_UPDATE_CLIMBS, {
+      client: graphqlClient,
+      onCompleted: (data) => {
+        reset(undefined, { keepValues: true })
+        console.log('#saved', data)
+      }
+    }
+  )
 
   return (
     <div className='lg:flex lg:justify-center w-full' {...swipeHandlers}>
@@ -124,25 +169,35 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
           <div id='border div' className='border border-slate-500 my-6' />
 
           <div id='Climb Content' />
-          <div className='md:px-16 mb-16'>
-            <h3 className='mb-3'>Description</h3>
-            {/* <div className='whitespace-pre-line'>{content.description}</div> */}
-            <div><Editor initialValue={content.description} /></div>
-            {content.location !== ''
-              ? (
-                <>
-                  <h3 className='mb-3 mt-6'>Location</h3>
-                  {/* <div className='whitespace-pre-line'>{content.location}</div> */}
-                  <div><Editor initialValue={content.location} /></div>
 
-                </>
-                )
-              : ''}
-            <h3 className='mb-3 mt-6'>Protection</h3>
-            {/* <div className='whitespace-pre-line'>{content.protection}</div> */}
-            <div><Editor initialValue={content.protection} /></div>
+          <FormProvider {...form}>
+            <form onSubmit={handleSubmit(submitHandler)}>
+              <div className='md:px-16 mb-16'>
+                <div className='flex justify-end'>
+                  <LockToggle name='Edit' onChange={setEditMode} />
+                </div>
+                <h3 className='mb-3'>Description</h3>
+                {/* <div className='whitespace-pre-line'>{content.description}</div> */}
+                <div><Editor initialValue={content.description} editable={editMode} name='description' /></div>
+                {content.location !== ''
+                  ? (
+                    <>
+                      <h3 className='mb-3 mt-6'>Location</h3>
+                      {/* <div className='whitespace-pre-line'>{content.location}</div> */}
+                      <div><Editor name='location' initialValue={content.location} editable={editMode} /></div>
 
-          </div>
+                    </>
+                    )
+                  : ''}
+                <h3 className='mb-3 mt-6'>Protection</h3>
+                {/* <div className='whitespace-pre-line'>{content.protection}</div> */}
+                <div><Editor name='protection' initialValue={content.protection} editable={editMode} /></div>
+                <div className='flex justify-end'>
+                  {editMode && <button type='submit' disabled={isSubmitting || !isDirty} className='btn btn-primary btn-solid  btn-sm'>Save</button>}
+                </div>
+              </div>
+            </form>
+          </FormProvider>
         </div>
       </div>
     </div>

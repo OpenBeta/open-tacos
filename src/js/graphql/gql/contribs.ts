@@ -46,6 +46,25 @@ mutation ($uuid: String!, $areaName: String, $isDestination: Boolean, $shortCode
     }
 }`
 
+export const MUTATION_UPDATE_CLIMBS = gql`
+mutation ($input: ChangesInput) {
+  updateClimbs(input: $input)
+}
+`
+
+export interface IndividualClimbChangeInput {
+  id: string
+  name?: string
+  description?: string
+  location?: string
+  protection?: string
+}
+
+export interface ChangesInput {
+  parentId: string
+  changes: IndividualClimbChangeInput[]
+}
+
 /**
  * A reusable fragment
  */

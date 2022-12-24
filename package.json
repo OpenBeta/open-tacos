@@ -17,6 +17,7 @@
     "@radix-ui/react-dropdown-menu": "^2.0.1",
     "@radix-ui/react-tabs": "^1.0.1",
     "@radix-ui/react-toast": "^1.0.0",
+    "@radix-ui/react-toggle": "^1.0.1",
     "@turf/bbox": "^6.5.0",
     "@types/underscore": "^1.11.4",
     "@types/uuid": "^8.3.4",

@@ -9,8 +9,9 @@ import { $generateNodesFromDOM } from '@lexical/html'
 // actually use them.
 interface Props {
   initialValue?: string
+  editable: boolean
 }
-export default function MyCustomAutoFocusPlugin ({ initialValue }: Props): any {
+export default function MyCustomAutoFocusPlugin ({ initialValue, editable = false }: Props): any {
   const [editor] = useLexicalComposerContext()
 
   const updateHTML = (editor: LexicalEditor, value: string, clear: boolean): void => {
@@ -32,5 +33,10 @@ export default function MyCustomAutoFocusPlugin ({ initialValue }: Props): any {
     }
   }, [editor])
 
+  useEffect(() => {
+    if (editor != null) {
+      editor.setEditable(editable)
+    }
+  }, [editable])
   return null
 }
