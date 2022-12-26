@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { gql, useMutation } from '@apollo/client'
@@ -59,6 +59,12 @@ export default ClimbPage
 const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
   const [editMode, setEditMode] = useState(false)
   const [resetCount, setResetCount] = useState(0)
+  const [cache, setCache] = useState({
+    name: '',
+    description: '',
+    location: '',
+    protection: ''
+  })
 
   const router = useRouter()
   const session = useSession()
@@ -66,7 +72,13 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
 
   const { id, name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
   const { climbId } = metadata
-  const { description, location, protection } = content
+
+  useEffect(() => {
+    setCache({
+      name,
+      ...content
+    })
+  }, [])
   useState([leftClimb, rightClimb])
 
   const swipeHandlers = useSwipeable({
@@ -92,7 +104,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
   const form = useForm(
     {
       mode: 'onBlur',
-      defaultValues: { name, description, protection, location }
+      defaultValues: { ...cache }
     })
 
   const { handleSubmit, formState: { isSubmitting, isDirty }, reset } = form
@@ -112,6 +124,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
         }
       }
     })
+    setCache({ ...formData })
     reset(formData)
   }
 
@@ -153,7 +166,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                     reset={resetCount}
                     name='name'
                     editable={editMode}
-                    initialValue={name}
+                    initialValue={cache.name}
                     placeholder='Climb name'
                   />
                 </h1>
@@ -189,26 +202,26 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                 </div>
                 <Editor
                   reset={resetCount}
-                  initialValue={content.description}
+                  initialValue={cache.description}
                   editable={editMode}
                   name='description'
                   placeholder='Enter a description'
                 />
 
-                {(content.location?.trim() !== '' || editMode) &&
+                {(cache.location?.trim() !== '' || editMode) &&
                   (
                     <>
                       <h3 className='mb-3 mt-6'>Location</h3>
-                      <div><Editor reset={resetCount} name='location' initialValue={content.location} editable={editMode} /></div>
+                      <div><Editor reset={resetCount} name='location' initialValue={cache.location} editable={editMode} /></div>
 
                     </>
                   )}
 
-                {(content.protection?.trim() !== '' || editMode) &&
+                {(cache.protection?.trim() !== '' || editMode) &&
                   (
                     <>
                       <h3 className='mb-3 mt-6'>Protection</h3>
-                      <Editor reset={resetCount} name='protection' initialValue={content.protection} editable={editMode} />
+                      <Editor reset={resetCount} name='protection' initialValue={cache.protection} editable={editMode} />
                     </>
                   )}
 
@@ -216,10 +229,10 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   <div className='mt-6 flex justify-end gap-4'>
                     <button
                       className={clx('btn btn-sm btn-link', isDirty ? '' : 'btn-disabled')} type='reset' onClick={() => {
-                        reset({ description, location, protection })
                         setResetCount(Date.now())
                       }}
-                    >Reset
+                    >
+                      Reset
                     </button>
                     <button type='submit' disabled={isSubmitting || !isDirty} className='btn btn-primary btn-solid btn-sm'>&nbsp;Save&nbsp;</button>
                   </div>}
