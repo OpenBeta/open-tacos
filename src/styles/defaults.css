@@ -95,10 +95,6 @@ html {
   @apply text-4xl font-bold font-sans my-4 !important;
 }
 
-code {
-  @apply text-sm font-mono bg-green-100 -mx-1.5 px-1.5 py-1.5 rounded !important;
-}
-
 p {
   @apply block mb-4 text-base text-slate-900 leading-relaxed;
 }
@@ -213,8 +209,12 @@ p {
     @apply mb-1;
   }
 
+  .editor-container {
+    @apply -mx-2 px-2 rounded-lg;
+  }
+
   .editor-input {
-    @apply -mx-2 px-2 bg-opacity-60 border-none outline-none rounded-lg focus:bg-blue-50 focus:transition-colors focus:duration-700 focus:ease-in !important;
+    @apply -mx-2 px-2 border-none outline-none rounded-lg focus:bg-amber-50 focus:transition-colors focus:duration-500 focus:ease-in-out !important;
   }
 
 
@@ -230,6 +230,10 @@ p {
     user-select: none;
     pointer-events: none;
     @apply text-base-300 italic;
+  }
+
+  code {
+    @apply font-sans text-base text-slate-900 leading-relaxed !important;
   }
 }
 

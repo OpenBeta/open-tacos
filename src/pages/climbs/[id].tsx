@@ -4,6 +4,9 @@ import { useRouter } from 'next/router'
 import { gql, useMutation } from '@apollo/client'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
+import dynamic from 'next/dynamic'
+import clx from 'classnames'
+
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import { AreaType, Climb, MediaBaseTag } from '../../js/types'
@@ -20,9 +23,9 @@ import FavouriteButton from '../../components/users/FavouriteButton'
 import TickButton from '../../components/users/TickButton'
 import { useCanary } from '../../js/hooks'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
-import Editor from '../../components/editor/InplaceEditor'
 import LockToggle from '../../components/ui/LockToggle'
 import { MUTATION_UPDATE_CLIMBS, ChangesInput } from '../../js/graphql/gql/contribs'
+import { InplaceTextInput } from '../../components/editor/InplaceEditor'
 interface ClimbPageProps {
   climb: Climb
   mediaListWithUsernames: MediaBaseTag[]
@@ -56,12 +59,13 @@ export default ClimbPage
 
 const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
   const [editMode, setEditMode] = useState(false)
-
+  const [resetCount, setResetCount] = useState(0)
   const router = useRouter()
   const session = useSession()
 
   const { id, name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
   const { climbId } = metadata
+  const { description, location, protection } = content
   useState([leftClimb, rightClimb])
   const isCanary = useCanary()
 
@@ -88,19 +92,18 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
   const form = useForm(
     {
       mode: 'onBlur',
-      defaultValues: { description: content.description, protection: content.protection, location: content.location }
+      defaultValues: { name, description, protection, location }
     })
 
   const { handleSubmit, formState: { isSubmitting, isDirty }, reset } = form
 
-  const submitHandler = async (p): Promise<void> => {
-    // console.log('#submit', p)
-    const { description, location, protection } = p
+  const submitHandler = async (formData): Promise<void> => {
+    const { description, location, protection, name } = formData
     await updateClimbsApi({
       variables: {
         input: {
           parentId: ancestors[ancestors.length - 1],
-          changes: [{ id, description, location, protection }]
+          changes: [{ id, description, location, protection, name }]
         }
       },
       context: {
@@ -116,89 +119,93 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
       client: graphqlClient,
       onCompleted: (data) => {
         reset(undefined, { keepValues: true })
-        console.log('#saved', data)
       }
     }
   )
 
   return (
     <div className='lg:flex lg:justify-center w-full' {...swipeHandlers}>
-      <div className='px-4 max-w-screen-xl'>
+      <div className='px-4 max-w-screen-xl w-full'>
         <BreadCrumbs
           pathTokens={pathTokens}
           ancestors={ancestors}
           isClimbPage
         />
-
-        <div className='py-6'>
-          <PhotoMontage photoList={mediaListWithUsernames} />
-        </div>
-        <div className='md:flex'>
-          <div
-            id='Title Information'
-            style={{ minWidth: '300px' }}
-          >
-            <h1 className='text-4xl md:text-5xl mr-10'>{name}</h1>
-            <div className='pl-1'>
-              <div
-                className='flex items-center space-x-2 mt-6'
-              >
-                <RouteGradeChip grade={yds} safety={safety} />
-                <RouteTypeChips type={type} />
-
-              </div>
-
-              <div
-                title='First Assent'
-                className='text-slate-700 mt-4 text-sm'
-              >
-                <strong>FA: </strong>{fa}
-              </div>
-
-              <div className='flex flex-col pt-8'>
-                <FavouriteButton climbId={climbId} />
-                {isCanary && <TickButton climbId={climbId} name={name} grade={yds} />}
-              </div>
+        <FormProvider {...form}>
+          <form onSubmit={handleSubmit(submitHandler)}>
+            <div className='py-6'>
+              <PhotoMontage photoList={mediaListWithUsernames} />
             </div>
+            <div className='md:flex'>
+              <div
+                id='Title Information'
+                style={{ minWidth: '300px' }}
+              >
 
-            <div className='pl-1'>
-              {isCanary && <ImportFromMtnProj isButton={false} />}
-            </div>
-          </div>
+                <h1 className='text-4xl md:text-5xl mr-10'><InplaceTextInput reset={0} name='name' editable={editMode} initialValue='foos' /></h1>
+                <div className='pl-1'>
+                  <div
+                    className='flex items-center space-x-2 mt-6'
+                  >
+                    <RouteGradeChip grade={yds} safety={safety} />
+                    <RouteTypeChips type={type} />
+                  </div>
 
-          <div id='border div' className='border border-slate-500 my-6' />
+                  <div
+                    title='First Assent'
+                    className='text-slate-700 mt-4 text-sm'
+                  >
+                    <strong>FA: </strong>{fa}
+                  </div>
 
-          <div id='Climb Content' />
+                  <div className='flex flex-col pt-8'>
+                    <FavouriteButton climbId={climbId} />
+                    {isCanary && <TickButton climbId={climbId} name={name} grade={yds} />}
+                  </div>
+                </div>
 
-          <FormProvider {...form}>
-            <form onSubmit={handleSubmit(submitHandler)}>
-              <div className='md:px-16 mb-16'>
+                <div className='pl-1'>
+                  {isCanary && <ImportFromMtnProj isButton={false} />}
+                </div>
+              </div>
+
+              <div id='border div' className='border border-slate-500 my-6' />
+
+              <div id='Climb Content' />
+
+              <div className='md:px-16 mb-16 w-full'>
                 <div className='flex justify-end'>
                   <LockToggle name='Edit' onChange={setEditMode} />
                 </div>
                 <h3 className='mb-3'>Description</h3>
-                {/* <div className='whitespace-pre-line'>{content.description}</div> */}
-                <div><Editor initialValue={content.description} editable={editMode} name='description' /></div>
+                <div><Editor reset={resetCount} initialValue={content.description} editable={editMode} name='description' /></div>
                 {content.location !== ''
                   ? (
                     <>
                       <h3 className='mb-3 mt-6'>Location</h3>
-                      {/* <div className='whitespace-pre-line'>{content.location}</div> */}
-                      <div><Editor name='location' initialValue={content.location} editable={editMode} /></div>
+                      <div><Editor reset={resetCount} name='location' initialValue={content.location} editable={editMode} /></div>
 
                     </>
                     )
                   : ''}
                 <h3 className='mb-3 mt-6'>Protection</h3>
-                {/* <div className='whitespace-pre-line'>{content.protection}</div> */}
-                <div><Editor name='protection' initialValue={content.protection} editable={editMode} /></div>
-                <div className='flex justify-end'>
-                  {editMode && <button type='submit' disabled={isSubmitting || !isDirty} className='btn btn-primary btn-solid  btn-sm'>Save</button>}
-                </div>
+                <div><Editor reset={resetCount} name='protection' initialValue={content.protection} editable={editMode} /></div>
+                {editMode &&
+                  <div className='mt-6 flex justify-end gap-4'>
+                    <button
+                      className={clx('btn btn-sm btn-link', isDirty ? '' : 'btn-disabled')} type='reset' onClick={() => {
+                        reset({ description, location, protection })
+                        setResetCount(Date.now())
+                      }}
+                    >Reset
+                    </button>
+                    <button type='submit' disabled={isSubmitting || !isDirty} className='btn btn-primary btn-solid btn-sm'>&nbsp;Save&nbsp;</button>
+                  </div>}
               </div>
-            </form>
-          </FormProvider>
-        </div>
+
+            </div>
+          </form>
+        </FormProvider>
       </div>
     </div>
   )
@@ -350,3 +357,7 @@ const PageMeta = ({ climb, mediaListWithUsernames }: ClimbPageProps): JSX.Elemen
     />
   )
 }
+
+const Editor = dynamic(async () => await import('../../components/editor/InplaceEditor'), {
+  ssr: false
+})
