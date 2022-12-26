@@ -210,14 +210,14 @@ p {
   }
 
   .editor-container {
-    @apply -mx-2 px-2 rounded-lg;
+    @apply -mx-2 p-2 rounded-lg;
   }
 
   .editor-input {
-    @apply -mx-2 px-2 border-none outline-none rounded-lg focus:bg-amber-50 focus:transition-colors focus:duration-500 focus:ease-in-out !important;
+    @apply border-none outline-none !important;
   }
 
-
+  /* rounded-lg focus:bg-amber-50 focus:transition-colors focus:duration-500 focus:ease-in-out  */
   .editor-container {
     position: relative;
   }
@@ -225,15 +225,20 @@ p {
   .editor-placeholder {
     overflow: hidden;
     position: absolute;
-    top: 0;
-    left: 0;
     user-select: none;
     pointer-events: none;
-    @apply text-base-300 italic;
+    @apply top-2.5 left-3 text-base-300 text-opacity-50 italic;
   }
 
   code {
     @apply font-sans text-base text-slate-900 leading-relaxed !important;
+  }
+
+  p.editor-single-paragraph {
+    margin-bottom: 0;
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
   }
 }
 

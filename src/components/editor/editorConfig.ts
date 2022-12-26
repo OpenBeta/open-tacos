@@ -7,20 +7,15 @@ import { HeadingNode, QuoteNode } from '@lexical/rich-text'
 import { LinkNode } from '@lexical/link'
 import { ListItemNode, ListNode } from '@lexical/list'
 import { MarkNode } from '@lexical/mark'
-import { CodeNode, $createCodeNode } from '@lexical/code'
-import { $createTextNode, $getRoot } from 'lexical'
+import { CodeNode } from '@lexical/code'
 
-import ExampleTheme from './themes/ExampleTheme'
+import DefaultTheme, { textInputTheme } from './themes/DefaultTheme'
+import { $createInitialPlainTextState } from './plugins/PlainTextResetPlugin'
 
-const editorConfig = (initialValue: string, editable: boolean): InitialConfigType => {
+export const editorConfigRichText = (initialValue: string, editable: boolean): InitialConfigType => {
   const createInitial = (): void => {
-    const root = $getRoot()
     if (editable) {
-      root
-        .clear()
-        .append(
-          $createCodeNode('markdown').append($createTextNode(initialValue))
-        )
+      $createInitialPlainTextState(initialValue)
     } else {
       $convertFromMarkdownString(initialValue, TRANSFORMERS)
     }
@@ -29,7 +24,7 @@ const editorConfig = (initialValue: string, editable: boolean): InitialConfigTyp
   return {
     editorState: createInitial,
     namespace: 'editor',
-    theme: ExampleTheme,
+    theme: DefaultTheme,
     onError (error) {
       throw error
     },
@@ -37,4 +32,14 @@ const editorConfig = (initialValue: string, editable: boolean): InitialConfigTyp
   }
 }
 
-export default editorConfig
+export const editorConfigPlain = (initialValue: string): InitialConfigType => {
+  return {
+    editorState: () => $createInitialPlainTextState(initialValue),
+    namespace: 'editor',
+    theme: textInputTheme,
+    onError (error) {
+      throw error
+    },
+    nodes: []
+  }
+}

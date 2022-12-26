@@ -2,6 +2,7 @@ import { useFormContext } from 'react-hook-form'
 import clx from 'classnames'
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
+import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin'
 import { ContentEditable } from '@lexical/react/LexicalContentEditable'
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
@@ -9,18 +10,20 @@ import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
 
-import editorConfig from './editorConfig'
+import { editorConfigRichText } from './editorConfig'
 import onChange from './onChange'
-import MyCustomAutoFocusPlugin from './plugins/MyInitialValuePlugin'
+import { MarkdownPreviewPlugin } from './plugins/MarkdownPreviewPlugin'
+import { PlainTextResetPlugin } from './plugins/PlainTextResetPlugin'
 
 interface EditorProps {
   initialValue?: string
   editable?: boolean
   name: string
   reset: number
+  placeholder?: string
 }
 
-export default function Editor ({ initialValue = '', name, editable = false, reset }: EditorProps): JSX.Element {
+export default function Editor ({ initialValue = '', name, editable = false, reset, placeholder = 'Enter some text' }: EditorProps): JSX.Element {
   const { setValue } = useFormContext()
 
   const onChangeHandler = (arg0, arg1): void => {
@@ -28,30 +31,42 @@ export default function Editor ({ initialValue = '', name, editable = false, res
   }
 
   return (
-    <LexicalComposer initialConfig={editorConfig(initialValue, editable)}>
+    <LexicalComposer initialConfig={editorConfigRichText(initialValue, editable)}>
       <div className={clx('editor-container', editable ? 'bg-slate-200' : '')}>
-        <RichTextPlugin
-          contentEditable={<ContentEditable className='editor-input' />}
-          placeholder={<Placeholder />}
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <ListPlugin />
-        <LinkPlugin />
+        {editable
+          ? (
+            <>
+              <PlainTextPlugin
+                contentEditable={<ContentEditable className='editor-input' />}
+                placeholder={<Placeholder text={placeholder} />}
+                ErrorBoundary={LexicalErrorBoundary}
+              />
+              <PlainTextResetPlugin
+                initialValue={initialValue}
+                editable={editable}
+                resetSignal={reset}
+              />
+            </>
+            )
+          : (
+            <>
+              <RichTextPlugin
+                contentEditable={<ContentEditable className='editor-input' />}
+                placeholder={<Placeholder text={placeholder} />}
+                ErrorBoundary={LexicalErrorBoundary}
+              />
+              <ListPlugin />
+              <LinkPlugin />
+            </>)}
+
         <OnChangePlugin onChange={onChangeHandler} ignoreSelectionChange />
         <HistoryPlugin />
-        <MyCustomAutoFocusPlugin reset={reset} initialValue={initialValue} editable={editable} />
+        <MarkdownPreviewPlugin editable={editable} />
       </div>
     </LexicalComposer>
   )
 }
 
-function Placeholder (): JSX.Element {
-  return <div className='editor-placeholder'>Enter some text...</div>
-}
-
-export const InplaceTextInput = ({ initialValue = '', name, editable = false, reset }: EditorProps): JSX.Element => {
-  const { register, getValues } = useFormContext()
-
-  const val = getValues(name)
-  return editable ? <input id='editor' type='text' className='input' {...register(name)} /> : <div>{val}</div>
+export function Placeholder ({ text }): JSX.Element {
+  return <div className='editor-placeholder'>{text}</div>
 }

@@ -1,4 +1,4 @@
-const exampleTheme = {
+const theme = {
   ltr: 'ltr',
   rtl: 'rtl',
   placeholder: 'editor-placeholder',
@@ -14,4 +14,11 @@ const exampleTheme = {
   }
 }
 
-export default exampleTheme
+export const textInputTheme = {
+  ltr: 'ltr',
+  rtl: 'rtl',
+  placeholder: 'editor-placeholder',
+  paragraph: 'editor-single-paragraph'
+}
+
+export default theme

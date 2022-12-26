@@ -25,7 +25,7 @@ import { useCanary } from '../../js/hooks'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
 import LockToggle from '../../components/ui/LockToggle'
 import { MUTATION_UPDATE_CLIMBS, ChangesInput } from '../../js/graphql/gql/contribs'
-import { InplaceTextInput } from '../../components/editor/InplaceEditor'
+// import InplaceTextInput from '../../components/editor/InplaceTextInput'
 interface ClimbPageProps {
   climb: Climb
   mediaListWithUsernames: MediaBaseTag[]
@@ -136,13 +136,21 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
             <div className='py-6'>
               <PhotoMontage photoList={mediaListWithUsernames} />
             </div>
-            <div className='md:flex'>
+            <div className='lg:grid lg:grid-cols-3 w-full'>
               <div
                 id='Title Information'
-                style={{ minWidth: '300px' }}
+                className='lg:border-r-2 border-base-content'
               >
 
-                <h1 className='text-4xl md:text-5xl mr-10'><InplaceTextInput reset={0} name='name' editable={editMode} initialValue='foos' /></h1>
+                <h1 className='text-4xl md:text-5xl mr-10'>
+                  <InplaceTextInput
+                    reset={resetCount}
+                    name='name'
+                    editable={editMode}
+                    initialValue={name}
+                    placeholder='Climb name'
+                  />
+                </h1>
                 <div className='pl-1'>
                   <div
                     className='flex items-center space-x-2 mt-6'
@@ -169,16 +177,19 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                 </div>
               </div>
 
-              <div id='border div' className='border border-slate-500 my-6' />
-
-              <div id='Climb Content' />
-
-              <div className='md:px-16 mb-16 w-full'>
-                <div className='flex justify-end'>
+              <div className='mt-16 lg:mt-0 lg:col-span-2 lg:pl-16 mb-16 w-full'>
+                <div className='flex justify-between'>
+                  <h3 className='mb-3'>Description</h3>
                   <LockToggle name='Edit' onChange={setEditMode} />
                 </div>
-                <h3 className='mb-3'>Description</h3>
-                <div><Editor reset={resetCount} initialValue={content.description} editable={editMode} name='description' /></div>
+                <div><Editor
+                  reset={resetCount}
+                  initialValue={content.description}
+                  editable={editMode}
+                  name='description'
+                  placeholder='Enter a description'
+                     />
+                </div>
                 {content.location !== ''
                   ? (
                     <>
@@ -359,5 +370,9 @@ const PageMeta = ({ climb, mediaListWithUsernames }: ClimbPageProps): JSX.Elemen
 }
 
 const Editor = dynamic(async () => await import('../../components/editor/InplaceEditor'), {
+  ssr: false
+})
+
+const InplaceTextInput = dynamic(async () => await import('../../components/editor/InplaceTextInput'), {
   ssr: false
 })
