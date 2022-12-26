@@ -10,7 +10,7 @@ interface Props {
 }
 
 /**
- * React Lexical plugin to set preview/editable mode
+ * React Lexical plugin to response to preview/editable mode change
  */
 export function PlainTextResetPlugin ({ initialValue, resetSignal, editable = false }: Props): any {
   const [editor] = useLexicalComposerContext()

@@ -39,6 +39,7 @@ export default function InplaceTextInput ({ initialValue = '', name, editable = 
         <HistoryPlugin />
         <SetModePlugin editable={editable} />
         <SingleLinePlugin />
+        <OnChangePlugin onChange={onChangeHandler} ignoreSelectionChange />
         <PlainTextResetPlugin initialValue={initialValue} editable={editable} resetSignal={reset} />
       </div>
     </LexicalComposer>

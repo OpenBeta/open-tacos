@@ -1,6 +1,4 @@
 import { useState, Dispatch, SetStateAction, useEffect } from 'react'
-import { LockClosedIcon, LockOpenIcon } from '@heroicons/react/24/solid'
-import * as Toggle from '@radix-ui/react-toggle'
 
 interface Props {
   name: string
@@ -8,16 +6,16 @@ interface Props {
 }
 
 export default function LockToggle ({ name, onChange }: Props): JSX.Element {
-  const [editable, setEditable] = useState(false)
+  const [editable, setEditable] = useState(true)
 
   useEffect(() => {
     const val = sessionStorage.getItem(`toggle-${name}`) === 'true'
-    console.log('#Useeffect', val)
     setEditable(val)
-    if (val) onChange(true)
-  }, [])
+    onChange(val)
+  }, [onChange])
+
   const onPressed = (): void => {
-    onChange(!editable)
+    onChange(curr => !curr)
     setEditable(curr => {
       sessionStorage.setItem(`toggle-${name}`, (!curr).toString())
       return !curr
@@ -25,8 +23,9 @@ export default function LockToggle ({ name, onChange }: Props): JSX.Element {
   }
 
   return (
-    <Toggle.Root className='Toggle btn btn-sm btn-ghost' aria-label='Toggle italic' pressed={editable} onPressedChange={onPressed}>
-      {editable ? <><LockOpenIcon className='w-5 h-5' /> <span className='ml-1.5 mt-1 text-xs font-light'>Edit mode</span></> : <><LockClosedIcon className='w-5 h-5' /> <span className='mt-1 ml-1.5 text-xs font-light'>Unlock to edit</span></>}
-    </Toggle.Root>
+    <label className='label cursor-pointer'>
+      <span className='label-text mr-2 text-xs'>Edit mode</span>
+      <input type='checkbox' name='editMode' className='toggle toggle-sm toggle-accent' checked={editable} onChange={onPressed} />
+    </label>
   )
 }

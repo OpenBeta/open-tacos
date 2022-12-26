@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { gql, useMutation } from '@apollo/client'
@@ -19,13 +19,12 @@ import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useSwipeable } from 'react-swipeable'
-import FavouriteButton from '../../components/users/FavouriteButton'
 import TickButton from '../../components/users/TickButton'
-import { useCanary } from '../../js/hooks'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
 import LockToggle from '../../components/ui/LockToggle'
 import { MUTATION_UPDATE_CLIMBS, ChangesInput } from '../../js/graphql/gql/contribs'
-// import InplaceTextInput from '../../components/editor/InplaceTextInput'
+import Toast from '../../components/ui/Toast'
+
 interface ClimbPageProps {
   climb: Climb
   mediaListWithUsernames: MediaBaseTag[]
@@ -60,14 +59,15 @@ export default ClimbPage
 const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
   const [editMode, setEditMode] = useState(false)
   const [resetCount, setResetCount] = useState(0)
+
   const router = useRouter()
   const session = useSession()
+  const toastRef = useRef<any>()
 
   const { id, name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
   const { climbId } = metadata
   const { description, location, protection } = content
   useState([leftClimb, rightClimb])
-  const isCanary = useCanary()
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => {
@@ -112,13 +112,19 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
         }
       }
     })
+    reset(formData)
   }
 
   const [updateClimbsApi] = useMutation<{ updateClimbsApi: string[] }, { input: ChangesInput }>(
     MUTATION_UPDATE_CLIMBS, {
       client: graphqlClient,
       onCompleted: (data) => {
-        reset(undefined, { keepValues: true })
+        void fetch(`/api/revalidate?c=${id}`)
+        toastRef?.current?.publish('Changes saved.  Thank you for your contribution! ✨')
+      },
+      onError: (error) => {
+        console.log(error)
+        toastRef?.current?.publish('Something unexpected happened. Please save again.', true)
       }
     }
   )
@@ -167,13 +173,12 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   </div>
 
                   <div className='flex flex-col pt-8'>
-                    <FavouriteButton climbId={climbId} />
-                    {isCanary && <TickButton climbId={climbId} name={name} grade={yds} />}
+                    <TickButton climbId={climbId} name={name} grade={yds} />
                   </div>
                 </div>
 
                 <div className='pl-1'>
-                  {isCanary && <ImportFromMtnProj isButton={false} />}
+                  <ImportFromMtnProj isButton={false} />
                 </div>
               </div>
 
@@ -182,25 +187,31 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   <h3 className='mb-3'>Description</h3>
                   <LockToggle name='Edit' onChange={setEditMode} />
                 </div>
-                <div><Editor
+                <Editor
                   reset={resetCount}
                   initialValue={content.description}
                   editable={editMode}
                   name='description'
                   placeholder='Enter a description'
-                     />
-                </div>
-                {content.location !== ''
-                  ? (
+                />
+
+                {(content.location?.trim() !== '' || editMode) &&
+                  (
                     <>
                       <h3 className='mb-3 mt-6'>Location</h3>
                       <div><Editor reset={resetCount} name='location' initialValue={content.location} editable={editMode} /></div>
 
                     </>
-                    )
-                  : ''}
-                <h3 className='mb-3 mt-6'>Protection</h3>
-                <div><Editor reset={resetCount} name='protection' initialValue={content.protection} editable={editMode} /></div>
+                  )}
+
+                {(content.protection?.trim() !== '' || editMode) &&
+                  (
+                    <>
+                      <h3 className='mb-3 mt-6'>Protection</h3>
+                      <Editor reset={resetCount} name='protection' initialValue={content.protection} editable={editMode} />
+                    </>
+                  )}
+
                 {editMode &&
                   <div className='mt-6 flex justify-end gap-4'>
                     <button
@@ -218,6 +229,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
           </form>
         </FormProvider>
       </div>
+      <Toast ref={toastRef} />
     </div>
   )
 }
