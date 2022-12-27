@@ -22,7 +22,7 @@ import { useSwipeable } from 'react-swipeable'
 import TickButton from '../../components/users/TickButton'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
 import LockToggle from '../../components/ui/LockToggle'
-import { MUTATION_UPDATE_CLIMBS, ChangesInput } from '../../js/graphql/gql/contribs'
+import { MUTATION_UPDATE_CLIMBS, UpdateClimbsInput } from '../../js/graphql/gql/contribs'
 import Toast from '../../components/ui/Toast'
 
 interface ClimbPageProps {
@@ -121,7 +121,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
     reset(formData, { keepValues: true })
   }
 
-  const [updateClimbsApi] = useMutation<{ updateClimbsApi: string[] }, { input: ChangesInput }>(
+  const [updateClimbsApi] = useMutation<{ updateClimbsApi: string[] }, { input: UpdateClimbsInput }>(
     MUTATION_UPDATE_CLIMBS, {
       client: graphqlClient,
       onCompleted: (data) => {

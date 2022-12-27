@@ -47,7 +47,7 @@ mutation ($uuid: String!, $areaName: String, $isDestination: Boolean, $shortCode
 }`
 
 export const MUTATION_UPDATE_CLIMBS = gql`
-mutation ($input: ChangesInput) {
+mutation ($input: UpdateClimbsInput) {
   updateClimbs(input: $input)
 }
 `
@@ -60,7 +60,7 @@ export interface IndividualClimbChangeInput {
   protection?: string
 }
 
-export interface ChangesInput {
+export interface UpdateClimbsInput {
   parentId: string
   changes: IndividualClimbChangeInput[]
 }
