@@ -81,7 +81,9 @@ const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeT
   if (fullDocument?.areaName == null) {
     return null
   }
-  const { areaName, uuid } = fullDocument as AreaType
+  const { areaName, uuid, metadata } = fullDocument as AreaType
+
+  const url = metadata.leaf ? `/crag/${uuid}` : `/areas/${uuid}`
 
   return (
     <div className='ml-2 flex gap-x-2'>
@@ -91,13 +93,12 @@ const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeT
         <div className=''>
           {dbOp === 'delete'
             ? <span>{areaName}</span>
-            : (<Link href={`/areas/${uuid}`}><a className='link link-hover'>{areaName}</a></Link>)}
+            : (<Link href={url}><a className='link link-hover'>{areaName}</a></Link>)}
         </div>
         <div className='text-xs text-base-300'>
           <UpdatedFields fields={updateDescription?.updatedFields} />
         </div>
       </div>
-      {/* <div className='row-span-2 col-span-2'>{JSON.stringify(updateDescription?.updatedFields)}</div> */}
     </div>
   )
 }

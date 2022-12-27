@@ -84,6 +84,10 @@ export const FRAGMENT_CHANGE_HISTORY = gql`
         ... on Area {
           areaName
           uuid
+          metadata {
+            leaf
+            areaId
+          }
         }
         ... on Climb {
           id
