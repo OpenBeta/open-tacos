@@ -6,6 +6,7 @@ import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import clx from 'classnames'
+import * as Portal from '@radix-ui/react-portal'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
@@ -134,10 +135,13 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
       }
     }
   )
-
+  const portalRef = useRef(null)
   return (
     <div className='lg:flex lg:justify-center w-full' {...swipeHandlers}>
       <div className='px-4 max-w-screen-xl w-full'>
+        <Portal.Root container={portalRef.current}>
+          <LockToggle name='Edit' onChange={setEditMode} />
+        </Portal.Root>
         <BreadCrumbs
           pathTokens={pathTokens}
           ancestors={ancestors}
@@ -189,9 +193,9 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
               </div>
 
               <div className='mt-16 lg:mt-0 lg:col-span-2 lg:pl-16 mb-16 w-full'>
-                <div className='flex justify-between'>
-                  <h3 className='mb-3'>Description</h3>
-                  <LockToggle name='Edit' onChange={setEditMode} />
+                <div className='mb-3 flex justify-between items-center'>
+                  <h3>Description</h3>
+                  <div ref={portalRef} />
                 </div>
                 <Editor
                   reset={resetSignal}
