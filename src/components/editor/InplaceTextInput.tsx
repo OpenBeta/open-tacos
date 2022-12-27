@@ -9,7 +9,6 @@ import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 
 import { editorConfigPlain } from './editorConfig'
 import onChange from './onChange'
-import { SetModePlugin } from './plugins/SetModePlugin'
 import { SingleLinePlugin } from './plugins/SingleLinePlugin'
 import { PlainTextResetPlugin } from './plugins/PlainTextResetPlugin'
 import { Placeholder } from './InplaceEditor'
@@ -37,7 +36,6 @@ export default function InplaceTextInput ({ initialValue = '', name, editable = 
           ErrorBoundary={LexicalErrorBoundary}
         />
         <HistoryPlugin />
-        <SetModePlugin editable={editable} />
         <SingleLinePlugin />
         <OnChangePlugin onChange={onChangeHandler} ignoreSelectionChange />
         <PlainTextResetPlugin initialValue={initialValue} editable={editable} resetSignal={reset} />

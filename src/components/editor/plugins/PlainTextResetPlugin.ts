@@ -1,5 +1,5 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { $getRoot, $createTextNode, $createParagraphNode } from 'lexical'
 
@@ -13,13 +13,19 @@ interface Props {
  * React Lexical plugin to response to preview/editable mode change
  */
 export function PlainTextResetPlugin ({ initialValue, resetSignal, editable = false }: Props): any {
+  const [previous, setPrevious] = useState(resetSignal)
+
   const [editor] = useLexicalComposerContext()
+
   useEffect(() => {
-    if (!editable || resetSignal === 0) return
-    editor.update(() =>
+    if (!editable || resetSignal === previous) return
+
+    editor.update(() => {
+      setPrevious(resetSignal)
       $createInitialPlainTextState(initialValue)
+    }
     )
-  }, [editor, editable, resetSignal])
+  }, [resetSignal])
 
   return null
 }
@@ -30,7 +36,7 @@ export const $createInitialPlainTextState = (plainText: string): void => {
   paragraph.append(
     $createTextNode(plainText)
   )
-  root.clear()
+  root
+    .clear()
     .append(paragraph)
-  root.selectEnd()
 }

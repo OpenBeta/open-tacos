@@ -57,28 +57,21 @@ const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
 export default ClimbPage
 
 const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
+  const { id, name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
+  const { climbId } = metadata
+
   const [editMode, setEditMode] = useState(false)
-  const [resetCount, setResetCount] = useState(0)
-  const [cache, setCache] = useState({
-    name: '',
-    description: '',
-    location: '',
-    protection: ''
-  })
+  const [resetSignal, setResetSignal] = useState(0)
+  const [cache, setCache] = useState({ name, ...content })
 
   const router = useRouter()
   const session = useSession()
   const toastRef = useRef<any>()
 
-  const { id, name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
-  const { climbId } = metadata
-
   useEffect(() => {
-    setCache({
-      name,
-      ...content
-    })
-  }, [])
+    setCache({ name, ...content })
+  }, [name, content])
+
   useState([leftClimb, rightClimb])
 
   const swipeHandlers = useSwipeable({
@@ -125,7 +118,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
       }
     })
     setCache({ ...formData })
-    reset(formData)
+    reset(formData, { keepValues: true })
   }
 
   const [updateClimbsApi] = useMutation<{ updateClimbsApi: string[] }, { input: ChangesInput }>(
@@ -163,7 +156,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
 
                 <h1 className='text-4xl md:text-5xl mr-10'>
                   <InplaceTextInput
-                    reset={resetCount}
+                    reset={resetSignal}
                     name='name'
                     editable={editMode}
                     initialValue={cache.name}
@@ -201,7 +194,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   <LockToggle name='Edit' onChange={setEditMode} />
                 </div>
                 <Editor
-                  reset={resetCount}
+                  reset={resetSignal}
                   initialValue={cache.description}
                   editable={editMode}
                   name='description'
@@ -212,7 +205,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   (
                     <>
                       <h3 className='mb-3 mt-6'>Location</h3>
-                      <div><Editor reset={resetCount} name='location' initialValue={cache.location} editable={editMode} /></div>
+                      <div><Editor reset={resetSignal} name='location' initialValue={cache.location} editable={editMode} /></div>
 
                     </>
                   )}
@@ -221,7 +214,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   (
                     <>
                       <h3 className='mb-3 mt-6'>Protection</h3>
-                      <Editor reset={resetCount} name='protection' initialValue={cache.protection} editable={editMode} />
+                      <Editor reset={resetSignal} name='protection' initialValue={cache.protection} editable={editMode} />
                     </>
                   )}
 
@@ -229,7 +222,8 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   <div className='mt-6 flex justify-end gap-4'>
                     <button
                       className={clx('btn btn-sm btn-link', isDirty ? '' : 'btn-disabled')} type='reset' onClick={() => {
-                        setResetCount(Date.now())
+                        reset({ ...cache }, { keepValues: true })
+                        setResetSignal(Date.now())
                       }}
                     >
                       Reset
