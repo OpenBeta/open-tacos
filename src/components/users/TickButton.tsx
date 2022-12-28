@@ -15,11 +15,10 @@ interface Props {
 function IsTicked ({ loading, onClick }): JSX.Element {
   return (
     <button
+      type='button'
       disabled={loading}
       onClick={onClick}
-      className='mt-2 text-center p-2 border-2 rounded-xl border-ob-primary transition
-        text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
-        hover:text-white w-64 font-bold'
+      className='btn btn-primary btn-sm'
     >👀 View Ticks
     </button>
   )
@@ -66,11 +65,10 @@ export default function TickButton ({ climbId, areaId, name, grade }: Props): JS
     <>
       {!isTicked &&
         <button
+          type='button'
           disabled={loading}
           onClick={() => setOpen(true)}
-          className='mt-2 text-center p-2 border-2 rounded-xl border-ob-primary transition
-        text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
-        hover:text-white w-64 font-bold'
+          className='btn btn-primary btn-sm'
         >
           {loading
             ? (

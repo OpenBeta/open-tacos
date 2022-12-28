@@ -95,10 +95,6 @@ html {
   @apply text-4xl font-bold font-sans my-4 !important;
 }
 
-code {
-  @apply text-sm font-mono bg-green-100 -mx-1.5 px-1.5 py-1.5 rounded !important;
-}
-
 p {
   @apply block mb-4 text-base text-slate-900 leading-relaxed;
 }
@@ -211,6 +207,41 @@ p {
   }
   .dropdown-item > *:last-child {
     @apply mb-1;
+  }
+
+  .editor-container {
+    @apply -mx-2 p-2 rounded-lg ;
+  }
+
+  .editor-input {
+    @apply  -m-2 p-2 rounded-lg focus:bg-info/20 border-none outline-none !important;
+  }
+
+  /* rounded-lg focus:bg-amber-50 focus:transition-colors focus:duration-500 focus:ease-in-out  */
+  .editor-container {
+    position: relative;
+  }
+
+  .editor-placeholder {
+    overflow: hidden;
+    position: absolute;
+    user-select: none;
+    pointer-events: none;
+    @apply top-2.5 left-3 text-base-300 text-opacity-50 italic;
+  }
+
+  code {
+    @apply font-sans text-base text-slate-900 leading-relaxed !important;
+  }
+  p.editor-paragraph:last-child {
+    margin-bottom: 0;
+  }
+
+  p.editor-single-paragraph {
+    margin-bottom: 0;
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
   }
 }
 

@@ -71,26 +71,6 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
 }
 
 export async function getStaticPaths (): Promise<any> {
-  // Temporarily disable pre-rendering
-  // https://github.com/OpenBeta/openbeta-graphql/issues/26
-  // const rs = await graphqlClient.query<AreaResponseType>({
-  //   query: gql`query EdgeAreasQuery($filter: Filter) {
-  //   areas(filter: $filter) {
-  //     area_name
-  //     metadata {
-  //       area_id
-  //     }
-  //   }
-  // }`,
-  //   variables: {
-  //     filter: { leaf_status: { isLeaf: true } }
-  //   }
-  // })
-
-  // const paths = rs.data.areas.map((area: AreaType) => ({
-  //   params: { id: area.metadata.area_id }
-  // }))
-
   return {
     paths: [],
     fallback: true

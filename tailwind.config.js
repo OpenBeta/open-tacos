@@ -46,6 +46,7 @@ module.exports = {
         accent: '#F15E40', // OB primary brand
         neutral: '#111826',
         info: '#65C3C8',
+        error: '#ec4899',
         'base-content': '#111827', // gray-900
         'base-300': '#4B5563', // gray-600
         'base-200': '#E5E7EB', // gray-200
