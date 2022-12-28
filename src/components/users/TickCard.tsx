@@ -42,7 +42,7 @@ export default function TickCard ({ tickId, ticks, setTicks, dateClimbed, notes,
           onConfirm={remove}
           hideTitle
           button={(
-            <button>
+            <button type='button'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 className='h-10 w-10 md:w-8 md:h-8 md:marker:w-8 text-rose-100 bg-rose-500 ring-rose-500 hover:bg-rose-600

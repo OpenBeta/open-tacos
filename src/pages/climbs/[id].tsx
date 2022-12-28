@@ -7,6 +7,8 @@ import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import clx from 'classnames'
 import * as Portal from '@radix-ui/react-portal'
+import { useHotkeys } from 'react-hotkeys-hook'
+import { useSwipeable } from 'react-swipeable'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
@@ -18,11 +20,9 @@ import RouteTypeChips from '../../components/ui/RouteTypeChips'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
-import { useHotkeys } from 'react-hotkeys-hook'
-import { useSwipeable } from 'react-swipeable'
 import TickButton from '../../components/users/TickButton'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
-import LockToggle from '../../components/ui/LockToggle'
+import LockToggle from '../../components/editor/EditModeToggle'
 import { MUTATION_UPDATE_CLIMBS, UpdateClimbsInput } from '../../js/graphql/gql/contribs'
 import Toast from '../../components/ui/Toast'
 
@@ -140,7 +140,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
     <div className='lg:flex lg:justify-center w-full' {...swipeHandlers}>
       <div className='px-4 max-w-screen-xl w-full'>
         <Portal.Root container={portalRef.current}>
-          <LockToggle name='Edit' onChange={setEditMode} />
+          <LockToggle onChange={setEditMode} />
         </Portal.Root>
         <BreadCrumbs
           pathTokens={pathTokens}
@@ -182,7 +182,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                     <strong>FA: </strong>{fa}
                   </div>
 
-                  <div className='flex flex-col pt-8'>
+                  <div className='pt-8'>
                     <TickButton climbId={climbId} name={name} grade={yds} />
                   </div>
                 </div>
@@ -223,16 +223,23 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   )}
 
                 {editMode &&
-                  <div className='mt-6 flex justify-end gap-4'>
+                  <div className='mt-12 flex justify-center md:justify-end flex-wrap-reverse gap-8'>
+                    {/* md and wider screen: row, right-justify; smaller: column, center-justify */}
                     <button
-                      className={clx('btn btn-sm btn-link', isDirty ? '' : 'btn-disabled')} type='reset' onClick={() => {
+                      className={clx('btn btn-sm btn-link', isDirty ? '' : 'btn-disabled no-underline')} type='reset' onClick={() => {
                         reset({ ...cache }, { keepValues: true })
                         setResetSignal(Date.now())
                       }}
                     >
                       Reset
                     </button>
-                    <button type='submit' disabled={isSubmitting || !isDirty} className='btn btn-primary btn-solid btn-sm'>&nbsp;Save&nbsp;</button>
+                    <button
+                      type='submit'
+                      disabled={isSubmitting || !isDirty}
+                      className={clx('btn btn-primary btn-solid btn-sm btn-block md:btn-wide', isSubmitting ? 'animate-pulse' : '')}
+                    >
+                      {isSubmitting ? 'Saving...' : 'Save'}
+                    </button>
                   </div>}
               </div>
 

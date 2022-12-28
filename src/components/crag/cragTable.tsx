@@ -7,8 +7,7 @@ import ButtonGroup from '../../components/ui/ButtonGroup'
 import { Button } from '../../components/ui/Button'
 import { summarize } from './cragSummary'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import { useCanary } from '../../js/hooks'
-import { APIFavouriteCollections } from '../../pages/api/user/fav'
+// import { APIFavouriteCollections } from '../../pages/api/user/fav'
 
 interface CragTableProps {
   climbs: Climb[]
@@ -115,21 +114,20 @@ export default function CragTable (props: CragTableProps): JSX.Element {
   const [selectedClimbSort, setSelectedClimbSort] = useState<number>(0)
   const [isEditing, setIsEditing] = useState(false)
   const [sortedRoutes, setSortedRoutes] = useState<Climb[]>([])
-  const [favs, setFavs] = useState<string[]>([])
-  const canary = useCanary()
+  const [favs] = useState<string[]>([])
   const { status } = useSession()
 
-  useEffect(() => {
-    fetch('/api/user/fav')
-      .then(async (res) => await res.json())
-      .then((collections: APIFavouriteCollections) => {
-        const f = collections.climbCollections.favourites
-        if (f !== undefined) {
-          setFavs(f)
-        }
-      })
-      .catch(console.error)
-  }, [])
+  // useEffect(() => {
+  //   fetch('/api/user/fav')
+  //     .then(async (res) => await res.json())
+  //     .then((collections: APIFavouriteCollections) => {
+  //       const f = collections.climbCollections.favourites
+  //       if (f !== undefined) {
+  //         setFavs(f)
+  //       }
+  //     })
+  //     .catch(console.error)
+  // }, [])
 
   useEffect(() => {
     setSortedRoutes(
@@ -138,7 +136,7 @@ export default function CragTable (props: CragTableProps): JSX.Element {
   }, [props.climbs, selectedClimbSort])
 
   const canChangeOrder =
-    canary && status === 'authenticated' && selectedClimbSort === 0
+    false && status === 'authenticated' && selectedClimbSort === 0
 
   return (
     <>

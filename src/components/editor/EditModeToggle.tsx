@@ -1,11 +1,10 @@
 import { useState, Dispatch, SetStateAction, useEffect } from 'react'
 import { useSession, signIn } from 'next-auth/react'
 interface Props {
-  name: string
   onChange: Dispatch<SetStateAction<boolean>>
 }
 
-export default function LockToggle ({ name, onChange }: Props): JSX.Element {
+export default function LockToggle ({ onChange }: Props): JSX.Element {
   const [editable, setEditable] = useState(false)
   const session = useSession()
 
@@ -16,7 +15,7 @@ export default function LockToggle ({ name, onChange }: Props): JSX.Element {
   }, [session, editable])
 
   useEffect(() => {
-    const val = sessionStorage.getItem(`toggle-${name}`) === 'true'
+    const val = sessionStorage.getItem('editMode') === 'true'
     setEditable(val)
     onChange(val)
   }, [onChange])
@@ -24,7 +23,7 @@ export default function LockToggle ({ name, onChange }: Props): JSX.Element {
   const onPressed = (): void => {
     onChange(curr => !curr)
     setEditable(curr => {
-      sessionStorage.setItem(`toggle-${name}`, (!curr).toString())
+      sessionStorage.setItem('editMode', (!curr).toString())
       return !curr
     })
   }

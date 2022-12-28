@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react'
 import { AreaMetadataType, CountByGroupType } from '../../js/types'
-import FavouriteButton from '../users/FavouriteButton'
+// import FavouriteButton from '../users/FavouriteButton'
 
 export interface CragHeroProps {
   title: string
@@ -159,9 +159,10 @@ export default function CragSummary (props: CragHeroProps): JSX.Element {
         </div>
       </a>
 
-      <div className='flex-1 flex justify-end'>
+      {/* <div className='flex-1 flex justify-end'>
+        // vnguyen: temporarily removed until we have view favorites feature
         <FavouriteButton areaId={props.areaMeta.areaId} />
-      </div>
+      </div> */}
 
       <div className='mt-6'>
         <Description cont={props.description} />
