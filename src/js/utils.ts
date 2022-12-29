@@ -206,3 +206,10 @@ export const urlResolver = (type: number, dest: string): string | null => {
       return null
   }
 }
+
+/**
+ * Create a Google Maps link from latitude and longitude
+ */
+export const getMapHref = ({ lat, lng }: { lat: number, lng: number}): string => {
+  return `https://www.google.com/maps/place/${lat},${lng}`
+}

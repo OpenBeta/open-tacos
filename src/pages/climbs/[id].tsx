@@ -5,7 +5,6 @@ import { gql, useMutation } from '@apollo/client'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
-import clx from 'classnames'
 import * as Portal from '@radix-ui/react-portal'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useSwipeable } from 'react-swipeable'
@@ -22,9 +21,10 @@ import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import TickButton from '../../components/users/TickButton'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
-import LockToggle from '../../components/editor/EditModeToggle'
+import EditModeToggle from '../../components/editor/EditModeToggle'
 import { MUTATION_UPDATE_CLIMBS, UpdateClimbsInput } from '../../js/graphql/gql/contribs'
 import Toast from '../../components/ui/Toast'
+import { FormSaveAction } from '../../components/editor/FormSaveAction'
 
 interface ClimbPageProps {
   climb: Climb
@@ -140,7 +140,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
     <div className='lg:flex lg:justify-center w-full' {...swipeHandlers}>
       <div className='px-4 max-w-screen-xl w-full'>
         <Portal.Root container={portalRef.current}>
-          <LockToggle onChange={setEditMode} />
+          <EditModeToggle onChange={setEditMode} />
         </Portal.Root>
         <BreadCrumbs
           pathTokens={pathTokens}
@@ -222,25 +222,14 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                     </>
                   )}
 
-                {editMode &&
-                  <div className='mt-12 flex justify-center md:justify-end flex-wrap-reverse gap-8'>
-                    {/* md and wider screen: row, right-justify; smaller: column, center-justify */}
-                    <button
-                      className={clx('btn btn-sm btn-link', isDirty ? '' : 'btn-disabled no-underline')} type='reset' onClick={() => {
-                        reset({ ...cache }, { keepValues: true })
-                        setResetSignal(Date.now())
-                      }}
-                    >
-                      Reset
-                    </button>
-                    <button
-                      type='submit'
-                      disabled={isSubmitting || !isDirty}
-                      className={clx('btn btn-primary btn-solid btn-sm btn-block md:btn-wide', isSubmitting ? 'animate-pulse' : '')}
-                    >
-                      {isSubmitting ? 'Saving...' : 'Save'}
-                    </button>
-                  </div>}
+                <FormSaveAction
+                  cache={cache}
+                  editMode={editMode}
+                  isDirty={isDirty}
+                  isSubmitting={isSubmitting}
+                  resetHookFn={reset}
+                  onReset={() => setResetSignal(Date.now())}
+                />
               </div>
 
             </div>

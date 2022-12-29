@@ -5,7 +5,7 @@ import { Climb } from '../../js/types'
 import { getSetTypes } from '../ui/RouteTypeChips'
 import ButtonGroup from '../../components/ui/ButtonGroup'
 import { Button } from '../../components/ui/Button'
-import { summarize } from './cragSummary'
+import { summarize } from '../ui/Description'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 // import { APIFavouriteCollections } from '../../pages/api/user/fav'
 
