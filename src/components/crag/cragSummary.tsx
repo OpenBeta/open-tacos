@@ -75,7 +75,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
   const submitHandler = async (formData: SummaryHTMLFormProps): Promise<void> => {
     const { uuid, areaName, description, latlng } = formData
     const [lat, lng] = latlng.split(',')
-    const rs = await updateArea({
+    await updateArea({
       variables: {
         uuid,
         areaName,
