@@ -1,9 +1,22 @@
-import React from 'react'
-import { AreaMetadataType, CountByGroupType } from '../../js/types'
-import Description from '../ui/Description'
+import React, { useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
+import { useForm, FormProvider } from 'react-hook-form'
+import { useSession } from 'next-auth/react'
+import { GlobeAltIcon } from '@heroicons/react/24/outline'
+import { useMutation } from '@apollo/client'
+
+import { AreaMetadataType, CountByGroupType, AreaUpdatableFieldsType } from '../../js/types'
+import EditModeToggle from '../../components/editor/EditModeToggle'
+import { FormSaveAction } from '../../components/editor/FormSaveAction'
+import { MUTATION_UPDATE_AREA, UpdateAreaReturnType } from '../../js/graphql/gql/contribs'
+import { graphqlClient } from '../../js/graphql/Client'
+import Toast from '../../components/ui/Toast'
+import { getMapHref } from '../../js/utils'
+import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
 // import FavouriteButton from '../users/FavouriteButton'
 
 export interface CragHeroProps {
+  uuid: string
   title: string
   latitude: number
   longitude: number
@@ -14,107 +27,160 @@ export interface CragHeroProps {
   areaMeta: AreaMetadataType
 }
 
-/**  For a given number of allowed words, quantize to the nearest
- * sentence termination in either direction.
- */
-export function summarize (s: string, n: number): [string, string] {
-  // traverse in either direction.
-  const words = s.split(' ')
-  const quantized: string[] = []
+type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description'>> & { uuid: string, latlng: string }
 
-  if (words.length <= n || words.length === 0) {
-    return [s, '']
-  }
-
-  function distanceToTermination (ordinal: number): [number, number] {
-    function distDir (direction: -1 | 1): number {
-      let dist = 0
-      for (let i = ordinal; i < words.length && i >= 0; i += direction) {
-        if (words[i].endsWith('.')) {
-          return dist
-        }
-
-        dist++
-      }
-
-      return dist
-    }
-    return [distDir(1), distDir(-1)]
-  }
-
-  if (!s.includes('.')) {
-    return [words.slice(0, n).join(' '), '']
-  }
-
-  for (const word of words) {
-    if (quantized.length >= n) {
-      // Check the distance to next sentence termination. (in both directions)
-      const [dforward, dbackward] = distanceToTermination(quantized.length - 1)
-
-      // If it is nearer to remove elements until no sentence is interrupted,
-      // then pop elements until we hit a sentence termination.
-      if (dbackward < dforward && quantized.length > 1) {
-        while (quantized.length > 0 && !quantized[quantized.length - 1].endsWith('.')) {
-          quantized.pop()
-        }
-      } else {
-        while (quantized[quantized.length - 1] !== undefined && !quantized[quantized.length - 1].endsWith('.')) {
-          quantized.push(words[quantized.length - 1])
-        }
-      }
-
-      break
-    }
-
-    quantized.push(word)
-  }
-
-  return [quantized.join(' '), words.slice(quantized.length).join(' ')]
-}
-
-/**
- * Please note that this is an entirely untested function. There is absolutely
- * no guarentee of url-encode safety or link integrity.
- *
- * It seems to work, but this is not an API call or anything... just
- * a query lookup
- */
-function getMapHref (lat: number, lng: number): string {
-  return `https://www.google.com/maps/search/${lng},+${lat}`
-}
+type UpdateAPIType = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng'>> & { uuid: string }
 
 /**
  * Responsive summary of major attributes for a crag / boulder.
  * This could actually be extended to giving area summaries as well.
  */
-export default function CragSummary (props: CragHeroProps): JSX.Element {
+export default function CragSummary ({ uuid, title: initTitle, description: initDescription, latitude: initLat, longitude: initLng }: CragHeroProps): JSX.Element {
+  const toastRef = useRef<any>(null)
+  const session = useSession()
+  const [resetSignal, setResetSignal] = useState(0)
+  const [editMode, setEditMode] = useState(false)
+  const [cache, setCache] = useState<SummaryHTMLFormProps>({
+    uuid,
+    areaName: initTitle,
+    description: initDescription,
+    latlng: `${initLat.toString()},${initLng.toString()}`
+  })
+
+  const [updateArea] = useMutation<{ updateArea: UpdateAreaReturnType }, UpdateAPIType>(
+    MUTATION_UPDATE_AREA, {
+      client: graphqlClient,
+      onCompleted: () => {
+        void fetch(`/api/revalidate?s=${uuid}`)
+        toastRef?.current?.publish('Changes saved.  Thank you for your contribution! ✨')
+      },
+      onError: (error) => {
+        console.log(error)
+        toastRef?.current?.publish('Something unexpected happened. Please save again.', true)
+      }
+    }
+  )
+
+  // Form declaration
+  const form = useForm<SummaryHTMLFormProps>(
+    {
+      mode: 'onBlur',
+      defaultValues: { ...cache }
+    })
+
+  const { handleSubmit, formState: { isSubmitting, isDirty }, reset, watch } = form
+
+  const currentLatLngStr = watch('latlng')
+
+  const submitHandler = async (formData: SummaryHTMLFormProps): Promise<void> => {
+    const { uuid, areaName, description, latlng } = formData
+    const [lat, lng] = latlng.split(',')
+    await updateArea({
+      variables: {
+        uuid,
+        areaName,
+        description,
+        lat: parseFloat(lat),
+        lng: parseFloat(lng)
+      },
+      context: {
+        headers: {
+          authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
+        }
+      }
+    })
+    setCache({ ...formData })
+    reset(formData, { keepValues: true })
+  }
+
+  const { areaName, description } = cache
+  const latlngPair = parseLatLng(currentLatLngStr)
   return (
-    <div className=''>
-      <h1 className='text-3xl md:text-4xl lg:text-5xl font-bold max-w-sm'>
-        {props.title}
-      </h1>
+    <>
+      <div className='flex justify-end'>
+        <EditModeToggle onChange={setEditMode} />
+      </div>
+      <FormProvider {...form}>
+        <form onSubmit={handleSubmit(submitHandler)}>
+          <h1 className='mt-4 text-3xl md:text-4xl lg:text-5xl font-bold lg:max-w-lg'>
+            <InplaceTextInput
+              initialValue={areaName}
+              name='areaName'
+              reset={resetSignal}
+              editable={editMode}
+              placeholder='Area name'
+              rules={AREA_NAME_FORM_VALIDATION_RULES}
+            />
+          </h1>
 
-      <a
-        href={getMapHref(props.latitude, props.longitude)}
-        target='blank'
-      >
-        <div
-          className='text-slate-700 tracking-wider hover:underline
-          hover:text-blue-700 cursor-pointer text-sm'
-          title='Click to view on google maps'
-        >
-          {props.latitude.toFixed(5)}, {props.longitude.toFixed(5)}
-        </div>
-      </a>
+          {editMode
+            ? <InplaceTextInput
+                initialValue={currentLatLngStr}
+                name='latlng'
+                reset={resetSignal}
+                editable={editMode}
+                className='text-xs'
+                placeholder='Enter a latitude,longitude. Ex: 46.433333,11.85'
+                rules={AREA_LATLNG_FORM_VALIDATION_RULES}
+              />
+            : (
+                latlngPair != null && (
+                  <a
+                    href={getMapHref({ lat: latlngPair[0], lng: latlngPair[1] })} target='blank' className='hover:underline
+              text-xs inline-flex items-center gap-2'
+                  >
+                    <GlobeAltIcon className='w-4 h-4' />
+                    {latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}
+                  </a>)
+              )}
 
-      {/* <div className='flex-1 flex justify-end'>
+          {/* <div className='flex-1 flex justify-end'>
         // vnguyen: temporarily removed until we have view favorites feature
         <FavouriteButton areaId={props.areaMeta.areaId} />
       </div> */}
 
-      <div className='mt-6'>
-        <Description cont={props.description} maxLength={100} />
-      </div>
-    </div>
+          <div className='mt-6'>
+            <InplaceEditor
+              initialValue={description}
+              name='description'
+              reset={resetSignal}
+              editable={editMode}
+              placeholder='Area description'
+              rules={AREA_DESCRIPTION_FORM_VALIDATION_RULES}
+            />
+          </div>
+          <FormSaveAction
+            cache={cache}
+            editMode={editMode}
+            isDirty={isDirty}
+            isSubmitting={isSubmitting}
+            resetHookFn={reset}
+            onReset={() => setResetSignal(Date.now())}
+          />
+        </form>
+      </FormProvider>
+      <Toast ref={toastRef} />
+    </>
   )
 }
+
+/**
+ * Split lat,lng string into lat and lng tuple.  Return null if string is invalid.
+ */
+const parseLatLng = (s: string): [number, number] | null => {
+  const [latStr, lngStr] = s.split(',')
+  const lat = parseFloat(latStr)
+  const lng = parseFloat(lngStr)
+  if (Number.isNaN(lat) || Number.isNaN(lng)) {
+    return null
+  }
+  return [lat, lng]
+}
+
+const InplaceEditor = dynamic(async () => await import('../../components/editor/InplaceEditor'), {
+  ssr: false
+})
+
+const InplaceTextInput = dynamic(async () => await import('../../components/editor/InplaceTextInput'), {
+  ssr: false
+})

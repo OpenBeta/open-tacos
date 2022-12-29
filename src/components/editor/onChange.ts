@@ -1,12 +1,10 @@
 import { EditorState, LexicalEditor, $getRoot } from 'lexical'
-import { UseFormSetValue, FieldValues } from 'react-hook-form'
+import { ControllerRenderProps } from 'react-hook-form'
 
-export default function onChange (editorState: EditorState, editor: LexicalEditor, setValue: UseFormSetValue<FieldValues>, name: string): void {
+export default function onChange (editorState: EditorState, editor: LexicalEditor, field: ControllerRenderProps, name: string): void {
+  if (field?.onChange == null) return
   editorState.read(() => {
     const root = $getRoot()
-    setValue(name, root.getTextContent()?.trim(), {
-      shouldDirty: true,
-      shouldTouch: true
-    })
+    field?.onChange(root.getTextContent()?.trim())
   })
 }

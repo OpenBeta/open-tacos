@@ -1,5 +1,6 @@
 import * as React from 'react'
 import Description from '../../ui/Description'
+import { getMapHref } from '../../../js/utils'
 
 export interface PanelHeaderProps {
   title: string
@@ -7,17 +8,6 @@ export interface PanelHeaderProps {
   longitude: number
   description: string
   galleryRef?: string
-}
-
-/**
- * Please note that this is an entirely untested function. There is absolutely
- * no guarentee of url-encode safety or link integrity.
- *
- * It seems to work, but this is not an API call or anything... just
- * a query lookup
- */
-function getMapHref (lat: number, lng: number): string {
-  return `https://www.google.com/maps/place/${lat},${lng}`
 }
 
 export function PanelHeader (props: PanelHeaderProps): JSX.Element {
@@ -31,7 +21,7 @@ export function PanelHeader (props: PanelHeaderProps): JSX.Element {
           {props.title}
         </h1>
         <a
-          href={getMapHref(props.latitude, props.longitude)}
+          href={getMapHref({ lat: props.latitude, lng: props.longitude })}
           target='blank'
         >
           <div

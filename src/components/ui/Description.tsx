@@ -1,5 +1,4 @@
 import React, { useMemo, useRef, useState } from 'react'
-import { summarize } from '../crag/cragSummary'
 
 interface Props { cont: string, maxLength: number }
 
@@ -8,7 +7,7 @@ interface Props { cont: string, maxLength: number }
  * * `cont`: content to display in paragraph
  * * `maxLength`: max number of words until truncated to nearest sentence
  */
-function Description ({ cont, maxLength }: Props): JSX.Element {
+export default function Description ({ cont, maxLength }: Props): JSX.Element {
   const [showFull, setShow] = useState(false)
   const [content, overflowText] = useMemo(() => summarize(cont, maxLength), [cont])
   const overflow = overflowText.length > 0
@@ -61,4 +60,60 @@ function Description ({ cont, maxLength }: Props): JSX.Element {
   )
 }
 
-export default Description
+/**  For a given number of allowed words, quantize to the nearest
+ * sentence termination in either direction.
+ */
+export function summarize (s: string, n: number): [string, string] {
+  // traverse in either direction.
+  const words = s.split(' ')
+  const quantized: string[] = []
+
+  if (words.length <= n || words.length === 0) {
+    return [s, '']
+  }
+
+  function distanceToTermination (ordinal: number): [number, number] {
+    function distDir (direction: -1 | 1): number {
+      let dist = 0
+      for (let i = ordinal; i < words.length && i >= 0; i += direction) {
+        if (words[i].endsWith('.')) {
+          return dist
+        }
+
+        dist++
+      }
+
+      return dist
+    }
+    return [distDir(1), distDir(-1)]
+  }
+
+  if (!s.includes('.')) {
+    return [words.slice(0, n).join(' '), '']
+  }
+
+  for (const word of words) {
+    if (quantized.length >= n) {
+      // Check the distance to next sentence termination. (in both directions)
+      const [dforward, dbackward] = distanceToTermination(quantized.length - 1)
+
+      // If it is nearer to remove elements until no sentence is interrupted,
+      // then pop elements until we hit a sentence termination.
+      if (dbackward < dforward && quantized.length > 1) {
+        while (quantized.length > 0 && !quantized[quantized.length - 1].endsWith('.')) {
+          quantized.pop()
+        }
+      } else {
+        while (quantized[quantized.length - 1] !== undefined && !quantized[quantized.length - 1].endsWith('.')) {
+          quantized.push(words[quantized.length - 1])
+        }
+      }
+
+      break
+    }
+
+    quantized.push(word)
+  }
+
+  return [quantized.join(' '), words.slice(quantized.length).join(' ')]
+}

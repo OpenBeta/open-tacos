@@ -17,11 +17,11 @@ export default function CragLayout (props: CragLayoutProps): JSX.Element {
     <div className='w-full'>
       <PhotoMontage isHero photoList={props.media} />
 
-      <div className='mt-8'>
+      <div className='mt-4'>
         <CragSummary {...props} />
       </div>
 
-      <div className='mt-6'>
+      <div className='mt-12'>
         <CragTable title='Climbs' climbs={props.climbs} />
       </div>
     </div>

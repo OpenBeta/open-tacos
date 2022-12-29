@@ -37,7 +37,7 @@ const CragPage: NextPage<CragProps> = (props) => {
 export default CragPage
 
 const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
-  const { areaName, aggregate, climbs, metadata, content, ancestors, pathTokens } = area
+  const { uuid, areaName, aggregate, climbs, metadata, content, ancestors, pathTokens } = area
 
   return (
     <>
@@ -45,10 +45,11 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
         <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
         <div className='mt-6' />
         <CragLayout
+          uuid={uuid}
           title={areaName}
           description={content.description}
-          latitude={metadata.lng}
-          longitude={metadata.lat}
+          latitude={metadata.lat}
+          longitude={metadata.lng}
           climbs={climbs}
           areaMeta={metadata}
           ancestors={ancestors}
