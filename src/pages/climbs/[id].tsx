@@ -11,7 +11,7 @@ import { useSwipeable } from 'react-swipeable'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, Climb, MediaBaseTag } from '../../js/types'
+import { AreaType, Climb, MediaBaseTag, RulesType } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
@@ -25,6 +25,21 @@ import EditModeToggle from '../../components/editor/EditModeToggle'
 import { MUTATION_UPDATE_CLIMBS, UpdateClimbsInput } from '../../js/graphql/gql/contribs'
 import Toast from '../../components/ui/Toast'
 import { FormSaveAction } from '../../components/editor/FormSaveAction'
+import { AREA_NAME_FORM_VALIDATION_RULES } from '../../components/edit/EditAreaForm'
+
+export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
+  maxLength: {
+    value: 3500,
+    message: 'Maxium 3500 characters.'
+  }
+}
+
+export const CLIMB_LOCATION_FORM_VALIDATION_RULES: RulesType = {
+  maxLength: {
+    value: 800,
+    message: 'Maxium 800 characters.'
+  }
+}
 
 interface ClimbPageProps {
   climb: Climb
@@ -165,6 +180,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                     editable={editMode}
                     initialValue={cache.name}
                     placeholder='Climb name'
+                    rules={AREA_NAME_FORM_VALIDATION_RULES}
                   />
                 </h1>
                 <div className='pl-1'>
@@ -203,13 +219,21 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   editable={editMode}
                   name='description'
                   placeholder='Enter a description'
+                  rules={CLIMB_DESCRIPTION_FORM_VALIDATION_RULES}
                 />
 
                 {(cache.location?.trim() !== '' || editMode) &&
                   (
                     <>
                       <h3 className='mb-3 mt-6'>Location</h3>
-                      <div><Editor reset={resetSignal} name='location' initialValue={cache.location} editable={editMode} /></div>
+                      <Editor
+                        reset={resetSignal}
+                        name='location'
+                        initialValue={cache.location}
+                        editable={editMode}
+                        placeholder='How to find this climb'
+                        rules={CLIMB_LOCATION_FORM_VALIDATION_RULES}
+                      />
 
                     </>
                   )}
@@ -218,7 +242,14 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   (
                     <>
                       <h3 className='mb-3 mt-6'>Protection</h3>
-                      <Editor reset={resetSignal} name='protection' initialValue={cache.protection} editable={editMode} />
+                      <Editor
+                        reset={resetSignal}
+                        name='protection'
+                        initialValue={cache.protection}
+                        editable={editMode}
+                        placeholder='Example: 16 quickdraws'
+                        rules={CLIMB_LOCATION_FORM_VALIDATION_RULES}
+                      />
                     </>
                   )}
 
