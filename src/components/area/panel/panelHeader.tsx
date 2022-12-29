@@ -1,8 +1,7 @@
 import * as React from 'react'
-import { useMemo } from 'react'
-import { summarize } from '../../crag/cragSummary'
+import Description from '../../ui/Description'
 
-export interface PanelHeaderProps{
+export interface PanelHeaderProps {
   title: string
   latitude: number
   longitude: number
@@ -23,17 +22,7 @@ function getMapHref (lat: number, lng: number): string {
 
 export function PanelHeader (props: PanelHeaderProps): JSX.Element {
   const maxWordsInSummary = 50
-
-  // This will truncate longer descriptions so that users aren't assaulted with a
-  // massive block of text. In the sprit of progressive disclosure I'd say there
-  // should be a button somewhere below to view the full version. This is more of
-  // a "Summary"
-  let [content] =
-  useMemo(() => summarize(props.description, maxWordsInSummary), [props.description])
-
-  if (content === '' || content === null) {
-    content = ''
-  }
+  const { description } = props
 
   return (
     <div className='w-full'>
@@ -58,19 +47,19 @@ export function PanelHeader (props: PanelHeaderProps): JSX.Element {
       <div className='border-slate-500 border-l-2 mx-6 md:mx-8 lg:mx-16' />
 
       {
-      // We only show description if such data is available. In the future it will make
-      // sense to allow users to add or edit these descriptions if they feel the need to.
-      content !== ''
-        ? (
-          <div className='mt-2'>
-            <h3 className='font-semibold tracking-tight'>Description</h3>
-            <div className='my-2 whitespace-pre-line'>
-              {content}
+        // We only show description if such data is available. In the future it will make
+        // sense to allow users to add or edit these descriptions if they feel the need to.
+        description !== ''
+          ? (
+            <div className='mt-2'>
+              <h3 className='font-semibold tracking-tight'>Description</h3>
+              <div className='my-2 whitespace-pre-line'>
+                <Description cont={description} maxLength={maxWordsInSummary} />
+              </div>
             </div>
-          </div>
-          )
-        : ''
-}
+            )
+          : ''
+      }
 
     </div>
   )
