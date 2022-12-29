@@ -5,14 +5,13 @@ import { gql, useMutation } from '@apollo/client'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
-import clx from 'classnames'
 import * as Portal from '@radix-ui/react-portal'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useSwipeable } from 'react-swipeable'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, Climb, MediaBaseTag } from '../../js/types'
+import { AreaType, Climb, MediaBaseTag, RulesType } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
@@ -22,9 +21,25 @@ import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import TickButton from '../../components/users/TickButton'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
-import LockToggle from '../../components/editor/EditModeToggle'
+import EditModeToggle from '../../components/editor/EditModeToggle'
 import { MUTATION_UPDATE_CLIMBS, UpdateClimbsInput } from '../../js/graphql/gql/contribs'
 import Toast from '../../components/ui/Toast'
+import { FormSaveAction } from '../../components/editor/FormSaveAction'
+import { AREA_NAME_FORM_VALIDATION_RULES } from '../../components/edit/EditAreaForm'
+
+export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
+  maxLength: {
+    value: 3500,
+    message: 'Maxium 3500 characters.'
+  }
+}
+
+export const CLIMB_LOCATION_FORM_VALIDATION_RULES: RulesType = {
+  maxLength: {
+    value: 800,
+    message: 'Maxium 800 characters.'
+  }
+}
 
 interface ClimbPageProps {
   climb: Climb
@@ -140,7 +155,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
     <div className='lg:flex lg:justify-center w-full' {...swipeHandlers}>
       <div className='px-4 max-w-screen-xl w-full'>
         <Portal.Root container={portalRef.current}>
-          <LockToggle onChange={setEditMode} />
+          <EditModeToggle onChange={setEditMode} />
         </Portal.Root>
         <BreadCrumbs
           pathTokens={pathTokens}
@@ -165,6 +180,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                     editable={editMode}
                     initialValue={cache.name}
                     placeholder='Climb name'
+                    rules={AREA_NAME_FORM_VALIDATION_RULES}
                   />
                 </h1>
                 <div className='pl-1'>
@@ -203,13 +219,21 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   editable={editMode}
                   name='description'
                   placeholder='Enter a description'
+                  rules={CLIMB_DESCRIPTION_FORM_VALIDATION_RULES}
                 />
 
                 {(cache.location?.trim() !== '' || editMode) &&
                   (
                     <>
                       <h3 className='mb-3 mt-6'>Location</h3>
-                      <div><Editor reset={resetSignal} name='location' initialValue={cache.location} editable={editMode} /></div>
+                      <Editor
+                        reset={resetSignal}
+                        name='location'
+                        initialValue={cache.location}
+                        editable={editMode}
+                        placeholder='How to find this climb'
+                        rules={CLIMB_LOCATION_FORM_VALIDATION_RULES}
+                      />
 
                     </>
                   )}
@@ -218,29 +242,25 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   (
                     <>
                       <h3 className='mb-3 mt-6'>Protection</h3>
-                      <Editor reset={resetSignal} name='protection' initialValue={cache.protection} editable={editMode} />
+                      <Editor
+                        reset={resetSignal}
+                        name='protection'
+                        initialValue={cache.protection}
+                        editable={editMode}
+                        placeholder='Example: 16 quickdraws'
+                        rules={CLIMB_LOCATION_FORM_VALIDATION_RULES}
+                      />
                     </>
                   )}
 
-                {editMode &&
-                  <div className='mt-12 flex justify-center md:justify-end flex-wrap-reverse gap-8'>
-                    {/* md and wider screen: row, right-justify; smaller: column, center-justify */}
-                    <button
-                      className={clx('btn btn-sm btn-link', isDirty ? '' : 'btn-disabled no-underline')} type='reset' onClick={() => {
-                        reset({ ...cache }, { keepValues: true })
-                        setResetSignal(Date.now())
-                      }}
-                    >
-                      Reset
-                    </button>
-                    <button
-                      type='submit'
-                      disabled={isSubmitting || !isDirty}
-                      className={clx('btn btn-primary btn-solid btn-sm btn-block md:btn-wide', isSubmitting ? 'animate-pulse' : '')}
-                    >
-                      {isSubmitting ? 'Saving...' : 'Save'}
-                    </button>
-                  </div>}
+                <FormSaveAction
+                  cache={cache}
+                  editMode={editMode}
+                  isDirty={isDirty}
+                  isSubmitting={isSubmitting}
+                  resetHookFn={reset}
+                  onReset={() => setResetSignal(Date.now())}
+                />
               </div>
 
             </div>

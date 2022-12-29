@@ -1,6 +1,7 @@
 import { BBox, Feature } from '@turf/helpers'
 import { ViewState } from 'react-map-gl'
 import { BaseItem } from '@algolia/autocomplete-core'
+import { RegisterOptions } from 'react-hook-form'
 
 import { IUserProfile } from './types/User'
 
@@ -326,3 +327,8 @@ export interface TagsLeaderboardType {
   grandTotal: number
   list: TagsByUserType[]
 }
+
+/**
+ * Validation rules for react-hook-form
+ */
+export type RulesType = Pick<RegisterOptions, 'minLength' | 'maxLength' | 'min' | 'max' | 'required' | 'validate'>

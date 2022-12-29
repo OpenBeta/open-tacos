@@ -4,7 +4,7 @@ interface Props {
   onChange: Dispatch<SetStateAction<boolean>>
 }
 
-export default function LockToggle ({ onChange }: Props): JSX.Element {
+export default function EditModeToggle ({ onChange }: Props): JSX.Element {
   const [editable, setEditable] = useState(false)
   const session = useSession()
 
@@ -29,8 +29,8 @@ export default function LockToggle ({ onChange }: Props): JSX.Element {
   }
 
   return (
-    <form>
-      <label className='label cursor-pointer'>
+    <form className='block'>
+      <label className='inline-flex label cursor-pointer'>
         <span className='label-text mr-2 text-xs'>Edit mode</span>
         <input
           type='checkbox' name='editMode' className='toggle toggle-sm toggle-accent' checked={editable} onChange={onPressed}
