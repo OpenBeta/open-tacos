@@ -1,5 +1,6 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React from 'react'
 import { AreaMetadataType, CountByGroupType } from '../../js/types'
+import Description from '../ui/Description'
 // import FavouriteButton from '../users/FavouriteButton'
 
 export interface CragHeroProps {
@@ -82,59 +83,6 @@ function getMapHref (lat: number, lng: number): string {
   return `https://www.google.com/maps/search/${lng},+${lat}`
 }
 
-function Description ({ cont }: {cont: string}): JSX.Element {
-  const maxLength = 100 // words
-  const [showFull, setShow] = useState(false)
-  const [content, overflowText] = useMemo(() => summarize(cont, maxLength), [cont])
-  const overflow = overflowText.length > 0
-  const descRef = useRef<HTMLParagraphElement>(null)
-
-  if (overflow) {
-    const overflowHeight = descRef.current !== null ? descRef.current?.clientHeight : 500
-    return (
-      <div className='transition'>
-        <p>
-          {content}
-          {' '}
-          <button
-            onClick={() => setShow(!showFull)}
-            className={`text-blue-600 underline transition
-            ${showFull ? 'opacity-0' : 'opacity-1'}`}
-          >
-            See full description
-          </button>
-        </p>
-
-        <div
-          className='overflow-y-hidden'
-          style={{
-            transition: 'max-height 0.2s ease-in-out',
-            maxHeight: !showFull ? '0px' : `${overflowHeight}px`
-          }}
-        >
-          <p ref={descRef}>
-            {overflowText}
-            {' '}
-            <button
-              onClick={() => setShow(!showFull)}
-              className={`text-blue-600 underline transition
-          ${showFull ? 'opacity-1' : 'opacity-0'}`}
-            >
-              Hide full description
-            </button>
-          </p>
-        </div>
-
-      </div>
-    )
-  }
-  return (
-    <div>
-      {content !== '' ? content : 'This crag has no description'}
-    </div>
-  )
-}
-
 /**
  * Responsive summary of major attributes for a crag / boulder.
  * This could actually be extended to giving area summaries as well.
@@ -165,7 +113,7 @@ export default function CragSummary (props: CragHeroProps): JSX.Element {
       </div> */}
 
       <div className='mt-6'>
-        <Description cont={props.description} />
+        <Description cont={props.description} maxLength={100} />
       </div>
     </div>
   )
