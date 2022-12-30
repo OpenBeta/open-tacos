@@ -327,7 +327,8 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
     query,
     variables: {
       uuid: params.id
-    }
+    },
+    fetchPolicy: 'no-cache'
   })
 
   if (rs.data == null || rs.data.climb == null) {

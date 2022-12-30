@@ -4,7 +4,7 @@ import PhotoMontage from '../media/PhotoMontage'
 import CragSummary, { CragHeroProps } from './cragSummary'
 import CragTable from './cragTable'
 
-interface CragLayoutProps extends CragHeroProps {
+export interface CragLayoutProps extends CragHeroProps {
   climbs: Climb[]
   areaMeta: AreaMetadataType
   pathTokens: string[]

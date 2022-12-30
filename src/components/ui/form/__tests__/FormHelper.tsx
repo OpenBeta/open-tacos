@@ -8,11 +8,17 @@ interface FormProps {
 
 export const Form = ({ onSubmit, defaultValues, children }: FormProps): JSX.Element => {
   const form = useForm({ defaultValues })
-  const { handleSubmit } = form
+  const { handleSubmit, reset } = form
   return (
     <FormProvider {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
         {children}
+        <button type='submit'>OK</button>
+        <button
+          type='reset' onClick={() =>
+            reset()}
+        >Reset
+        </button>
       </form>
     </FormProvider>
   )

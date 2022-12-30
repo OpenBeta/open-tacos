@@ -43,7 +43,7 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
 
   return (
     <>
-      <div className='p-6 flex-1'>
+      <div className='px-4 py-6 max-w-screen-xl mx-auto w-full'>
         <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
         <div className='mt-6' />
         <CragLayout
@@ -120,6 +120,8 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
       }
       metadata {
         areaId
+        leaf
+        isBoulder
         lat
         lng 
         left_right_index

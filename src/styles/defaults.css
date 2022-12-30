@@ -70,7 +70,7 @@ html {
   }
 
   h3 {
-    @apply text-2xl font-light tracking-tight text-primary;
+    @apply text-2xl font-light tracking-tighter text-primary;
   }
 
   .home-hero-bg-img {

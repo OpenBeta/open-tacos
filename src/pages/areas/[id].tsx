@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 
@@ -53,21 +53,17 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList, history }: Area
   const [selected, setSelected] = useState<null | string>(null)
   const navbarOffset = getNavBarOffset()
 
-  const items = useMemo(() => {
-    return area.children
-      // We don't care about empty children
-      // .filter(i => i.totalClimbs > 0)
-      // map the actual data we need into the item entity
-      .map(child => ({
-        id: child.metadata.areaId,
-        name: child.areaName,
-        description: child.content?.description,
-        totalClimbs: child.totalClimbs,
-        aggregate: child.aggregate,
-        content: child.content,
-        href: getSlug(child.metadata.areaId, child.metadata.leaf)
-      }))
-  }, [area])
+  const items = area.children
+    .map(child => ({
+      id: child.metadata.areaId,
+      name: child.areaName,
+      description: child.content?.description,
+      totalClimbs: child.totalClimbs,
+      aggregate: child.aggregate,
+      content: child.content,
+      href: getSlug(child.metadata.areaId, child.metadata.leaf)
+    })
+    )
 
   const { areaName, children, metadata, content, pathTokens, ancestors } = area
 

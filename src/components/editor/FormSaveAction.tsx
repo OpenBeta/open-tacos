@@ -16,10 +16,10 @@ export function FormSaveAction ({ editMode, isDirty, isSubmitting, cache, resetH
   if (!editMode) return null
   return (
     <div className='mt-8 flex justify-center md:justify-end flex-wrap-reverse gap-8'>
-      {/* md and wider screen: row, right-justify; smaller: column, center-justify */}
+      {/* md and wider screens: row, right-justify; mobile: column, center-justify */}
       <button
         className={clx('btn btn-sm btn-link', isDirty ? '' : 'btn-disabled no-underline')} type='reset' onClick={() => {
-          resetFn({ ...cache }, { keepValues: true })
+          resetFn({ ...cache }, { keepValues: false })
           onReset()
         }}
       >

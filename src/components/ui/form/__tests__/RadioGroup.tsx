@@ -9,7 +9,7 @@ import RadioGroup from '../RadioGroup'
 test('RadioGroup can change state', async () => {
   const user = userEvent.setup()
   const submitFn = jest.fn()
-  const defaultValues = { testRadioGroup: '1' }
+  const defaultValues = { testRadioGroup: '2' }
   render(
     <Form
       onSubmit={submitFn}
@@ -21,21 +21,31 @@ test('RadioGroup can change state', async () => {
         labels={['one', 'two']}
         values={['1', '2']}
       />
-      <button type='submit'>OK</button>
     </Form>
   )
 
-  await user.click(screen.getByRole('button'))
+  await user.click(screen.getByRole('button', { name: 'OK' }))
 
   expect(submitFn).toHaveBeenCalledTimes(1)
   expect(submitFn).toBeCalledWith(
-    { testRadioGroup: '1' },
+    { testRadioGroup: '2' },
     expect.anything()) // we don't care about form 'ref' param but we have to ack it
 
   // select the other option
-  await user.click(screen.getByLabelText('two'))
-  // submit again
-  await user.click(screen.getByRole('button'))
+  await user.click(screen.getByLabelText('one'))
 
-  expect(submitFn).toBeCalledWith({ testRadioGroup: '2' }, expect.anything())
+  // submit again
+  await user.click(screen.getByRole('button', { name: 'OK' }))
+
+  expect(submitFn).toBeCalledWith({ testRadioGroup: '1' }, expect.anything())
+  screen.debug()
+
+  // Test reset
+  await user.click(screen.getByRole('button', { name: 'Reset' }))
+
+  screen.debug()
+
+  expect(submitFn).toBeCalledWith(
+    { testRadioGroup: '2' },
+    expect.anything())
 })

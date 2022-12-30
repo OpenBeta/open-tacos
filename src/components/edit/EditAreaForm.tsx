@@ -3,12 +3,12 @@ import { useForm, FormProvider } from 'react-hook-form'
 import clx from 'classnames'
 import { useMutation } from '@apollo/client'
 import { signIn, useSession } from 'next-auth/react'
+import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
 
 import { MUTATION_UPDATE_AREA, UpdateAreaReturnType, UpdateAreaProps } from '../../js/graphql/gql/contribs'
 import { ErrorAlert } from './alerts/Alerts'
 import { graphqlClient } from '../../js/graphql/Client'
-import Input from '../ui/form/Input'
-import TextArea from '../ui/form/TextArea'
+import { Input, TextArea, RadioGroup } from '../ui/form'
 import Toast from '../ui/Toast'
 import { AreaType, AreaUpdatableFieldsType, RulesType } from '../../js/types'
 
@@ -50,6 +50,7 @@ export interface ChildAreaBaseProps {
 
 interface HtmlFormProps extends AreaUpdatableFieldsType {
   latlng: string
+  areaType: 'area' | 'leaf'
 }
 
 export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.Element {
@@ -74,18 +75,26 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
     }
   )
 
-  const { areaName, shortCode, pathTokens, content: { description }, metadata: { lat, lng }, formRef } = props
+  const { areaName, shortCode, pathTokens, content: { description }, children, climbs, metadata: { lat, lng, leaf: isLeaf }, formRef } = props
 
   // React-hook-form declaration
   const form = useForm<HtmlFormProps>(
     {
       mode: 'onBlur',
-      defaultValues: { areaName, shortCode, latlng: `${lat.toString()},${lng.toString()}`, description }
+      defaultValues: {
+        areaName,
+        shortCode,
+        latlng: `${lat.toString()},${lng.toString()}`,
+        areaType: isLeaf
+          ? 'leaf'
+          : 'area',
+        description
+      }
     })
 
   const { handleSubmit, formState: { isSubmitting, dirtyFields }, reset, getValues } = form
 
-  const submitHandler = async ({ areaName, shortCode, latlng, isDestination, description }: HtmlFormProps): Promise<void> => {
+  const submitHandler = async ({ areaName, shortCode, latlng, isDestination, areaType, description }: HtmlFormProps): Promise<void> => {
     const { uuid } = props
     const [latStr, lngStr] = latlng.split(',')
 
@@ -93,6 +102,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
       dirtyFields?.areaName === true ? { areaName: getValues('areaName') } : undefined,
       dirtyFields?.shortCode === true ? { shortCode: getValues('shortCode') } : undefined,
       dirtyFields?.isDestination === true ? { isDestination: getValues('isDestination') } : undefined,
+      dirtyFields?.areaType === true && canChangeAreaType ? { isLeaf: getValues('areaType') === 'leaf' } : undefined,
       dirtyFields?.latlng === true ? { ...{ lat: parseFloat(latStr), lng: parseFloat(lngStr) } } : undefined,
       dirtyFields?.description === true ? { description: getValues('description') } : undefined
     )
@@ -114,7 +124,8 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
       })
       if (rs.errors == null) {
         const values = Object.assign({}, doc, dirtyFields?.latlng === true ? { latlng } : undefined)
-        reset(values)
+        console.log('#reset', values)
+        reset(values, { keepValues: true })
         toastRef?.current?.publish('Area updated successfully.')
       }
     }
@@ -133,6 +144,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
   const MIN2PATTERN = /^[a-zA-Z0-9]*$/
 
   const isCountry = pathTokens.length === 1
+  const canChangeAreaType = children.length === 0 && climbs.length === 0
 
   return (
     <>
@@ -169,6 +181,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
             placeholder='latitude, longtitude'
             registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
           />
+          <AreaTypeRadioGroup canEdit={canChangeAreaType} />
           <TextArea
             label='Description:'
             name='description'
@@ -209,3 +222,28 @@ export const SaveErrorAlert = ({ message }: ErrorAlertProps): JSX.Element => {
     />
   )
 }
+
+/**
+ * A reuseable radio button group for changing area type (area vs crag)
+ */
+export const AreaTypeRadioGroup = ({ name = 'areaType', canEdit }: { name?: string, canEdit: boolean }): JSX.Element => (
+  <RadioGroup
+    groupLabel='Area type'
+    groupLabelAlt={<ExplainAreaTypeLock canEdit={canEdit} />}
+    name={name}
+    disabled={!canEdit}
+    labels={[
+      <span key='area'>A large <strong>area</strong> (may contain other areas)</span>,
+      <span key='leaf'>A <strong>crag</strong> or a <strong>boulder</strong> (may contain climbs, but not areas)</span>]}
+    values={['area', 'leaf']}
+  />)
+
+const ExplainAreaTypeLock = ({ canEdit }: { canEdit: boolean }): JSX.Element | null =>
+  (
+    canEdit
+      ? null
+      : (
+        <div className='tooltip tooltip-left tooltip-info drop-shadow-lg' data-tip='Area type is read-only when the area has other subareas or is a crag.'>
+          <QuestionMarkCircleIcon className='w-5 h-5' />
+        </div>)
+  )

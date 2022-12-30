@@ -12,7 +12,8 @@ import { MUTATION_UPDATE_AREA, UpdateAreaReturnType } from '../../js/graphql/gql
 import { graphqlClient } from '../../js/graphql/Client'
 import Toast from '../../components/ui/Toast'
 import { getMapHref } from '../../js/utils'
-import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
+import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES, AreaTypeRadioGroup } from '../edit/EditAreaForm'
+import { CragLayoutProps } from './cragLayout'
 // import FavouriteButton from '../users/FavouriteButton'
 
 export interface CragHeroProps {
@@ -27,15 +28,15 @@ export interface CragHeroProps {
   areaMeta: AreaMetadataType
 }
 
-type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description'>> & { uuid: string, latlng: string }
+type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' >> & { uuid: string, latlng: string, areaType: 'leaf' | 'area' }
 
-type UpdateAPIType = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng'>> & { uuid: string }
+type UpdateAPIType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng' |'isLeaf'>> & { uuid: string }>
 
 /**
  * Responsive summary of major attributes for a crag / boulder.
  * This could actually be extended to giving area summaries as well.
  */
-export default function CragSummary ({ uuid, title: initTitle, description: initDescription, latitude: initLat, longitude: initLng }: CragHeroProps): JSX.Element {
+export default function CragSummary ({ uuid, title: initTitle, description: initDescription, latitude: initLat, longitude: initLng, areaMeta, climbs }: CragLayoutProps): JSX.Element {
   const toastRef = useRef<any>(null)
   const session = useSession()
   const [resetSignal, setResetSignal] = useState(0)
@@ -44,7 +45,10 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     uuid,
     areaName: initTitle,
     description: initDescription,
-    latlng: `${initLat.toString()},${initLng.toString()}`
+    latlng: `${initLat.toString()},${initLng.toString()}`,
+    areaType: areaMeta.leaf
+      ? 'leaf'
+      : 'area'
   })
 
   const [updateArea] = useMutation<{ updateArea: UpdateAreaReturnType }, UpdateAPIType>(
@@ -68,20 +72,26 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
       defaultValues: { ...cache }
     })
 
-  const { handleSubmit, formState: { isSubmitting, isDirty }, reset, watch } = form
+  const { handleSubmit, formState: { isSubmitting, isDirty, dirtyFields }, reset, watch } = form
 
   const currentLatLngStr = watch('latlng')
 
   const submitHandler = async (formData: SummaryHTMLFormProps): Promise<void> => {
-    const { uuid, areaName, description, latlng } = formData
+    const { uuid, areaName, description, latlng, areaType } = formData
     const [lat, lng] = latlng.split(',')
+
+    // Extract only dirty fields to send to the API
+    const onlyDirtyFields: Partial<UpdateAPIType> = {
+      ...dirtyFields?.areaName === true && { areaName },
+      ...dirtyFields?.areaType === true && canChangeAreaType && { isLeaf: areaType === 'leaf' },
+      ...dirtyFields?.latlng === true && { lat: parseFloat(lat), lng: parseFloat(lng) },
+      ...dirtyFields?.description === true && { description }
+    }
+
     await updateArea({
       variables: {
         uuid,
-        areaName,
-        description,
-        lat: parseFloat(lat),
-        lng: parseFloat(lng)
+        ...onlyDirtyFields
       },
       context: {
         headers: {
@@ -95,6 +105,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
 
   const { areaName, description } = cache
   const latlngPair = parseLatLng(currentLatLngStr)
+  const canChangeAreaType = climbs.length === 0 // we're not allowed to change a crag to an area once it already has climbs
   return (
     <>
       <div className='flex justify-end'>
@@ -102,64 +113,77 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
       </div>
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(submitHandler)}>
-          <h1 className='mt-4 text-3xl md:text-4xl lg:text-5xl font-bold lg:max-w-lg'>
-            <InplaceTextInput
-              initialValue={areaName}
-              name='areaName'
-              reset={resetSignal}
-              editable={editMode}
-              placeholder='Area name'
-              rules={AREA_NAME_FORM_VALIDATION_RULES}
-            />
-          </h1>
+          <div className='lg:grid lg:grid-cols-3 w-full'>
+            <div className='lg:border-r-2 lg:pr-8 border-base-content'>
+              <h1 className='text-4xl md:text-5xl'>
+                <InplaceTextInput
+                  initialValue={areaName}
+                  name='areaName'
+                  reset={resetSignal}
+                  editable={editMode}
+                  placeholder='Area name'
+                  rules={AREA_NAME_FORM_VALIDATION_RULES}
+                />
+              </h1>
 
-          {editMode
-            ? <InplaceTextInput
-                initialValue={currentLatLngStr}
-                name='latlng'
-                reset={resetSignal}
-                editable={editMode}
-                className='text-xs'
-                placeholder='Enter a latitude,longitude. Ex: 46.433333,11.85'
-                rules={AREA_LATLNG_FORM_VALIDATION_RULES}
-              />
-            : (
-                latlngPair != null && (
-                  <a
-                    href={getMapHref({ lat: latlngPair[0], lng: latlngPair[1] })} target='blank' className='hover:underline
+              {editMode
+                ? <InplaceTextInput
+                    initialValue={currentLatLngStr}
+                    name='latlng'
+                    reset={resetSignal}
+                    editable={editMode}
+                    className='text-xs'
+                    placeholder='Enter a latitude,longitude. Ex: 46.433333,11.85'
+                    rules={AREA_LATLNG_FORM_VALIDATION_RULES}
+                  />
+                : (
+                    latlngPair != null && (
+                      <a
+                        href={getMapHref({ lat: latlngPair[0], lng: latlngPair[1] })} target='blank' className='hover:underline
               text-xs inline-flex items-center gap-2'
-                  >
-                    <GlobeAltIcon className='w-4 h-4' />
-                    {latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}
-                  </a>)
-              )}
+                      >
+                        <GlobeAltIcon className='w-4 h-4' />
+                        {latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}
+                      </a>)
+                  )}
+              {editMode && (
+                <div className='mt-6'>
+                  <h3 className='tracking-tight'>Housekeeping</h3>
+                  <AreaTypeRadioGroup canEdit={canChangeAreaType} />
+                </div>
 
-          {/* <div className='flex-1 flex justify-end'>
+              )}
+            </div>
+            <div className='lg:col-span-2 lg:pl-16 mb-16 w-full'>
+              {/* <div className='flex-1 flex justify-end'>
         // vnguyen: temporarily removed until we have view favorites feature
         <FavouriteButton areaId={props.areaMeta.areaId} />
       </div> */}
 
-          <div className='mt-6'>
-            <InplaceEditor
-              initialValue={description}
-              name='description'
-              reset={resetSignal}
-              editable={editMode}
-              placeholder='Area description'
-              rules={AREA_DESCRIPTION_FORM_VALIDATION_RULES}
-            />
+              <h3>Description</h3>
+
+              <InplaceEditor
+                initialValue={description}
+                name='description'
+                reset={resetSignal}
+                editable={editMode}
+                placeholder='Area description'
+                rules={AREA_DESCRIPTION_FORM_VALIDATION_RULES}
+              />
+              <FormSaveAction
+                cache={cache}
+                editMode={editMode}
+                isDirty={isDirty}
+                isSubmitting={isSubmitting}
+                resetHookFn={reset}
+                onReset={() => setResetSignal(Date.now())}
+              />
+            </div>
           </div>
-          <FormSaveAction
-            cache={cache}
-            editMode={editMode}
-            isDirty={isDirty}
-            isSubmitting={isSubmitting}
-            resetHookFn={reset}
-            onReset={() => setResetSignal(Date.now())}
-          />
         </form>
       </FormProvider>
       <Toast ref={toastRef} />
+
     </>
   )
 }

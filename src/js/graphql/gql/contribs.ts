@@ -31,11 +31,12 @@ mutation ($uuid: String!) {
 }`
 
 export const MUTATION_UPDATE_AREA = gql`
-mutation ($uuid: String!, $areaName: String, $isDestination: Boolean, $shortCode: String, $lat: Float, $lng: Float, $description: String) {
+mutation ($uuid: String!, $areaName: String, $isDestination: Boolean, $isLeaf: Boolean, $shortCode: String, $lat: Float, $lng: Float, $description: String) {
     updateArea(input: { 
       uuid: $uuid,
       areaName: $areaName,
       isDestination: $isDestination,
+      isLeaf: $isLeaf,
       shortCode: $shortCode,
       lat: $lat,
       lng: $lng,

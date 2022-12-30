@@ -118,6 +118,7 @@ export interface AreaUpdatableFieldsType {
   areaName?: string
   description?: string
   isDestination?: boolean
+  isLeaf?: boolean
   shortCode?: string
   lat?: number
   lng?: number

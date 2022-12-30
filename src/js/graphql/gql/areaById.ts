@@ -82,6 +82,10 @@ export const QUERY_AREA_BY_ID = gql`
         }
       }
 
+      climbs {
+        id
+      }
+
       media {
         mediaUrl
         mediaUuid
