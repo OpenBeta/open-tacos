@@ -228,14 +228,16 @@ export const SaveErrorAlert = ({ message }: ErrorAlertProps): JSX.Element => {
  */
 export const AreaTypeRadioGroup = ({ name = 'areaType', canEdit }: { name?: string, canEdit: boolean }): JSX.Element => (
   <RadioGroup
-    groupLabel='Area type'
+    groupLabel='Area designation'
     groupLabelAlt={<ExplainAreaTypeLock canEdit={canEdit} />}
     name={name}
     disabled={!canEdit}
     labels={[
-      <span key='area'>A large <strong>area</strong> (may contain other areas)</span>,
-      <span key='leaf'>A <strong>crag</strong> or a <strong>boulder</strong> (may contain climbs, but not areas)</span>]}
-    values={['area', 'leaf']}
+      'Area',
+      'Crag (sport, trad, ice)',
+      'Boulder']}
+    values={['area', 'crag', 'boulder']}
+    labelTips={['Like a folder an area may only contain other smaller areas', 'A crag is where you add rope climbing routes (sport, trad, ice).', 'A boulder may only have boulder problems.']}
   />)
 
 const ExplainAreaTypeLock = ({ canEdit }: { canEdit: boolean }): JSX.Element | null =>
@@ -243,7 +245,7 @@ const ExplainAreaTypeLock = ({ canEdit }: { canEdit: boolean }): JSX.Element | n
     canEdit
       ? null
       : (
-        <div className='tooltip tooltip-left tooltip-info drop-shadow-lg' data-tip='Area type is read-only when the area has other subareas or is a crag.'>
-          <QuestionMarkCircleIcon className='w-5 h-5' />
+        <div className='tooltip tooltip-left tooltip-info drop-shadow-lg' data-tip='Selections become read-only when the area contains subareas or is a crag/boulder.'>
+          <QuestionMarkCircleIcon className='text-info w-5 h-5' />
         </div>)
   )

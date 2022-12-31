@@ -28,9 +28,11 @@ export interface CragHeroProps {
   areaMeta: AreaMetadataType
 }
 
-type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' >> & { uuid: string, latlng: string, areaType: 'leaf' | 'area' }
+type AreaTypeFormProp = 'crag' | 'area' | 'boulder'
 
-type UpdateAPIType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng' |'isLeaf'>> & { uuid: string }>
+type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' >> & { uuid: string, latlng: string, areaType: AreaTypeFormProp }
+
+type UpdateAPIType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng' |'isLeaf' | 'isBoulder'>> & { uuid: string }>
 
 /**
  * Responsive summary of major attributes for a crag / boulder.
@@ -46,9 +48,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     areaName: initTitle,
     description: initDescription,
     latlng: `${initLat.toString()},${initLng.toString()}`,
-    areaType: areaMeta.leaf
-      ? 'leaf'
-      : 'area'
+    areaType: areaDesignationToForm(areaMeta)
   })
 
   const [updateArea] = useMutation<{ updateArea: UpdateAreaReturnType }, UpdateAPIType>(
@@ -83,11 +83,26 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     // Extract only dirty fields to send to the API
     const onlyDirtyFields: Partial<UpdateAPIType> = {
       ...dirtyFields?.areaName === true && { areaName },
-      ...dirtyFields?.areaType === true && canChangeAreaType && { isLeaf: areaType === 'leaf' },
+      ...dirtyFields?.areaType === true && canChangeAreaType && areaDesignationToDb(areaType),
       ...dirtyFields?.latlng === true && { lat: parseFloat(lat), lng: parseFloat(lng) },
       ...dirtyFields?.description === true && { description }
     }
 
+    /**
+     * Submit button should be disabled (this submitHandler() can't be triggered) when the
+     * form's global dirty flag is false.
+     * We still double-check here just in case things fall through the cracks.
+     */
+    if (Object.keys(onlyDirtyFields).length === 0) {
+      toastRef?.current?.publish('Nothing to save.  Please make at least 1 edit.', true)
+      return
+    }
+
+    /**
+     * There's no need to wrap backend API calls in a try/catch block
+     * because react-hook-form `handleSubmit()` handles it for us and send exeptions
+     * to `onError()` callback.
+     */
     await updateArea({
       variables: {
         uuid,
@@ -139,8 +154,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
                 : (
                     latlngPair != null && (
                       <a
-                        href={getMapHref({ lat: latlngPair[0], lng: latlngPair[1] })} target='blank' className='hover:underline
-              text-xs inline-flex items-center gap-2'
+                        href={getMapHref({ lat: latlngPair[0], lng: latlngPair[1] })} target='blank' className='hover:underline text-xs inline-flex items-center gap-2'
                       >
                         <GlobeAltIcon className='w-4 h-4' />
                         {latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}
@@ -148,13 +162,12 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
                   )}
               {editMode && (
                 <div className='mt-6'>
-                  <h3 className='tracking-tight'>Housekeeping</h3>
+                  <h3>Housekeeping</h3>
                   <AreaTypeRadioGroup canEdit={canChangeAreaType} />
                 </div>
-
               )}
             </div>
-            <div className='lg:col-span-2 lg:pl-16 mb-16 w-full'>
+            <div className='mb-16 lg:mb-0 lg:col-span-2 lg:pl-16 w-full'>
               {/* <div className='flex-1 flex justify-end'>
         // vnguyen: temporarily removed until we have view favorites feature
         <FavouriteButton areaId={props.areaMeta.areaId} />
@@ -199,6 +212,38 @@ const parseLatLng = (s: string): [number, number] | null => {
     return null
   }
   return [lat, lng]
+}
+
+/**
+ * Convert area leaf and boulder attributes to form prop.
+ */
+const areaDesignationToForm = ({ isBoulder, leaf }: Pick<AreaMetadataType, 'isBoulder' | 'leaf'>): AreaTypeFormProp => {
+  if (isBoulder) return 'boulder'
+  if (leaf) return 'crag'
+  return 'area'
+}
+
+/**
+ * The opposite of `areaDesignationToForm()`, convert form prop to DB's attributes.
+ */
+const areaDesignationToDb = (attr: AreaTypeFormProp): Pick<AreaUpdatableFieldsType, 'isBoulder' | 'isLeaf'> => {
+  switch (attr) {
+    case 'boulder':
+      return {
+        isLeaf: true,
+        isBoulder: true
+      }
+    case 'crag':
+      return {
+        isLeaf: true,
+        isBoulder: false
+      }
+    default:
+      return {
+        isLeaf: false,
+        isBoulder: false
+      }
+  }
 }
 
 const InplaceEditor = dynamic(async () => await import('../../components/editor/InplaceEditor'), {

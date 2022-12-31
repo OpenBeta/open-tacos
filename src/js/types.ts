@@ -8,6 +8,8 @@ import { IUserProfile } from './types/User'
 export type { IUserProfile }
 export interface AreaMetadataType {
   leaf: boolean
+  isDestination: boolean
+  isBoulder: boolean
   lat: number
   lng: number
   bbox: [number, number, number, number]
@@ -119,6 +121,7 @@ export interface AreaUpdatableFieldsType {
   description?: string
   isDestination?: boolean
   isLeaf?: boolean
+  isBoulder?: boolean
   shortCode?: string
   lat?: number
   lng?: number
