@@ -244,7 +244,6 @@ p {
     @apply  -m-2 p-2 rounded-lg focus:bg-info/20 border-none outline-none !important;
   }
 
-  /* rounded-lg focus:bg-amber-50 focus:transition-colors focus:duration-500 focus:ease-in-out  */
   .editor-container {
     position: relative;
   }
@@ -269,6 +268,41 @@ p {
     color: inherit;
     font-size: inherit;
     line-height: inherit;
+  }
+
+  p.editor-csv-paragraph:last-child {
+    margin-bottom: 0;
+  }
+
+  p.editor-csv-paragraph {
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    margin-bottom: 0;
+  }
+
+  .editor-csv-container {
+    position: relative;
+    counter-reset: line;
+    @apply rounded-box;
+  }
+
+  .editor-csv-input {
+    counter-reset: line;
+    @apply focus:bg-info/20 border-none rounded-box outline-none;
+  }
+
+  p.editor-csv-paragraph span {
+    counter-increment: line;
+  }
+  p.editor-csv-paragraph span::before {
+    display: inline-block;
+    /* white-space: pre-wrap; */
+    text-align:right;
+    width: 2rem;
+    min-width: 1rem;
+    content: counter(line);
+    @apply pr-1 mr-2 border-r border-base-300/50 bg-base-100 text-base-300/60 !important;
   }
 }
 

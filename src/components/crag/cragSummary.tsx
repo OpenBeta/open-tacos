@@ -193,10 +193,12 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
               />
             </div>
           </div>
+          <div className='mt-6'>
+            <ClimbBulkEditor name='climbList' initialClimbs={climbs} reset={0} editable />
+          </div>
         </form>
       </FormProvider>
       <Toast ref={toastRef} />
-
     </>
   )
 }
@@ -251,5 +253,9 @@ const InplaceEditor = dynamic(async () => await import('../../components/editor/
 })
 
 const InplaceTextInput = dynamic(async () => await import('../../components/editor/InplaceTextInput'), {
+  ssr: false
+})
+
+const ClimbBulkEditor = dynamic(async () => await import('../../components/editor/CsvEditor'), {
   ssr: false
 })

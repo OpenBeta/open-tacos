@@ -2,7 +2,7 @@ import { BBox, Feature } from '@turf/helpers'
 import { ViewState } from 'react-map-gl'
 import { BaseItem } from '@algolia/autocomplete-core'
 import { RegisterOptions } from 'react-hook-form'
-
+import { GradeScalesTypes } from '@openbeta/sandbag'
 import { IUserProfile } from './types/User'
 
 export type { IUserProfile }
@@ -39,11 +39,13 @@ export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' 
 
 export type ClimbDisciplineRecord = Record<ClimbDiscipline, boolean>
 
+export type Grades = { [Key in GradeScalesTypes]?: string}
 export interface Climb {
   id: string
   name: string
   fa: string
   yds: string
+  grade: Grades
   metadata: ClimbMetadataType
   type: ClimbDisciplineRecord
   safety: SafetyType

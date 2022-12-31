@@ -9,8 +9,10 @@ import { ListItemNode, ListNode } from '@lexical/list'
 import { MarkNode } from '@lexical/mark'
 import { CodeNode } from '@lexical/code'
 
-import DefaultTheme, { textInputTheme } from './themes/DefaultTheme'
-import { $createInitialPlainTextState } from './plugins/PlainTextResetPlugin'
+import DefaultTheme, { textInputTheme, csvTheme } from './themes/DefaultTheme'
+import { $createInitialPlainTextState, $createInitialPlainTextState2 } from './plugins/PlainTextResetPlugin'
+
+import { ClimbType } from '../../js/types'
 
 export const editorConfigRichText = (initialValue: string, editable: boolean): InitialConfigType => {
   const createInitial = (): void => {
@@ -42,4 +44,24 @@ export const editorConfigPlain = (initialValue: string): InitialConfigType => {
     },
     nodes: []
   }
+}
+
+export const editorConfigCsv = (initialList: ClimbType[]): InitialConfigType => {
+  return {
+    editorState: () => $createInitialPlainTextState2(initialList),
+    namespace: 'editor',
+    theme: csvTheme,
+    onError (error) {
+      throw error
+    },
+    nodes: []
+  }
+}
+
+export const climbListToCsv = (list: ClimbType[]): string => {
+  return list.map(individualClimbToCsv).join('\n')
+}
+
+const individualClimbToCsv = ({ name }: ClimbType): string => {
+  return name
 }

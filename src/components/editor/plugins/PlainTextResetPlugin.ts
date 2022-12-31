@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 
 import { $getRoot, $createTextNode, $createParagraphNode } from 'lexical'
 
+import { ClimbType } from '../../../js/types'
+
 interface Props {
   initialValue: string
   editable: boolean
@@ -39,4 +41,21 @@ export const $createInitialPlainTextState = (plainText: string): void => {
   root
     .clear()
     .append(paragraph)
+}
+
+export const $createInitialPlainTextState2 = (climbList: ClimbType[]): void => {
+  const root = $getRoot()
+  // const multilines = plainText.split('\n')
+  root.clear()
+  climbList.forEach(climb => {
+    const paragraph = $createParagraphNode()
+    paragraph.append(
+      $createTextNode(individualClimbToCsv(climb))
+    )
+    root.append(paragraph)
+  })
+}
+
+const individualClimbToCsv = ({ name }: ClimbType): string => {
+  return name
 }
