@@ -7,6 +7,9 @@ import PhotoFooter from './PhotoFooter'
 import { MediaBaseTag } from '../../js/types'
 import useResponsive from '../../js/hooks/useResponsive'
 import { DefaultLoader, MobileLoader } from '../../js/sirv/util'
+import PhotoGalleryModal from './PhotoGalleryModal'
+import { userMediaStore } from '../../js/stores/media'
+
 export interface PhotoMontageProps {
   photoList: MediaBaseTag[]
   /** set to `true` if gallery is placed above the fold */
@@ -27,10 +30,13 @@ export interface PhotoMontageProps {
 const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontageProps): JSX.Element | null => {
   const { isMobile } = useResponsive()
   const [shuffledList, setPhotoList] = useState<MediaBaseTag[]>([])
+  const [showPhotoGalleryModal, setShowPhotoGalleryModal] = useState<boolean>(false)
   useEffect(() => {
     setPhotoList(shuffle(initialList))
+    void userMediaStore.set.setPhotoList(initialList)
   }, [initialList])
 
+  const photoGalleryModal = <PhotoGalleryModal title='a title' description='a description' setShowPhotoGalleryModal={setShowPhotoGalleryModal} />
   const [hover, setHover] = useState(false)
 
   if (shuffledList == null || shuffledList?.length === 0) { return null }
@@ -39,6 +45,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
     const { uid, mediaUrl, destType, destination } = shuffledList[0]
     return (
       <div className='block relative w-full h-60'>
+        {showPhotoGalleryModal && photoGalleryModal} {/* is there a better way to do this conditional rendering? */}
         <Image
           src={mediaUrl}
           layout='fill'
@@ -47,6 +54,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
           quality={90}
           loader={MobileLoader}
           priority={isHero}
+          onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)}
         />
         <PhotoFooter username={uid} destType={destType} destination={destination} hover />
       </div>
@@ -60,6 +68,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
+        {showPhotoGalleryModal && photoGalleryModal} {/* is there a better way to do this conditional rendering? */}
         {shuffledList.slice(0, 2).map(({ mediaUrl, mediaUuid, uid, destination, destType }) => {
           return (
             <div
@@ -68,9 +77,9 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
                 classNames(
                   'block relative',
                   shuffledList.length === 1 ? ' overflow-hidden rounded-r-xl' : '')
-                }
+              }
             >
-              <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} />
+              <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
               <PhotoFooter username={uid} destType={destType} destination={destination} hover={hover} />
             </div>
           )
@@ -87,8 +96,9 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
+      {showPhotoGalleryModal && photoGalleryModal} {/* is there a better way to do this conditional rendering? */}
       <div className='block relative col-start-1 col-span-2 row-span-2 col-end-3'>
-        <ResponsiveImage mediaUrl={first.mediaUrl} isHero={isHero} />
+        <ResponsiveImage mediaUrl={first.mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
         <PhotoFooter username={first.uid} destType={first.destType} destination={first.destination} hover={hover} />
       </div>
       {theRest.map(({ mediaUrl, mediaUuid, uid, destination, destType }, i) => {
@@ -97,7 +107,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
             key={`${mediaUuid}_${i}`}
             className='block relative'
           >
-            <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} />
+            <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
             <PhotoFooter username={uid} destType={destType} destination={destination} hover={hover} />
           </div>
         )
@@ -111,7 +121,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
  * See https://nextjs.org/docs/api-reference/next/image
  * Set priority={true} if the photo montage is above the fold
  */
-const ResponsiveImage = ({ mediaUrl, isHero = true }): JSX.Element => (
+const ResponsiveImage = ({ mediaUrl, isHero = true, onClick }): JSX.Element => (
   <Image
     src={mediaUrl}
     loader={DefaultLoader}
@@ -120,6 +130,7 @@ const ResponsiveImage = ({ mediaUrl, isHero = true }): JSX.Element => (
     sizes='50vw'
     objectFit='cover'
     priority={isHero}
+    onClick={onClick}
   />)
 
 export default memo(PhotoMontage)

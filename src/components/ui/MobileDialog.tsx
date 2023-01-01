@@ -16,7 +16,7 @@ export const DialogContent = React.forwardRef<any, Props>(
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className='z-40 fixed inset-0 bg-black/60' />
         <DialogPrimitive.Content
-          className='fixed z-50 inset-0 lg:top-16 mx-auto max-w-screen md:max-w-screen-md lg:drop-shadow-lg overflow-y-scroll' {...props} ref={forwardedRef}
+          className='fixed z-50 inset-0 lg:top-16 mx-auto max-w-screen md:max-w-screen-xxl lg:drop-shadow-lg overflow-y-scroll' {...props} ref={forwardedRef}
         >
           <div className='px-2 lg:px-4 py-4 md:rounded-box bg-base-100 w-full'>
             <div className='flex justify-between items-center align-middle mb-4'>

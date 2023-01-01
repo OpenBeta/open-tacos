@@ -14,8 +14,7 @@ const triplet = (e1, e2, e3): string =>
   keyStr.charAt(e3 & 63)
 
 const rgbDataURL = (r, g, b): string =>
-  `data:image/gif;base64,R0lGODlhAQABAPAA${
-    triplet(0, r, g) + triplet(b, 255, 255)
+  `data:image/gif;base64,R0lGODlhAQABAPAA${triplet(0, r, g) + triplet(b, 255, 255)
   }/yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==`
 
 const DefaultPlaceholder = rgbDataURL(226, 232, 240)
@@ -77,13 +76,14 @@ export function ResponsiveImage2 ({ mediaUrl, naturalWidth, naturalHeight, isHer
       src={mediaUrl}
       loader={MobileLoader}
       layout='responsive'
-      sizes='50vw'
+      sizes='(max-width: 768px) 100vw,
+      (max-width: 1200px) 50vw,
+      33vw'
       width={width}
       height={height}
-      objectFit='contain'
+      objectFit='cover'
       placeholder='blur'
       blurDataURL={DefaultPlaceholder}
     />
   )
 }
-// style={{ maxWidth: width, maxHeight: height, aspectRatio: aspectRatio as string }}
