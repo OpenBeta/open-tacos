@@ -90,6 +90,33 @@ html {
   .home-hero-mobile {
     @apply lg:hidden h-screen portrait:height-mobile-portrait w-screen bg-gray-800;
   }
+
+  .dialog-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    @apply rounded-box overflow-hidden; 
+  }
+
+  .dialog-default {
+    @apply top-0 left-0 lg:dialog-center fixed z-50 w-full max-w-screen-md bg-base-100 lg:drop-shadow-lg;
+  }
+
+  .dialog-wide {
+    @apply top-0 left-0 fixed z-50 w-full w-screen bg-base-100;
+  }
+
+  .dialog-content-default {
+    @apply pt-16 overflow-y-auto overscroll-contain h-screen lg:h-full lg:max-h-[85vh];
+  }
+
+  .dialog-content-fullscreen {
+    @apply pt-16 overflow-y-auto overscroll-contain h-screen;
+  }
+
+  .dialog-form-default {
+    @apply px-2 lg:px-4 mb-8;
+  }
 }
 .title {
   @apply text-4xl font-bold font-sans my-4 !important;

@@ -89,23 +89,25 @@ const AddAreaPage: INextPageWithAuth = () => {
           event.preventDefault()
         }}
       >
-        <div className='text-xs mt-4'>Area can be a crag, boulder, or a destination containing other smaller areas.</div>
-        <ProgressSteps />
-        <FormProvider {...form}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className='mt-8 text-lg text-content-base font-bold'>Location</div>
-            <Step1a />
-            <Step1b />
-            <div className='mt-8 text-lg text-content-base font-bold'>New area</div>
-            <Step2a />
-            {useWizardStore().addAreaStore.refAreaData() !== '' && <Step2b />}
-            <div className='mt-8 text-lg text-content-base font-bold'>Submit</div>
-            <StepSubmit />
-          </form>
-        </FormProvider>
-        {isSubmitSuccessful && error == null && data != null &&
-          <AddSucessAlert {...data.addArea} onContinue={onResetForm} />}
-        {error != null && <AddErrorAlert {...error} />}
+        <div className='dialog-form-default'>
+          <div className='text-xs mt-4'>Area can be a crag, boulder, or a destination containing other smaller areas.</div>
+          <ProgressSteps />
+          <FormProvider {...form}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className='mt-8 text-lg text-content-base font-bold'>Location</div>
+              <Step1a />
+              <Step1b />
+              <div className='mt-8 text-lg text-content-base font-bold'>New area</div>
+              <Step2a />
+              {useWizardStore().addAreaStore.refAreaData() !== '' && <Step2b />}
+              <div className='mt-8 text-lg text-content-base font-bold'>Submit</div>
+              <StepSubmit />
+            </form>
+          </FormProvider>
+          {isSubmitSuccessful && error == null && data != null &&
+            <AddSucessAlert {...data.addArea} onContinue={onResetForm} />}
+          {error != null && <AddErrorAlert {...error} />}
+        </div>
       </DialogContent>
     </MobileDialog>
   )

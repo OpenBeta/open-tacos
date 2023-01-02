@@ -148,7 +148,7 @@ export const getUserImages = async (uuid: string, size: number = 200, token?: st
   throw new Error('Sirv API.getUserImages() error' + res.statusText)
 }
 
-export const getImagesByFilenames = async (fileList: string[], token?: string): Promise <any> => {
+export const getImagesByFilenames = async (fileList: string[], token?: string): Promise <{ mediaList: MediaType[], idList: string[]}> => {
   if (fileList.length === 0) {
     return {
       mediaList: [],

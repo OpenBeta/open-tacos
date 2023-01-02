@@ -75,7 +75,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
               key={mediaUuid}
               className={
                 classNames(
-                  'block relative',
+                  'block relative hover:cursor-pointer',
                   shuffledList.length === 1 ? ' overflow-hidden rounded-r-xl' : '')
               }
             >
@@ -92,7 +92,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
   const theRest = shuffledList.slice(1, 5)
   return (
     <div
-      className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80'
+      className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 hover:cursor-pointer'
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >

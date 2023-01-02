@@ -200,6 +200,7 @@ export interface MediaBaseTag {
   destType: number
   destination: string | null
   uid: string | null
+  mediaInfo?: MediaType
 }
 
 export interface MediaTagWithClimb extends MediaBaseTag {

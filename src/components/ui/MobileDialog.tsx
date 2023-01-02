@@ -1,35 +1,39 @@
 import React, { ReactNode } from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-
+import clx from 'classnames'
 interface Props {
   title?: string | ReactNode
+  fullScreen?: boolean
   children: ReactNode
   onInteractOutside?: (event: any) => void
 }
 /**
  * The main dialog contaner.
+ * @param title Optional title
+ * @param fullScreen Optional flag to expand the dialog to max screen width & height
  */
 export const DialogContent = React.forwardRef<any, Props>(
-  ({ title, children, ...props }, forwardedRef) =>
+  ({ title, children, fullScreen = false, ...props }, forwardedRef) =>
     (
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className='z-40 fixed inset-0 bg-black/60' />
         <DialogPrimitive.Content
-          className='fixed z-50 inset-0 lg:top-16 mx-auto max-w-screen md:max-w-screen-xxl lg:drop-shadow-lg overflow-y-scroll' {...props} ref={forwardedRef}
+          className={clx(fullScreen ? 'dialog-wide' : 'dialog-default')} {...props} ref={forwardedRef}
+
         >
-          <div className='px-2 lg:px-4 py-4 md:rounded-box bg-base-100 w-full'>
-            <div className='flex justify-between items-center align-middle mb-4'>
-              <DialogPrimitive.Close aria-label='Close' asChild>
-                <button className='btn btn-circle btn-ghost btn-sm'>
-                  <XMarkIcon className='w-6 h-6' />
-                </button>
-              </DialogPrimitive.Close>
-              <DialogPrimitive.Title asChild>
-                <h2 className=''>{title}</h2>
-              </DialogPrimitive.Title>
-              <div className='w-8 h-8' />
-            </div>
+          <div className='px-2 lg:px-4 h-16 fixed top-0 left-0 z-30 w-full flex justify-between items-center align-middle bg-base-100 bg-opacity-90 backdrop-blur-sm'>
+            <DialogPrimitive.Close aria-label='Close' asChild>
+              <button className='btn btn-circle btn-ghost btn-sm'>
+                <XMarkIcon className='w-6 h-6' />
+              </button>
+            </DialogPrimitive.Close>
+            <DialogPrimitive.Title asChild>
+              <h2 className=''>{title}</h2>
+            </DialogPrimitive.Title>
+            <div className='w-8 h-8' />
+          </div>
+          <div className={clx(fullScreen ? 'dialog-content-fullscreen' : 'dialog-content-default')}>
             {children}
           </div>
         </DialogPrimitive.Content>
