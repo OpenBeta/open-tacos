@@ -10,6 +10,7 @@ import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import { editorConfigCsv } from './editorConfig'
 import onChange from './onChange'
 // import { PlainTextResetPlugin } from './plugins/PlainTextResetPlugin'
+import { ForceParagraphBreaks } from './plugins/ForceParagraphBreaks'
 import { RulesType, ClimbType } from '../../js/types'
 
 interface EditorProps {
@@ -37,6 +38,7 @@ export default function CsvEditor ({ initialClimbs, name, editable = false, rese
             placeholder={<Placeholder text={placeholder} />}
             ErrorBoundary={LexicalErrorBoundary}
           />
+          {/* <ForceParagraphBreaks /> */}
           {/* <PlainTextPlugin
             contentEditable={<ContentEditable className='editor-input' />}
             placeholder={<Placeholder text={placeholder} />}

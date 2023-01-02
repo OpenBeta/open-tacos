@@ -35,7 +35,9 @@ export interface ClimbMetadataType {
   climbId: string
 }
 
-export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' | 'mixed' | 'aid'
+export type GradeContextType = 'US' | 'FR'
+
+export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' | 'mixed' | 'aid' | 'ice' | 'snow'
 
 export type ClimbDisciplineRecord = Record<ClimbDiscipline, boolean>
 
@@ -45,7 +47,8 @@ export interface Climb {
   name: string
   fa: string
   yds: string
-  grade: Grades
+  grades: Grades
+  gradeContext: GradeContextType
   metadata: ClimbMetadataType
   type: ClimbDisciplineRecord
   safety: SafetyType

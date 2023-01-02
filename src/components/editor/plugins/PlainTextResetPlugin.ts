@@ -56,6 +56,6 @@ export const $createInitialPlainTextState2 = (climbList: ClimbType[]): void => {
   })
 }
 
-const individualClimbToCsv = ({ name }: ClimbType): string => {
-  return name
+const individualClimbToCsv = ({ id, name }: ClimbType): string => {
+  return `${id} | ${name}`
 }

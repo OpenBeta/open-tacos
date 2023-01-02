@@ -100,7 +100,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
 
     /**
      * There's no need to wrap backend API calls in a try/catch block
-     * because react-hook-form `handleSubmit()` handles it for us and send exeptions
+     * because react-hook-form `handleSubmit()` handles it for us and sends exeptions
      * to `onError()` callback.
      */
     await updateArea({
