@@ -1,10 +1,10 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { $createParagraphNode, LineBreakNode, ParagraphNode, $getRoot, EditorState } from 'lexical'
+import { LineBreakNode, EditorState } from 'lexical'
 import { useEffect } from 'react'
 // import { $getRoot } from 'lexical'
 
 /**
- * Enforce a single line of text by removing new line characters (from enter key or copy-n-paste content)
+ * In progress: Enforce a single line of text by removing new line characters (from enter key or copy-n-paste content)
  */
 export function ForceParagraphBreaks (): null {
   const [editor] = useLexicalComposerContext()

@@ -8,9 +8,9 @@ import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 
 import { editorConfigCsv } from './editorConfig'
-import onChange from './onChange'
+import { onChangeCsv } from './onChange'
 // import { PlainTextResetPlugin } from './plugins/PlainTextResetPlugin'
-import { ForceParagraphBreaks } from './plugins/ForceParagraphBreaks'
+// import { ForceParagraphBreaks } from './plugins/ForceParagraphBreaks'
 import { RulesType, ClimbType } from '../../js/types'
 
 interface EditorProps {
@@ -27,7 +27,7 @@ export default function CsvEditor ({ initialClimbs, name, editable = false, rese
   const { field, fieldState: { error } } = useController({ name, rules })
 
   const onChangeHandler = (arg0, arg1): void => {
-    onChange(arg0, arg1, field, name)
+    onChangeCsv(arg0, arg1, field)
   }
   return (
     <LexicalComposer initialConfig={editorConfigCsv(initialClimbs)}>
@@ -38,17 +38,6 @@ export default function CsvEditor ({ initialClimbs, name, editable = false, rese
             placeholder={<Placeholder text={placeholder} />}
             ErrorBoundary={LexicalErrorBoundary}
           />
-          {/* <ForceParagraphBreaks /> */}
-          {/* <PlainTextPlugin
-            contentEditable={<ContentEditable className='editor-input' />}
-            placeholder={<Placeholder text={placeholder} />}
-            ErrorBoundary={LexicalErrorBoundary}
-          /> */}
-          {/* <PlainTextResetPlugin
-            initialValue=''
-            editable={editable}
-            resetSignal={reset}
-          /> */}
           <OnChangePlugin onChange={onChangeHandler} ignoreSelectionChange />
           <HistoryPlugin />
         </div>

@@ -14,6 +14,7 @@ import Toast from '../../components/ui/Toast'
 import { getMapHref } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES, AreaTypeRadioGroup } from '../edit/EditAreaForm'
 import { CragLayoutProps } from './cragLayout'
+import { ClimbListPreview } from './ClimbListPreview'
 // import FavouriteButton from '../users/FavouriteButton'
 
 export interface CragHeroProps {
@@ -28,9 +29,18 @@ export interface CragHeroProps {
   areaMeta: AreaMetadataType
 }
 
+export interface EditableClimbType {
+  id: string | null
+  name: string
+  yds: string
+  error?: string
+}
+
+type BulkClimbList = EditableClimbType[]
+
 type AreaTypeFormProp = 'crag' | 'area' | 'boulder'
 
-type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' >> & { uuid: string, latlng: string, areaType: AreaTypeFormProp }
+type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description'>> & { uuid: string, latlng: string, areaType: AreaTypeFormProp, climbList: BulkClimbList }
 
 type UpdateAPIType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng' |'isLeaf' | 'isBoulder'>> & { uuid: string }>
 
@@ -48,7 +58,12 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     areaName: initTitle,
     description: initDescription,
     latlng: `${initLat.toString()},${initLng.toString()}`,
-    areaType: areaDesignationToForm(areaMeta)
+    areaType: areaDesignationToForm(areaMeta),
+    climbList: climbs.map(({ id, name, yds }) => ({
+      id,
+      name,
+      yds
+    }))
   })
 
   const [updateArea] = useMutation<{ updateArea: UpdateAreaReturnType }, UpdateAPIType>(
@@ -193,9 +208,17 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
               />
             </div>
           </div>
-          <div className='mt-6'>
-            <ClimbBulkEditor name='climbList' initialClimbs={climbs} reset={0} editable />
-          </div>
+          <ClimbListPreview />
+          {editMode && (
+            <div className='collapse mt-8 collapse-plus'>
+              <input type='checkbox' defaultChecked />
+              <div className='px-0 collapse-title'>
+                <span className='hover:underline font-medium'>Show / Hide the bulk CSV editor</span>
+              </div>
+              <div className='px-0 collapse-content'>
+                <ClimbBulkEditor name='climbList' initialClimbs={climbs} reset={0} editable />
+              </div>
+            </div>)}
         </form>
       </FormProvider>
       <Toast ref={toastRef} />

@@ -130,6 +130,7 @@ export interface AreaUpdatableFieldsType {
   shortCode?: string
   lat?: number
   lng?: number
+  climbs?: ClimbType[]
 }
 
 export interface AreaResponseType {

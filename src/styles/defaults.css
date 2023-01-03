@@ -359,6 +359,15 @@ input:checked + label {
   transition: visibility 0s 150ms, opacity 100ms linear;
 }
 
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.fadeinEffect {
+  animation: fadeIn 1s;
+}
+
 /* make nprogress bar thicker */
 .bar {
   padding-top: 3px;
@@ -388,4 +397,8 @@ table td.dtable-highlight:last-of-type {
 
 table td.dtable-my-range {
   @apply bg-ob-secondary bg-opacity-70;
+}
+
+.collapse-plus .collapse-title:after {
+  @apply text-3xl !important;
 }

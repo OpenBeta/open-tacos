@@ -2,7 +2,7 @@ import React from 'react'
 import { AreaMetadataType, Climb, CountByGroupType } from '../../js/types'
 import PhotoMontage from '../media/PhotoMontage'
 import CragSummary, { CragHeroProps } from './cragSummary'
-import CragTable from './cragTable'
+// import CragTable from './cragTable'
 
 export interface CragLayoutProps extends CragHeroProps {
   climbs: Climb[]
@@ -21,9 +21,9 @@ export default function CragLayout (props: CragLayoutProps): JSX.Element {
         <CragSummary {...props} />
       </div>
 
-      <div className='mt-12'>
+      {/* <div className='mt-12'>
         <CragTable title='Climbs' climbs={props.climbs} />
-      </div>
+      </div> */}
     </div>
   )
 }
