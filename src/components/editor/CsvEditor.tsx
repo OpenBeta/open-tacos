@@ -1,4 +1,4 @@
-import { useController } from 'react-hook-form'
+import { useController, useFieldArray } from 'react-hook-form'
 import clx from 'classnames'
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
@@ -24,10 +24,10 @@ interface EditorProps {
 }
 
 export default function CsvEditor ({ initialClimbs, name, editable = false, reset, placeholder = 'Enter some text', rules }: EditorProps): JSX.Element {
-  const { field, fieldState: { error } } = useController({ name, rules })
-
+  const { fieldState: { error } } = useController({ name, rules })
+  const { fields, replace } = useFieldArray({ name, rules })
   const onChangeHandler = (arg0, arg1): void => {
-    onChangeCsv(arg0, arg1, field)
+    onChangeCsv(arg0, arg1, replace)
   }
   return (
     <LexicalComposer initialConfig={editorConfigCsv(initialClimbs)}>

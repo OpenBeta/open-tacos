@@ -30,7 +30,7 @@ export interface CragHeroProps {
 }
 
 export interface EditableClimbType {
-  id: string | null
+  climbId: string | null
   name: string
   yds: string
   error?: string
@@ -60,7 +60,8 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     latlng: `${initLat.toString()},${initLng.toString()}`,
     areaType: areaDesignationToForm(areaMeta),
     climbList: climbs.map(({ id, name, yds }) => ({
-      id,
+      id, // to be used as react key
+      climbId: id,
       name,
       yds
     }))
@@ -208,7 +209,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
               />
             </div>
           </div>
-          <ClimbListPreview />
+          <ClimbListPreview editable={editMode} />
           {editMode && (
             <div className='collapse mt-8 collapse-plus'>
               <input type='checkbox' defaultChecked />

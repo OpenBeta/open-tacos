@@ -1,24 +1,21 @@
 import { EditorState, LexicalEditor, $getRoot, TextNode } from 'lexical'
 import { ControllerRenderProps } from 'react-hook-form'
-import { validate as isUuid } from 'uuid'
+import { validate as isUuid, v4 } from 'uuid'
 
 export default function onChange (editorState: EditorState, editor: LexicalEditor, field: ControllerRenderProps): void {
   if (field?.onChange == null) return
   editorState.read(() => {
     const root = $getRoot()
-    console.log('#root', root.getAllTextNodes())
     field?.onChange(root.getTextContent()?.trim())
   })
 }
 
-export function onChangeCsv (editorState: EditorState, editor: LexicalEditor, field: ControllerRenderProps): void {
-  if (field?.onChange == null) return
+export function onChangeCsv (editorState: EditorState, editor: LexicalEditor, replace: any): void {
+  if (replace == null) return
   editorState.read(() => {
     const root = $getRoot()
-    // console.log('#root', root.getAllTextNodes())
     const lines = root.getAllTextNodes().map(parseLine)
-    console.log('#lines', lines)
-    field?.onChange(lines)
+    replace(lines)
   })
 }
 
@@ -32,27 +29,32 @@ const parseLine = (line: TextNode, index: number): any => {
 
 export const csvToClimb = (tokens: string[], index: number): any => {
   if (tokens.length === 2) {
-    const id = isUuid(tokens[0].trim()) ? tokens[0].trim() : null
+    const climbId = isUuid(tokens[0].trim()) ? tokens[0].trim() : null
     const name = tokens[1].trim()
     return {
-      id,
+      id: climbId == null ? index : climbId,
+      climbId,
       name
     }
   }
   if (tokens.length === 1) {
     if (isUuid(tokens[0].trim())) {
+      const climbId = tokens[0].trim()
       return {
-        id: tokens[0].trim(),
+        id: climbId == null ? index : climbId,
+        climbId,
         name: `Untitled ${index}`
       }
     }
     return {
-      id: null,
+      id: index,
+      climbId: null,
       name: tokens[0].trim()
     }
   }
   return {
-    id: null,
+    id: index,
+    climbId: null,
     name: `Untitled ${index}`
   }
 }
