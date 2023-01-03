@@ -1,29 +1,22 @@
-import React, { Dispatch, ReactNode, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { userMediaStore } from '../../js/stores/media'
 import { ResponsiveImage2 } from './slideshow/ResponsiveImage'
 import { MobileDialog, DialogContent } from '../ui/MobileDialog'
 // import PhotoFooter from './PhotoFooter';
 
-interface LeanAlertProps {
-  closeOnEsc?: boolean // prevent Esc to close alert
-  icon?: ReactNode
-  title: ReactNode
-  description: ReactNode
-  children?: ReactNode
+interface PhotoGalleryModalProps {
   setShowPhotoGalleryModal: Dispatch<SetStateAction<boolean>>
 }
 
 /*
  * A reusable popup alert
- * @param title
- * @param description
  * @param setShowPhotoGallery A setState action that toggles the photo gallery modal on click.
  */
-const PhotoGalleryModal = ({ title, description, setShowPhotoGalleryModal }: LeanAlertProps): JSX.Element => {
+const PhotoGalleryModal = ({ setShowPhotoGalleryModal }: PhotoGalleryModalProps): JSX.Element => {
   const photoList = userMediaStore.use.photoList()
   return (
     <MobileDialog modal open onOpenChange={() => setShowPhotoGalleryModal(false)}>
-      <DialogContent title={title} fullScreen>
+      <DialogContent fullScreen>
         <div className='px-0 lg:px-4 mt-8 relative w-screen w-full mx-auto columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-2 lg:gap-4'>
           {photoList.map(element => {
             const mediaInfo = element?.mediaInfo
@@ -32,16 +25,14 @@ const PhotoGalleryModal = ({ title, description, setShowPhotoGalleryModal }: Lea
             return (
               <div
                 key={element.mediaUrl}
-                className='overflow-hidden mt-0 mb-2 lg:mb-4 hover:brightness-75 break-inside-avoid-column break-inside-avoid relative block'
+                className='overflow-hidden mt-0 mb-2 lg:mb-4 hover:brightness-75 break-inside-avoid-column break-inside-avoid relative block rounded-md'
               >
-                {/* <Link href={element.mediaUrl}> */}
                 <ResponsiveImage2
                   naturalWidth={width}
                   naturalHeight={height}
                   mediaUrl={element.mediaUrl}
                   isHero={false}
                 />
-                {/* </Link> */}
               </div>
             )
           }

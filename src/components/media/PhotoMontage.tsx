@@ -36,7 +36,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
     void userMediaStore.set.setPhotoList(initialList)
   }, [initialList])
 
-  const photoGalleryModal = <PhotoGalleryModal title='a title' description='a description' setShowPhotoGalleryModal={setShowPhotoGalleryModal} />
+  const photoGalleryModal = <PhotoGalleryModal setShowPhotoGalleryModal={setShowPhotoGalleryModal} />
   const [hover, setHover] = useState(false)
 
   if (shuffledList == null || shuffledList?.length === 0) { return null }

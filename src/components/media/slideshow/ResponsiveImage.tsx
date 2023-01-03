@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { MouseEventHandler, useEffect, useState } from 'react'
 import { Transition } from '@headlessui/react'
 import Image from 'next/image'
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
@@ -65,9 +65,10 @@ export default function ResponsiveImage ({ mediaUrl, isHero = true, loader = nul
 interface SSRResponsiveImageProps extends ResponsiveImageProps {
   naturalWidth: number
   naturalHeight: number
+  onClick?: MouseEventHandler<HTMLImageElement> | undefined
 }
 
-export function ResponsiveImage2 ({ mediaUrl, naturalWidth, naturalHeight, isHero = true, loader = null }: SSRResponsiveImageProps): JSX.Element {
+export function ResponsiveImage2 ({ mediaUrl, naturalWidth, naturalHeight, isHero = true, loader = null, onClick = undefined }: SSRResponsiveImageProps): JSX.Element {
   const aspectRatio = naturalWidth / naturalHeight
   const width = 300
   const height = width / aspectRatio
@@ -81,9 +82,10 @@ export function ResponsiveImage2 ({ mediaUrl, naturalWidth, naturalHeight, isHer
       33vw'
       width={width}
       height={height}
-      objectFit='cover'
+      objectFit='fill'
       placeholder='blur'
       blurDataURL={DefaultPlaceholder}
+      onClick={onClick !== undefined ? onClick : undefined}
     />
   )
 }
