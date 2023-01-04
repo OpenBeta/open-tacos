@@ -60,6 +60,7 @@ export interface IndividualClimbChangeInput {
   description?: string
   location?: string
   protection?: string
+  leftRightIndex?: number
 }
 
 export interface UpdateClimbsInput {

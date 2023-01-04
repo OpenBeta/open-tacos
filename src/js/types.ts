@@ -31,6 +31,7 @@ export interface ClimbMetadataType {
   lat: number
   lng: number
   left_right_index: string
+  leftRightIndex: number
   mp_id: string
   climbId: string
 }

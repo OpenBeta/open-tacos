@@ -245,7 +245,7 @@ const ExplainAreaTypeLock = ({ canEdit }: { canEdit: boolean }): JSX.Element | n
     canEdit
       ? null
       : (
-        <div className='tooltip tooltip-left tooltip-info drop-shadow-lg' data-tip='Selections become read-only when the area contains subareas or is a crag/boulder.'>
+        <div className='tooltip tooltip-left tooltip-info drop-shadow-lg' data-tip='Selection becomes read-only when the area contains subareas or is a crag/boulder.'>
           <QuestionMarkCircleIcon className='text-info w-5 h-5' />
         </div>)
   )

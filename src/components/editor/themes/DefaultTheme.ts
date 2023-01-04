@@ -24,7 +24,7 @@ export const textInputTheme = {
 export const csvTheme = {
   ltr: 'ltr',
   rtl: 'rtl',
-  placeholder: 'editor-placeholder',
+  placeholder: 'editor-csv-placeholder',
   paragraph: 'editor-csv-paragraph'
 }
 

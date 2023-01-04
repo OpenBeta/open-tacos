@@ -10,10 +10,15 @@ import { MarkNode } from '@lexical/mark'
 import { CodeNode } from '@lexical/code'
 
 import DefaultTheme, { textInputTheme, csvTheme } from './themes/DefaultTheme'
-import { $createInitialPlainTextState, $createInitialPlainTextState2 } from './plugins/PlainTextResetPlugin'
+import { $createInitialPlainTextState } from './plugins/PlainTextResetPlugin'
+import { $createInitialState } from './plugins/CsvResetPlugin'
+import { EditableClimbType } from '../../components/crag/cragSummary'
 
-import { ClimbType } from '../../js/types'
-
+/**
+ * Create initial config object for rich text editor
+ * @param initialValue
+ * @param editable
+ */
 export const editorConfigRichText = (initialValue: string, editable: boolean): InitialConfigType => {
   const createInitial = (): void => {
     if (editable) {
@@ -34,6 +39,10 @@ export const editorConfigRichText = (initialValue: string, editable: boolean): I
   }
 }
 
+/**
+ * Create initial config object for plain text editor
+ * @param initialValue
+ */
 export const editorConfigPlain = (initialValue: string): InitialConfigType => {
   return {
     editorState: () => $createInitialPlainTextState(initialValue),
@@ -46,9 +55,13 @@ export const editorConfigPlain = (initialValue: string): InitialConfigType => {
   }
 }
 
-export const editorConfigCsv = (initialList: ClimbType[]): InitialConfigType => {
+/**
+ * Create initial config object for CSV editor
+ * @param initialList initial climb list
+ */
+export const editorConfigCsv = (initialList: EditableClimbType[]): InitialConfigType => {
   return {
-    editorState: () => $createInitialPlainTextState2(initialList),
+    editorState: () => $createInitialState(initialList),
     namespace: 'editor',
     theme: csvTheme,
     onError (error) {
@@ -56,12 +69,4 @@ export const editorConfigCsv = (initialList: ClimbType[]): InitialConfigType => 
     },
     nodes: []
   }
-}
-
-export const climbListToCsv = (list: ClimbType[]): string => {
-  return list.map(individualClimbToCsv).join('\n')
-}
-
-const individualClimbToCsv = ({ name }: ClimbType): string => {
-  return name
 }

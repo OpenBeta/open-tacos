@@ -145,6 +145,7 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
         }
         metadata {
           climbId
+          leftRightIndex
         }
         content {
           description

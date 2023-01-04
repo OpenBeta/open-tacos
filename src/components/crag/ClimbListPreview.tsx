@@ -1,4 +1,4 @@
-import { useController } from 'react-hook-form'
+import { useController, useWatch } from 'react-hook-form'
 import Link from 'next/link'
 import { indexBy, Dictionary } from 'underscore'
 import clx from 'classnames'
@@ -11,54 +11,65 @@ interface Props {
 }
 
 export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
-  const { field, formState: { dirtyFields, defaultValues } } = useController({ name: 'climbList' })
+  const { formState: { defaultValues } } = useController({ name: 'climbList' })
 
-  const toBeDeleted = findDeletedClimbs(defaultValues?.climbList, field.value)
+  const watchList = useWatch({ name: 'climbList' })
+
+  const toBeDeleted = findDeletedClimbs(defaultValues?.climbList, watchList)
   const defaultDict = indexBy(defaultValues?.climbList, 'climbId')
+
   return (
     <>
-      <h3 className='mt-16'>Climbs&nbsp;<span className='text-base-300'>({field.value.length})</span></h3>
-      <div className='lg:columns-2 lg:gap-16'>
-        {field.value.map((entry, index) =>
+      <h3 className='mt-16'>Climbs&nbsp;<span className='text-base-300'>({watchList.length})</span></h3>
+      <section className='lg:columns-2 lg:gap-16'>
+        {watchList.map((entry, index) =>
           <ClimbEntry
             key={entry.id} {...entry} index={index}
-            dirtyFields={dirtyFields.climbList}
             defaultDict={defaultDict}
           />)}
-        {field.value.length === 0 && <div className='text-base-300 italic'>None</div>}
-      </div>
-      {editable && (
+        {watchList.length === 0 && <div className='text-base-300 italic'>None</div>}
+      </section>
+      {editable && toBeDeleted?.length > 0 && (
         <>
-          <h3 className='mt-6'>To be deleted <span className='text-base-300'>({toBeDeleted.length})</span></h3>
-          <div className='lg:columns-2 lg:gap-16'>
-            {toBeDeleted.map(ClimbEntry)}
+          <h3 className='mt-6 text-base-300 fadeinEffect'>To Be Deleted <span className=''>({toBeDeleted.length})</span></h3>
+          <section className='lg:columns-2 lg:gap-16'>
+            {toBeDeleted.map((entry, index) => <ClimbEntry key={entry.id} {...entry} index={index} toBeDeleted />)}
             {toBeDeleted?.length === 0 && <div className='text-base-300 italic'>None</div>}
-          </div>
+          </section>
         </>)}
     </>
   )
 }
 
 type ClimbEntryProps = EditableClimbTypeWithFieldId & {
-  dirtyFields: any
   index: number
-  defaultDict: Dictionary<EditableClimbType>
+  defaultDict?: Dictionary<EditableClimbType>
+  toBeDeleted?: boolean
 }
 
-const ClimbEntry = ({ id, climbId, name, yds, dirtyFields, index, defaultDict }: ClimbEntryProps): JSX.Element => {
+const ClimbEntry = ({ id, climbId, name, yds, index, defaultDict, toBeDeleted = false }: ClimbEntryProps): JSX.Element => {
   const isDirty = climbId != null && defaultDict?.[climbId]?.name !== name
   const isNew = climbId == null
   return (
     <div className='my-2 flex items-center gap-4 fadeinEffect'>
-      <div className={clx('rounded-full h-8 w-8 grid place-content-center text-sm bg-primary text-base-100 indicator', isDirty && !isNew ? 'outline-2 outline-secondary outline-offset-4 outline-dashed' : '')}>
-        {isNew && <span className='indicator-item'><span className='px-1 font-bold text-lg text-base-content bg-warning rounded-full'>+</span></span>}
+      <div className={
+        clx('rounded-full h-8 w-8 grid place-content-center text-sm bg-primary text-base-100 indicator',
+          isDirty && !isNew && !toBeDeleted ? 'outline-2 outline-secondary outline-offset-4 outline-dashed' : '',
+          toBeDeleted ? 'bg-opacity-60' : ''
+        )
+        }
+      >
+        {isNew && !toBeDeleted &&
+          <span className='indicator-item indicator-item-mod badge badge-xs badge-success' />}
         {index + 1}
       </div>
-      <div className='grow border-t-2 py-2 uppercase font-semibold text-base-content flex items-center justify-between'>
-        <div className={clx(isDirty ? 'italic text-secondary' : '')}>
-          <WrapLink climbId={climbId} text={name} />
-        </div>
-        <div>{yds}</div>
+      <div className={
+  clx('grow border-t-2 py-2 uppercase font-semibold flex items-center justify-between', (isDirty && !toBeDeleted) || isNew ? 'italic text-secondary' : '',
+    toBeDeleted ? 'italic text-base-300' : '')
+  }
+      >
+        <WrapLink climbId={climbId} text={name} />
+        <div className='text-inherit'>{yds}</div>
       </div>
     </div>
   )

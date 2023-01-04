@@ -1,6 +1,8 @@
 import { ClimbTypeToColor } from './constants'
-import { Climb, ClimbDisciplineRecord, ClimbDiscipline } from './types'
 import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
+
+import { ClimbType, ClimbDisciplineRecord, ClimbDiscipline } from './types'
+
 /**
  * Given a path or parent id and the type of the page generate the GitHub URL
  * @param {String} pathOrParentId from createNodeField in gatsby-node.js
@@ -23,7 +25,7 @@ interface PercentAndColor {
  * @param {Object[]} climbs, these are the nodes {frontmatter, fields} format
  * @returns {percents: [], colors:[]}
  */
-export const computeClimbingPercentsAndColors = (climbs: Climb[]): PercentAndColor => {
+export const computeClimbingPercentsAndColors = (climbs: ClimbType[]): PercentAndColor => {
   const typeToCount: {[key: string]: number} = {}
   climbs.forEach((climb) => {
     const { type } = climb
@@ -237,3 +239,12 @@ export const urlResolver = (type: number, dest: string): string | null => {
 export const getMapHref = ({ lat, lng }: { lat: number, lng: number}): string => {
   return `https://www.google.com/maps/place/${lat},${lng}`
 }
+
+/**
+ * Sort climb list by its left to right index
+ * @param climbs  array of climbs
+ * @returns sorted array
+ */
+export const sortClimbsByLeftRightIndex = (climbs: ClimbType[]): ClimbType[] => climbs.slice().sort(compareFn)
+
+const compareFn = (a: ClimbType, b: ClimbType): number => (a.metadata.leftRightIndex - b.metadata.leftRightIndex)

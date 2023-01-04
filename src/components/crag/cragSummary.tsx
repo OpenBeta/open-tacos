@@ -11,7 +11,7 @@ import { FormSaveAction } from '../../components/editor/FormSaveAction'
 import { MUTATION_UPDATE_AREA, UpdateAreaReturnType } from '../../js/graphql/gql/contribs'
 import { graphqlClient } from '../../js/graphql/Client'
 import Toast from '../../components/ui/Toast'
-import { getMapHref } from '../../js/utils'
+import { getMapHref, sortClimbsByLeftRightIndex } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES, AreaTypeRadioGroup } from '../edit/EditAreaForm'
 import { CragLayoutProps } from './cragLayout'
 import { ClimbListPreview } from './ClimbListPreview'
@@ -30,9 +30,11 @@ export interface CragHeroProps {
 }
 
 export interface EditableClimbType {
+  id: string
   climbId: string | null
   name: string
   yds: string
+  leftRightIndex: number
   error?: string
 }
 
@@ -59,11 +61,12 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     description: initDescription,
     latlng: `${initLat.toString()},${initLng.toString()}`,
     areaType: areaDesignationToForm(areaMeta),
-    climbList: climbs.map(({ id, name, yds }) => ({
+    climbList: sortClimbsByLeftRightIndex(climbs).map(({ id, name, yds, metadata: { leftRightIndex } }) => ({
       id, // to be used as react key
       climbId: id,
       name,
-      yds
+      yds,
+      leftRightIndex
     }))
   })
 
@@ -91,11 +94,14 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
   const { handleSubmit, formState: { isSubmitting, isDirty, dirtyFields }, reset, watch } = form
 
   const currentLatLngStr = watch('latlng')
+  const currentClimbList = watch('climbList')
+  const currentareaType = watch('areaType')
 
   const submitHandler = async (formData: SummaryHTMLFormProps): Promise<void> => {
-    const { uuid, areaName, description, latlng, areaType } = formData
+    const { uuid, areaName, description, latlng, areaType, climbList } = formData
     const [lat, lng] = latlng.split(',')
 
+    extractDirtyClimbs(dirtyFields?.climbList, climbList, cache.climbList)
     // Extract only dirty fields to send to the API
     const onlyDirtyFields: Partial<UpdateAPIType> = {
       ...dirtyFields?.areaName === true && { areaName },
@@ -136,7 +142,8 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
 
   const { areaName, description } = cache
   const latlngPair = parseLatLng(currentLatLngStr)
-  const canChangeAreaType = climbs.length === 0 // we're not allowed to change a crag to an area once it already has climbs
+  const canChangeAreaType = currentClimbList.length === 0 // we're not allowed to change a crag to an area once it already has climbs
+  const showBulkEditor = currentareaType !== 'area'
   return (
     <>
       <div className='flex justify-end'>
@@ -210,14 +217,14 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
             </div>
           </div>
           <ClimbListPreview editable={editMode} />
-          {editMode && (
-            <div className='collapse mt-8 collapse-plus'>
+          {editMode && showBulkEditor && (
+            <div className='collapse mt-8 collapse-plus fadeinEffect'>
               <input type='checkbox' defaultChecked />
               <div className='px-0 collapse-title'>
                 <span className='hover:underline font-medium'>Show / Hide the bulk CSV editor</span>
               </div>
               <div className='px-0 collapse-content'>
-                <ClimbBulkEditor name='climbList' initialClimbs={climbs} reset={0} editable />
+                <ClimbBulkEditor name='climbList' initialClimbs={cache.climbList} resetSignal={resetSignal} editable />
               </div>
             </div>)}
         </form>
@@ -270,6 +277,27 @@ const areaDesignationToDb = (attr: AreaTypeFormProp): Pick<AreaUpdatableFieldsTy
         isBoulder: false
       }
   }
+}
+type ClimbDirtyFieldsType = Partial<Record<keyof EditableClimbType, boolean>>
+
+const extractDirtyClimbs = (dirtyFields: ClimbDirtyFieldsType[] = [], climbList: EditableClimbType[], cacheList): any => {
+  console.log('#dirty', dirtyFields)
+  const updateList: any[] = climbList.reduce<any[]>((acc, curr, index): EditableClimbType[] => {
+    const dirtyObj = dirtyFields?.[index] ?? {}
+    if (Object.keys(dirtyObj).length === 0) {
+      return acc
+    }
+    const { climbId, name, leftRightIndex } = curr
+    acc.push({
+      climbId: climbId,
+      ...dirtyObj?.name === true && { name },
+      ...dirtyObj?.id === true && { leftRightIndex }
+    })
+    return acc
+  }, [])
+  console.log('#list', updateList)
+  console.log('#cache', cacheList)
+  return updateList
 }
 
 const InplaceEditor = dynamic(async () => await import('../../components/editor/InplaceEditor'), {

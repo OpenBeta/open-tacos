@@ -256,6 +256,15 @@ p {
     @apply top-2.5 left-3 text-base-300 text-opacity-50 italic;
   }
 
+  .editor-csv-placeholder {
+    overflow: hidden;
+    position: absolute;
+    user-select: none;
+    pointer-events: none;
+    @apply w-full rounded-lg top-0 left-3 text-base-300 text-opacity-50 italic;
+
+  }
+
   code {
     @apply font-sans text-base text-slate-900 leading-relaxed !important;
   }
@@ -284,12 +293,12 @@ p {
   .editor-csv-container {
     position: relative;
     counter-reset: line;
-    @apply rounded-box;
+    @apply overflow-clip rounded-box;
   }
 
   .editor-csv-input {
     counter-reset: line;
-    @apply focus:bg-info/20 border-none rounded-box outline-none;
+    @apply focus:bg-info/20 border-none rounded-box outline-none min-h-[5rem];
   }
 
   p.editor-csv-paragraph span {
@@ -297,7 +306,6 @@ p {
   }
   p.editor-csv-paragraph span::before {
     display: inline-block;
-    /* white-space: pre-wrap; */
     text-align:right;
     width: 2rem;
     min-width: 1rem;
@@ -401,4 +409,9 @@ table td.dtable-my-range {
 
 .collapse-plus .collapse-title:after {
   @apply text-3xl !important;
+}
+
+/* Move Daisy indicator closer to the center */
+.indicator-item-mod {
+  transform: translateY(-15%) translateX(15%); 
 }
