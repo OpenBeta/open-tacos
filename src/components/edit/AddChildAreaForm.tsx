@@ -85,7 +85,7 @@ export default function Form ({ parentUuid, parentName, formRef }: ChildAreaBase
   return (
     <>
       <FormProvider {...form}>
-        <form onSubmit={handleSubmit(submitHandler)}>
+        <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
           <Input
             label='Parent:'
             name='parentName'

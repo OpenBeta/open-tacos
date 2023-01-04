@@ -11,7 +11,7 @@ import { useSwipeable } from 'react-swipeable'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, Climb, MediaBaseTag, RulesType } from '../../js/types'
+import { AreaType, Climb, MediaBaseTag, RulesType, MediaType } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
@@ -26,6 +26,8 @@ import { MUTATION_UPDATE_CLIMBS, UpdateClimbsInput } from '../../js/graphql/gql/
 import Toast from '../../components/ui/Toast'
 import { FormSaveAction } from '../../components/editor/FormSaveAction'
 import { AREA_NAME_FORM_VALIDATION_RULES } from '../../components/edit/EditAreaForm'
+import { getImagesByFilenames } from '../../js/sirv/SirvClient'
+import { indexBy } from 'underscore'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -279,7 +281,7 @@ export async function getStaticPaths (): Promise<any> {
   }
 }
 
-export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = async ({ params }) => {
   if (params == null || params.id == null) {
     return {
       notFound: true
@@ -321,7 +323,7 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = asy
     }
   }`
 
-  const rs = await graphqlClient.query<{climb: Climb}>({
+  const rs = await graphqlClient.query<{ climb: Climb }>({
     query,
     variables: {
       uuid: params.id
@@ -335,7 +337,7 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = asy
     }
   }
 
-  let mediaListWithUsernames = rs.data.climb.media
+  let mediaListWithUsernames: MediaBaseTag[] = rs.data.climb.media
   try {
     mediaListWithUsernames = await enhanceMediaListWithUsernames(mediaListWithUsernames)
   } catch (e) {
@@ -353,12 +355,19 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = asy
     }
   }
 
+  /**
+   * Call Sirv API to get image metadata.  We should probably store metadata in the db.
+   */
+  const mediaListWithMetadata = await getImagesByFilenames(mediaListWithUsernames.map(entry => entry.mediaUrl))
+
+  const mediaMetaDict = indexBy<MediaType[]>(mediaListWithMetadata.mediaList, 'mediaId')
+
   // Pass climb data to the page via props
   return {
     props: {
       key: rs.data.climb.id,
       climb: rs.data.climb,
-      mediaListWithUsernames,
+      mediaListWithUsernames: mediaListWithUsernames.map(entry => ({ ...entry, mediaInfo: mediaMetaDict?.[entry.mediaUuid] ?? null })),
       leftClimb,
       rightClimb
     },
@@ -384,7 +393,7 @@ const fetchSortedClimbsInArea = async (uuid: string): Promise<Climb[]> => {
     }
   }`
 
-  const rs = await graphqlClient.query<{area: AreaType}>({
+  const rs = await graphqlClient.query<{ area: AreaType }>({
     query,
     variables: {
       uuid: uuid
