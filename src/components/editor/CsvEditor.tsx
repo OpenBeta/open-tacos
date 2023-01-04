@@ -25,7 +25,7 @@ interface EditorProps {
 
 export default function CsvEditor ({ initialClimbs, name, editable = false, reset, placeholder = 'Enter some text', rules }: EditorProps): JSX.Element {
   const { fieldState: { error } } = useController({ name, rules })
-  const { fields, replace } = useFieldArray({ name, rules })
+  const { replace } = useFieldArray({ name, rules })
   const onChangeHandler = (arg0, arg1): void => {
     onChangeCsv(arg0, arg1, replace)
   }

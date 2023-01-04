@@ -1,6 +1,6 @@
 import { EditorState, LexicalEditor, $getRoot, TextNode } from 'lexical'
 import { ControllerRenderProps } from 'react-hook-form'
-import { validate as isUuid, v4 } from 'uuid'
+import { validate as isUuid } from 'uuid'
 
 export default function onChange (editorState: EditorState, editor: LexicalEditor, field: ControllerRenderProps): void {
   if (field?.onChange == null) return
@@ -22,19 +22,16 @@ export function onChangeCsv (editorState: EditorState, editor: LexicalEditor, re
 const parseLine = (line: TextNode, index: number): any => {
   const tokens = line.getTextContent()?.trim().split(/\s*\|\s*/)
   return csvToClimb(tokens, index)
-  // return tokens.map(csvToClimb)
 }
 
-// type TransformerType = (rawCsv: string) => ClimbType[]
-
 export const csvToClimb = (tokens: string[], index: number): any => {
-  if (tokens.length === 2) {
+  if (tokens.length >= 2) {
     const climbId = isUuid(tokens[0].trim()) ? tokens[0].trim() : null
     const name = tokens[1].trim()
     return {
       id: climbId == null ? index : climbId,
       climbId,
-      name
+      name: name === '' ? `Untitled ${index + 1}` : name
     }
   }
   if (tokens.length === 1) {
@@ -43,7 +40,7 @@ export const csvToClimb = (tokens: string[], index: number): any => {
       return {
         id: climbId == null ? index : climbId,
         climbId,
-        name: `Untitled ${index}`
+        name: `Untitled ${index + 1}`
       }
     }
     return {
@@ -55,6 +52,6 @@ export const csvToClimb = (tokens: string[], index: number): any => {
   return {
     id: index,
     climbId: null,
-    name: `Untitled ${index}`
+    name: `Untitled ${index + 1}`
   }
 }
