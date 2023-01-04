@@ -69,7 +69,7 @@ export default function Form ({ areaUuid, areaName, parentUuid, onClose }: Delet
     <>
       <div>You're about to delete area <b>{areaName}</b>.  Type DELETE to confirm.</div>
       <FormProvider {...form}>
-        <form onSubmit={handleSubmit(submitHandler)}>
+        <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
           <Input
             label=''
             name='confirmation'

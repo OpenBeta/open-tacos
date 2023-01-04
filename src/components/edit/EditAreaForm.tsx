@@ -137,7 +137,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
   return (
     <>
       <FormProvider {...form}>
-        <form onSubmit={handleSubmit(submitHandler)}>
+        <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
           <Input
             label='Name:'
             name='areaName'
@@ -190,6 +190,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
       <Toast ref={toastRef} />
       {gqlError != null && <SaveErrorAlert {...gqlError} />}
     </>
+  // </div>
   )
 }
 interface ErrorAlertProps {
