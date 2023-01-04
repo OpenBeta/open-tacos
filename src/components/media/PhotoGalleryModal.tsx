@@ -2,7 +2,6 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { userMediaStore } from '../../js/stores/media'
 import { ResponsiveImage2 } from './slideshow/ResponsiveImage'
 import { MobileDialog, DialogContent } from '../ui/MobileDialog'
-// import PhotoFooter from './PhotoFooter';
 
 interface PhotoGalleryModalProps {
   setShowPhotoGalleryModal: Dispatch<SetStateAction<boolean>>

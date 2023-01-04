@@ -45,7 +45,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
     const { uid, mediaUrl, destType, destination } = shuffledList[0]
     return (
       <div className='block relative w-full h-60'>
-        {showPhotoGalleryModal && photoGalleryModal} {/* is there a better way to do this conditional rendering? */}
+        {showPhotoGalleryModal ? photoGalleryModal : undefined}
         <Image
           src={mediaUrl}
           layout='fill'
@@ -68,7 +68,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
-        {showPhotoGalleryModal && photoGalleryModal} {/* is there a better way to do this conditional rendering? */}
+        {showPhotoGalleryModal ? photoGalleryModal : undefined}
         {shuffledList.slice(0, 2).map(({ mediaUrl, mediaUuid, uid, destination, destType }) => {
           return (
             <div
@@ -96,7 +96,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      {showPhotoGalleryModal && photoGalleryModal} {/* is there a better way to do this conditional rendering? */}
+      {showPhotoGalleryModal ? photoGalleryModal : undefined}
       <div className='block relative col-start-1 col-span-2 row-span-2 col-end-3'>
         <ResponsiveImage mediaUrl={first.mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
         <PhotoFooter username={first.uid} destType={first.destType} destination={first.destination} hover={hover} />
