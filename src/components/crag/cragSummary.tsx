@@ -2,19 +2,20 @@ import React, { useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
-import { GlobeAltIcon } from '@heroicons/react/24/outline'
+import { GlobeAltIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 import { useMutation } from '@apollo/client'
 
 import { AreaMetadataType, CountByGroupType, AreaUpdatableFieldsType } from '../../js/types'
+import { IndividualClimbChangeInput, MUTATION_UPDATE_AREA, UpdateAreaReturnType } from '../../js/graphql/gql/contribs'
 import EditModeToggle from '../../components/editor/EditModeToggle'
 import { FormSaveAction } from '../../components/editor/FormSaveAction'
-import { MUTATION_UPDATE_AREA, UpdateAreaReturnType } from '../../js/graphql/gql/contribs'
 import { graphqlClient } from '../../js/graphql/Client'
 import Toast from '../../components/ui/Toast'
 import { getMapHref, sortClimbsByLeftRightIndex } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES, AreaTypeRadioGroup } from '../edit/EditAreaForm'
 import { CragLayoutProps } from './cragLayout'
 import { ClimbListPreview } from './ClimbListPreview'
+import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 // import FavouriteButton from '../users/FavouriteButton'
 
 export interface CragHeroProps {
@@ -31,11 +32,12 @@ export interface CragHeroProps {
 
 export interface EditableClimbType {
   id: string
-  climbId: string | null
+  climbId: string
   name: string
   yds: string
   leftRightIndex: number
   error?: string
+  isNew?: boolean
 }
 
 type BulkClimbList = EditableClimbType[]
@@ -49,6 +51,10 @@ type UpdateAPIType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' |
 /**
  * Responsive summary of major attributes for a crag / boulder.
  * This could actually be extended to giving area summaries as well.
+ *
+ * **Note:** There's no need to wrap backend API calls in a try/catch block
+ * because react-hook-form `handleSubmit()` handles it for us and sends exeptions
+ * to `onError()` callback.
  */
 export default function CragSummary ({ uuid, title: initTitle, description: initDescription, latitude: initLat, longitude: initLng, areaMeta, climbs }: CragLayoutProps): JSX.Element {
   const toastRef = useRef<any>(null)
@@ -70,12 +76,26 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     }))
   })
 
+  const onUpdateCompleted = (): void => {
+    toastRef?.current?.publish('Climbs updated.  Thank you for your contribution! ✨')
+  }
+
+  const onUpdateError = (): void => {
+    toastRef?.current?.publish('Something unexpected happened. Please save again.', true)
+  }
+
+  const { updateClimbCmd } = useUpdateClimbsCmd({
+    accessToken: session?.data?.accessToken as string,
+    onCompleted: onUpdateCompleted,
+    onError: onUpdateError
+  })
+
   const [updateArea] = useMutation<{ updateArea: UpdateAreaReturnType }, UpdateAPIType>(
     MUTATION_UPDATE_AREA, {
       client: graphqlClient,
       onCompleted: () => {
         void fetch(`/api/revalidate?s=${uuid}`)
-        toastRef?.current?.publish('Changes saved.  Thank you for your contribution! ✨')
+        toastRef?.current?.publish('Crag updated.  Thank you for your contribution! ✨')
       },
       onError: (error) => {
         console.log(error)
@@ -85,11 +105,10 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
   )
 
   // Form declaration
-  const form = useForm<SummaryHTMLFormProps>(
-    {
-      mode: 'onBlur',
-      defaultValues: { ...cache }
-    })
+  const form = useForm<SummaryHTMLFormProps>({
+    mode: 'onBlur',
+    defaultValues: { ...cache }
+  })
 
   const { handleSubmit, formState: { isSubmitting, isDirty, dirtyFields }, reset, watch } = form
 
@@ -97,11 +116,15 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
   const currentClimbList = watch('climbList')
   const currentareaType = watch('areaType')
 
+  /**
+   * For submit handler
+   */
   const submitHandler = async (formData: SummaryHTMLFormProps): Promise<void> => {
     const { uuid, areaName, description, latlng, areaType, climbList } = formData
     const [lat, lng] = latlng.split(',')
 
-    extractDirtyClimbs(dirtyFields?.climbList, climbList, cache.climbList)
+    const updatedClimbs = extractDirtyClimbs(dirtyFields?.climbList, climbList, cache.climbList)
+
     // Extract only dirty fields to send to the API
     const onlyDirtyFields: Partial<UpdateAPIType> = {
       ...dirtyFields?.areaName === true && { areaName },
@@ -115,27 +138,35 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
      * form's global dirty flag is false.
      * We still double-check here just in case things fall through the cracks.
      */
-    if (Object.keys(onlyDirtyFields).length === 0) {
+    const isCragSummaryDirty = Object.keys(onlyDirtyFields).length > 0
+    const isClimbListDirty = updatedClimbs.length > 0
+    if (!isCragSummaryDirty && !isClimbListDirty) {
       toastRef?.current?.publish('Nothing to save.  Please make at least 1 edit.', true)
       return
     }
 
-    /**
-     * There's no need to wrap backend API calls in a try/catch block
-     * because react-hook-form `handleSubmit()` handles it for us and sends exeptions
-     * to `onError()` callback.
-     */
-    await updateArea({
-      variables: {
-        uuid,
-        ...onlyDirtyFields
-      },
-      context: {
-        headers: {
-          authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
+    // Send climb updates to backend
+    if (isClimbListDirty) {
+      await updateClimbCmd({
+        parentId: uuid,
+        changes: updatedClimbs
+      })
+    }
+
+    // Send crag updates to backend
+    if (isCragSummaryDirty) {
+      await updateArea({
+        variables: {
+          uuid,
+          ...onlyDirtyFields
+        },
+        context: {
+          headers: {
+            authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
+          }
         }
-      }
-    })
+      })
+    }
     setCache({ ...formData })
     reset(formData, { keepValues: true })
   }
@@ -220,8 +251,8 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
           {editMode && showBulkEditor && (
             <div className='collapse mt-8 collapse-plus fadeinEffect'>
               <input type='checkbox' defaultChecked />
-              <div className='px-0 collapse-title'>
-                <span className='hover:underline font-medium'>Show / Hide the bulk CSV editor</span>
+              <div className='px-0 collapse-title flex items-center gap-4'>
+                <PencilSquareIcon className='w-12 h-12 rounded-full p-3 bg-secondary shadow-lg' /><span className='underline font-medium'>CSV editor</span>
               </div>
               <div className='px-0 collapse-content'>
                 <ClimbBulkEditor name='climbList' initialClimbs={cache.climbList} resetSignal={resetSignal} editable />
@@ -280,23 +311,31 @@ const areaDesignationToDb = (attr: AreaTypeFormProp): Pick<AreaUpdatableFieldsTy
 }
 type ClimbDirtyFieldsType = Partial<Record<keyof EditableClimbType, boolean>>
 
-const extractDirtyClimbs = (dirtyFields: ClimbDirtyFieldsType[] = [], climbList: EditableClimbType[], cacheList): any => {
-  console.log('#dirty', dirtyFields)
-  const updateList: any[] = climbList.reduce<any[]>((acc, curr, index): EditableClimbType[] => {
+/**
+ * Use react-hook-form's dirty field flags to return only updated fields
+ * @param dirtyFields See react-hook-form
+ * @param climbList Active list extracted from form
+ * @param cacheList Cache/default list
+ * @returns
+ */
+const extractDirtyClimbs = (dirtyFields: ClimbDirtyFieldsType[] = [], climbList: EditableClimbType[], cacheList: EditableClimbType[]): IndividualClimbChangeInput[] => {
+  // Reduce climb list in html form to list of objects compatible with `updateClimbs` API
+  const updateList = climbList.reduce<IndividualClimbChangeInput[]>((acc, curr, index) => {
     const dirtyObj = dirtyFields?.[index] ?? {}
     if (Object.keys(dirtyObj).length === 0) {
+      // Climb object unchanged, skip
       return acc
     }
+
+    // There's a change
     const { climbId, name, leftRightIndex } = curr
     acc.push({
-      climbId: climbId,
-      ...dirtyObj?.name === true && { name },
-      ...dirtyObj?.id === true && { leftRightIndex }
+      id: climbId, // A new random ID will add as a new climb
+      ...dirtyObj?.name === true && { name }, // Include name if changed
+      ...dirtyObj?.id === true && { leftRightIndex } // Include ordering index if array index has changed
     })
     return acc
   }, [])
-  console.log('#list', updateList)
-  console.log('#cache', cacheList)
   return updateList
 }
 

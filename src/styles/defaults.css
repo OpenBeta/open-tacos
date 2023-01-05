@@ -298,7 +298,7 @@ p {
 
   .editor-csv-input {
     counter-reset: line;
-    @apply focus:bg-info/20 border-none rounded-box outline-none min-h-[5rem];
+    @apply focus:bg-info/20 border-none rounded-box outline-none min-h-[8rem];
   }
 
   p.editor-csv-paragraph span {

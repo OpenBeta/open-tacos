@@ -19,8 +19,8 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
   const defaultDict = indexBy(defaultValues?.climbList, 'climbId')
 
   return (
-    <>
-      <h3 className='mt-16'>Climbs&nbsp;<span className='text-base-300'>({watchList.length})</span></h3>
+    <div className='mt-16 lg:mt-32 min-h-[8rem]'>
+      <h3>Climbs&nbsp;<span className='text-base-300'>({watchList.length})</span></h3>
       <section className='lg:columns-2 lg:gap-16'>
         {watchList.map((entry, index) =>
           <ClimbEntry
@@ -37,7 +37,7 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
             {toBeDeleted?.length === 0 && <div className='text-base-300 italic'>None</div>}
           </section>
         </>)}
-    </>
+    </div>
   )
 }
 
@@ -47,9 +47,8 @@ type ClimbEntryProps = EditableClimbTypeWithFieldId & {
   toBeDeleted?: boolean
 }
 
-const ClimbEntry = ({ id, climbId, name, yds, index, defaultDict, toBeDeleted = false }: ClimbEntryProps): JSX.Element => {
+const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict, toBeDeleted = false }: ClimbEntryProps): JSX.Element => {
   const isDirty = climbId != null && defaultDict?.[climbId]?.name !== name
-  const isNew = climbId == null
   return (
     <div className='my-2 flex items-center gap-4 fadeinEffect'>
       <div className={

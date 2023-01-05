@@ -55,7 +55,7 @@ mutation ($input: UpdateClimbsInput) {
 `
 
 export interface IndividualClimbChangeInput {
-  id: string
+  id?: string // Null or undefined id will create a new climb
   name?: string
   description?: string
   location?: string

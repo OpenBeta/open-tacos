@@ -1,5 +1,6 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useFirstMountState } from 'react-use'
 
 import { $getRoot, $createTextNode, $createParagraphNode } from 'lexical'
 
@@ -15,19 +16,21 @@ interface Props {
  * React Lexical plugin to response to preview/editable mode change
  */
 export function CsvResetPlugin ({ initialValue, resetSignal, editable = false }: Props): any {
-  const [previous, setPrevious] = useState(resetSignal)
+  // const [previous, setPrevious] = useState(resetSignal)
 
   const [editor] = useLexicalComposerContext()
+  const isFirstMount = useFirstMountState()
 
   useEffect(() => {
-    if (!editable || resetSignal === previous) return
+    if (!editable || isFirstMount) return
+    console.log('#Reset CSV editor', initialValue)
 
     editor.update(() => {
-      setPrevious(resetSignal)
+      // setPrevious(resetSignal)
       $createInitialState(initialValue)
     }
     )
-  }, [resetSignal])
+  }, [resetSignal, initialValue])
 
   return null
 }
