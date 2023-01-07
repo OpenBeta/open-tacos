@@ -3,7 +3,7 @@ import { NextApiHandler } from 'next'
 import withAuth from '../withAuth'
 import createMetadataClient, { Auth0UserMetadata } from './metadataClient'
 import { addUserIdFile } from '../../../js/sirv/SirvClient'
-import { checkUsername } from '../../../js/utils'
+import { checkUsername, checkWebsiteUrl } from '../../../js/utils'
 
 type Handler = NextApiHandler<Auth0UserMetadata | { message: string }>
 
@@ -30,15 +30,19 @@ const updateMyProfile: Handler = async (req, res) => {
   }
 
   try {
-    // Only validate username
+    // validate username
     if (!checkUsername(req.body?.nick)) {
       throw new Error('Bad username')
     }
+    // validate that URL is properly formatted
+    const website = checkWebsiteUrl(req.body?.website)
+    if (website == null) { throw new Error('Bad website URL') }
     if (req.body?.name?.length > 150 || req.body?.bio?.length > 150 || req?.body?.uuid == null) {
       throw new Error('Bad profile data')
     }
 
     req.body.nick = (req.body.nick as string).toLowerCase()
+    req.body.website = website
 
     await addUserIdFile(`/u/${req.body.uuid as string}/uid.json`, req.body?.nick)
 
