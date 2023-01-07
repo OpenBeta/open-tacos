@@ -49,7 +49,13 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
 
             <DropdownSeparator />
 
-            <DropdownItem text='Logout' onSelect={async () => await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })} />
+            <DropdownItem
+              text='Logout'
+              onSelect={async () => {
+                sessionStorage.setItem('editMode', 'false')
+                await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })
+              }}
+            />
             <DropdownItem
               icon={<ChatBubbleOvalLeftEllipsisIcon className='w-4 h-4' />}
               text='Discord community'

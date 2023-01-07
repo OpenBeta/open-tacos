@@ -3,17 +3,19 @@ interface BackerCardProps {
   imageUrl: string
 }
 
-function BackerCard ({ name, imageUrl }: BackerCardProps): JSX.Element {
+export default function BackerCard ({ name, imageUrl }: BackerCardProps): JSX.Element {
   return (
-    <div className='border-solid border-2 rounded-md shadow-xl max-w-xs my-3 pt-3'>
-      <div className='flex justify-center'>
-        <img className='rounded-md border-solid border-white border-2' src={imageUrl} />
-      </div>
-      <div className='text-center px-3 pb-6 pt-2'>
-        <h3>{name}</h3>
+    <div className='shadow-lg card card-compact bg-amber-500'>
+      <div className='card-body items-center'>
+        <div className='avatar'>
+          <div className='rounded-full w-12'>
+            <img src={imageUrl} />
+          </div>
+        </div>
+        <div className='text-center text-xs capitalize'>
+          {name}
+        </div>
       </div>
     </div>
   )
 }
-
-export default BackerCard

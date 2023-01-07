@@ -1,6 +1,7 @@
 import { BBox, Feature } from '@turf/helpers'
 import { ViewState } from 'react-map-gl'
 import { BaseItem } from '@algolia/autocomplete-core'
+import { RegisterOptions } from 'react-hook-form'
 
 import { IUserProfile } from './types/User'
 
@@ -199,6 +200,7 @@ export interface MediaBaseTag {
   destType: number
   destination: string | null
   uid: string | null
+  mediaInfo?: MediaType
 }
 
 export interface MediaTagWithClimb extends MediaBaseTag {
@@ -302,6 +304,11 @@ export interface FinancialBackersResponseType {
   }
 }
 
+export interface FinancialReportType {
+  totalRaised: number
+  donors: FinancialBackerAccountType[]
+}
+
 export interface FinancialBackerAccountType {
   account: {
     id: string
@@ -311,3 +318,18 @@ export interface FinancialBackerAccountType {
 }
 
 export type CountrySummaryType = Pick<AreaType, 'areaName' | 'uuid' | 'totalClimbs' | 'updatedAt' | 'metadata'> & { metadata: Pick<AreaMetadataType, 'lat' | 'lng' | 'areaId'> }
+
+export interface TagsByUserType {
+  username: string | null
+  total: number
+}
+
+export interface TagsLeaderboardType {
+  grandTotal: number
+  list: TagsByUserType[]
+}
+
+/**
+ * Validation rules for react-hook-form
+ */
+export type RulesType = Pick<RegisterOptions, 'minLength' | 'maxLength' | 'min' | 'max' | 'required' | 'validate'>

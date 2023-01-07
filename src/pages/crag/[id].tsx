@@ -4,12 +4,14 @@ import { useRouter } from 'next/router'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
+import { AreaType, MediaBaseTag, ChangesetType, MediaType } from '../../js/types'
 import CragLayout from '../../components/crag/cragLayout'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import AreaMap from '../../components/area/areaMap'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { PageMeta } from '../areas/[id]'
+import { getImagesByFilenames } from '../../js/sirv/SirvClient'
+import { indexBy } from 'underscore'
 
 interface CragProps {
   area: AreaType
@@ -37,7 +39,7 @@ const CragPage: NextPage<CragProps> = (props) => {
 export default CragPage
 
 const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
-  const { areaName, aggregate, climbs, metadata, content, ancestors, pathTokens } = area
+  const { uuid, areaName, aggregate, climbs, metadata, content, ancestors, pathTokens } = area
 
   return (
     <>
@@ -45,10 +47,11 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
         <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
         <div className='mt-6' />
         <CragLayout
+          uuid={uuid}
           title={areaName}
           description={content.description}
-          latitude={metadata.lng}
-          longitude={metadata.lat}
+          latitude={metadata.lat}
+          longitude={metadata.lng}
           climbs={climbs}
           areaMeta={metadata}
           ancestors={ancestors}
@@ -71,33 +74,13 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
 }
 
 export async function getStaticPaths (): Promise<any> {
-  // Temporarily disable pre-rendering
-  // https://github.com/OpenBeta/openbeta-graphql/issues/26
-  // const rs = await graphqlClient.query<AreaResponseType>({
-  //   query: gql`query EdgeAreasQuery($filter: Filter) {
-  //   areas(filter: $filter) {
-  //     area_name
-  //     metadata {
-  //       area_id
-  //     }
-  //   }
-  // }`,
-  //   variables: {
-  //     filter: { leaf_status: { isLeaf: true } }
-  //   }
-  // })
-
-  // const paths = rs.data.areas.map((area: AreaType) => ({
-  //   params: { id: area.metadata.area_id }
-  // }))
-
   return {
     paths: [],
     fallback: true
   }
 }
 
-export const getStaticProps: GetStaticProps<CragProps, {id: string}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async ({ params }) => {
   if (params == null || params.id == null) {
     return {
       notFound: true
@@ -171,7 +154,7 @@ export const getStaticProps: GetStaticProps<CragProps, {id: string}> = async ({ 
     }
   }`
 
-  const rs = await graphqlClient.query<{area: AreaType}>({
+  const rs = await graphqlClient.query<{ area: AreaType }>({
     query,
     variables: {
       uuid: params.id
@@ -184,19 +167,26 @@ export const getStaticProps: GetStaticProps<CragProps, {id: string}> = async ({ 
     }
   }
 
-  let mediaListWithUsernames = rs.data.area.media
+  let mediaListWithUsernames: MediaBaseTag[] = rs.data.area.media
   try {
     mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.area.media)
   } catch (e) {
     console.log('Error when trying to add username to image data', e)
   }
 
+  /**
+ * Call Sirv API to get image metadata.  We should probably store metadata in the db.
+ */
+  const mediaListWithMetadata = await getImagesByFilenames(mediaListWithUsernames.map(entry => entry.mediaUrl))
+
+  const mediaMetaDict = indexBy<MediaType[]>(mediaListWithMetadata.mediaList, 'mediaId')
+
   // Pass post data to the page via props
   return {
     props: {
       area: rs.data.area,
       history: [],
-      mediaListWithUsernames
+      mediaListWithUsernames: mediaListWithUsernames.map(entry => ({ ...entry, mediaInfo: mediaMetaDict?.[entry.mediaUuid] ?? null }))
     }
   }
 }

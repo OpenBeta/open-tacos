@@ -10,7 +10,38 @@ import { graphqlClient } from '../../js/graphql/Client'
 import Input from '../ui/form/Input'
 import TextArea from '../ui/form/TextArea'
 import Toast from '../ui/Toast'
-import { AreaType, AreaUpdatableFieldsType } from '../../js/types'
+import { AreaType, AreaUpdatableFieldsType, RulesType } from '../../js/types'
+
+export const LATLNG_PATTERN = /(?<lat>^[-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)),(?<lng>[-+]?(?:180(?:\.0+)?|(?:1[0-7]\d|[1-9]?\d)(?:\.\d+)?))$/
+
+export const AREA_NAME_FORM_VALIDATION_RULES: RulesType = {
+  required: 'A name is required.',
+  minLength: {
+    value: 2,
+    message: 'Minimum 2 characters.'
+  },
+  maxLength: {
+    value: 120,
+    message: 'Maxium 120 characters.'
+  }
+}
+
+export const AREA_LATLNG_FORM_VALIDATION_RULES: RulesType = {
+  validate: {
+    validLatLng:
+    (v: string): string | undefined => {
+      if (v.length === 0) return undefined
+      return LATLNG_PATTERN.test(v) ? undefined : 'Invalid coordinates. Example: 46.433333,11.85'
+    }
+  }
+}
+
+export const AREA_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
+  maxLength: {
+    value: 3500,
+    message: 'Maxium 3500 characters.'
+  }
+}
 
 export interface ChildAreaBaseProps {
   areaUuid: string
@@ -100,30 +131,19 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
   }
 
   const MIN2PATTERN = /^[a-zA-Z0-9]*$/
-  const LATLNG_PATTERN = /(?<lat>^[-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?))\s*,\s*(?<lng>[-+]?(?:180(?:\.0+)?|(?:1[0-7]\d|[1-9]?\d)(?:\.\d+)?))$/
 
   const isCountry = pathTokens.length === 1
 
   return (
     <>
       <FormProvider {...form}>
-        <form onSubmit={handleSubmit(submitHandler)}>
+        <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
           <Input
             label='Name:'
             name='areaName'
             placeholder='Area name'
             disabled={isCountry}
-            registerOptions={{
-              required: 'Name is required.',
-              minLength: {
-                value: 2,
-                message: 'Minimum 2 characters'
-              },
-              maxLength: {
-                value: 120,
-                message: 'Maxium 120 characters'
-              }
-            }}
+            registerOptions={AREA_NAME_FORM_VALIDATION_RULES}
           />
           <Input
             label='Short code:'
@@ -147,26 +167,13 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
             label='Latitude, longtitude:'
             name='latlng'
             placeholder='latitude, longtitude'
-            registerOptions={{
-              validate: {
-                validLatLng:
-                (v: string): string | undefined => {
-                  if (v.length === 0) return undefined
-                  return LATLNG_PATTERN.test(v) ? undefined : 'Invalid coordinates. Ex: 46.433333, 11.85'
-                }
-              }
-            }}
+            registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
           />
           <TextArea
             label='Description:'
             name='description'
             placeholder='Area description'
-            registerOptions={{
-              maxLength: {
-                value: 3500,
-                message: 'Maxium 3500 characters'
-              }
-            }}
+            registerOptions={AREA_DESCRIPTION_FORM_VALIDATION_RULES}
             rows={8}
           />
           <button
@@ -183,6 +190,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
       <Toast ref={toastRef} />
       {gqlError != null && <SaveErrorAlert {...gqlError} />}
     </>
+  // </div>
   )
 }
 interface ErrorAlertProps {

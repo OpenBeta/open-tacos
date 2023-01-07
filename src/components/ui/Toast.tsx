@@ -37,18 +37,23 @@ interface ToastProps {
 const Toast = forwardRef((props: ToastProps, forwardedRef) => {
   const { children, title, alertClass = 'alert-info', type = 'foreground', ...toastProps } = props
   const [list, updateList] = useState<string[]>([])
+  const [error, setError] = useState(false)
 
   useImperativeHandle(forwardedRef, () => ({
-    publish: (msg: string) => updateList(list => {
-      list.push(msg)
-      return list
-    })
+    publish: (msg: string, isError: boolean = false) => {
+      setError(isError)
+      updateList(list => {
+        list.push(msg)
+        return list
+      })
+    }
   }))
 
+  const alertClz = error ? 'alert-warning' : alertClass
   return (
     <>
       {list.map((message, index) => (
-        <ToastPrimitive.Root key={index} type={type} {...toastProps} className={`rounded-box p-4 drop-shadow-lg flex flex-col gap-1 ${alertClass}`}>
+        <ToastPrimitive.Root key={index} type={type} {...toastProps} className={`rounded-box p-4 drop-shadow-lg flex flex-col gap-1 ${alertClz}`}>
           {title != null && <ToastPrimitive.Title className='font-semibold text-sm'>{title}</ToastPrimitive.Title>}
           <ToastPrimitive.Description>{children ?? <span className='text-sm'>{message}</span>}</ToastPrimitive.Description>
           <ToastPrimitive.Close className='mt-2 btn btn-outline btn btn-sm'>Got it</ToastPrimitive.Close>

@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
-
+import { indexBy } from 'underscore'
 import { QUERY_AREA_BY_ID } from '../../js/graphql/gql/areaById'
-import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
+import { AreaType, MediaBaseTag, MediaType, ChangesetType } from '../../js/types'
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
@@ -16,7 +16,7 @@ import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useAreaSeo } from '../../js/hooks/seo'
 import AreaEditTrigger from '../../components/edit/AreaEditTrigger'
-
+import { getImagesByFilenames } from '../../js/sirv/SirvClient'
 interface AreaPageProps {
   area: AreaType
   history: ChangesetType[]
@@ -171,7 +171,7 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
       variables: {
         uuid: params.id
       },
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'no-cache'
     })
 
     if (rs.data.area == null) {
@@ -181,19 +181,26 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
       }
     }
 
-    let mediaListWithUsernames = rs.data.area.media
+    let mediaListWithUsernames: MediaBaseTag[] = rs.data.area.media
     try {
       mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.area.media)
     } catch (e) {
       console.log('Error when trying to add username to image data', e)
     }
 
+    /**
+     * Call Sirv API to get image metadata.  We should probably store metadata in the db.
+     */
+    const mediaListWithMetadata = await getImagesByFilenames(mediaListWithUsernames.map(entry => entry.mediaUrl))
+
+    const mediaMetaDict = indexBy<MediaType[]>(mediaListWithMetadata.mediaList, 'mediaId')
+
     // Pass Area & edit history data to the page via props
     return {
       props: {
         area: rs.data.area,
         history: rs.data.getAreaHistory,
-        mediaListWithUsernames
+        mediaListWithUsernames: mediaListWithUsernames.map(entry => ({ ...entry, mediaInfo: mediaMetaDict?.[entry.mediaUuid] ?? null }))
       },
       revalidate: 10
     }

@@ -1,10 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { gql } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
+import { useForm, FormProvider } from 'react-hook-form'
+import { useSession } from 'next-auth/react'
+import dynamic from 'next/dynamic'
+import * as Portal from '@radix-ui/react-portal'
+import { useHotkeys } from 'react-hotkeys-hook'
+import { useSwipeable } from 'react-swipeable'
+
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, Climb, MediaBaseTag } from '../../js/types'
+import { AreaType, Climb, MediaBaseTag, RulesType, MediaType } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
@@ -12,12 +19,29 @@ import RouteTypeChips from '../../components/ui/RouteTypeChips'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
-import { useHotkeys } from 'react-hotkeys-hook'
-import { useSwipeable } from 'react-swipeable'
-import FavouriteButton from '../../components/users/FavouriteButton'
 import TickButton from '../../components/users/TickButton'
-import { useCanary } from '../../js/hooks'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
+import EditModeToggle from '../../components/editor/EditModeToggle'
+import { MUTATION_UPDATE_CLIMBS, UpdateClimbsInput } from '../../js/graphql/gql/contribs'
+import Toast from '../../components/ui/Toast'
+import { FormSaveAction } from '../../components/editor/FormSaveAction'
+import { AREA_NAME_FORM_VALIDATION_RULES } from '../../components/edit/EditAreaForm'
+import { getImagesByFilenames } from '../../js/sirv/SirvClient'
+import { indexBy } from 'underscore'
+
+export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
+  maxLength: {
+    value: 3500,
+    message: 'Maxium 3500 characters.'
+  }
+}
+
+export const CLIMB_LOCATION_FORM_VALIDATION_RULES: RulesType = {
+  maxLength: {
+    value: 800,
+    message: 'Maxium 800 characters.'
+  }
+}
 
 interface ClimbPageProps {
   climb: Climb
@@ -51,11 +75,22 @@ const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
 export default ClimbPage
 
 const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
-  const router = useRouter()
-  const { name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
+  const { id, name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
   const { climbId } = metadata
+
+  const [editMode, setEditMode] = useState(false)
+  const [resetSignal, setResetSignal] = useState(0)
+  const [cache, setCache] = useState({ name, ...content })
+
+  const router = useRouter()
+  const session = useSession()
+  const toastRef = useRef<any>()
+
+  useEffect(() => {
+    setCache({ name, ...content })
+  }, [name, content])
+
   useState([leftClimb, rightClimb])
-  const isCanary = useCanary()
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => {
@@ -76,70 +111,165 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
     rightClimb !== null && router.push(`/climbs/${rightClimb.id}`)
   }, [rightClimb])
 
+  // Form declaration
+  const form = useForm(
+    {
+      mode: 'onBlur',
+      defaultValues: { ...cache }
+    })
+
+  const { handleSubmit, formState: { isSubmitting, isDirty }, reset } = form
+
+  const submitHandler = async (formData): Promise<void> => {
+    const { description, location, protection, name } = formData
+    await updateClimbsApi({
+      variables: {
+        input: {
+          parentId: ancestors[ancestors.length - 1],
+          changes: [{ id, description, location, protection, name }]
+        }
+      },
+      context: {
+        headers: {
+          authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
+        }
+      }
+    })
+    setCache({ ...formData })
+    reset(formData, { keepValues: true })
+  }
+
+  const [updateClimbsApi] = useMutation<{ updateClimbsApi: string[] }, { input: UpdateClimbsInput }>(
+    MUTATION_UPDATE_CLIMBS, {
+      client: graphqlClient,
+      onCompleted: (data) => {
+        void fetch(`/api/revalidate?c=${id}`)
+        toastRef?.current?.publish('Changes saved.  Thank you for your contribution! ✨')
+      },
+      onError: (error) => {
+        console.log(error)
+        toastRef?.current?.publish('Something unexpected happened. Please save again.', true)
+      }
+    }
+  )
+  const portalRef = useRef(null)
   return (
     <div className='lg:flex lg:justify-center w-full' {...swipeHandlers}>
-      <div className='px-4 max-w-screen-xl'>
+      <div className='px-4 max-w-screen-xl w-full'>
+        <Portal.Root container={portalRef.current}>
+          <EditModeToggle onChange={setEditMode} />
+        </Portal.Root>
         <BreadCrumbs
           pathTokens={pathTokens}
           ancestors={ancestors}
           isClimbPage
         />
-
-        <div className='py-6'>
-          <PhotoMontage photoList={mediaListWithUsernames} />
-        </div>
-        <div className='md:flex'>
-          <div
-            id='Title Information'
-            style={{ minWidth: '300px' }}
-          >
-            <h1 className='text-4xl md:text-5xl mr-10'>{name}</h1>
-            <div className='pl-1'>
-              <div
-                className='flex items-center space-x-2 mt-6'
-              >
-                <RouteGradeChip grade={yds} safety={safety} />
-                <RouteTypeChips type={type} />
-
-              </div>
-
-              <div
-                title='First Assent'
-                className='text-slate-700 mt-4 text-sm'
-              >
-                <strong>FA: </strong>{fa}
-              </div>
-
-              <div className='flex flex-col pt-8'>
-                <FavouriteButton climbId={climbId} />
-                {isCanary && <TickButton climbId={climbId} name={name} grade={yds} />}
-              </div>
+        <FormProvider {...form}>
+          <form onSubmit={handleSubmit(submitHandler)}>
+            <div className='py-6'>
+              <PhotoMontage photoList={mediaListWithUsernames} />
             </div>
+            <div className='lg:grid lg:grid-cols-3 w-full'>
+              <div
+                id='Title Information'
+                className='lg:border-r-2 border-base-content'
+              >
 
-            <div className='pl-1'>
-              {isCanary && <ImportFromMtnProj isButton={false} />}
+                <h1 className='text-4xl md:text-5xl mr-10'>
+                  <InplaceTextInput
+                    reset={resetSignal}
+                    name='name'
+                    editable={editMode}
+                    initialValue={cache.name}
+                    placeholder='Climb name'
+                    rules={AREA_NAME_FORM_VALIDATION_RULES}
+                  />
+                </h1>
+                <div className='pl-1'>
+                  <div
+                    className='flex items-center space-x-2 mt-6'
+                  >
+                    <RouteGradeChip grade={yds} safety={safety} />
+                    <RouteTypeChips type={type} />
+                  </div>
+
+                  <div
+                    title='First Assent'
+                    className='text-slate-700 mt-4 text-sm'
+                  >
+                    <strong>FA: </strong>{fa}
+                  </div>
+
+                  <div className='pt-8'>
+                    <TickButton climbId={climbId} name={name} grade={yds} />
+                  </div>
+                </div>
+
+                <div className='pl-1'>
+                  <ImportFromMtnProj isButton={false} />
+                </div>
+              </div>
+
+              <div className='mt-16 lg:mt-0 lg:col-span-2 lg:pl-16 mb-16 w-full'>
+                <div className='mb-3 flex justify-between items-center'>
+                  <h3>Description</h3>
+                  <div ref={portalRef} />
+                </div>
+                <Editor
+                  reset={resetSignal}
+                  initialValue={cache.description}
+                  editable={editMode}
+                  name='description'
+                  placeholder='Enter a description'
+                  rules={CLIMB_DESCRIPTION_FORM_VALIDATION_RULES}
+                />
+
+                {(cache.location?.trim() !== '' || editMode) &&
+                  (
+                    <>
+                      <h3 className='mb-3 mt-6'>Location</h3>
+                      <Editor
+                        reset={resetSignal}
+                        name='location'
+                        initialValue={cache.location}
+                        editable={editMode}
+                        placeholder='How to find this climb'
+                        rules={CLIMB_LOCATION_FORM_VALIDATION_RULES}
+                      />
+
+                    </>
+                  )}
+
+                {(cache.protection?.trim() !== '' || editMode) &&
+                  (
+                    <>
+                      <h3 className='mb-3 mt-6'>Protection</h3>
+                      <Editor
+                        reset={resetSignal}
+                        name='protection'
+                        initialValue={cache.protection}
+                        editable={editMode}
+                        placeholder='Example: 16 quickdraws'
+                        rules={CLIMB_LOCATION_FORM_VALIDATION_RULES}
+                      />
+                    </>
+                  )}
+
+                <FormSaveAction
+                  cache={cache}
+                  editMode={editMode}
+                  isDirty={isDirty}
+                  isSubmitting={isSubmitting}
+                  resetHookFn={reset}
+                  onReset={() => setResetSignal(Date.now())}
+                />
+              </div>
+
             </div>
-          </div>
-
-          <div id='border div' className='border border-slate-500 my-6' />
-
-          <div id='Climb Content' />
-          <div className='md:px-16 mb-16'>
-            <h3 className='mb-3'>Description</h3>
-            <div className='whitespace-pre-line'>{content.description}</div>
-            {content.location !== ''
-              ? (
-                <>
-                  <h3 className='mb-3 mt-6'>Location</h3>
-                  <div className='whitespace-pre-line'>{content.location}</div>
-                </>
-                )
-              : ''}
-            <h3 className='mb-3 mt-6'>Protection</h3>
-            <div className='whitespace-pre-line'>{content.protection}</div>
-          </div>
-        </div>
+          </form>
+        </FormProvider>
       </div>
+      <Toast ref={toastRef} />
     </div>
   )
 }
@@ -151,7 +281,7 @@ export async function getStaticPaths (): Promise<any> {
   }
 }
 
-export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = async ({ params }) => {
   if (params == null || params.id == null) {
     return {
       notFound: true
@@ -193,7 +323,7 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = asy
     }
   }`
 
-  const rs = await graphqlClient.query<{climb: Climb}>({
+  const rs = await graphqlClient.query<{ climb: Climb }>({
     query,
     variables: {
       uuid: params.id
@@ -207,7 +337,7 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = asy
     }
   }
 
-  let mediaListWithUsernames = rs.data.climb.media
+  let mediaListWithUsernames: MediaBaseTag[] = rs.data.climb.media
   try {
     mediaListWithUsernames = await enhanceMediaListWithUsernames(mediaListWithUsernames)
   } catch (e) {
@@ -225,12 +355,19 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string}> = asy
     }
   }
 
+  /**
+   * Call Sirv API to get image metadata.  We should probably store metadata in the db.
+   */
+  const mediaListWithMetadata = await getImagesByFilenames(mediaListWithUsernames.map(entry => entry.mediaUrl))
+
+  const mediaMetaDict = indexBy<MediaType[]>(mediaListWithMetadata.mediaList, 'mediaId')
+
   // Pass climb data to the page via props
   return {
     props: {
       key: rs.data.climb.id,
       climb: rs.data.climb,
-      mediaListWithUsernames,
+      mediaListWithUsernames: mediaListWithUsernames.map(entry => ({ ...entry, mediaInfo: mediaMetaDict?.[entry.mediaUuid] ?? null })),
       leftClimb,
       rightClimb
     },
@@ -256,7 +393,7 @@ const fetchSortedClimbsInArea = async (uuid: string): Promise<Climb[]> => {
     }
   }`
 
-  const rs = await graphqlClient.query<{area: AreaType}>({
+  const rs = await graphqlClient.query<{ area: AreaType }>({
     query,
     variables: {
       uuid: uuid
@@ -290,3 +427,11 @@ const PageMeta = ({ climb, mediaListWithUsernames }: ClimbPageProps): JSX.Elemen
     />
   )
 }
+
+const Editor = dynamic(async () => await import('../../components/editor/InplaceEditor'), {
+  ssr: false
+})
+
+const InplaceTextInput = dynamic(async () => await import('../../components/editor/InplaceTextInput'), {
+  ssr: false
+})

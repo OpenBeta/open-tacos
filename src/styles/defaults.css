@@ -90,13 +90,36 @@ html {
   .home-hero-mobile {
     @apply lg:hidden h-screen portrait:height-mobile-portrait w-screen bg-gray-800;
   }
+
+  .dialog-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    @apply rounded-box overflow-hidden; 
+  }
+
+  .dialog-default {
+    @apply top-0 left-0 lg:dialog-center fixed z-50 w-full max-w-screen-md bg-base-100 lg:drop-shadow-lg;
+  }
+
+  .dialog-wide {
+    @apply top-0 left-0 fixed z-50 w-full w-screen bg-base-100;
+  }
+
+  .dialog-content-default {
+    @apply pt-16 overflow-y-auto overscroll-contain h-screen lg:h-full lg:max-h-[85vh];
+  }
+
+  .dialog-content-fullscreen {
+    @apply pt-16 overflow-y-auto overscroll-contain h-screen;
+  }
+
+  .dialog-form-default {
+    @apply px-2 lg:px-4 mb-8;
+  }
 }
 .title {
   @apply text-4xl font-bold font-sans my-4 !important;
-}
-
-code {
-  @apply text-sm font-mono bg-green-100 -mx-1.5 px-1.5 py-1.5 rounded !important;
 }
 
 p {
@@ -211,6 +234,41 @@ p {
   }
   .dropdown-item > *:last-child {
     @apply mb-1;
+  }
+
+  .editor-container {
+    @apply -mx-2 p-2 rounded-lg ;
+  }
+
+  .editor-input {
+    @apply  -m-2 p-2 rounded-lg focus:bg-info/20 border-none outline-none !important;
+  }
+
+  /* rounded-lg focus:bg-amber-50 focus:transition-colors focus:duration-500 focus:ease-in-out  */
+  .editor-container {
+    position: relative;
+  }
+
+  .editor-placeholder {
+    overflow: hidden;
+    position: absolute;
+    user-select: none;
+    pointer-events: none;
+    @apply top-2.5 left-3 text-base-300 text-opacity-50 italic;
+  }
+
+  code {
+    @apply font-sans text-base text-slate-900 leading-relaxed !important;
+  }
+  p.editor-paragraph:last-child {
+    margin-bottom: 0;
+  }
+
+  p.editor-single-paragraph {
+    margin-bottom: 0;
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
   }
 }
 

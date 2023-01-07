@@ -46,6 +46,25 @@ mutation ($uuid: String!, $areaName: String, $isDestination: Boolean, $shortCode
     }
 }`
 
+export const MUTATION_UPDATE_CLIMBS = gql`
+mutation ($input: UpdateClimbsInput) {
+  updateClimbs(input: $input)
+}
+`
+
+export interface IndividualClimbChangeInput {
+  id: string
+  name?: string
+  description?: string
+  location?: string
+  protection?: string
+}
+
+export interface UpdateClimbsInput {
+  parentId: string
+  changes: IndividualClimbChangeInput[]
+}
+
 /**
  * A reusable fragment
  */
@@ -64,6 +83,15 @@ export const FRAGMENT_CHANGE_HISTORY = gql`
       fullDocument {
         ... on Area {
           areaName
+          uuid
+          metadata {
+            leaf
+            areaId
+          }
+        }
+        ... on Climb {
+          id
+          name
           uuid
         }
       }
