@@ -119,7 +119,10 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
     toastRef?.current?.publish('Something unexpected happened. Please save again.', true)
   }
 
+  const parentId = ancestors[ancestors.length - 1]
+
   const { updateClimbCmd } = useUpdateClimbsCmd({
+    parentId,
     accessToken: session?.data?.accessToken as string,
     onCompleted: onUpdateCompleted,
     onError: onUpdateError

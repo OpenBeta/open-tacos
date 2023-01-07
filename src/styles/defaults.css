@@ -8,11 +8,11 @@ html {
 /******** App's root container *********/
 /* Max width=3xl */
 .root-container-default {
-  @apply relative max-w-screen-3xl w-full mx-auto bg-gray-50;
+  @apply relative max-w-screen-3xl w-full mx-auto bg-base-100;
 }
 /* Full screen */
 .root-container-full {
-  @apply relative w-screen max-w-full bg-gray-50;
+  @apply relative w-screen max-w-full bg-base-100;
 }
 /***************************************/
 

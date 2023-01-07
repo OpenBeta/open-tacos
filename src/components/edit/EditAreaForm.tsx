@@ -3,14 +3,14 @@ import { useForm, FormProvider } from 'react-hook-form'
 import clx from 'classnames'
 import { useMutation } from '@apollo/client'
 import { signIn, useSession } from 'next-auth/react'
-import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
 
-import { MUTATION_UPDATE_AREA, UpdateAreaReturnType, UpdateAreaProps } from '../../js/graphql/gql/contribs'
+import { MUTATION_UPDATE_AREA, UpdateAreaApiReturnType, UpdateAreaProps } from '../../js/graphql/gql/contribs'
 import { ErrorAlert } from './alerts/Alerts'
 import { graphqlClient } from '../../js/graphql/Client'
-import { Input, TextArea, RadioGroup } from '../ui/form'
+import { Input, TextArea } from '../ui/form'
 import Toast from '../ui/Toast'
 import { AreaType, AreaUpdatableFieldsType, RulesType } from '../../js/types'
+import { areaDesignationToForm, areaDesignationToDb, AreaTypeFormProp, AreaDesignationRadioGroup } from './form/AreaDesignationRadioGroup'
 
 export const LATLNG_PATTERN = /(?<lat>^[-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)),(?<lng>[-+]?(?:180(?:\.0+)?|(?:1[0-7]\d|[1-9]?\d)(?:\.\d+)?))$/
 
@@ -50,7 +50,7 @@ export interface ChildAreaBaseProps {
 
 interface HtmlFormProps extends AreaUpdatableFieldsType {
   latlng: string
-  areaType: 'area' | 'leaf'
+  areaType: AreaTypeFormProp
 }
 
 export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.Element {
@@ -66,7 +66,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
   // react-hook-form has a similar prop but it gets reset when we call  `form.reset()`
   const [submitCount, setSubmitCount] = useState(0)
 
-  const [updateArea, { error: gqlError }] = useMutation<{ updateArea: UpdateAreaReturnType }, UpdateAreaProps>(
+  const [updateArea, { error: gqlError }] = useMutation<{ updateArea: UpdateAreaApiReturnType }, UpdateAreaProps>(
     MUTATION_UPDATE_AREA, {
       client: graphqlClient,
       onCompleted: () => {
@@ -75,7 +75,9 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
     }
   )
 
-  const { areaName, shortCode, pathTokens, content: { description }, children, climbs, metadata: { lat, lng, leaf: isLeaf }, formRef } = props
+  const { areaName, shortCode, pathTokens, content: { description }, children, climbs, metadata, formRef } = props
+
+  const { lat, lng } = metadata
 
   // React-hook-form declaration
   const form = useForm<HtmlFormProps>(
@@ -85,9 +87,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
         areaName,
         shortCode,
         latlng: `${lat.toString()},${lng.toString()}`,
-        areaType: isLeaf
-          ? 'leaf'
-          : 'area',
+        areaType: areaDesignationToForm(metadata),
         description
       }
     })
@@ -98,14 +98,15 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
     const { uuid } = props
     const [latStr, lngStr] = latlng.split(',')
 
-    const doc: Partial<HtmlFormProps> = Object.assign({},
-      dirtyFields?.areaName === true ? { areaName: getValues('areaName') } : undefined,
-      dirtyFields?.shortCode === true ? { shortCode: getValues('shortCode') } : undefined,
-      dirtyFields?.isDestination === true ? { isDestination: getValues('isDestination') } : undefined,
-      dirtyFields?.areaType === true && canChangeAreaType ? { isLeaf: getValues('areaType') === 'leaf' } : undefined,
-      dirtyFields?.latlng === true ? { ...{ lat: parseFloat(latStr), lng: parseFloat(lngStr) } } : undefined,
-      dirtyFields?.description === true ? { description: getValues('description') } : undefined
-    )
+    // const doc: Partial<HtmlFormProps> = {
+    const doc = {
+      ...dirtyFields?.areaName === true && { areaName: getValues('areaName') },
+      ...dirtyFields?.shortCode === true && { shortCode: getValues('shortCode') },
+      ...dirtyFields?.isDestination === true && { isDestination: getValues('isDestination') },
+      ...dirtyFields?.areaType === true && canChangeAreaType && areaDesignationToDb(areaType),
+      ...dirtyFields?.latlng === true && { ...{ lat: parseFloat(latStr), lng: parseFloat(lngStr) } },
+      ...dirtyFields?.description === true && { description: getValues('description') }
+    }
 
     const isEmptyDoc = Object.keys(doc).length === 0
     if (isEmptyDoc) {
@@ -124,7 +125,6 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
       })
       if (rs.errors == null) {
         const values = Object.assign({}, doc, dirtyFields?.latlng === true ? { latlng } : undefined)
-        console.log('#reset', values)
         reset(values, { keepValues: true })
         toastRef?.current?.publish('Area updated successfully.')
       }
@@ -181,7 +181,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
             placeholder='latitude, longtitude'
             registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
           />
-          <AreaTypeRadioGroup canEdit={canChangeAreaType} />
+          <AreaDesignationRadioGroup canEdit={canChangeAreaType} />
           <TextArea
             label='Description:'
             name='description'
@@ -222,30 +222,3 @@ export const SaveErrorAlert = ({ message }: ErrorAlertProps): JSX.Element => {
     />
   )
 }
-
-/**
- * A reuseable radio button group for changing area type (area vs crag)
- */
-export const AreaTypeRadioGroup = ({ name = 'areaType', canEdit }: { name?: string, canEdit: boolean }): JSX.Element => (
-  <RadioGroup
-    groupLabel='Area designation'
-    groupLabelAlt={<ExplainAreaTypeLock canEdit={canEdit} />}
-    name={name}
-    disabled={!canEdit}
-    labels={[
-      'Area',
-      'Crag (sport, trad, ice)',
-      'Boulder']}
-    values={['area', 'crag', 'boulder']}
-    labelTips={['Like a folder an area may only contain other smaller areas', 'A crag is where you add rope climbing routes (sport, trad, ice).', 'A boulder may only have boulder problems.']}
-  />)
-
-const ExplainAreaTypeLock = ({ canEdit }: { canEdit: boolean }): JSX.Element | null =>
-  (
-    canEdit
-      ? null
-      : (
-        <div className='tooltip tooltip-left tooltip-info drop-shadow-lg' data-tip='Selection becomes read-only when the area contains subareas or is a crag/boulder.'>
-          <QuestionMarkCircleIcon className='text-info w-5 h-5' />
-        </div>)
-  )

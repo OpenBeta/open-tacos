@@ -53,6 +53,11 @@ mutation ($input: UpdateClimbsInput) {
   updateClimbs(input: $input)
 }
 `
+export const MUTATION_DELETE_CLIMBS = gql`
+mutation ($idList: [ID]!) {
+  deleteClimbs(idList: $idList)
+}
+`
 
 export interface IndividualClimbChangeInput {
   id?: string // Null or undefined id will create a new climb
@@ -128,4 +133,6 @@ export interface UpdateAreaProps extends AreaUpdatableFieldsType {
   uuid: string
 }
 
-export type UpdateAreaReturnType = Pick<AreaType, 'areaName'|'uuid'>
+export type UpdateAreaApiType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng' |'isLeaf' | 'isBoulder'>> & { uuid: string }>
+
+export type UpdateAreaApiReturnType = Pick<AreaType, 'areaName'|'uuid'>

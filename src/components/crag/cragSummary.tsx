@@ -6,15 +6,16 @@ import { GlobeAltIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 import { useMutation } from '@apollo/client'
 
 import { AreaMetadataType, CountByGroupType, AreaUpdatableFieldsType } from '../../js/types'
-import { IndividualClimbChangeInput, MUTATION_UPDATE_AREA, UpdateAreaReturnType } from '../../js/graphql/gql/contribs'
+import { IndividualClimbChangeInput, MUTATION_UPDATE_AREA, UpdateAreaApiReturnType } from '../../js/graphql/gql/contribs'
 import EditModeToggle from '../../components/editor/EditModeToggle'
 import { FormSaveAction } from '../../components/editor/FormSaveAction'
 import { graphqlClient } from '../../js/graphql/Client'
 import Toast from '../../components/ui/Toast'
 import { getMapHref, sortClimbsByLeftRightIndex } from '../../js/utils'
-import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES, AreaTypeRadioGroup } from '../edit/EditAreaForm'
+import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
+import { AreaDesignationRadioGroup } from '../edit/form/AreaDesignationRadioGroup'
 import { CragLayoutProps } from './cragLayout'
-import { ClimbListPreview } from './ClimbListPreview'
+import { ClimbListPreview, findDeletedCandidates } from './ClimbListPreview'
 import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 // import FavouriteButton from '../users/FavouriteButton'
 
@@ -45,8 +46,6 @@ type BulkClimbList = EditableClimbType[]
 type AreaTypeFormProp = 'crag' | 'area' | 'boulder'
 
 type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description'>> & { uuid: string, latlng: string, areaType: AreaTypeFormProp, climbList: BulkClimbList }
-
-type UpdateAPIType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng' |'isLeaf' | 'isBoulder'>> & { uuid: string }>
 
 /**
  * Responsive summary of major attributes for a crag / boulder.
@@ -84,25 +83,12 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     toastRef?.current?.publish('Something unexpected happened. Please save again.', true)
   }
 
-  const { updateClimbCmd } = useUpdateClimbsCmd({
+  const { updateClimbCmd, deleteClimbsCmd } = useUpdateClimbsCmd({
+    parentId: uuid,
     accessToken: session?.data?.accessToken as string,
     onCompleted: onUpdateCompleted,
     onError: onUpdateError
   })
-
-  const [updateArea] = useMutation<{ updateArea: UpdateAreaReturnType }, UpdateAPIType>(
-    MUTATION_UPDATE_AREA, {
-      client: graphqlClient,
-      onCompleted: () => {
-        void fetch(`/api/revalidate?s=${uuid}`)
-        toastRef?.current?.publish('Crag updated.  Thank you for your contribution! ✨')
-      },
-      onError: (error) => {
-        console.log(error)
-        toastRef?.current?.publish('Something unexpected happened. Please save again.', true)
-      }
-    }
-  )
 
   // Form declaration
   const form = useForm<SummaryHTMLFormProps>({
@@ -124,6 +110,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     const [lat, lng] = latlng.split(',')
 
     const updatedClimbs = extractDirtyClimbs(dirtyFields?.climbList, climbList, cache.climbList)
+    const deleteCandidiates = findDeletedCandidates(cache.climbList, climbList)
 
     // Extract only dirty fields to send to the API
     const onlyDirtyFields: Partial<UpdateAPIType> = {
@@ -140,9 +127,16 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
      */
     const isCragSummaryDirty = Object.keys(onlyDirtyFields).length > 0
     const isClimbListDirty = updatedClimbs.length > 0
-    if (!isCragSummaryDirty && !isClimbListDirty) {
+    const hasSomethingToDelete = deleteCandidiates.length > 0
+
+    if (!isCragSummaryDirty && !isClimbListDirty && !hasSomethingToDelete) {
       toastRef?.current?.publish('Nothing to save.  Please make at least 1 edit.', true)
       return
+    }
+
+    if (hasSomethingToDelete) {
+      const idList = deleteCandidiates.map(entry => entry.climbId)
+      await deleteClimbsCmd(idList)
     }
 
     // Send climb updates to backend
@@ -155,17 +149,17 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
 
     // Send crag updates to backend
     if (isCragSummaryDirty) {
-      await updateArea({
-        variables: {
-          uuid,
-          ...onlyDirtyFields
-        },
-        context: {
-          headers: {
-            authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
-          }
-        }
-      })
+      // await updateArea({
+      //   variables: {
+      //     uuid,
+      //     ...onlyDirtyFields
+      //   },
+      //   context: {
+      //     headers: {
+      //       authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
+      //     }
+      //   }
+      // })
     }
     setCache({ ...formData })
     reset(formData, { keepValues: true })
@@ -217,11 +211,11 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
               {editMode && (
                 <div className='mt-6'>
                   <h3>Housekeeping</h3>
-                  <AreaTypeRadioGroup canEdit={canChangeAreaType} />
+                  <AreaDesignationRadioGroup canEdit={canChangeAreaType} />
                 </div>
               )}
             </div>
-            <div className='mb-16 lg:mb-0 lg:col-span-2 lg:pl-16 w-full'>
+            <div className='lg:col-span-2 lg:pl-16 w-full'>
               {/* <div className='flex-1 flex justify-end'>
         // vnguyen: temporarily removed until we have view favorites feature
         <FavouriteButton areaId={props.areaMeta.areaId} />
@@ -237,16 +231,16 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
                 placeholder='Area description'
                 rules={AREA_DESCRIPTION_FORM_VALIDATION_RULES}
               />
-              <FormSaveAction
-                cache={cache}
-                editMode={editMode}
-                isDirty={isDirty}
-                isSubmitting={isSubmitting}
-                resetHookFn={reset}
-                onReset={() => setResetSignal(Date.now())}
-              />
             </div>
           </div>
+          <FormSaveAction
+            cache={cache}
+            editMode={editMode}
+            isDirty={isDirty}
+            isSubmitting={isSubmitting}
+            resetHookFn={reset}
+            onReset={() => setResetSignal(Date.now())}
+          />
           <ClimbListPreview editable={editMode} />
           {editMode && showBulkEditor && (
             <div className='collapse mt-8 collapse-plus fadeinEffect'>
@@ -258,6 +252,16 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
                 <ClimbBulkEditor name='climbList' initialClimbs={cache.climbList} resetSignal={resetSignal} editable />
               </div>
             </div>)}
+          <div className='md:hidden'>
+            <FormSaveAction
+              cache={cache}
+              editMode={editMode}
+              isDirty={isDirty}
+              isSubmitting={isSubmitting}
+              resetHookFn={reset}
+              onReset={() => setResetSignal(Date.now())}
+            />
+          </div>
         </form>
       </FormProvider>
       <Toast ref={toastRef} />

@@ -15,7 +15,7 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
 
   const watchList = useWatch({ name: 'climbList' })
 
-  const toBeDeleted = findDeletedClimbs(defaultValues?.climbList, watchList)
+  const toBeDeleted = findDeletedCandidates(defaultValues?.climbList, watchList)
   const defaultDict = indexBy(defaultValues?.climbList, 'climbId')
 
   return (
@@ -87,13 +87,12 @@ const WrapLink = ({ climbId, text }: { climbId: string | null, text: string }): 
   return <span>{text}</span>
 }
 
-const findDeletedClimbs = (defaultList: EditableClimbType[], activeList: EditableClimbTypeWithFieldId[]): EditableClimbTypeWithFieldId[] => {
+export const findDeletedCandidates = (defaultList: EditableClimbType[], activeList: EditableClimbTypeWithFieldId[]): EditableClimbTypeWithFieldId[] => {
   const activeDict = indexBy(activeList, 'climbId')
-  const f = defaultList.reduce<EditableClimbTypeWithFieldId[]>((accumulator, current): EditableClimbTypeWithFieldId[] => {
-    if (current.climbId != null && activeDict?.[current.climbId] == null) {
+  return defaultList.reduce<EditableClimbTypeWithFieldId[]>((accumulator, current): EditableClimbTypeWithFieldId[] => {
+    if (activeDict?.[current.climbId] == null) {
       accumulator.push({ ...current, id: current.climbId })
     }
     return accumulator
   }, [])
-  return f
 }
