@@ -30,7 +30,7 @@ const UserProfileSchema = Yup.object().shape({
       is: val => val?.length > 0,
       then: rule => {
         if (rule != null) {
-          return Yup.string().test('special-rules', 'Invalid URL', checkWebsiteUrl)
+          return Yup.string().test('special-rules', 'Invalid URL', (x) => checkWebsiteUrl(x) !== null)
         } else {
           return Yup.string().notRequired()
         }
@@ -62,15 +62,21 @@ export default function ProfileEditForm (): ReactElement {
     void asyncLoad()
   }, [])
 
+  /** When a user submits their changes, this handler will attempt the submission. */
   const submitHandler = useCallback(async (newValues: IWritableUserMetadata) => {
+    // Send a request to the server to update the user's profile
     const profile = await updateUserProfile(newValues)
 
     if (profile != null) {
+      // Update the profile object in the state
       setProfile(profile)
+      // Set the flag that indicates the user just submitted a change
       setJustSubmitted(true)
       // Also trigger a page rebuild
       void revalidateUserHomePage(profile.nick)
     } else {
+      // profile did not update for some reason
+      // TODO: display that profile did not update
       console.error('Profile object was supposed to not be null!')
     }
   }, [])

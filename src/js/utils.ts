@@ -164,14 +164,38 @@ export const checkUsername = (uid: string): boolean => {
   regUsername.test(uid)
 }
 
-const regValidUrl = /^((http|https):\/\/)?(www.)?(?!.*(http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+(\/)?.([\w?[a-zA-Z-_%\\/@?]+)*([^\\/\w?[a-zA-Z0-9_-]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/
 /**
- * Website URL validation
+ * Website URL validation.
+ * If no protocol is specified, it will default to https,
+ * if it is specified, it must be https.
+ *
  * @param url
  * @returns true if valid website URL
  */
-export const checkWebsiteUrl = (url: string): boolean => {
-  return !url.includes(' ') && url.length > 2 && regValidUrl.test(url)
+export const checkWebsiteUrl = (url: string | null | undefined, allowRetest?: boolean): string | null => {
+  if (typeof url !== 'string') return null
+
+  try {
+    const test = new URL(url)
+
+    // We disallow arbitrary protocols, only allow https.
+    if (test.protocol !== 'https:') {
+      return null // disallow arbitrary protocols
+    }
+
+    return test.href
+  } catch {
+    // Endless recurse prevention
+    if (allowRetest !== false) {
+      // Try again with https prepended.
+      const reTest = checkWebsiteUrl('https://' + url, false)
+      if (reTest !== null) {
+        return reTest
+      }
+    }
+
+    return null
+  }
 }
 
 /**
