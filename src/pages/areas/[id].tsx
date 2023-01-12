@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
-// import { indexBy } from 'underscore'
 
 import { QUERY_AREA_BY_ID } from '../../js/graphql/gql/areaById'
 import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
@@ -17,7 +16,6 @@ import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useAreaSeo } from '../../js/hooks/seo'
 import AreaEditTrigger from '../../components/edit/AreaEditTrigger'
-// import { getImagesByFilenames } from '../../js/sirv/SirvClient'
 import { getImageDimensionsHack } from '../../js/utils/hacks'
 
 interface AreaPageProps {
