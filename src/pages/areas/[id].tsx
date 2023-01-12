@@ -122,37 +122,19 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList, history }: Area
   )
 }
 
-// This function gets called at build time.
-// Nextjs uses the result to decide which paths will get pre-rendered at build time
+/**
+ * This function gets called at build time.
+ * Nextjs uses the result to decide which paths will get pre-rendered at build time
+ */
 export async function getStaticPaths (): Promise<any> {
-  // Temporarily disable pre-rendering
-  // https://github.com/OpenBeta/openbeta-graphql/issues/26
-  // const rs = await graphqlClient.query<AreaResponseType>({
-  //   query: gql`query EdgeAreasQuery($filter:Filter) {
-  //   areas(filter: $filter) {
-  //     area_name
-  //     metadata {
-  //       area_id
-  //     }
-  //   }
-  // }`,
-  //   variables: {
-  //     filter: { leaf_status: { isLeaf: false } }
-  //   }
-  // })
-
-  // // Get the paths we want to pre-render based on posts
-  // const paths = rs.data.areas.map((area: AreaType) => ({
-  //   params: { id: area.metadata.area_id }
-  // }))
-
-  // We'll pre-render only these paths at build time.
-  // { fallback: true } means render on first reques for those that are not in `paths`
   return {
     paths: [
-      { params: { id: 'bea6bf11-de53-5046-a5b4-b89217b7e9bc' } },
-      { params: { id: 'decc1251-4a67-52b9-b23f-3243e10e93d0' } },
-      { params: { id: '78da26bc-cd94-5ac8-8e1c-815f7f30a28b' } }
+      { params: { id: 'bea6bf11-de53-5046-a5b4-b89217b7e9bc' } }, // Red Rock
+      { params: { id: '78da26bc-cd94-5ac8-8e1c-815f7f30a28b' } }, // Red River Gorge
+      { params: { id: '1db1e8ba-a40e-587c-88a4-64f5ea814b8e' } }, // USA
+      { params: { id: 'ab48aed5-2e8d-54bb-b099-6140fe1f098f' } }, // Colorado
+      { params: { id: 'decc1251-4a67-52b9-b23f-3243e10e93d0' } }, // Boulder
+      { params: { id: 'f166e672-4a52-56d3-94f1-14c876feb670' } } // Indian Creek
     ],
     fallback: true
   }
