@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
-import { indexBy } from 'underscore'
+
 import { QUERY_AREA_BY_ID } from '../../js/graphql/gql/areaById'
-import { AreaType, MediaBaseTag, MediaType, ChangesetType } from '../../js/types'
+import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
@@ -16,7 +16,8 @@ import PhotoMontage from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useAreaSeo } from '../../js/hooks/seo'
 import AreaEditTrigger from '../../components/edit/AreaEditTrigger'
-import { getImagesByFilenames } from '../../js/sirv/SirvClient'
+import { getImageDimensionsHack } from '../../js/utils/hacks'
+
 interface AreaPageProps {
   area: AreaType
   history: ChangesetType[]
@@ -119,37 +120,19 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList, history }: Area
   )
 }
 
-// This function gets called at build time.
-// Nextjs uses the result to decide which paths will get pre-rendered at build time
+/**
+ * This function gets called at build time.
+ * Nextjs uses the result to decide which paths will get pre-rendered at build time
+ */
 export async function getStaticPaths (): Promise<any> {
-  // Temporarily disable pre-rendering
-  // https://github.com/OpenBeta/openbeta-graphql/issues/26
-  // const rs = await graphqlClient.query<AreaResponseType>({
-  //   query: gql`query EdgeAreasQuery($filter:Filter) {
-  //   areas(filter: $filter) {
-  //     area_name
-  //     metadata {
-  //       area_id
-  //     }
-  //   }
-  // }`,
-  //   variables: {
-  //     filter: { leaf_status: { isLeaf: false } }
-  //   }
-  // })
-
-  // // Get the paths we want to pre-render based on posts
-  // const paths = rs.data.areas.map((area: AreaType) => ({
-  //   params: { id: area.metadata.area_id }
-  // }))
-
-  // We'll pre-render only these paths at build time.
-  // { fallback: true } means render on first reques for those that are not in `paths`
   return {
     paths: [
-      { params: { id: 'bea6bf11-de53-5046-a5b4-b89217b7e9bc' } },
-      { params: { id: 'decc1251-4a67-52b9-b23f-3243e10e93d0' } },
-      { params: { id: '78da26bc-cd94-5ac8-8e1c-815f7f30a28b' } }
+      { params: { id: 'bea6bf11-de53-5046-a5b4-b89217b7e9bc' } }, // Red Rock
+      { params: { id: '78da26bc-cd94-5ac8-8e1c-815f7f30a28b' } }, // Red River Gorge
+      { params: { id: '1db1e8ba-a40e-587c-88a4-64f5ea814b8e' } }, // USA
+      { params: { id: 'ab48aed5-2e8d-54bb-b099-6140fe1f098f' } }, // Colorado
+      { params: { id: 'decc1251-4a67-52b9-b23f-3243e10e93d0' } }, // Boulder
+      { params: { id: 'f166e672-4a52-56d3-94f1-14c876feb670' } } // Indian Creek
     ],
     fallback: true
   }
@@ -164,56 +147,33 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
     }
   }
 
-  let rs
-  try {
-    rs = await graphqlClient.query<{ area: AreaType, getAreaHistory: ChangesetType[] }>({
-      query: QUERY_AREA_BY_ID,
-      variables: {
-        uuid: params.id
-      },
-      fetchPolicy: 'no-cache'
-    })
+  const rs = await graphqlClient.query<{ area: AreaType, getAreaHistory: ChangesetType[] }>({
+    query: QUERY_AREA_BY_ID,
+    variables: {
+      uuid: params.id
+    },
+    fetchPolicy: 'no-cache'
+  })
 
-    if (rs.data.area == null) {
-      return {
-        notFound: true,
-        revalidate: 10
-      }
-    }
-
-    let mediaListWithUsernames: MediaBaseTag[] = rs.data.area.media
-    try {
-      mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.area.media)
-    } catch (e) {
-      console.log('Error when trying to add username to image data', e)
-    }
-
-    /**
-     * Call Sirv API to get image metadata.  We should probably store metadata in the db.
-     */
-    const mediaListWithMetadata = await getImagesByFilenames(mediaListWithUsernames.map(entry => entry.mediaUrl))
-
-    const mediaMetaDict = indexBy<MediaType[]>(mediaListWithMetadata.mediaList, 'mediaId')
-
-    // Pass Area & edit history data to the page via props
+  if (rs.data.area == null) {
     return {
-      props: {
-        area: rs.data.area,
-        history: rs.data.getAreaHistory,
-        mediaListWithUsernames: mediaListWithUsernames.map(entry => ({ ...entry, mediaInfo: mediaMetaDict?.[entry.mediaUuid] ?? null }))
-      },
-      revalidate: 10
-    }
-  } catch (e) {
-    console.log('#GraphQL exception:', e)
-    console.log('#', e?.result)
-    return {
-      // TODO: the area may be in the db but we're having some issue.
-      // As an improvement, maybe return empty props and display a friendlier error page than 404
       notFound: true,
-
       revalidate: 10
     }
+  }
+
+  const mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.area.media)
+
+  const mediaListWithDimensions = await getImageDimensionsHack(mediaListWithUsernames)
+
+  // Pass Area & edit history data to the page via props
+  return {
+    props: {
+      area: rs.data.area,
+      history: rs.data.getAreaHistory,
+      mediaListWithUsernames: mediaListWithDimensions
+    },
+    revalidate: 10
   }
 }
 

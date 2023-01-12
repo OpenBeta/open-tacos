@@ -154,8 +154,6 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
      * @returns
      */
     setPhotoList: async (photoList: MediaBaseTag[] | []) => {
-      console.log(photoList)
-
       set.photoList(photoList)
     }
   }))
