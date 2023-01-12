@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
+import * as Portal from '@radix-ui/react-portal'
 import { GlobeAltIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 
 import { AreaMetadataType, CountByGroupType, AreaUpdatableFieldsType } from '../../js/types'
@@ -17,6 +18,8 @@ import { ClimbListPreview, findDeletedCandidates } from './ClimbListPreview'
 import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 
+import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
+import DeleteAreaForm from '../edit/DeleteAreaForm'
 // import FavouriteButton from '../users/FavouriteButton'
 
 export interface CragHeroProps {
@@ -55,7 +58,7 @@ type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 
  * because react-hook-form `handleSubmit()` handles it for us and sends exeptions
  * to `onError()` callback.
  */
-export default function CragSummary ({ uuid, title: initTitle, description: initDescription, latitude: initLat, longitude: initLng, areaMeta, climbs }: CragLayoutProps): JSX.Element {
+export default function CragSummary ({ uuid, title: initTitle, description: initDescription, latitude: initLat, longitude: initLng, areaMeta, climbs, ancestors }: CragLayoutProps): JSX.Element {
   const toastRef = useRef<any>(null)
   const session = useSession()
   const [resetSignal, setResetSignal] = useState(0)
@@ -170,10 +173,25 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
 
   const { areaName, description } = cache
   const latlngPair = parseLatLng(currentLatLngStr)
-  const canChangeAreaType = currentClimbList.length === 0 // we're not allowed to change a crag to an area once it already has climbs
+  const canChangeAreaType = currentClimbList.length === 0 && cache.climbList.length === 0 // we're not allowed to change a crag to an area once it already has climbs
   const showBulkEditor = currentareaType !== 'area'
+  const parentAreaId = ancestors[ancestors.length - 2]
+  const portalRef = useRef(null)
   return (
     <>
+      <Portal.Root container={portalRef.current}>
+        <MobileDialog modal>
+          <DialogTrigger>Delete</DialogTrigger>
+          <DialogContent title='Delete area'>
+            <DeleteAreaForm
+              areaName={areaName}
+              areaUuid={uuid}
+              parentUuid={parentAreaId}
+              onClose={() => console.log('deleted')}
+            />
+          </DialogContent>
+        </MobileDialog>
+      </Portal.Root>
       <div className='flex justify-end'>
         <EditModeToggle onChange={setEditMode} />
       </div>
@@ -212,13 +230,24 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
                       </a>)
                   )}
               {editMode && (
-                <div className='mt-6'>
-                  <h3>Housekeeping</h3>
-                  <AreaDesignationRadioGroup canEdit={canChangeAreaType} />
-                </div>
-              )}
+                <div className='fadeinEffect'>
+                  <div className='mt-6'>
+                    <h3>Housekeeping</h3>
+                    <AreaDesignationRadioGroup canEdit={canChangeAreaType} />
+                  </div>
+                  <div className='mt-6 form-control'>
+                    <label className='label'>
+                      <span className='label-text font-semibold'>Permanently delete this area</span>
+                    </label>
+                    <div className='ml-2'>
+                      {/* <button className='btn btn-primart btn-sm btn-outline px-6' disabled={!canChangeAreaType} type='button'>Delete</button> */}
+                      <div ref={portalRef} />
+
+                    </div>
+                  </div>
+                </div>)}
             </div>
-            <div className='lg:col-span-2 lg:pl-16 w-full'>
+            <div className='mt-6 lg:mt-0 lg:col-span-2 lg:pl-16 w-full'>
               {/* <div className='flex-1 flex justify-end'>
         // vnguyen: temporarily removed until we have view favorites feature
         <FavouriteButton areaId={props.areaMeta.areaId} />

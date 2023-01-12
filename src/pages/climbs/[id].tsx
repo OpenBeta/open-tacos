@@ -112,7 +112,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
   }, [rightClimb])
 
   const onUpdateCompleted = (): void => {
-    toastRef?.current?.publish('Changes saved.  Thank you for your contribution! ✨')
+    toastRef?.current?.publish('Changes saved ✨ Thank you for your contribution!')
   }
 
   const onUpdateError = (): void => {
@@ -124,8 +124,8 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
   const { updateClimbCmd } = useUpdateClimbsCmd({
     parentId,
     accessToken: session?.data?.accessToken as string,
-    onCompleted: onUpdateCompleted,
-    onError: onUpdateError
+    onUpdateCompleted,
+    onUpdateError
   })
 
   // React hook form declaration

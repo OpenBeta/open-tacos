@@ -1,5 +1,6 @@
 import { useState, forwardRef, useImperativeHandle } from 'react'
 import * as ToastPrimitive from '@radix-ui/react-toast'
+import { CheckIcon } from '@heroicons/react/24/outline'
 
 interface ToastProps {
   type?: 'foreground' | 'background'
@@ -56,7 +57,7 @@ const Toast = forwardRef((props: ToastProps, forwardedRef) => {
         <ToastPrimitive.Root key={index} type={type} {...toastProps} className={`rounded-box p-4 drop-shadow-lg flex flex-col gap-1 ${alertClz}`}>
           {title != null && <ToastPrimitive.Title className='font-semibold text-sm'>{title}</ToastPrimitive.Title>}
           <ToastPrimitive.Description>{children ?? <span className='text-sm'>{message}</span>}</ToastPrimitive.Description>
-          <ToastPrimitive.Close className='mt-2 btn btn-outline btn btn-sm'>Got it</ToastPrimitive.Close>
+          <ToastPrimitive.Close className='mx-auto mt-2 btn btn-circle btn-secondary'><CheckIcon className='w-6 h-6 delay-200 fadeinEffect' /></ToastPrimitive.Close>
         </ToastPrimitive.Root>
       ))}
     </>

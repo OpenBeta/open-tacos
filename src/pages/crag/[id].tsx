@@ -165,7 +165,7 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
     fetchPolicy: 'no-cache'
   })
 
-  if (rs.data === null) {
+  if (rs.data == null || rs.data.area == null) {
     return {
       notFound: true
     }

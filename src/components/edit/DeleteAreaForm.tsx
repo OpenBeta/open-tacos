@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import clx from 'classnames'
 import { useMutation } from '@apollo/client'
@@ -8,6 +8,7 @@ import { MUTATION_REMOVE_AREA, RemoveAreaReturnType, RemoveAreaProps } from '../
 import { graphqlClient } from '../../js/graphql/Client'
 import Input from '../ui/form/Input'
 import { SuccessAlert, AlertAction } from './alerts/Alerts'
+import Toast from '../ui/Toast'
 
 export interface DeleteAreaProps {
   parentUuid: string
@@ -20,20 +21,26 @@ interface HtmlFormProps {
   confirmation: string
 }
 
-export default function Form ({ areaUuid, areaName, parentUuid, onClose }: DeleteAreaProps): JSX.Element {
+export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, onClose }: DeleteAreaProps): JSX.Element {
   const session = useSession()
+  const toastRef = useRef<any>()
 
   useEffect(() => {
     if (session.status === 'unauthenticated') {
       void signIn('auth0') // send users to Auth0 login screen
     }
+    toastRef?.current?.publish('Area deleted.')
   }, [session])
 
-  const [removeArea, { error, data }] = useMutation<{ removeArea: RemoveAreaReturnType }, RemoveAreaProps>(
+  const [removeArea] = useMutation<{ removeArea: RemoveAreaReturnType }, RemoveAreaProps>(
     MUTATION_REMOVE_AREA, {
       client: graphqlClient,
       onCompleted: (data) => {
-        void fetch(`/api/revalidate?a=${parentUuid}`) // build parent area page
+        void fetch(`/api/revalidate?a=${parentUuid}`) // rebuild parent area page
+        toastRef?.current?.publish(`Area '${areaName}' deleted.`)
+      },
+      onError: (error) => {
+        toastRef.current?.publish('Delete error: ' + error.message, true)
       }
     }
   )
@@ -45,7 +52,7 @@ export default function Form ({ areaUuid, areaName, parentUuid, onClose }: Delet
       defaultValues: { confirmation: '' }
     })
 
-  const { handleSubmit, formState: { isSubmitSuccessful, isSubmitting } } = form
+  const { handleSubmit, formState: { isSubmitting } } = form
 
   const submitHandler = async (): Promise<void> => {
     await removeArea({
@@ -67,9 +74,9 @@ export default function Form ({ areaUuid, areaName, parentUuid, onClose }: Delet
   }
   return (
     <>
-      <div>You're about to delete area <b>{areaName}</b>.  Type DELETE to confirm.</div>
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
+          <div>You're about to delete area <b>{areaName}</b>.  Type DELETE to confirm.</div>
           <Input
             label=''
             name='confirmation'
@@ -96,13 +103,7 @@ export default function Form ({ areaUuid, areaName, parentUuid, onClose }: Delet
           </button>
         </form>
       </FormProvider>
-      {isSubmitSuccessful && error == null && data != null &&
-        <DeleteSuccessAlert
-          {...data.removeArea}
-          parentUuid={parentUuid}
-          onClose={onClose}
-        />}
-      {/* {error != null && <ErrorAlert {...error} />} */}
+      <Toast ref={toastRef} />
     </>
   )
 }
