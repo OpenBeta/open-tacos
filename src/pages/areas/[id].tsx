@@ -61,7 +61,7 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList, history }: Area
       totalClimbs: child.totalClimbs,
       aggregate: child.aggregate,
       content: child.content,
-      href: getSlug(child.metadata.areaId, child.metadata.leaf)
+      href: getSlug(child.metadata.areaId, child.metadata.leaf, child.children.length)
     })
     )
 
@@ -151,10 +151,12 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
     fetchPolicy: 'no-cache'
   })
 
-  if (rs.data.area == null) {
+  if (rs.data.area.metadata?.leaf) {
     return {
-      notFound: true,
-      revalidate: 10
+      redirect: {
+        destination: `/crag/${params.id}`,
+        permanent: false
+      }
     }
   }
 

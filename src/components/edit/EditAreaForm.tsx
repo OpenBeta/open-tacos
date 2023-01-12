@@ -11,6 +11,7 @@ import { Input, TextArea } from '../ui/form'
 import Toast from '../ui/Toast'
 import { AreaType, AreaUpdatableFieldsType, RulesType } from '../../js/types'
 import { areaDesignationToForm, areaDesignationToDb, AreaTypeFormProp, AreaDesignationRadioGroup } from './form/AreaDesignationRadioGroup'
+import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 
 export const LATLNG_PATTERN = /(?<lat>^[-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)),(?<lng>[-+]?(?:180(?:\.0+)?|(?:1[0-7]\d|[1-9]?\d)(?:\.\d+)?))$/
 
@@ -54,6 +55,9 @@ interface HtmlFormProps extends AreaUpdatableFieldsType {
 }
 
 export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.Element {
+  const { uuid, areaName, shortCode, pathTokens, content: { description }, children, climbs, metadata, formRef } = props
+  const { lat, lng } = metadata
+
   const session = useSession()
   const toastRef = useRef<any>()
   useEffect(() => {
@@ -63,21 +67,20 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
   }, [session])
 
   // Track submit count
-  // react-hook-form has a similar prop but it gets reset when we call  `form.reset()`
+  // react-hook-form has a similar prop but it gets reset when we call `form.reset()`
   const [submitCount, setSubmitCount] = useState(0)
 
-  const [updateArea, { error: gqlError }] = useMutation<{ updateArea: UpdateAreaApiReturnType }, UpdateAreaProps>(
-    MUTATION_UPDATE_AREA, {
-      client: graphqlClient,
-      onCompleted: () => {
-        setSubmitCount(old => old + 1)
-      }
+  const { updateOneAreaCmd } = useUpdateAreasCmd({
+    areaId: uuid,
+    accessToken: session?.data?.accessToken as string,
+    onUpdateCompleted: (data) => {
+      setSubmitCount(old => old + 1)
+      toastRef?.current?.publish('Area updated successfully.')
+    },
+    onUpdateError: ({ message }: { message: string}) => {
+      toastRef?.current.publish(`Oops unexpected error. ${message != null ? message : ''}`, true)
     }
-  )
-
-  const { areaName, shortCode, pathTokens, content: { description }, children, climbs, metadata, formRef } = props
-
-  const { lat, lng } = metadata
+  })
 
   // React-hook-form declaration
   const form = useForm<HtmlFormProps>(
@@ -98,7 +101,6 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
     const { uuid } = props
     const [latStr, lngStr] = latlng.split(',')
 
-    // const doc: Partial<HtmlFormProps> = {
     const doc = {
       ...dirtyFields?.areaName === true && { areaName: getValues('areaName') },
       ...dirtyFields?.shortCode === true && { shortCode: getValues('shortCode') },
@@ -112,22 +114,9 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
     if (isEmptyDoc) {
       toastRef?.current?.publish('Nothing to save.  Please make some edit.')
     } else {
-      const rs = await updateArea({
-        variables: {
-          uuid,
-          ...doc
-        },
-        context: {
-          headers: {
-            authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
-          }
-        }
-      })
-      if (rs.errors == null) {
-        const values = Object.assign({}, doc, dirtyFields?.latlng === true ? { latlng } : undefined)
-        reset(values, { keepValues: true })
-        toastRef?.current?.publish('Area updated successfully.')
-      }
+      await updateOneAreaCmd({ ...doc, uuid })
+      const values = Object.assign({}, doc, dirtyFields?.latlng === true ? { latlng } : undefined)
+      reset(values, { keepValues: true })
     }
   }
 
@@ -201,24 +190,24 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
         </form>
       </FormProvider>
       <Toast ref={toastRef} />
-      {gqlError != null && <SaveErrorAlert {...gqlError} />}
+      {/* {gqlError != null && <SaveErrorAlert {...gqlError} />} */}
     </>
   // </div>
   )
 }
-interface ErrorAlertProps {
-  message: string
-}
+// interface ErrorAlertProps {
+//   message: string
+// }
 
-export const SaveErrorAlert = ({ message }: ErrorAlertProps): JSX.Element => {
-  return (
-    <ErrorAlert
-      description={
-        <span>
-          {message}
-          <span><br />Click Ok and try again.</span>
-        </span>
-      }
-    />
-  )
-}
+// export const SaveErrorAlert = ({ message }: ErrorAlertProps): JSX.Element => {
+//   return (
+//     <ErrorAlert
+//       description={
+//         <span>
+//           {message}
+//           <span><br />Click Ok and try again.</span>
+//         </span>
+//       }
+//     />
+//   )
+// }

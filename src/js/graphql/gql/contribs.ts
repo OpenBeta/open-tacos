@@ -54,8 +54,8 @@ mutation ($input: UpdateClimbsInput) {
 }
 `
 export const MUTATION_DELETE_CLIMBS = gql`
-mutation ($idList: [ID]!) {
-  deleteClimbs(idList: $idList)
+mutation ($input: DeleteManyClimbsInput) {
+  deleteClimbs(input: $input)
 }
 `
 
@@ -133,6 +133,13 @@ export interface UpdateAreaProps extends AreaUpdatableFieldsType {
   uuid: string
 }
 
-export type UpdateAreaApiType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng' |'isLeaf' | 'isBoulder'>> & { uuid: string }>
+export type UpdateOneAreaApiType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng' |'isLeaf' | 'isBoulder'>> & { uuid: string }>
 
 export type UpdateAreaApiReturnType = Pick<AreaType, 'areaName'|'uuid'>
+
+export interface DeleteManyClimbsInputType {
+  parentId: string
+  idList: string[]
+}
+
+export type DeleteManyClimbsAPI = (input: DeleteManyClimbsInputType) => Promise<number>

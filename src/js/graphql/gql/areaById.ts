@@ -70,6 +70,9 @@ export const QUERY_AREA_BY_ID = gql`
             }
           }
         }
+        children {
+          id
+        }
         totalClimbs
         content {
           description 

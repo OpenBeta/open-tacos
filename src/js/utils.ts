@@ -116,8 +116,8 @@ export const simplifyClimbTypeJson = (type?: ClimbDisciplineRecord): {[key: stri
   return type
 }
 
-export const getSlug = (areaID: string, isLeaf: boolean): string => {
-  const type = isLeaf ? 'crag' : 'areas'
+export const getSlug = (areaID: string, isLeaf: boolean, childAreasCount: number = -1): string => {
+  const type = isLeaf || childAreasCount === 0 ? 'crag' : 'areas'
   return `/${type}/${areaID}`
 }
 

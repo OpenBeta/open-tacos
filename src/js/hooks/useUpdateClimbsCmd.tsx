@@ -1,21 +1,24 @@
 import { useMutation } from '@apollo/client'
+import { GraphQLError } from 'graphql'
 
 import { graphqlClient } from '../graphql/Client'
-import { MUTATION_UPDATE_CLIMBS, MUTATION_DELETE_CLIMBS, UpdateClimbsInput } from '../graphql/gql/contribs'
+import { MUTATION_UPDATE_CLIMBS, MUTATION_DELETE_CLIMBS, UpdateClimbsInput, DeleteManyClimbsAPI, DeleteManyClimbsInputType } from '../graphql/gql/contribs'
 
-type updateClimbCmdType = (input: UpdateClimbsInput) => Promise<void>
-type deleteClimbsCmdType = (idList: string[]) => Promise<void>
+type UpdateClimbCmdType = (input: UpdateClimbsInput) => Promise<void>
+type DeleteClimbsCmdType = (idList: string[]) => Promise<number>
 
 interface UpdateClimbsHookProps {
   parentId: string
   accessToken: string
-  onCompleted?: (data: any) => void
-  onError?: (error: any) => void
+  onUpdateCompleted?: (data: any) => void
+  onUpdateError?: (error: any) => void
+  onDeleteCompleted?: (data: any) => void
+  onDeleteError?: (error: any) => void
 }
 
 interface UpdateClimbsHookReturn {
-  updateClimbCmd: updateClimbCmdType
-  deleteClimbsCmd: deleteClimbsCmdType
+  updateClimbCmd: UpdateClimbCmdType
+  deleteClimbsCmd: DeleteClimbsCmdType
 }
 
 /**
@@ -26,22 +29,26 @@ interface UpdateClimbsHookReturn {
  * @param onError Optiona error callback
  * @returns updateClimbCmd
  */
-export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onCompleted = () => {}, onError = () => {} }: UpdateClimbsHookProps): UpdateClimbsHookReturn {
+export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpdateCompleted, onUpdateError, onDeleteCompleted, onDeleteError }: UpdateClimbsHookProps): UpdateClimbsHookReturn {
   const [updateClimbsApi] = useMutation<{ updateClimbsApi: string[] }, { input: UpdateClimbsInput }>(
     MUTATION_UPDATE_CLIMBS, {
       client: graphqlClient,
       onCompleted: (data) => {
         // void fetch(`/api/revalidate?c=${id}`)
-        onCompleted(data)
+        if (onUpdateCompleted != null) {
+          onUpdateCompleted(data)
+        }
       },
       onError: (error) => {
-        console.log('updateClimbsCmd error', error)
-        onError(error)
+        console.log('updateClimbsApi error', error)
+        if (onUpdateError != null) {
+          onUpdateError(error)
+        }
       }
     }
   )
 
-  const updateClimbCmd: updateClimbCmdType = async (input) => {
+  const updateClimbCmd: UpdateClimbCmdType = async (input) => {
     await updateClimbsApi({
       variables: {
         input
@@ -54,24 +61,31 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onComp
     })
   }
 
-  const [deleteClimbsApi] = useMutation<{ deleteClimbsApi: string[] }, { idList: string[] }>(
+  const [deleteClimbsApi] = useMutation<{ deleteClimbsApi: number }, { input: DeleteManyClimbsInputType }>(
     MUTATION_DELETE_CLIMBS, {
       client: graphqlClient,
       onCompleted: (data) => {
         void fetch(`/api/revalidate?a=${parentId}`)
-        onCompleted(data)
+        if (onDeleteCompleted != null) {
+          onDeleteCompleted(data)
+        }
       },
       onError: (error) => {
-        console.log('updateClimbsCmd error', error)
-        onError(error)
+        console.log('deleteClimbsApi error', error)
+        if (onDeleteError != null) {
+          onDeleteError(error)
+        }
       }
     }
   )
 
-  const deleteClimbsCmd: deleteClimbsCmdType = async (idList) => {
-    await deleteClimbsApi({
+  const deleteClimbsCmd: DeleteClimbsCmdType = async (idList) => {
+    const rs = await deleteClimbsApi({
       variables: {
-        idList
+        input: {
+          parentId,
+          idList
+        }
       },
       context: {
         headers: {
@@ -79,6 +93,11 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onComp
         }
       }
     })
+
+    if (rs.data == null) {
+      throw new GraphQLError('Error running deleteClimbsApi()')
+    }
+    return rs.data.deleteClimbsApi
   }
 
   return { updateClimbCmd, deleteClimbsCmd }

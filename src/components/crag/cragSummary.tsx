@@ -3,20 +3,20 @@ import dynamic from 'next/dynamic'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import { GlobeAltIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
-import { useMutation } from '@apollo/client'
 
 import { AreaMetadataType, CountByGroupType, AreaUpdatableFieldsType } from '../../js/types'
-import { IndividualClimbChangeInput, MUTATION_UPDATE_AREA, UpdateAreaApiReturnType } from '../../js/graphql/gql/contribs'
+import { IndividualClimbChangeInput, UpdateOneAreaApiType } from '../../js/graphql/gql/contribs'
 import EditModeToggle from '../../components/editor/EditModeToggle'
 import { FormSaveAction } from '../../components/editor/FormSaveAction'
-import { graphqlClient } from '../../js/graphql/Client'
 import Toast from '../../components/ui/Toast'
 import { getMapHref, sortClimbsByLeftRightIndex } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
-import { AreaDesignationRadioGroup } from '../edit/form/AreaDesignationRadioGroup'
+import { AreaDesignationRadioGroup, areaDesignationToDb, areaDesignationToForm } from '../edit/form/AreaDesignationRadioGroup'
 import { CragLayoutProps } from './cragLayout'
 import { ClimbListPreview, findDeletedCandidates } from './ClimbListPreview'
 import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
+import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
+
 // import FavouriteButton from '../users/FavouriteButton'
 
 export interface CragHeroProps {
@@ -76,7 +76,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
   })
 
   const onUpdateCompleted = (): void => {
-    toastRef?.current?.publish('Climbs updated.  Thank you for your contribution! ✨')
+    toastRef?.current?.publish('Climbs updated ✨')
   }
 
   const onUpdateError = (): void => {
@@ -86,8 +86,19 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
   const { updateClimbCmd, deleteClimbsCmd } = useUpdateClimbsCmd({
     parentId: uuid,
     accessToken: session?.data?.accessToken as string,
-    onCompleted: onUpdateCompleted,
-    onError: onUpdateError
+    onUpdateCompleted,
+    onUpdateError,
+    onDeleteCompleted: () => {
+      toastRef?.current?.publish('Climbs deleted. ✨')
+    },
+    onDeleteError: () => {
+      toastRef?.current?.publish('Unexpected error.  Please try again.', true)
+    }
+  })
+
+  const { updateOneAreaCmd: updateAreaCmd } = useUpdateAreasCmd({
+    areaId: uuid,
+    accessToken: session?.data?.accessToken as string
   })
 
   // Form declaration
@@ -113,7 +124,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     const deleteCandidiates = findDeletedCandidates(cache.climbList, climbList)
 
     // Extract only dirty fields to send to the API
-    const onlyDirtyFields: Partial<UpdateAPIType> = {
+    const onlyDirtyFields: UpdateOneAreaApiType = {
       ...dirtyFields?.areaName === true && { areaName },
       ...dirtyFields?.areaType === true && canChangeAreaType && areaDesignationToDb(areaType),
       ...dirtyFields?.latlng === true && { lat: parseFloat(lat), lng: parseFloat(lng) },
@@ -149,17 +160,9 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
 
     // Send crag updates to backend
     if (isCragSummaryDirty) {
-      // await updateArea({
-      //   variables: {
-      //     uuid,
-      //     ...onlyDirtyFields
-      //   },
-      //   context: {
-      //     headers: {
-      //       authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
-      //     }
-      //   }
-      // })
+      await updateAreaCmd({
+        ...onlyDirtyFields
+      })
     }
     setCache({ ...formData })
     reset(formData, { keepValues: true })
@@ -282,37 +285,6 @@ const parseLatLng = (s: string): [number, number] | null => {
   return [lat, lng]
 }
 
-/**
- * Convert area leaf and boulder attributes to form prop.
- */
-const areaDesignationToForm = ({ isBoulder, leaf }: Pick<AreaMetadataType, 'isBoulder' | 'leaf'>): AreaTypeFormProp => {
-  if (isBoulder) return 'boulder'
-  if (leaf) return 'crag'
-  return 'area'
-}
-
-/**
- * The opposite of `areaDesignationToForm()`, convert form prop to DB's attributes.
- */
-const areaDesignationToDb = (attr: AreaTypeFormProp): Pick<AreaUpdatableFieldsType, 'isBoulder' | 'isLeaf'> => {
-  switch (attr) {
-    case 'boulder':
-      return {
-        isLeaf: true,
-        isBoulder: true
-      }
-    case 'crag':
-      return {
-        isLeaf: true,
-        isBoulder: false
-      }
-    default:
-      return {
-        isLeaf: false,
-        isBoulder: false
-      }
-  }
-}
 type ClimbDirtyFieldsType = Partial<Record<keyof EditableClimbType, boolean>>
 
 /**

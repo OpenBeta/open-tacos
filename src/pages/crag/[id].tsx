@@ -161,7 +161,8 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
     query,
     variables: {
       uuid: params.id
-    }
+    },
+    fetchPolicy: 'no-cache'
   })
 
   if (rs.data === null) {
