@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import clx from 'classnames'
 import { useMutation } from '@apollo/client'
 import { signIn, useSession } from 'next-auth/react'
@@ -7,41 +8,44 @@ import { signIn, useSession } from 'next-auth/react'
 import { MUTATION_REMOVE_AREA, RemoveAreaReturnType, RemoveAreaProps } from '../../js/graphql/gql/contribs'
 import { graphqlClient } from '../../js/graphql/Client'
 import Input from '../ui/form/Input'
-import { SuccessAlert, AlertAction } from './alerts/Alerts'
 import Toast from '../ui/Toast'
+import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
 
 export interface DeleteAreaProps {
   parentUuid: string
   areaUuid: string
   areaName: string
-  onClose: (event: any) => void
+  onSuccess?: () => void
+  onError?: (error) => void
 }
 
 interface HtmlFormProps {
   confirmation: string
 }
 
-export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, onClose }: DeleteAreaProps): JSX.Element {
+export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, onSuccess, onError }: DeleteAreaProps): JSX.Element {
   const session = useSession()
-  const toastRef = useRef<any>()
+  const router = useRouter()
 
   useEffect(() => {
     if (session.status === 'unauthenticated') {
       void signIn('auth0') // send users to Auth0 login screen
     }
-    toastRef?.current?.publish('Area deleted.')
   }, [session])
 
+  // TODO: move this to useUpdateAreasCmd hook
   const [removeArea] = useMutation<{ removeArea: RemoveAreaReturnType }, RemoveAreaProps>(
     MUTATION_REMOVE_AREA, {
       client: graphqlClient,
-      onCompleted: (data) => {
+      onCompleted: async (data) => {
+        if (onSuccess != null) {
+          onSuccess()
+        }
         void fetch(`/api/revalidate?a=${parentUuid}`) // rebuild parent area page
-        toastRef?.current?.publish(`Area '${areaName}' deleted.`)
+        await router.replace('/areas/' + parentUuid)
+        router.reload()
       },
-      onError: (error) => {
-        toastRef.current?.publish('Delete error: ' + error.message, true)
-      }
+      onError
     }
   )
 
@@ -76,7 +80,7 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, onClos
     <>
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
-          <div>You're about to delete area <b>{areaName}</b>.  Type DELETE to confirm.</div>
+          <div>You're about to delete <b>{areaName}</b>.  Type DELETE to confirm.</div>
           <Input
             label=''
             name='confirmation'
@@ -103,16 +107,32 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, onClos
           </button>
         </form>
       </FormProvider>
-      <Toast ref={toastRef} />
     </>
   )
 }
 
-interface DeleteSuccessAlertProps {
-  parentUuid: string
-  onClose: (event: any) => void
+export const DeleteAreaTrigger = ({ areaName, areaUuid, parentUuid, disabled }: DeleteAreaProps & { disabled: boolean}): JSX.Element => {
+  const toastRef = useRef<any>()
+
+  const [isOpen, setOpen] = useState(false)
+  const onSuccess = (): void => {
+    setOpen(false)
+    toastRef?.current?.publish(`Area '${areaName}' deleted.`)
+  }
+  return (
+    <>
+      <MobileDialog modal open={isOpen} onOpenChange={setOpen}>
+        <DialogTrigger className='btn btn-primart btn-sm btn-outline px-6' disabled={disabled}>Delete</DialogTrigger>
+        <DialogContent title='Delete area'>
+          <DeleteAreaForm
+            areaName={areaName}
+            areaUuid={areaUuid}
+            parentUuid={parentUuid}
+            onSuccess={onSuccess}
+          />
+        </DialogContent>
+      </MobileDialog>
+      <Toast ref={toastRef} />
+    </>
+  )
 }
-export const DeleteSuccessAlert = ({ areaName, parentUuid, onClose }: DeleteSuccessAlertProps & RemoveAreaReturnType): JSX.Element => (
-  <SuccessAlert description={<span>Area <b>{areaName}</b> deleted.</span>}>
-    <AlertAction className='btn btn-primary' onClick={onClose}>Continue</AlertAction>
-  </SuccessAlert>)

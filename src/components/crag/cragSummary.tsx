@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
@@ -6,7 +6,7 @@ import * as Portal from '@radix-ui/react-portal'
 import { GlobeAltIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 
 import { AreaMetadataType, CountByGroupType, AreaUpdatableFieldsType } from '../../js/types'
-import { IndividualClimbChangeInput, UpdateOneAreaApiType } from '../../js/graphql/gql/contribs'
+import { IndividualClimbChangeInput, UpdateOneAreaInputType } from '../../js/graphql/gql/contribs'
 import EditModeToggle from '../../components/editor/EditModeToggle'
 import { FormSaveAction } from '../../components/editor/FormSaveAction'
 import Toast from '../../components/ui/Toast'
@@ -18,8 +18,7 @@ import { ClimbListPreview, findDeletedCandidates } from './ClimbListPreview'
 import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 
-import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
-import DeleteAreaForm from '../edit/DeleteAreaForm'
+import { DeleteAreaTrigger } from '../edit/DeleteAreaForm'
 // import FavouriteButton from '../users/FavouriteButton'
 
 export interface CragHeroProps {
@@ -61,8 +60,32 @@ type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 
 export default function CragSummary ({ uuid, title: initTitle, description: initDescription, latitude: initLat, longitude: initLng, areaMeta, climbs, ancestors }: CragLayoutProps): JSX.Element {
   const toastRef = useRef<any>(null)
   const session = useSession()
+
+  /**
+   * Hold the ref to the delete component.
+   * We use Portal to avoid nesting the delete form inside the edit form which causes
+   * unwanted submit.
+   */
+  const [deletePlaceholderRef, setDeletePlaceholderRef] = useState<HTMLElement|null>()
+
+  /**
+   * Change this value will trigger a form control reset to Lexical-backed components.
+   * We use Lexical to build inplace editing components and I don't know of a good way
+   * to imperatively reset/clear Lexical content without resorting to complicated ref
+   * forwarding.
+   * As a workaround (maybe this is how you're supposed to do it) there's a custom
+   * Lexical plugin that reacts to resetSignal change in useEffect() and resets Lexical
+   * content.
+   */
   const [resetSignal, setResetSignal] = useState(0)
+
   const [editMode, setEditMode] = useState(false)
+
+  /**
+   * Hold the form base states aka default values.  Since we use Next SSG,
+   * this component props become stale the moment a user submits a change.
+   * Every time a user submits the form, this cache needs to be updated.
+   */
   const [cache, setCache] = useState<SummaryHTMLFormProps>({
     uuid,
     areaName: initTitle,
@@ -92,16 +115,18 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     onUpdateCompleted,
     onUpdateError,
     onDeleteCompleted: () => {
-      toastRef?.current?.publish('Climbs deleted. ✨')
+      toastRef?.current?.publish('Climbs deleted ✨')
     },
-    onDeleteError: () => {
-      toastRef?.current?.publish('Unexpected error.  Please try again.', true)
+    onDeleteError: (error) => {
+      toastRef?.current?.publish(`Unexpected error: ${error?.message as string}`, true)
     }
   })
 
   const { updateOneAreaCmd: updateAreaCmd } = useUpdateAreasCmd({
     areaId: uuid,
-    accessToken: session?.data?.accessToken as string
+    accessToken: session?.data?.accessToken as string,
+    onUpdateCompleted: () => toastRef.current.publish('Area updated ✨'),
+    onUpdateError: (error) => toastRef.current.publish(`An unexpected error: ${error?.message as string}`)
   })
 
   // Form declaration
@@ -117,7 +142,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
   const currentareaType = watch('areaType')
 
   /**
-   * For submit handler
+   * Form submit handler
    */
   const submitHandler = async (formData: SummaryHTMLFormProps): Promise<void> => {
     const { uuid, areaName, description, latlng, areaType, climbList } = formData
@@ -126,8 +151,8 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     const updatedClimbs = extractDirtyClimbs(dirtyFields?.climbList, climbList, cache.climbList)
     const deleteCandidiates = findDeletedCandidates(cache.climbList, climbList)
 
-    // Extract only dirty fields to send to the API
-    const onlyDirtyFields: UpdateOneAreaApiType = {
+    // Extract only dirty fields to send to the Update Area API
+    const onlyDirtyFields: UpdateOneAreaInputType = {
       ...dirtyFields?.areaName === true && { areaName },
       ...dirtyFields?.areaType === true && canChangeAreaType && areaDesignationToDb(areaType),
       ...dirtyFields?.latlng === true && { lat: parseFloat(lat), lng: parseFloat(lng) },
@@ -176,21 +201,18 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
   const canChangeAreaType = currentClimbList.length === 0 && cache.climbList.length === 0 // we're not allowed to change a crag to an area once it already has climbs
   const showBulkEditor = currentareaType !== 'area'
   const parentAreaId = ancestors[ancestors.length - 2]
-  const portalRef = useRef(null)
+
+  useEffect(() => {
+    const div = document.getElementById('deleteButtonPlaceholder')
+    if (div != null) {
+      setDeletePlaceholderRef(div)
+    }
+  }, [editMode])
+
   return (
     <>
-      <Portal.Root container={portalRef.current}>
-        <MobileDialog modal>
-          <DialogTrigger>Delete</DialogTrigger>
-          <DialogContent title='Delete area'>
-            <DeleteAreaForm
-              areaName={areaName}
-              areaUuid={uuid}
-              parentUuid={parentAreaId}
-              onClose={() => console.log('deleted')}
-            />
-          </DialogContent>
-        </MobileDialog>
+      <Portal.Root container={deletePlaceholderRef}>
+        <DeleteAreaTrigger areaName={areaName} areaUuid={uuid} parentUuid={parentAreaId} disabled={!canChangeAreaType} />
       </Portal.Root>
       <div className='flex justify-end'>
         <EditModeToggle onChange={setEditMode} />
@@ -239,11 +261,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
                     <label className='label'>
                       <span className='label-text font-semibold'>Permanently delete this area</span>
                     </label>
-                    <div className='ml-2'>
-                      {/* <button className='btn btn-primart btn-sm btn-outline px-6' disabled={!canChangeAreaType} type='button'>Delete</button> */}
-                      <div ref={portalRef} />
-
-                    </div>
+                    <div className='ml-2' id='deleteButtonPlaceholder' />
                   </div>
                 </div>)}
             </div>
@@ -273,7 +291,9 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
             resetHookFn={reset}
             onReset={() => setResetSignal(Date.now())}
           />
+
           <ClimbListPreview editable={editMode} />
+
           {editMode && showBulkEditor && (
             <div className='collapse mt-8 collapse-plus fadeinEffect'>
               <input type='checkbox' defaultChecked />
@@ -284,6 +304,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
                 <ClimbBulkEditor name='climbList' initialClimbs={cache.climbList} resetSignal={resetSignal} editable />
               </div>
             </div>)}
+
           <div className='md:hidden'>
             <FormSaveAction
               cache={cache}

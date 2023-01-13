@@ -54,7 +54,7 @@ const Toast = forwardRef((props: ToastProps, forwardedRef) => {
   return (
     <>
       {list.map((message, index) => (
-        <ToastPrimitive.Root key={index} type={type} {...toastProps} className={`rounded-box p-4 drop-shadow-lg flex flex-col gap-1 ${alertClz}`}>
+        <ToastPrimitive.Root key={index} type={type} {...toastProps} className={`max-w-xs rounded-box p-4 drop-shadow-lg flex flex-col gap-1 justify-center ${alertClz}`}>
           {title != null && <ToastPrimitive.Title className='font-semibold text-sm'>{title}</ToastPrimitive.Title>}
           <ToastPrimitive.Description>{children ?? <span className='text-sm'>{message}</span>}</ToastPrimitive.Description>
           <ToastPrimitive.Close className='mx-auto mt-2 btn btn-circle btn-secondary'><CheckIcon className='w-6 h-6 delay-200 fadeinEffect' /></ToastPrimitive.Close>

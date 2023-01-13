@@ -1,9 +1,9 @@
 import { useMutation } from '@apollo/client'
 
 import { graphqlClient } from '../graphql/Client'
-import { MUTATION_UPDATE_AREA, UpdateOneAreaApiType, UpdateAreaApiReturnType } from '../graphql/gql/contribs'
+import { MUTATION_UPDATE_AREA, UpdateOneAreaInputType, UpdateAreaApiReturnType } from '../graphql/gql/contribs'
 
-type UpdateOneAreaCmdType = (input: UpdateOneAreaApiType) => Promise<void>
+type UpdateOneAreaCmdType = (input: UpdateOneAreaInputType) => Promise<void>
 
 interface Props {
   areaId: string
@@ -17,15 +17,14 @@ interface UpdateClimbsHookReturn {
 }
 
 /**
- * React hook for update areas API
+ * React hook for Area update/delete API
  * @param parentId
  * @param accessToken JWT token
  * @param onUpdateCompleted Optional success callback
  * @param onError Optiona error callback
- * @returns updateOneAreaCmd
  */
 export default function useUpdateAreasCmd ({ areaId, accessToken = '', onUpdateCompleted, onUpdateError }: Props): UpdateClimbsHookReturn {
-  const [updateAreaApi] = useMutation<{ updateAreaApi: UpdateAreaApiReturnType }, UpdateOneAreaApiType>(
+  const [updateAreaApi] = useMutation<{ updateAreaApi: UpdateAreaApiReturnType }, UpdateOneAreaInputType>(
     MUTATION_UPDATE_AREA, {
       client: graphqlClient,
       onCompleted: (data) => {
@@ -39,7 +38,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', onUpdateC
     }
   )
 
-  const updateOneAreaCmd: UpdateOneAreaCmdType = async (input: UpdateOneAreaApiType) => {
+  const updateOneAreaCmd: UpdateOneAreaCmdType = async (input: UpdateOneAreaInputType) => {
     await updateAreaApi({
       variables: {
         ...input,

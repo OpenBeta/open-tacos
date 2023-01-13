@@ -151,7 +151,7 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
     fetchPolicy: 'no-cache'
   })
 
-  if (rs.data.area.metadata?.leaf) {
+  if (rs.data.area.metadata?.leaf || rs.data.area.children.length === 0) {
     return {
       redirect: {
         destination: `/crag/${params.id}`,

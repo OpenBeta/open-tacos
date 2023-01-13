@@ -1,12 +1,8 @@
 import { useEffect, useState, useRef } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import clx from 'classnames'
-import { useMutation } from '@apollo/client'
 import { signIn, useSession } from 'next-auth/react'
 
-import { MUTATION_UPDATE_AREA, UpdateAreaApiReturnType, UpdateAreaProps } from '../../js/graphql/gql/contribs'
-import { ErrorAlert } from './alerts/Alerts'
-import { graphqlClient } from '../../js/graphql/Client'
 import { Input, TextArea } from '../ui/form'
 import Toast from '../ui/Toast'
 import { AreaType, AreaUpdatableFieldsType, RulesType } from '../../js/types'
@@ -190,24 +186,6 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
         </form>
       </FormProvider>
       <Toast ref={toastRef} />
-      {/* {gqlError != null && <SaveErrorAlert {...gqlError} />} */}
     </>
-  // </div>
   )
 }
-// interface ErrorAlertProps {
-//   message: string
-// }
-
-// export const SaveErrorAlert = ({ message }: ErrorAlertProps): JSX.Element => {
-//   return (
-//     <ErrorAlert
-//       description={
-//         <span>
-//           {message}
-//           <span><br />Click Ok and try again.</span>
-//         </span>
-//       }
-//     />
-//   )
-// }

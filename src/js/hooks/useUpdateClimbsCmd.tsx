@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client'
 import { GraphQLError } from 'graphql'
 
 import { graphqlClient } from '../graphql/Client'
-import { MUTATION_UPDATE_CLIMBS, MUTATION_DELETE_CLIMBS, UpdateClimbsInput, DeleteManyClimbsAPI, DeleteManyClimbsInputType } from '../graphql/gql/contribs'
+import { MUTATION_UPDATE_CLIMBS, MUTATION_DELETE_CLIMBS, UpdateClimbsInput, DeleteManyClimbsInputType } from '../graphql/gql/contribs'
 
 type UpdateClimbCmdType = (input: UpdateClimbsInput) => Promise<void>
 type DeleteClimbsCmdType = (idList: string[]) => Promise<number>
@@ -22,12 +22,9 @@ interface UpdateClimbsHookReturn {
 }
 
 /**
- * React hook for update climbs API
+ * React hook for update/delete Climb API
  * @param parentId
  * @param accessToken JWT token
- * @param onCompleted Optional success callback
- * @param onError Optiona error callback
- * @returns updateClimbCmd
  */
 export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpdateCompleted, onUpdateError, onDeleteCompleted, onDeleteError }: UpdateClimbsHookProps): UpdateClimbsHookReturn {
   const [updateClimbsApi] = useMutation<{ updateClimbsApi: string[] }, { input: UpdateClimbsInput }>(

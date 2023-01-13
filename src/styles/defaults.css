@@ -163,14 +163,6 @@ p {
     @apply bg-gray-200;
   }
 
-  /* .btn-small {
-    @apply whitespace-nowrap py-1 px-4 text-sm !important;
-  } */
-
-  /* .btn-medium {
-    @apply px-6 py-2 text-lg !important;
-  } */
-
   .btn-nav-secondary {
     @apply bg-ob-tertiary text-black hover:scale-110 duration-300 !important;
   }
@@ -178,18 +170,6 @@ p {
   .btn-nav {
     @apply text-white hover:scale-110 duration-300 !important;
   }
-
-  /* .btn {
-    @apply no-underline px-6 py-1 text-gray-900 font-medium text-sm drop-shadow-lg rounded-xl;
-  }
-
-  .btn-primary {
-    @apply bg-black hover:bg-custom-primary  border-2 border-black text-white;
-  }
-
-  .btn-secondary {
-    @apply bg-white hover:bg-custom-primary border-2 border-black;
-  } */
 
   .btn-success {
     @apply bg-green-300 hover:bg-green-400;
@@ -262,7 +242,6 @@ p {
     user-select: none;
     pointer-events: none;
     @apply w-full rounded-lg top-0 left-3 text-base-300 text-opacity-50 italic;
-
   }
 
   code {

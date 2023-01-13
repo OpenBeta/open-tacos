@@ -19,7 +19,7 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
   const defaultDict = indexBy(defaultValues?.climbList, 'climbId')
 
   return (
-    <div className='mt-16 lg:mt-32 min-h-[8rem]'>
+    <div className='mt-16 min-h-[8rem]'>
       <h3>Climbs&nbsp;<span className='text-base-300'>({watchList.length})</span></h3>
       <section className='lg:columns-2 lg:gap-16'>
         {watchList.map((entry, index) =>
