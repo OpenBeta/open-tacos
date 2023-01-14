@@ -22,7 +22,6 @@ import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import TickButton from '../../components/users/TickButton'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
 import EditModeToggle from '../../components/editor/EditModeToggle'
-import Toast from '../../components/ui/Toast'
 import { FormSaveAction } from '../../components/editor/FormSaveAction'
 import { AREA_NAME_FORM_VALIDATION_RULES } from '../../components/edit/EditAreaForm'
 import { getImagesByFilenames } from '../../js/sirv/SirvClient'
@@ -84,7 +83,6 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
 
   const router = useRouter()
   const session = useSession()
-  const toastRef = useRef<any>()
 
   useEffect(() => {
     setCache({ name, ...content })
@@ -111,21 +109,11 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
     rightClimb !== null && router.push(`/climbs/${rightClimb.id}`)
   }, [rightClimb])
 
-  const onUpdateCompleted = (): void => {
-    toastRef?.current?.publish('Changes saved ✨ Thank you for your contribution!')
-  }
-
-  const onUpdateError = (): void => {
-    toastRef?.current?.publish('Something unexpected happened. Please save again.', true)
-  }
-
   const parentId = ancestors[ancestors.length - 1]
 
   const { updateClimbCmd } = useUpdateClimbsCmd({
     parentId,
-    accessToken: session?.data?.accessToken as string,
-    onUpdateCompleted,
-    onUpdateError
+    accessToken: session?.data?.accessToken as string
   })
 
   // React hook form declaration
@@ -262,7 +250,6 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
           </form>
         </FormProvider>
       </div>
-      <Toast ref={toastRef} />
     </div>
   )
 }

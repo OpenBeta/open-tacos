@@ -1,22 +1,21 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import clx from 'classnames'
 import { useMutation } from '@apollo/client'
+import { GraphQLError } from 'graphql'
 import { signIn, useSession } from 'next-auth/react'
 
 import { MUTATION_REMOVE_AREA, RemoveAreaReturnType, RemoveAreaProps } from '../../js/graphql/gql/contribs'
 import { graphqlClient } from '../../js/graphql/Client'
 import Input from '../ui/form/Input'
-import Toast from '../ui/Toast'
-import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
 
 export interface DeleteAreaProps {
   parentUuid: string
   areaUuid: string
   areaName: string
   onSuccess?: () => void
-  onError?: (error) => void
+  onError?: (error: GraphQLError) => void
 }
 
 interface HtmlFormProps {
@@ -44,8 +43,7 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, onSucc
         void fetch(`/api/revalidate?a=${parentUuid}`) // rebuild parent area page
         await router.replace('/areas/' + parentUuid)
         router.reload()
-      },
-      onError
+      }
     }
   )
 
@@ -107,32 +105,6 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, onSucc
           </button>
         </form>
       </FormProvider>
-    </>
-  )
-}
-
-export const DeleteAreaTrigger = ({ areaName, areaUuid, parentUuid, disabled }: DeleteAreaProps & { disabled: boolean}): JSX.Element => {
-  const toastRef = useRef<any>()
-
-  const [isOpen, setOpen] = useState(false)
-  const onSuccess = (): void => {
-    setOpen(false)
-    toastRef?.current?.publish(`Area '${areaName}' deleted.`)
-  }
-  return (
-    <>
-      <MobileDialog modal open={isOpen} onOpenChange={setOpen}>
-        <DialogTrigger className='btn btn-primart btn-sm btn-outline px-6' disabled={disabled}>Delete</DialogTrigger>
-        <DialogContent title='Delete area'>
-          <DeleteAreaForm
-            areaName={areaName}
-            areaUuid={areaUuid}
-            parentUuid={parentUuid}
-            onSuccess={onSuccess}
-          />
-        </DialogContent>
-      </MobileDialog>
-      <Toast ref={toastRef} />
     </>
   )
 }

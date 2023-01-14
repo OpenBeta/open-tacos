@@ -117,8 +117,8 @@ export const QUERY_RECENT_CHANGE_HISTORY = gql`
 
 export interface AddAreaProps {
   name: string
-  parentUuid: string | null
-  countryCode: string | null
+  parentUuid?: string
+  countryCode?: string
 }
 
 export type AddAreaReturnType = Pick<AreaType, 'areaName'|'uuid'>

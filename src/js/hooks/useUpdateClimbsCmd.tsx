@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { GraphQLError } from 'graphql'
-
+import { toast } from 'react-toastify'
 import { graphqlClient } from '../graphql/Client'
 import { MUTATION_UPDATE_CLIMBS, MUTATION_DELETE_CLIMBS, UpdateClimbsInput, DeleteManyClimbsInputType } from '../graphql/gql/contribs'
 
@@ -32,12 +32,14 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
       client: graphqlClient,
       onCompleted: (data) => {
         // void fetch(`/api/revalidate?c=${id}`)
+        toast('Climbs updated ✨')
+
         if (onUpdateCompleted != null) {
           onUpdateCompleted(data)
         }
       },
       onError: (error) => {
-        console.log('updateClimbsApi error', error)
+        toast.error(`Climb update error: ${error.message}`)
         if (onUpdateError != null) {
           onUpdateError(error)
         }
@@ -63,12 +65,13 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
       client: graphqlClient,
       onCompleted: (data) => {
         void fetch(`/api/revalidate?a=${parentId}`)
+        toast('Climbs deleted ✔️')
         if (onDeleteCompleted != null) {
           onDeleteCompleted(data)
         }
       },
       onError: (error) => {
-        console.log('deleteClimbsApi error', error)
+        toast.error(`Climb delete error: ${error.message}`)
         if (onDeleteError != null) {
           onDeleteError(error)
         }

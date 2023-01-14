@@ -1,21 +1,19 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import Link from 'next/link'
 import clx from 'classnames'
-import { useMutation } from '@apollo/client'
 import { signIn, useSession } from 'next-auth/react'
 import { CheckBadgeIcon } from '@heroicons/react/24/outline'
 
-import { MUTATION_ADD_AREA, AddAreaReturnType, AddAreaProps } from '../../js/graphql/gql/contribs'
+import { AddAreaReturnType } from '../../js/graphql/gql/contribs'
 import { SuccessAlert, AlertAction, ErrorAlert } from './alerts/Alerts'
-import { graphqlClient } from '../../js/graphql/Client'
 import Input from '../ui/form/Input'
-import Toast from '../../components/ui/Toast'
+import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 
-interface MainProps {
+export interface AddAreaFormProps {
   parentUuid: string
   parentName: string
-  formRef: any
+  onSuccess?: () => void
 }
 
 type ProgressState = 'initial' | 'data-entry' | 'confirm'
@@ -23,48 +21,41 @@ type ProgressState = 'initial' | 'data-entry' | 'confirm'
 /**
  * Add child area wizard
  */
-export default function Main (props: MainProps): JSX.Element {
-  const { formRef } = props
+export default function AddAreaForm ({ parentName, parentUuid, onSuccess }: AddAreaFormProps): JSX.Element {
   const session = useSession()
   const [step, setStep] = useState<ProgressState>('initial')
   const [newArea, setNewArea] = useState<AddAreaReturnType>()
-  const toastRef = useRef<any>(null)
-
-  // Track submit count
-  const [submitCount, setSubmitCount] = useState(0)
 
   useEffect(() => {
     if (session.status === 'unauthenticated') {
       void signIn('auth0') // send users to Auth0 login screen
     }
+    if (session.status === 'authenticated') {
+      setStep('data-entry')
+    }
   }, [session])
-
-  useEffect(() => {
-    formRef.current = submitCount
-  }, [submitCount])
 
   const onAddSuccessHandler = (data): void => {
     setNewArea(data.addArea)
     setStep('confirm')
-    setSubmitCount(curr => curr + 1)
-  }
-
-  const onAddErrorHandler = (error): void => {
-    toastRef.current.publish(`Unexpected error: ${error?.message as string}`)
+    if (onSuccess != null) onSuccess()
   }
 
   return (
     <div className='dialog-form-default'>
       {session.status !== 'authenticated' && <div>Checking authorization...</div>}
       {step === 'data-entry' &&
-        <Step1 {...props} onSuccess={onAddSuccessHandler} onError={onAddErrorHandler} />}
+        <Step1
+          parentName={parentName}
+          parentUuid={parentUuid}
+          onSuccess={onAddSuccessHandler}
+        />}
       {step === 'confirm' &&
         <Step2
           areaId={newArea?.uuid ?? ''}
           areaName={newArea?.areaName ?? ''}
           onAddMore={() => setStep('data-entry')}
         />}
-      <Toast ref={toastRef} />
     </div>
   )
 }
@@ -73,7 +64,6 @@ export interface ChildAreaBaseProps {
   parentName: string
   formRef?: any
   onSuccess: (data) => void
-  onError: (error) => void
 }
 
 interface NewAreaFormProps extends ChildAreaBaseProps {
@@ -81,44 +71,21 @@ interface NewAreaFormProps extends ChildAreaBaseProps {
   shortCode: string
 }
 
-function Step1 ({ parentUuid, parentName, onSuccess, onError }: ChildAreaBaseProps): JSX.Element {
+function Step1 ({ parentUuid, parentName, onSuccess }: ChildAreaBaseProps): JSX.Element {
   const session = useSession()
 
-  // TODO: move this to useUpdateAreasCmd hook
-  const [addArea] = useMutation<{ addArea: AddAreaReturnType }, AddAreaProps>(
-    MUTATION_ADD_AREA, {
-      client: graphqlClient,
-      onCompleted: (data) => {
-        void fetch(`/api/revalidate?a=${data.addArea.uuid}`) // build new area page
-        void fetch(`/api/revalidate?a=${parentUuid}`) // rebuild parent page
-        onSuccess(data)
-      },
-      onError
-    }
-  )
+  const { addOneAreaCmd } = useUpdateAreasCmd({ areaId: parentUuid, accessToken: session?.data?.accessToken as string ?? '' })
 
   // Form declaration
-  const form = useForm<NewAreaFormProps>(
-    {
-      mode: 'onBlur',
-      defaultValues: { newAreaName: '', shortCode: '', parentName: parentName }
-    })
+  const form = useForm<NewAreaFormProps>({
+    mode: 'onBlur',
+    defaultValues: { newAreaName: '', shortCode: '', parentName: parentName }
+  })
 
   const { handleSubmit, formState: { isSubmitting } } = form
 
   const submitHandler = async ({ newAreaName }: NewAreaFormProps): Promise<void> => {
-    await addArea({
-      variables: {
-        name: newAreaName,
-        parentUuid: parentUuid,
-        countryCode: null
-      },
-      context: {
-        headers: {
-          authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
-        }
-      }
-    })
+    await addOneAreaCmd({ name: newAreaName, parentUuid })
   }
 
   return (
@@ -202,7 +169,7 @@ const Step2 = ({ areaId, areaName, onAddMore }: Step2Props): JSX.Element => {
           </span>
         </AreaPageResolver> added.  Thank you for your contribution!
       </div>
-      <div className='flex items-center gap-2ß'>
+      <div className='flex items-center gap-2'>
         <button type='button' className='btn btn-solid btn-wide' onClick={onAddMore}>Add more</button>
         <AreaPageResolver uuid={areaId}>
           <button className='btn btn-link'>View area</button>

@@ -21,7 +21,9 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
   return (
     <div className='mt-16 min-h-[8rem]'>
       <h3>Climbs&nbsp;<span className='text-base-300'>({watchList.length})</span></h3>
-      <section className='lg:columns-2 lg:gap-16'>
+      <hr className='mt-1 my-4 border border-base-content' />
+
+      <section className='mt-8 lg:columns-2 lg:gap-x-16  break-inside-avoid-column break-inside-avoid'>
         {watchList.map((entry, index) =>
           <ClimbEntry
             key={entry.id} {...entry} index={index}
@@ -50,7 +52,7 @@ type ClimbEntryProps = EditableClimbTypeWithFieldId & {
 const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict, toBeDeleted = false }: ClimbEntryProps): JSX.Element => {
   const isDirty = climbId != null && defaultDict?.[climbId]?.name !== name
   return (
-    <div className='my-2 flex items-center gap-4 fadeinEffect'>
+    <div className='flex items-center gap-4 fadeinEffect mb-4'>
       <div className={
         clx('rounded-full h-8 w-8 grid place-content-center text-sm bg-primary text-base-100 indicator',
           isDirty && !isNew && !toBeDeleted ? 'outline-2 outline-secondary outline-offset-4 outline-dashed' : '',
@@ -63,7 +65,7 @@ const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict,
         {index + 1}
       </div>
       <div className={
-  clx('grow border-t-2 py-2 uppercase font-semibold flex items-center justify-between', (isDirty && !toBeDeleted) || isNew ? 'italic text-secondary' : '',
+  clx('border-b grow py-2 uppercase font-semibold flex items-center justify-between', (isDirty && !toBeDeleted) || isNew ? 'italic text-secondary' : '',
     toBeDeleted ? 'italic text-base-300' : '')
   }
       >

@@ -73,7 +73,7 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
 
       <MobileDialog modal open={action === 'add'} onOpenChange={postCreateUpdateHandler}>
         <DialogContent title='Add new child area'>
-          <AddChildAreaForm parentName={areaName} parentUuid={uuid} formRef={submitCountRef} />
+          <AddChildAreaForm parentName={areaName} parentUuid={uuid} onSuccess={() => router.reload()} />
         </DialogContent>
       </MobileDialog>
 

@@ -1,15 +1,15 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import * as Portal from '@radix-ui/react-portal'
 import { GlobeAltIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
+import { toast } from 'react-toastify'
 
 import { AreaMetadataType, CountByGroupType, AreaUpdatableFieldsType } from '../../js/types'
 import { IndividualClimbChangeInput, UpdateOneAreaInputType } from '../../js/graphql/gql/contribs'
 import EditModeToggle from '../../components/editor/EditModeToggle'
 import { FormSaveAction } from '../../components/editor/FormSaveAction'
-import Toast from '../../components/ui/Toast'
 import { getMapHref, sortClimbsByLeftRightIndex } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
 import { AreaDesignationRadioGroup, areaDesignationToDb, areaDesignationToForm } from '../edit/form/AreaDesignationRadioGroup'
@@ -17,8 +17,7 @@ import { CragLayoutProps } from './cragLayout'
 import { ClimbListPreview, findDeletedCandidates } from './ClimbListPreview'
 import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
-
-import { DeleteAreaTrigger } from '../edit/DeleteAreaForm'
+import { DeleteAreaTrigger, AddAreaTrigger } from '../edit/Triggers'
 // import FavouriteButton from '../users/FavouriteButton'
 
 export interface CragHeroProps {
@@ -58,15 +57,15 @@ type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 
  * to `onError()` callback.
  */
 export default function CragSummary ({ uuid, title: initTitle, description: initDescription, latitude: initLat, longitude: initLng, areaMeta, climbs, ancestors }: CragLayoutProps): JSX.Element {
-  const toastRef = useRef<any>(null)
   const session = useSession()
 
   /**
-   * Hold the ref to the delete component.
-   * We use Portal to avoid nesting the delete form inside the edit form which causes
+   * Hold the ref to the area add & delete components.
+   * We use Portal to avoid nesting the add/delete form inside the Edit form which causes
    * unwanted submit.
    */
   const [deletePlaceholderRef, setDeletePlaceholderRef] = useState<HTMLElement|null>()
+  const [addAreaPlaceholderRef, setAddAreaPlaceholderRef] = useState<HTMLElement|null>()
 
   /**
    * Change this value will trigger a form control reset to Lexical-backed components.
@@ -102,11 +101,11 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
   })
 
   const onUpdateCompleted = (): void => {
-    toastRef?.current?.publish('Climbs updated ✨')
+    toast('Climbs updated ✨')
   }
 
   const onUpdateError = (): void => {
-    toastRef?.current?.publish('Something unexpected happened. Please save again.', true)
+    toast.error('Something unexpected happened. Please save again.')
   }
 
   const { updateClimbCmd, deleteClimbsCmd } = useUpdateClimbsCmd({
@@ -115,18 +114,16 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     onUpdateCompleted,
     onUpdateError,
     onDeleteCompleted: () => {
-      toastRef?.current?.publish('Climbs deleted ✨')
+      toast('Climbs deleted ✨')
     },
     onDeleteError: (error) => {
-      toastRef?.current?.publish(`Unexpected error: ${error?.message as string}`, true)
+      toast.error(`Unexpected error: ${error?.message as string}`)
     }
   })
 
   const { updateOneAreaCmd: updateAreaCmd } = useUpdateAreasCmd({
     areaId: uuid,
-    accessToken: session?.data?.accessToken as string,
-    onUpdateCompleted: () => toastRef.current.publish('Area updated ✨'),
-    onUpdateError: (error) => toastRef.current.publish(`An unexpected error: ${error?.message as string}`)
+    accessToken: session?.data?.accessToken as string
   })
 
   // Form declaration
@@ -169,7 +166,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     const hasSomethingToDelete = deleteCandidiates.length > 0
 
     if (!isCragSummaryDirty && !isClimbListDirty && !hasSomethingToDelete) {
-      toastRef?.current?.publish('Nothing to save.  Please make at least 1 edit.', true)
+      toast.warn('Nothing to save.  Please make at least 1 edit.')
       return
     }
 
@@ -199,13 +196,18 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
   const { areaName, description } = cache
   const latlngPair = parseLatLng(currentLatLngStr)
   const canChangeAreaType = currentClimbList.length === 0 && cache.climbList.length === 0 // we're not allowed to change a crag to an area once it already has climbs
+  const disabledAddNewAreas = canChangeAreaType && currentareaType !== 'area'
   const showBulkEditor = currentareaType !== 'area'
   const parentAreaId = ancestors[ancestors.length - 2]
 
   useEffect(() => {
-    const div = document.getElementById('deleteButtonPlaceholder')
-    if (div != null) {
-      setDeletePlaceholderRef(div)
+    const deleteAreaDiv = document.getElementById('deleteButtonPlaceholder')
+    if (deleteAreaDiv != null) {
+      setDeletePlaceholderRef(deleteAreaDiv)
+    }
+    const addAreaDiv = document.getElementById('addAreaPlaceholder')
+    if (addAreaDiv != null) {
+      setAddAreaPlaceholderRef(addAreaDiv)
     }
   }, [editMode])
 
@@ -214,6 +216,10 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
       <Portal.Root container={deletePlaceholderRef}>
         <DeleteAreaTrigger areaName={areaName} areaUuid={uuid} parentUuid={parentAreaId} disabled={!canChangeAreaType} />
       </Portal.Root>
+      <Portal.Root asChild container={addAreaPlaceholderRef}>
+        <AddAreaTrigger parentName={areaName} parentUuid={uuid} disabled={disabledAddNewAreas} />
+      </Portal.Root>
+
       <div className='flex justify-end'>
         <EditModeToggle onChange={setEditMode} />
       </div>
@@ -292,6 +298,13 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
             onReset={() => setResetSignal(Date.now())}
           />
 
+          {editMode &&
+            <div className='mt-8'>
+              <h3>Areas</h3>
+              <hr className='mt-1 my-4 border border-base-content' />
+              <div className='mt-8 mr-4 text-right' id='addAreaPlaceholder' />
+            </div>}
+
           <ClimbListPreview editable={editMode} />
 
           {editMode && showBulkEditor && (
@@ -317,7 +330,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
           </div>
         </form>
       </FormProvider>
-      <Toast ref={toastRef} />
+      {/* <Toast ref={toastRef} /> */}
     </>
   )
 }

@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import clx from 'classnames'
 import { signIn, useSession } from 'next-auth/react'
+import { toast } from 'react-toastify'
 
 import { Input, TextArea } from '../ui/form'
-import Toast from '../ui/Toast'
 import { AreaType, AreaUpdatableFieldsType, RulesType } from '../../js/types'
 import { areaDesignationToForm, areaDesignationToDb, AreaTypeFormProp, AreaDesignationRadioGroup } from './form/AreaDesignationRadioGroup'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
@@ -55,7 +55,6 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
   const { lat, lng } = metadata
 
   const session = useSession()
-  const toastRef = useRef<any>()
   useEffect(() => {
     if (session.status === 'unauthenticated') {
       void signIn('auth0') // send users to Auth0 login screen
@@ -71,10 +70,6 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
     accessToken: session?.data?.accessToken as string,
     onUpdateCompleted: (data) => {
       setSubmitCount(old => old + 1)
-      toastRef?.current?.publish('Area updated successfully.')
-    },
-    onUpdateError: ({ message }: { message: string}) => {
-      toastRef?.current.publish(`Oops unexpected error. ${message != null ? message : ''}`, true)
     }
   })
 
@@ -108,7 +103,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
 
     const isEmptyDoc = Object.keys(doc).length === 0
     if (isEmptyDoc) {
-      toastRef?.current?.publish('Nothing to save.  Please make some edit.')
+      toast.warn('Nothing to save.  Please make at least 1 edit.')
     } else {
       await updateOneAreaCmd({ ...doc, uuid })
       const values = Object.assign({}, doc, dirtyFields?.latlng === true ? { latlng } : undefined)
@@ -185,7 +180,6 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
           </button>
         </form>
       </FormProvider>
-      <Toast ref={toastRef} />
     </>
   )
 }
