@@ -54,7 +54,7 @@ const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict,
   return (
     <div className='flex items-center gap-4 fadeinEffect mb-4'>
       <div className={
-        clx('rounded-full h-8 w-8 grid place-content-center text-sm bg-primary text-base-100 indicator',
+        clx('rounded-full h-8 w-8 grid place-content-center text-sm bg-primary/90 text-base-100 indicator',
           isDirty && !isNew && !toBeDeleted ? 'outline-2 outline-secondary outline-offset-4 outline-dashed' : '',
           toBeDeleted ? 'bg-opacity-60' : ''
         )

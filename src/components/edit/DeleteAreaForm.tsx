@@ -14,6 +14,7 @@ export interface DeleteAreaProps {
   parentUuid: string
   areaUuid: string
   areaName: string
+  returnToParentPageAfterDelete?: boolean
   onSuccess?: () => void
   onError?: (error: GraphQLError) => void
 }
@@ -22,7 +23,7 @@ interface HtmlFormProps {
   confirmation: string
 }
 
-export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, onSuccess, onError }: DeleteAreaProps): JSX.Element {
+export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, returnToParentPageAfterDelete = true, onSuccess }: DeleteAreaProps): JSX.Element {
   const session = useSession()
   const router = useRouter()
 
@@ -41,9 +42,12 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, onSucc
           onSuccess()
         }
         void fetch(`/api/revalidate?a=${parentUuid}`) // rebuild parent area page
-        await router.replace('/areas/' + parentUuid)
-        router.reload()
-      }
+        if (returnToParentPageAfterDelete) {
+          await router.replace('/areas/' + parentUuid)
+          router.reload()
+        }
+      },
+      fetchPolicy: 'no-cache'
     }
   )
 

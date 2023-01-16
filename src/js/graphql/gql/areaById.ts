@@ -101,3 +101,61 @@ export const QUERY_AREA_BY_ID = gql`
     }
   }
   `
+
+export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
+  area(uuid: $uuid) {
+    id
+    uuid
+    areaName
+    media {
+      mediaUrl
+      mediaUuid
+      destination
+      destType
+    }
+    metadata {
+      areaId
+      leaf
+      isBoulder
+      lat
+      lng 
+      left_right_index
+    }
+    pathTokens  
+    ancestors
+    climbs {
+      id
+      name
+      fa
+      yds
+      safety
+      type {
+        trad
+        tr
+        sport
+        mixed
+        bouldering
+        alpine
+        aid
+      }
+      metadata {
+        climbId
+        leftRightIndex
+      }
+      content {
+        description
+      }
+    }
+    children {
+      uuid
+      areaName
+      metadata {
+        leaf
+        isBoulder
+      }
+    }
+    content {
+      description 
+    } 
+  }
+}`

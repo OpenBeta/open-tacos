@@ -1,11 +1,12 @@
 import React from 'react'
-import { AreaMetadataType, Climb, CountByGroupType } from '../../js/types'
+import { AreaMetadataType, AreaType, Climb, CountByGroupType } from '../../js/types'
 import PhotoMontage from '../media/PhotoMontage'
 import CragSummary, { CragHeroProps } from './cragSummary'
-// import CragTable from './cragTable'
 
+export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 export interface CragLayoutProps extends CragHeroProps {
   climbs: Climb[]
+  childAreas: AreaSummaryType []
   areaMeta: AreaMetadataType
   pathTokens: string[]
   ancestors: string[]
@@ -14,16 +15,12 @@ export interface CragLayoutProps extends CragHeroProps {
 
 export default function CragLayout (props: CragLayoutProps): JSX.Element {
   return (
-    <div className='w-full'>
+    <div className='w-full mb-16'>
       <PhotoMontage isHero photoList={props.media} />
 
       <div className='mt-4'>
         <CragSummary {...props} />
       </div>
-
-      {/* <div className='mt-12'>
-        <CragTable title='Climbs' climbs={props.climbs} />
-      </div> */}
     </div>
   )
 }

@@ -30,6 +30,12 @@ mutation ($uuid: String!) {
     }
 }`
 
+export interface DeleteOneAreaInputType {
+  uuid: string
+}
+
+export type DeleteOneAreaReturnType = Pick<AreaType, 'uuid' | 'areaName'>
+
 export const MUTATION_UPDATE_AREA = gql`
 mutation ($uuid: String!, $areaName: String, $isDestination: Boolean, $isLeaf: Boolean, $isBoulder: Boolean, $shortCode: String, $lat: Float, $lng: Float, $description: String) {
     updateArea(input: { 

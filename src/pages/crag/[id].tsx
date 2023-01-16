@@ -39,7 +39,7 @@ const CragPage: NextPage<CragProps> = (props) => {
 export default CragPage
 
 const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
-  const { uuid, areaName, aggregate, climbs, metadata, content, ancestors, pathTokens } = area
+  const { uuid, areaName, aggregate, climbs, metadata, content, ancestors, pathTokens, children } = area
 
   return (
     <>
@@ -58,6 +58,7 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
           pathTokens={pathTokens}
           aggregate={aggregate.byGrade}
           media={mediaListWithUsernames}
+          childAreas={children}
         />
       </div>
 
@@ -149,6 +150,14 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
         }
         content {
           description
+        }
+      }
+      children {
+        uuid
+        areaName
+        metadata {
+          leaf
+          isBoulder
         }
       }
       content {

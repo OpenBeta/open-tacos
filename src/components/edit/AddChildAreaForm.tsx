@@ -74,7 +74,11 @@ interface NewAreaFormProps extends ChildAreaBaseProps {
 function Step1 ({ parentUuid, parentName, onSuccess }: ChildAreaBaseProps): JSX.Element {
   const session = useSession()
 
-  const { addOneAreaCmd } = useUpdateAreasCmd({ areaId: parentUuid, accessToken: session?.data?.accessToken as string ?? '' })
+  const { addOneAreaCmd } = useUpdateAreasCmd({
+    areaId: parentUuid,
+    accessToken: session?.data?.accessToken as string ?? '',
+    onAddCompleted: onSuccess
+  })
 
   // Form declaration
   const form = useForm<NewAreaFormProps>({

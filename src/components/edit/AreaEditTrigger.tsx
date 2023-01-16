@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from 'react'
-import { PencilIcon, FolderPlusIcon, ChevronDoubleDownIcon } from '@heroicons/react/24/outline'
+import { PencilIcon, PencilSquareIcon, FolderPlusIcon, ChevronDoubleDownIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 
 import { MobileDialog, DialogContent } from '../ui/MobileDialog'
@@ -21,17 +21,18 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
   const { isMobile } = useResponsive()
   const submitCountRef = useRef<number>(0)
   const [action, setAction] = useState('none')
+  const [shouldReloadPage, setShouldReloadPage] = useState(false)
 
   const { areaName, uuid, history } = props
   const router = useRouter()
 
   const postCreateUpdateHandler = useCallback(() => {
     setAction('none')
-    if (submitCountRef.current > 0) {
+    if (submitCountRef.current > 0 || shouldReloadPage) {
       // the user has edited something --> let's reload this page
       router.reload()
     }
-  }, [action])
+  }, [action, shouldReloadPage])
 
   return (
     <>
@@ -50,15 +51,20 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
           <DropdownItem
             className='font-bold'
             icon={<PencilIcon className='w-5 h-5' />}
-            text='Edit'
+            text='Quick Edit'
             onSelect={() => setAction('edit')}
           />
           <DropdownSeparator />
           <DropdownItem
-            className='font-bold'
             icon={<FolderPlusIcon className='w-5 h-5' />}
             text='Add new area'
             onSelect={() => setAction('add')}
+          />
+          <DropdownSeparator />
+          <DropdownItem
+            icon={<PencilSquareIcon className='w-5 h-5' />}
+            text='Advanced Edit'
+            onSelect={() => { void router.push(`/crag/${props.uuid}`) }}
           />
           <DropdownSeparator />
           <DropdownItem text='Cancel' />
@@ -73,7 +79,7 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
 
       <MobileDialog modal open={action === 'add'} onOpenChange={postCreateUpdateHandler}>
         <DialogContent title='Add new child area'>
-          <AddChildAreaForm parentName={areaName} parentUuid={uuid} onSuccess={() => router.reload()} />
+          <AddChildAreaForm parentName={areaName} parentUuid={uuid} onSuccess={() => setShouldReloadPage(true)} />
         </DialogContent>
       </MobileDialog>
 

@@ -13,13 +13,12 @@ import { FormSaveAction } from '../../components/editor/FormSaveAction'
 import { getMapHref, sortClimbsByLeftRightIndex } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
 import { AreaDesignationRadioGroup, areaDesignationToDb, areaDesignationToForm } from '../edit/form/AreaDesignationRadioGroup'
-import { CragLayoutProps } from './cragLayout'
 import { ClimbListPreview, findDeletedCandidates } from './ClimbListPreview'
 import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
-import { DeleteAreaTrigger, AddAreaTrigger } from '../edit/Triggers'
-// import FavouriteButton from '../users/FavouriteButton'
-
+import { DeleteAreaTrigger } from '../edit/Triggers'
+import { AreaCRUD } from '../edit/AreaCRUD'
+import { CragLayoutProps } from './cragLayout'
 export interface CragHeroProps {
   uuid: string
   title: string
@@ -56,7 +55,14 @@ type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 
  * because react-hook-form `handleSubmit()` handles it for us and sends exeptions
  * to `onError()` callback.
  */
-export default function CragSummary ({ uuid, title: initTitle, description: initDescription, latitude: initLat, longitude: initLng, areaMeta, climbs, ancestors }: CragLayoutProps): JSX.Element {
+export default function CragSummary (props: CragLayoutProps): JSX.Element {
+  const {
+    uuid, title: initTitle,
+    description: initDescription,
+    latitude: initLat, longitude: initLng,
+    areaMeta, climbs, ancestors
+  } = props
+
   const session = useSession()
 
   /**
@@ -121,11 +127,15 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     }
   })
 
-  const { updateOneAreaCmd: updateAreaCmd } = useUpdateAreasCmd({
+  const { updateOneAreaCmd: updateAreaCmd, getAreaByIdCmd } = useUpdateAreasCmd({
     areaId: uuid,
     accessToken: session?.data?.accessToken as string
   })
 
+  const { loading, error, data, refetch } = getAreaByIdCmd()
+
+  console.log('#GQL loading', loading, error)
+  console.log('#data', data?.area)
   // Form declaration
   const form = useForm<SummaryHTMLFormProps>({
     mode: 'onBlur',
@@ -195,9 +205,9 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
 
   const { areaName, description } = cache
   const latlngPair = parseLatLng(currentLatLngStr)
-  const canChangeAreaType = currentClimbList.length === 0 && cache.climbList.length === 0 // we're not allowed to change a crag to an area once it already has climbs
-  const disabledAddNewAreas = canChangeAreaType && currentareaType !== 'area'
-  const showBulkEditor = currentareaType !== 'area'
+  const canChangeAreaType = currentClimbList.length === 0 && cache.climbList.length === 0// we're not allowed to change a crag to an area once it already has climbs
+  const canAddAreas = currentareaType === 'area' || cache.areaType === 'area'
+  const canAddClimbs = !canAddAreas
   const parentAreaId = ancestors[ancestors.length - 2]
 
   useEffect(() => {
@@ -209,7 +219,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
     if (addAreaDiv != null) {
       setAddAreaPlaceholderRef(addAreaDiv)
     }
-  }, [editMode])
+  }, [editMode, canAddAreas])
 
   return (
     <>
@@ -217,7 +227,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
         <DeleteAreaTrigger areaName={areaName} areaUuid={uuid} parentUuid={parentAreaId} disabled={!canChangeAreaType} />
       </Portal.Root>
       <Portal.Root asChild container={addAreaPlaceholderRef}>
-        <AddAreaTrigger parentName={areaName} parentUuid={uuid} disabled={disabledAddNewAreas} />
+        <AreaCRUD uuid={uuid} areaName={areaName} childAreas={data?.area.children ?? []} onChange={refetch} canEdit={editMode} />
       </Portal.Root>
 
       <div className='flex justify-end'>
@@ -289,6 +299,7 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
               />
             </div>
           </div>
+
           <FormSaveAction
             cache={cache}
             editMode={editMode}
@@ -298,16 +309,12 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
             onReset={() => setResetSignal(Date.now())}
           />
 
-          {editMode &&
-            <div className='mt-8'>
-              <h3>Areas</h3>
-              <hr className='mt-1 my-4 border border-base-content' />
-              <div className='mt-8 mr-4 text-right' id='addAreaPlaceholder' />
-            </div>}
+          {canAddAreas &&
+            <div className='block mt-16 min-h-[8rem]' id='addAreaPlaceholder' />}
 
-          <ClimbListPreview editable={editMode} />
+          {canAddClimbs && <ClimbListPreview editable={editMode} />}
 
-          {editMode && showBulkEditor && (
+          {editMode && canAddClimbs && (
             <div className='collapse mt-8 collapse-plus fadeinEffect'>
               <input type='checkbox' defaultChecked />
               <div className='px-0 collapse-title flex items-center gap-4'>
@@ -317,20 +324,8 @@ export default function CragSummary ({ uuid, title: initTitle, description: init
                 <ClimbBulkEditor name='climbList' initialClimbs={cache.climbList} resetSignal={resetSignal} editable />
               </div>
             </div>)}
-
-          <div className='md:hidden'>
-            <FormSaveAction
-              cache={cache}
-              editMode={editMode}
-              isDirty={isDirty}
-              isSubmitting={isSubmitting}
-              resetHookFn={reset}
-              onReset={() => setResetSignal(Date.now())}
-            />
-          </div>
         </form>
       </FormProvider>
-      {/* <Toast ref={toastRef} /> */}
     </>
   )
 }
