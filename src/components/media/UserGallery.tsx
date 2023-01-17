@@ -40,7 +40,15 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
 
   const [selectedMediaId, setSlideNumber] = useState<number>(-1)
   const [tagModeOn, setTagMode] = useState<boolean>(false) // Bulk tagging
-  const [hover, setHover] = useState(false)
+  const [hoveredPicture, setHoveredPicture] = useState(-1)
+
+  const showTagHandler = (index: number): void => {
+    setHoveredPicture(index)
+  }
+
+  const hideTagHandler = (): void => {
+    setHoveredPicture(-1)
+  }
 
   const imageHelper = useImageTagHelper()
   const { isMobile } = useResponsive()
@@ -159,8 +167,8 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
           return (
             <div
               className='relative' key={key}
-              onMouseOver={() => setHover(true)}
-              onMouseOut={() => setHover(false)}
+              onMouseOver={() => showTagHandler(index)}
+              onMouseOut={() => hideTagHandler()}
             >
               <UserMedia
                 uid={uid}
@@ -175,11 +183,12 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
                 clx(
                   !isAuthorized && tags.length === 0 ? 'hidden' : '',
                   'absolute inset-x-0 bottom-0 p-2 flex items-center opacity-90',
-                  hover ? 'opacity-100 bg-base-100 bg-opacity-90' : ''
+                  hoveredPicture === index ? 'transition-opacity duration-300 ease-in opacity-100 bg-base-100 bg-opacity-90 visible' : 'duration-300 ease-out opacity-0 invisible'
                 )
                 }
               >
                 <TagList
+                  key={key}
                   list={tags}
                   imageInfo={imageInfo}
                   {...auth}
