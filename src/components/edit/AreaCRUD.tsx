@@ -1,9 +1,6 @@
-import { TrashIcon } from '@heroicons/react/24/outline'
-import Link from 'next/link'
 import { AreaType } from '../../js/types'
 import { AreaSummaryType } from '../crag/cragLayout'
-import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTriggerButtonSm } from './Triggers'
-import { DialogTrigger } from '../ui/MobileDialog'
+import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTriggerButtonSm, DeleteAreaTriggerButtonSm } from './Triggers'
 
 export type AreaCRUDProps = Pick<AreaType, 'uuid'|'areaName'> & {
   childAreas: AreaSummaryType[]
@@ -11,6 +8,10 @@ export type AreaCRUDProps = Pick<AreaType, 'uuid'|'areaName'> & {
   onChange: () => void
 }
 
+/**
+ * Responsible for rendering child areas table (Read) and Create/Update/Delete operations.
+ * @param onChange notify parent of any changes
+ */
 export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, canEdit, onChange }: AreaCRUDProps): JSX.Element => {
   const areaCount = childAreas.length
   return (
@@ -31,12 +32,15 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, c
       {areaCount === 0 && (
         <div>
           <div className='mb-8 italic text-base-300'>This area doesn't have any child areas.</div>
-          <AddAreaTrigger parentName={parentName} parentUuid={parentUuid} onSuccess={onChange} />
+          {canEdit && <AddAreaTrigger parentName={parentName} parentUuid={parentUuid} onSuccess={onChange} />}
         </div>)}
 
+      {/* Build the table */}
       <div className='mt-16 lg:gap-x-24 lg:columns-2 divide-y'>
         {childAreas.map((props, index) => <AreaItem key={props.uuid} index={index} parentUuid={parentUuid} {...props} canEdit={canEdit} onChange={onChange} />)}
-        <div className='border-t' />
+
+        {/* A hack to add bottom border */}
+        {areaCount > 2 && <div className='border-t' />}
       </div>
 
       {areaCount > 0 && canEdit && (
@@ -46,7 +50,6 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, c
           </AddAreaTrigger>
         </div>)}
     </>
-
   )
 }
 
@@ -56,17 +59,20 @@ type AreaItemProps = AreaSummaryType & {
   canEdit?: boolean
   onChange: () => void
 }
+
+/**
+ * Individual area entry
+ */
 export const AreaItem = ({ index, areaName, uuid, parentUuid, onChange, canEdit = false }: AreaItemProps): JSX.Element => {
   return (
     <div className='flex flex-rows flex-nowrap gap-4 items-center break-inside-avoid-column break-inside-avoid first:border-t'>
-      <Link href={`/crag/${uuid}`}>
-        <a className='flex items-center gap-4 grow py-6'>
-          <div className='rounded h-8 w-8 grid place-content-center bg-base-content/80 text-base-100 text-sm hover:decoration-0 hover:no-underline'>{index + 1}</div>
-          <div className='font-semibold uppercase'>
-            {areaName}
-          </div>
-        </a>
-      </Link>
+      {/* Use regular 'a' tag instead of Link because of a data caching issue with client-side routing. We'll revisit this in the future. */}
+      <a className='flex items-center gap-4 grow py-6' href={`/crag/${uuid}`}>
+        <div className='rounded h-8 w-8 grid place-content-center bg-base-content/80 text-base-100 text-sm hover:decoration-0 hover:no-underline'>{index + 1}</div>
+        <div className='font-semibold uppercase'>
+          {areaName}
+        </div>
+      </a>
 
       {canEdit && (
         <div className='text-base-300'>
@@ -78,15 +84,8 @@ export const AreaItem = ({ index, areaName, uuid, parentUuid, onChange, canEdit 
             returnToParentPageAfterDelete={false}
             onSuccess={onChange}
           >
-            <DialogTrigger
-              className='btn btn-square btn-ghost btn-sm'
-              disabled={!canEdit}
-              type='button'
-            >
-              <TrashIcon className='w-6 h-6' />
-            </DialogTrigger>
+            <DeleteAreaTriggerButtonSm disabled={!canEdit} />
           </DeleteAreaTrigger>
-
         </div>)}
     </div>
 

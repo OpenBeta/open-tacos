@@ -1,10 +1,21 @@
 import { useState, useCallback } from 'react'
 import { PlusIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
+import { TrashIcon } from '@heroicons/react/24/outline'
 import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
 import DeleteAreaForm, { DeleteAreaProps } from './DeleteAreaForm'
 import AddAreaForm, { AddAreaFormProps } from './AddChildAreaForm'
 import { toast } from 'react-toastify'
 
+/**
+ * A button used to trigger the Delete Area dialog.  You can pass an optional nested child component to customize the trigger button.
+ *
+ * Example:
+ * ```
+ * <DeleteAreaTrigger>
+ *   <DeleteAreaTriggerButtonSm disabled={!canEdit}/>
+ * </DeleteAreaTrigger>
+ * ```
+ */
 export const DeleteAreaTrigger = ({ areaName, areaUuid, parentUuid, disabled, returnToParentPageAfterDelete, onSuccess, children }: DeleteAreaProps & { disabled: boolean, children?: JSX.Element }): JSX.Element => {
   const [isOpen, setOpen] = useState(false)
   const onSuccessHandler = useCallback((): void => {
@@ -17,14 +28,7 @@ export const DeleteAreaTrigger = ({ areaName, areaUuid, parentUuid, disabled, re
   return (
     <MobileDialog modal open={isOpen} onOpenChange={setOpen}>
       {children == null
-        ? (
-          <DialogTrigger
-            className='btn btn-primary btn-sm btn-outline px-6'
-            disabled={disabled}
-            type='button'
-          >
-            Delete
-          </DialogTrigger>)
+        ? <DeleteAreaTriggerButtonDefault disabled={disabled} />
         : children}
       <DialogContent title='Delete area'>
         <DeleteAreaForm
@@ -39,6 +43,32 @@ export const DeleteAreaTrigger = ({ areaName, areaUuid, parentUuid, disabled, re
   )
 }
 
+interface TriggerButtonProps {
+  disabled: boolean
+}
+
+const DeleteAreaTriggerButtonDefault = ({ disabled }: TriggerButtonProps): JSX.Element => (
+  <DialogTrigger
+    className='btn btn-primary btn-sm btn-outline px-6'
+    disabled={disabled}
+    type='button'
+  >
+    Delete
+  </DialogTrigger>
+)
+
+export const DeleteAreaTriggerButtonSm = ({ disabled }: TriggerButtonProps): JSX.Element => (
+  <DialogTrigger
+    className='btn btn-square btn-ghost'
+    disabled={disabled}
+    type='button'
+  >
+    <TrashIcon className='w-6 h-6' />
+  </DialogTrigger>)
+
+/**
+ * A button used to trigger the Add Area dialog.  See `DeleteAreaTrigger` for a customization example.
+ */
 export const AddAreaTrigger = ({ parentName, parentUuid, onSuccess, children }: Omit<AddAreaFormProps, 'onError'> & { children?: JSX.Element}): JSX.Element => {
   const [hasChanges, setHasChanges] = useState(false)
 

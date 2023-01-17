@@ -23,7 +23,6 @@ export function CsvResetPlugin ({ initialValue, resetSignal, editable = false }:
 
   useEffect(() => {
     if (!editable || isFirstMount) return
-    console.log('#Reset CSV editor', initialValue)
 
     editor.update(() => {
       // setPrevious(resetSignal)

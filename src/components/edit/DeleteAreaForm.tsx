@@ -54,11 +54,11 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
   // Form declaration
   const form = useForm<HtmlFormProps>(
     {
-      mode: 'onBlur',
+      mode: 'onSubmit',
       defaultValues: { confirmation: '' }
     })
 
-  const { handleSubmit, formState: { isSubmitting } } = form
+  const { handleSubmit, setFocus, formState: { isSubmitting } } = form
 
   const submitHandler = async (): Promise<void> => {
     await removeArea({
@@ -75,40 +75,43 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
 
   if (session.status !== 'authenticated') {
     return (
-      <div>Checking authorization...</div>
+      <div className='dialog-form-default'>Checking authorization...</div>
     )
   }
-  return (
-    <>
-      <FormProvider {...form}>
-        <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
-          <div>You're about to delete <b>{areaName}</b>.  Type DELETE to confirm.</div>
-          <Input
-            label=''
-            name='confirmation'
-            registerOptions={{
-              required: 'A confirmation is required.',
-              validate: {
-                confirm: (v: string): string | undefined => {
-                  if (v === 'DELETE') return undefined
-                  return 'Type DELETE in uppercase'
-                }
 
+  useEffect(() => {
+    setFocus('confirmation')
+  }, [])
+
+  return (
+    <FormProvider {...form}>
+      <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
+        <div>You're about to delete '<span className='font-semibold'>{areaName}</span>'.  Type <b>DELETE</b> to confirm.</div>
+        <Input
+          label=''
+          name='confirmation'
+          registerOptions={{
+            required: 'A confirmation is required.',
+            validate: {
+              confirm: (v: string): string | undefined => {
+                if (v === 'DELETE') return undefined
+                return 'Type DELETE in uppercase'
               }
-            }}
-            className='input input-primary input-bordered input-md'
-          />
-          <button
-            className={
+
+            }
+          }}
+          className='input input-primary input-bordered input-md'
+        />
+        <button
+          className={
             clx('mt-4 btn btn-primary w-full',
               isSubmitting ? 'loading btn-disabled' : ''
             )
           }
-            type='submit'
-          >Delete
-          </button>
-        </form>
-      </FormProvider>
-    </>
+          type='submit'
+        >Delete
+        </button>
+      </form>
+    </FormProvider>
   )
 }

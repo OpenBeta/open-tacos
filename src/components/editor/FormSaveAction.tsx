@@ -9,6 +9,7 @@ interface Props {
   resetHookFn: UseFormReset<any>
   onReset: Function
 }
+
 /**
  * A reusable Reset and Save button bar to be used with react-hook-form
  */
@@ -17,10 +18,10 @@ export function FormSaveAction ({ editMode, isDirty, isSubmitting, cache, resetH
   return (
     <div className='lg:sticky lg:top-0 z-40 mt-8 block md:flex md:justify-end'>
       {/* md and wider screens: row, right-justify; mobile: column, center-justify */}
-      <div className='bg-base-100 flex justify-center md:justify-end flex-wrap-reverse gap-8 p-4 rounded-box'>
+      <div className='bg-base-100 flex justify-center md:justify-end flex-wrap-reverse gap-8 p-4 lg:pr-0 rounded-box bg-opacity-60 backdrop-blur-sm'>
         <button
           disabled={!isDirty}
-          className={clx('bg-opacity-100 btn btn-md btn-link', isDirty ? '' : 'no-underline')} type='reset' onClick={() => {
+          className={clx('bg-opacity-80 btn btn-md btn-link', isDirty ? '' : 'no-underline')} type='reset' onClick={() => {
             resetFn({ ...cache }, { keepValues: false })
             onReset()
           }}
@@ -38,8 +39,3 @@ export function FormSaveAction ({ editMode, isDirty, isSubmitting, cache, resetH
     </div>
   )
 }
-
-// () => {
-//     reset({ ...cache }, { keepValues: true })
-//     setResetSignal(Date.now())
-//   }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import Link from 'next/link'
 import clx from 'classnames'
@@ -19,7 +19,7 @@ export interface AddAreaFormProps {
 type ProgressState = 'initial' | 'data-entry' | 'confirm'
 
 /**
- * Add child area wizard
+ * Add child area wizard.  Users must be authenticated.
  */
 export default function AddAreaForm ({ parentName, parentUuid, onSuccess }: AddAreaFormProps): JSX.Element {
   const session = useSession()
@@ -59,6 +59,7 @@ export default function AddAreaForm ({ parentName, parentUuid, onSuccess }: AddA
     </div>
   )
 }
+
 export interface ChildAreaBaseProps {
   parentUuid: string
   parentName: string
@@ -71,7 +72,12 @@ interface NewAreaFormProps extends ChildAreaBaseProps {
   shortCode: string
 }
 
-function Step1 ({ parentUuid, parentName, onSuccess }: ChildAreaBaseProps): JSX.Element {
+/**
+ * Step 1: Prompt the user for area name.
+ */
+const Step1 = (props: ChildAreaBaseProps): JSX.Element => {
+  const { parentUuid, parentName, onSuccess } = props
+
   const session = useSession()
 
   const { addOneAreaCmd } = useUpdateAreasCmd({
@@ -82,15 +88,19 @@ function Step1 ({ parentUuid, parentName, onSuccess }: ChildAreaBaseProps): JSX.
 
   // Form declaration
   const form = useForm<NewAreaFormProps>({
-    mode: 'onBlur',
+    mode: 'onSubmit',
     defaultValues: { newAreaName: '', shortCode: '', parentName: parentName }
   })
 
-  const { handleSubmit, formState: { isSubmitting } } = form
+  const { handleSubmit, formState: { isSubmitting }, setFocus } = form
 
   const submitHandler = async ({ newAreaName }: NewAreaFormProps): Promise<void> => {
     await addOneAreaCmd({ name: newAreaName, parentUuid })
   }
+
+  useEffect(() => {
+    setFocus('newAreaName')
+  }, [])
 
   return (
     <FormProvider {...form}>
@@ -105,14 +115,16 @@ function Step1 ({ parentUuid, parentName, onSuccess }: ChildAreaBaseProps): JSX.
           name='newAreaName'
           placeholder='New area name'
           registerOptions={{
-            required: 'Name is required.',
-            minLength: {
-              value: 2,
-              message: 'Minimum 2 characters'
-            },
-            maxLength: {
-              value: 120,
-              message: 'Maxium 120 characters'
+            validate: {
+              areNameValidator:
+              (v: string): string | undefined => {
+                if (v == null) return 'minimum 2 letters.'
+                const length = v.trim().length
+                if (length < 2) return 'Minimum 2 letters.'
+                if (length > 3500) return 'Too long.  Maximuim 3500 letters.'
+                if (v.trim().match(/^[@%\\^\\&\\(\\)\\-\\+\\=\\~\\`]/) != null) return 'First letter can\'t be: @ % ^ & ( ) - + = ~ `'
+                return undefined
+              }
             }
           }}
         />
@@ -130,9 +142,48 @@ function Step1 ({ parentUuid, parentName, onSuccess }: ChildAreaBaseProps): JSX.
   )
 }
 
+interface Step2Props {
+  areaId: string
+  areaName: string
+  onAddMore: () => void
+}
+
+/**
+ * Confirmation step.  Users have 3 options:
+ * 1.  Close the popup dialog
+ * 2.  Vist the newly added area
+ * 3.  Return to the previous step and add another area
+ */
+const Step2 = ({ areaId, areaName, onAddMore }: Step2Props): JSX.Element => {
+  const buttonRef = useRef<any>()
+  useEffect(() => {
+    buttonRef.current?.focus()
+  })
+
+  return (
+    <div className='fadeinEffect flex flex-col items-center gap-4'>
+      <CheckBadgeIcon className='stroke-success w-10 h-10' />
+      <div>Area&nbsp;
+        <AreaPageResolver uuid={areaId}>
+          <span className='font-semibold link-accent'>
+            {areaName}
+          </span>
+        </AreaPageResolver> added.  Thank you for your contribution!
+      </div>
+      <div className='flex items-center gap-2'>
+        <button type='button' className='btn btn-solid btn-wide' onClick={onAddMore} ref={buttonRef}>Add more</button>
+        <AreaPageResolver uuid={areaId}>
+          <button className='btn btn-link'>View area</button>
+        </AreaPageResolver>
+      </div>
+    </div>
+  )
+}
+
 interface SuccessAlertProps extends AddAreaReturnType {
   onContinue: () => void
 }
+
 export const AddSucessAlert = ({ areaName, uuid, onContinue }: SuccessAlertProps): JSX.Element => {
   return (
     <SuccessAlert
@@ -156,32 +207,6 @@ export const AddSucessAlert = ({ areaName, uuid, onContinue }: SuccessAlertProps
   )
 }
 
-interface Step2Props {
-  areaId: string
-  areaName: string
-  onAddMore: () => void
-}
-
-const Step2 = ({ areaId, areaName, onAddMore }: Step2Props): JSX.Element => {
-  return (
-    <div className='fadeinEffect flex flex-col items-center gap-4'>
-      <CheckBadgeIcon className='stroke-success w-10 h-10' />
-      <div>Area&nbsp;
-        <AreaPageResolver uuid={areaId}>
-          <span className='font-semibold link-accent'>
-            {areaName}
-          </span>
-        </AreaPageResolver> added.  Thank you for your contribution!
-      </div>
-      <div className='flex items-center gap-2'>
-        <button type='button' className='btn btn-solid btn-wide' onClick={onAddMore}>Add more</button>
-        <AreaPageResolver uuid={areaId}>
-          <button className='btn btn-link'>View area</button>
-        </AreaPageResolver>
-      </div>
-    </div>
-  )
-}
 interface AreaPageResolverProps {
   uuid: string
   children: JSX.Element

@@ -49,7 +49,6 @@ type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 
 
 /**
  * Responsive summary of major attributes for a crag / boulder.
- * This could actually be extended to giving area summaries as well.
  *
  * **Note:** There's no need to wrap backend API calls in a try/catch block
  * because react-hook-form `handleSubmit()` handles it for us and sends exeptions
@@ -60,7 +59,8 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
     uuid, title: initTitle,
     description: initDescription,
     latitude: initLat, longitude: initLng,
-    areaMeta, climbs, ancestors
+    areaMeta, climbs, ancestors,
+    childAreas
   } = props
 
   const session = useSession()
@@ -87,6 +87,18 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
   const [editMode, setEditMode] = useState(false)
 
   /**
+   * False during SSR or Next build.
+   */
+  const [clientSide, setClientSide] = useState(false)
+
+  /**
+   * A working copy of child areas that can be updated client side.
+   * Initially set to the childAreas prop coming from Next build, the cache
+   * may be updated by the users in the AreaCRUD component.
+   */
+  const [childAreasCache, setChildAreasCache] = useState(childAreas)
+
+  /**
    * Hold the form base states aka default values.  Since we use Next SSG,
    * this component props become stale the moment a user submits a change.
    * Every time a user submits the form, this cache needs to be updated.
@@ -106,25 +118,9 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
     }))
   })
 
-  const onUpdateCompleted = (): void => {
-    toast('Climbs updated ✨')
-  }
-
-  const onUpdateError = (): void => {
-    toast.error('Something unexpected happened. Please save again.')
-  }
-
   const { updateClimbCmd, deleteClimbsCmd } = useUpdateClimbsCmd({
     parentId: uuid,
-    accessToken: session?.data?.accessToken as string,
-    onUpdateCompleted,
-    onUpdateError,
-    onDeleteCompleted: () => {
-      toast('Climbs deleted ✨')
-    },
-    onDeleteError: (error) => {
-      toast.error(`Unexpected error: ${error?.message as string}`)
-    }
+    accessToken: session?.data?.accessToken as string
   })
 
   const { updateOneAreaCmd: updateAreaCmd, getAreaByIdCmd } = useUpdateAreasCmd({
@@ -132,10 +128,8 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
     accessToken: session?.data?.accessToken as string
   })
 
-  const { loading, error, data, refetch } = getAreaByIdCmd()
+  const { data, refetch } = getAreaByIdCmd({ skip: !clientSide || !editMode })
 
-  console.log('#GQL loading', loading, error)
-  console.log('#data', data?.area)
   // Form declaration
   const form = useForm<SummaryHTMLFormProps>({
     mode: 'onBlur',
@@ -204,12 +198,18 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
   }
 
   const { areaName, description } = cache
-  const latlngPair = parseLatLng(currentLatLngStr)
-  const canChangeAreaType = currentClimbList.length === 0 && cache.climbList.length === 0// we're not allowed to change a crag to an area once it already has climbs
-  const canAddAreas = currentareaType === 'area' || cache.areaType === 'area'
-  const canAddClimbs = !canAddAreas
   const parentAreaId = ancestors[ancestors.length - 2]
+  const latlngPair = parseLatLng(currentLatLngStr)
 
+  // we're allowed to change area designation when the area has neither climbs nor areas.
+  const canChangeAreaType = currentClimbList.length === 0 && cache.climbList.length === 0 && childAreasCache.length === 0
+
+  const canAddAreas = (currentareaType === 'area' || cache.areaType === 'area') && cache.climbList.length === 0
+  const canAddClimbs = !canAddAreas
+
+  /**
+   * Update refs to divs inside the main form
+   */
   useEffect(() => {
     const deleteAreaDiv = document.getElementById('deleteButtonPlaceholder')
     if (deleteAreaDiv != null) {
@@ -221,13 +221,39 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
     }
   }, [editMode, canAddAreas])
 
+  /**
+   * We're in edit mode so let's update local cache with new data from the DB
+   */
+  useEffect(() => {
+    if (data?.area != null) {
+      setChildAreasCache(data.area.children)
+      const { uuid, areaName, metadata, content } = data.area
+      const { lat, lng } = metadata
+      setCache(current => ({
+        ...current,
+        uuid,
+        areaName,
+        description: content.description,
+        areaType: areaDesignationToForm(metadata),
+        latlng: `${lat.toString()},${lng.toString()}`
+      }))
+    }
+  }, [data?.area])
+
+  /**
+   * Enable clientSide flag so that we can re-fetch child areas from the DB
+   */
+  useEffect(() => {
+    setClientSide(true)
+  }, [])
+
   return (
     <>
       <Portal.Root container={deletePlaceholderRef}>
         <DeleteAreaTrigger areaName={areaName} areaUuid={uuid} parentUuid={parentAreaId} disabled={!canChangeAreaType} />
       </Portal.Root>
-      <Portal.Root asChild container={addAreaPlaceholderRef}>
-        <AreaCRUD uuid={uuid} areaName={areaName} childAreas={data?.area.children ?? []} onChange={refetch} canEdit={editMode} />
+      <Portal.Root container={addAreaPlaceholderRef}>
+        <AreaCRUD uuid={uuid} areaName={areaName} childAreas={childAreasCache} onChange={refetch} canEdit={editMode} />
       </Portal.Root>
 
       <div className='flex justify-end'>
@@ -267,6 +293,7 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
                         {latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}
                       </a>)
                   )}
+
               {editMode && (
                 <div className='fadeinEffect'>
                   <div className='mt-6'>
@@ -318,7 +345,8 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
             <div className='collapse mt-8 collapse-plus fadeinEffect'>
               <input type='checkbox' defaultChecked />
               <div className='px-0 collapse-title flex items-center gap-4'>
-                <PencilSquareIcon className='w-12 h-12 rounded-full p-3 bg-secondary shadow-lg' /><span className='underline font-medium'>CSV editor</span>
+                <PencilSquareIcon className='w-12 h-12 rounded-full p-3 bg-secondary shadow-lg' />
+                <span className='underline font-medium'>CSV editor</span>
               </div>
               <div className='px-0 collapse-content'>
                 <ClimbBulkEditor name='climbList' initialClimbs={cache.climbList} resetSignal={resetSignal} editable />

@@ -13,7 +13,7 @@ import { AreaType } from '../../js/types'
 type UpdateOneAreaCmdType = (input: UpdateOneAreaInputType) => Promise<void>
 type AddOneAreCmdType = ({ name, parentUuid }: AddAreaProps) => Promise<void>
 // type DeletOneAreaCmdType = ({ uuid }: DeleteOneAreaInputType) => Promise<void>
-type GetAreaByIdCmdType = () => QueryResult<{ area: AreaType}>
+type GetAreaByIdCmdType = ({ skip }: { skip?: boolean }) => QueryResult<{ area: AreaType}>
 
 interface Props {
   areaId: string
@@ -38,14 +38,15 @@ interface UpdateClimbsHookReturn {
  * @param onError Optiona error callback
  */
 export default function useUpdateAreasCmd ({ areaId, accessToken = '', onUpdateCompleted, onUpdateError, onAddCompleted, onAddError }: Props): UpdateClimbsHookReturn {
-  const getAreaByIdCmd: GetAreaByIdCmdType = () => {
+  const getAreaByIdCmd: GetAreaByIdCmdType = ({ skip = false }) => {
     return useQuery<{area: AreaType}, {uuid: string}>(QUERY_AREA_FOR_EDIT, {
       client: graphqlClient,
       variables: {
         uuid: areaId
       },
       fetchPolicy: 'no-cache',
-      ssr: false
+      ssr: false,
+      skip
     })
   }
 

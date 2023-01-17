@@ -21,7 +21,7 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
   return (
     <div className='mt-16 min-h-[8rem]'>
       <h3>Climbs&nbsp;<span className='text-base-300'>({watchList.length})</span></h3>
-      <hr className='mt-1 my-4 border border-base-content' />
+      <hr className='mt-1 mb-8 border-1 border-base-content' />
 
       <section className='mt-8 lg:columns-2 lg:gap-x-16  break-inside-avoid-column break-inside-avoid'>
         {watchList.map((entry, index) =>
