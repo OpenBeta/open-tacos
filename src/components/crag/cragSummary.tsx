@@ -250,10 +250,12 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
   return (
     <>
       <Portal.Root container={deletePlaceholderRef}>
-        <DeleteAreaTrigger areaName={areaName} areaUuid={uuid} parentUuid={parentAreaId} disabled={!canChangeAreaType} />
+        {editMode &&
+          <DeleteAreaTrigger areaName={areaName} areaUuid={uuid} parentUuid={parentAreaId} disabled={!canChangeAreaType} />}
       </Portal.Root>
       <Portal.Root container={addAreaPlaceholderRef}>
-        <AreaCRUD uuid={uuid} areaName={areaName} childAreas={childAreasCache} onChange={refetch} editMode={editMode} />
+        {canAddAreas &&
+          <AreaCRUD uuid={uuid} areaName={areaName} childAreas={childAreasCache} onChange={refetch} editMode={editMode} />}
       </Portal.Root>
 
       <div className='flex justify-end'>

@@ -2,12 +2,10 @@ import { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import clx from 'classnames'
-import { useMutation } from '@apollo/client'
 import { GraphQLError } from 'graphql'
 import { signIn, useSession } from 'next-auth/react'
-
-import { MUTATION_REMOVE_AREA, RemoveAreaReturnType, RemoveAreaProps } from '../../js/graphql/gql/contribs'
-import { graphqlClient } from '../../js/graphql/Client'
+import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
+// import { MUTATION_REMOVE_AREA, RemoveAreaReturnType, RemoveAreaProps } from '../../js/graphql/gql/contribs'
 import Input from '../ui/form/Input'
 
 export interface DeleteAreaProps {
@@ -23,6 +21,14 @@ interface HtmlFormProps {
   confirmation: string
 }
 
+/**
+ * Delete area dialog.  Users must be authenticated.
+ * @param areaUuid ID of deleting area
+ * @param areaName Name of deleting area
+ * @param parentUuid ID of parent area (for redirection and revalidating SSG page purpose)
+ * @param returnToParentPageAfterDelete true to be redirected to parent area page
+ * @param onSuccess Optional callback
+ */
 export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, returnToParentPageAfterDelete = true, onSuccess }: DeleteAreaProps): JSX.Element {
   const session = useSession()
   const router = useRouter()
@@ -33,23 +39,21 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
     }
   }, [session])
 
-  // TODO: move this to useUpdateAreasCmd hook
-  const [removeArea] = useMutation<{ removeArea: RemoveAreaReturnType }, RemoveAreaProps>(
-    MUTATION_REMOVE_AREA, {
-      client: graphqlClient,
-      onCompleted: async (data) => {
-        if (onSuccess != null) {
-          onSuccess()
-        }
-        void fetch(`/api/revalidate?a=${parentUuid}`) // rebuild parent area page
-        if (returnToParentPageAfterDelete) {
-          await router.replace('/areas/' + parentUuid)
-          router.reload()
-        }
-      },
-      fetchPolicy: 'no-cache'
+  const onSuccessHandler = async (): Promise<void> => {
+    if (onSuccess != null) {
+      onSuccess()
     }
-  )
+    if (returnToParentPageAfterDelete) {
+      await router.replace('/crag/' + parentUuid)
+      router.reload()
+    }
+  }
+
+  const { deleteOneAreaCmd } = useUpdateAreasCmd({
+    areaId: parentUuid,
+    accessToken: session?.data?.accessToken as string ?? '',
+    onDeleteCompleted: onSuccessHandler
+  })
 
   // Form declaration
   const form = useForm<HtmlFormProps>(
@@ -61,16 +65,7 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
   const { handleSubmit, setFocus, formState: { isSubmitting } } = form
 
   const submitHandler = async (): Promise<void> => {
-    await removeArea({
-      variables: {
-        uuid: areaUuid
-      },
-      context: {
-        headers: {
-          authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
-        }
-      }
-    })
+    await deleteOneAreaCmd({ uuid: areaUuid })
   }
 
   if (session.status !== 'authenticated') {

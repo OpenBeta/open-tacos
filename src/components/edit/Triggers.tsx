@@ -6,6 +6,7 @@ import DeleteAreaForm, { DeleteAreaProps } from './DeleteAreaForm'
 import AddAreaForm, { AddAreaFormProps } from './AddChildAreaForm'
 import { toast } from 'react-toastify'
 
+export type DeleteAreaTriggerProps = DeleteAreaProps & { disabled?: boolean, children?: JSX.Element }
 /**
  * A button used to trigger the Delete Area dialog.  You can pass an optional nested child component to customize the trigger button.
  *
@@ -16,7 +17,7 @@ import { toast } from 'react-toastify'
  * </DeleteAreaTrigger>
  * ```
  */
-export const DeleteAreaTrigger = ({ areaName, areaUuid, parentUuid, disabled = false, returnToParentPageAfterDelete, onSuccess, children }: DeleteAreaProps & { disabled?: boolean, children?: JSX.Element }): JSX.Element => {
+export const DeleteAreaTrigger = ({ areaName, areaUuid, parentUuid, disabled = false, returnToParentPageAfterDelete, onSuccess, children }: DeleteAreaTriggerProps): JSX.Element => {
   const [isOpen, setOpen] = useState(false)
   const onSuccessHandler = useCallback((): void => {
     setOpen(false)
@@ -43,7 +44,7 @@ export const DeleteAreaTrigger = ({ areaName, areaUuid, parentUuid, disabled = f
   )
 }
 
-interface TriggerButtonProps {
+export interface TriggerButtonProps {
   disabled: boolean
 }
 
@@ -66,10 +67,11 @@ export const DeleteAreaTriggerButtonSm = ({ disabled }: TriggerButtonProps): JSX
     <TrashIcon className='w-6 h-6' />
   </DialogTrigger>)
 
+export type AddAreaTriggerProps = Omit<AddAreaFormProps, 'onError'> & { children?: JSX.Element}
 /**
  * A button used to trigger the Add Area dialog.  See `DeleteAreaTrigger` for a customization example.
  */
-export const AddAreaTrigger = ({ parentName, parentUuid, onSuccess, children }: Omit<AddAreaFormProps, 'onError'> & { children?: JSX.Element}): JSX.Element => {
+export const AddAreaTrigger = ({ parentName, parentUuid, onSuccess, children }: AddAreaTriggerProps): JSX.Element => {
   const [hasChanges, setHasChanges] = useState(false)
 
   const onOpenChange = (isOpen: boolean): void => {

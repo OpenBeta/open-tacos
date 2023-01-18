@@ -12,7 +12,7 @@ import { CodeNode } from '@lexical/code'
 import DefaultTheme, { textInputTheme, csvTheme } from './themes/DefaultTheme'
 import { $createInitialPlainTextState } from './plugins/PlainTextResetPlugin'
 import { $createInitialState } from './plugins/CsvResetPlugin'
-import { EditableClimbType } from '../../components/crag/cragSummary'
+import { EditableClimbType } from '../crag/cragSummary'
 
 /**
  * Create initial config object for rich text editor

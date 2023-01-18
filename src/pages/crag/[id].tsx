@@ -200,6 +200,7 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
       area: rs.data.area,
       history: [],
       mediaListWithUsernames: mediaListWithUsernames.map(entry => ({ ...entry, mediaInfo: mediaMetaDict?.[entry.mediaUuid] ?? null }))
-    }
+    },
+    revalidate: 5
   }
 }

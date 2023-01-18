@@ -2,7 +2,7 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { useEffect, useState } from 'react'
 import { $getRoot, $createTextNode, $createParagraphNode } from 'lexical'
 
-import { EditableClimbType } from '../../../components/crag/cragSummary'
+import { EditableClimbType } from '../../crag/cragSummary'
 
 interface Props {
   initialValue: string

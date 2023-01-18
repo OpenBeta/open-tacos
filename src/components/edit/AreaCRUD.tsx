@@ -50,7 +50,7 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
           />))}
 
         {/* A hack to add bottom border */}
-        {areaCount > 2 && <div className='border-t' />}
+        {areaCount > 1 && <div className='border-t' />}
       </div>
       {areaCount > 0 && editMode && (
         <div className='mt-8 text-right'>
@@ -82,7 +82,7 @@ export const AreaItem = ({ index, borderBottom, areaName, uuid, parentUuid, onCh
       {/* Use regular 'a' tag instead of Link because of a data caching issue with client-side routing. We'll revisit this in the future. */}
       <a className='flex items-center gap-4 grow py-6' href={`/crag/${uuid}`}>
         <div className='rounded h-8 w-8 grid place-content-center bg-base-content/80 text-base-100 text-sm hover:decoration-0 hover:no-underline'>{index + 1}</div>
-        <div className='font-semibold uppercase'>
+        <div className='font-semibold uppercase hover:underline underline-offset-4 decoration-4'>
           {areaName}
         </div>
       </a>

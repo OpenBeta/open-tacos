@@ -4,30 +4,36 @@ import { toast } from 'react-toastify'
 import { graphqlClient } from '../graphql/Client'
 import {
   MUTATION_UPDATE_AREA, MUTATION_ADD_AREA,
-  UpdateOneAreaInputType, UpdateAreaApiReturnType, AddAreaReturnType, AddAreaProps
-  // DeleteOneAreaInputType, DeleteOneAreaReturnType
+  UpdateOneAreaInputType, UpdateAreaApiReturnType, AddAreaReturnType, AddAreaProps,
+  DeleteOneAreaInputType, DeleteOneAreaReturnType, MUTATION_REMOVE_AREA
 } from '../graphql/gql/contribs'
 import { QUERY_AREA_FOR_EDIT } from '../../js/graphql/gql/areaById'
 import { AreaType } from '../../js/types'
 
 type UpdateOneAreaCmdType = (input: UpdateOneAreaInputType) => Promise<void>
 type AddOneAreCmdType = ({ name, parentUuid }: AddAreaProps) => Promise<void>
-// type DeletOneAreaCmdType = ({ uuid }: DeleteOneAreaInputType) => Promise<void>
+type DeleteOneAreaCmdType = ({ uuid }: DeleteOneAreaInputType) => Promise<void>
 type GetAreaByIdCmdType = ({ skip }: { skip?: boolean }) => QueryResult<{ area: AreaType}>
 
-interface Props {
-  areaId: string
-  accessToken: string
+interface CallbackProps {
   onUpdateCompleted?: (data: any) => void
   onUpdateError?: (error: any) => void
   onAddCompleted?: (data: any) => void
   onAddError?: (error: any) => void
+  onDeleteCompleted?: (data: any) => void
+  onDeleteError?: (error: any) => void
+}
+
+type Props = CallbackProps & {
+  areaId: string
+  accessToken: string
 }
 
 interface UpdateClimbsHookReturn {
+  getAreaByIdCmd: GetAreaByIdCmdType
   updateOneAreaCmd: UpdateOneAreaCmdType
   addOneAreaCmd: AddOneAreCmdType
-  getAreaByIdCmd: GetAreaByIdCmdType
+  deleteOneAreaCmd: DeleteOneAreaCmdType
 }
 
 /**
@@ -37,7 +43,9 @@ interface UpdateClimbsHookReturn {
  * @param onUpdateCompleted Optional success callback
  * @param onError Optiona error callback
  */
-export default function useUpdateAreasCmd ({ areaId, accessToken = '', onUpdateCompleted, onUpdateError, onAddCompleted, onAddError }: Props): UpdateClimbsHookReturn {
+export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props }: Props): UpdateClimbsHookReturn {
+  const { onUpdateCompleted, onUpdateError, onAddCompleted, onAddError, onDeleteCompleted, onDeleteError } = props
+
   const getAreaByIdCmd: GetAreaByIdCmdType = ({ skip = false }) => {
     return useQuery<{area: AreaType}, {uuid: string}>(
       QUERY_AREA_FOR_EDIT, {
@@ -55,7 +63,8 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', onUpdateC
     MUTATION_UPDATE_AREA, {
       client: graphqlClient,
       onCompleted: (data) => {
-        toast.info('Area updated successfully 🔥')
+        toast.info('Area updated successfully ✔️')
+        void fetch(`/api/revalidate?a=${areaId}`)
         void fetch(`/api/revalidate?s=${areaId}`)
         if (onUpdateCompleted != null) onUpdateCompleted(data)
       },
@@ -84,7 +93,10 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', onUpdateC
     MUTATION_ADD_AREA, {
       client: graphqlClient,
       onCompleted: (data) => {
-        toast.info('Area added ✔️')
+        toast.info('Area added 🔥')
+        void fetch(`/api/revalidate?s=${data.addArea.uuid}`) // build new area page
+        void fetch(`/api/revalidate?s=${areaId}`) // rebuild parent page
+        // Rebuild old areas pages
         void fetch(`/api/revalidate?a=${data.addArea.uuid}`) // build new area page
         void fetch(`/api/revalidate?a=${areaId}`) // rebuild parent page
         if (onAddCompleted != null) {
@@ -114,5 +126,36 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', onUpdateC
     })
   }
 
-  return { updateOneAreaCmd, addOneAreaCmd, getAreaByIdCmd }
+  const [deleteOneArea] = useMutation<{ deleteOneArea: DeleteOneAreaReturnType }, DeleteOneAreaInputType>(
+    MUTATION_REMOVE_AREA, {
+      client: graphqlClient,
+      onCompleted: async (data) => {
+        if (onDeleteCompleted != null) {
+          onDeleteCompleted(data)
+        }
+        void fetch(`/api/revalidate?s=${areaId}`) // rebuild parent area page
+        void fetch(`/api/revalidate?a=${areaId}`) // rebuild parent area page
+      },
+      onError: (error) => {
+        toast.error(`Unexpected error: ${error.message}`)
+        if (onDeleteError != null) {
+          onDeleteError(error)
+        }
+      },
+      fetchPolicy: 'no-cache'
+    }
+  )
+
+  const deleteOneAreaCmd: DeleteOneAreaCmdType = async ({ uuid }) => {
+    await deleteOneArea({
+      variables: { uuid },
+      context: {
+        headers: {
+          authorization: `Bearer ${accessToken}`
+        }
+      }
+    })
+  }
+
+  return { updateOneAreaCmd, addOneAreaCmd, deleteOneAreaCmd, getAreaByIdCmd }
 }

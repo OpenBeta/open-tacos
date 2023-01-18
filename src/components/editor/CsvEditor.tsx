@@ -11,7 +11,7 @@ import { editorConfigCsv } from './editorConfig'
 import { onChangeCsv } from './onChange'
 import { CsvResetPlugin } from './plugins/CsvResetPlugin'
 import { RulesType } from '../../js/types'
-import { EditableClimbType } from '../../components/crag/cragSummary'
+import { EditableClimbType } from '../crag/cragSummary'
 
 interface EditorProps {
   initialValue?: string
