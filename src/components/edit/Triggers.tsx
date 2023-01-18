@@ -16,7 +16,7 @@ import { toast } from 'react-toastify'
  * </DeleteAreaTrigger>
  * ```
  */
-export const DeleteAreaTrigger = ({ areaName, areaUuid, parentUuid, disabled, returnToParentPageAfterDelete, onSuccess, children }: DeleteAreaProps & { disabled: boolean, children?: JSX.Element }): JSX.Element => {
+export const DeleteAreaTrigger = ({ areaName, areaUuid, parentUuid, disabled = false, returnToParentPageAfterDelete, onSuccess, children }: DeleteAreaProps & { disabled?: boolean, children?: JSX.Element }): JSX.Element => {
   const [isOpen, setOpen] = useState(false)
   const onSuccessHandler = useCallback((): void => {
     setOpen(false)
@@ -59,7 +59,7 @@ const DeleteAreaTriggerButtonDefault = ({ disabled }: TriggerButtonProps): JSX.E
 
 export const DeleteAreaTriggerButtonSm = ({ disabled }: TriggerButtonProps): JSX.Element => (
   <DialogTrigger
-    className='btn btn-square btn-ghost'
+    className='btn btn-ghost btn-circle btn-primary'
     disabled={disabled}
     type='button'
   >

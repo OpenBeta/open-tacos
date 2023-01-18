@@ -394,3 +394,7 @@ table td.dtable-my-range {
 .indicator-item-mod {
   transform: translateY(-15%) translateX(15%); 
 }
+
+.two-column-table {
+  @apply mt-16 lg:gap-x-24 lg:columns-2;
+}

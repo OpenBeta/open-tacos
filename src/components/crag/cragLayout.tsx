@@ -3,7 +3,7 @@ import { AreaMetadataType, AreaType, Climb, CountByGroupType } from '../../js/ty
 import PhotoMontage from '../media/PhotoMontage'
 import CragSummary, { CragHeroProps } from './cragSummary'
 
-export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
+export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName' | 'climbs' | 'children'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 export interface CragLayoutProps extends CragHeroProps {
   climbs: Climb[]
   childAreas: AreaSummaryType []

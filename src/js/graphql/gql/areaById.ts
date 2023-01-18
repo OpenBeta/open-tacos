@@ -149,6 +149,12 @@ export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
     children {
       uuid
       areaName
+      children {
+        uuid
+      }
+      climbs {
+        id
+      }
       metadata {
         leaf
         isBoulder

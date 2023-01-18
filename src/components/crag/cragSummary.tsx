@@ -253,7 +253,7 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
         <DeleteAreaTrigger areaName={areaName} areaUuid={uuid} parentUuid={parentAreaId} disabled={!canChangeAreaType} />
       </Portal.Root>
       <Portal.Root container={addAreaPlaceholderRef}>
-        <AreaCRUD uuid={uuid} areaName={areaName} childAreas={childAreasCache} onChange={refetch} canEdit={editMode} />
+        <AreaCRUD uuid={uuid} areaName={areaName} childAreas={childAreasCache} onChange={refetch} editMode={editMode} />
       </Portal.Root>
 
       <div className='flex justify-end'>
@@ -342,11 +342,11 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
           {canAddClimbs && <ClimbListPreview editable={editMode} />}
 
           {editMode && canAddClimbs && (
-            <div className='collapse mt-8 collapse-plus fadeinEffect'>
+            <div className='collapse mt-12 collapse-plus fadeinEffect'>
               <input type='checkbox' defaultChecked />
               <div className='px-0 collapse-title flex items-center gap-4'>
-                <PencilSquareIcon className='w-12 h-12 rounded-full p-3 bg-secondary shadow-lg' />
-                <span className='underline font-medium'>CSV editor</span>
+                <PencilSquareIcon className='w-8 h-8 rounded-full p-2 bg-secondary shadow-lg' />
+                <span className='font-semibold text-base-300'>CSV Editor</span>
               </div>
               <div className='px-0 collapse-content'>
                 <ClimbBulkEditor name='climbList' initialClimbs={cache.climbList} resetSignal={resetSignal} editable />

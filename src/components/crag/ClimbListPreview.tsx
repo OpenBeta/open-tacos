@@ -18,15 +18,18 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
   const toBeDeleted = findDeletedCandidates(defaultValues?.climbList, watchList)
   const defaultDict = indexBy(defaultValues?.climbList, 'climbId')
 
+  const lastItemOfFirstColumn = Math.ceil(watchList.length / 2) - 1
   return (
     <div className='mt-16 min-h-[8rem]'>
       <h3>Climbs&nbsp;<span className='text-base-300'>({watchList.length})</span></h3>
       <hr className='mt-1 mb-8 border-1 border-base-content' />
 
-      <section className='mt-8 lg:columns-2 lg:gap-x-16  break-inside-avoid-column break-inside-avoid'>
-        {watchList.map((entry, index) =>
+      <section className='two-column-table'>
+        {watchList.map((entry, index: number) =>
           <ClimbEntry
-            key={entry.id} {...entry} index={index}
+            key={entry.id} {...entry}
+            index={index}
+            showBorderBottom={index === lastItemOfFirstColumn || index === watchList.length - 1}
             defaultDict={defaultDict}
           />)}
         {watchList.length === 0 && <div className='text-base-300 italic'>None</div>}
@@ -47,12 +50,13 @@ type ClimbEntryProps = EditableClimbTypeWithFieldId & {
   index: number
   defaultDict?: Dictionary<EditableClimbType>
   toBeDeleted?: boolean
+  showBorderBottom?: boolean
 }
 
-const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict, toBeDeleted = false }: ClimbEntryProps): JSX.Element => {
+const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict, toBeDeleted = false, showBorderBottom = false }: ClimbEntryProps): JSX.Element => {
   const isDirty = climbId != null && defaultDict?.[climbId]?.name !== name
   return (
-    <div className='flex items-center gap-4 fadeinEffect mb-4'>
+    <div className='flex items-center gap-4 fadeinEffect break-inside-avoid-column break-inside-avoid'>
       <div className={
         clx('rounded-full h-8 w-8 grid place-content-center text-sm bg-primary/90 text-base-100 indicator',
           isDirty && !isNew && !toBeDeleted ? 'outline-2 outline-secondary outline-offset-4 outline-dashed' : '',
@@ -65,9 +69,11 @@ const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict,
         {index + 1}
       </div>
       <div className={
-  clx('border-b grow py-2 uppercase font-semibold flex items-center justify-between', (isDirty && !toBeDeleted) || isNew ? 'italic text-secondary' : '',
-    toBeDeleted ? 'italic text-base-300' : '')
-  }
+        clx('border-t grow py-4 uppercase font-semibold flex items-center justify-between',
+          (isDirty && !toBeDeleted) || isNew ? 'italic text-secondary' : '',
+          toBeDeleted ? 'italic text-base-300' : '',
+          showBorderBottom ? 'border-b' : '')
+        }
       >
         <WrapLink climbId={climbId} text={name} />
         <div className='text-inherit'>{yds}</div>

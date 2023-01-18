@@ -39,15 +39,16 @@ interface UpdateClimbsHookReturn {
  */
 export default function useUpdateAreasCmd ({ areaId, accessToken = '', onUpdateCompleted, onUpdateError, onAddCompleted, onAddError }: Props): UpdateClimbsHookReturn {
   const getAreaByIdCmd: GetAreaByIdCmdType = ({ skip = false }) => {
-    return useQuery<{area: AreaType}, {uuid: string}>(QUERY_AREA_FOR_EDIT, {
-      client: graphqlClient,
-      variables: {
-        uuid: areaId
-      },
-      fetchPolicy: 'no-cache',
-      ssr: false,
-      skip
-    })
+    return useQuery<{area: AreaType}, {uuid: string}>(
+      QUERY_AREA_FOR_EDIT, {
+        client: graphqlClient,
+        variables: {
+          uuid: areaId
+        },
+        fetchPolicy: 'no-cache',
+        ssr: false,
+        skip
+      })
   }
 
   const [updateAreaApi] = useMutation<{ updateAreaApi: UpdateAreaApiReturnType }, UpdateOneAreaInputType>(
