@@ -14,7 +14,6 @@ import { RulesType } from '../../js/types'
 import { EditableClimbType } from '../crag/cragSummary'
 
 interface EditorProps {
-  initialValue?: string
   editable?: boolean
   name: string
   resetSignal: number

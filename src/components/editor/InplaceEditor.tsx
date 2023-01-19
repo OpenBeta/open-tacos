@@ -25,6 +25,9 @@ interface EditorProps {
   rules?: RulesType
 }
 
+/**
+ * Multiline inplace editor with react-hook-form support.
+ */
 export default function Editor ({ initialValue = '', name, editable = false, reset, placeholder = 'Enter some text', rules }: EditorProps): JSX.Element {
   const { field, fieldState: { error } } = useController({ name, rules })
 

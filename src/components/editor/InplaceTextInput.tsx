@@ -26,7 +26,7 @@ interface EditorProps {
 }
 
 /**
- * A single-line inplace editor that behaves like a text input field.  Support react-hook-form validation rules and error label.
+ * A single-line inplace editor that behaves like a react-hook-form input field.  Support validation rules and error label.
  */
 export default function InplaceTextInput ({ initialValue = '', name, editable = false, reset, placeholder = 'Enter some text...', className = '', rules }: EditorProps): JSX.Element {
   const { field, fieldState: { error } } = useController({ name, rules })
