@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import * as Portal from '@radix-ui/react-portal'
-import { GlobeAltIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
+import { MapPinIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
 
 import { AreaMetadataType, CountByGroupType, AreaUpdatableFieldsType } from '../../js/types'
@@ -289,10 +289,10 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
                 : (
                     latlngPair != null && (
                       <a
-                        href={getMapHref({ lat: latlngPair[0], lng: latlngPair[1] })} target='blank' className='hover:underline text-xs inline-flex items-center gap-2'
+                        href={getMapHref({ lat: latlngPair[0], lng: latlngPair[1] })} target='blank' className='hover:underline text-xs inline-flex items-center gap-1'
                       >
-                        <GlobeAltIcon className='w-4 h-4' />
-                        {latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}
+                        <MapPinIcon className='w-4 h-4' />
+                        <span className='mt-0.5'>{latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}</span>
                       </a>)
                   )}
 

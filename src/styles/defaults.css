@@ -92,30 +92,27 @@ html {
   }
 
   .dialog-center {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    @apply rounded-box overflow-hidden; 
+    @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-box !important; 
   }
 
   .dialog-default {
-    @apply top-0 left-0 lg:dialog-center fixed z-50 w-full max-w-screen-md bg-base-100 lg:drop-shadow-lg;
+    @apply  top-0 left-0 h-screen md:dialog-center fixed z-50 w-screen max-w-screen-md bg-base-100 lg:drop-shadow-lg overflow-y-auto h-fit max-h-screen lg:max-h-[95vh];
   }
 
   .dialog-wide {
-    @apply top-0 left-0 fixed z-50 w-full w-screen bg-base-100;
+    @apply top-0 left-0 fixed z-50 w-full h-full w-screen h-screen bg-base-100 overflow-y-auto overscroll-contain;
   }
 
-  .dialog-content-default {
-    @apply pt-16 overflow-y-auto overscroll-contain h-screen lg:h-full lg:max-h-[85vh];
+  .dialog-title {
+    @apply py-4 lg:py-5 left-0 top-0 w-full text-center fixed bg-base-100 bg-opacity-80 backdrop-blur-sm z-50 leading-none;
   }
 
-  .dialog-content-fullscreen {
-    @apply pt-16 overflow-y-auto overscroll-contain h-screen;
+  .dialog-close-button {
+    @apply fixed top-0.5 left-0.5 lg:top-1 lg:left-1 z-50;
   }
 
   .dialog-form-default {
-    @apply px-2 lg:px-4 mb-8;
+    @apply mt-16 lg:mt-20 px-2 lg:px-4 mb-6 !important;
   }
 }
 .title {

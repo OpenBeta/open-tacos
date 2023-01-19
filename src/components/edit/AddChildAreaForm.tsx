@@ -161,16 +161,16 @@ const Step2 = ({ areaId, areaName, onAddMore }: Step2Props): JSX.Element => {
   })
 
   return (
-    <div className='fadeinEffect flex flex-col items-center gap-4'>
+    <div className='fadeinEffect flex flex-col items-center justify-center gap-4'>
       <CheckBadgeIcon className='stroke-success w-10 h-10' />
-      <div>Area&nbsp;
+      <div className='text-center'>Area&nbsp;
         <AreaPageResolver uuid={areaId}>
           <span className='font-semibold link-accent'>
             {areaName}
           </span>
         </AreaPageResolver> added.  Thank you for your contribution!
       </div>
-      <div className='flex items-center gap-2'>
+      <div className='mt-16 md:mt-8 flex items-center justify-center  gap-2 flex-wrap'>
         <button type='button' className='btn btn-solid btn-wide' onClick={onAddMore} ref={buttonRef}>Add more</button>
         <AreaPageResolver uuid={areaId}>
           <button className='btn btn-link'>View area</button>

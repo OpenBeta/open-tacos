@@ -127,59 +127,57 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
   const canChangeAreaType = children.length === 0 && climbs.length === 0
 
   return (
-    <>
-      <FormProvider {...form}>
-        <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
-          <Input
-            label='Name:'
-            name='areaName'
-            placeholder='Area name'
-            disabled={isCountry}
-            registerOptions={AREA_NAME_FORM_VALIDATION_RULES}
-          />
-          <Input
-            label='Short code:'
-            name='shortCode'
-            placeholder='Short code'
-            disabled={isCountry}
-            registerOptions={{
-              maxLength: 5,
-              validate: {
-                min2AlphaNumeric:
+    <FormProvider {...form}>
+      <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
+        <Input
+          label='Name:'
+          name='areaName'
+          placeholder='Area name'
+          disabled={isCountry}
+          registerOptions={AREA_NAME_FORM_VALIDATION_RULES}
+        />
+        <Input
+          label='Short code:'
+          name='shortCode'
+          placeholder='Short code'
+          disabled={isCountry}
+          registerOptions={{
+            maxLength: 5,
+            validate: {
+              min2AlphaNumeric:
                 (v: string): string | undefined => {
                   if (v.length === 0) return undefined
                   if (v.length < 2) return 'Minimum 2 characters'
                   return MIN2PATTERN.test(v) ? undefined : 'Please use only letters and numbers'
                 }
-              }
-            }}
-            className='uppercase'
-          />
-          <Input
-            label='Latitude, longtitude:'
-            name='latlng'
-            placeholder='latitude, longtitude'
-            registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
-          />
-          <AreaDesignationRadioGroup canEdit={canChangeAreaType} />
-          <TextArea
-            label='Description:'
-            name='description'
-            placeholder='Area description'
-            registerOptions={AREA_DESCRIPTION_FORM_VALIDATION_RULES}
-            rows={8}
-          />
-          <button
-            className={
+            }
+          }}
+          className='uppercase'
+        />
+        <Input
+          label='Latitude, longtitude:'
+          name='latlng'
+          placeholder='latitude, longtitude'
+          registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
+        />
+        <AreaDesignationRadioGroup canEdit={canChangeAreaType} />
+        <TextArea
+          label='Description:'
+          name='description'
+          placeholder='Area description'
+          registerOptions={AREA_DESCRIPTION_FORM_VALIDATION_RULES}
+          rows={8}
+        />
+        <button
+          className={
             clx('mt-4 btn btn-primary w-full',
               isSubmitting ? 'loading btn-disabled' : ''
             )
           }
-            type='submit'
-          >Save
-          </button>
-        </form>
-      </FormProvider>
-    </>
+          type='submit'
+        >Save
+        </button>
+      </form>
+    </FormProvider>
   )
 }

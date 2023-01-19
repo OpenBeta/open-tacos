@@ -3,7 +3,7 @@ import Link from 'next/link'
 import clx from 'classnames'
 
 import { sanitizeName } from '../../js/utils'
-import { MapPinIcon } from '@heroicons/react/24/outline'
+import { GlobeAltIcon } from '@heroicons/react/24/outline'
 import { TypesenseAreaType } from '../../js/types'
 /**
  * Turn each element of `pathTokens` to a gatsby-link.
@@ -26,11 +26,12 @@ interface BreakCrumbsProps {
 
 function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumbsProps): JSX.Element {
   return (
-    <div aria-label='area-breadcrumbs' className='flex-wrap flex gap-2 text-sm items-center'>
-      <MapPinIcon className='text-ob-primary w-5 h-5' />
-
+    <div aria-label='area-breadcrumbs' className='flex-wrap flex gap-2 text-sm items-center text-base-300 tracking-tight'>
       <Link href='/a'>
-        <a className='hover:underline hover:text-base-content text-base-300'>Home</a>
+        <a className='inline-flex items-center gap-1'>
+          <GlobeAltIcon className='inline w-5 h-5' />
+          <span className='hover:underline mt-0.5'>Home</span>
+        </a>
       </Link>
 
       {pathTokens.map((place, index, array) => {
@@ -41,12 +42,12 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
 
         return (
           <React.Fragment key={`bread-${index}`}>
-            <span className='text-xs'>/</span>
-            <span className='text-base-300'>
-              {(isLastElement && !isClimbPage && <span className='text-ob-primary'>{sanitizeName(place)}</span>) ||
+            <span className='text-xs mt-0.5'>/</span>
+            <span className='text-base-300 mt-0.5'>
+              {(isLastElement && !isClimbPage && <span className='font-semibold'>{sanitizeName(place)}</span>) ||
             (
               <Link href={isLastElement && isClimbPage ? climbPageLastUrl : url}>
-                <a className='hover:underline hover:text-base-content whitespace-nowrap'>
+                <a className='hover:underline whitespace-nowrap'>
                   {sanitizeName(place)}
                 </a>
               </Link>

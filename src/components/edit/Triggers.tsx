@@ -98,7 +98,7 @@ export const AddAreaTrigger = ({ parentName, parentUuid, onSuccess, children }: 
 
 const AddAreaTriggerButtonCTA = (): JSX.Element => (
   <DialogTrigger className='flex flex-row items-center gap-4'>
-    <div className='border-secondary border-dashed border-2 w-16 h-16 rounded-box flex items-center justify-center'>
+    <div className='border-secondary border-dashed border-4 w-24 h-24 hover:bg-secondary hover:bg-opacity-60 rounded-box flex items-center justify-center'>
       <PlusIcon className='w-8 h-8 text-secondary' />
     </div>
     <div>Add New Area</div>
@@ -106,7 +106,7 @@ const AddAreaTriggerButtonCTA = (): JSX.Element => (
 )
 
 export const AddAreaTriggerButtonMd = (): JSX.Element => (
-  <DialogTrigger className='btn btn-sm btn-wide btn-outline btn-secondary border-dashed border-2 gap-2'>
+  <DialogTrigger className='btn btn-sm btn-wide btn-solid btn-secondary border-dashed border-2 gap-2'>
     <PlusIcon className='stroke-2 w-5 h-5' /> New Area
   </DialogTrigger>
 )
@@ -114,6 +114,6 @@ export const AddAreaTriggerButtonMd = (): JSX.Element => (
 export const AddAreaTriggerButtonSm = (): JSX.Element => (
   <div className='tooltip' data-tip='Add new area'>
     <DialogTrigger className='btn btn-square btn-secondary btn-sm btn-ghost border-dashed border-2'>
-      <PlusCircleIcon className='w-5 h-5 text-secondary' />
+      <PlusCircleIcon className='w-6 h-6 text-secondary' />
     </DialogTrigger>
   </div>)

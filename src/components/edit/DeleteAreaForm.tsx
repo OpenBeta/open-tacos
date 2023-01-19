@@ -5,7 +5,6 @@ import clx from 'classnames'
 import { GraphQLError } from 'graphql'
 import { signIn, useSession } from 'next-auth/react'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
-// import { MUTATION_REMOVE_AREA, RemoveAreaReturnType, RemoveAreaProps } from '../../js/graphql/gql/contribs'
 import Input from '../ui/form/Input'
 
 export interface DeleteAreaProps {
