@@ -18,7 +18,7 @@ export default function CragLayout (props: CragLayoutProps): JSX.Element {
     <div className='w-full mb-16'>
       <PhotoMontage isHero photoList={props.media} />
       <div className='mt-4'>
-        <CragSummary {...props} />
+        <CragSummary {...props} key={props.uuid} />
       </div>
     </div>
   )

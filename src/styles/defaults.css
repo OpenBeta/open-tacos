@@ -395,3 +395,24 @@ table td.dtable-my-range {
 .two-column-table {
   @apply mt-16 lg:gap-x-24 lg:columns-2;
 }
+
+.area-item-index {
+  box-shadow: 2px 2px 0px #fe4f1a;
+  @apply rounded h-8 w-8 grid place-content-center bg-area-coded text-base-100 text-sm hover:decoration-0 hover:no-underline;
+}
+
+button:focus {
+  @apply outline-base-content !important;
+}
+
+input:focus {
+  @apply outline-base-content !important;
+}
+
+a:focus {
+  @apply outline-base-content !important;
+}
+
+.radio:checked {
+  @apply border-8 no-animation !important;
+}

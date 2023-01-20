@@ -1,13 +1,12 @@
 import { useController } from 'react-hook-form'
-import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
-import clx from 'classnames'
+
 interface RadioGroupProps {
   groupLabel: string
   groupLabelAlt?: JSX.Element
   name: string
   labels: string[] | JSX.Element[]
   values: string[]
-  labelTips?: string[] | JSX.Element[]
+  labelTips?: string[]
   disabled?: boolean
 }
 
@@ -23,24 +22,19 @@ export default function RadioGroup ({ groupLabel, groupLabelAlt, name, labels, v
   return (
     <div className='form-control'>
       <label className='label'>
-        <span className='cursor-pointer label-text font-semibold'>{groupLabel}</span>
+        <span className='cursor-pointer label-text font-semibold uppercase'>{groupLabel}</span>
         <span className='cursor-pointer label-text-alt'>{groupLabelAlt}</span>
       </label>
-      <div className='bg-base-100 rounded-box px-1 divide-y'>
+      <div className='bg-base-100 rounded-box divide-y border'>
         {labels.map((label, index: number) => (
-          <label key={index} className='label cursor-pointer justify-between gap-4'>
-            <span
-              className={
-                clx(
-                  'z-40 label-text',
-                  labelTips?.[index] != null
-                    ? 'tooltip tooltip-right tooltip-info drop-shadow-lg flex gap-1'
-                    : '')
-              }
-              data-tip={labelTips[index]}
-            >
-              {label}{labelTips?.[index] != null && <QuestionMarkCircleIcon className='text-info w-3 h-3' />}
-            </span>
+          <label key={index} className='label cursor-pointer px-4'>
+            <div className=''>
+              <div>{label}</div>
+              {labelTips?.[index] != null &&
+                <div className='text-xs text-base-200'>
+                  {labelTips[index]}
+                </div>}
+            </div>
             <input
               type='radio'
               className='radio'

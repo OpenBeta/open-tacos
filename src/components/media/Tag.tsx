@@ -59,10 +59,7 @@ const resolver = (tag: HybridMediaTag): [string, string] | [null, null] => {
     }
     case TagTargetType.area: {
       const area = (tag as MediaTagWithArea).area
-      if (area.metadata?.leaf) { // not sure why leaf may be undefined?
-        return [`/crag/${area.uuid}`, area.areaName]
-      }
-      return [`/areas/${area.uuid}`, area.areaName]
+      return [`/crag/${area.uuid}`, area.areaName]
     }
     default: return [null, null]
   }

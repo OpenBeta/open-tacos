@@ -22,7 +22,8 @@ module.exports = {
         'ob-dark': '#0f172a', // slate-900
         'custom-secondary': '#62cae3',
         'custom-avery': '#a5d9cf',
-        'custom-primary': '#F07933'
+        'custom-primary': '#F07933',
+        'area-coded': '#004F6E'
       },
       height: {
         'screen-85': '85vh',
@@ -41,6 +42,7 @@ module.exports = {
       light: {
         ...require('daisyui/src/colors/themes')['[data-theme=light]'],
         primary: '#111827',
+        'primary-focus': '#111827',
         secondary: '#b1c077', // OB brand secondary
         accent: '#F15E40', // OB primary brand
         neutral: '#111826',
@@ -48,7 +50,7 @@ module.exports = {
         error: '#ec4899',
         'base-content': '#111827', // gray-900
         'base-300': '#4B5563', // gray-600
-        'base-200': '#E5E7EB', // gray-200
+        'base-200': '#9ca3af', // gray-400
         'base-100': '#ffffff', // white
         '--rounded-box': '0.5rem',
         '--btn-text-case': s => s

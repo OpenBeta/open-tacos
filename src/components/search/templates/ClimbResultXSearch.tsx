@@ -21,7 +21,7 @@ export const ClimbItem = ({ item }: ItemProps): JSX.Element => {
         </div>
 
         <div className='flex-1 flex justify-end whitespace-nowrap'>
-          <div className='rounded-full p-1 px-3 bg-indigo-700 text-white text-xs
+          <div className='rounded-lg p-1 px-3 bg-area-coded text-base-100 text-xs
               flex justify-center items-center mr-2'
           >
             {item.areaNames[item.areaNames.length - 1]}
@@ -54,12 +54,12 @@ export const AreaItem = ({ item }: AreaItemProps): JSX.Element => {
     <div className='py-4 text-xs flex flex-col gap-2'>
       {pathTokens.length === 1 &&
         <>
-          <div className='badge badge-success bg-opacity-50 badge-sm'>country</div>
+          <div className='badge bg-area-coded bg-opacity-60 badge-sm'>country</div>
           <div className='badge badge-outline badge-lg'>{name} →</div>
         </>}
       {pathTokens.length > 1 &&
         <>
-          <div className='badge badge-info badge-sm'>area</div>
+          <div className='badge bg-area-coded badge-sm'>area</div>
           <TextOnlyCrumbs pathTokens={pathTokens} highlightIndices={highlightIndices} />
         </>}
     </div>

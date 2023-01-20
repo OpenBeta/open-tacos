@@ -19,6 +19,7 @@ import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 import { DeleteAreaTrigger } from '../edit/Triggers'
 import { AreaCRUD } from '../edit/AreaCRUD'
 import { CragLayoutProps } from './cragLayout'
+
 export interface CragHeroProps {
   uuid: string
   title: string

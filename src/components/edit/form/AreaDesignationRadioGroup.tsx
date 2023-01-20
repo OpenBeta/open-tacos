@@ -1,7 +1,7 @@
 import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
-
 import { AreaMetadataType, AreaUpdatableFieldsType } from '../../../js/types'
 import { RadioGroup } from '../../ui/form'
+import Tooltip from '../../ui/Tooltip'
 
 export type AreaTypeFormProp = 'crag' | 'area' | 'boulder'
 
@@ -19,7 +19,7 @@ export const AreaDesignationRadioGroup = ({ name = 'areaType', canEdit }: { name
       'Crag (sport, trad, ice)',
       'Boulder']}
     values={['area', 'crag', 'boulder']}
-    labelTips={['Like a folder an area may only contain other smaller areas', 'A crag is where you add rope climbing routes (sport, trad, ice).', 'A boulder may only have boulder problems.']}
+    labelTips={['Group other areas.', 'List rope climbing routes.', 'List boulder problems.']}
   />)
 
 export const ExplainAreaTypeLockTooltip = ({ canEdit }: { canEdit: boolean }): JSX.Element | null =>
@@ -27,12 +27,10 @@ export const ExplainAreaTypeLockTooltip = ({ canEdit }: { canEdit: boolean }): J
     canEdit
       ? null
       : (
-        <div
-          className='tooltip tooltip-left tooltip-info drop-shadow-lg'
-          data-tip='Selection becomes read-only when the area contains subareas or is a crag/boulder.'
-        >
+        <Tooltip content='Read only when the area has climbs or contains other areas'>
           <QuestionMarkCircleIcon className='text-info w-5 h-5' />
-        </div>)
+        </Tooltip>
+        )
   )
 
 /**

@@ -1,4 +1,5 @@
 import clx from 'classnames'
+import Link from 'next/link'
 import { AreaType } from '../../js/types'
 import { AreaSummaryType } from '../crag/cragLayout'
 import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTriggerButtonSm, DeleteAreaTriggerButtonSm } from './Triggers'
@@ -79,13 +80,14 @@ export const AreaItem = ({ index, borderBottom, areaName, uuid, parentUuid, onCh
   const canEdit = (children?.length ?? 1) === 0 && (climbs?.length ?? 1) === 0
   return (
     <div className={clx('flex flex-rows flex-nowrap gap-4 items-center border-t break-inside-avoid-column break-inside-avoid', borderBottom ? 'border-b' : '')}>
-      {/* Use regular 'a' tag instead of Link because of a data caching issue with client-side routing. We'll revisit this in the future. */}
-      <a className='flex items-center gap-4 grow py-6' href={`/crag/${uuid}`}>
-        <div className='rounded h-8 w-8 grid place-content-center bg-base-content/80 text-base-100 text-sm hover:decoration-0 hover:no-underline'>{index + 1}</div>
-        <div className='font-semibold uppercase hover:underline underline-offset-4 decoration-4'>
-          {areaName}
-        </div>
-      </a>
+      <Link href={`/crag/${uuid}`}>
+        <a className='flex items-center gap-4 grow py-6'>
+          <div className='area-item-index'>{index + 1}</div>
+          <div className='font-semibold uppercase hover:underline underline-offset-4 decoration-4'>
+            {areaName}
+          </div>
+        </a>
+      </Link>
 
       {editMode && (
         <div className='text-base-300'>
