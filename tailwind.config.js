@@ -23,7 +23,8 @@ module.exports = {
         'custom-secondary': '#62cae3',
         'custom-avery': '#a5d9cf',
         'custom-primary': '#F07933',
-        'area-coded': '#004F6E'
+        'area-coded': '#004F6E', // background cue for Areas
+        tooltip: 'rgb(254 243 199)' // background for Daist tooltip bg-amber-100
       },
       height: {
         'screen-85': '85vh',

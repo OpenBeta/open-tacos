@@ -1,9 +1,10 @@
 import clx from 'classnames'
 import Link from 'next/link'
+import Image from 'next/image'
 import { AreaType } from '../../js/types'
 import { AreaSummaryType } from '../crag/cragLayout'
 import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTriggerButtonSm, DeleteAreaTriggerButtonSm } from './Triggers'
-
+import NetworkIcon1 from '../../assets/icons/network-square-icon.svg'
 export type AreaCRUDProps = Pick<AreaType, 'uuid'|'areaName'> & {
   childAreas: AreaSummaryType[]
   editMode: boolean
@@ -75,16 +76,29 @@ type AreaItemProps = AreaSummaryType & {
  * Individual area entry
  * @param endOfFirstColumn true to indicate this is the last item in the first column
  */
-export const AreaItem = ({ index, borderBottom, areaName, uuid, parentUuid, onChange, editMode = false, climbs, children }: AreaItemProps): JSX.Element => {
+export const AreaItem = ({ index, borderBottom, areaName, uuid, parentUuid, onChange, editMode = false, climbs, children, ...props }: AreaItemProps): JSX.Element => {
   // undefined array can mean we forget to include the field in GQL so make it not editable
   const canEdit = (children?.length ?? 1) === 0 && (climbs?.length ?? 1) === 0
+
+  const { totalClimbs, metadata: { leaf, isBoulder } } = props
+  const isLeaf = leaf || isBoulder
   return (
-    <div className={clx('flex flex-rows flex-nowrap gap-4 items-center border-t break-inside-avoid-column break-inside-avoid', borderBottom ? 'border-b' : '')}>
+    <div className={clx('py-4 flex flex-rows flex-nowrap gap-4 items-start border-t break-inside-avoid-column break-inside-avoid', borderBottom ? 'border-b' : '')}>
       <Link href={`/crag/${uuid}`}>
-        <a className='flex items-center gap-4 grow py-6'>
-          <div className='area-item-index'>{index + 1}</div>
+        <a className='area-item-index'>
+          {index + 1}
+        </a>
+      </Link>
+      <Link href={`/crag/${uuid}`}>
+        <a className='flex flex-col items-start items-stretch grow gap-y-1'>
           <div className='font-semibold uppercase hover:underline underline-offset-4 decoration-4'>
             {areaName}
+          </div>
+          <div className='flex gap-2 items-center'>
+            {!isLeaf && <Image className='w-5 h-5' src={NetworkIcon1} />}
+            <span className='mt-0.5 text-sm text-base-200'>
+              <span>{totalClimbs ?? 0} climbs • {children?.length ?? 0} areas</span>
+            </span>
           </div>
         </a>
       </Link>

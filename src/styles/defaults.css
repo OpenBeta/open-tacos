@@ -401,6 +401,9 @@ table td.dtable-my-range {
   @apply rounded h-8 w-8 grid place-content-center bg-area-coded text-base-100 text-sm hover:decoration-0 hover:no-underline;
 }
 
+/**
+* Overriding Daisy theme
+*/
 button:focus {
   @apply outline-base-content !important;
 }
@@ -415,4 +418,8 @@ a:focus {
 
 .radio:checked {
   @apply border-8 no-animation !important;
+}
+
+.tooltip:before {
+  @apply border bg-tooltip text-sm text-base-content !important;
 }

@@ -155,9 +155,13 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
       children {
         uuid
         areaName
+        totalClimbs
         metadata {
           leaf
           isBoulder
+        }
+        children {
+          uuid
         }
       }
       content {

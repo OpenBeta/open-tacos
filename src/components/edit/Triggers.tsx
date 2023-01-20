@@ -5,6 +5,7 @@ import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
 import DeleteAreaForm, { DeleteAreaProps } from './DeleteAreaForm'
 import AddAreaForm, { AddAreaFormProps } from './AddChildAreaForm'
 import { toast } from 'react-toastify'
+import Tooltip from '../ui/Tooltip'
 
 export type DeleteAreaTriggerProps = DeleteAreaProps & { disabled?: boolean, children?: JSX.Element }
 /**
@@ -59,13 +60,15 @@ const DeleteAreaTriggerButtonDefault = ({ disabled }: TriggerButtonProps): JSX.E
 )
 
 export const DeleteAreaTriggerButtonSm = ({ disabled }: TriggerButtonProps): JSX.Element => (
-  <DialogTrigger
-    className='btn btn-ghost btn-circle btn-primary'
-    disabled={disabled}
-    type='button'
-  >
-    <TrashIcon className='w-6 h-6' />
-  </DialogTrigger>)
+  <Tooltip content='Please delete child areas or climbs first.' disabled={disabled}>
+    <DialogTrigger
+      className='btn btn-ghost btn-circle btn-primary'
+      disabled={disabled}
+      type='button'
+    >
+      <TrashIcon className='w-6 h-6' />
+    </DialogTrigger>
+  </Tooltip>)
 
 export type AddAreaTriggerProps = Omit<AddAreaFormProps, 'onError'> & { children?: JSX.Element}
 /**

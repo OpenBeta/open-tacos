@@ -123,6 +123,7 @@ export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
     }
     pathTokens  
     ancestors
+    totalClimbs
     climbs {
       id
       name
@@ -149,6 +150,7 @@ export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
     children {
       uuid
       areaName
+      totalClimbs
       children {
         uuid
       }
