@@ -21,4 +21,11 @@ export const textInputTheme = {
   paragraph: 'editor-single-paragraph'
 }
 
+export const csvTheme = {
+  ltr: 'ltr',
+  rtl: 'rtl',
+  placeholder: 'editor-csv-placeholder',
+  paragraph: 'editor-csv-paragraph'
+}
+
 export default theme

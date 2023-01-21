@@ -1,9 +1,8 @@
-import Image from 'next/image'
+import { ArrowRightIcon } from '@heroicons/react/20/solid'
 import LinkedIn from '../assets/icons/li.inline.svg'
 import Instagram from '../assets/icons/ig.inline.svg'
 import Github from '../assets/icons/github.inline.svg'
 import Twitter from '../assets/icons/twitter.inline.svg'
-import { Button, ButtonVariant } from '../components/ui/BaseButton'
 
 function Footer (): JSX.Element {
   return (
@@ -22,15 +21,13 @@ function Footer (): JSX.Element {
             </a>
           </div>
 
-          <div>
-            <Button
-              href='https://opencollective.com/openbeta/'
-              target='_blank'
-              rel='noopener noreferrer'
-              label='Make a donation'
-              variant={ButtonVariant.SOLID_SECONDARY}
-            />
-          </div>
+          <a
+            className='btn btn-secondary btn-sm gap-2' href='https://opencollective.com/openbeta/'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            Make a donation <ArrowRightIcon className='w-4 h-4' />
+          </a>
         </div>
         <hr className='my-6 md:my-4 border-black' />
         <div className='flex flex-col md:flex-row gap-y-4 md:gap-y-0 items-center justify-between'>
@@ -57,16 +54,16 @@ function Footer (): JSX.Element {
           </div>
           <div className='flex flex-row items-center gap-x-4'>
             <a href='https://github.com/OpenBeta'>
-              <Image className='w-6 h-6' src={Github} />
+              <Github className='w-8 h-8' />
             </a>
             <a href='https://www.instagram.com/openbetaproject/'>
-              <Image className='w-6 h-6' src={Instagram} />
+              <Instagram className='w-8 h-8' />
             </a>
             <a href='https://twitter.com/OpenBetaHQ'>
-              <Image className='w-6 h-6' src={Twitter} />
+              <Twitter className='w-8 h-8' />
             </a>
             <a href='https://www.linkedin.com/company/openbetacollective/'>
-              <Image className='w-6 h-6' src={LinkedIn} />
+              <LinkedIn className='w-8 h-8' />
             </a>
           </div>
         </div>

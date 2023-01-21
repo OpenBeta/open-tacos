@@ -17,7 +17,7 @@ export default function MobileNavBar ({ branding, home, search, profile, more }:
         borderBottom
       >
         <div className='hidden md:inline-flex items-center'>
-          <div className='w-8 h-8'>{branding}</div>
+          {branding}
         </div>
         <div className='inline-flex md:hidden md:w-12'>{home}</div>
         {search}

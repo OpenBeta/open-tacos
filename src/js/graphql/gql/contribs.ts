@@ -30,12 +30,20 @@ mutation ($uuid: String!) {
     }
 }`
 
+export interface DeleteOneAreaInputType {
+  uuid: string
+}
+
+export type DeleteOneAreaReturnType = Pick<AreaType, 'uuid' | 'areaName'>
+
 export const MUTATION_UPDATE_AREA = gql`
-mutation ($uuid: String!, $areaName: String, $isDestination: Boolean, $shortCode: String, $lat: Float, $lng: Float, $description: String) {
+mutation ($uuid: String!, $areaName: String, $isDestination: Boolean, $isLeaf: Boolean, $isBoulder: Boolean, $shortCode: String, $lat: Float, $lng: Float, $description: String) {
     updateArea(input: { 
       uuid: $uuid,
       areaName: $areaName,
       isDestination: $isDestination,
+      isLeaf: $isLeaf,
+      isBoulder: $isBoulder,
       shortCode: $shortCode,
       lat: $lat,
       lng: $lng,
@@ -51,13 +59,19 @@ mutation ($input: UpdateClimbsInput) {
   updateClimbs(input: $input)
 }
 `
+export const MUTATION_DELETE_CLIMBS = gql`
+mutation ($input: DeleteManyClimbsInput) {
+  deleteClimbs(input: $input)
+}
+`
 
 export interface IndividualClimbChangeInput {
-  id: string
+  id?: string // Null or undefined id will create a new climb
   name?: string
   description?: string
   location?: string
   protection?: string
+  leftRightIndex?: number
 }
 
 export interface UpdateClimbsInput {
@@ -109,8 +123,8 @@ export const QUERY_RECENT_CHANGE_HISTORY = gql`
 
 export interface AddAreaProps {
   name: string
-  parentUuid: string | null
-  countryCode: string | null
+  parentUuid?: string
+  countryCode?: string
 }
 
 export type AddAreaReturnType = Pick<AreaType, 'areaName'|'uuid'>
@@ -125,4 +139,13 @@ export interface UpdateAreaProps extends AreaUpdatableFieldsType {
   uuid: string
 }
 
-export type UpdateAreaReturnType = Pick<AreaType, 'areaName'|'uuid'>
+export type UpdateOneAreaInputType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng' |'isLeaf' | 'isBoulder'>> & { uuid: string }>
+
+export type UpdateAreaApiReturnType = Pick<AreaType, 'areaName'|'uuid'>
+
+export interface DeleteManyClimbsInputType {
+  parentId: string
+  idList: string[]
+}
+
+export type DeleteManyClimbsAPI = (input: DeleteManyClimbsInputType) => Promise<number>

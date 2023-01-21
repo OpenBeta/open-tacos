@@ -92,7 +92,7 @@ const entityToUrl = ({ item }: {item: TypesenseAreaType | TypesenseDocumentType}
   const { type } = item
   switch (type) {
     case EntityType.area:
-      return `/areas/${(item as TypesenseAreaType).id}`
+      return `/crag/${(item as TypesenseAreaType).id}`
     case EntityType.crag:
       return `/crag/${(item as TypesenseAreaType).id}`
     case EntityType.climb:

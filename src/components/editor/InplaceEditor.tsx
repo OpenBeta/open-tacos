@@ -25,11 +25,14 @@ interface EditorProps {
   rules?: RulesType
 }
 
+/**
+ * Multiline inplace editor with react-hook-form support.
+ */
 export default function Editor ({ initialValue = '', name, editable = false, reset, placeholder = 'Enter some text', rules }: EditorProps): JSX.Element {
   const { field, fieldState: { error } } = useController({ name, rules })
 
   const onChangeHandler = (arg0, arg1): void => {
-    onChange(arg0, arg1, field, name)
+    onChange(arg0, arg1, field)
   }
   return (
     <LexicalComposer initialConfig={editorConfigRichText(initialValue, editable)}>

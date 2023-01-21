@@ -1,27 +1,36 @@
 import { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import clx from 'classnames'
-import { useMutation } from '@apollo/client'
+import { GraphQLError } from 'graphql'
 import { signIn, useSession } from 'next-auth/react'
-
-import { MUTATION_REMOVE_AREA, RemoveAreaReturnType, RemoveAreaProps } from '../../js/graphql/gql/contribs'
-import { graphqlClient } from '../../js/graphql/Client'
+import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 import Input from '../ui/form/Input'
-import { SuccessAlert, AlertAction } from './alerts/Alerts'
 
 export interface DeleteAreaProps {
   parentUuid: string
   areaUuid: string
   areaName: string
-  onClose: (event: any) => void
+  returnToParentPageAfterDelete?: boolean
+  onSuccess?: () => void
+  onError?: (error: GraphQLError) => void
 }
 
 interface HtmlFormProps {
   confirmation: string
 }
 
-export default function Form ({ areaUuid, areaName, parentUuid, onClose }: DeleteAreaProps): JSX.Element {
+/**
+ * Delete area dialog.  Users must be authenticated.
+ * @param areaUuid ID of deleting area
+ * @param areaName Name of deleting area
+ * @param parentUuid ID of parent area (for redirection and revalidating SSG page purpose)
+ * @param returnToParentPageAfterDelete true to be redirected to parent area page
+ * @param onSuccess Optional callback
+ */
+export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, returnToParentPageAfterDelete = true, onSuccess }: DeleteAreaProps): JSX.Element {
   const session = useSession()
+  const router = useRouter()
 
   useEffect(() => {
     if (session.status === 'unauthenticated') {
@@ -29,89 +38,74 @@ export default function Form ({ areaUuid, areaName, parentUuid, onClose }: Delet
     }
   }, [session])
 
-  const [removeArea, { error, data }] = useMutation<{ removeArea: RemoveAreaReturnType }, RemoveAreaProps>(
-    MUTATION_REMOVE_AREA, {
-      client: graphqlClient,
-      onCompleted: (data) => {
-        void fetch(`/api/revalidate?a=${parentUuid}`) // build parent area page
-      }
+  const onSuccessHandler = async (): Promise<void> => {
+    if (onSuccess != null) {
+      onSuccess()
     }
-  )
+    if (returnToParentPageAfterDelete) {
+      await router.replace('/crag/' + parentUuid)
+      router.reload()
+    }
+  }
+
+  const { deleteOneAreaCmd } = useUpdateAreasCmd({
+    areaId: parentUuid,
+    accessToken: session?.data?.accessToken as string ?? '',
+    onDeleteCompleted: onSuccessHandler
+  })
 
   // Form declaration
   const form = useForm<HtmlFormProps>(
     {
-      mode: 'onBlur',
+      mode: 'onSubmit',
       defaultValues: { confirmation: '' }
     })
 
-  const { handleSubmit, formState: { isSubmitSuccessful, isSubmitting } } = form
+  const { handleSubmit, setFocus, formState: { isSubmitting } } = form
 
   const submitHandler = async (): Promise<void> => {
-    await removeArea({
-      variables: {
-        uuid: areaUuid
-      },
-      context: {
-        headers: {
-          authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
-        }
-      }
-    })
+    await deleteOneAreaCmd({ uuid: areaUuid })
   }
 
   if (session.status !== 'authenticated') {
     return (
-      <div>Checking authorization...</div>
+      <div className='dialog-form-default'>Checking authorization...</div>
     )
   }
-  return (
-    <>
-      <div>You're about to delete area <b>{areaName}</b>.  Type DELETE to confirm.</div>
-      <FormProvider {...form}>
-        <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
-          <Input
-            label=''
-            name='confirmation'
-            registerOptions={{
-              required: 'A confirmation is required.',
-              validate: {
-                confirm: (v: string): string | undefined => {
-                  if (v === 'DELETE') return undefined
-                  return 'Type DELETE in uppercase'
-                }
 
+  useEffect(() => {
+    setFocus('confirmation')
+  }, [])
+
+  return (
+    <FormProvider {...form}>
+      <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
+        <div>You're about to delete '<span className='font-semibold'>{areaName}</span>'.  Type <b>DELETE</b> to confirm.</div>
+        <Input
+          label=''
+          name='confirmation'
+          registerOptions={{
+            required: 'A confirmation is required.',
+            validate: {
+              confirm: (v: string): string | undefined => {
+                if (v === 'DELETE') return undefined
+                return 'Type DELETE in uppercase'
               }
-            }}
-            className='input input-primary input-bordered input-md'
-          />
-          <button
-            className={
+
+            }
+          }}
+          className='input input-primary input-bordered input-md'
+        />
+        <button
+          className={
             clx('mt-4 btn btn-primary w-full',
               isSubmitting ? 'loading btn-disabled' : ''
             )
           }
-            type='submit'
-          >Delete
-          </button>
-        </form>
-      </FormProvider>
-      {isSubmitSuccessful && error == null && data != null &&
-        <DeleteSuccessAlert
-          {...data.removeArea}
-          parentUuid={parentUuid}
-          onClose={onClose}
-        />}
-      {/* {error != null && <ErrorAlert {...error} />} */}
-    </>
+          type='submit'
+        >Delete
+        </button>
+      </form>
+    </FormProvider>
   )
 }
-
-interface DeleteSuccessAlertProps {
-  parentUuid: string
-  onClose: (event: any) => void
-}
-export const DeleteSuccessAlert = ({ areaName, parentUuid, onClose }: DeleteSuccessAlertProps & RemoveAreaReturnType): JSX.Element => (
-  <SuccessAlert description={<span>Area <b>{areaName}</b> deleted.</span>}>
-    <AlertAction className='btn btn-primary' onClick={onClose}>Continue</AlertAction>
-  </SuccessAlert>)

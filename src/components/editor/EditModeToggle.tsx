@@ -31,9 +31,9 @@ export default function EditModeToggle ({ onChange }: Props): JSX.Element {
   return (
     <form className='block'>
       <label className='inline-flex label cursor-pointer'>
-        <span className='label-text mr-2 text-xs'>Edit mode</span>
+        <span className='label-text mr-2 text-md font-semibold'>Edit mode</span>
         <input
-          type='checkbox' name='editMode' className='toggle toggle-sm toggle-accent' checked={editable} onChange={onPressed}
+          type='checkbox' name='editMode' className='toggle toggle-accent md:toggle-lg' checked={editable} onChange={onPressed}
         />
       </label>
     </form>

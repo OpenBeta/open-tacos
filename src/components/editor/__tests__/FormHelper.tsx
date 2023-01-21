@@ -18,4 +18,21 @@ export function FormHelper ({ initialValue, children, submitHandler }): JSX.Elem
   )
 }
 
+export function CSVFormHelper ({ initialClimbs, children, submitHandler }): JSX.Element {
+  const form = useForm(
+    {
+      mode: 'onBlur',
+      defaultValues: { climbs: initialClimbs }
+    })
+
+  const { handleSubmit } = form
+  return (
+    <FormProvider {...form}>
+      <form onSubmit={handleSubmit(submitHandler)}>
+        {children}
+        <button type='submit'>Submit</button>
+      </form>
+    </FormProvider>
+  )
+}
 it('Do nothing test to make jest happy', () => {})

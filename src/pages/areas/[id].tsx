@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 
@@ -53,21 +53,17 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList, history }: Area
   const [selected, setSelected] = useState<null | string>(null)
   const navbarOffset = getNavBarOffset()
 
-  const items = useMemo(() => {
-    return area.children
-      // We don't care about empty children
-      // .filter(i => i.totalClimbs > 0)
-      // map the actual data we need into the item entity
-      .map(child => ({
-        id: child.metadata.areaId,
-        name: child.areaName,
-        description: child.content?.description,
-        totalClimbs: child.totalClimbs,
-        aggregate: child.aggregate,
-        content: child.content,
-        href: getSlug(child.metadata.areaId, child.metadata.leaf)
-      }))
-  }, [area])
+  const items = area.children
+    .map(child => ({
+      id: child.metadata.areaId,
+      name: child.areaName,
+      description: child.content?.description,
+      totalClimbs: child.totalClimbs,
+      aggregate: child.aggregate,
+      content: child.content,
+      href: getSlug(child.metadata.areaId, child.metadata.leaf, child.children.length)
+    })
+    )
 
   const { areaName, children, metadata, content, pathTokens, ancestors } = area
 
@@ -126,14 +122,7 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList, history }: Area
  */
 export async function getStaticPaths (): Promise<any> {
   return {
-    paths: [
-      { params: { id: 'bea6bf11-de53-5046-a5b4-b89217b7e9bc' } }, // Red Rock
-      { params: { id: '78da26bc-cd94-5ac8-8e1c-815f7f30a28b' } }, // Red River Gorge
-      { params: { id: '1db1e8ba-a40e-587c-88a4-64f5ea814b8e' } }, // USA
-      { params: { id: 'ab48aed5-2e8d-54bb-b099-6140fe1f098f' } }, // Colorado
-      { params: { id: 'decc1251-4a67-52b9-b23f-3243e10e93d0' } }, // Boulder
-      { params: { id: 'f166e672-4a52-56d3-94f1-14c876feb670' } } // Indian Creek
-    ],
+    paths: [],
     fallback: true
   }
 }
@@ -155,10 +144,12 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
     fetchPolicy: 'no-cache'
   })
 
-  if (rs.data.area == null) {
+  if (rs.data.area.metadata?.leaf || rs.data.area.children.length === 0) {
     return {
-      notFound: true,
-      revalidate: 10
+      redirect: {
+        destination: `/crag/${params.id}`,
+        permanent: false
+      }
     }
   }
 

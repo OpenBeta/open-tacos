@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { gql, useMutation } from '@apollo/client'
+import { gql } from '@apollo/client'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
@@ -11,7 +11,7 @@ import { useSwipeable } from 'react-swipeable'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, Climb, MediaBaseTag, RulesType, MediaType } from '../../js/types'
+import { AreaType, ClimbType, MediaBaseTag, RulesType, MediaType } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
@@ -22,12 +22,11 @@ import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import TickButton from '../../components/users/TickButton'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
 import EditModeToggle from '../../components/editor/EditModeToggle'
-import { MUTATION_UPDATE_CLIMBS, UpdateClimbsInput } from '../../js/graphql/gql/contribs'
-import Toast from '../../components/ui/Toast'
 import { FormSaveAction } from '../../components/editor/FormSaveAction'
 import { AREA_NAME_FORM_VALIDATION_RULES } from '../../components/edit/EditAreaForm'
 import { getImagesByFilenames } from '../../js/sirv/SirvClient'
 import { indexBy } from 'underscore'
+import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -44,10 +43,10 @@ export const CLIMB_LOCATION_FORM_VALIDATION_RULES: RulesType = {
 }
 
 interface ClimbPageProps {
-  climb: Climb
+  climb: ClimbType
   mediaListWithUsernames: MediaBaseTag[]
-  leftClimb: Climb | null
-  rightClimb: Climb | null
+  leftClimb: ClimbType | null
+  rightClimb: ClimbType | null
 }
 
 const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
@@ -84,7 +83,6 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
 
   const router = useRouter()
   const session = useSession()
-  const toastRef = useRef<any>()
 
   useEffect(() => {
     setCache({ name, ...content })
@@ -111,47 +109,32 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
     rightClimb !== null && router.push(`/climbs/${rightClimb.id}`)
   }, [rightClimb])
 
-  // Form declaration
-  const form = useForm(
-    {
-      mode: 'onBlur',
-      defaultValues: { ...cache }
-    })
+  const parentId = ancestors[ancestors.length - 1]
+
+  const { updateClimbCmd } = useUpdateClimbsCmd({
+    parentId,
+    accessToken: session?.data?.accessToken as string
+  })
+
+  // React hook form declaration
+  const form = useForm({
+    mode: 'onBlur',
+    defaultValues: { ...cache }
+  })
 
   const { handleSubmit, formState: { isSubmitting, isDirty }, reset } = form
 
   const submitHandler = async (formData): Promise<void> => {
     const { description, location, protection, name } = formData
-    await updateClimbsApi({
-      variables: {
-        input: {
-          parentId: ancestors[ancestors.length - 1],
-          changes: [{ id, description, location, protection, name }]
-        }
-      },
-      context: {
-        headers: {
-          authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
-        }
-      }
-    })
+    const input = {
+      parentId: ancestors[ancestors.length - 1],
+      changes: [{ id, description, location, protection, name }]
+    }
+    await updateClimbCmd(input)
     setCache({ ...formData })
     reset(formData, { keepValues: true })
   }
 
-  const [updateClimbsApi] = useMutation<{ updateClimbsApi: string[] }, { input: UpdateClimbsInput }>(
-    MUTATION_UPDATE_CLIMBS, {
-      client: graphqlClient,
-      onCompleted: (data) => {
-        void fetch(`/api/revalidate?c=${id}`)
-        toastRef?.current?.publish('Changes saved.  Thank you for your contribution! ✨')
-      },
-      onError: (error) => {
-        console.log(error)
-        toastRef?.current?.publish('Something unexpected happened. Please save again.', true)
-      }
-    }
-  )
   const portalRef = useRef(null)
   return (
     <div className='lg:flex lg:justify-center w-full' {...swipeHandlers}>
@@ -186,9 +169,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   />
                 </h1>
                 <div className='pl-1'>
-                  <div
-                    className='flex items-center space-x-2 mt-6'
-                  >
+                  <div className='flex items-center space-x-2 mt-6'>
                     <RouteGradeChip grade={yds} safety={safety} />
                     <RouteTypeChips type={type} />
                   </div>
@@ -269,7 +250,6 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
           </form>
         </FormProvider>
       </div>
-      <Toast ref={toastRef} />
     </div>
   )
 }
@@ -323,11 +303,12 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
     }
   }`
 
-  const rs = await graphqlClient.query<{ climb: Climb }>({
+  const rs = await graphqlClient.query<{climb: ClimbType}>({
     query,
     variables: {
       uuid: params.id
-    }
+    },
+    fetchPolicy: 'no-cache'
   })
 
   if (rs.data == null || rs.data.climb == null) {
@@ -345,13 +326,13 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
   }
 
   const sortedClimbsInArea = await fetchSortedClimbsInArea(rs.data.climb.ancestors[rs.data.climb.ancestors.length - 1])
-  let leftClimb
-  let rightClimb
+  let leftClimb: ClimbType | null = null
+  let rightClimb: ClimbType | null = null
 
   for (const [index, climb] of sortedClimbsInArea.entries()) {
     if (climb.id === params.id) {
-      leftClimb = (sortedClimbsInArea[index - 1] !== undefined) ? sortedClimbsInArea[index - 1] : null
-      rightClimb = sortedClimbsInArea[index + 1] !== undefined ? sortedClimbsInArea[index + 1] : null
+      leftClimb = (sortedClimbsInArea[index - 1] != null) ? sortedClimbsInArea[index - 1] : null
+      rightClimb = sortedClimbsInArea[index + 1] != null ? sortedClimbsInArea[index + 1] : null
     }
   }
 
@@ -378,7 +359,7 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
 /**
  * Fetch and sort the climbs in the area from left to right
  */
-const fetchSortedClimbsInArea = async (uuid: string): Promise<Climb[]> => {
+const fetchSortedClimbsInArea = async (uuid: string): Promise<ClimbType[]> => {
   const query = gql`query SortedNearbyClimbsByAreaUUID($uuid: ID) {
     area(uuid: $uuid) {
       uuid,

@@ -1,11 +1,10 @@
 import { useRef, useState, useCallback } from 'react'
-import { PencilIcon, FolderPlusIcon, FolderMinusIcon, ChevronDoubleDownIcon } from '@heroicons/react/24/outline'
+import { PencilIcon, PencilSquareIcon, FolderPlusIcon, ChevronDoubleDownIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 
 import { MobileDialog, DialogContent } from '../ui/MobileDialog'
 import { DropdownMenu, DropdownContent, DropdownItem, DropdownTrigger, DropdownSeparator } from '../ui/DropdownMenu'
 import AddChildAreaForm from './AddChildAreaForm'
-import DeleteAreaForm from './DeleteAreaForm'
 import EditAreaForm from './EditAreaForm'
 import { useResponsive } from '../../js/hooks'
 import { AreaType, ChangesetType } from '../../js/types'
@@ -13,7 +12,6 @@ import RecentChangeHistory from './RecentChangeHistory'
 
 interface AreaEditActionTriggerProps extends AreaType {
   history: ChangesetType[]
-
 }
 
 /**
@@ -23,29 +21,19 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
   const { isMobile } = useResponsive()
   const submitCountRef = useRef<number>(0)
   const [action, setAction] = useState('none')
+  const [shouldReloadPage, setShouldReloadPage] = useState(false)
 
-  const { areaName, uuid, children, climbs, ancestors, history } = props
+  const { areaName, uuid, history } = props
   const router = useRouter()
-
-  const parentUuid = ancestors[ancestors.length - 2]
 
   const postCreateUpdateHandler = useCallback(() => {
     setAction('none')
-    if (submitCountRef.current > 0) {
+    if (submitCountRef.current > 0 || shouldReloadPage) {
       // the user has edited something --> let's reload this page
       router.reload()
     }
-  }, [action])
+  }, [action, shouldReloadPage])
 
-  const postDeleteHandler = async (): Promise<void> => {
-    setAction('none')
-    await router.replace('/areas/' + parentUuid)
-    router.reload()
-  }
-
-  const isCountry = ancestors.length === 1
-  const hasChildren = children?.length > 0 || climbs?.length > 0
-  const deletable = !isCountry && !hasChildren
   return (
     <>
       <DropdownMenu>
@@ -63,22 +51,20 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
           <DropdownItem
             className='font-bold'
             icon={<PencilIcon className='w-5 h-5' />}
-            text='Edit'
+            text='Quick Edit'
             onSelect={() => setAction('edit')}
           />
           <DropdownSeparator />
           <DropdownItem
-            className='font-bold'
             icon={<FolderPlusIcon className='w-5 h-5' />}
             text='Add new area'
             onSelect={() => setAction('add')}
           />
           <DropdownSeparator />
           <DropdownItem
-            icon={<FolderMinusIcon className='w-5 h-5' />}
-            text='Delete this area'
-            onSelect={() => setAction('delete')}
-            disabled={!deletable}
+            icon={<PencilSquareIcon className='w-5 h-5' />}
+            text='Advanced Edit'
+            onSelect={() => { void router.push(`/crag/${props.uuid}`) }}
           />
           <DropdownSeparator />
           <DropdownItem text='Cancel' />
@@ -93,18 +79,7 @@ export default function AreaTrigger (props: AreaEditActionTriggerProps): JSX.Ele
 
       <MobileDialog modal open={action === 'add'} onOpenChange={postCreateUpdateHandler}>
         <DialogContent title='Add new child area'>
-          <AddChildAreaForm parentName={areaName} parentUuid={uuid} formRef={submitCountRef} />
-        </DialogContent>
-      </MobileDialog>
-
-      <MobileDialog modal open={action === 'delete'} onOpenChange={postCreateUpdateHandler}>
-        <DialogContent title='Delete area'>
-          <DeleteAreaForm
-            areaName={areaName}
-            areaUuid={uuid}
-            parentUuid={parentUuid}
-            onClose={postDeleteHandler}
-          />
+          <AddChildAreaForm parentName={areaName} parentUuid={uuid} onSuccess={() => setShouldReloadPage(true)} />
         </DialogContent>
       </MobileDialog>
 

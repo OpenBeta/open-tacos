@@ -5,7 +5,7 @@ import clx from 'classnames'
 interface Props {
   title?: string | ReactNode
   fullScreen?: boolean
-  children: ReactNode
+  children: ReactNode | ReactNode[]
   onInteractOutside?: (event: any) => void
 }
 /**
@@ -20,26 +20,36 @@ export const DialogContent = React.forwardRef<any, Props>(
         <DialogPrimitive.Overlay className='z-40 fixed inset-0 bg-black/60' />
         <DialogPrimitive.Content
           className={clx(fullScreen ? 'dialog-wide' : 'dialog-default')} {...props} ref={forwardedRef}
-
         >
-          <div className='px-2 lg:px-4 h-16 fixed top-0 left-0 z-30 w-full flex justify-between items-center align-middle bg-base-100 bg-opacity-90 backdrop-blur-sm'>
-            <DialogPrimitive.Close aria-label='Close' asChild>
-              <button className='btn btn-circle btn-ghost btn-sm'>
-                <XMarkIcon className='w-6 h-6' />
-              </button>
-            </DialogPrimitive.Close>
-            <DialogPrimitive.Title asChild>
-              <h2 className=''>{title}</h2>
-            </DialogPrimitive.Title>
-            <div className='w-8 h-8' />
-          </div>
-          <div className={clx(fullScreen ? 'dialog-content-fullscreen' : 'dialog-content-default')}>
-            {children}
-          </div>
+          <DialogPrimitive.Title className='dialog-title'>
+            {title}
+          </DialogPrimitive.Title>
+          {children}
+          {/* Use absolute positioning to place the close button on the upper left corner */}
+          <DialogPrimitive.Close aria-label='Close' asChild className='dialog-close-button'>
+            <button className='btn btn-circle btn-ghost'>
+              <XMarkIcon className='w-8 h-8' />
+            </button>
+          </DialogPrimitive.Close>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     )
 )
+
+// <div className='px-2 lg:px-4 h-16 fixed top-0 left-0 z-30 w-full flex justify-between items-center align-middle bg-base-100 bg-opacity-90 backdrop-blur-sm'>
+// <DialogPrimitive.Close aria-label='Close' asChild>
+//   <button className='btn btn-circle btn-ghost'>
+//     <XMarkIcon className='w-8 h-8' />
+//   </button>
+// </DialogPrimitive.Close>
+// <DialogPrimitive.Title asChild>
+//   <h2 className=''>{title}</h2>
+// </DialogPrimitive.Title>
+// <div className='w-8 h-8' />
+// </div>
+// <div className={clx(fullScreen ? 'dialog-content-fullscreen' : 'dialog-content-default')}>
+// {children}
+// </div>
 
 /**
  * A reusable mobile-first dialog.  Anatomy:

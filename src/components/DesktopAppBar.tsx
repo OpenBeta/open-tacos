@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { useSession, signIn } from 'next-auth/react'
 
@@ -33,8 +32,8 @@ export default function DesktopAppBar ({ showFilterBar = true }: DesktopAppBarPr
       <DesktopNavBar
         branding={
           <Link href='/'>
-            <a className='h-[32px] w-[112px] block'>
-              <Image src={LogoWithText} layout='responsive' />
+            <a className=''>
+              <LogoWithText className='h-[36px]' />
             </a>
           </Link>
       }

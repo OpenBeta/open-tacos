@@ -2,12 +2,14 @@ import { BBox, Feature } from '@turf/helpers'
 import { ViewState } from 'react-map-gl'
 import { BaseItem } from '@algolia/autocomplete-core'
 import { RegisterOptions } from 'react-hook-form'
-
+import { GradeScalesTypes } from '@openbeta/sandbag'
 import { IUserProfile } from './types/User'
 
 export type { IUserProfile }
 export interface AreaMetadataType {
   leaf: boolean
+  isDestination: boolean
+  isBoulder: boolean
   lat: number
   lng: number
   bbox: [number, number, number, number]
@@ -29,19 +31,25 @@ export interface ClimbMetadataType {
   lat: number
   lng: number
   left_right_index: string
+  leftRightIndex: number
   mp_id: string
   climbId: string
 }
 
-export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' | 'mixed' | 'aid'
+export type GradeContextType = 'US' | 'FR'
+
+export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' | 'mixed' | 'aid' | 'ice' | 'snow'
 
 export type ClimbDisciplineRecord = Record<ClimbDiscipline, boolean>
 
+export type Grades = { [Key in GradeScalesTypes]?: string}
 export interface Climb {
   id: string
   name: string
   fa: string
   yds: string
+  grades: Grades
+  gradeContext: GradeContextType
   metadata: ClimbMetadataType
   type: ClimbDisciplineRecord
   safety: SafetyType
@@ -118,9 +126,12 @@ export interface AreaUpdatableFieldsType {
   areaName?: string
   description?: string
   isDestination?: boolean
+  isLeaf?: boolean
+  isBoulder?: boolean
   shortCode?: string
   lat?: number
   lng?: number
+  climbs?: ClimbType[]
 }
 
 export interface AreaResponseType {
