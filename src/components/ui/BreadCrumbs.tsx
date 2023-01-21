@@ -28,7 +28,7 @@ interface BreakCrumbsProps {
 function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumbsProps): JSX.Element {
   const oldBehavoir = useCanary()
   return (
-    <div aria-label='area-breadcrumbs' className='flex-wrap flex gap-2 text-sm items-center text-base-300 tracking-tight'>
+    <div aria-label='area-breadcrumbs' className='inline-flex flex-wrap  gap-2 text-sm items-center text-base-300 tracking-tight'>
       <Link href='/a'>
         <a className='inline-flex items-center gap-1'>
           <GlobeAltIcon className='inline w-5 h-5' />

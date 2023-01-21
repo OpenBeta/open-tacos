@@ -15,27 +15,25 @@ interface Props {
  */
 export function FormSaveAction ({ editMode, isDirty, isSubmitting, cache, resetHookFn: resetFn, onReset }: Props): JSX.Element | null {
   if (!editMode) return null
+  // { /* md and wider screens: row, right-justify; mobile: column, center-justify */ }
   return (
-    <div className='lg:sticky lg:top-0 z-40 mt-8 block md:flex md:justify-end'>
-      {/* md and wider screens: row, right-justify; mobile: column, center-justify */}
-      <div className='bg-base-100 flex justify-center md:justify-end flex-wrap-reverse gap-8 p-4 lg:pr-0 rounded-box bg-opacity-60 backdrop-blur-sm'>
-        <button
-          disabled={!isDirty}
-          className={clx('bg-opacity-80 btn btn-md btn-link', isDirty ? '' : 'no-underline')} type='reset' onClick={() => {
-            resetFn({ ...cache }, { keepValues: false })
-            onReset()
-          }}
-        >
-          Reset
-        </button>
-        <button
-          type='submit'
-          disabled={isSubmitting || !isDirty}
-          className={clx('btn btn-primary btn-solid btn-md btn-block md:btn-wide', isSubmitting ? 'animate-pulse' : '')}
-        >
-          {isSubmitting ? 'Saving...' : 'Save'}
-        </button>
-      </div>
+    <div className='bg-base-100 flex justify-center md:justify-end flex-wrap-reverse gap-x-8 gap-y-4 px-4 lg:pr-0'>
+      <button
+        disabled={!isDirty}
+        className={clx('bg-opacity-80 btn btn-md btn-link', isDirty ? '' : 'no-underline')} type='reset' onClick={() => {
+          resetFn({ ...cache }, { keepValues: false })
+          onReset()
+        }}
+      >
+        Reset
+      </button>
+      <button
+        type='submit'
+        disabled={isSubmitting || !isDirty}
+        className={clx('btn btn-primary btn-solid btn-md btn-block md:btn-wide', isSubmitting ? 'animate-pulse' : '')}
+      >
+        {isSubmitting ? 'Saving...' : 'Save'}
+      </button>
     </div>
   )
 }

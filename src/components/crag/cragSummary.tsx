@@ -19,6 +19,7 @@ import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 import { DeleteAreaTrigger } from '../edit/Triggers'
 import { AreaCRUD } from '../edit/AreaCRUD'
 import { CragLayoutProps } from './cragLayout'
+import BreadCrumbs from '../ui/BreadCrumbs'
 
 export interface CragHeroProps {
   uuid: string
@@ -60,7 +61,7 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
     uuid, title: initTitle,
     description: initDescription,
     latitude: initLat, longitude: initLng,
-    areaMeta, climbs, ancestors,
+    areaMeta, climbs, ancestors, pathTokens,
     childAreas
   } = props
 
@@ -73,6 +74,7 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
    */
   const [deletePlaceholderRef, setDeletePlaceholderRef] = useState<HTMLElement|null>()
   const [addAreaPlaceholderRef, setAddAreaPlaceholderRef] = useState<HTMLElement|null>()
+  const [editTogglePlaceholderRef, setEditTogglePlaceholderRef] = useState<HTMLElement|null>()
 
   /**
    * Change this value will trigger a form control reset to Lexical-backed components.
@@ -220,6 +222,10 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
     if (addAreaDiv != null) {
       setAddAreaPlaceholderRef(addAreaDiv)
     }
+    const editToggleDiv = document.getElementById('editTogglePlaceholder')
+    if (editToggleDiv != null) {
+      setEditTogglePlaceholderRef(editToggleDiv)
+    }
   }, [editMode, canAddAreas])
 
   /**
@@ -258,13 +264,30 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
         {canAddAreas &&
           <AreaCRUD uuid={uuid} areaName={areaName} childAreas={childAreasCache} onChange={refetch} editMode={editMode} />}
       </Portal.Root>
+      <Portal.Root container={editTogglePlaceholderRef}>
+        <div className='mt-4 text-right'>
+          <EditModeToggle onChange={setEditMode} />
+        </div>
+      </Portal.Root>
 
-      <div className='flex justify-end'>
-        <EditModeToggle onChange={setEditMode} />
-      </div>
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(submitHandler)}>
-          <div className='lg:grid lg:grid-cols-3 w-full'>
+          <div className='sticky top-0 z-40 py-2 lg:py-0 lg:h-16 block lg:flex lg:items-center lg:justify-between bg-base-100 -mx-4 px-4'>
+            <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
+            <div className='hidden lg:block'>
+              <FormSaveAction
+                cache={cache}
+                editMode={editMode}
+                isDirty={isDirty}
+                isSubmitting={isSubmitting}
+                resetHookFn={reset}
+                onReset={() => setResetSignal(Date.now())}
+              />
+            </div>
+          </div>
+          <div id='editTogglePlaceholder' />
+
+          <div className='mt-6 lg:grid lg:grid-cols-3 w-full'>
             <div className='lg:border-r-2 lg:pr-8 border-base-content'>
               <h1 className='text-4xl md:text-5xl'>
                 <InplaceTextInput
@@ -330,14 +353,16 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
             </div>
           </div>
 
-          <FormSaveAction
-            cache={cache}
-            editMode={editMode}
-            isDirty={isDirty}
-            isSubmitting={isSubmitting}
-            resetHookFn={reset}
-            onReset={() => setResetSignal(Date.now())}
-          />
+          <div className='mt-4 block lg:hidden'>
+            <FormSaveAction
+              cache={cache}
+              editMode={editMode}
+              isDirty={isDirty}
+              isSubmitting={isSubmitting}
+              resetHookFn={reset}
+              onReset={() => setResetSignal(Date.now())}
+            />
+          </div>
 
           {canAddAreas &&
             <div className='block mt-16 min-h-[8rem]' id='addAreaPlaceholder' />}

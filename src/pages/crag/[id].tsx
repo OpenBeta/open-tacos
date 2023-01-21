@@ -4,14 +4,12 @@ import { useRouter } from 'next/router'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, MediaBaseTag, ChangesetType, MediaType } from '../../js/types'
+import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
 import CragLayout from '../../components/crag/cragLayout'
-import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import AreaMap from '../../components/area/areaMap'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { PageMeta } from '../areas/[id]'
-import { getImagesByFilenames } from '../../js/sirv/SirvClient'
-import { indexBy } from 'underscore'
+import { getImageDimensionsHack } from '../../js/utils/hacks'
 
 interface CragProps {
   area: AreaType
@@ -43,9 +41,7 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
 
   return (
     <>
-      <div className='px-4 py-6 max-w-screen-xl mx-auto w-full'>
-        <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
-        <div className='mt-6' />
+      <div className='px-4 py-4 lg:py-8 max-w-screen-xl mx-auto w-full'>
         <CragLayout
           uuid={uuid}
           title={areaName}
@@ -184,26 +180,14 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
     }
   }
 
-  let mediaListWithUsernames: MediaBaseTag[] = rs.data.area.media
-  try {
-    mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.area.media)
-  } catch (e) {
-    console.log('Error when trying to add username to image data', e)
-  }
+  const mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.area.media)
+  const mediaListWithDimensions = await getImageDimensionsHack(mediaListWithUsernames)
 
-  /**
- * Call Sirv API to get image metadata.  We should probably store metadata in the db.
- */
-  const mediaListWithMetadata = await getImagesByFilenames(mediaListWithUsernames.map(entry => entry.mediaUrl))
-
-  const mediaMetaDict = indexBy<MediaType[]>(mediaListWithMetadata.mediaList, 'mediaId')
-
-  // Pass post data to the page via props
   return {
     props: {
       area: rs.data.area,
       history: [],
-      mediaListWithUsernames: mediaListWithUsernames.map(entry => ({ ...entry, mediaInfo: mediaMetaDict?.[entry.mediaUuid] ?? null }))
+      mediaListWithUsernames: mediaListWithDimensions
     },
     revalidate: 5
   }
