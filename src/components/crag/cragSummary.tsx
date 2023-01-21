@@ -272,7 +272,7 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
 
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(submitHandler)}>
-          <div className='sticky top-0 z-40 py-2 lg:py-0 lg:h-16 block lg:flex lg:items-center lg:justify-between bg-base-100 -mx-4 px-4'>
+          <div className='sticky top-0 z-40 py-2 lg:min-h-[4rem] block lg:flex lg:items-center lg:justify-between bg-base-100 -mx-4 px-4'>
             <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
             <div className='hidden lg:block'>
               <FormSaveAction
