@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { Popover } from '@headlessui/react'
-import Image from 'next/image'
 
 import MobileNavBar from './ui/MobileNavBar'
 import { HomeIcon, Bars3Icon } from '@heroicons/react/24/outline'
@@ -60,8 +59,8 @@ const Home = (): JSX.Element => (
 const Branding = (): JSX.Element => {
   return (
     <Link href='/'>
-      <a>
-        <Image width={16} height={16} src={OpenBetaLogo} layout='responsive' />
+      <a className='inline-block px-4'>
+        <OpenBetaLogo className='inline-block w-6 h-6 ' />
       </a>
     </Link>
   )

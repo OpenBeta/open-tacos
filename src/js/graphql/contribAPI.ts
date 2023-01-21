@@ -5,7 +5,7 @@ export const getChangeHistoryServerSide = async (): Promise<any> => {
   try {
     const rs = await graphqlClient.query<{getChangeHistory: any[]}>({
       query: QUERY_RECENT_CHANGE_HISTORY,
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'no-cache'
     })
 
     if (Array.isArray(rs.data?.getChangeHistory)) {

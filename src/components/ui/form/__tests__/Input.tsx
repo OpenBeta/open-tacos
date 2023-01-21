@@ -22,11 +22,10 @@ test('Input sends value to form', async () => {
         name={inputFieldName}
         registerOptions={{ required: errorMsg }}
       />
-      <button type='submit'>OK</button>
     </Form>
   )
 
-  await user.click(screen.getByRole('button'))
+  await user.click(screen.getByRole('button', { name: 'OK' }))
   // form submit is blocked
   expect(submitFn).toHaveBeenCalledTimes(0)
   // verify error message
@@ -39,7 +38,7 @@ test('Input sends value to form', async () => {
   expect(screen.queryByLabelText(errorMsg)).toBeNull()
 
   // submit again
-  await user.click(screen.getByRole('button'))
+  await user.click(screen.getByRole('button', { name: 'OK' }))
 
   expect(submitFn).toHaveBeenCalledTimes(1)
   expect(submitFn).toBeCalledWith(

@@ -8,11 +8,11 @@ html {
 /******** App's root container *********/
 /* Max width=3xl */
 .root-container-default {
-  @apply relative max-w-screen-3xl w-full mx-auto bg-gray-50;
+  @apply relative max-w-screen-3xl w-full mx-auto bg-base-100;
 }
 /* Full screen */
 .root-container-full {
-  @apply relative w-screen max-w-full bg-gray-50;
+  @apply relative w-screen max-w-full bg-base-100;
 }
 /***************************************/
 
@@ -70,7 +70,7 @@ html {
   }
 
   h3 {
-    @apply text-2xl font-light tracking-tight text-primary;
+    @apply text-2xl font-light tracking-tighter text-primary;
   }
 
   .home-hero-bg-img {
@@ -92,30 +92,27 @@ html {
   }
 
   .dialog-center {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    @apply rounded-box overflow-hidden; 
+    @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-box !important; 
   }
 
   .dialog-default {
-    @apply top-0 left-0 lg:dialog-center fixed z-50 w-full max-w-screen-md bg-base-100 lg:drop-shadow-lg;
+    @apply  top-0 left-0 h-screen md:dialog-center fixed z-50 w-screen max-w-screen-md bg-base-100 lg:drop-shadow-lg overflow-y-auto h-fit max-h-screen lg:max-h-[95vh];
   }
 
   .dialog-wide {
-    @apply top-0 left-0 fixed z-50 w-full w-screen bg-base-100;
+    @apply top-0 left-0 fixed z-50 w-full h-full w-screen h-screen bg-base-100 overflow-y-auto overscroll-contain;
   }
 
-  .dialog-content-default {
-    @apply pt-16 overflow-y-auto overscroll-contain h-screen lg:h-full lg:max-h-[85vh];
+  .dialog-title {
+    @apply py-4 lg:py-5 left-0 top-0 w-full text-center fixed bg-base-100 bg-opacity-80 backdrop-blur-sm z-50 leading-none;
   }
 
-  .dialog-content-fullscreen {
-    @apply pt-16 overflow-y-auto overscroll-contain h-screen;
+  .dialog-close-button {
+    @apply fixed top-0.5 left-0.5 lg:top-1 lg:left-1 z-50;
   }
 
   .dialog-form-default {
-    @apply px-2 lg:px-4 mb-8;
+    @apply mt-16 lg:mt-20 px-2 lg:px-4 mb-6 !important;
   }
 }
 .title {
@@ -163,14 +160,6 @@ p {
     @apply bg-gray-200;
   }
 
-  /* .btn-small {
-    @apply whitespace-nowrap py-1 px-4 text-sm !important;
-  } */
-
-  /* .btn-medium {
-    @apply px-6 py-2 text-lg !important;
-  } */
-
   .btn-nav-secondary {
     @apply bg-ob-tertiary text-black hover:scale-110 duration-300 !important;
   }
@@ -178,18 +167,6 @@ p {
   .btn-nav {
     @apply text-white hover:scale-110 duration-300 !important;
   }
-
-  /* .btn {
-    @apply no-underline px-6 py-1 text-gray-900 font-medium text-sm drop-shadow-lg rounded-xl;
-  }
-
-  .btn-primary {
-    @apply bg-black hover:bg-custom-primary  border-2 border-black text-white;
-  }
-
-  .btn-secondary {
-    @apply bg-white hover:bg-custom-primary border-2 border-black;
-  } */
 
   .btn-success {
     @apply bg-green-300 hover:bg-green-400;
@@ -244,7 +221,6 @@ p {
     @apply  -m-2 p-2 rounded-lg focus:bg-info/20 border-none outline-none !important;
   }
 
-  /* rounded-lg focus:bg-amber-50 focus:transition-colors focus:duration-500 focus:ease-in-out  */
   .editor-container {
     position: relative;
   }
@@ -255,6 +231,14 @@ p {
     user-select: none;
     pointer-events: none;
     @apply top-2.5 left-3 text-base-300 text-opacity-50 italic;
+  }
+
+  .editor-csv-placeholder {
+    overflow: hidden;
+    position: absolute;
+    user-select: none;
+    pointer-events: none;
+    @apply w-full rounded-lg top-0 left-3 text-base-300 text-opacity-50 italic;
   }
 
   code {
@@ -269,6 +253,40 @@ p {
     color: inherit;
     font-size: inherit;
     line-height: inherit;
+  }
+
+  p.editor-csv-paragraph:last-child {
+    margin-bottom: 0;
+  }
+
+  p.editor-csv-paragraph {
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    margin-bottom: 0;
+  }
+
+  .editor-csv-container {
+    position: relative;
+    counter-reset: line;
+    @apply overflow-clip rounded-box;
+  }
+
+  .editor-csv-input {
+    counter-reset: line;
+    @apply focus:bg-info/20 border-none rounded-box outline-none min-h-[8rem];
+  }
+
+  p.editor-csv-paragraph span {
+    counter-increment: line;
+  }
+  p.editor-csv-paragraph span::before {
+    display: inline-block;
+    text-align:right;
+    width: 2rem;
+    min-width: 1rem;
+    content: counter(line);
+    @apply pr-1 mr-2 border-r border-base-300/50 bg-base-100 text-base-300/60 !important;
   }
 }
 
@@ -325,6 +343,15 @@ input:checked + label {
   transition: visibility 0s 150ms, opacity 100ms linear;
 }
 
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.fadeinEffect {
+  animation: fadeIn 1s;
+}
+
 /* make nprogress bar thicker */
 .bar {
   padding-top: 3px;
@@ -354,4 +381,52 @@ table td.dtable-highlight:last-of-type {
 
 table td.dtable-my-range {
   @apply bg-ob-secondary bg-opacity-70;
+}
+
+.collapse-plus .collapse-title:after {
+  @apply text-3xl !important;
+}
+
+/* Move Daisy indicator closer to the center */
+.indicator-item-mod {
+  transform: translateY(-15%) translateX(15%); 
+}
+
+/** 2-column layout for Area and Climb list */
+.two-column-table {
+  @apply mt-16 lg:gap-x-24 lg:columns-2;
+}
+
+.area-row {
+  @apply py-4 flex flex-row flex-nowrap gap-4 items-start border-t break-inside-avoid-column break-inside-avoid;
+}
+
+.area-entity-box {
+  box-shadow: 2px 2px 0px #fe4f1a;
+  @apply rounded h-8 w-8 grid place-content-center bg-area-coded text-base-100 text-sm hover:decoration-0 hover:no-underline;
+}
+
+
+
+/**
+* Overriding Daisy theme
+*/
+button:focus {
+  @apply outline-base-content !important;
+}
+
+input:focus {
+  @apply outline-base-content !important;
+}
+
+a:focus {
+  @apply outline-base-content !important;
+}
+
+.radio:checked {
+  @apply border-8 no-animation !important;
+}
+
+.tooltip:before {
+  @apply border bg-tooltip text-sm text-base-content !important;
 }

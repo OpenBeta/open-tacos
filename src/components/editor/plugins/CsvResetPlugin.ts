@@ -1,11 +1,13 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useFirstMountState } from 'react-use'
+
 import { $getRoot, $createTextNode, $createParagraphNode } from 'lexical'
 
 import { EditableClimbType } from '../../crag/cragSummary'
 
 interface Props {
-  initialValue: string
+  initialValue: EditableClimbType[]
   editable: boolean
   resetSignal: number
 }
@@ -13,38 +15,31 @@ interface Props {
 /**
  * React Lexical plugin to response to preview/editable mode change
  */
-export function PlainTextResetPlugin ({ initialValue, resetSignal, editable = false }: Props): any {
-  const [previous, setPrevious] = useState(resetSignal)
+export function CsvResetPlugin ({ initialValue, resetSignal, editable = false }: Props): any {
+  // const [previous, setPrevious] = useState(resetSignal)
 
   const [editor] = useLexicalComposerContext()
+  const isFirstMount = useFirstMountState()
 
   useEffect(() => {
-    if (!editable || resetSignal === previous) return
+    if (!editable || isFirstMount) return
 
     editor.update(() => {
-      setPrevious(resetSignal)
-      $createInitialPlainTextState(initialValue)
+      // setPrevious(resetSignal)
+      $createInitialState(initialValue)
     }
     )
-  }, [resetSignal])
+  }, [resetSignal, initialValue])
 
   return null
 }
 
-export const $createInitialPlainTextState = (plainText: string): void => {
+/**
+ * Convert climb list to CSV, 1 climb per line
+ * @param climbList
+ */
+export const $createInitialState = (climbList: EditableClimbType[]): void => {
   const root = $getRoot()
-  const paragraph = $createParagraphNode()
-  paragraph.append(
-    $createTextNode(plainText)
-  )
-  root
-    .clear()
-    .append(paragraph)
-}
-
-export const $createInitialPlainTextState2 = (climbList: EditableClimbType[]): void => {
-  const root = $getRoot()
-  // const multilines = plainText.split('\n')
   root.clear()
   climbList.forEach(climb => {
     const paragraph = $createParagraphNode()

@@ -4,14 +4,12 @@ import { useRouter } from 'next/router'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, MediaBaseTag, ChangesetType, MediaType } from '../../js/types'
+import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
 import CragLayout from '../../components/crag/cragLayout'
-import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import AreaMap from '../../components/area/areaMap'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { PageMeta } from '../areas/[id]'
-import { getImagesByFilenames } from '../../js/sirv/SirvClient'
-import { indexBy } from 'underscore'
+import { getImageDimensionsHack } from '../../js/utils/hacks'
 
 interface CragProps {
   area: AreaType
@@ -39,13 +37,11 @@ const CragPage: NextPage<CragProps> = (props) => {
 export default CragPage
 
 const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
-  const { uuid, areaName, aggregate, climbs, metadata, content, ancestors, pathTokens } = area
+  const { uuid, areaName, aggregate, climbs, metadata, content, ancestors, pathTokens, children } = area
 
   return (
     <>
-      <div className='p-6 flex-1'>
-        <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
-        <div className='mt-6' />
+      <div className='px-4 py-4 lg:py-8 max-w-screen-xl mx-auto w-full'>
         <CragLayout
           uuid={uuid}
           title={areaName}
@@ -58,6 +54,7 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
           pathTokens={pathTokens}
           aggregate={aggregate.byGrade}
           media={mediaListWithUsernames}
+          childAreas={children}
         />
       </div>
 
@@ -75,7 +72,15 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
 
 export async function getStaticPaths (): Promise<any> {
   return {
-    paths: [],
+    paths: [
+      { params: { id: 'bea6bf11-de53-5046-a5b4-b89217b7e9bc' } }, // Red Rock
+      { params: { id: '78da26bc-cd94-5ac8-8e1c-815f7f30a28b' } }, // Red River Gorge
+      { params: { id: '1db1e8ba-a40e-587c-88a4-64f5ea814b8e' } }, // USA
+      { params: { id: 'ab48aed5-2e8d-54bb-b099-6140fe1f098f' } }, // Colorado
+      { params: { id: 'decc1251-4a67-52b9-b23f-3243e10e93d0' } }, // Boulder
+      { params: { id: 'f166e672-4a52-56d3-94f1-14c876feb670' } } // Indian Creek
+
+    ],
     fallback: true
   }
 }
@@ -120,6 +125,8 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
       }
       metadata {
         areaId
+        leaf
+        isBoulder
         lat
         lng 
         left_right_index
@@ -143,9 +150,22 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
         }
         metadata {
           climbId
+          leftRightIndex
         }
         content {
           description
+        }
+      }
+      children {
+        uuid
+        areaName
+        totalClimbs
+        metadata {
+          leaf
+          isBoulder
+        }
+        children {
+          uuid
         }
       }
       content {
@@ -158,35 +178,25 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
     query,
     variables: {
       uuid: params.id
-    }
+    },
+    fetchPolicy: 'no-cache'
   })
 
-  if (rs.data === null) {
+  if (rs.data == null || rs.data.area == null) {
     return {
       notFound: true
     }
   }
 
-  let mediaListWithUsernames: MediaBaseTag[] = rs.data.area.media
-  try {
-    mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.area.media)
-  } catch (e) {
-    console.log('Error when trying to add username to image data', e)
-  }
+  const mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.area.media)
+  const mediaListWithDimensions = await getImageDimensionsHack(mediaListWithUsernames)
 
-  /**
- * Call Sirv API to get image metadata.  We should probably store metadata in the db.
- */
-  const mediaListWithMetadata = await getImagesByFilenames(mediaListWithUsernames.map(entry => entry.mediaUrl))
-
-  const mediaMetaDict = indexBy<MediaType[]>(mediaListWithMetadata.mediaList, 'mediaId')
-
-  // Pass post data to the page via props
   return {
     props: {
       area: rs.data.area,
       history: [],
-      mediaListWithUsernames: mediaListWithUsernames.map(entry => ({ ...entry, mediaInfo: mediaMetaDict?.[entry.mediaUuid] ?? null }))
-    }
+      mediaListWithUsernames: mediaListWithDimensions
+    },
+    revalidate: 5
   }
 }

@@ -5,6 +5,15 @@ module.exports = {
   typescript: {
     ignoreBuildErrors: false
   },
+  webpack (config) {
+    config.module.rules.push({
+      test: /\.svg$/i,
+      issuer: /\.[jt]sx?$/,
+      use: ['@svgr/webpack']
+    })
+
+    return config
+  },
   async rewrites () {
     return [
       { // A hack to pass ?gallery=true to getStaticProps()

@@ -9,17 +9,19 @@ interface Props {
   resetHookFn: UseFormReset<any>
   onReset: Function
 }
+
 /**
  * A reusable Reset and Save button bar to be used with react-hook-form
  */
 export function FormSaveAction ({ editMode, isDirty, isSubmitting, cache, resetHookFn: resetFn, onReset }: Props): JSX.Element | null {
   if (!editMode) return null
+  // { /* md and wider screens: row, right-justify; mobile: column, center-justify */ }
   return (
-    <div className='mt-8 flex justify-center md:justify-end flex-wrap-reverse gap-8'>
-      {/* md and wider screen: row, right-justify; smaller: column, center-justify */}
+    <div className='bg-base-100 flex justify-center flex-wrap-reverse lg:flex-nowrap gap-x-8 gap-y-4 px-4 lg:pr-0'>
       <button
-        className={clx('btn btn-sm btn-link', isDirty ? '' : 'btn-disabled no-underline')} type='reset' onClick={() => {
-          resetFn({ ...cache }, { keepValues: true })
+        disabled={!isDirty}
+        className={clx('bg-opacity-80 btn btn-md btn-link', isDirty ? '' : 'no-underline')} type='reset' onClick={() => {
+          resetFn({ ...cache }, { keepValues: false })
           onReset()
         }}
       >
@@ -28,15 +30,10 @@ export function FormSaveAction ({ editMode, isDirty, isSubmitting, cache, resetH
       <button
         type='submit'
         disabled={isSubmitting || !isDirty}
-        className={clx('btn btn-primary btn-solid btn-sm btn-block md:btn-wide', isSubmitting ? 'animate-pulse' : '')}
+        className={clx('btn btn-primary btn-solid btn-md btn-block md:btn-wide', isSubmitting ? 'animate-pulse' : '')}
       >
         {isSubmitting ? 'Saving...' : 'Save'}
       </button>
     </div>
   )
 }
-
-// () => {
-//     reset({ ...cache }, { keepValues: true })
-//     setResetSignal(Date.now())
-//   }

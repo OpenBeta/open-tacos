@@ -20,7 +20,7 @@ test('Breadcrumbs don\'t add href to last link', () => {
   expect(element.getByLabelText('area-breadcrumbs'))
     .toHaveTextContent('US/California/Yosemite Valley')
 
-  expect(screen.getByRole('link', { name: /California/i })).toHaveAttribute('href', '/areas/2')
+  expect(screen.getByRole('link', { name: /California/i })).toHaveAttribute('href', '/crag/2')
 
   // the last entry shouldn't be a link
   const notExisted = element.queryByRole('link', { name: /Yosemite Valley/i })
@@ -33,8 +33,8 @@ test('Breadcrumbs show correct items on climb page', () => {
   expect(actual)
     .toHaveTextContent('US/California/Yosemite Valley')
 
-  expect(screen.getByRole('link', { name: /US/i })).toHaveAttribute('href', '/areas/1')
-  expect(screen.getByRole('link', { name: /California/i })).toHaveAttribute('href', '/areas/2')
+  expect(screen.getByRole('link', { name: /US/i })).toHaveAttribute('href', '/crag/1')
+  expect(screen.getByRole('link', { name: /California/i })).toHaveAttribute('href', '/crag/2')
   // last link should be 'crag'
   expect(screen.getByRole('link', { name: /Yosemite Valley/i })).toHaveAttribute('href', '/crag/3')
 })

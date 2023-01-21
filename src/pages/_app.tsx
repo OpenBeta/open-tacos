@@ -5,8 +5,8 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { useSession, SessionProvider, signIn } from 'next-auth/react'
-import { ToastProvider, ToastViewport } from '@radix-ui/react-toast'
-import clx from 'classnames'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.min.css'
 
 import '../styles/global.css'
 import '../../public/fonts/fonts.css'
@@ -27,9 +27,8 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
 
   return (
     <>
-      <ToastProvider duration={4000}>
-        <SessionProvider session={session}>
-          {
+      <SessionProvider session={session}>
+        {
             Component?.auth
               ? (
                 <Auth>
@@ -40,9 +39,19 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
                 <Component {...pageProps} />
                 )
           }
-        </SessionProvider>
-        <ToastViewport className={clx('fixed p-4 flex flex-col gap-5 z-50', isMobile ? 'top-0 right-0' : 'bottom-0 right-0')} style={{ zIndex: 99999 }} />
-      </ToastProvider>
+      </SessionProvider>
+      <ToastContainer
+        position={isMobile ? 'top-right' : 'bottom-right'}
+        autoClose={8000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable={false}
+        pauseOnHover
+        theme='light'
+      />
       {/* main call-to-action popup */}
       {/* <MainCta /> */}
     </>

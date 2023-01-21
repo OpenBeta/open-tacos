@@ -4,6 +4,7 @@ import { useForm, useFormContext, FormProvider } from 'react-hook-form'
 import clx from 'classnames'
 import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
+import { toast } from 'react-toastify'
 
 import { LocationAutocompleteControl } from '../../components/search/LocationAutocomplete'
 import { AreaSearchAutoCompleteControl } from '../../components/search/AreaSearchAutoComplete'
@@ -35,7 +36,9 @@ const AddAreaPage: INextPageWithAuth = () => {
         wizardActions.addAreaStore.recordStepFinal()
         void fetch(`/api/revalidate?a=${data.addArea.uuid}`)
         void fetch('/api/revalidate?page=/edit')
-      }
+      },
+      onError: (error) => toast.error(`Unexpected error: ${error.message}`)
+
     }
   )
 
@@ -55,22 +58,18 @@ const AddAreaPage: INextPageWithAuth = () => {
   const onSubmit = async (formFields: AddAreaFormProps): Promise<void> => {
     const { newAreaName, placeSearch, locationRefType } = formFields
     const refUuid = addAreaStore.get.refAreaData()
-    try {
-      await addArea({
-        variables: {
-          name: newAreaName,
-          parentUuid: locationRefType === 'child' && refUuid != null ? refUuid : null,
-          countryCode: placeSearch
-        },
-        context: {
-          headers: {
-            authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
-          }
+    await addArea({
+      variables: {
+        name: newAreaName,
+        parentUuid: locationRefType === 'child' && refUuid != null ? refUuid : undefined,
+        countryCode: placeSearch
+      },
+      context: {
+        headers: {
+          authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
         }
-      })
-    } catch (e) {
-      console.log('Error adding area', e)
-    }
+      }
+    })
   }
 
   const onResetForm = (): void => {
