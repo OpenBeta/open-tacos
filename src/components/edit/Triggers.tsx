@@ -7,9 +7,12 @@ import AddAreaForm, { AddAreaFormProps } from './AddChildAreaForm'
 import { toast } from 'react-toastify'
 import Tooltip from '../ui/Tooltip'
 
-export type DeleteAreaTriggerProps = DeleteAreaProps & { disabled?: boolean, children?: JSX.Element }
+export type DeleteAreaTriggerProps = DeleteAreaProps & {
+  disabled?: boolean
+  children?: JSX.Element }
+
 /**
- * A button used to trigger the Delete Area dialog.  You can pass an optional nested child component to customize the trigger button.
+ * A high level component that triggers the Delete Area dialog.  You can pass an optional nested component to customize the look and feel of the trigger button.
  *
  * Example:
  * ```
@@ -17,6 +20,7 @@ export type DeleteAreaTriggerProps = DeleteAreaProps & { disabled?: boolean, chi
  *   <DeleteAreaTriggerButtonSm disabled={!canEdit}/>
  * </DeleteAreaTrigger>
  * ```
+ * @param areaName j
  */
 export const DeleteAreaTrigger = ({ areaName, areaUuid, parentUuid, disabled = false, returnToParentPageAfterDelete, onSuccess, children }: DeleteAreaTriggerProps): JSX.Element => {
   const [isOpen, setOpen] = useState(false)
@@ -59,8 +63,11 @@ const DeleteAreaTriggerButtonDefault = ({ disabled }: TriggerButtonProps): JSX.E
   </DialogTrigger>
 )
 
+/**
+ * A small delete trigger button
+ */
 export const DeleteAreaTriggerButtonSm = ({ disabled }: TriggerButtonProps): JSX.Element => (
-  <Tooltip content='Please delete child areas or climbs first.' disabled={disabled}>
+  <Tooltip content='Please delete child areas or climbs first.' enabled={disabled}>
     <DialogTrigger
       className='btn btn-ghost btn-circle btn-primary'
       disabled={disabled}
@@ -71,8 +78,9 @@ export const DeleteAreaTriggerButtonSm = ({ disabled }: TriggerButtonProps): JSX
   </Tooltip>)
 
 export type AddAreaTriggerProps = Omit<AddAreaFormProps, 'onError'> & { children?: JSX.Element}
+
 /**
- * A button used to trigger the Add Area dialog.  See `DeleteAreaTrigger` for a customization example.
+ * A high level component that triggers the Add Area dialog.  See  {@link DeleteAreaTrigger} for a customization example.
  */
 export const AddAreaTrigger = ({ parentName, parentUuid, onSuccess, children }: AddAreaTriggerProps): JSX.Element => {
   const [hasChanges, setHasChanges] = useState(false)
@@ -99,6 +107,9 @@ export const AddAreaTrigger = ({ parentName, parentUuid, onSuccess, children }: 
   )
 }
 
+/**
+ * Default trigger button
+ */
 const AddAreaTriggerButtonCTA = (): JSX.Element => (
   <DialogTrigger className='flex flex-row items-center gap-4'>
     <div className='border-secondary border-dashed border-4 w-24 h-24 hover:bg-secondary hover:bg-opacity-60 rounded-box flex items-center justify-center'>
@@ -109,14 +120,13 @@ const AddAreaTriggerButtonCTA = (): JSX.Element => (
 )
 
 export const AddAreaTriggerButtonMd = (): JSX.Element => (
-  <DialogTrigger className='btn btn-sm btn-wide btn-solid btn-secondary border-dashed border-2 gap-2'>
+  <DialogTrigger className='btn btn-sm w-full md:btn-wide btn-solid btn-secondary border-dashed border-2 gap-2'>
     <PlusIcon className='stroke-2 w-5 h-5' /> New Area
   </DialogTrigger>
 )
 
 export const AddAreaTriggerButtonSm = (): JSX.Element => (
-  <div className='tooltip' data-tip='Add new area'>
-    <DialogTrigger className='btn btn-square btn-secondary btn-sm btn-ghost border-dashed border-2'>
-      <PlusCircleIcon className='w-6 h-6 text-secondary' />
-    </DialogTrigger>
-  </div>)
+  <DialogTrigger className='btn btn-square btn-secondary btn-sm btn-ghost border-dashed border-2'>
+    <PlusCircleIcon className='w-6 h-6 text-secondary' />
+  </DialogTrigger>
+)

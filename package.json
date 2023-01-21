@@ -88,6 +88,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@svgr/webpack": "^6.5.1",
     "@tailwindcss/typography": "^0.5.4",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",

@@ -160,7 +160,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
           placeholder='latitude, longtitude'
           registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
         />
-        <AreaDesignationRadioGroup canEdit={canChangeAreaType} />
+        <AreaDesignationRadioGroup disabled={!canChangeAreaType} />
         <TextArea
           label='Description:'
           name='description'

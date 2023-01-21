@@ -301,7 +301,7 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
                 <div className='fadeinEffect'>
                   <div className='mt-6'>
                     <h3>Housekeeping</h3>
-                    <AreaDesignationRadioGroup canEdit={canChangeAreaType} />
+                    <AreaDesignationRadioGroup disabled={!canChangeAreaType} />
                   </div>
                   <div className='mt-6 form-control'>
                     <label className='label'>

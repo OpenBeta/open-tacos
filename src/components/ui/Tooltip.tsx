@@ -2,15 +2,20 @@ import * as Popover from '@radix-ui/react-popover'
 
 interface Props {
   content: string
-  disabled?: boolean
+  enabled?: boolean
   children: JSX.Element | JSX.Element []
 }
 
-export default function Tooltip ({ content, disabled = false, children }: Props): JSX.Element {
+/**
+ * A Tooltip that activates on mouse click or touch.
+ * @param enabled false to disable tooltip but still render the trigger element
+ * @param children Trigger element
+ */
+export default function Tooltip ({ content, enabled = true, children }: Props): JSX.Element {
   return (
     <Popover.Root>
       <Popover.Trigger>{children}</Popover.Trigger>
-      {disabled &&
+      {enabled &&
         <Popover.Content
           className='z-20 bg-tooltip rounded-md p-2 drop-shadow-lg border max-w-[300px] focus:outline-none'
           side='top'

@@ -392,14 +392,21 @@ table td.dtable-my-range {
   transform: translateY(-15%) translateX(15%); 
 }
 
+/** 2-column layout for Area and Climb list */
 .two-column-table {
   @apply mt-16 lg:gap-x-24 lg:columns-2;
 }
 
-.area-item-index {
+.area-row {
+  @apply py-4 flex flex-row flex-nowrap gap-4 items-start border-t break-inside-avoid-column break-inside-avoid;
+}
+
+.area-entity-box {
   box-shadow: 2px 2px 0px #fe4f1a;
   @apply rounded h-8 w-8 grid place-content-center bg-area-coded text-base-100 text-sm hover:decoration-0 hover:no-underline;
 }
+
+
 
 /**
 * Overriding Daisy theme

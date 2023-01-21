@@ -7,13 +7,15 @@ export type AreaTypeFormProp = 'crag' | 'area' | 'boulder'
 
 /**
  * A react-hook-form radio button group for changing area type (area container vs crag vs boulder)
+ * @param name form control name (default: 'areaType')
+ * @param name
  */
-export const AreaDesignationRadioGroup = ({ name = 'areaType', canEdit }: { name?: string, canEdit: boolean }): JSX.Element => (
+export const AreaDesignationRadioGroup = ({ name = 'areaType', disabled = false }: { name?: string, disabled: boolean }): JSX.Element => (
   <RadioGroup
     groupLabel='Area designation'
-    groupLabelAlt={<ExplainAreaTypeLockTooltip canEdit={canEdit} />}
+    groupLabelAlt={<ExplainAreaTypeLockTooltip canEdit={!disabled} />}
     name={name}
-    disabled={!canEdit}
+    disabled={disabled}
     labels={[
       'Area',
       'Crag (sport, trad, ice)',
