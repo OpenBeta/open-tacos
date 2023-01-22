@@ -1,5 +1,4 @@
 import { useController, useWatch } from 'react-hook-form'
-import Link from 'next/link'
 import { indexBy, Dictionary } from 'underscore'
 import clx from 'classnames'
 
@@ -85,11 +84,9 @@ const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict,
 const WrapLink = ({ climbId, text }: { climbId: string | null, text: string }): JSX.Element => {
   if (climbId != null) {
     return (
-      <Link href={`/climbs/${climbId}`}>
-        <a className='hover:underline underline-offset-4 decoration-4' target='_blank' rel='noreferrer'>
-          {text}
-        </a>
-      </Link>
+      <a href={`/climbs/${climbId}`} className='hover:underline underline-offset-4 decoration-4' target='_blank' rel='noreferrer'>
+        {text}
+      </a>
     )
   }
   return <span>{text}</span>

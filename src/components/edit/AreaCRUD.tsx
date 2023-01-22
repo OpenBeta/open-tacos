@@ -1,5 +1,4 @@
 import clx from 'classnames'
-import Link from 'next/link'
 import { AreaType } from '../../js/types'
 import { AreaSummaryType } from '../crag/cragLayout'
 import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTriggerButtonSm, DeleteAreaTriggerButtonSm } from './Triggers'
@@ -85,24 +84,20 @@ export const AreaItem = ({ index, borderBottom, areaName, uuid, parentUuid, onCh
   const isLeaf = leaf || isBoulder
   return (
     <div className={clx('area-row', borderBottom ? 'border-b' : '')}>
-      <Link href={`/crag/${uuid}`}>
-        <a className='area-entity-box'>
-          {index + 1}
-        </a>
-      </Link>
-      <Link href={`/crag/${uuid}`}>
-        <a className='flex flex-col items-start items-stretch grow gap-y-1'>
-          <div className='font-semibold uppercase hover:underline underline-offset-4 decoration-4'>
-            {areaName}
-          </div>
-          <div className='flex gap-2 items-center'>
-            {!isLeaf && <NetworkSquareIcon className='stroke-base-200 w-6 h-6' />}
-            <span className='mt-0.5 text-sm text-base-200'>
-              <span>{totalClimbs ?? 0} climbs • {children?.length ?? 0} areas</span>
-            </span>
-          </div>
-        </a>
-      </Link>
+      <a href={`/crag/${uuid}`} className='area-entity-box'>
+        {index + 1}
+      </a>
+      <a href={`/crag/${uuid}`} className='flex flex-col items-start items-stretch grow gap-y-1'>
+        <div className='font-semibold uppercase hover:underline underline-offset-4 decoration-4'>
+          {areaName}
+        </div>
+        <div className='flex gap-2 items-center'>
+          {!isLeaf && <NetworkSquareIcon className='stroke-base-200 w-6 h-6' />}
+          <span className='mt-0.5 text-sm text-base-200'>
+            <span>{totalClimbs ?? 0} climbs • {children?.length ?? 0} areas</span>
+          </span>
+        </div>
+      </a>
 
       {editMode && (
         <div className='text-base-300'>
