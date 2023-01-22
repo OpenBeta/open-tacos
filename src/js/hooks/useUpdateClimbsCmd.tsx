@@ -31,7 +31,9 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
     MUTATION_UPDATE_CLIMBS, {
       client: graphqlClient,
       onCompleted: (data) => {
-        // void fetch(`/api/revalidate?c=${id}`)
+        // TODO: revalidate all climb pages data
+        void fetch(`/api/revalidate?s=${parentId}`)
+
         toast('Climbs updated ✨')
 
         if (onUpdateCompleted != null) {
@@ -64,7 +66,7 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
     MUTATION_DELETE_CLIMBS, {
       client: graphqlClient,
       onCompleted: (data) => {
-        void fetch(`/api/revalidate?a=${parentId}`)
+        void fetch(`/api/revalidate?s=${parentId}`)
         toast('Climbs deleted ✔️')
         if (onDeleteCompleted != null) {
           onDeleteCompleted(data)

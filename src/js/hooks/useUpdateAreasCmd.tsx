@@ -64,7 +64,6 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
       client: graphqlClient,
       onCompleted: (data) => {
         toast.info('Area updated successfully ✔️')
-        void fetch(`/api/revalidate?a=${areaId}`)
         void fetch(`/api/revalidate?s=${areaId}`)
         if (onUpdateCompleted != null) onUpdateCompleted(data)
       },
@@ -96,9 +95,6 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
         toast.info('Area added 🔥')
         void fetch(`/api/revalidate?s=${data.addArea.uuid}`) // build new area page
         void fetch(`/api/revalidate?s=${areaId}`) // rebuild parent page
-        // Rebuild old areas pages
-        void fetch(`/api/revalidate?a=${data.addArea.uuid}`) // build new area page
-        void fetch(`/api/revalidate?a=${areaId}`) // rebuild parent page
         if (onAddCompleted != null) {
           onAddCompleted(data)
         }
@@ -134,7 +130,6 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
           onDeleteCompleted(data)
         }
         void fetch(`/api/revalidate?s=${areaId}`) // rebuild parent area page
-        void fetch(`/api/revalidate?a=${areaId}`) // rebuild parent area page
       },
       onError: (error) => {
         toast.error(`Unexpected error: ${error.message}`)
