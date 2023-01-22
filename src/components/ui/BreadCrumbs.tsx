@@ -5,7 +5,7 @@ import clx from 'classnames'
 import { sanitizeName } from '../../js/utils'
 import { GlobeAltIcon } from '@heroicons/react/24/outline'
 import { TypesenseAreaType } from '../../js/types'
-import useCanary from '../../js/hooks/useCanary'
+
 /**
  * Turn each element of `pathTokens` to a gatsby-link.
  *
@@ -26,7 +26,6 @@ interface BreakCrumbsProps {
 }
 
 function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumbsProps): JSX.Element {
-  const oldBehavoir = useCanary()
   return (
     <div aria-label='area-breadcrumbs' className='inline-flex flex-wrap  gap-2 text-sm items-center text-base-300 tracking-tight'>
       <Link href='/a'>
@@ -39,9 +38,7 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
       {pathTokens.map((place, index, array) => {
         const isLastElement = array.length - 1 === index
         const path = ancestors[index]
-        const nonLeaf = `/${oldBehavoir ? 'areas' : 'crag'}/${path}`
-        const leafPage = `/crag/${path}`
-        const url = isLastElement && isClimbPage ? leafPage : nonLeaf
+        const url = `crag/${path}`
         return (
           <React.Fragment key={`bread-${index}`}>
             <span className='text-xs mt-0.5'>/</span>
