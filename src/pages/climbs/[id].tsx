@@ -11,7 +11,7 @@ import { useSwipeable } from 'react-swipeable'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, ClimbType, MediaBaseTag, RulesType, MediaType } from '../../js/types'
+import { AreaType, ClimbType, MediaBaseTag, RulesType } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
@@ -21,12 +21,11 @@ import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import TickButton from '../../components/users/TickButton'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
 import EditModeToggle from '../../components/editor/EditModeToggle'
-import { FormSaveAction } from '../../components/editor/FormSaveAction'
 import { AREA_NAME_FORM_VALIDATION_RULES } from '../../components/edit/EditAreaForm'
-import { getImagesByFilenames } from '../../js/sirv/SirvClient'
-import { indexBy } from 'underscore'
 import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 import { StickyHeader } from '../../components/crag/StickyHeader'
+import { ClientSideFormSaveAction } from '../../components/crag/cragSummary'
+import { getImageDimensionsHack } from '../../js/utils/hacks'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -148,6 +147,13 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
     reset(formData, { keepValues: true })
   }
 
+  const FormAction = (
+    <ClientSideFormSaveAction
+      cache={cache}
+      editMode={editMode}
+      onReset={() => setResetSignal(Date.now())}
+    />
+  )
   return (
     <div className='px-4 py-4 lg:py-8 max-w-screen-xl mx-auto w-full' {...swipeHandlers}>
       <Portal.Root container={editTogglePlaceholderRef}>
@@ -163,9 +169,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
             isClimbPage
             ancestors={ancestors}
             pathTokens={pathTokens}
-            cache={cache}
-            editMode={editMode}
-            onReset={() => setResetSignal(Date.now())}
+            formAction={FormAction}
           />
 
           <div className='mt-4 text-right' id='editTogglePlaceholder' />
@@ -255,11 +259,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
 
               <div className='mt-4 block lg:hidden'>
                 {/* Mobile-only */}
-                <FormSaveAction
-                  cache={cache}
-                  editMode={editMode}
-                  onReset={() => setResetSignal(Date.now())}
-                />
+                {FormAction}
               </div>
             </div>
 
@@ -330,16 +330,12 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
   if (rs.data == null || rs.data.climb == null) {
     return {
       notFound: true,
-      revalidate: 30
+      revalidate: 10
     }
   }
 
-  let mediaListWithUsernames: MediaBaseTag[] = rs.data.climb.media
-  try {
-    mediaListWithUsernames = await enhanceMediaListWithUsernames(mediaListWithUsernames)
-  } catch (e) {
-    console.log('Error when trying to add username to image data', e)
-  }
+  const mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.climb.media)
+  const mediaListWithDimensions = await getImageDimensionsHack(mediaListWithUsernames)
 
   const sortedClimbsInArea = await fetchSortedClimbsInArea(rs.data.climb.ancestors[rs.data.climb.ancestors.length - 1])
   let leftClimb: ClimbType | null = null
@@ -352,23 +348,16 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
     }
   }
 
-  /**
-   * Call Sirv API to get image metadata.  We should probably store metadata in the db.
-   */
-  const mediaListWithMetadata = await getImagesByFilenames(mediaListWithUsernames.map(entry => entry.mediaUrl))
-
-  const mediaMetaDict = indexBy<MediaType[]>(mediaListWithMetadata.mediaList, 'mediaId')
-
   // Pass climb data to the page via props
   return {
     props: {
       key: rs.data.climb.id,
       climb: rs.data.climb,
-      mediaListWithUsernames: mediaListWithUsernames.map(entry => ({ ...entry, mediaInfo: mediaMetaDict?.[entry.mediaUuid] ?? null })),
+      mediaListWithUsernames: mediaListWithDimensions,
       leftClimb,
       rightClimb
     },
-    revalidate: 10
+    revalidate: 30
   }
 }
 

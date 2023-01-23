@@ -366,9 +366,8 @@ input:checked + label {
 }
 
 /* make nprogress bar thicker */
-.bar {
-  padding-top: 3px;
-  padding-bottom: 3px;
+#nprogress .bar {
+  height: 8px !important;
 }
 
 /* yds and vscale range slider */

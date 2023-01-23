@@ -67,15 +67,35 @@ const DeleteAreaTriggerButtonDefault = ({ disabled }: TriggerButtonProps): JSX.E
  * A small delete trigger button
  */
 export const DeleteAreaTriggerButtonSm = ({ disabled }: TriggerButtonProps): JSX.Element => (
-  <Tooltip content='Please delete child areas or climbs first.' enabled={disabled}>
-    <DialogTrigger
-      className='btn btn-ghost btn-circle btn-primary'
-      disabled={disabled}
-      type='button'
-    >
-      <TrashIcon className='w-6 h-6' />
-    </DialogTrigger>
-  </Tooltip>)
+  disabled
+    ? (
+      <Tooltip
+        content='Please delete child areas or climbs first.' enabled={disabled}
+      >
+        <div className='btn btn-ghost btn-circle btn-primary btn-disabled'>
+          <TrashIcon className='w-6 h-6' />
+        </div>
+      </Tooltip>)
+    : (
+      <DialogTrigger
+        className='btn btn-ghost btn-circle btn-primary'
+        disabled={disabled}
+        type='button'
+      >
+        <TrashIcon className='w-6 h-6' />
+      </DialogTrigger>)
+
+)
+
+// <Tooltip content='Please delete child areas or climbs first.' enabled={disabled}>
+//     <DialogTrigger
+//       className='btn btn-ghost btn-circle btn-primary'
+//       disabled={disabled}
+//       type='button'
+//     >
+//       <TrashIcon className='w-6 h-6' />
+//     </DialogTrigger>
+//   </Tooltip>
 
 export type AddAreaTriggerProps = Omit<AddAreaFormProps, 'onError'> & { children?: JSX.Element}
 

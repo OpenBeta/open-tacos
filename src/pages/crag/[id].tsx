@@ -6,7 +6,6 @@ import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
 import CragLayout from '../../components/crag/cragLayout'
-import AreaMap from '../../components/area/areaMap'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { PageMeta } from '../areas/[id]'
 import { getImageDimensionsHack } from '../../js/utils/hacks'
@@ -58,14 +57,14 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
         />
       </div>
 
-      <div id='#map' className='w-full mt-16' style={{ height: '30rem' }}>
+      {/* <div id='#map' className='w-full mt-16' style={{ height: '30rem' }}>
         <AreaMap
           focused={null}
           selected={area.id}
           subAreas={[{ ...area }]}
           area={area}
         />
-      </div>
+      </div> */}
     </>
   )
 }

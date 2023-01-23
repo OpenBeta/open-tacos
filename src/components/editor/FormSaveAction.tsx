@@ -1,7 +1,7 @@
 import clx from 'classnames'
 import { useForm } from 'react-hook-form'
 
-interface Props {
+export interface FormSaveActionProps {
   editMode: boolean
   cache: any
   onReset: Function
@@ -10,10 +10,10 @@ interface Props {
 /**
  * A reusable Reset and Save button bar to be used with react-hook-form
  */
-export function FormSaveAction ({ editMode, cache, onReset }: Props): JSX.Element | null {
-  if (!editMode) return null
-
+export function FormSaveAction ({ editMode, cache, onReset }: FormSaveActionProps): JSX.Element | null {
   const { formState: { isDirty, isSubmitting }, reset } = useForm()
+
+  if (!editMode) return null
 
   // { /* md and wider screens: row, right-justify; mobile: column, center-justify */ }
   return (

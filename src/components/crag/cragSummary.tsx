@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import * as Portal from '@radix-ui/react-portal'
@@ -9,8 +9,6 @@ import { toast } from 'react-toastify'
 
 import { AreaMetadataType, CountByGroupType, AreaUpdatableFieldsType } from '../../js/types'
 import { IndividualClimbChangeInput, UpdateOneAreaInputType } from '../../js/graphql/gql/contribs'
-import EditModeToggle from '../../components/editor/EditModeToggle'
-import { FormSaveAction } from '../../components/editor/FormSaveAction'
 import { getMapHref, sortClimbsByLeftRightIndex } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
 import { AreaDesignationRadioGroup, areaDesignationToDb, areaDesignationToForm } from '../edit/form/AreaDesignationRadioGroup'
@@ -21,7 +19,10 @@ import { DeleteAreaTrigger } from '../edit/Triggers'
 import { AreaCRUD } from '../edit/AreaCRUD'
 import { CragLayoutProps } from './cragLayout'
 import { StickyHeader } from './StickyHeader'
-
+import { InplaceTextInput, InplaceEditor } from '../editor'
+import ClimbBulkEditor from '../editor/CsvEditor'
+import EditModeToggle from '../editor/EditModeToggle'
+import { FormSaveActionProps } from '../../components/editor/FormSaveAction'
 export interface CragHeroProps {
   uuid: string
   title: string
@@ -77,7 +78,6 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
    */
   const [deletePlaceholderRef, setDeletePlaceholderRef] = useState<HTMLElement|null>()
   const [addAreaPlaceholderRef, setAddAreaPlaceholderRef] = useState<HTMLElement|null>()
-  const [editTogglePlaceholderRef, setEditTogglePlaceholderRef] = useState<HTMLElement|null>()
 
   /**
    * Change this value will trigger a form control reset to Lexical-backed components.
@@ -210,6 +210,12 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
     reset(formData, { keepValues: true })
   }
 
+  const FormAction = (
+    <ClientSideFormSaveAction
+      cache={cache} editMode={editMode} onReset={() => setResetSignal(Date.now())}
+    />
+  )
+
   const { areaName, description } = cache
   const parentAreaId = ancestors[ancestors.length - 2]
   const latlngPair = parseLatLng(currentLatLngStr)
@@ -231,10 +237,6 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
     const addAreaDiv = document.getElementById('addAreaPlaceholder')
     if (addAreaDiv != null) {
       setAddAreaPlaceholderRef(addAreaDiv)
-    }
-    const editToggleDiv = document.getElementById('editTogglePlaceholder')
-    if (editToggleDiv != null) {
-      setEditTogglePlaceholderRef(editToggleDiv)
     }
   }, [editMode, canAddAreas])
 
@@ -266,17 +268,17 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
 
   return (
     <>
-      <Portal.Root container={deletePlaceholderRef}>
-        {editMode &&
-          <DeleteAreaTrigger areaName={areaName} areaUuid={uuid} parentUuid={parentAreaId} disabled={!canChangeAreaType} />}
-      </Portal.Root>
-      <Portal.Root container={addAreaPlaceholderRef}>
-        {canAddAreas &&
-          <AreaCRUD uuid={uuid} areaName={areaName} childAreas={childAreasCache} onChange={onAreaCRUDChangeHandler} editMode={editMode} />}
-      </Portal.Root>
-      <Portal.Root container={editTogglePlaceholderRef}>
-        <EditModeToggle onChange={setEditMode} />
-      </Portal.Root>
+      {deletePlaceholderRef != null &&
+        <Portal.Root container={deletePlaceholderRef}>
+          {editMode &&
+            <DeleteAreaTrigger areaName={areaName} areaUuid={uuid} parentUuid={parentAreaId} disabled={!canChangeAreaType} />}
+        </Portal.Root>}
+
+      {addAreaPlaceholderRef != null &&
+        <Portal.Root container={addAreaPlaceholderRef}>
+          {canAddAreas &&
+            <AreaCRUD uuid={uuid} areaName={areaName} childAreas={childAreasCache} onChange={onAreaCRUDChangeHandler} editMode={editMode} />}
+        </Portal.Root>}
 
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(submitHandler)}>
@@ -284,12 +286,13 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
           <StickyHeader
             ancestors={ancestors}
             pathTokens={pathTokens}
-            cache={cache}
-            editMode={editMode}
-            onReset={() => setResetSignal(Date.now())}
+            formAction={FormAction}
+
           />
 
-          <div className='mt-4 text-right' id='editTogglePlaceholder' />
+          <div className='mt-4 text-right' id='editTogglePlaceholder'>
+            <EditModeToggle onChange={setEditMode} />
+          </div>
 
           <div className='area-climb-page-summary'>
             <div className='area-climb-page-summary-left'>
@@ -359,11 +362,7 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
 
           <div className='mt-4 block lg:hidden'>
             {/* Mobile-only */}
-            <FormSaveAction
-              cache={cache}
-              editMode={editMode}
-              onReset={() => setResetSignal(Date.now())}
-            />
+            {FormAction}
           </div>
 
           {canAddAreas &&
@@ -431,14 +430,6 @@ const extractDirtyClimbs = (dirtyFields: ClimbDirtyFieldsType[] = [], climbList:
   return updateList
 }
 
-const InplaceEditor = dynamic(async () => await import('../../components/editor/InplaceEditor'), {
-  ssr: false
-})
-
-const InplaceTextInput = dynamic(async () => await import('../../components/editor/InplaceTextInput'), {
-  ssr: false
-})
-
-const ClimbBulkEditor = dynamic(async () => await import('../../components/editor/CsvEditor'), {
+export const ClientSideFormSaveAction = dynamic<FormSaveActionProps>(async () => await import('../../components/editor/FormSaveAction').then(module => module.FormSaveAction), {
   ssr: false
 })
