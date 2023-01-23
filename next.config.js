@@ -5,8 +5,7 @@ module.exports = {
   typescript: {
     ignoreBuildErrors: false
   },
-  generateEtags: false,
-  webpack (config) {
+  webpack (config) { // required by @svgr/webpack lib
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
