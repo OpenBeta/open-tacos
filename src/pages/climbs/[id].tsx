@@ -203,7 +203,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   title='First Assent'
                   className='text-slate-700 mt-4 text-sm'
                 >
-                  <strong>FA: </strong>{fa}
+                  <strong>FA: </strong>{fa ?? 'Unknown'}
                 </div>
 
                 <div className='pt-8'>

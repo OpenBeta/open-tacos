@@ -1,4 +1,5 @@
 import { GetStaticProps, NextPage } from 'next'
+import dynamic from 'next/dynamic'
 import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
 
@@ -57,14 +58,14 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
         />
       </div>
 
-      {/* <div id='#map' className='w-full mt-16' style={{ height: '30rem' }}>
+      <div id='#map' className='w-full mt-16' style={{ height: '30rem' }}>
         <AreaMap
           focused={null}
           selected={area.id}
           subAreas={[{ ...area }]}
           area={area}
         />
-      </div> */}
+      </div>
     </>
   )
 }
@@ -199,3 +200,7 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
     revalidate: 30
   }
 }
+
+export const AreaMap = dynamic<any>(async () => await import('../../components/area/areaMap'), {
+  ssr: false
+})
