@@ -3,6 +3,7 @@ import { GraphQLError } from 'graphql'
 import { toast } from 'react-toastify'
 import { graphqlClient } from '../graphql/Client'
 import { MUTATION_UPDATE_CLIMBS, MUTATION_DELETE_CLIMBS, UpdateClimbsInput, DeleteManyClimbsInputType } from '../graphql/gql/contribs'
+import { refreshPage } from './useUpdateAreasCmd'
 
 type UpdateClimbCmdType = (input: UpdateClimbsInput) => Promise<void>
 type DeleteClimbsCmdType = (idList: string[]) => Promise<number>
@@ -27,17 +28,32 @@ interface UpdateClimbsHookReturn {
  * @param accessToken JWT token
  */
 export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpdateCompleted, onUpdateError, onDeleteCompleted, onDeleteError }: UpdateClimbsHookProps): UpdateClimbsHookReturn {
+  /**
+   * Add/Update Clims API
+   */
   const [updateClimbsApi] = useMutation<{ updateClimbsApi: string[] }, { input: UpdateClimbsInput }>(
     MUTATION_UPDATE_CLIMBS, {
       client: graphqlClient,
-      onCompleted: (data) => {
-        // void fetch(`/api/revalidate?c=${id}`)
+
+      onCompleted: async (returnValue) => {
+        // Trigger Next to build newly create climb pages
+        const { updateClimbsApi } = returnValue
+        const idList = Array.isArray(updateClimbsApi) ? updateClimbsApi : []
+        await Promise.all(
+          idList.map(async climbId => {
+            await refreshPage(`/api/revalidate?s=${climbId}`)
+          }))
+
+        // Rebuild the parent area page
+        await refreshPage(`/api/revalidate?s=${parentId}`)
+
         toast('Climbs updated ✨')
 
         if (onUpdateCompleted != null) {
-          onUpdateCompleted(data)
+          onUpdateCompleted(returnValue)
         }
       },
+
       onError: (error) => {
         toast.error(`Climb update error: ${error.message}`)
         if (onUpdateError != null) {
@@ -60,11 +76,14 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
     })
   }
 
+  /**
+   * Delete climbs API
+   */
   const [deleteClimbsApi] = useMutation<{ deleteClimbsApi: number }, { input: DeleteManyClimbsInputType }>(
     MUTATION_DELETE_CLIMBS, {
       client: graphqlClient,
-      onCompleted: (data) => {
-        void fetch(`/api/revalidate?a=${parentId}`)
+      onCompleted: async (data) => {
+        await refreshPage(`/api/revalidate?s=${parentId}`)
         toast('Climbs deleted ✔️')
         if (onDeleteCompleted != null) {
           onDeleteCompleted(data)

@@ -62,10 +62,9 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   const [updateAreaApi] = useMutation<{ updateAreaApi: UpdateAreaApiReturnType }, UpdateOneAreaInputType>(
     MUTATION_UPDATE_AREA, {
       client: graphqlClient,
-      onCompleted: (data) => {
+      onCompleted: async (data) => {
         toast.info('Area updated successfully ✔️')
-        void fetch(`/api/revalidate?a=${areaId}`)
-        void fetch(`/api/revalidate?s=${areaId}`)
+        await refreshPage(`/api/revalidate?s=${areaId}`)
         if (onUpdateCompleted != null) onUpdateCompleted(data)
       },
       onError: (error) => {
@@ -92,13 +91,12 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   const [addArea] = useMutation<{ addArea: AddAreaReturnType }, AddAreaProps>(
     MUTATION_ADD_AREA, {
       client: graphqlClient,
-      onCompleted: (data) => {
+      onCompleted: async (data) => {
         toast.info('Area added 🔥')
-        void fetch(`/api/revalidate?s=${data.addArea.uuid}`) // build new area page
-        void fetch(`/api/revalidate?s=${areaId}`) // rebuild parent page
-        // Rebuild old areas pages
-        void fetch(`/api/revalidate?a=${data.addArea.uuid}`) // build new area page
-        void fetch(`/api/revalidate?a=${areaId}`) // rebuild parent page
+
+        await refreshPage(`/api/revalidate?s=${data.addArea.uuid}`) // build new area page
+        await refreshPage(`/api/revalidate?s=${areaId}`) // rebuild parent page
+
         if (onAddCompleted != null) {
           onAddCompleted(data)
         }
@@ -130,11 +128,11 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     MUTATION_REMOVE_AREA, {
       client: graphqlClient,
       onCompleted: async (data) => {
+        await refreshPage(`/api/revalidate?s=${areaId}`) // rebuild parent area page
+
         if (onDeleteCompleted != null) {
           onDeleteCompleted(data)
         }
-        void fetch(`/api/revalidate?s=${areaId}`) // rebuild parent area page
-        void fetch(`/api/revalidate?a=${areaId}`) // rebuild parent area page
       },
       onError: (error) => {
         toast.error(`Unexpected error: ${error.message}`)
@@ -158,4 +156,10 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   }
 
   return { updateOneAreaCmd, addOneAreaCmd, deleteOneAreaCmd, getAreaByIdCmd }
+}
+
+export const refreshPage = async (url: string): Promise<void> => {
+  try {
+    await fetch(url)
+  } catch {}
 }

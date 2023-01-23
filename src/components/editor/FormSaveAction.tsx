@@ -1,27 +1,27 @@
 import clx from 'classnames'
-import { UseFormReset } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
-interface Props {
+export interface FormSaveActionProps {
   editMode: boolean
-  isDirty: boolean
-  isSubmitting: boolean
   cache: any
-  resetHookFn: UseFormReset<any>
   onReset: Function
 }
 
 /**
  * A reusable Reset and Save button bar to be used with react-hook-form
  */
-export function FormSaveAction ({ editMode, isDirty, isSubmitting, cache, resetHookFn: resetFn, onReset }: Props): JSX.Element | null {
+export function FormSaveAction ({ editMode, cache, onReset }: FormSaveActionProps): JSX.Element | null {
+  const { formState: { isDirty, isSubmitting }, reset } = useFormContext()
+
   if (!editMode) return null
+
   // { /* md and wider screens: row, right-justify; mobile: column, center-justify */ }
   return (
     <div className='bg-base-100 flex justify-center flex-wrap-reverse lg:flex-nowrap gap-x-8 gap-y-4 px-4 lg:pr-0'>
       <button
         disabled={!isDirty}
         className={clx('bg-opacity-80 btn btn-md btn-link', isDirty ? '' : 'no-underline')} type='reset' onClick={() => {
-          resetFn({ ...cache }, { keepValues: false })
+          reset({ ...cache }, { keepValues: false })
           onReset()
         }}
       >

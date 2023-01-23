@@ -7,7 +7,8 @@ interface RouteGradeChipProps {
   safety: SafetyType
   size?: string
 }
-export default function RouteGradeChip ({ grade, safety, size = Size.md }: RouteGradeChipProps): JSX.Element {
+export default function RouteGradeChip ({ grade, safety, size = Size.md }: RouteGradeChipProps): JSX.Element | null {
+  if (grade == null) return null
   const gradeStr = grade === 'NaN' ? 'Unknown' : grade
   return (
     <span

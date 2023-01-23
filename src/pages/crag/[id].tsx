@@ -1,4 +1,5 @@
 import { GetStaticProps, NextPage } from 'next'
+import dynamic from 'next/dynamic'
 import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
 
@@ -6,7 +7,6 @@ import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
 import CragLayout from '../../components/crag/cragLayout'
-import AreaMap from '../../components/area/areaMap'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { PageMeta } from '../areas/[id]'
 import { getImageDimensionsHack } from '../../js/utils/hacks'
@@ -197,6 +197,10 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
       history: [],
       mediaListWithUsernames: mediaListWithDimensions
     },
-    revalidate: 5
+    revalidate: 30
   }
 }
+
+export const AreaMap = dynamic<any>(async () => await import('../../components/area/areaMap'), {
+  ssr: false
+})
