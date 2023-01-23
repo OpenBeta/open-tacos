@@ -1,5 +1,5 @@
 import clx from 'classnames'
-import { useForm } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 export interface FormSaveActionProps {
   editMode: boolean
@@ -11,7 +11,7 @@ export interface FormSaveActionProps {
  * A reusable Reset and Save button bar to be used with react-hook-form
  */
 export function FormSaveAction ({ editMode, cache, onReset }: FormSaveActionProps): JSX.Element | null {
-  const { formState: { isDirty, isSubmitting }, reset } = useForm()
+  const { formState: { isDirty, isSubmitting }, reset } = useFormContext()
 
   if (!editMode) return null
 

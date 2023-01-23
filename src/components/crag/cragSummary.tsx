@@ -287,7 +287,6 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
             ancestors={ancestors}
             pathTokens={pathTokens}
             formAction={FormAction}
-
           />
 
           <div className='mt-4 text-right' id='editTogglePlaceholder'>
@@ -431,5 +430,5 @@ const extractDirtyClimbs = (dirtyFields: ClimbDirtyFieldsType[] = [], climbList:
 }
 
 export const ClientSideFormSaveAction = dynamic<FormSaveActionProps>(async () => await import('../../components/editor/FormSaveAction').then(module => module.FormSaveAction), {
-  ssr: false
+  ssr: true
 })

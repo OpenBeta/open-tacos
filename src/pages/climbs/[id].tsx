@@ -125,7 +125,10 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
 
   const { updateClimbCmd } = useUpdateClimbsCmd({
     parentId,
-    accessToken: session?.data?.accessToken as string
+    accessToken: session?.data?.accessToken as string,
+    onUpdateCompleted: async () => {
+      await router.replace(router.asPath)
+    }
   })
 
   // React hook form declaration
