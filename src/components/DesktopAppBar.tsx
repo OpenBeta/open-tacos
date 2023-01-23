@@ -32,7 +32,7 @@ export default function DesktopAppBar ({ showFilterBar = true }: DesktopAppBarPr
       <DesktopNavBar
         branding={
           <Link href='/'>
-            <a className=''>
+            <a>
               <LogoWithText className='h-[36px]' />
             </a>
           </Link>

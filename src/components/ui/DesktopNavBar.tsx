@@ -19,7 +19,7 @@ export default function DesktopNavBar ({ branding, search, navList }: DesktopApp
       heightClass={Bar.H_LG}
       layoutClass={Bar.GRID3}
     >
-      <div className=''>{branding}</div>
+      <div className='w-fit'>{branding}</div>
 
       <div className='w-9/12 2xl:w-full'>
         {search}

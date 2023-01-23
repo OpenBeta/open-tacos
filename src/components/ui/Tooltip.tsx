@@ -17,7 +17,7 @@ export default function Tooltip ({ content, enabled = true, children }: Props): 
       <Popover.Trigger>{children}</Popover.Trigger>
       {enabled &&
         <Popover.Content
-          className='z-20 bg-tooltip rounded-md p-2 drop-shadow-lg border max-w-[300px] focus:outline-none'
+          className='z-20 text-sm text-base-300 bg-tooltip rounded-md p-2 drop-shadow-lg border max-w-[300px] focus:outline-none'
           side='top'
           align='start'
           alignOffset={-40}
