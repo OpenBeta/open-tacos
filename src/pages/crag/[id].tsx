@@ -197,6 +197,6 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
       history: [],
       mediaListWithUsernames: mediaListWithDimensions
     },
-    revalidate: 5
+    revalidate: 30
   }
 }

@@ -44,7 +44,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
   if (isMobile) {
     const { uid, mediaUrl, destType, destination } = shuffledList[0]
     return (
-      <div className='block relative w-full h-60'>
+      <div className='block relative w-full h-60 fadeinEffect'>
         {showPhotoGalleryModal ? photoGalleryModal : undefined}
         <Image
           src={mediaUrl}
@@ -64,7 +64,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
   if (shuffledList.length <= 4) {
     return (
       <div
-        className='grid grid-cols-2 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80'
+        className='grid grid-cols-2 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 fadeinEffect'
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
@@ -92,7 +92,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
   const theRest = shuffledList.slice(1, 5)
   return (
     <div
-      className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 hover:cursor-pointer'
+      className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 hover:cursor-pointer fadeinEffect'
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >

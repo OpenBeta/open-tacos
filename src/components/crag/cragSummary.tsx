@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import * as Portal from '@radix-ui/react-portal'
@@ -19,7 +20,7 @@ import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 import { DeleteAreaTrigger } from '../edit/Triggers'
 import { AreaCRUD } from '../edit/AreaCRUD'
 import { CragLayoutProps } from './cragLayout'
-import BreadCrumbs from '../ui/BreadCrumbs'
+import { StickyHeader } from './StickyHeader'
 
 export interface CragHeroProps {
   uuid: string
@@ -64,6 +65,8 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
     areaMeta, climbs, ancestors, pathTokens,
     childAreas
   } = props
+
+  const router = useRouter()
 
   const session = useSession()
 
@@ -133,13 +136,20 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
 
   const { data, refetch } = getAreaByIdCmd({ skip: !clientSide || !editMode })
 
-  // Form declaration
+  const onAreaCRUDChangeHandler = (): void => {
+    if (editMode) {
+      void refetch()
+    }
+    void router.replace(router.asPath)
+  }
+
+  // React-hook-form declaration
   const form = useForm<SummaryHTMLFormProps>({
     mode: 'onBlur',
     defaultValues: { ...cache }
   })
 
-  const { handleSubmit, formState: { isSubmitting, isDirty, dirtyFields }, reset, watch } = form
+  const { handleSubmit, formState: { dirtyFields }, reset, watch } = form
 
   const currentLatLngStr = watch('latlng')
   const currentClimbList = watch('climbList')
@@ -262,33 +272,27 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
       </Portal.Root>
       <Portal.Root container={addAreaPlaceholderRef}>
         {canAddAreas &&
-          <AreaCRUD uuid={uuid} areaName={areaName} childAreas={childAreasCache} onChange={refetch} editMode={editMode} />}
+          <AreaCRUD uuid={uuid} areaName={areaName} childAreas={childAreasCache} onChange={onAreaCRUDChangeHandler} editMode={editMode} />}
       </Portal.Root>
       <Portal.Root container={editTogglePlaceholderRef}>
-        <div className='mt-4 text-right'>
-          <EditModeToggle onChange={setEditMode} />
-        </div>
+        <EditModeToggle onChange={setEditMode} />
       </Portal.Root>
 
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(submitHandler)}>
-          <div className='sticky top-0 z-40 py-2 lg:min-h-[4rem] block lg:flex lg:items-center lg:justify-between bg-base-100 -mx-4 px-4'>
-            <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
-            <div className='hidden lg:block'>
-              <FormSaveAction
-                cache={cache}
-                editMode={editMode}
-                isDirty={isDirty}
-                isSubmitting={isSubmitting}
-                resetHookFn={reset}
-                onReset={() => setResetSignal(Date.now())}
-              />
-            </div>
-          </div>
-          <div id='editTogglePlaceholder' />
 
-          <div className='mt-6 lg:grid lg:grid-cols-3 w-full'>
-            <div className='lg:border-r-2 lg:pr-8 border-base-content'>
+          <StickyHeader
+            ancestors={ancestors}
+            pathTokens={pathTokens}
+            cache={cache}
+            editMode={editMode}
+            onReset={() => setResetSignal(Date.now())}
+          />
+
+          <div className='mt-4 text-right' id='editTogglePlaceholder' />
+
+          <div className='area-climb-page-summary'>
+            <div className='area-climb-page-summary-left'>
               <h1 className='text-4xl md:text-5xl'>
                 <InplaceTextInput
                   initialValue={areaName}
@@ -334,7 +338,7 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
                   </div>
                 </div>)}
             </div>
-            <div className='mt-6 lg:mt-0 lg:col-span-2 lg:pl-16 w-full'>
+            <div className='area-climb-page-summary-right'>
               {/* <div className='flex-1 flex justify-end'>
         // vnguyen: temporarily removed until we have view favorites feature
         <FavouriteButton areaId={props.areaMeta.areaId} />
@@ -354,12 +358,10 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
           </div>
 
           <div className='mt-4 block lg:hidden'>
+            {/* Mobile-only */}
             <FormSaveAction
               cache={cache}
               editMode={editMode}
-              isDirty={isDirty}
-              isSubmitting={isSubmitting}
-              resetHookFn={reset}
               onReset={() => setResetSignal(Date.now())}
             />
           </div>

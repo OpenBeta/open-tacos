@@ -27,19 +27,31 @@ interface UpdateClimbsHookReturn {
  * @param accessToken JWT token
  */
 export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpdateCompleted, onUpdateError, onDeleteCompleted, onDeleteError }: UpdateClimbsHookProps): UpdateClimbsHookReturn {
+  /**
+   * Add/Update Clims API
+   */
   const [updateClimbsApi] = useMutation<{ updateClimbsApi: string[] }, { input: UpdateClimbsInput }>(
     MUTATION_UPDATE_CLIMBS, {
       client: graphqlClient,
-      onCompleted: (data) => {
-        // TODO: revalidate all climb pages data
+
+      onCompleted: (returnValue) => {
+        // Trigger Next to build newly create climb pages
+        const { updateClimbsApi } = returnValue
+        const idList = Array.isArray(updateClimbsApi) ? updateClimbsApi : []
+        idList.forEach(climbId => {
+          void fetch(`/api/revalidate?s=${climbId}`)
+        })
+
+        // Rebuild the parent area page
         void fetch(`/api/revalidate?s=${parentId}`)
 
         toast('Climbs updated ✨')
 
         if (onUpdateCompleted != null) {
-          onUpdateCompleted(data)
+          onUpdateCompleted(returnValue)
         }
       },
+
       onError: (error) => {
         toast.error(`Climb update error: ${error.message}`)
         if (onUpdateError != null) {
@@ -62,6 +74,9 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
     })
   }
 
+  /**
+   * Delete climbs API
+   */
   const [deleteClimbsApi] = useMutation<{ deleteClimbsApi: number }, { input: DeleteManyClimbsInputType }>(
     MUTATION_DELETE_CLIMBS, {
       client: graphqlClient,

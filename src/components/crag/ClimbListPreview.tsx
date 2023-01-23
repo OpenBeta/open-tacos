@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useController, useWatch } from 'react-hook-form'
 import { indexBy, Dictionary } from 'underscore'
 import clx from 'classnames'
@@ -9,6 +10,9 @@ interface Props {
   editable: boolean
 }
 
+/**
+ * Rendering the climb table.  The list is coming from react-hook-form context.
+ */
 export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
   const { formState: { defaultValues } } = useController({ name: 'climbList' })
 
@@ -30,14 +34,16 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
             index={index}
             showBorderBottom={index === lastItemOfFirstColumn || index === watchList.length - 1}
             defaultDict={defaultDict}
+            editMode={editable}
           />)}
         {watchList.length === 0 && <div className='text-base-300 italic'>None</div>}
       </section>
+
       {editable && toBeDeleted?.length > 0 && (
         <>
           <h3 className='mt-6 text-base-300 fadeinEffect'>To Be Deleted <span className=''>({toBeDeleted.length})</span></h3>
           <section className='lg:columns-2 lg:gap-16'>
-            {toBeDeleted.map((entry, index) => <ClimbEntry key={entry.id} {...entry} index={index} toBeDeleted />)}
+            {toBeDeleted.map((entry, index) => <ClimbEntry key={entry.id} {...entry} index={index} toBeDeleted editMode={editable} />)}
             {toBeDeleted?.length === 0 && <div className='text-base-300 italic'>None</div>}
           </section>
         </>)}
@@ -50,9 +56,10 @@ type ClimbEntryProps = EditableClimbTypeWithFieldId & {
   defaultDict?: Dictionary<EditableClimbType>
   toBeDeleted?: boolean
   showBorderBottom?: boolean
+  editMode: boolean
 }
 
-const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict, toBeDeleted = false, showBorderBottom = false }: ClimbEntryProps): JSX.Element => {
+const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict, toBeDeleted = false, showBorderBottom = false, editMode }: ClimbEntryProps): JSX.Element => {
   const isDirty = climbId != null && defaultDict?.[climbId]?.name !== name
   return (
     <div className='flex items-center gap-4 fadeinEffect break-inside-avoid-column break-inside-avoid'>
@@ -74,19 +81,24 @@ const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict,
           showBorderBottom ? 'border-b' : '')
         }
       >
-        <WrapLink climbId={climbId} text={name} />
+        <WrapLink climbId={climbId} text={name} newWindow={editMode} />
         <div className='text-inherit'>{yds}</div>
       </div>
     </div>
   )
 }
 
-const WrapLink = ({ climbId, text }: { climbId: string | null, text: string }): JSX.Element => {
+/**
+ * Wrap climb name in an 'a' tag.  Open a new window if in editMode.
+ */
+const WrapLink = ({ climbId, text, newWindow }: { climbId: string | null, text: string, newWindow: boolean }): JSX.Element => {
   if (climbId != null) {
     return (
-      <a href={`/climbs/${climbId}`} className='hover:underline underline-offset-4 decoration-4' target='_blank' rel='noreferrer'>
-        {text}
-      </a>
+      <Link href={`/climbs/${climbId}`}>
+        <a className='hover:underline underline-offset-4 decoration-4' {...newWindow ? { target: '_blank' } : undefined} rel='noreferrer'>
+          {text}
+        </a>
+      </Link>
     )
   }
   return <span>{text}</span>

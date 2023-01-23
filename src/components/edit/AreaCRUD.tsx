@@ -112,6 +112,5 @@ export const AreaItem = ({ index, borderBottom, areaName, uuid, parentUuid, onCh
           </DeleteAreaTrigger>
         </div>)}
     </div>
-
   )
 }

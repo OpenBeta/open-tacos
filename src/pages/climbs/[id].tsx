@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { gql } from '@apollo/client'
@@ -13,7 +13,6 @@ import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import { AreaType, ClimbType, MediaBaseTag, RulesType, MediaType } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
-import BreadCrumbs from '../../components/ui/BreadCrumbs'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
 import PhotoMontage from '../../components/media/PhotoMontage'
@@ -27,6 +26,7 @@ import { AREA_NAME_FORM_VALIDATION_RULES } from '../../components/edit/EditAreaF
 import { getImagesByFilenames } from '../../js/sirv/SirvClient'
 import { indexBy } from 'underscore'
 import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
+import { StickyHeader } from '../../components/crag/StickyHeader'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -56,8 +56,9 @@ const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
       {!router.isFallback && <PageMeta {...props} />}
       <Layout
         showFilterBar={false}
-        contentContainerClass='content-default with-standard-y-margin min-h-screen'
+        contentContainerClass='content-default'
       >
+        {/* with-standard-y-margin min-h-screen */}
         {router.isFallback
           ? (
             <div className='px-4 max-w-screen-md'>
@@ -77,6 +78,8 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
   const { id, name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
   const { climbId } = metadata
 
+  const [editTogglePlaceholderRef, setEditTogglePlaceholderRef] = useState<HTMLElement|null>()
+
   const [editMode, setEditMode] = useState(false)
   const [resetSignal, setResetSignal] = useState(0)
   const [cache, setCache] = useState({ name, ...content })
@@ -87,6 +90,16 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
   useEffect(() => {
     setCache({ name, ...content })
   }, [name, content])
+
+  /**
+   * Update refs to divs inside the main form
+   */
+  useEffect(() => {
+    const editToggleDiv = document.getElementById('editTogglePlaceholder')
+    if (editToggleDiv != null) {
+      setEditTogglePlaceholderRef(editToggleDiv)
+    }
+  }, [editMode])
 
   useState([leftClimb, rightClimb])
 
@@ -122,7 +135,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
     defaultValues: { ...cache }
   })
 
-  const { handleSubmit, formState: { isSubmitting, isDirty }, reset } = form
+  const { handleSubmit, reset } = form
 
   const submitHandler = async (formData): Promise<void> => {
     const { description, location, protection, name } = formData
@@ -135,77 +148,81 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
     reset(formData, { keepValues: true })
   }
 
-  const portalRef = useRef(null)
   return (
-    <div className='lg:flex lg:justify-center w-full' {...swipeHandlers}>
-      <div className='px-4 max-w-screen-xl w-full'>
-        <Portal.Root container={portalRef.current}>
-          <EditModeToggle onChange={setEditMode} />
-        </Portal.Root>
-        <BreadCrumbs
-          pathTokens={pathTokens}
-          ancestors={ancestors}
-          isClimbPage
-        />
-        <FormProvider {...form}>
-          <form onSubmit={handleSubmit(submitHandler)}>
-            <div className='py-6'>
-              <PhotoMontage photoList={mediaListWithUsernames} />
-            </div>
-            <div className='lg:grid lg:grid-cols-3 w-full'>
-              <div
-                id='Title Information'
-                className='lg:border-r-2 border-base-content'
-              >
+    <div className='px-4 py-4 lg:py-8 max-w-screen-xl mx-auto w-full' {...swipeHandlers}>
+      <Portal.Root container={editTogglePlaceholderRef}>
+        <EditModeToggle onChange={setEditMode} />
+      </Portal.Root>
 
-                <h1 className='text-4xl md:text-5xl mr-10'>
-                  <InplaceTextInput
-                    reset={resetSignal}
-                    name='name'
-                    editable={editMode}
-                    initialValue={cache.name}
-                    placeholder='Climb name'
-                    rules={AREA_NAME_FORM_VALIDATION_RULES}
-                  />
-                </h1>
-                <div className='pl-1'>
-                  <div className='flex items-center space-x-2 mt-6'>
-                    <RouteGradeChip grade={yds} safety={safety} />
-                    <RouteTypeChips type={type} />
-                  </div>
+      <PhotoMontage photoList={mediaListWithUsernames} />
 
-                  <div
-                    title='First Assent'
-                    className='text-slate-700 mt-4 text-sm'
-                  >
-                    <strong>FA: </strong>{fa}
-                  </div>
+      <FormProvider {...form}>
+        <form onSubmit={handleSubmit(submitHandler)} className='mt-6 first:mt-0'>
 
-                  <div className='pt-8'>
-                    <TickButton climbId={climbId} name={name} grade={yds} />
-                  </div>
+          <StickyHeader
+            isClimbPage
+            ancestors={ancestors}
+            pathTokens={pathTokens}
+            cache={cache}
+            editMode={editMode}
+            onReset={() => setResetSignal(Date.now())}
+          />
+
+          <div className='mt-4 text-right' id='editTogglePlaceholder' />
+
+          <div className='area-climb-page-summary'>
+            <div
+              id='Title Information'
+              className='area-climb-page-summary-left'
+            >
+
+              <h1 className='text-4xl md:text-5xl mr-10'>
+                <InplaceTextInput
+                  reset={resetSignal}
+                  name='name'
+                  editable={editMode}
+                  initialValue={cache.name}
+                  placeholder='Climb name'
+                  rules={AREA_NAME_FORM_VALIDATION_RULES}
+                />
+              </h1>
+              <div className='pl-1'>
+                <div className='flex items-center space-x-2 mt-6'>
+                  <RouteGradeChip grade={yds} safety={safety} />
+                  <RouteTypeChips type={type} />
                 </div>
 
-                <div className='pl-1'>
-                  <ImportFromMtnProj isButton={false} />
+                <div
+                  title='First Assent'
+                  className='text-slate-700 mt-4 text-sm'
+                >
+                  <strong>FA: </strong>{fa}
+                </div>
+
+                <div className='pt-8'>
+                  <TickButton climbId={climbId} name={name} grade={yds} />
                 </div>
               </div>
 
-              <div className='mt-16 lg:mt-0 lg:col-span-2 lg:pl-16 mb-16 w-full'>
-                <div className='mb-3 flex justify-between items-center'>
-                  <h3>Description</h3>
-                  <div ref={portalRef} />
-                </div>
-                <Editor
-                  reset={resetSignal}
-                  initialValue={cache.description}
-                  editable={editMode}
-                  name='description'
-                  placeholder='Enter a description'
-                  rules={CLIMB_DESCRIPTION_FORM_VALIDATION_RULES}
-                />
+              <div className='pl-1'>
+                <ImportFromMtnProj isButton={false} />
+              </div>
+            </div>
 
-                {(cache.location?.trim() !== '' || editMode) &&
+            <div className='area-climb-page-summary-right'>
+              <div className='mb-3 flex justify-between items-center'>
+                <h3>Description</h3>
+              </div>
+              <Editor
+                reset={resetSignal}
+                initialValue={cache.description}
+                editable={editMode}
+                name='description'
+                placeholder='Enter a description'
+                rules={CLIMB_DESCRIPTION_FORM_VALIDATION_RULES}
+              />
+
+              {(cache.location?.trim() !== '' || editMode) &&
                   (
                     <>
                       <h3 className='mb-3 mt-6'>Location</h3>
@@ -221,7 +238,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                     </>
                   )}
 
-                {(cache.protection?.trim() !== '' || editMode) &&
+              {(cache.protection?.trim() !== '' || editMode) &&
                   (
                     <>
                       <h3 className='mb-3 mt-6'>Protection</h3>
@@ -236,20 +253,19 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                     </>
                   )}
 
+              <div className='mt-4 block lg:hidden'>
+                {/* Mobile-only */}
                 <FormSaveAction
                   cache={cache}
                   editMode={editMode}
-                  isDirty={isDirty}
-                  isSubmitting={isSubmitting}
-                  resetHookFn={reset}
                   onReset={() => setResetSignal(Date.now())}
                 />
               </div>
-
             </div>
-          </form>
-        </FormProvider>
-      </div>
+
+          </div>
+        </form>
+      </FormProvider>
     </div>
   )
 }
@@ -314,7 +330,7 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
   if (rs.data == null || rs.data.climb == null) {
     return {
       notFound: true,
-      revalidate: 10
+      revalidate: 30
     }
   }
 
