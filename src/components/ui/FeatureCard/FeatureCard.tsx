@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { shuffle } from 'underscore'
 
 import { AggregateType, AreaType, CountByDisciplineType, DisciplineStatsType } from '../../../js/types'
-import { getSlug, sanitizeName } from '../../../js/utils'
+import { sanitizeName } from '../../../js/utils'
 import { FeatureImage } from './FeatureImage'
 import { SIRV_CONFIG } from '../../../js/sirv/SirvClient'
 
