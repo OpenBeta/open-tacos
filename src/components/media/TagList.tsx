@@ -15,6 +15,7 @@ interface TagsProps {
   isAuthorized?: boolean
   isAuthenticated?: boolean
   showDelete?: boolean
+  showActions?: boolean
   className?: string
   imageInfo: MediaType
 }
@@ -22,7 +23,7 @@ interface TagsProps {
 /**
  * A horizontal tag list.  The last item is a CTA.
  */
-export default function TagList ({ list, isAuthorized = false, isAuthenticated = false, showDelete = false, imageInfo, className = '' }: TagsProps): JSX.Element | null {
+export default function TagList ({ list, isAuthorized = false, isAuthenticated = false, showDelete = false, showActions = true, imageInfo, className = '' }: TagsProps): JSX.Element | null {
   const { onDelete } = useDeleteTagBackend()
   if (list == null) {
     return null
@@ -44,12 +45,12 @@ export default function TagList ({ list, isAuthorized = false, isAuthenticated =
           isAuthorized={isAuthorized}
           showDelete={showDelete}
         />)}
-      {isAuthorized &&
+      {showActions && isAuthorized &&
         <AddTag
           imageInfo={imageInfo}
           label={<AddTagBadge />}
         />}
-      {!isAuthenticated &&
+      {showActions && !isAuthenticated &&
         <AddTagBadge onClick={() => { void signIn('auth0') }} />}
     </div>
   )

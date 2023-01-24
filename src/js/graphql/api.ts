@@ -81,6 +81,10 @@ export const getAreaByUUID = (uuid: string): AreaType | null => {
   return null
 }
 
+/**
+ * Providing a list of media IDs return all tag objects that include climb name or area name
+ * @param uuidList An array of media UUIDs
+ */
 export const getTagsByMediaId = async (uuidList: string[]): Promise<HybridMediaTag[]> => {
   try {
     const rs = await graphqlClient.query({

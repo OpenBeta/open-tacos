@@ -83,6 +83,7 @@ export const QUERY_RECENT_MEDIA = gql`
     getRecentTags(userLimit: $userLimit) {
       authorUuid
       tagList {
+        mediaUuid
         destType
         mediaUrl
         mediaType
