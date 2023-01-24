@@ -5,7 +5,7 @@ import { formatDistanceToNow } from 'date-fns'
 
 import { ChangesetType, ChangeType, AreaType, ClimbType } from '../../js/types'
 
-interface RecentChangeHistoryProps {
+export interface RecentChangeHistoryProps {
   history: ChangesetType[]
 }
 export default function RecentChangeHistory ({ history }: RecentChangeHistoryProps): JSX.Element {

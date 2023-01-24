@@ -11,7 +11,6 @@ export const getImageDimensionsHack = async (tagList: MediaBaseTag[]): Promise<a
   return await Promise.all(tagList.map(async (entry) => {
     try {
       const img = await probe(`${SIRV_CONFIG.baseUrl}${entry.mediaUrl}`)
-      console.log('#image', img)
       return {
         ...entry,
         mediaInfo: {
