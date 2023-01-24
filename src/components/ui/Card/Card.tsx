@@ -5,25 +5,24 @@ export interface CardProps {
   header?: string | JSX.Element
   imageActions?: JSX.Element | undefined
   body: string | JSX.Element
-  styles?: string
 }
 
 export default function Card ({
   header,
   image,
   imageActions,
-  body,
-  styles = 'bg-base-100 drop-shadow rounded-box'
+  body
 }: CardProps): JSX.Element {
   return (
-    <div className={styles}>
-      <CardHeader content={header} />
-      <div className='card card-compact rounded-none'>
+    <div className='card card-compact'>
+      <div className='flex items-center justify-between'>{header}</div>
+      <figure className='overflow-hidden rounded-box'>
         {image}
-        {imageActions}
-        <CardBody content={body} />
-      </div>
+      </figure>
+      {imageActions}
+      <CardBody content={body} />
     </div>
+  // </div>
   )
 }
 
@@ -33,7 +32,7 @@ export interface CardHeaderProps {
 }
 export const CardHeader = ({
   content,
-  styles = 'container mx-auto bg-base-100 rounded-box'
+  styles = 'container mx-auto'
 }: CardHeaderProps): JSX.Element => {
   return (
     <div className={styles}>

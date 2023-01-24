@@ -11,9 +11,9 @@ import classNames from 'classnames'
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
 import { graphqlClient } from '../js/graphql/Client'
-import { getRecentMedia } from '../js/graphql/api'
+import { getRecentMedia, getTagsByMediaId } from '../js/graphql/api'
 
-import { IndexResponseType, MediaBaseTag, MediaType } from '../js/types'
+import { HybridMediaTag, IndexResponseType, MediaType } from '../js/types'
 import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import { RecentTagsProps } from '../components/home/RecentMedia'
@@ -24,7 +24,7 @@ const allowedViews = ['explore', 'newTags', 'map', 'edit', 'pulse']
 
 interface HomePageType {
   exploreData: IndexResponseType
-  tagsByMedia: Dictionary<MediaBaseTag[]>
+  tagsByMedia: Dictionary<HybridMediaTag[]>
   mediaList: MediaType[]
 }
 
@@ -202,18 +202,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   })
   const recentMediaList = await getRecentMedia()
-  console.log('#getRecentMedia() ', recentMediaList.length)
 
-  const allTags = recentMediaList?.flatMap(entry => entry.tagList.slice(0, 10)) ?? []
+  const recentTags = recentMediaList?.flatMap(entry => entry.tagList.slice(0, 10)) ?? []
 
-  const tagsWithUsernames = await enhanceMediaListWithUsernames(allTags)
-  console.log('#enhanceMediaList()', tagsWithUsernames.length)
+  const recentMediaIDList = recentTags.map(entry => entry.mediaUuid)
+  const tags = await getTagsByMediaId(recentMediaIDList)
 
-  const tagsByMedia = groupBy(tagsWithUsernames, 'mediaUrl')
+  const tagsWithUsernames = await enhanceMediaListWithUsernames(tags)
+
+  const tagsByMedia = groupBy(tagsWithUsernames as HybridMediaTag[], 'mediaUrl')
 
   const list = await getImagesByFilenames(Object.keys(tagsByMedia).slice(0, 30))
-  console.log('#getImagesByFilenames() ', Object.keys(tagsByMedia).length)
-
   return {
     props: {
       exploreData: rs.data,

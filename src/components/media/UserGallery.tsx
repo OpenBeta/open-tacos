@@ -160,6 +160,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
                 key={key}
                 tagList={tags}
                 imageInfo={imageInfo}
+                showTagActions
                 {...auth}
               />
             )
