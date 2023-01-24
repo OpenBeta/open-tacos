@@ -15,43 +15,12 @@ export default function Card ({
 }: CardProps): JSX.Element {
   return (
     <div className='card card-compact'>
-      <div className='flex items-center justify-between'>{header}</div>
-      <figure className='overflow-hidden rounded-box'>
+      <div className='px-2 sm:px-0 flex items-center justify-between'>{header}</div>
+      <figure className='overflow-hidden rounded sm:rounded-none sm:rounded-box'>
         {image}
       </figure>
       {imageActions}
-      <CardBody content={body} />
-    </div>
-  // </div>
-  )
-}
-
-export interface CardHeaderProps {
-  content: any
-  styles?: string
-}
-export const CardHeader = ({
-  content,
-  styles = 'container mx-auto'
-}: CardHeaderProps): JSX.Element => {
-  return (
-    <div className={styles}>
-      <div data-test='cardHeader'>{content}</div>
-    </div>
-  )
-}
-
-export interface CardBodyProps {
-  content: any
-  styles?: string
-}
-export const CardBody = ({
-  content,
-  styles = 'card-body'
-}: CardBodyProps): JSX.Element => {
-  return (
-    <div data-test='cardBody' className={styles}>
-      {content}
+      <div className='card-body'>{body}</div>
     </div>
   )
 }

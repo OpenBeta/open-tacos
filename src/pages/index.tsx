@@ -16,7 +16,7 @@ import { getRecentMedia, getTagsByMediaId } from '../js/graphql/api'
 import { HybridMediaTag, IndexResponseType, MediaType } from '../js/types'
 import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
-import { RecentTagsProps } from '../components/home/RecentMedia'
+import RecentTaggedMedia from '../components/home/RecentMedia'
 import { enhanceMediaListWithUsernames } from '../js/usernameUtil'
 import { getImagesByFilenames } from '../js/sirv/SirvClient'
 
@@ -127,7 +127,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
               <DynamicDenseAreas areas={areas} />
             </Tabs.Content>
             <Tabs.Content value='newTags' className='w-full'>
-              <DynamicRecentTags tags={tagsByMedia} mediaList={mediaList} />
+              <RecentTaggedMedia tags={tagsByMedia} mediaList={mediaList} />
             </Tabs.Content>
             <Tabs.Content value='map' className='z-0 h-full'>
               <DynamicMap />
@@ -201,11 +201,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       }
     }
   })
+
+  /**
+   * Inefficient queries to get recent tagged media.
+   * See https://github.com/OpenBeta/open-tacos/issues/659
+   */
   const recentMediaList = await getRecentMedia()
 
   const recentTags = recentMediaList?.flatMap(entry => entry.tagList.slice(0, 10)) ?? []
 
   const recentMediaIDList = recentTags.map(entry => entry.mediaUuid)
+
+  // Get tag objects with climb & area name
   const tags = await getTagsByMediaId(recentMediaIDList)
 
   const tagsWithUsernames = await enhanceMediaListWithUsernames(tags)
@@ -223,12 +230,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 }
 export default Home
-
-const DynamicRecentTags = dynamic<RecentTagsProps>(
-  async () =>
-    await import('../components/home/RecentMedia').then(
-      module => module.default), { ssr: false }
-)
 
 const DynamicDenseAreas = dynamic<ExploreProps>(
   async () =>

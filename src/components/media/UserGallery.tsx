@@ -149,7 +149,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
           tagModeOn={tagModeOn}
         />
       </div>
-      <div className='flex flex-col gap-y-4 lg:grid lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>
+      <div className='flex flex-col gap-x-6 gap-y-10 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>
         {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
         {imageList?.map((imageInfo, index) => {
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []

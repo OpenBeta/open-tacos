@@ -444,5 +444,5 @@ a:focus {
 }
 
 .card-body {
-  @apply lg:px-0 border-0 !important;
+  @apply sm:px-0 border-0 !important;
 }

@@ -50,20 +50,17 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
     <div
       className='rounded-md overflow-hidden cursor-pointer hover:brightness-75 border border-gray-300'
     >
-      <Link href={getSlug(metadata.areaId, metadata.leaf)} passHref>
-        <a>
-          <div className='m-4 lg:m-0'>
-            <FeatureImage image={image} />
-
-            <div className='mx-0 lg:mx-2 my-2.5'>
-              <h3 className='whitespace-normal  font-semibold text-base truncate'>
-                {sanitizeName(areaName)}
-              </h3>
-              <div className='font-semibold text-xs text-secondary'>{totalClimbs} Climbs</div>
-              <div className='my-1 text-xs flex flex-row space-x-2 flex-wrap'>{formatClimbingTypes(aggregate)}</div>
-              <div className='text-secondary text-xs text-tietiary'>{pathTokens.slice(1).join(' / ')}</div>
-              {attribution !== '' && <div className='text-xs tertiary'>Image By: {attribution}</div>}
-            </div>
+      <Link href={`/crag/${metadata.areaId}`} passHref>
+        <a className='m-4 lg:m-0'>
+          <FeatureImage image={image} />
+          <div className='mx-0 lg:mx-2 my-2.5'>
+            <h3 className='whitespace-normal  font-semibold text-base truncate'>
+              {sanitizeName(areaName)}
+            </h3>
+            <div className='font-semibold text-xs text-secondary'>{totalClimbs} Climbs</div>
+            <div className='my-1 text-xs flex flex-row space-x-2 flex-wrap'>{formatClimbingTypes(aggregate)}</div>
+            <div className='text-secondary text-xs text-tietiary'>{pathTokens.slice(1).join(' / ')}</div>
+            {attribution !== '' && <div className='text-xs tertiary'>Image By: {attribution}</div>}
           </div>
         </a>
       </Link>

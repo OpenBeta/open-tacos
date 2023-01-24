@@ -3,8 +3,9 @@ import Card from '../ui/Card/Card'
 import TagList from '../media/TagList'
 import { MobileLoader } from '../../js/sirv/util'
 import { MediaType, HybridMediaTag } from '../../js/types'
-import { getUploadDateSummary, urlResolver } from '../../js/utils'
+import { getUploadDateSummary } from '../../js/utils'
 import { PostHeader } from './Post'
+import { resolver as urlResolver } from '../media/Tag'
 
 const MOBILE_IMAGE_MAX_WIDITH = 914
 
@@ -14,14 +15,16 @@ interface RecentImageCardProps {
   tagList: HybridMediaTag[]
 }
 
+/**
+ * Image card for the home page
+ */
 export const RecentImageCard = ({ imageInfo, tagList }: RecentImageCardProps): JSX.Element => {
-  const { mediaType, destination } = tagList[0]
-  const firstUrl = urlResolver(mediaType, destination) ?? '#'
+  const [firstUrl] = urlResolver(tagList[0])
   return (
     <Card
       header={<PostHeader username={tagList[0].uid} />}
       image={
-        <Link href={firstUrl}>
+        <Link href={firstUrl ?? '#'}>
           <a>
             <img
               src={MobileLoader({
@@ -36,7 +39,7 @@ export const RecentImageCard = ({ imageInfo, tagList }: RecentImageCardProps): J
       }
       body={
         <>
-          <section className='flex flex-col gap-y-4'>
+          <section className='flex flex-col gap-y-4 justify-between'>
             <TagList
               list={tagList}
               showActions={false}
@@ -44,9 +47,9 @@ export const RecentImageCard = ({ imageInfo, tagList }: RecentImageCardProps): J
               isAuthenticated={false}
               imageInfo={imageInfo}
             />
-            <div className='uppercase text-xs text-base-200'>
+            <span className='uppercase text-xs text-base-200'>
               {getUploadDateSummary(imageInfo.ctime)}
-            </div>
+            </span>
 
           </section>
         </>

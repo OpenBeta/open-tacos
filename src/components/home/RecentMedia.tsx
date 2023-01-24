@@ -12,7 +12,7 @@ export default function RecentTags ({
 }: RecentTagsProps): JSX.Element {
   return (
     <>
-      <div className='md:px-4 gap-6 columns-xs'>
+      <div className='sm:px-6 gap-6 columns-xs'>
         {mediaList?.map((media, index) => {
           const { filename } = media
           const tagList = allTags[filename] ?? []
