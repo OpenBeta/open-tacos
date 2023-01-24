@@ -45,7 +45,7 @@ export default function UserMedia ({
   return (
     <figure
       key={imageInfo.filename}
-      className='block relative rounded overflow-hidden hover:shadow transition w-[300px] h-[300px] hover:brightness-75'
+      className='block relative rounded-box overflow-hidden hover:shadow transition w-[300px] h-[300px] hover:brightness-75'
 
     >
       <Link href={shareableUrl}>

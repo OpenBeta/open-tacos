@@ -51,7 +51,7 @@ const stopPropagation = (event): void => event.stopPropagation()
  * @param tag HybridMediaTag
  * @returns [url, name]
  */
-const resolver = (tag: HybridMediaTag): [string, string] | [null, null] => {
+export const resolver = (tag: HybridMediaTag): [string, string] | [null, null] => {
   switch (tag.destType) {
     case TagTargetType.climb: {
       const climb = (tag as MediaTagWithClimb).climb

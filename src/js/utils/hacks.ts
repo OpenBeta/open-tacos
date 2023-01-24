@@ -4,13 +4,14 @@ import { SIRV_CONFIG } from '../sirv/SirvClient'
 
 /**
  * Use a 3rd-party lib to get image width and height at build time
- * @param mediaList
+ * @param tagList
  * @returns media list with width & height
  */
-export const getImageDimensionsHack = async (mediaList: MediaBaseTag[]): Promise<any[]> => {
-  return await Promise.all(mediaList.map(async (entry) => {
+export const getImageDimensionsHack = async (tagList: MediaBaseTag[]): Promise<any[]> => {
+  return await Promise.all(tagList.map(async (entry) => {
     try {
       const img = await probe(`${SIRV_CONFIG.baseUrl}${entry.mediaUrl}`)
+      console.log('#image', img)
       return {
         ...entry,
         mediaInfo: {

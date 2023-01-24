@@ -3,8 +3,7 @@ import React from 'react'
 import { MediaType } from '../../js/types'
 import {
   UserCircleIcon,
-  TagIcon,
-  EllipsisHorizontalIcon
+  TagIcon
 } from '@heroicons/react/24/outline'
 import { getUploadDateSummary, urlResolver } from '../../js/utils'
 
@@ -44,54 +43,28 @@ export function PostBody ({
 
 export interface PostHeaderProps {
   profilePhoto?: MediaType | null
-  username: string
+  username: string | null
 }
 
 export const PostHeader = ({
   profilePhoto = null,
   username
-}: PostHeaderProps): JSX.Element => {
+}: PostHeaderProps): JSX.Element | null => {
+  if (username == null) return null
   return (
-    <div className='px-1 flex justify-between items-center'>
-      <div>
-        <div className='flex py-2 items-center space-x-2'>
-          {/* TODO: Add link to user's profile */}
-
-          <Link href={urlResolver(3, username) ?? '#'} passHref>
-            {profilePhoto != null
-              ? (
-                <div className='cursor-pointer' />
-                )
-              : (
-                <UserCircleIcon className='cursor-pointer mx-auto h-6 rounded-box mx-0 shrink-0' />
-                )}
-          </Link>
-          <Link href={urlResolver(3, username) ?? '#'} passHref>
-            <div className='cursor-pointer text-left space-y-0.5 text-left'>
-              <div className='text-sm text-black font-semibold'>{username}</div>
-            </div>
-          </Link>
-        </div>
-      </div>
-      <div>
-        <div className='dropdown dropdown-end'>
-          <EllipsisHorizontalIcon
-            tabIndex={0}
-            className='px-2 cursor-pointer h-6 rounded-box'
-          />
-          <ul
-            tabIndex={0}
-            className='dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52'
-          >
-            <li>
-              <a>Item 1</a>
-            </li>
-            <li>
-              <a>Item 2</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <>
+      <Link href={urlResolver(3, username) ?? '#'}>
+        <a className='flex py-2 items-center space-x-2 text-base-300'>
+          {profilePhoto != null
+            ? (
+              <div className='cursor-pointer' />
+              )
+            : (
+              <UserCircleIcon className='h-6 w-6' />
+              )}
+          <div className='text-sm text-base-300 font-semibold'>{username}</div>
+        </a>
+      </Link>
+    </>
   )
 }

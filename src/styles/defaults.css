@@ -442,3 +442,7 @@ a:focus {
 .tooltip:before {
   @apply border bg-tooltip text-sm text-base-content !important;
 }
+
+.card-body {
+  @apply sm:px-0 border-0 !important;
+}
