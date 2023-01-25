@@ -26,7 +26,7 @@ export default function MiniAlert ({ message }: Props): JSX.Element | null {
   return open
     ? (
       <div className='w-full z-40 alert alert-info flex-wrap justify-center xl:px-4 xl:py-0.5 rounded-none gap-6'>
-        <div className='inline-block text-center'>
+        <div className='inline-flex items-center justify-between'>
           {message}
         </div>
         <div className='inline-flex w-[210]px grow-1'>

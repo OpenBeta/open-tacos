@@ -1,5 +1,5 @@
 import React from 'react'
-import { ExclamationTriangleIcon } from '@heroicons/react/20/solid'
+import Link from 'next/link'
 
 import MobileTabletAppBar from './MobileAppBar'
 import DesktopAppBar from './DesktopAppBar'
@@ -33,8 +33,13 @@ export default function Header (props: HeaderProps): JSX.Element {
       <AppAlert
         message={
           <>
-            <ExclamationTriangleIcon className='h-5 w-5 inline-block' /> Test mode alert!  Data may be inaccurate.  Consult guidebooks & local community for latest conditions.
-            &nbsp;<a className='btn btn-xs font-light' href='https://openbeta.substack.com/p/hackathon-2022'>Learn more</a>
+            We created a special
+            <Link href='/crag/18c5dd5c-8186-50b6-8a60-ae2948c548d1'>
+              <a className='semibold underline'>
+                Test area
+              </a>
+            </Link>for test driving the new edit feature.
+            &nbsp;<a className='btn btn-xs font-light' href='https://openbeta.substack.com/p/new-year-new-milestone'>Learn more</a>
           </>
         }
       />
