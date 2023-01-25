@@ -365,6 +365,9 @@ input:checked + label {
   animation: fadeIn 1s;
 }
 
+.bottom-shadow {
+  box-shadow: 0 4px 2px -2px rgb(240, 240, 240);
+}
 /* make nprogress bar thicker */
 #nprogress .bar {
   height: 8px !important;
