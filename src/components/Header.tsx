@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import { ExclamationTriangleIcon } from '@heroicons/react/20/solid'
 
 import MobileTabletAppBar from './MobileAppBar'
 import DesktopAppBar from './DesktopAppBar'
