@@ -43,7 +43,8 @@ export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' 
 export type ClimbDisciplineRecord = Record<ClimbDiscipline, boolean>
 
 export type Grades = { [Key in GradeScalesTypes]?: string}
-export interface Climb {
+
+export type Climb = EditMetadataType & {
   id: string
   name: string
   fa: string
@@ -102,7 +103,15 @@ export interface AggregateType {
   byGradeBand: CountByGradeBandType
 
 }
-export interface AreaType {
+
+export interface EditMetadataType {
+  updatedAt?: number
+  updatedBy?: string
+  createdAt?: number
+  createdBy?: string
+}
+
+export type AreaType = EditMetadataType & {
   id: string
   uuid: string
   areaName: string

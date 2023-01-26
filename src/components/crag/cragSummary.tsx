@@ -7,7 +7,7 @@ import * as Portal from '@radix-ui/react-portal'
 import { MapPinIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
 
-import { AreaMetadataType, CountByGroupType, AreaUpdatableFieldsType } from '../../js/types'
+import { AreaMetadataType, CountByGroupType, AreaUpdatableFieldsType, EditMetadataType } from '../../js/types'
 import { IndividualClimbChangeInput, UpdateOneAreaInputType } from '../../js/graphql/gql/contribs'
 import { getMapHref, sortClimbsByLeftRightIndex } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
@@ -23,7 +23,9 @@ import { InplaceTextInput, InplaceEditor } from '../editor'
 import ClimbBulkEditor from '../editor/CsvEditor'
 import EditModeToggle from '../editor/EditModeToggle'
 import { FormSaveActionProps } from '../../components/editor/FormSaveAction'
-export interface CragHeroProps {
+import { ArticleLastUpdate } from '../edit/ArticleLastUpdate'
+
+export type CragHeroProps = EditMetadataType & {
   uuid: string
   title: string
   latitude: number
@@ -64,7 +66,8 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
     description: initDescription,
     latitude: initLat, longitude: initLng,
     areaMeta, climbs, ancestors, pathTokens,
-    childAreas
+    childAreas,
+    createdAt, createdBy, updatedAt, updatedBy
   } = props
 
   const router = useRouter()
@@ -319,16 +322,18 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
                 : (
                     latlngPair != null && (
                       <a
-                        href={getMapHref({ lat: latlngPair[0], lng: latlngPair[1] })} target='blank' className='hover:underline text-xs inline-flex items-center gap-1'
+                        href={getMapHref({ lat: latlngPair[0], lng: latlngPair[1] })} target='blank' className='hover:underline text-xs inline-flex items-center gap-2'
                       >
-                        <MapPinIcon className='w-4 h-4' />
+                        <MapPinIcon className='w-5 h-5' />
                         <span className='mt-0.5'>{latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}</span>
                       </a>)
                   )}
 
+              <ArticleLastUpdate updatedAt={updatedAt} updatedBy={updatedBy} createdAt={createdAt} createdBy={createdBy} />
+
               {editMode && (
                 <div className='fadeinEffect'>
-                  <div className='mt-6'>
+                  <div className='mt-8'>
                     <h3>Housekeeping</h3>
                     <AreaDesignationRadioGroup disabled={!canChangeAreaType} />
                   </div>
@@ -339,6 +344,7 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
                     <div className='ml-2' id='deleteButtonPlaceholder' />
                   </div>
                 </div>)}
+
             </div>
             <div className='area-climb-page-summary-right'>
               {/* <div className='flex-1 flex justify-end'>
