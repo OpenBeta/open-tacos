@@ -26,6 +26,7 @@ import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 import { StickyHeader } from '../../components/crag/StickyHeader'
 import { ClientSideFormSaveAction } from '../../components/crag/cragSummary'
 import { getImageDimensionsHack } from '../../js/utils/hacks'
+import { ArticleLastUpdate } from '../../components/edit/ArticleLastUpdate'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -74,7 +75,7 @@ const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
 export default ClimbPage
 
 const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
-  const { id, name, fa, yds, type, content, safety, metadata, ancestors, pathTokens } = climb
+  const { id, name, fa, yds, type, content, safety, metadata, ancestors, pathTokens, createdAt, createdBy, updatedAt, updatedBy } = climb
   const { climbId } = metadata
 
   const [editTogglePlaceholderRef, setEditTogglePlaceholderRef] = useState<HTMLElement|null>()
@@ -206,9 +207,14 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   <strong>FA: </strong>{fa ?? 'Unknown'}
                 </div>
 
-                <div className='pt-8'>
+                <div className='mt-8  border-t border-b'>
+                  <ArticleLastUpdate createdAt={createdAt} createdBy={createdBy} updatedAt={updatedAt} updatedBy={updatedBy} />
+                </div>
+
+                <div className='mt-8'>
                   <TickButton climbId={climbId} name={name} grade={yds} />
                 </div>
+
               </div>
 
               <div className='pl-1'>
@@ -319,6 +325,10 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
       metadata {
         climbId
       }
+      createdAt
+      createdBy
+      updatedAt
+      updatedBy
     }
   }`
 
