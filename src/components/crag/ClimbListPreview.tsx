@@ -81,27 +81,38 @@ const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict,
           showBorderBottom ? 'border-b' : '')
         }
       >
-        <WrapLink climbId={climbId} text={name} newWindow={editMode} />
+        <WrapLink climbId={climbId} text={name} noLink={isNew} newWindow={!editMode} />
         <div className='text-inherit'>{yds}</div>
       </div>
     </div>
   )
 }
 
+interface WrapLinkProps {
+  /** Climb name */
+  text: string
+  climbId: string | null
+  /** `true`: Don't wrap text in 'a' tag */
+  noLink: boolean
+  /** `true`: open link in a new window */
+  newWindow: boolean
+}
+
 /**
- * Wrap climb name in an 'a' tag.  Open a new window if in editMode.
+ * Conditionally wrap climb name in an 'a' tag.
  */
-const WrapLink = ({ climbId, text, newWindow }: { climbId: string | null, text: string, newWindow: boolean }): JSX.Element => {
-  if (climbId != null) {
+const WrapLink = ({ climbId, text, noLink, newWindow }: WrapLinkProps): JSX.Element => {
+  if (climbId == null || noLink) {
+    return <span>{text}</span>
+  } else {
     return (
-      <Link href={`/climbs/${climbId}`}>
-        <a className='hover:underline underline-offset-4 decoration-4' {...newWindow ? { target: '_blank' } : undefined} rel='noreferrer'>
+      <Link href={`/climbs/${climbId}`} {...newWindow ? { target: '_blank', rel: 'noreferrer' } : undefined}>
+        <a className='thick-link'>
           {text}
         </a>
       </Link>
     )
   }
-  return <span>{text}</span>
 }
 
 export const findDeletedCandidates = (defaultList: EditableClimbType[], activeList: EditableClimbTypeWithFieldId[]): EditableClimbTypeWithFieldId[] => {

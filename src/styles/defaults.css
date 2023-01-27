@@ -429,6 +429,9 @@ table td.dtable-my-range {
   @apply rounded h-8 w-8 grid place-content-center bg-area-coded text-base-100 text-sm hover:decoration-0 hover:no-underline;
 }
 
+.thick-link {
+  @apply hover:underline underline-offset-4 decoration-4;
+}
 
 
 /**
