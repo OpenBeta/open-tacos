@@ -26,6 +26,7 @@ export interface UserGalleryProps {
   initialTagsByMediaId: Dictionary<HybridMediaTag[]>
   auth: WithPermission
   postId: string | null
+  keyboardTip: boolean
 }
 
 /**
@@ -217,6 +218,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
           onClose={slideViewerCloseHandler}
           auth={auth}
           baseUrl={baseUrl}
+          keyboardTip
           onNavigate={navigateHandler}
         />}
     </>

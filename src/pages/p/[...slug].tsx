@@ -62,6 +62,7 @@ const UserSinglePostView: NextPage<UserSinglePostViewProps> = ({ uid, postId = n
             mostRecentTagMap={tagMap}
             userProfile={userProfile}
             loaded={!isFallback}
+            keyboardTip={false}
           />
           {!isAuthorized && !isFallback && (
             <div className='mt-4 w-full mx-auto text-sm text-secondary text-center'>
