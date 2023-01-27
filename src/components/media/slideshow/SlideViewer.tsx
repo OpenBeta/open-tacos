@@ -22,6 +22,7 @@ interface SlideViewerProps {
   userinfo: JSX.Element
   auth: WithPermission
   baseUrl: string
+  keyboardTip: boolean
   onNavigate: (newIndex: number) => void
 }
 
@@ -36,6 +37,7 @@ export default function SlideViewer ({
   tagsByMediaId,
   userinfo,
   auth,
+  keyboardTip,
   baseUrl,
   onNavigate
 }: SlideViewerProps): JSX.Element {
@@ -57,6 +59,7 @@ export default function SlideViewer ({
         <RhsContainer
           loaded
           userinfo={userinfo}
+          keyboardTip={keyboardTip}
           content={
             <InfoContainer
               currentImage={currentImage}
@@ -85,10 +88,11 @@ interface SingleViewerProps {
   tagList: HybridMediaTag[]
   userinfo: JSX.Element
   auth: WithPermission
+  keyboardTip: boolean
   onClose?: () => void
 }
 
-export const SingleViewer = ({ loaded, media, tagList, userinfo, auth, onClose }: SingleViewerProps): JSX.Element => {
+export const SingleViewer = ({ loaded, media, tagList, userinfo, auth, keyboardTip, onClose }: SingleViewerProps): JSX.Element => {
   return (
     <>
       <div className='block relative overflow-hidden min-w-[350px] min-h-[300px]'>
@@ -104,6 +108,7 @@ export const SingleViewer = ({ loaded, media, tagList, userinfo, auth, onClose }
       <RhsContainer
         loaded={loaded}
         userinfo={userinfo}
+        keyboardTip={keyboardTip}
         content={
           <InfoContainer
             currentImage={media}
@@ -148,9 +153,10 @@ interface RhsContainerProps {
   userinfo: ReactElement
   content: ReactElement
   footer?: null | ReactElement
+  keyboardTip: boolean
 }
 
-const RhsContainer = ({ loaded, userinfo, content, footer = null }: RhsContainerProps): JSX.Element => {
+const RhsContainer = ({ loaded, userinfo, content, footer = null, keyboardTip }: RhsContainerProps): JSX.Element => {
   return loaded
     ? (
       <div className='flex flex-col justify-start h-[inherit] lg:max-w-[400px] min-w-[350px] bg-white'>
@@ -162,11 +168,12 @@ const RhsContainer = ({ loaded, userinfo, content, footer = null }: RhsContainer
             {content}
           </div>
         </div>
-        <div className='mb-2'>
-          <span className='text-xs px-4 text-slate-500'>
-            Keyboard shortcuts: Previous [<kbd className='kbd-xs'>◀︎</kbd>] Next [<kbd className='kbd-xs'>▶︎</kbd>]
-          </span>
-        </div>
+        {keyboardTip &&
+          <div className='mb-2'>
+            <span className='text-xs px-4 text-slate-500'>
+              Keyboard shortcuts: Previous [<kbd className='kbd-xs'>◀︎</kbd>] Next [<kbd className='kbd-xs'>▶︎</kbd>]
+            </span>
+          </div>}
         <div className='border-t'>
           {footer}
         </div>
