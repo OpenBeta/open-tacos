@@ -162,6 +162,11 @@ const RhsContainer = ({ loaded, userinfo, content, footer = null }: RhsContainer
             {content}
           </div>
         </div>
+        <div className='mb-2'>
+          <span className='text-xs px-4 text-slate-500'>
+            Keyboard shortcuts: Previous [<kbd className='kbd-xs'>◀︎</kbd>] Next [<kbd className='kbd-xs'>▶︎</kbd>]
+          </span>
+        </div>
         <div className='border-t'>
           {footer}
         </div>
