@@ -321,15 +321,19 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
                   />
                 : (
                     latlngPair != null && (
-                      <a
-                        href={getMapHref({ lat: latlngPair[0], lng: latlngPair[1] })} target='blank' className='hover:underline text-xs inline-flex items-center gap-2'
-                      >
-                        <MapPinIcon className='w-5 h-5' />
-                        <span className='mt-0.5'>{latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}</span>
-                      </a>)
+                      <div className='flex flex-col text-xs text-base-300 border-t border-b border-t-base-300 border-b-base-300 divide-y'>
+                        <a
+                          href={getMapHref({ lat: latlngPair[0], lng: latlngPair[1] })} target='blank' className='flex items-center gap-2 py-3'
+                        >
+                          <MapPinIcon className='w-5 h-5' />
+                          <span className='mt-0.5'>
+                            <b>LAT,LNG</b>&nbsp;<span className='link-dotted'>{latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}</span>
+                          </span>
+                        </a>
+                        <ArticleLastUpdate updatedAt={updatedAt} updatedBy={updatedBy} createdAt={createdAt} createdBy={createdBy} />
+                      </div>
+                    )
                   )}
-
-              <ArticleLastUpdate updatedAt={updatedAt} updatedBy={updatedBy} createdAt={createdAt} createdBy={createdBy} />
 
               {editMode && (
                 <div className='fadeinEffect'>

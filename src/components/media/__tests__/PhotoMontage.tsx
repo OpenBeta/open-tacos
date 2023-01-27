@@ -1,30 +1,61 @@
+import { v4 } from 'uuid'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
-
+import { MediaBaseTag } from '../../../js/types'
 import PhotoMontage from '../PhotoMontage'
 
-const photoList = [
+const photoList: MediaBaseTag[] = [
   {
+    id: v4(),
+    mediaType: 0,
+    destType: 0,
+    destination: v4(),
+    uid: v4(),
     mediaUrl: '/img1.jpg',
     mediaUuid: '1'
   },
   {
+    id: v4(),
+    mediaType: 0,
+    destType: 0,
+    destination: v4(),
+    uid: v4(),
     mediaUrl: '/img2.jpg',
     mediaUuid: '2'
   },
   {
+    id: v4(),
+    mediaType: 0,
+    destType: 0,
+    destination: v4(),
+    uid: v4(),
     mediaUrl: '/img3.jpg',
     mediaUuid: '3'
   },
   {
+    id: v4(),
+    mediaType: 0,
+    destType: 0,
+    destination: v4(),
+    uid: v4(),
     mediaUrl: '/img4.jpg',
     mediaUuid: '4'
   },
   {
+    id: v4(),
+    mediaType: 0,
+    destType: 0,
+    destination: v4(),
+    uid: v4(),
     mediaUrl: '/img5.jpg',
     mediaUuid: '5'
   },
   {
+    id: v4(),
+    mediaType: 0,
+    destType: 0,
+    destination: v4(),
+    uid: v4(),
     mediaUrl: '/img6.jpg',
     mediaUuid: '6'
   }

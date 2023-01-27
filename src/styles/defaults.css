@@ -31,7 +31,7 @@ html {
 }
 
 .area-climb-page-summary-left {
-  @apply lg:border-r-2 lg:pr-8 border-base-content;
+  @apply lg:border-r-2 lg:border-r-base-300 lg:pr-8 border-base-content;
 }
 
 .area-climb-page-summary-right {
@@ -84,6 +84,13 @@ html {
 
   h3 {
     @apply text-2xl font-light tracking-tighter text-primary;
+  }
+
+  /**
+  A slightly deemphasized dotted underline for a tag in order to not competing with horizontal rulers
+  */
+  .link-dotted {
+    @apply underline decoration-dotted underline-offset-2 decoration-base-200;
   }
 
   .home-hero-bg-img {
@@ -368,6 +375,7 @@ input:checked + label {
 .bottom-shadow {
   box-shadow: 0 4px 2px -2px rgb(240, 240, 240);
 }
+
 /* make nprogress bar thicker */
 #nprogress .bar {
   height: 8px !important;
