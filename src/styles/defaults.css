@@ -31,7 +31,7 @@ html {
 }
 
 .area-climb-page-summary-left {
-  @apply lg:border-r-2 lg:border-r-base-300 lg:pr-8 border-base-content;
+  @apply  lg:pr-8 border-base-content;
 }
 
 .area-climb-page-summary-right {

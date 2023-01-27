@@ -81,9 +81,9 @@ const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeT
   if (fullDocument?.areaName == null) {
     return null
   }
-  const { areaName, uuid, metadata } = fullDocument as AreaType
+  const { areaName, uuid } = fullDocument as AreaType
 
-  const url = metadata.leaf ? `/crag/${uuid}` : `/areas/${uuid}`
+  const url = `/crag/${uuid}`
 
   return (
     <div className='ml-2 flex gap-x-2'>

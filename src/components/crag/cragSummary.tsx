@@ -321,7 +321,7 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
                   />
                 : (
                     latlngPair != null && (
-                      <div className='flex flex-col text-xs text-base-300 border-t border-b border-t-base-300 border-b-base-300 divide-y'>
+                      <div className='flex flex-col text-xs text-base-300 border-t border-b  divide-y'>
                         <a
                           href={getMapHref({ lat: latlngPair[0], lng: latlngPair[1] })} target='blank' className='flex items-center gap-2 py-3'
                         >
