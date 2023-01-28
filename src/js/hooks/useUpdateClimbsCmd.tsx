@@ -31,17 +31,18 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
   /**
    * Add/Update Clims API
    */
-  const [updateClimbsApi] = useMutation<{ updateClimbsApi: string[] }, { input: UpdateClimbsInput }>(
+  const [updateClimbsApi] = useMutation<{ updateClimbs: string[] }, { input: UpdateClimbsInput }>(
     MUTATION_UPDATE_CLIMBS, {
       client: graphqlClient,
 
       onCompleted: async (returnValue) => {
         // Trigger Next to build newly create climb pages
-        const { updateClimbsApi } = returnValue
-        const idList = Array.isArray(updateClimbsApi) ? updateClimbsApi : []
+        const { updateClimbs } = returnValue
+        console.log('#updated', updateClimbsApi)
+        const idList = Array.isArray(updateClimbs) ? updateClimbs : []
         await Promise.all(
           idList.map(async climbId => {
-            await refreshPage(`/api/revalidate?s=${climbId}`)
+            await refreshPage(`/api/revalidate?c=${climbId}`)
           }))
 
         // Rebuild the parent area page

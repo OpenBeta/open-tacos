@@ -1,7 +1,8 @@
 import * as Popover from '@radix-ui/react-popover'
+import { ReactNode } from 'react'
 
 interface Props {
-  content: string
+  content: string | ReactNode
   enabled?: boolean
   children: JSX.Element | JSX.Element []
 }

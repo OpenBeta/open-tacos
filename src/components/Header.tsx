@@ -32,15 +32,15 @@ export default function Header (props: HeaderProps): JSX.Element {
       </div>
       <AppAlert
         message={
-          <>
-            We created a special
+          <div className='flex items-center justify-center flex-wrap'>
+            We created a special&nbsp;
             <Link href='/crag/18c5dd5c-8186-50b6-8a60-ae2948c548d1'>
-              <a className='semibold underline'>
-                Test area
+              <a className='link-dotted'>
+                <strong>Test area</strong>
               </a>
-            </Link>for test driving the new edit feature.
+            </Link>&nbsp;for test driving the new edit feature.
             &nbsp;<a className='btn btn-xs font-light' href='https://openbeta.substack.com/p/new-year-new-milestone'>Learn more</a>
-          </>
+          </div>
         }
       />
     </>

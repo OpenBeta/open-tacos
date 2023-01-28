@@ -13,7 +13,7 @@ interface DisplayProps {
   createdByUid?: string
 }
 /**
- * Show created by and edit by
+ * Show created by and edit by.
  */
 export const ArticleLastUpdate: FC<EditMetadataType> = ({ updatedAt, updatedBy, createdAt, createdBy }) => {
   const [values, setValues] = useState<DisplayProps>({
@@ -21,6 +21,11 @@ export const ArticleLastUpdate: FC<EditMetadataType> = ({ updatedAt, updatedBy, 
     createdAtStr: ''
   })
 
+  /**
+   * Since an area/climb page is generated server-side
+   * useEffect is used to show updated timestamps each
+   * time the browser displays the page.
+   */
   useEffect(() => {
     if (updatedBy != null) {
       void getUserNickFromMediaDir(updatedBy).then(uid => {
