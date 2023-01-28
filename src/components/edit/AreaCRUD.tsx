@@ -88,7 +88,7 @@ export const AreaItem = ({ index, borderBottom, areaName, uuid, parentUuid, onCh
         {index + 1}
       </a>
       <a href={`/crag/${uuid}`} className='flex flex-col items-start items-stretch grow gap-y-1'>
-        <div className='font-semibold uppercase hover:underline underline-offset-4 decoration-4'>
+        <div className='font-semibold uppercase thick-link'>
           {areaName}
         </div>
         <div className='flex gap-2 items-center'>

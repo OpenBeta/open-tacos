@@ -207,9 +207,10 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   <strong>FA: </strong>{fa ?? 'Unknown'}
                 </div>
 
-                <div className='mt-8  border-t border-b'>
-                  <ArticleLastUpdate createdAt={createdAt} createdBy={createdBy} updatedAt={updatedAt} updatedBy={updatedBy} />
-                </div>
+                {(createdAt != null || updatedAt != null) &&
+                  <div className='mt-8  border-t border-b'>
+                    <ArticleLastUpdate createdAt={createdAt} createdBy={createdBy} updatedAt={updatedAt} updatedBy={updatedBy} />
+                  </div>}
 
                 <div className='mt-8'>
                   <TickButton climbId={climbId} name={name} grade={yds} />
