@@ -5,12 +5,16 @@ import Tooltip from '../../ui/Tooltip'
 
 export type AreaTypeFormProp = 'crag' | 'area' | 'boulder'
 
+export interface AreaDesignationRadioGroupProps {
+  name?: string
+  disabled: boolean
+}
 /**
  * A react-hook-form radio button group for changing area type (area container vs crag vs boulder)
  * @param name form control name (default: 'areaType')
  * @param name
  */
-export const AreaDesignationRadioGroup = ({ name = 'areaType', disabled = false }: { name?: string, disabled: boolean }): JSX.Element => (
+export const AreaDesignationRadioGroup = ({ name = 'areaType', disabled = false }: AreaDesignationRadioGroupProps): JSX.Element => (
   <RadioGroup
     groupLabel='Area designation'
     groupLabelAlt={<ExplainAreaTypeLockTooltip canEdit={!disabled} />}

@@ -4,14 +4,14 @@ import dynamic from 'next/dynamic'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import * as Portal from '@radix-ui/react-portal'
-import { MapPinIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
+import { MapPinIcon, PencilSquareIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
 
 import { AreaMetadataType, CountByGroupType, AreaUpdatableFieldsType, EditMetadataType } from '../../js/types'
 import { IndividualClimbChangeInput, UpdateOneAreaInputType } from '../../js/graphql/gql/contribs'
 import { getMapHref, sortClimbsByLeftRightIndex } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
-import { AreaDesignationRadioGroup, areaDesignationToDb, areaDesignationToForm } from '../edit/form/AreaDesignationRadioGroup'
+import { AreaDesignationRadioGroupProps, areaDesignationToDb, areaDesignationToForm } from '../edit/form/AreaDesignationRadioGroup'
 import { ClimbListPreview, findDeletedCandidates } from './ClimbListPreview'
 import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
@@ -20,10 +20,10 @@ import { AreaCRUD } from '../edit/AreaCRUD'
 import { CragLayoutProps } from './cragLayout'
 import { StickyHeader } from './StickyHeader'
 import { InplaceTextInput, InplaceEditor } from '../editor'
-import ClimbBulkEditor from '../editor/CsvEditor'
 import EditModeToggle from '../editor/EditModeToggle'
 import { FormSaveActionProps } from '../../components/editor/FormSaveAction'
 import { ArticleLastUpdate } from '../edit/ArticleLastUpdate'
+import Tooltip from '../ui/Tooltip'
 
 export type CragHeroProps = EditMetadataType & {
   uuid: string
@@ -380,15 +380,13 @@ export default function CragSummary (props: CragLayoutProps): JSX.Element {
           {canAddClimbs && <ClimbListPreview editable={editMode} />}
 
           {editMode && canAddClimbs && (
-            <div className='collapse mt-12 collapse-plus fadeinEffect'>
-              <input type='checkbox' defaultChecked />
-              <div className='px-0 collapse-title flex items-center gap-4'>
+            <div className='collapse mt-12 fadeinEffect flex flex-col gap-4'>
+              <div className='flex items-center gap-4'>
                 <PencilSquareIcon className='w-8 h-8 rounded-full p-2 bg-secondary shadow-lg' />
                 <span className='font-semibold text-base-300'>CSV Editor</span>
+                <EditorTooltip />
               </div>
-              <div className='px-0 collapse-content'>
-                <ClimbBulkEditor name='climbList' initialClimbs={cache.climbList} resetSignal={resetSignal} editable />
-              </div>
+              <ClimbBulkEditor name='climbList' initialClimbs={cache.climbList} resetSignal={resetSignal} editable />
             </div>)}
         </form>
       </FormProvider>
@@ -439,6 +437,37 @@ const extractDirtyClimbs = (dirtyFields: ClimbDirtyFieldsType[] = [], climbList:
   return updateList
 }
 
+const EditorTooltip: React.FC = () => (
+  <Tooltip content={
+    <ul className='px-4 py-2 list-disc space-y-2'>
+      <li>
+        <strong>Create new climbs</strong><br /> Enter one climb per line
+      </li>
+      <li>
+        <strong>Delete climbs</strong><br />Delete the entire line
+      </li>
+      <li>
+        <strong>Set climb a difficulty/grade</strong><br />Coming soon!
+      </li>
+      <li>
+        <strong>Change left-to-right order</strong><br />Copy-n-paste lines
+      </li>
+      <li>
+        <strong>Climb ID</strong><br />Don't edit the strange text: <i>646756eb-7552-4715-8e17-d4c1073b5d51</i>
+      </li>
+      <li>
+        Remember to press <strong>Save</strong> when done 😀
+      </li>
+    </ul>
+    }
+  >
+    <div className='flex items-center gap-2 text-xs'><span className='link-dotted'>Help</span><QuestionMarkCircleIcon className='text-info w-5 h-5' /></div>
+  </Tooltip>)
+
 export const ClientSideFormSaveAction = dynamic<FormSaveActionProps>(async () => await import('../../components/editor/FormSaveAction').then(module => module.FormSaveAction), {
   ssr: false
 })
+
+const ClimbBulkEditor = dynamic(async () => await import('../editor/CsvEditor'))
+
+const AreaDesignationRadioGroup = dynamic<AreaDesignationRadioGroupProps>(async () => await import('../edit/form/AreaDesignationRadioGroup').then(module => module.AreaDesignationRadioGroup))
