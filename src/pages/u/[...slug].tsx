@@ -21,10 +21,9 @@ interface UserHomeProps {
   serverMediaList: MediaType[]
   serverTagMap: Dictionary<HybridMediaTag[]>
   userProfile: IUserProfile
-  keyboardTip: boolean
 }
 
-const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMediaList, serverTagMap, userProfile, keyboardTip }) => {
+const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMediaList, serverTagMap, userProfile }) => {
   const router = useRouter()
 
   const auth = usePermissions({ ownerProfileOnPage: userProfile })
@@ -147,8 +146,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> =
       postId,
       serverMediaList: mediaList,
       serverTagMap: tagsByMediaId,
-      userProfile,
-      keyboardTip: true
+      userProfile
     }
     return {
       props: data,

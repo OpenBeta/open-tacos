@@ -59,7 +59,6 @@ export default function SlideViewer ({
         <RhsContainer
           loaded
           userinfo={userinfo}
-          keyboardTip={keyboardTip}
           content={
             <InfoContainer
               currentImage={currentImage}
@@ -108,12 +107,12 @@ export const SingleViewer = ({ loaded, media, tagList, userinfo, auth, keyboardT
       <RhsContainer
         loaded={loaded}
         userinfo={userinfo}
-        keyboardTip={keyboardTip}
         content={
           <InfoContainer
             currentImage={media}
             tagList={tagList}
             auth={auth}
+            keyboardTip={keyboardTip}
             onClose={onClose}
           />
         }
@@ -153,27 +152,20 @@ interface RhsContainerProps {
   userinfo: ReactElement
   content: ReactElement
   footer?: null | ReactElement
-  keyboardTip: boolean
 }
 
-const RhsContainer = ({ loaded, userinfo, content, footer = null, keyboardTip }: RhsContainerProps): JSX.Element => {
+const RhsContainer = ({ loaded, userinfo, content, footer = null }: RhsContainerProps): JSX.Element => {
   return loaded
     ? (
       <div className='flex flex-col justify-start h-[inherit] lg:max-w-[400px] min-w-[350px] bg-white'>
-        <div className='grow'>
+        <div className='grow flex-col flex'>
           <div className='border-b px-4 py-4'>
             {userinfo}
           </div>
-          <div className='px-4'>
+          <div className='px-4 grow flex flex-col'>
             {content}
           </div>
         </div>
-        {keyboardTip &&
-          <div className='mb-2'>
-            <span className='text-xs px-4 text-slate-500'>
-              Keyboard shortcuts: Previous [<kbd className='kbd-xs'>◀︎</kbd>] Next [<kbd className='kbd-xs'>▶︎</kbd>]
-            </span>
-          </div>}
         <div className='border-t'>
           {footer}
         </div>
@@ -186,10 +178,11 @@ interface InfoContainerProps {
   currentImage: MediaType | null
   tagList: HybridMediaTag[]
   auth: WithPermission
+  keyboardTip?: boolean
   onClose?: () => void
 }
 
-const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerProps): ReactElement | null => {
+const InfoContainer = ({ currentImage, tagList, auth, keyboardTip = true, onClose }: InfoContainerProps): ReactElement | null => {
   if (currentImage == null) return null
 
   return (
@@ -215,7 +208,12 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
         </div>}
 
       <div className='flex-1' />
-
+      {keyboardTip &&
+        <div className='mb-2'>
+          <span className='text-xs text-slate-500'>
+            Keyboard shortcuts: Previous [<kbd className='kbd-xs'>◀︎</kbd>] Next [<kbd className='kbd-xs'>▶︎</kbd>]
+          </span>
+        </div>}
       {auth.isAuthorized &&
         <div className='my-8 flex items-center hover:bg-rose-50 p-2 rounded-lg transition'>
           <div className='text-primary text-sm flex-1'>Enable <b>Power mode</b> to delete this image</div>
