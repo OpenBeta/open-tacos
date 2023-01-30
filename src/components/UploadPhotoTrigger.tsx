@@ -1,0 +1,132 @@
+import { useRef } from 'react'
+import { useSession, signIn } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { StopIcon } from '@heroicons/react/24/outline'
+import { validate as isValidUuid } from 'uuid'
+import clx from 'classnames'
+
+import usePhotoUploader from '../js/hooks/usePhotoUploader'
+import { userMediaStore, revalidateUserHomePage } from '../js/stores/media'
+import useReturnToProfile from '../js/hooks/useReturnToProfile'
+import usePhotoTag from '../js/hooks/usePhotoTagCmd'
+import { mediaUrlHash } from '../js/sirv/SirvClient'
+import { BlockingAlert } from './ui/micro/AlertDialogue'
+
+interface UploadPhotoTriggerProps {
+  children: JSX.Element | JSX.Element []
+  className?: string
+  onUploaded?: () => void
+}
+
+/**
+ * Wrapper component that uploads photo to our image provider.
+ * If the user is viewing a climb or an area page, also tag
+ * the climb/area.
+ */
+export default function UploadPhotoTrigger ({ className = '', onUploaded, children }: UploadPhotoTriggerProps): JSX.Element | null {
+  const { data, status } = useSession()
+  const router = useRouter()
+
+  /**
+   * Why useRef?
+   * Even though render is called multiple times, the callback function is
+   * only generated once, with a stale session object.
+   * See https://stackoverflow.com/questions/57847594/react-hooks-accessing-up-to-date-state-from-within-a-callback
+  */
+  const sessionRef = useRef<any>()
+  sessionRef.current = data?.user
+
+  const { tagPhotoCmd } = usePhotoTag()
+  const { toMyProfile } = useReturnToProfile()
+
+  const onUploadedHannder = async (url: string): Promise<void> => {
+    const session = sessionRef.current
+
+    if (session.metadata == null) {
+      console.log('## Error: user metadata not found')
+      return
+    }
+
+    const { nick, uuid } = session.metadata
+
+    const [id, destType, pageToInvalidate] = pagePathToEntityType(router.asPath)
+
+    // let's see if we're viewing the climb or area page
+    if (id != null && isValidUuid(id) && (destType === 0 || destType === 1)) {
+      // yes! let's tag it
+      await tagPhotoCmd({
+        mediaUrl: url,
+        mediaUuid: mediaUrlHash(url),
+        destinationId: id,
+        destType
+      })
+
+      if (onUploaded != null) onUploaded()
+
+      // Tell Next to regenerate the page being tagged
+      try {
+        await fetch(pageToInvalidate)
+        void router.replace({
+          pathname: '/crag/[id]',
+          query: { id }
+        })
+      } catch {}
+
+      // Regenerate user profile page as well
+      if (nick != null) {
+        void revalidateUserHomePage(nick)
+      }
+    } else {
+      if (uuid != null && nick != null) {
+        await toMyProfile()
+        await userMediaStore.set.addImage(nick, uuid, url, true)
+      }
+    }
+  }
+
+  const { uploading, getRootProps, getInputProps, openFileDialog } = usePhotoUploader({ onUploaded: onUploadedHannder })
+
+  return (
+    <div
+      className={clx(className, uploading ? 'pointer-events-none' : '')} {...getRootProps()} onClick={(e) => {
+        if (status === 'authenticated') {
+          openFileDialog()
+        } else {
+          void signIn('auth0')
+        }
+      }}
+    >
+      <input {...getInputProps()} />
+      {children}
+      {uploading &&
+        <BlockingAlert
+          icon={<StopIcon className='w-12 h-12 stroke-2 animate-spin' />}
+          description='Uploading'
+        />}
+    </div>
+  )
+}
+
+/**
+ * Convert current page path to a destination type for tagging.  Expect `path` to be in /areas|crag|climb/[id].
+ * @param path `path` property as return from `Next.router()`
+ * @returns 0 if current page is climb, 1 for area and crag, null otherwise
+ */
+const pagePathToEntityType = (path: string): [string, number, string] | [null, null, null] => {
+  if (path == null) return [null, null, null]
+  const tokens = path.split('/')
+  if (tokens.length >= 3) {
+    const id = tokens[2]
+    switch (tokens[1]) {
+      case 'climbs':
+        return [id, 0, `/api/revalidate?c=${id}`]
+      case 'areas':
+        return [id, 1, `/api/revalidate?s=${id}`]
+      case 'crag':
+        return [id, 1, `/api/revalidate?s=${id}`]
+      default:
+        return [null, null, null]
+    }
+  }
+  return [null, null, null]
+}

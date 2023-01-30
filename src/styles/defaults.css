@@ -140,7 +140,7 @@ html {
 }
 
 p {
-  @apply block mb-4 text-base text-slate-900 leading-relaxed;
+  @apply block mb-4 text-base;
 }
 
 .editor-profile-container {

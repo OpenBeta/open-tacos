@@ -39,6 +39,7 @@ export default CragPage
 const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
   const { uuid, areaName, aggregate, climbs, metadata, content, ancestors, pathTokens, children, updatedAt, updatedBy, createdAt, createdBy } = area
 
+  console.log('#crag page', uuid, mediaListWithUsernames)
   return (
     <>
       <div className='px-4 py-4 lg:py-8 max-w-screen-xl mx-auto w-full'>
@@ -77,12 +78,12 @@ const Body = ({ area, mediaListWithUsernames }: CragProps): JSX.Element => {
 export async function getStaticPaths (): Promise<any> {
   return {
     paths: [
-      { params: { id: 'bea6bf11-de53-5046-a5b4-b89217b7e9bc' } }, // Red Rock
-      { params: { id: '78da26bc-cd94-5ac8-8e1c-815f7f30a28b' } }, // Red River Gorge
-      { params: { id: '1db1e8ba-a40e-587c-88a4-64f5ea814b8e' } }, // USA
-      { params: { id: 'ab48aed5-2e8d-54bb-b099-6140fe1f098f' } }, // Colorado
-      { params: { id: 'decc1251-4a67-52b9-b23f-3243e10e93d0' } }, // Boulder
-      { params: { id: 'f166e672-4a52-56d3-94f1-14c876feb670' } } // Indian Creek
+      // { params: { id: 'bea6bf11-de53-5046-a5b4-b89217b7e9bc' } }, // Red Rock
+      // { params: { id: '78da26bc-cd94-5ac8-8e1c-815f7f30a28b' } }, // Red River Gorge
+      // { params: { id: '1db1e8ba-a40e-587c-88a4-64f5ea814b8e' } }, // USA
+      // { params: { id: 'ab48aed5-2e8d-54bb-b099-6140fe1f098f' } }, // Colorado
+      // { params: { id: 'decc1251-4a67-52b9-b23f-3243e10e93d0' } }, // Boulder
+      // { params: { id: 'f166e672-4a52-56d3-94f1-14c876feb670' } } // Indian Creek
 
     ],
     fallback: true

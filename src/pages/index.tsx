@@ -18,7 +18,7 @@ import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import RecentTaggedMedia from '../components/home/RecentMedia'
 import { enhanceMediaListWithUsernames } from '../js/usernameUtil'
-import { getImagesByFilenames } from '../js/sirv/SirvClient'
+// import { getImagesByFilenames } from '../js/sirv/SirvClient'
 
 const allowedViews = ['explore', 'newTags', 'map', 'edit', 'pulse']
 
@@ -219,12 +219,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const tagsByMedia = groupBy(tagsWithUsernames as HybridMediaTag[], 'mediaUrl')
 
-  const list = await getImagesByFilenames(Object.keys(tagsByMedia).slice(0, 30))
+  // const list = await getImagesByFilenames(Object.keys(tagsByMedia).slice(0, 30))
   return {
     props: {
       exploreData: rs.data,
       tagsByMedia,
-      mediaList: list.mediaList
+      mediaList: [] // list.mediaList
     },
     revalidate: 60
   }

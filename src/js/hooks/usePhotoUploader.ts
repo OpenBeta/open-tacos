@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import { useDropzone, DropzoneInputProps, FileRejection } from 'react-dropzone'
 import { userMediaStore } from '../stores/media'
 
@@ -56,28 +56,25 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
     }
   }
 
-  const onDrop = useCallback(
-    async (files: File[], rejections: FileRejection[]) => {
-      console.log('#number of files', files.length)
-      if (rejections.length > 0) { console.warn('Rejected files: ', rejections) }
+  const onDrop = async (files: File[], rejections: FileRejection[]): Promise<void> => {
+    console.log('#number of files', files.length)
+    if (rejections.length > 0) { console.warn('Rejected files: ', rejections) }
 
-      // Do something with the files
-      setUploading(true)
+    // Do something with the files
+    setUploading(true)
 
-      for (const file of files) {
-        if (file.size > 11534336) {
-          await userMediaStore.set.setPhotoUploadErrorMessage('¡Ay, caramba! your photo is too large (max=11MB).')
-          setUploading(false)
-          return
-        }
-
-        await onload(await readFile(file), file.name)
+    for (const file of files) {
+      if (file.size > 11534336) {
+        await userMediaStore.set.setPhotoUploadErrorMessage('¡Ay, caramba! your photo is too large (max=11MB).')
+        setUploading(false)
+        return
       }
 
-      setUploading(false)
-    },
-    []
-  )
+      await onload(await readFile(file), file.name)
+    }
+
+    setUploading(false)
+  }
 
   const { getRootProps, getInputProps, open } = useDropzone({
     onDrop,
