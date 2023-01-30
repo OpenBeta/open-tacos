@@ -77,7 +77,6 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
             userProfile={userProfile}
             initialImageList={mediaList}
             initialTagsByMediaId={tagMap}
-            keyboardTip
           />
           {!isAuthorized && !isFallback && (
             <div className='mt-4 w-full mx-auto text-xs text-secondary text-center'>

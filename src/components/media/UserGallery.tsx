@@ -26,7 +26,6 @@ export interface UserGalleryProps {
   initialTagsByMediaId: Dictionary<HybridMediaTag[]>
   auth: WithPermission
   postId: string | null
-  keyboardTip: boolean
 }
 
 /**
