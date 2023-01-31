@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useDropzone, DropzoneInputProps, FileRejection } from 'react-dropzone'
-import { userMediaStore } from '../stores/media'
+import { toast } from 'react-toastify'
 
+import { userMediaStore } from '../stores/media'
 import { uploadPhoto } from '../userApi/media'
 
 interface UploaderProps {
@@ -74,6 +75,7 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
     }
 
     setUploading(false)
+    toast.info('Photos uploaded ✓')
   }
 
   const { getRootProps, getInputProps, open } = useDropzone({

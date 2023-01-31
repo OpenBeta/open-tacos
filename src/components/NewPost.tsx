@@ -70,8 +70,8 @@ export default function NewPost ({ isMobile = true, className = '' }: ProfileNav
           </button>
           {uploading &&
             <BlockingAlert
-              icon={<StopIcon className='w-12 h-12 stroke-2 animate-spin' />}
-              description='Uploading'
+              title={<StopIcon className='w-12 h-12 stroke-2 animate-spin' />}
+              description={<progress className='progress w-56' />}
             />}
         </div>
       )
@@ -85,8 +85,8 @@ export default function NewPost ({ isMobile = true, className = '' }: ProfileNav
         </button>
         {uploading &&
           <BlockingAlert
-            icon={<StopIcon className='w-12 h-12 stroke-2 animate-spin' />}
-            description='Uploading'
+            title={<StopIcon className='w-12 h-12 stroke-2 animate-spin' />}
+            description={<progress className='progress w-56' />}
           />}
       </div>
     )

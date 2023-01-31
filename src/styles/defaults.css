@@ -38,6 +38,13 @@ html {
   @apply mt-6 lg:mt-0 lg:col-span-2 lg:pl-16 w-full;
 }
 
+/**
+ * Area & climb main container 
+ */
+.article {
+  @apply px-4 py-4 lg:py-8 max-w-screen-xl mx-auto w-full;
+}
+
 @layer utilities {
   /* For device up to xl (exclusively) */
   .content-fullscreen-tablet {

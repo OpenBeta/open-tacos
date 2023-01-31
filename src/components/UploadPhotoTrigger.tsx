@@ -1,7 +1,6 @@
 import { useRef } from 'react'
 import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { StopIcon } from '@heroicons/react/24/outline'
 import { validate as isValidUuid } from 'uuid'
 import clx from 'classnames'
 
@@ -49,7 +48,7 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
 
     const { nick, uuid } = session.metadata
 
-    const [id, destType, pageToInvalidate] = pagePathToEntityType(router.asPath)
+    const [id, destType, pageToInvalidate, destPageUrl] = pagePathToEntityType(router.asPath)
 
     // let's see if we're viewing the climb or area page
     if (id != null && isValidUuid(id) && (destType === 0 || destType === 1)) {
@@ -66,16 +65,14 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
       // Tell Next to regenerate the page being tagged
       try {
         await fetch(pageToInvalidate)
-        void router.replace({
-          pathname: '/crag/[id]',
-          query: { id }
-        })
-      } catch {}
+      } catch (e) { console.log(e) }
 
       // Regenerate user profile page as well
       if (nick != null) {
         void revalidateUserHomePage(nick)
       }
+
+      void router.replace(destPageUrl)
     } else {
       if (uuid != null && nick != null) {
         await toMyProfile()
@@ -89,7 +86,7 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
   return (
     <div
       className={clx(className, uploading ? 'pointer-events-none' : '')} {...getRootProps()} onClick={(e) => {
-        if (status === 'authenticated') {
+        if (status === 'authenticated' && !uploading) {
           openFileDialog()
         } else {
           void signIn('auth0')
@@ -100,8 +97,8 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
       {children}
       {uploading &&
         <BlockingAlert
-          icon={<StopIcon className='w-12 h-12 stroke-2 animate-spin' />}
-          description='Uploading'
+          title='Uploading'
+          description={<progress className='progress w-56' />}
         />}
     </div>
   )
@@ -112,21 +109,22 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
  * @param path `path` property as return from `Next.router()`
  * @returns 0 if current page is climb, 1 for area and crag, null otherwise
  */
-const pagePathToEntityType = (path: string): [string, number, string] | [null, null, null] => {
-  if (path == null) return [null, null, null]
+const pagePathToEntityType = (path: string): [string, number, string, string] | [null, null, null, null] => {
+  const nulls: [null, null, null, null] = [null, null, null, null]
+  if (path == null) return nulls
   const tokens = path.split('/')
   if (tokens.length >= 3) {
     const id = tokens[2]
     switch (tokens[1]) {
       case 'climbs':
-        return [id, 0, `/api/revalidate?c=${id}`]
+        return [id, 0, `/api/revalidate?c=${id}`, `/climbs/${id}`]
       case 'areas':
-        return [id, 1, `/api/revalidate?s=${id}`]
+        return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
       case 'crag':
-        return [id, 1, `/api/revalidate?s=${id}`]
+        return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
       default:
-        return [null, null, null]
+        return nulls
     }
   }
-  return [null, null, null]
+  return nulls
 }
