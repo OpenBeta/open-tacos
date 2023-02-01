@@ -217,7 +217,6 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
           onClose={slideViewerCloseHandler}
           auth={auth}
           baseUrl={baseUrl}
-          keyboardTip
           onNavigate={navigateHandler}
         />}
     </>

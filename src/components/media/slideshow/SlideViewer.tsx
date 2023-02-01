@@ -22,7 +22,6 @@ interface SlideViewerProps {
   userinfo: JSX.Element
   auth: WithPermission
   baseUrl: string
-  keyboardTip: boolean
   onNavigate: (newIndex: number) => void
 }
 
@@ -37,7 +36,6 @@ export default function SlideViewer ({
   tagsByMediaId,
   userinfo,
   auth,
-  keyboardTip,
   baseUrl,
   onNavigate
 }: SlideViewerProps): JSX.Element {
@@ -87,11 +85,11 @@ interface SingleViewerProps {
   tagList: HybridMediaTag[]
   userinfo: JSX.Element
   auth: WithPermission
-  keyboardTip: boolean
+  keyboardTip?: boolean
   onClose?: () => void
 }
 
-export const SingleViewer = ({ loaded, media, tagList, userinfo, auth, keyboardTip, onClose }: SingleViewerProps): JSX.Element => {
+export const SingleViewer = ({ loaded, media, tagList, userinfo, auth, keyboardTip = true, onClose }: SingleViewerProps): JSX.Element => {
   return (
     <>
       <div className='block relative overflow-hidden min-w-[350px] min-h-[300px]'>

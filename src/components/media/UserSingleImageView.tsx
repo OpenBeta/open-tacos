@@ -15,11 +15,10 @@ export interface UserSingleImageViewProps {
   mostRecentTagMap: Dictionary<HybridMediaTag[]>
   userProfile: IUserProfile
   auth: WithPermission
-  keyboardTip: boolean
   loaded: boolean
 }
 
-export default function UserSingleImageView ({ uid, auth, featureMedia, featureTags, mostRecentList, mostRecentTagMap, userProfile, keyboardTip, loaded }: UserSingleImageViewProps): ReactElement | null {
+export default function UserSingleImageView ({ uid, auth, featureMedia, featureTags, mostRecentList, mostRecentTagMap, userProfile, loaded }: UserSingleImageViewProps): ReactElement | null {
   return (
     <>
       <div className='max-w-screen-2xl flex flex-col lg:flex-row items-stretch justify-center border rounded-md overflow-hidden drop-shadow-sm'>
@@ -29,7 +28,7 @@ export default function UserSingleImageView ({ uid, auth, featureMedia, featureT
           tagList={featureTags}
           userinfo={<TinyProfile userProfile={userProfile} />}
           auth={auth}
-          keyboardTip={keyboardTip}
+          keyboardTip={false}
         />
       </div>
       <MoreFromThisUser loaded={loaded} uid={uid} mediaList={mostRecentList} tagMap={mostRecentTagMap} />
