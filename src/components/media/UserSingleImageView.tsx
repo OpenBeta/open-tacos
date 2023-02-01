@@ -13,7 +13,6 @@ export interface UserSingleImageViewProps {
   featureTags: HybridMediaTag[]
   mostRecentList: MediaType[]
   mostRecentTagMap: Dictionary<HybridMediaTag[]>
-
   userProfile: IUserProfile
   auth: WithPermission
   loaded: boolean
@@ -29,6 +28,7 @@ export default function UserSingleImageView ({ uid, auth, featureMedia, featureT
           tagList={featureTags}
           userinfo={<TinyProfile userProfile={userProfile} />}
           auth={auth}
+          keyboardTip={false}
         />
       </div>
       <MoreFromThisUser loaded={loaded} uid={uid} mediaList={mostRecentList} tagMap={mostRecentTagMap} />
