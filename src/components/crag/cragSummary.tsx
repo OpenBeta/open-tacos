@@ -7,7 +7,7 @@ import * as Portal from '@radix-ui/react-portal'
 import { MapPinIcon, PencilSquareIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
 
-import { AreaMetadataType, CountByGroupType, AreaUpdatableFieldsType, EditMetadataType } from '../../js/types'
+import { AreaUpdatableFieldsType, AreaType } from '../../js/types'
 import { IndividualClimbChangeInput, UpdateOneAreaInputType } from '../../js/graphql/gql/contribs'
 import { getMapHref, sortClimbsByLeftRightIndex } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
@@ -17,25 +17,14 @@ import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 import { DeleteAreaTrigger } from '../edit/Triggers'
 import { AreaCRUD } from '../edit/AreaCRUD'
-import { CragLayoutProps } from './cragLayout'
-import { StickyHeader } from './StickyHeader'
+import { StickyHeader, Skeleton as HeaderSkeleton } from './StickyHeader'
 import { InplaceTextInput, InplaceEditor } from '../editor'
 import EditModeToggle from '../editor/EditModeToggle'
 import { FormSaveActionProps } from '../../components/editor/FormSaveAction'
 import { ArticleLastUpdate } from '../edit/ArticleLastUpdate'
 import Tooltip from '../ui/Tooltip'
 
-export type CragHeroProps = EditMetadataType & {
-  uuid: string
-  title: string
-  latitude: number
-  longitude: number
-  description: string
-  galleryRef?: string
-  aggregate: CountByGroupType[]
-  media: any[]
-  areaMeta: AreaMetadataType
-}
+export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName' | 'climbs' | 'children' | 'totalClimbs'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 
 export interface EditableClimbType {
   id: string
@@ -60,15 +49,16 @@ type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 
  * because react-hook-form `handleSubmit()` handles it for us and sends exeptions
  * to `onError()` callback.
  */
-export default function CragSummary (props: CragLayoutProps): JSX.Element {
+export default function CragSummary (props: AreaType): JSX.Element {
   const {
-    uuid, title: initTitle,
-    description: initDescription,
-    latitude: initLat, longitude: initLng,
-    areaMeta, climbs, ancestors, pathTokens,
-    childAreas,
+    uuid, areaName: initTitle,
+    content: { description: initDescription },
+    metadata: areaMeta, climbs, ancestors, pathTokens,
+    children: childAreas,
     createdAt, createdBy, updatedAt, updatedBy
   } = props
+
+  const { lat: initLat, lng: initLng } = areaMeta
 
   const router = useRouter()
 
@@ -447,7 +437,7 @@ const EditorTooltip: React.FC = () => (
         <strong>Delete climbs</strong><br />Delete the entire line
       </li>
       <li>
-        <strong>Set climb a difficulty/grade</strong><br />Coming soon!
+        <strong>Set difficulty/grade</strong><br />Coming soon!
       </li>
       <li>
         <strong>Change left-to-right order</strong><br />Copy-n-paste lines
@@ -463,6 +453,26 @@ const EditorTooltip: React.FC = () => (
   >
     <div className='flex items-center gap-2 text-xs'><span className='link-dotted'>Help</span><QuestionMarkCircleIcon className='text-info w-5 h-5' /></div>
   </Tooltip>)
+
+/**
+ * Area/climb main skeleton
+ */
+export const Skeleton: React.FC = () => (
+  <div>
+    <HeaderSkeleton />
+    <div className='mt-4 text-right'>
+      <EditModeToggle onChange={() => {}} showSkeleton />
+    </div>
+    <div className='area-climb-page-summary'>
+      <div className='area-climb-page-summary-left'>
+        <h1 className='text-4xl md:text-5xl rounded-box bg-base-200/10 w-72'>&nbsp;</h1>
+      </div>
+      <div className='area-climb-page-summary-right'>
+        <h3 className='rounded-box bg-base-200/10 w-48'>&nbsp;</h3>
+        <div className='mt-4 rounded-box bg-base-200/10 w-full h-80' />
+      </div>
+    </div>
+  </div>)
 
 export const ClientSideFormSaveAction = dynamic<FormSaveActionProps>(async () => await import('../../components/editor/FormSaveAction').then(module => module.FormSaveAction), {
   ssr: false

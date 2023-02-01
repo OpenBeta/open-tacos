@@ -11,7 +11,7 @@ interface ReturnToProfileHook {
  */
 export default function useReturnToProfile (): ReturnToProfileHook {
   const router = useRouter()
-  const { data } = useSession({ required: true })
+  const { data } = useSession()
 
   const nick = data?.user?.metadata?.nick ?? null
 

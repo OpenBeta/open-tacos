@@ -40,3 +40,8 @@ export const StickyHeader = ({ isClimbPage = false, ancestors, pathTokens, formA
     </div>
   )
 }
+
+export const Skeleton: React.FC = () => (
+  <div className='top-0 z-40 py-2 lg:min-h-[4rem] block lg:flex lg:items-center lg:justify-between'>
+    <div className='bg-base-200/10 h-6 w-60 lg:w-[800px] rounded-box' />
+  </div>)

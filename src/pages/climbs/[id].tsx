@@ -15,7 +15,7 @@ import { AreaType, ClimbType, MediaBaseTag, RulesType } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
-import PhotoMontage from '../../components/media/PhotoMontage'
+import PhotoMontage, { Skeleton as PhotoMontageSkeleton } from '../../components/media/PhotoMontage'
 import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import TickButton from '../../components/users/TickButton'
@@ -24,7 +24,7 @@ import EditModeToggle from '../../components/editor/EditModeToggle'
 import { AREA_NAME_FORM_VALIDATION_RULES } from '../../components/edit/EditAreaForm'
 import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 import { StickyHeader } from '../../components/crag/StickyHeader'
-import { ClientSideFormSaveAction } from '../../components/crag/cragSummary'
+import { ClientSideFormSaveAction, Skeleton as ContentSkeleton } from '../../components/crag/cragSummary'
 import { getImageDimensionsHack } from '../../js/utils/hacks'
 import { ArticleLastUpdate } from '../../components/edit/ArticleLastUpdate'
 
@@ -47,25 +47,31 @@ interface ClimbPageProps {
   mediaListWithUsernames: MediaBaseTag[]
   leftClimb: ClimbType | null
   rightClimb: ClimbType | null
+  showSkeleton?: boolean
 }
 
 const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
-  const router = useRouter()
+  const { isFallback: showSkeleton } = useRouter()
   return (
     <>
-      {!router.isFallback && <PageMeta {...props} />}
+      {!showSkeleton && <PageMeta {...props} />}
       <Layout
         showFilterBar={false}
         contentContainerClass='content-default'
       >
-        {/* with-standard-y-margin min-h-screen */}
-        {router.isFallback
-          ? (
-            <div className='px-4 max-w-screen-md'>
-              <div>Loading...</div>
-            </div>
-            )
-          : <Body {...props} />}
+        <article className='article'>
+          {showSkeleton
+            ? (
+              <>
+                <PhotoMontageSkeleton />
+                <div className='mt-6'>
+                  <ContentSkeleton />
+                </div>
+              </>)
+            : (
+              <Body {...props} />
+              )}
+        </article>
       </Layout>
     </>
 
@@ -74,7 +80,7 @@ const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
 
 export default ClimbPage
 
-const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
+const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb, showSkeleton = false }: ClimbPageProps): JSX.Element => {
   const { id, name, fa, yds, type, content, safety, metadata, ancestors, pathTokens, createdAt, createdBy, updatedAt, updatedBy } = climb
   const { climbId } = metadata
 
@@ -159,7 +165,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
     />
   )
   return (
-    <div className='px-4 py-4 lg:py-8 max-w-screen-xl mx-auto w-full' {...swipeHandlers}>
+    <div {...swipeHandlers}>
       <Portal.Root container={editTogglePlaceholderRef}>
         <EditModeToggle onChange={setEditMode} />
       </Portal.Root>

@@ -1,6 +1,6 @@
 import clx from 'classnames'
 import { AreaType } from '../../js/types'
-import { AreaSummaryType } from '../crag/cragLayout'
+import { AreaSummaryType } from '../crag/cragSummary'
 import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTriggerButtonSm, DeleteAreaTriggerButtonSm } from './Triggers'
 import { AreaEntityIcon } from '../EntityIcons'
 import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'

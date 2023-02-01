@@ -153,7 +153,7 @@ interface LeanAlertProps {
 export const LeanAlert = ({ icon = null, title = null, description = null, children = DefaultOkButton, closeOnEsc = true, className = '' }: LeanAlertProps): JSX.Element => {
   return (
     <AlertDialogPrimitive.Root defaultOpen>
-      <AlertDialogPrimitive.Overlay className='fixed inset-0 bg-black/60' />
+      <AlertDialogPrimitive.Overlay className='fixed inset-0 bg-black/60 z-50' />
       <AlertDialogPrimitive.Content
         onEscapeKeyDown={e => !closeOnEsc && e.preventDefault()}
         className='z-50 fixed h-screen inset-0 mx-auto flex items-center justify-center px-2 lg:px-0 text-center overflow-y-auto max-w-xs md:max-w-md lg:max-w-lg'
@@ -180,4 +180,4 @@ export const AlertAction = AlertDialogPrimitive.Action
 /**
  * An alert with no close button.  Use this to temporarily block the screen during important operation such as photo uploading.
  */
-export const BlockingAlert = ({ icon, description }): JSX.Element => <LeanAlert icon={icon} description={description}><div /></LeanAlert>
+export const BlockingAlert = ({ title, description }): JSX.Element => <LeanAlert title={title} description={description}><div /></LeanAlert>

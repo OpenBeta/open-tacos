@@ -41,7 +41,7 @@
     "mapbox-gl": "^2.7.0",
     "nanoid": "^4.0.0",
     "nanoid-dictionary": "^4.3.0",
-    "next": "12.3.0",
+    "next": "12.3.4",
     "next-auth": "4.10.3",
     "nprogress": "^0.2.0",
     "probe-image-size": "^7.2.3",
