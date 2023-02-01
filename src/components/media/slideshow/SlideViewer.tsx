@@ -85,10 +85,11 @@ interface SingleViewerProps {
   tagList: HybridMediaTag[]
   userinfo: JSX.Element
   auth: WithPermission
+  keyboardTip?: boolean
   onClose?: () => void
 }
 
-export const SingleViewer = ({ loaded, media, tagList, userinfo, auth, onClose }: SingleViewerProps): JSX.Element => {
+export const SingleViewer = ({ loaded, media, tagList, userinfo, auth, keyboardTip = true, onClose }: SingleViewerProps): JSX.Element => {
   return (
     <>
       <div className='block relative overflow-hidden min-w-[350px] min-h-[300px]'>
@@ -109,6 +110,7 @@ export const SingleViewer = ({ loaded, media, tagList, userinfo, auth, onClose }
             currentImage={media}
             tagList={tagList}
             auth={auth}
+            keyboardTip={keyboardTip}
             onClose={onClose}
           />
         }
@@ -154,11 +156,11 @@ const RhsContainer = ({ loaded, userinfo, content, footer = null }: RhsContainer
   return loaded
     ? (
       <div className='flex flex-col justify-start h-[inherit] lg:max-w-[400px] min-w-[350px] bg-white'>
-        <div className='grow'>
+        <div className='grow flex-col flex'>
           <div className='border-b px-4 py-4'>
             {userinfo}
           </div>
-          <div className='px-4'>
+          <div className='px-4 grow flex flex-col'>
             {content}
           </div>
         </div>
@@ -174,10 +176,11 @@ interface InfoContainerProps {
   currentImage: MediaType | null
   tagList: HybridMediaTag[]
   auth: WithPermission
+  keyboardTip?: boolean
   onClose?: () => void
 }
 
-const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerProps): ReactElement | null => {
+const InfoContainer = ({ currentImage, tagList, auth, keyboardTip = true, onClose }: InfoContainerProps): ReactElement | null => {
   if (currentImage == null) return null
 
   return (
@@ -203,7 +206,15 @@ const InfoContainer = ({ currentImage, tagList, auth, onClose }: InfoContainerPr
         </div>}
 
       <div className='flex-1' />
+      {keyboardTip &&
+        <div className='mb-2 flex flex-col gap-4 text-sm text-base-300 font-semibold'>
+          <div> Keyboard shortcuts:</div>
+          <div className='flex flex-col gap-2'>
+            <span><kbd className='mr-2 kbd'>◀︎</kbd>PREVIOUS</span>
+            <span><kbd className='mr-2 kbd'>▶︎</kbd>NEXT</span>
+          </div>
 
+        </div>}
       {auth.isAuthorized &&
         <div className='my-8 flex items-center hover:bg-rose-50 p-2 rounded-lg transition'>
           <div className='text-primary text-sm flex-1'>Enable <b>Power mode</b> to delete this image</div>
