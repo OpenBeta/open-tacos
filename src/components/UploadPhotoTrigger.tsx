@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useSession, signIn } from 'next-auth/react'
-import { useRouter } from 'next/router'
+import { useRouter, NextRouter } from 'next/router'
 import { validate as isValidUuid } from 'uuid'
 import clx from 'classnames'
 
@@ -48,7 +48,7 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
 
     const { nick, uuid } = session.metadata
 
-    const [id, destType, pageToInvalidate, destPageUrl] = pagePathToEntityType(router.asPath)
+    const [id, destType, pageToInvalidate, destPageUrl] = pagePathToEntityType(router)
 
     // let's see if we're viewing the climb or area page
     if (id != null && isValidUuid(id) && (destType === 0 || destType === 1)) {
@@ -72,6 +72,8 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
         void revalidateUserHomePage(nick)
       }
 
+      // Very important call to force destination page to update its props
+      // without doing a hard refresh
       void router.replace(destPageUrl)
     } else {
       if (uuid != null && nick != null) {
@@ -107,24 +109,23 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
 /**
  * Convert current page path to a destination type for tagging.  Expect `path` to be in /areas|crag|climb/[id].
  * @param path `path` property as return from `Next.router()`
- * @returns 0 if current page is climb, 1 for area and crag, null otherwise
  */
-const pagePathToEntityType = (path: string): [string, number, string, string] | [null, null, null, null] => {
+const pagePathToEntityType = (router: NextRouter): [string, number, string, string] | [null, null, null, null] => {
   const nulls: [null, null, null, null] = [null, null, null, null]
-  if (path == null) return nulls
-  const tokens = path.split('/')
-  if (tokens.length >= 3) {
-    const id = tokens[2]
-    switch (tokens[1]) {
-      case 'climbs':
-        return [id, 0, `/api/revalidate?c=${id}`, `/climbs/${id}`]
-      case 'areas':
-        return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
-      case 'crag':
-        return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
-      default:
-        return nulls
-    }
+  const { asPath, query } = router
+  const tokens = asPath.split('/')
+
+  if (query == null || query.id == null || tokens.length < 3) return nulls
+
+  const id = query.id as string
+  switch (tokens[1]) {
+    case 'climbs':
+      return [id, 0, `/api/revalidate?c=${id}`, `/climbs/${id}`]
+    case 'areas':
+      return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
+    case 'crag':
+      return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
+    default:
+      return nulls
   }
-  return nulls
 }

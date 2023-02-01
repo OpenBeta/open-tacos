@@ -50,16 +50,16 @@ export const UploadCTACragBanner: React.FC<UploadCTACragBannerProps> = ({ isSkel
   const router = useRouter()
   const [uploaded, setUploaded] = useState(false)
   return (
-    <section className={clx('p-4 rounded-box flex flex-wrap items-center justify-center gap-x-8 gap-y-2 h-48', isSkeleton ? 'animate-pulse bg-base-200/30' : 'bg-secondary/50')}>
+    <section className={clx('p-4 rounded-box flex flex-wrap items-center justify-center gap-x-8 gap-y-2 h-48', isSkeleton ? 'animate-pulse bg-base-200/10' : 'bg-secondary/50')}>
       {!isSkeleton && uploaded &&
          (
            <div className='text-center'>
              <div className='text-lg font-semibold'>Thank you for your contribution!</div>
-             <div className='text-sm text-base-300'>Click&nbsp;
+             <div className='text-sm text-base-300'>Photos will be added momentarily.  Click&nbsp;
                <Link href={router.asPath}>
                  <a className='underline'>here</a>
                </Link>
-              &nbsp;if you don't see the photo.
+              &nbsp;to manually refresh the page.
              </div>
            </div>)}
       {!isSkeleton && !uploaded && (
