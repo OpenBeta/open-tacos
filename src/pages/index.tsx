@@ -224,7 +224,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       exploreData: rs.data,
       tagsByMedia,
-      mediaList: list
+      mediaList: list.mediaList
     },
     revalidate: 60
   }
