@@ -1,7 +1,6 @@
 import { useState, useEffect, memo } from 'react'
 import Image from 'next/image'
-import { shuffle } from 'underscore'
-import classNames from 'classnames'
+import clx from 'classnames'
 
 import PhotoFooter from './PhotoFooter'
 import { MediaBaseTag } from '../../js/types'
@@ -14,6 +13,7 @@ export interface PhotoMontageProps {
   photoList: MediaBaseTag[]
   /** set to `true` if gallery is placed above the fold */
   isHero?: boolean
+  showSkeleton?: boolean
 }
 
 /**
@@ -27,19 +27,23 @@ export interface PhotoMontageProps {
  *
  * @see https://nextjs.org/docs/api-reference/next/image
  */
-const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontageProps): JSX.Element | null => {
+const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = false }: PhotoMontageProps): JSX.Element | null => {
   const { isMobile } = useResponsive()
-  const [shuffledList, setPhotoList] = useState<MediaBaseTag[]>([])
   const [showPhotoGalleryModal, setShowPhotoGalleryModal] = useState<boolean>(false)
   useEffect(() => {
-    setPhotoList(shuffle(initialList))
     void userMediaStore.set.setPhotoList(initialList)
   }, [initialList])
+
+  const shuffledList = initialList
 
   const photoGalleryModal = <PhotoGalleryModal setShowPhotoGalleryModal={setShowPhotoGalleryModal} />
   const [hover, setHover] = useState(false)
 
-  if (shuffledList == null || shuffledList?.length === 0) { return null }
+  if (showSkeleton) {
+    return <Skeleton />
+  }
+
+  if (!showSkeleton && (shuffledList == null || shuffledList?.length === 0)) { return null }
 
   if (isMobile) {
     const { uid, mediaUrl, destType, destination } = shuffledList[0]
@@ -64,7 +68,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
   if (shuffledList.length <= 4) {
     return (
       <div
-        className='grid grid-cols-2 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 fadeinEffect'
+        className={clx('grid grid-cols-2 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 fadeinEffect', showSkeleton ? 'animate-pulse bg-base-200/20' : '')}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
@@ -74,7 +78,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false }: PhotoMontagePr
             <div
               key={mediaUuid}
               className={
-                classNames(
+                clx(
                   'block relative hover:cursor-pointer',
                   shuffledList.length === 1 ? ' overflow-hidden rounded-r-xl' : '')
               }
@@ -133,4 +137,13 @@ const ResponsiveImage = ({ mediaUrl, isHero = true, onClick }): JSX.Element => (
     onClick={onClick}
   />)
 
+export const Skeleton: React.FC = () => (
+  <div className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 bg-base-200/10 lg:bg-transparent'>
+    <div className='hidden lg:block relative col-start-1 col-span-2 row-span-2 col-end-3 bg-base-200/10 h-80' />
+    <div className='hidden lg:block w-full h-[158px] bg-base-200/10 ' />
+    <div className='hidden lg:block w-full h-[158px] bg-base-200/10' />
+    <div className='hidden lg:block w-full h-[158px] bg-base-200/10' />
+    <div className='hidden lg:block w-full h-[158px] bg-base-200/10' />
+  </div>
+)
 export default memo(PhotoMontage)
