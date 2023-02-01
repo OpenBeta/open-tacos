@@ -207,10 +207,12 @@ const InfoContainer = ({ currentImage, tagList, auth, keyboardTip = true, onClos
 
       <div className='flex-1' />
       {keyboardTip &&
-        <div className='mb-2'>
-          <span className='text-xs text-slate-500'>
-            Keyboard shortcuts: Previous [<kbd className='kbd-xs'>◀︎</kbd>] Next [<kbd className='kbd-xs'>▶︎</kbd>]
-          </span>
+        <div className='mb-2 flex flex-col gap-2 text-sm text-base-300'>
+          <div> Keyboard shortcuts:</div>
+          <div className='flex gap-4 justify-between'>
+            <span><kbd className='kbd'>◀︎</kbd> Previous</span><span> Next <kbd className='kbd'>▶︎</kbd></span>
+          </div>
+
         </div>}
       {auth.isAuthorized &&
         <div className='my-8 flex items-center hover:bg-rose-50 p-2 rounded-lg transition'>
