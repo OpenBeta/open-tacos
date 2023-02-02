@@ -97,7 +97,7 @@ export default function BaseMap ({
       id='areaHeatmap'
       reuseMaps
       mapStyle={light ? MAP_STYLES.light : MAP_STYLES.dark}
-      mapboxAccessToken='pk.eyJ1IjoibWFwcGFuZGFzIiwiYSI6ImNqcDdzbW12aTBvOHAzcW82MGg0ZTRrd3MifQ.MYiNJHklgMkRzapAKuTQNg'
+      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
       onMouseMove={onHover}
       onClick={onClick}
       interactiveLayerIds={interactiveLayerIds}

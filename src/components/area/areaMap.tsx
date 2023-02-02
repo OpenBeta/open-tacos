@@ -82,7 +82,7 @@ export default function AreaMap (props: AreaMapProps): JSX.Element {
         ref={mapRef}
         id='areaHeatmap2'
         reuseMaps
-        mapboxAccessToken='pk.eyJ1IjoibWFwcGFuZGFzIiwiYSI6ImNqcDdzbW12aTBvOHAzcW82MGg0ZTRrd3MifQ.MYiNJHklgMkRzapAKuTQNg'
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
         mapStyle={MAP_STYLES.dark}
       >
         <Marker longitude={props.area.metadata.lng} latitude={props.area.metadata.lat} anchor='bottom'>
