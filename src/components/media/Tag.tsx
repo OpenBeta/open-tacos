@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { XCircleIcon, MapPinIcon } from '@heroicons/react/20/solid'
 import clx from 'classnames'
 import { HybridMediaTag, MediaTagWithArea, MediaTagWithClimb, TagTargetType } from '../../js/types'
-import useResponsive from '../../js/hooks/useResponsive'
 
 interface PhotoTagProps {
   tag: HybridMediaTag
@@ -10,13 +9,15 @@ interface PhotoTagProps {
   isAuthorized?: boolean
   showDelete?: boolean
   size?: 'md' | 'lg'
+  maxWidth?: number
 }
 
-export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, isAuthorized = false }: PhotoTagProps): JSX.Element | null {
+export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, isAuthorized = false, maxWidth }: PhotoTagProps): JSX.Element | null {
   const [url, name] = resolver(tag)
   if (url == null || name == null) return null
   const isArea = tag.destType === TagTargetType.area
-  const currentScreensize = useResponsive()
+
+  const DEFAULT_TAG_WIDTH = 320
 
   return (
     <Link href={url} prefetch={false}>
@@ -29,7 +30,8 @@ export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, i
         onClick={stopPropagation}
       >
         {isArea && <MapPinIcon className='w-4 h-4' />}
-        <div style={currentScreensize.isDesktop || currentScreensize.isTablet ? { maxWidth: 240 } : { maxWidth: 'calc(80vw)' }} className='mt-0.5 whitespace-nowrap truncate text-sm'>{name}</div>
+
+        <div style={maxWidth !== undefined ? { maxWidth: maxWidth } : { maxWidth: DEFAULT_TAG_WIDTH }} className='mt-0.5 whitespace-nowrap truncate text-sm'>{name}</div>
         {isAuthorized && showDelete &&
           <button onClick={(e) => {
             onDelete(tag.id)
