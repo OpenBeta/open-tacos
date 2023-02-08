@@ -29,7 +29,7 @@ const PhotoGalleryModal = ({ setShowPhotoGalleryModal }: PhotoGalleryModalProps)
                   setShowImage(element.mediaUrl), console.log(element.mediaUrl);
                 }}
                 key={element.mediaUrl}
-                className='overflow-hidden mt-0 mb-2 lg:mb-4 hover:brightness-75 break-inside-avoid-column break-inside-avoid relative block rounded-md'
+                className='overflow-hidden mt-0 mb-2 lg:mb-4 hover:brightness-75 break-inside-avoid-column cursor-pointer break-inside-avoid relative block rounded-md'
               >
                 <ResponsiveImage2
                   naturalWidth={width}
