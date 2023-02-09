@@ -85,7 +85,6 @@ export const MobilePopupTagList = ({ list, imageInfo, isAuthorized = false }: Ta
                   onDelete={onDelete}
                   showDelete
                   size='lg'
-                  maxWidth={240}
                 />
               </PrimitiveDropdownMenuItem>
             ))}

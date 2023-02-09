@@ -17,8 +17,6 @@ export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, i
   if (url == null || name == null) return null
   const isArea = tag.destType === TagTargetType.area
 
-  const DEFAULT_TAG_WIDTH = 320
-
   return (
     <Link href={url} prefetch={false}>
       <a
@@ -31,7 +29,7 @@ export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, i
       >
         {isArea && <MapPinIcon className='w-4 h-4' />}
 
-        <div style={maxWidth !== undefined ? { maxWidth: maxWidth } : { maxWidth: DEFAULT_TAG_WIDTH }} className='mt-0.5 whitespace-nowrap truncate text-sm'>{name}</div>
+        <div className='mt-0.5 whitespace-nowrap truncate text-sm max-w-[240px]'>{name}</div>
         {isAuthorized && showDelete &&
           <button onClick={(e) => {
             onDelete(tag.id)
