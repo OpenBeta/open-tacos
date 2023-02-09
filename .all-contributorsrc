@@ -349,6 +349,15 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "ParthParolekar",
+      "name": "Parth Parolekar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/69164301?v=4",
+      "profile": "https://github.com/ParthParolekar",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
