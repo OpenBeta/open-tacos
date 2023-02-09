@@ -8,7 +8,6 @@ import React, { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
 export type AreaCRUDProps = Pick<AreaType, 'uuid' | 'areaName'> & {
-  areas?: any
   childAreas: any
   editMode: boolean
   onChange: () => void
@@ -22,7 +21,7 @@ export type AreaCRUDProps = Pick<AreaType, 'uuid' | 'areaName'> & {
 export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, editMode, onChange }: AreaCRUDProps): JSX.Element => {
   const areaCount = childAreas.length
 
-  const [state, setState] = useState<any | undefined>({})
+  const [state, setState] = useState<any | undefined>()
 
   useEffect(() => {
     if (childAreas !== undefined) {
