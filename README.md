@@ -182,6 +182,7 @@ Thanks goes to these wonderful people:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/evannoronha"><img src="https://avatars.githubusercontent.com/u/6803522?v=4?s=100" width="100px;" alt="Evan Noronha"/><br /><sub><b>Evan Noronha</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/issues?q=author%3Aevannoronha" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://tedgeving.com"><img src="https://avatars.githubusercontent.com/u/24211?v=4?s=100" width="100px;" alt="ted"/><br /><sub><b>ted</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=tedgeving" title="Code">💻</a> <a href="#ideas-tedgeving" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ParthParolekar"><img src="https://avatars.githubusercontent.com/u/69164301?v=4?s=100" width="100px;" alt="Parth Parolekar"/><br /><sub><b>Parth Parolekar</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=ParthParolekar" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/theonlyjunaid"><img src="https://avatars.githubusercontent.com/u/95287515?v=4?s=100" width="100px;" alt="Junaid"/><br /><sub><b>Junaid</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=theonlyjunaid" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
