@@ -4,9 +4,12 @@ import { AreaSummaryType } from '../crag/cragSummary'
 import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTriggerButtonSm, DeleteAreaTriggerButtonSm } from './Triggers'
 import { AreaEntityIcon } from '../EntityIcons'
 import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
+import React, { useEffect, useState } from 'react'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
-export type AreaCRUDProps = Pick<AreaType, 'uuid'|'areaName'> & {
-  childAreas: AreaSummaryType[]
+export type AreaCRUDProps = Pick<AreaType, 'uuid' | 'areaName'> & {
+  areas?: any
+  childAreas: any
   editMode: boolean
   onChange: () => void
 }
@@ -15,8 +18,43 @@ export type AreaCRUDProps = Pick<AreaType, 'uuid'|'areaName'> & {
  * Responsible for rendering child areas table (Read) and Create/Update/Delete operations.
  * @param onChange notify parent of any changes
  */
+
 export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, editMode, onChange }: AreaCRUDProps): JSX.Element => {
   const areaCount = childAreas.length
+
+  const [state, setState] = useState<any | undefined>({})
+
+  useEffect(() => {
+    if (childAreas !== undefined) {
+      setState({ areas: childAreas })
+    }
+  }, [childAreas])
+
+  const reorder = (list, startIndex, endIndex): object => {
+    const result = Array.from(list)
+    const [removed] = result.splice(startIndex, 1)
+    result.splice(endIndex, 0, removed)
+    return result
+  }
+
+  function onDragEnd (result): void {
+    /* if (!result.destination) {
+      return
+    } */
+
+    if (result.destination.index === result.source.index) {
+      return
+    }
+
+    const areas = reorder(
+      state?.areas,
+      result.source.index,
+      result.destination.index
+    )
+
+    setState({ areas })
+  }
+
   return (
     <>
       <div className='flex items-center justify-between'>
@@ -27,6 +65,7 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
               <AddAreaTriggerButtonSm />
             </AddAreaTrigger>)}
         </div>
+        {/* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */}
         <span className='text-base-300 text-sm'>{areaCount > 0 && `Total: ${areaCount}`}</span>
       </div>
 
@@ -38,13 +77,62 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
           {editMode && <AddAreaTrigger parentName={parentName} parentUuid={parentUuid} onSuccess={onChange} />}
         </div>)}
 
+      {state !== undefined && (
+        <DragDropContext
+          onDragEnd={onDragEnd}
+        >
+          <Droppable droppableId='cragTable'>
+            {(provided, snapshot) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className={`two-column-table ${editMode ? '' : 'xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2'
+                  }  fr-2`}
+              >
+                {state?.areas?.map((i, idx) => (
+                  <Draggable
+                    isDragDisabled={!editMode}
+                    draggableId={i.uuid}
+                    index={idx}
+                    key={i.uuid}
+                  >
+                    {(provided, snapshot) => (
+                      <div
+                        className={
+                          `${snapshot.isDragging ? 'bg-purple-100' : 'bg-white'}`
+}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <AreaItem
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          key={i.uuid}
+                          index={idx}
+                          borderBottom={idx === Math.ceil(areaCount / 2) - 1}
+                          parentUuid={parentUuid}
+                          {...i}
+                          editMode={editMode}
+                          onChange={onChange}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
+
       {/* Build 2 column table on large screens */}
       <div className='two-column-table'>
         {childAreas.map((props, index) => (
           <AreaItem
             key={props.uuid}
             index={index}
-            borderBottom={index === Math.ceil(areaCount / 2) - 1}
+            borderBottom={0}
             parentUuid={parentUuid}
             {...props}
             editMode={editMode}
@@ -52,7 +140,7 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
           />))}
 
         {/* A hack to add bottom border */}
-        {areaCount > 1 && <div className='border-t' />}
+
       </div>
       {areaCount > 0 && editMode && (
         <div className='mt-8 md:text-right'>
@@ -83,7 +171,7 @@ export const AreaItem = ({ index, borderBottom, areaName, uuid, parentUuid, onCh
   const { totalClimbs, metadata: { leaf, isBoulder } } = props
   const isLeaf = leaf || isBoulder
   return (
-    <div className={clx('area-row', borderBottom ? 'border-b' : '')}>
+    <div className={clx('area-row')}>
       <a href={`/crag/${uuid}`} className='area-entity-box'>
         {index + 1}
       </a>
