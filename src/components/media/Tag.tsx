@@ -9,10 +9,9 @@ interface PhotoTagProps {
   isAuthorized?: boolean
   showDelete?: boolean
   size?: 'md' | 'lg'
-  maxWidth?: number
 }
 
-export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, isAuthorized = false, maxWidth }: PhotoTagProps): JSX.Element | null {
+export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, isAuthorized = false }: PhotoTagProps): JSX.Element | null {
   const [url, name] = resolver(tag)
   if (url == null || name == null) return null
   const isArea = tag.destType === TagTargetType.area
