@@ -13,6 +13,8 @@ interface TextFieldProps {
   spellcheck?: boolean
   /** Wait until submit to validate, or perform the validation immediately */
   validateImmediately?: boolean
+  /** Used to prompt user to change username */
+  isChanged?: boolean
   /** return an error message or undefined for valid input */
   validate?: (value: any) => Promise<undefined|string>
 }
@@ -54,6 +56,10 @@ const TextField = (props: TextFieldProps): JSX.Element => (
                 {...field}
                 spellCheck={props.spellcheck}
                />)}
+
+          <div className='h-3 pt-1 px-3 text-blue-500'>
+            {(props.isChanged !== true) && 'You may change your user name'}
+          </div>
 
           <div className='h-3 text-sm pt-1 px-3 text-pink-600'>
             {(props.validateImmediately === true || meta.touched) && (meta?.error ?? '')}

@@ -47,6 +47,7 @@ const UserProfileSchema = Yup.object().shape({
 export default function ProfileEditForm (): ReactElement {
   const [loadingName, setLoadingUser] = useState(false)
   const [justSubmitted, setJustSubmitted] = useState(false)
+  const [isChanged, setChanged] = useState(false)
   const [profile, setProfile] = useState<IWritableUserMetadata>({
     name: '',
     nick: '',
@@ -92,6 +93,12 @@ export default function ProfileEditForm (): ReactElement {
       return undefined
     }
 
+    if (profile.nick !== value) {
+      setChanged(true) // if username has changed
+    } else {
+      setChanged(false) // if not, prompt user to change username
+    }
+
     // only check if nick has changed from the original
     if (profile.nick !== value && await doesUsernameExist(value)) {
       setLoadingUser(false)
@@ -119,6 +126,7 @@ export default function ProfileEditForm (): ReactElement {
               name='nick'
               label='Username'
               validate={checkUsernameHandler}
+              isChanged={isChanged}
               validateImmediately
             />
 
@@ -131,9 +139,9 @@ export default function ProfileEditForm (): ReactElement {
             )}
           </div>
 
-          <TextField name='name' label='Name' />
-          <TextField name='bio' label='Bio' multiline rows={3} spellcheck />
-          <TextField name='website' label='Website (optional)' />
+          <TextField name='name' label='Display Name' isChanged />
+          <TextField name='bio' label='Bio' multiline rows={3} spellcheck isChanged />
+          <TextField name='website' label='Website (optional)' isChanged />
           <div className='flex justify-center pt-6'>
             <Snackbar
               open={justSubmitted}
