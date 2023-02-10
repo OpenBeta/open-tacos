@@ -349,6 +349,33 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "ParthParolekar",
+      "name": "Parth Parolekar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/69164301?v=4",
+      "profile": "https://github.com/ParthParolekar",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "theonlyjunaid",
+      "name": "Junaid",
+      "avatar_url": "https://avatars.githubusercontent.com/u/95287515?v=4",
+      "profile": "https://github.com/theonlyjunaid",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kunal00000",
+      "name": "KunalVerma2468",
+      "avatar_url": "https://avatars.githubusercontent.com/u/92316166?v=4",
+      "profile": "https://github.com/kunal00000",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

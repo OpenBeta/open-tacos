@@ -19,7 +19,10 @@ interface RecentImageCardProps {
 /**
  * Image card for the home page
  */
-export const RecentImageCard = ({ imageInfo, tagList }: RecentImageCardProps): JSX.Element => {
+export const RecentImageCard = ({
+  imageInfo,
+  tagList
+}: RecentImageCardProps): JSX.Element => {
   const [loaded, setLoaded] = useState(false)
   const { filename, meta } = imageInfo
   const { width, height } = meta
@@ -30,7 +33,7 @@ export const RecentImageCard = ({ imageInfo, tagList }: RecentImageCardProps): J
       header={<PostHeader username={tagList[0].uid} />}
       image={
         <Link href={firstUrl ?? '#'}>
-          <a>
+          <a className='relative'>
             <img
               src={MobileLoader({
                 src: filename,
@@ -41,7 +44,16 @@ export const RecentImageCard = ({ imageInfo, tagList }: RecentImageCardProps): J
               sizes='100vw'
               onLoad={() => setLoaded(true)}
             />
-            <div className={clx('absolute top-0 left-0 w-full h-full', loaded ? 'bg-transparent' : 'bg-gray-50 bg-opacity-60 border animate-pulse')}>{loaded}</div>
+            <div
+              className={clx(
+                'absolute top-0 left-0 w-full h-full',
+                loaded
+                  ? 'bg-transparent'
+                  : 'bg-gray-50 bg-opacity-60 border animate-pulse'
+              )}
+            >
+              {loaded}
+            </div>
           </a>
         </Link>
       }
@@ -58,10 +70,9 @@ export const RecentImageCard = ({ imageInfo, tagList }: RecentImageCardProps): J
             <span className='uppercase text-xs text-base-200'>
               {getUploadDateSummary(imageInfo.ctime)}
             </span>
-
           </section>
         </>
-}
+      }
     />
   )
 }
