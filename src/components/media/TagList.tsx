@@ -32,7 +32,7 @@ export default function TagList ({ list, isAuthorized = false, isAuthenticated =
   return (
     <div className={
           classNames(
-            'text-xs inline-flex flex-wrap justify-start items-center gap-2',
+            'text-xs inline-flex flex-wrap justify-start items-center gap-2 overflow-hidden',
             className
           )
           }
