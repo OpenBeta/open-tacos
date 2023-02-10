@@ -61,10 +61,16 @@ export const resolver = (tag: HybridMediaTag): [string, string] | [null, null] =
   switch (tag.destType) {
     case TagTargetType.climb: {
       const climb = (tag as MediaTagWithClimb).climb
+      if (climb?.id == null) {
+        return [null, null]
+      }
       return [`/climbs/${climb.id}`, climb.name]
     }
     case TagTargetType.area: {
       const area = (tag as MediaTagWithArea).area
+      if (area?.uuid == null) {
+        return [null, null]
+      }
       return [`/crag/${area.uuid}`, area.areaName]
     }
     default: return [null, null]
