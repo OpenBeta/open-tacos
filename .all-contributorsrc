@@ -376,6 +376,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Scott2bReal",
+      "name": "Scott Hoecker",
+      "avatar_url": "https://avatars.githubusercontent.com/u/69652149?v=4",
+      "profile": "https://scotthoecker.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
