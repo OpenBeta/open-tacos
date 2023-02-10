@@ -1,5 +1,7 @@
 import Link from 'next/link'
-import { XCircleIcon, MapPinIcon } from '@heroicons/react/20/solid'
+import { XCircleIcon } from '@heroicons/react/20/solid'
+import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
+
 import clx from 'classnames'
 import { HybridMediaTag, MediaTagWithArea, MediaTagWithClimb, TagTargetType } from '../../js/types'
 
@@ -20,20 +22,23 @@ export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, i
     <Link href={url} prefetch={false}>
       <a
         className={
-          clx('badge hover:underline',
+          clx('badge hover:underline max-w-full',
             isArea ? 'badge-info bg-opacity-60' : 'badge-outline',
             size === 'lg' ? 'badge-lg gap-2' : 'gap-1')
         }
         onClick={stopPropagation}
+        title={name}
       >
-        {isArea && <MapPinIcon className='w-4 h-4' />}
+        {isArea && <div className='h-6 w-6 grid place-content-center'><NetworkSquareIcon className='w-6 h-6' /></div>}
 
-        <div className='mt-0.5 whitespace-nowrap truncate text-sm max-w-[240px]'>{name}</div>
+        <div className='mt-0.5 whitespace-nowrap truncate text-sm'>{name}</div>
         {isAuthorized && showDelete &&
-          <button onClick={(e) => {
-            onDelete(tag.id)
-            e.preventDefault()
-          }}
+          <button
+            onClick={(e) => {
+              onDelete(tag.id)
+              e.preventDefault()
+            }}
+            title='Delete tag'
           >
             <div className='rounded-full -mr-2.5'>
               <XCircleIcon className={clx('cursor-pointer stroke-1 hover:stroke-2', size === 'lg' ? 'w-6 h-6' : 'w-5 h-5')} />
