@@ -125,22 +125,6 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
         </DragDropContext>
       )}
 
-      {/* Build 2 column table on large screens */}
-      <div className='two-column-table'>
-        {childAreas.map((props, index) => (
-          <AreaItem
-            key={props.uuid}
-            index={index}
-            borderBottom={0}
-            parentUuid={parentUuid}
-            {...props}
-            editMode={editMode}
-            onChange={onChange}
-          />))}
-
-        {/* A hack to add bottom border */}
-
-      </div>
       {areaCount > 0 && editMode && (
         <div className='mt-8 md:text-right'>
           <AddAreaTrigger parentName={parentName} parentUuid={parentUuid} onSuccess={onChange}>
