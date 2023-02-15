@@ -89,7 +89,7 @@ const More = (): JSX.Element => {
           <Button size='lg' href='/about' label='About' />
           <Button
             size='lg'
-            href='https://discord.gg/2A2F6kUtyh'
+            href='https://discord.gg/ptpnWWNkJx'
             label='Discord'
             variant={ButtonVariant.SOLID_SECONDARY}
           />

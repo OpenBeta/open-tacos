@@ -29,7 +29,7 @@ We have an official message board where the community chimes in with helpful adv
 
 If chat is more your speed, you can join the Discord chat server:
 
-* [Join the Discord chat server](https://discord.gg/xcWha22BhT)
+* [Join the Discord chat server](https://discord.gg/ptpnWWNkJx)
     * Even though Discord is a chat service, sometimes it takes several hours for community members to respond &mdash; please be patient!
     * Assign yourself role(s) according the type of climbing often do, eg: bouldering, sport, etc.
     * Under **OpenBeta category**, use the `#general` channel  for general questions or discussion about contributing to the project.
