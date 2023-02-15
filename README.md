@@ -189,6 +189,9 @@ Thanks goes to these wonderful people:
       <td align="center" valign="top" width="14.28%"><a href="https://scotthoecker.com"><img src="https://avatars.githubusercontent.com/u/69652149?v=4?s=100" width="100px;" alt="Scott Hoecker"/><br /><sub><b>Scott Hoecker</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=Scott2bReal" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/vcbenj"><img src="https://avatars.githubusercontent.com/u/46982128?v=4?s=100" width="100px;" alt="vcbenj"/><br /><sub><b>vcbenj</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=vcbenj" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ramzyraz"><img src="https://avatars.githubusercontent.com/u/52238175?v=4?s=100" width="100px;" alt="Ramez Salman"/><br /><sub><b>Ramez Salman</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=ramzyraz" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 
