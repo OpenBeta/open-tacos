@@ -62,7 +62,7 @@ const navListDefault: JSX.Element[] = [
     title: 'Docs'
   },
   {
-    route: 'https://discord.gg/2A2F6kUtyh',
+    route: 'https://discord.gg/ptpnWWNkJx',
     title: 'Discord',
     variant: ButtonVariant.OUTLINED_SECONDARY
   }
