@@ -26,12 +26,12 @@ interface PercentAndColor {
  * @returns {percents: [], colors:[]}
  */
 export const computeClimbingPercentsAndColors = (climbs: ClimbType[]): PercentAndColor => {
-  const typeToCount: {[key: string]: number} = {}
+  const typeToCount: { [key: string]: number } = {}
   climbs.forEach((climb) => {
     const { type } = climb
 
     Object.entries(type).reduce<Record<string, number>>(
-      (acc: {[key: string]: number}, [key, discipline]: [string, boolean]) => {
+      (acc: { [key: string]: number }, [key, discipline]: [string, boolean]) => {
         if (!discipline) return acc
         if (acc[key] !== undefined) {
           acc[key] = acc[key] + 1
@@ -105,7 +105,7 @@ export const sanitizeName = (s: string): string =>
  * @example {sport: true, boulder: false, trad: false} => {sport: true}
  * @param  type Climb type key-value dictionary
  */
-export const simplifyClimbTypeJson = (type?: ClimbDisciplineRecord): {[key: string]: boolean} => {
+export const simplifyClimbTypeJson = (type?: ClimbDisciplineRecord): { [key: string]: boolean } => {
   if (type === undefined) return {}
   for (const key in type) {
     if (type[key] === false) {
@@ -162,17 +162,18 @@ const regUsernameKeywords = /openbeta|0penbeta|admin/i
  */
 export const checkUsername = (uid: string): boolean => {
   return uid != null && uid.length <= 30 &&
-  !regUsernameKeywords.test(uid) &&
-  regUsername.test(uid)
+    !regUsernameKeywords.test(uid) &&
+    regUsername.test(uid)
 }
 
 /**
- * Website URL validation.
- * If no protocol is specified, it will default to https,
- * if it is specified, it must be https.
+ * Website URL validation and correction.
+ * Websites are validated with the URL function.
+ * Upon the first failure, a prefix of https:// will be added and the function will be called again.
+ * On the second failure null is returned.
  *
  * @param url
- * @returns true if valid website URL
+ * @returns a potentially altered valid url if immediately possible, null otherwise
  */
 export const checkWebsiteUrl = (url: string | null | undefined, allowRetest?: boolean): string | null => {
   if (typeof url !== 'string') return null
@@ -220,7 +221,7 @@ export const getUploadDateSummary = (dateUploaded: Date): string => {
  * @param dest
  * @returns url for the given destination type (area or climb) and destination uid
  */
-export const urlResolver = (type: number, dest: string|null): string | null => {
+export const urlResolver = (type: number, dest: string | null): string | null => {
   if (dest == null) return null
   switch (type) {
     case 0:
@@ -237,7 +238,7 @@ export const urlResolver = (type: number, dest: string|null): string | null => {
 /**
  * Create a Google Maps link from latitude and longitude
  */
-export const getMapHref = ({ lat, lng }: { lat: number, lng: number}): string => {
+export const getMapHref = ({ lat, lng }: { lat: number, lng: number }): string => {
   return `https://www.google.com/maps/place/${lat},${lng}`
 }
 
