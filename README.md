@@ -13,7 +13,7 @@
 </p>
 <p align="center">
   We're building the first <i>free</i> and <i>open source</i> rock climbing catalog.  </br>The project is currently in MVP stage.<br>
-  <b>We'd love to hear your feedback.</b>  Chat with the dev team on <a href="https://discord.gg/fY9DbRav8h">Discord</a>.
+  <b>We'd love to hear your feedback.</b>  Chat with the dev team on <a href="https://discord.gg/ptpnWWNkJx">Discord</a>.
 </p>
 
 <h2 align="center">

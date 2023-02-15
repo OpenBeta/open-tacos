@@ -59,7 +59,7 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
             <DropdownItem
               icon={<ChatBubbleOvalLeftEllipsisIcon className='w-4 h-4' />}
               text='Discord community'
-              onSelect={async () => await router.push('https://discord.gg/2A2F6kUtyh')}
+              onSelect={async () => await router.push('https://discord.gg/ptpnWWNkJx')}
             />
           </DropdownContent>
         </DropdownMenu>

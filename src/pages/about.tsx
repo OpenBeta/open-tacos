@@ -29,7 +29,7 @@ const About = (): JSX.Element => {
           <p className='text-xl text-slate-700'>
             All contributions are welcome.  You can share climbing photos, add new routes, write a guest article on our <a className='underline' href='https://openbeta.substack.com/' rel='noopener noreferrer'>blog</a>, help fix a bug, and more.  Check out the <a className='underline' href='https://github.com/OpenBeta/open-tacos/issues' rel='noopener noreferrer'>GitHub issues</a>.
           </p>
-          <p className='text-xl text-slate-700'>Still not sure how to get started?  Chat with other volunteers on <a className='underline' href='https://discord.gg/w2KpQu2ca5' rel='noopener noreferrer'>Discord</a>.</p>
+          <p className='text-xl text-slate-700'>Still not sure how to get started?  Chat with other volunteers on <a className='underline' href='https://discord.gg/ptpnWWNkJx' rel='noopener noreferrer'>Discord</a>.</p>
         </div>
 
       </div>
