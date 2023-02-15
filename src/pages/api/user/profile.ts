@@ -37,7 +37,7 @@ const updateMyProfile: Handler = async (req, res) => {
 
     // validate that URL is properly formatted if one is provided
     let website = req.body?.website
-    if (website !== null && website !== "") {
+    if (website != null && website !== '') {
       website = checkWebsiteUrl(req.body?.website)
       if (website == null) {
         throw new Error('Bad website URL')
