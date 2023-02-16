@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { AreaType, AreaUpdatableFieldsType } from '../../types'
+import { AreaType, AreaUpdatableFieldsType, ClimbDisciplineRecord } from '../../types'
 
 /**
  * Queries and Mutations for edits
@@ -71,7 +71,9 @@ export interface IndividualClimbChangeInput {
   description?: string
   location?: string
   protection?: string
+  grade?: string
   leftRightIndex?: number
+  disciplines?: Partial<ClimbDisciplineRecord>
 }
 
 export interface UpdateClimbsInput {

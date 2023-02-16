@@ -35,7 +35,7 @@ const parseLine = (line: TextNode, index: number, defaultClimbDict: Dictionary<E
   return csvToClimb(tokens, index, defaultClimbDict)
 }
 
-export const csvToClimb = (tokens: string[], index: number, defaultClimbDict): any => {
+export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Dictionary<EditableClimbType>): EditableClimbType | null => {
   if (tokens.length >= 2) {
     const firstToken = tokens[0].trim()
     const climbIdValidFormat = isUuid(firstToken)
@@ -44,11 +44,11 @@ export const csvToClimb = (tokens: string[], index: number, defaultClimbDict): a
     const name = tokens[1].trim()
     if (name === '') return null
     return {
-      id: index,
+      id: index.toString(),
       climbId,
       name,
       leftRightIndex: index,
-      yds: climbId != null && defaultClimbDict?.[climbId] != null ? defaultClimbDict?.[climbId].yds : '',
+      gradeStr: climbId != null && defaultClimbDict?.[climbId] != null ? defaultClimbDict?.[climbId].gradeStr : undefined,
       isNew: !climbIdValidFormat
     }
   }
@@ -56,30 +56,30 @@ export const csvToClimb = (tokens: string[], index: number, defaultClimbDict): a
     if (isUuid(tokens[0].trim())) {
       const climbId = tokens[0].trim()
       return {
-        id: index,
+        id: index.toString(),
         climbId,
         name: `Untitled ${index + 1}`,
         leftRightIndex: index,
-        yds: climbId != null && defaultClimbDict?.[climbId] != null ? defaultClimbDict?.[climbId].yds : ''
+        gradeStr: climbId != null && defaultClimbDict?.[climbId] != null ? defaultClimbDict?.[climbId].gradeStr : undefined
       }
     }
     const name = tokens[0].trim()
     if (name === '') return null
     return {
-      id: index,
+      id: index.toString(),
       climbId: uuidV4(),
       name,
       leftRightIndex: index,
-      yds: '',
+      gradeStr: undefined,
       isNew: true
     }
   }
   return {
-    id: index,
+    id: index.toString(),
     climbId: uuidV4(),
     name: `Untitled ${index + 1}`,
     leftRightIndex: index,
-    yds: '',
+    gradeStr: undefined,
     isNew: true
   }
 }

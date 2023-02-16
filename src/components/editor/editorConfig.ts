@@ -22,9 +22,9 @@ import { EditableClimbType } from '../crag/cragSummary'
 export const editorConfigRichText = (initialValue: string, editable: boolean): InitialConfigType => {
   const createInitial = (): void => {
     if (editable) {
-      $createInitialPlainTextState(initialValue)
+      $createInitialPlainTextState(initialValue ?? '')
     } else {
-      $convertFromMarkdownString(initialValue, TRANSFORMERS)
+      $convertFromMarkdownString(initialValue ?? '', TRANSFORMERS)
     }
   }
 

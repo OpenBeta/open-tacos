@@ -107,6 +107,7 @@ export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
     id
     uuid
     areaName
+    gradeContext
     media {
       mediaUrl
       mediaUuid
@@ -128,7 +129,12 @@ export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
       id
       name
       fa
-      yds
+      grades {
+        font
+        french
+        vscale
+        yds
+      }
       safety
       type {
         trad

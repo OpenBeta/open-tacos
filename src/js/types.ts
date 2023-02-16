@@ -42,15 +42,14 @@ export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' 
 
 export type ClimbDisciplineRecord = Record<ClimbDiscipline, boolean>
 
-export type Grades = { [Key in GradeScalesTypes]?: string}
+export type GradeValuesType = { [Key in GradeScalesTypes]?: string}
 
 export type Climb = EditMetadataType & {
   id: string
   name: string
   fa: string
   yds: string
-  grades: Grades
-  gradeContext: GradeContextType
+  grades: GradeValuesType
   metadata: ClimbMetadataType
   type: ClimbDisciplineRecord
   safety: SafetyType
@@ -62,6 +61,7 @@ export type Climb = EditMetadataType & {
   ancestors: string[]
   pathTokens: string[]
   media: MediaBaseTag[]
+  parent: AreaType
 }
 
 export type ClimbType = Climb
@@ -128,7 +128,7 @@ export type AreaType = EditMetadataType & {
   children: AreaType[]
   climbs: Climb[]
   media: MediaBaseTag[]
-  updatedAt?: number
+  gradeContext: GradeContextType
 }
 
 export interface AreaUpdatableFieldsType {

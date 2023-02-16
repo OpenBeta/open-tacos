@@ -8,6 +8,7 @@ export const graphqlClient = new ApolloClient({
   uri,
   cache: new InMemoryCache(
     {
+      addTypename: false,
       typePolicies: {
         CragsNear: {
           keyFields: ['placeId', '_id']
