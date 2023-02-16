@@ -26,6 +26,7 @@ export interface UserGalleryProps {
   initialTagsByMediaId: Dictionary<HybridMediaTag[]>
   auth: WithPermission
   postId: string | null
+  setIsLoading: Dispatch<SetStateAction<boolean>>
 }
 
 /**
@@ -34,7 +35,7 @@ export interface UserGalleryProps {
  *  - remove bulk taging mode
  *  - simplify back button logic with NextJS Layout
  */
-export default function UserGallery ({ uid, postId: initialPostId, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: UserGalleryProps): JSX.Element | null {
+export default function UserGallery ({ uid, postId: initialPostId, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap, setIsLoading }: UserGalleryProps): JSX.Element | null {
   const router = useRouter()
   const imageList = initialImageList
 
@@ -120,6 +121,34 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
     setSlideNumber(-1)
   }, [])
 
+  const [imageListToShow, setImageListToShow] = useState<MediaType[]>([])
+  const [imageListToShowLength, setImageListToShowLength] = useState(19)
+
+  useEffect(() => {
+    // add new items from the imageList to the imageListToShow array when length changes
+    if (imageList !== undefined) setImageListToShow(imageList.slice(0, imageListToShowLength))
+    console.log('Length Before ', imageListToShow.length)
+  }, [imageList, imageListToShowLength])
+
+  useEffect(() => {
+    console.log('Length After ', imageListToShowLength)
+
+    const handleScroll = (): void => {
+      const scrollHeight = document.documentElement.scrollHeight // height of the page
+      const scrollTop = document.documentElement.scrollTop // how much the user has scrolled
+      const clientHeight = document.documentElement.clientHeight // height of the viewport
+      // To add length to imageListToShow when the user scrolls to the bottom of the page
+      if ((scrollTop + clientHeight >= Math.round(0.99 * scrollHeight)) && imageList !== undefined && imageListToShowLength < imageList.length) {
+        setIsLoading(true)
+        setImageListToShowLength(imageListToShowLength + 8) // add 8 items to the imageListToShow array
+      } else {
+        setIsLoading(false)
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [imageList, imageListToShowLength])
+
   const navigateHandler = async (newIndex: number): Promise<void> => {
     const currentImage = imageList[newIndex]
     const pathname = `${baseUrl}/${basename(currentImage.filename)}`
@@ -151,7 +180,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
       </div>
       <div className='flex flex-col gap-x-6 gap-y-10 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>
         {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
-        {imageList?.map((imageInfo, index) => {
+        {imageListToShow?.map((imageInfo, index) => {
           const tags = initialTagMap?.[imageInfo.mediaId] ?? []
           const key = `${imageInfo.mediaId}${index}`
           if (isMobile) {
