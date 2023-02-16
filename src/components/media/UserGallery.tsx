@@ -122,7 +122,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
   }, [])
 
   const [imageListToShow, setImageListToShow] = useState<MediaType[]>([])
-  const [imageListToShowLength, setImageListToShowLength] = useState(19)
+  const [imageListToShowLength, setImageListToShowLength] = useState(20)
 
   useEffect(() => {
     // add new items from the imageList to the imageListToShow array when length changes
@@ -140,7 +140,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
       // To add length to imageListToShow when the user scrolls to the bottom of the page
       if ((scrollTop + clientHeight >= Math.round(0.99 * scrollHeight)) && imageList !== undefined && imageListToShowLength < imageList.length) {
         setIsLoading(true)
-        setImageListToShowLength(imageListToShowLength + 8) // add 8 items to the imageListToShow array
+        setImageListToShowLength(imageListToShowLength + 9) // add 8 items to the imageListToShow array
       } else {
         setIsLoading(false)
       }
