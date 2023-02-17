@@ -34,9 +34,16 @@ const updateMyProfile: Handler = async (req, res) => {
     if (!checkUsername(req.body?.nick)) {
       throw new Error('Bad username')
     }
-    // validate that URL is properly formatted
-    const website = checkWebsiteUrl(req.body?.website)
-    if (website == null) { throw new Error('Bad website URL') }
+
+    // validate that URL is properly formatted if one is provided
+    let website = req.body?.website
+    if (website != null && website !== '') {
+      website = checkWebsiteUrl(req.body?.website)
+      if (website == null) {
+        throw new Error('Bad website URL')
+      }
+    }
+
     if (req.body?.name?.length > 150 || req.body?.bio?.length > 150 || req?.body?.uuid == null) {
       throw new Error('Bad profile data')
     }
