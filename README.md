@@ -189,6 +189,7 @@ Thanks goes to these wonderful people:
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ramzyraz"><img src="https://avatars.githubusercontent.com/u/52238175?v=4?s=100" width="100px;" alt="Ramez Salman"/><br /><sub><b>Ramez Salman</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=ramzyraz" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/diericx"><img src="https://avatars.githubusercontent.com/u/17539534?v=4?s=100" width="100px;" alt="Zac Holland"/><br /><sub><b>Zac Holland</b></sub></a><br /><a href="#ideas-diericx" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/OpenBeta/open-tacos/commits?author=diericx" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
