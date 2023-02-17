@@ -167,12 +167,13 @@ export const checkUsername = (uid: string): boolean => {
 }
 
 /**
- * Website URL validation.
- * If no protocol is specified, it will default to https,
- * if it is specified, it must be https.
+ * Website URL validation and correction.
+ * Websites are validated with the URL function.
+ * Upon the first failure, a prefix of https:// will be added and the function will be called again.
+ * On the second failure null is returned.
  *
  * @param url
- * @returns true if valid website URL
+ * @returns a potentially altered valid url if immediately possible, null otherwise
  */
 export const checkWebsiteUrl = (url: string | null | undefined, allowRetest?: boolean): string | null => {
   if (typeof url !== 'string') return null
