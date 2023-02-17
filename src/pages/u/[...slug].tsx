@@ -14,8 +14,6 @@ import usePermissions from '../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../js/hooks/seo'
 import useMediaDataStore from '../../js/hooks/useMediaDS'
 import type { UserGalleryProps } from '../../components/media/UserGallery'
-import { BiLoaderAlt } from 'react-icons/bi'
-import { useState } from 'react'
 
 interface UserHomeProps {
   uid: string
@@ -41,8 +39,6 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
   })
 
   const { isFallback } = router
-
-  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   return (
     <>
@@ -81,10 +77,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
             userProfile={userProfile}
             initialImageList={mediaList}
             initialTagsByMediaId={tagMap}
-            setIsLoading={setIsLoading}
           />
-
-          {isLoading && <BiLoaderAlt className='animate-spin text-4xl text-orange-500 mt-[2.5%]' />}
 
           {!isAuthorized && !isFallback && (
             <div className='mt-4 w-full mx-auto text-xs text-secondary text-center'>

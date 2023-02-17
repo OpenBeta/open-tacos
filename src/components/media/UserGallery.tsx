@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useRef, Dispatch, SetStateAction, useEffect } from 'react'
 import { Dictionary } from 'underscore'
-import { TagIcon } from '@heroicons/react/24/outline'
+import { TagIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { basename } from 'path'
 import clx from 'classnames'
@@ -18,6 +18,7 @@ import Bar from '../ui/Bar'
 import Toggle from '../ui/Toggle'
 import { useResponsive } from '../../js/hooks'
 import TagList from './TagList'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 export interface UserGalleryProps {
   uid: string
@@ -26,7 +27,7 @@ export interface UserGalleryProps {
   initialTagsByMediaId: Dictionary<HybridMediaTag[]>
   auth: WithPermission
   postId: string | null
-  setIsLoading: Dispatch<SetStateAction<boolean>>
+  // setIsLoading: Dispatch<SetStateAction<boolean>>
 }
 
 /**
@@ -35,7 +36,7 @@ export interface UserGalleryProps {
  *  - remove bulk taging mode
  *  - simplify back button logic with NextJS Layout
  */
-export default function UserGallery ({ uid, postId: initialPostId, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap, setIsLoading }: UserGalleryProps): JSX.Element | null {
+export default function UserGallery ({ uid, postId: initialPostId, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: UserGalleryProps): JSX.Element | null {
   const router = useRouter()
   const imageList = initialImageList
 
@@ -121,34 +122,6 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
     setSlideNumber(-1)
   }, [])
 
-  const [imageListToShow, setImageListToShow] = useState<MediaType[]>([])
-  const [imageListToShowLength, setImageListToShowLength] = useState(20)
-
-  useEffect(() => {
-    // add new items from the imageList to the imageListToShow array when length changes
-    if (imageList !== undefined) setImageListToShow(imageList.slice(0, imageListToShowLength))
-    console.log('Length Before ', imageListToShow.length)
-  }, [imageList, imageListToShowLength])
-
-  useEffect(() => {
-    console.log('Length After ', imageListToShowLength)
-
-    const handleScroll = (): void => {
-      const scrollHeight = document.documentElement.scrollHeight // height of the page
-      const scrollTop = document.documentElement.scrollTop // how much the user has scrolled
-      const clientHeight = document.documentElement.clientHeight // height of the viewport
-      // To add length to imageListToShow when the user scrolls to the bottom of the page
-      if ((scrollTop + clientHeight >= Math.round(0.99 * scrollHeight)) && imageList !== undefined && imageListToShowLength < imageList.length) {
-        setIsLoading(true)
-        setImageListToShowLength(imageListToShowLength + 9) // add 8 items to the imageListToShow array
-      } else {
-        setIsLoading(false)
-      }
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [imageList, imageListToShowLength])
-
   const navigateHandler = async (newIndex: number): Promise<void> => {
     const currentImage = imageList[newIndex]
     const pathname = `${baseUrl}/${basename(currentImage.filename)}`
@@ -161,6 +134,32 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
 
     setSlideNumber(newIndex)
   }
+
+  const [loading, setLoading] = useState(true)
+  const [hasMore, setHasMore] = useState(true)
+  const [imageListToShow, setImageListToShow] = useState<MediaType[]>([])
+
+  // to load more images when user scrolls to the 'scrollThreshold' value of the page
+  const fetchMoreData = (): void => {
+    // all images are loaded
+    if (imageListToShow?.length >= imageList?.length) {
+      setHasMore(false)
+      return
+    }
+
+    setLoading(true)
+    // delay fetching images by 1 second to simulate network request
+    setTimeout(() => {
+      // concatenate furhter images to imageListToShow
+      setImageListToShow(imageListToShow.concat(imageList?.slice(imageListToShow?.length, imageListToShow?.length + 9)))
+      setLoading(false)
+    }, 500)
+  }
+
+  useEffect(() => {
+    // set initial images to be shown
+    setImageListToShow(imageList?.slice(0, 20))
+  }, [imageList])
 
   // When logged-in user has fewer than 3 photos,
   // create empty slots for the call-to-action upload component.
@@ -178,61 +177,68 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
           tagModeOn={tagModeOn}
         />
       </div>
-      <div className='flex flex-col gap-x-6 gap-y-10 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>
-        {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
-        {imageListToShow?.map((imageInfo, index) => {
-          const tags = initialTagMap?.[imageInfo.mediaId] ?? []
-          const key = `${imageInfo.mediaId}${index}`
-          if (isMobile) {
-            return (
-              <MobileMediaCard
-                key={key}
-                tagList={tags}
-                imageInfo={imageInfo}
-                showTagActions
-                {...auth}
-              />
-            )
-          }
-          return (
-            <div
-              className='relative' key={key}
-              onMouseOver={() => showTagHandler(index)}
-              onMouseOut={() => hideTagHandler()}
-            >
-              <UserMedia
-                uid={uid}
-                index={index}
-                tagList={tags}
-                imageInfo={imageInfo}
-                onClick={imageOnClickHandler}
-                isAuthorized={isAuthorized && (stateRef?.current ?? false)}
-              />
-              <div
-                className={
-                clx(
-                  !isAuthorized && tags.length === 0 ? 'hidden' : '',
-                  'absolute inset-x-0 bottom-0 p-2 flex items-center opacity-90',
-                  hoveredPicture === index ? 'transition-opacity duration-300 ease-in opacity-100 bg-base-100 bg-opacity-90 visible' : 'duration-300 ease-out opacity-0 invisible'
-                )
-                }
-              >
-                <TagList
+      <InfiniteScroll
+        dataLength={imageListToShow?.length}
+        next={fetchMoreData}
+        hasMore={hasMore}
+        loader={loading && <ArrowPathIcon className='animate-spin h-9 w-9 m-auto text-orange-600 mt-[3%]' />}
+        scrollThreshold={0.95}
+        endMessage={<p className='text-center text-secondary mt-[2.5%]'>No more images to show.</p>}
+      >
+        <div className='flex flex-col gap-x-6 gap-y-10 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>
+          {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
+          {imageListToShow?.map((imageInfo, index) => {
+            const tags = initialTagMap?.[imageInfo.mediaId] ?? []
+            const key = `${imageInfo.mediaId}${index}`
+            if (isMobile) {
+              return (
+                <MobileMediaCard
                   key={key}
-                  list={tags}
+                  tagList={tags}
                   imageInfo={imageInfo}
+                  showTagActions
                   {...auth}
-                  showDelete
                 />
+              )
+            }
+            return (
+              <div
+                className='relative' key={key}
+                onMouseOver={() => showTagHandler(index)}
+                onMouseOut={() => hideTagHandler()}
+              >
+                <UserMedia
+                  uid={uid}
+                  index={index}
+                  tagList={tags}
+                  imageInfo={imageInfo}
+                  onClick={imageOnClickHandler}
+                  isAuthorized={isAuthorized && (stateRef?.current ?? false)}
+                />
+                <div
+                  className={
+                      clx(
+                        !isAuthorized && tags.length === 0 ? 'hidden' : '',
+                        'absolute inset-x-0 bottom-0 p-2 flex items-center opacity-90',
+                        hoveredPicture === index ? 'transition-opacity duration-300 ease-in opacity-100 bg-base-100 bg-opacity-90 visible' : 'duration-300 ease-out opacity-0 invisible'
+                      )
+                      }
+                >
+                  <TagList
+                    key={key}
+                    list={tags}
+                    imageInfo={imageInfo}
+                    {...auth}
+                    showDelete
+                  />
+                </div>
               </div>
-            </div>
-          )
-        })}
-
-        {placeholders.map(index =>
-          <UploadCTA key={index} onUploadFinish={onUploadHandler} />)}
-
-      </div>
+            )
+          })}
+          {placeholders.map(index =>
+            <UploadCTA key={index} onUploadFinish={onUploadHandler} />)}
+        </div>
+      </InfiniteScroll>
 
       {!isMobile &&
         <SlideViewer
