@@ -428,7 +428,7 @@ table td.dtable-my-range {
 }
 
 .area-row {
-  @apply py-4 flex flex-row flex-nowrap gap-4 items-start border-t break-inside-avoid-column break-inside-avoid;
+  @apply py-2 flex flex-row flex-nowrap gap-4 items-start border-t break-inside-avoid-column break-inside-avoid;
 }
 
 .area-entity-box {

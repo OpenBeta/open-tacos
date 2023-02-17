@@ -3,9 +3,8 @@ import { AreaType } from '../../js/types'
 import { AreaSummaryType } from '../crag/cragSummary'
 import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTriggerButtonSm, DeleteAreaTriggerButtonSm } from './Triggers'
 import { AreaEntityIcon } from '../EntityIcons'
-import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
 
-export type AreaCRUDProps = Pick<AreaType, 'uuid'|'areaName'> & {
+export type AreaCRUDProps = Pick<AreaType, 'uuid' | 'areaName'> & {
   childAreas: AreaSummaryType[]
   editMode: boolean
   onChange: () => void
@@ -30,7 +29,7 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
         <span className='text-base-300 text-sm'>{areaCount > 0 && `Total: ${areaCount}`}</span>
       </div>
 
-      <hr className='mt-4 mb-8 border-1 border-base-content' />
+      <hr className='mt-4 border-1 border-base-content' />
 
       {areaCount === 0 && (
         <div>
@@ -38,13 +37,12 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
           {editMode && <AddAreaTrigger parentName={parentName} parentUuid={parentUuid} onSuccess={onChange} />}
         </div>)}
 
-      {/* Build 2 column table on large screens */}
-      <div className='two-column-table'>
+      <div>
         {childAreas.map((props, index) => (
           <AreaItem
             key={props.uuid}
             index={index}
-            borderBottom={index === Math.ceil(areaCount / 2) - 1}
+            borderBottom={false}
             parentUuid={parentUuid}
             {...props}
             editMode={editMode}
@@ -84,16 +82,15 @@ export const AreaItem = ({ index, borderBottom, areaName, uuid, parentUuid, onCh
   const isLeaf = leaf || isBoulder
   return (
     <div className={clx('area-row', borderBottom ? 'border-b' : '')}>
-      <a href={`/crag/${uuid}`} className='area-entity-box'>
-        {index + 1}
-      </a>
-      <a href={`/crag/${uuid}`} className='flex flex-col items-start items-stretch grow gap-y-1'>
-        <div className='font-semibold uppercase thick-link'>
+      <a href={`/crag/${uuid}`} className='flex items-start items-stretch grow gap-y-1'>
+        <div className='font-semibold uppercase thick-link mr-2'>
           {areaName}
         </div>
         <div className='flex gap-2 items-center'>
-          {!isLeaf && <NetworkSquareIcon className='stroke-base-200 w-6 h-6' />}
           <span className='mt-0.5 text-sm text-base-200'>
+            {isBoulder && isLeaf && <span>Boulder • </span>}
+            {!isBoulder && isLeaf && <span>Crag • </span>}
+            {!isLeaf && <span>Area • </span>}
             <span>{totalClimbs ?? 0} climbs • {children?.length ?? 0} areas</span>
           </span>
         </div>
