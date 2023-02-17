@@ -403,6 +403,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "diericx",
+      "name": "Zac Holland",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17539534?v=4",
+      "profile": "https://github.com/diericx",
+      "contributions": [
+        "ideas",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
