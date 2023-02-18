@@ -37,7 +37,7 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
           {editMode && <AddAreaTrigger parentName={parentName} parentUuid={parentUuid} onSuccess={onChange} />}
         </div>)}
 
-      <div>
+      <div className='two-column-table'>
         {childAreas.map((props, index) => (
           <AreaItem
             key={props.uuid}
