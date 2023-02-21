@@ -134,7 +134,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> =
 
     const { uuid } = userProfile
 
-    const { mediaList, mediaIdList } = await getUserImages(uuid, 100)
+    const { mediaList, mediaIdList } = await getUserImages(uuid, 300)
 
     let tagsByMediaId: Dictionary<HybridMediaTag[]> = {}
 

@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 import ContentLoader from 'react-content-loader'
 import { basename } from 'path'
-import Link from 'next/link'
 
 import { HybridMediaTag, MediaType } from '../../js/types'
 import ResponsiveImage from '../media/slideshow/ResponsiveImage'
@@ -48,15 +47,13 @@ export default function UserMedia ({
       className='block relative rounded-box overflow-hidden hover:shadow transition w-[300px] h-[300px] hover:brightness-75'
 
     >
-      <Link href={shareableUrl}>
-        <a onClick={onClickHandler}>
-          <ResponsiveImage
-            mediaUrl={imageInfo.filename}
-            isHero={index === 0}
-            loader={DesktopPreviewLoader}
-          />
-        </a>
-      </Link>
+      <a onClick={onClickHandler} href={shareableUrl}>
+        <ResponsiveImage
+          mediaUrl={imageInfo.filename}
+          isHero={index === 0}
+          loader={DesktopPreviewLoader}
+        />
+      </a>
 
       {tagList?.length === 0 && isAuthorized && (
         <div className='absolute top-0 right-0 p-1.5'>
