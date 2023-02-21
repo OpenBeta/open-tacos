@@ -92,7 +92,8 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
     const { uuid } = props
     const [latStr, lngStr] = latlng.split(',')
 
-    let doc = {
+    const doc = {
+      // @ts-expect-error
       ...dirtyFields?.areaName === true && { areaName: getValues('areaName') ?? '' },
       ...dirtyFields?.shortCode === true && { shortCode: getValues('shortCode') },
       ...dirtyFields?.isDestination === true && { isDestination: getValues('isDestination') },
@@ -101,7 +102,6 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
       ...dirtyFields?.description === true && { description: getValues('description') }
     }
 
-    const doc = {}
     const isEmptyDoc = Object.keys(doc).length === 0
     if (isEmptyDoc) {
       toast.warn('Nothing to save.  Please make at least 1 edit.')

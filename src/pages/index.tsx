@@ -215,7 +215,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   // Get tag objects with climb & area name
   const tags = await getTagsByMediaId(recentMediaIDList)
 
-  console.log('##tags', tags)
   const tagsWithUsernames = await enhanceMediaListWithUsernames(tags)
 
   const tagsByMedia = groupBy(tagsWithUsernames as HybridMediaTag[], 'mediaUrl')

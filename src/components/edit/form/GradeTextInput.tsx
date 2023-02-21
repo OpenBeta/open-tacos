@@ -53,7 +53,7 @@ export const BoulderingGradeInput: React.FC<BaseGradeInput> = ({ gradeObj }) => 
       <div className='form-control'>
         <label className='label gap-x-2'>
           <span className='label-text font-semibold'>Disciplines</span>
-          <Tooltip content='A boulder may contain only boulder problems. Create a separate crag to add sport or trad climbs'>
+          <Tooltip content='A boulder may contain only boulder problems. Please create a separate crag to add sport or trad climbs'>
             <div className='flex items-center gap-2 text-xs'><span className='link-dotted'>How to add sport/trad?</span><QuestionMarkCircleIcon className='text-info w-5 h-5' /></div>
           </Tooltip>
         </label>
