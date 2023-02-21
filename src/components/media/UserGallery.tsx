@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useRef, Dispatch, SetStateAction, useEffect } from 'react'
 import { Dictionary } from 'underscore'
-import { TagIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
+import { TagIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { basename } from 'path'
 import clx from 'classnames'
@@ -27,7 +27,6 @@ export interface UserGalleryProps {
   initialTagsByMediaId: Dictionary<HybridMediaTag[]>
   auth: WithPermission
   postId: string | null
-  // setIsLoading: Dispatch<SetStateAction<boolean>>
 }
 
 /**
@@ -135,7 +134,6 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
     setSlideNumber(newIndex)
   }
 
-  const [loading, setLoading] = useState(true)
   const [hasMore, setHasMore] = useState(true)
   const [imageListToShow, setImageListToShow] = useState<MediaType[]>([])
 
@@ -147,18 +145,16 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
       return
     }
 
-    setLoading(true)
     // delay fetching images by 1 second to simulate network request
     setTimeout(() => {
       // concatenate furhter images to imageListToShow
       setImageListToShow(imageListToShow.concat(imageList?.slice(imageListToShow?.length, imageListToShow?.length + 9)))
-      setLoading(false)
     }, 500)
   }
 
   useEffect(() => {
     // set initial images to be shown
-    setImageListToShow(imageList?.slice(0, 20))
+    setImageListToShow(imageList?.slice(0, 10))
   }, [imageList])
 
   // When logged-in user has fewer than 3 photos,
@@ -181,9 +177,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
         dataLength={imageListToShow?.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={loading && <ArrowPathIcon className='animate-spin h-9 w-9 m-auto text-orange-600 mt-[3%]' />}
-        scrollThreshold={0.95}
-        endMessage={<p className='text-center text-secondary mt-[2.5%]'>No more images to show.</p>}
+        loader={null}
       >
         <div className='flex flex-col gap-x-6 gap-y-10 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>
           {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
