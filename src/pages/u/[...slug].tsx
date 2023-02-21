@@ -78,6 +78,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
             initialImageList={mediaList}
             initialTagsByMediaId={tagMap}
           />
+
           {!isAuthorized && !isFallback && (
             <div className='mt-4 w-full mx-auto text-xs text-secondary text-center'>
               All photos are copyrighted by their respective owners.  All Rights Reserved.

@@ -18,6 +18,7 @@ import Bar from '../ui/Bar'
 import Toggle from '../ui/Toggle'
 import { useResponsive } from '../../js/hooks'
 import TagList from './TagList'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 export interface UserGalleryProps {
   uid: string
@@ -133,6 +134,29 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
     setSlideNumber(newIndex)
   }
 
+  const [hasMore, setHasMore] = useState(true)
+  const [imageListToShow, setImageListToShow] = useState<MediaType[]>([])
+
+  // to load more images when user scrolls to the 'scrollThreshold' value of the page
+  const fetchMoreData = (): void => {
+    // all images are loaded
+    if (imageListToShow?.length >= imageList?.length) {
+      setHasMore(false)
+      return
+    }
+
+    // delay fetching images by 1 second to simulate network request
+    setTimeout(() => {
+      // concatenate furhter images to imageListToShow
+      setImageListToShow(imageListToShow.concat(imageList?.slice(imageListToShow?.length, imageListToShow?.length + 9)))
+    }, 500)
+  }
+
+  useEffect(() => {
+    // set initial images to be shown
+    setImageListToShow(imageList?.slice(0, 10))
+  }, [imageList])
+
   // When logged-in user has fewer than 3 photos,
   // create empty slots for the call-to-action upload component.
   const placeholders = imageList?.length < 3 && isAuthorized
@@ -149,61 +173,66 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
           tagModeOn={tagModeOn}
         />
       </div>
-      <div className='flex flex-col gap-x-6 gap-y-10 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>
-        {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
-        {imageList?.map((imageInfo, index) => {
-          const tags = initialTagMap?.[imageInfo.mediaId] ?? []
-          const key = `${imageInfo.mediaId}${index}`
-          if (isMobile) {
-            return (
-              <MobileMediaCard
-                key={key}
-                tagList={tags}
-                imageInfo={imageInfo}
-                showTagActions
-                {...auth}
-              />
-            )
-          }
-          return (
-            <div
-              className='relative' key={key}
-              onMouseOver={() => showTagHandler(index)}
-              onMouseOut={() => hideTagHandler()}
-            >
-              <UserMedia
-                uid={uid}
-                index={index}
-                tagList={tags}
-                imageInfo={imageInfo}
-                onClick={imageOnClickHandler}
-                isAuthorized={isAuthorized && (stateRef?.current ?? false)}
-              />
-              <div
-                className={
-                clx(
-                  !isAuthorized && tags.length === 0 ? 'hidden' : '',
-                  'absolute inset-x-0 bottom-0 p-2 flex items-center opacity-90',
-                  hoveredPicture === index ? 'transition-opacity duration-300 ease-in opacity-100 bg-base-100 bg-opacity-90 visible' : 'duration-300 ease-out opacity-0 invisible'
-                )
-                }
-              >
-                <TagList
+      <InfiniteScroll
+        dataLength={imageListToShow?.length}
+        next={fetchMoreData}
+        hasMore={hasMore}
+        loader={null}
+      >
+        <div className='flex flex-col gap-x-6 gap-y-10 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>
+          {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
+          {imageListToShow?.map((imageInfo, index) => {
+            const tags = initialTagMap?.[imageInfo.mediaId] ?? []
+            const key = `${imageInfo.mediaId}${index}`
+            if (isMobile) {
+              return (
+                <MobileMediaCard
                   key={key}
-                  list={tags}
+                  tagList={tags}
                   imageInfo={imageInfo}
+                  showTagActions
                   {...auth}
-                  showDelete
                 />
+              )
+            }
+            return (
+              <div
+                className='relative' key={key}
+                onMouseOver={() => showTagHandler(index)}
+                onMouseOut={() => hideTagHandler()}
+              >
+                <UserMedia
+                  uid={uid}
+                  index={index}
+                  tagList={tags}
+                  imageInfo={imageInfo}
+                  onClick={imageOnClickHandler}
+                  isAuthorized={isAuthorized && (stateRef?.current ?? false)}
+                />
+                <div
+                  className={
+                      clx(
+                        !isAuthorized && tags.length === 0 ? 'hidden' : '',
+                        'absolute inset-x-0 bottom-0 p-2 flex items-center opacity-90',
+                        hoveredPicture === index ? 'transition-opacity duration-300 ease-in opacity-100 bg-base-100 bg-opacity-90 visible' : 'duration-300 ease-out opacity-0 invisible'
+                      )
+                      }
+                >
+                  <TagList
+                    key={key}
+                    list={tags}
+                    imageInfo={imageInfo}
+                    {...auth}
+                    showDelete
+                  />
+                </div>
               </div>
-            </div>
-          )
-        })}
-
-        {placeholders.map(index =>
-          <UploadCTA key={index} onUploadFinish={onUploadHandler} />)}
-
-      </div>
+            )
+          })}
+          {placeholders.map(index =>
+            <UploadCTA key={index} onUploadFinish={onUploadHandler} />)}
+        </div>
+      </InfiniteScroll>
 
       {!isMobile &&
         <SlideViewer
