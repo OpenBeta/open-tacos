@@ -92,8 +92,8 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
     const { uuid } = props
     const [latStr, lngStr] = latlng.split(',')
 
-    const doc = {
-      ...dirtyFields?.areaName === true && { areaName: getValues('areaName') },
+    let doc = {
+      ...dirtyFields?.areaName === true && { areaName: getValues('areaName') ?? '' },
       ...dirtyFields?.shortCode === true && { shortCode: getValues('shortCode') },
       ...dirtyFields?.isDestination === true && { isDestination: getValues('isDestination') },
       ...dirtyFields?.areaType === true && canChangeAreaType && areaDesignationToDb(areaType),
@@ -101,6 +101,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
       ...dirtyFields?.description === true && { description: getValues('description') }
     }
 
+    const doc = {}
     const isEmptyDoc = Object.keys(doc).length === 0
     if (isEmptyDoc) {
       toast.warn('Nothing to save.  Please make at least 1 edit.')

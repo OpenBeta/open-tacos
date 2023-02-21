@@ -174,8 +174,11 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
       ...dirtyFields?.description === true && { description },
       ...dirtyFields?.location === true && { location },
       ...dirtyFields?.protection === true && { protection },
-      ...dirtyFields?.gradeStr === true && { grade: gradeStr },
-      ...dirtyFields?.disciplines === true && { disciplines }
+      ...dirtyFields?.gradeStr === true && { grade: gradeStr }
+    }
+
+    if (Object.values(dirtyFields?.disciplines ?? []).some(value => value && true)) {
+      onlyDirtyFields.disciplines = disciplines
     }
 
     if (dirtyFields?.gradeStr === true && isBouldering) {
@@ -190,8 +193,6 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
       parentId: ancestors[ancestors.length - 1],
       changes: [{ id, ...onlyDirtyFields }]
     }
-
-    console.log('##form input', input)
 
     await updateClimbCmd(input)
     setCache({ ...formData })
