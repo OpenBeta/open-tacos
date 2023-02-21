@@ -1,6 +1,4 @@
-import { GradeScalesTypes } from '@openbeta/sandbag'
-
-import { ClimbDisciplineRecord, ClimbDiscipline } from '../types'
+import { ClimbDisciplineRecord } from '../types'
 
 export const disciplineTypeToDisplay = (type: ClimbDisciplineRecord): string[] => {
   const ret: string[] = []
