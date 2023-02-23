@@ -20,6 +20,9 @@ export const enhanceMediaListWithUsernames = async (mediaList: MediaBaseTag[]): 
   const uuidMap = new Map<string, MediaBaseTag & {uuid: string}>()
   for (const media of mediaList) {
     const { mediaUrl } = media
+    if (mediaUrl == null) {
+      continue
+    }
     const _arr = mediaUrl.split('/')
     uuidMap.set(mediaUrl, { ...media, uuid: _arr[2] })
     uuidSet.add(_arr[2])

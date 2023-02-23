@@ -89,6 +89,7 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
       id
       uuid
       areaName
+      gradeContext
       media {
         mediaUrl
         mediaUuid
@@ -130,7 +131,12 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
         id
         name
         fa
-        yds
+        grades {
+          font
+          french
+          vscale
+          yds
+        }
         safety
         type {
           trad

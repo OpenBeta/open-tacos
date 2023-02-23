@@ -38,7 +38,6 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
       onCompleted: async (returnValue) => {
         // Trigger Next to build newly create climb pages
         const { updateClimbs } = returnValue
-        console.log('#updated', updateClimbsApi)
         const idList = Array.isArray(updateClimbs) ? updateClimbs : []
         await Promise.all(
           idList.map(async climbId => {

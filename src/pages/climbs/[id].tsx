@@ -8,10 +8,11 @@ import dynamic from 'next/dynamic'
 import * as Portal from '@radix-ui/react-portal'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useSwipeable } from 'react-swipeable'
+import { toast } from 'react-toastify'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, ClimbType, MediaBaseTag, RulesType } from '../../js/types'
+import { AreaType, ClimbDisciplineRecord, ClimbType, MediaBaseTag, RulesType } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
@@ -27,6 +28,9 @@ import { StickyHeader } from '../../components/crag/StickyHeader'
 import { ClientSideFormSaveAction, Skeleton as ContentSkeleton } from '../../components/crag/cragSummary'
 import { getImageDimensionsHack } from '../../js/utils/hacks'
 import { ArticleLastUpdate } from '../../components/edit/ArticleLastUpdate'
+import { BoulderingGradeInput } from '../../components/edit/form/GradeTextInput'
+import Grade from '../../js/grades/Grade'
+import { removeTypenameFromDisciplines } from '../../js/utils'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -80,22 +84,32 @@ const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
 
 export default ClimbPage
 
-const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb, showSkeleton = false }: ClimbPageProps): JSX.Element => {
-  const { id, name, fa, yds, type, content, safety, metadata, ancestors, pathTokens, createdAt, createdBy, updatedAt, updatedBy } = climb
+interface ClimbEditFormProps {
+  name: string
+  description: string
+  location: string
+  protection: string
+  gradeStr: string
+  disciplines: ClimbDisciplineRecord
+}
+
+const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
+  const {
+    id, name, fa, yds, grades, type, content, safety, metadata, ancestors, pathTokens, createdAt, createdBy, updatedAt, updatedBy,
+    parent
+  } = climb
   const { climbId } = metadata
+
+  const gradesObj = new Grade(parent.gradeContext, grades, type, parent.metadata.isBoulder)
 
   const [editTogglePlaceholderRef, setEditTogglePlaceholderRef] = useState<HTMLElement|null>()
 
   const [editMode, setEditMode] = useState(false)
   const [resetSignal, setResetSignal] = useState(0)
-  const [cache, setCache] = useState({ name, ...content })
+  const [cache, setCache] = useState({ name, ...content, disciplines: removeTypenameFromDisciplines(type), gradeStr: gradesObj.toString() })
 
   const router = useRouter()
   const session = useSession()
-
-  useEffect(() => {
-    setCache({ name, ...content })
-  }, [name, content])
 
   /**
    * Update refs to divs inside the main form
@@ -139,19 +153,44 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb, showSkelet
   })
 
   // React hook form declaration
-  const form = useForm({
+  const form = useForm<ClimbEditFormProps>({
     mode: 'onBlur',
     defaultValues: { ...cache }
   })
 
-  const { handleSubmit, reset } = form
+  const { handleSubmit, reset, formState: { dirtyFields }, watch } = form
+
+  const disciplinesField = watch('disciplines')
+  const isBouldering = parent.metadata.isBoulder || (disciplinesField.bouldering && !(disciplinesField.trad || disciplinesField.sport || disciplinesField.aid))
 
   const submitHandler = async (formData): Promise<void> => {
-    const { description, location, protection, name } = formData
+    const { description, location, protection, name, gradeStr, disciplines } = formData
+
+    const onlyDirtyFields: Partial<ClimbEditFormProps> = {
+      ...dirtyFields?.name === true && { name },
+      ...dirtyFields?.description === true && { description },
+      ...dirtyFields?.location === true && { location },
+      ...dirtyFields?.protection === true && { protection },
+      ...dirtyFields?.gradeStr === true && { grade: gradeStr }
+    }
+
+    if (Object.values(dirtyFields?.disciplines ?? []).some(value => value && true)) {
+      onlyDirtyFields.disciplines = disciplines
+    }
+
+    if (dirtyFields?.gradeStr === true && isBouldering) {
+      onlyDirtyFields.disciplines = { ...disciplines, bouldering: true }
+    }
+
+    if (Object.keys(onlyDirtyFields).length === 0) {
+      toast.warn('Nothing to save.  Please make at least 1 edit.')
+      return
+    }
     const input = {
       parentId: ancestors[ancestors.length - 1],
-      changes: [{ id, description, location, protection, name }]
+      changes: [{ id, ...onlyDirtyFields }]
     }
+
     await updateClimbCmd(input)
     setCache({ ...formData })
     reset(formData, { keepValues: true })
@@ -164,6 +203,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb, showSkelet
       onReset={() => setResetSignal(Date.now())}
     />
   )
+
   return (
     <div {...swipeHandlers}>
       <Portal.Root container={editTogglePlaceholderRef}>
@@ -200,10 +240,12 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb, showSkelet
                   rules={AREA_NAME_FORM_VALIDATION_RULES}
                 />
               </h1>
-              <div className='pl-1'>
-                <div className='flex items-center space-x-2 mt-6'>
-                  <RouteGradeChip grade={yds} safety={safety} />
-                  <RouteTypeChips type={type} />
+              <div className='mt-6'>
+                {editMode && isBouldering &&
+                  <BoulderingGradeInput gradeObj={gradesObj} />}
+                <div className='flex items-center space-x-2 w-full'>
+                  {!editMode && cache.gradeStr != null && <RouteGradeChip gradeStr={cache.gradeStr} safety={safety} />}
+                  {!editMode && <RouteTypeChips type={disciplinesField} />}
                 </div>
 
                 <div
@@ -306,6 +348,12 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
       name
       fa
       yds
+      grades {
+        font
+        french
+        vscale
+        yds
+      }
       safety
       type {
         sport
@@ -331,6 +379,12 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
       ancestors
       metadata {
         climbId
+      }
+      parent {
+        gradeContext
+        metadata {
+          isBoulder
+        }
       }
       createdAt
       createdBy
@@ -432,6 +486,10 @@ const PageMeta = ({ climb, mediaListWithUsernames }: ClimbPageProps): JSX.Elemen
       images={pageImages}
     />
   )
+}
+
+export const BoulderingGradeChip: React.FC = () => {
+  return (<div>foos</div>)
 }
 
 const Editor = dynamic(async () => await import('../../components/editor/InplaceEditor'), {
