@@ -27,7 +27,7 @@ function RouteCard ({ routeName, type, safety, yds, fa = '', pathTokens }: Route
       </div>
       {fa !== null && (<div className='text-xs font-light text-slate-500'>{fa}</div>)}
       <div className='mt-4 flex justify-between items-center'>
-        {safety != null && <RouteGradeChip grade={yds} safety={safety} />}
+        {safety != null && <RouteGradeChip gradeStr={yds} safety={safety} />}
       </div>
       <div className='mt-4 flex justify-between items-center'>
         <RouteTypeChips type={type} />

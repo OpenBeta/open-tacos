@@ -93,7 +93,8 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
     const [latStr, lngStr] = latlng.split(',')
 
     const doc = {
-      ...dirtyFields?.areaName === true && { areaName: getValues('areaName') },
+      // @ts-expect-error
+      ...dirtyFields?.areaName === true && { areaName: getValues('areaName') ?? '' },
       ...dirtyFields?.shortCode === true && { shortCode: getValues('shortCode') },
       ...dirtyFields?.isDestination === true && { isDestination: getValues('isDestination') },
       ...dirtyFields?.areaType === true && canChangeAreaType && areaDesignationToDb(areaType),

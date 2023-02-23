@@ -4,6 +4,7 @@ import { Climb, MediaBaseTag, SafetyType } from '../../types'
 import { SeoHookType } from './index'
 import { sanitizeName } from '../../utils'
 import { disciplineTypeToDisplay } from '../../grades/util'
+import Grade from '../../grades/Grade'
 
 interface ClimbSeoProps {
   climb: Climb
@@ -11,7 +12,9 @@ interface ClimbSeoProps {
 }
 
 export const useClimbSeo = ({ climb, imageList = [] }: ClimbSeoProps): SeoHookType => {
-  const { name, type, yds, safety, fa, pathTokens } = climb
+  const { name, type, grades, parent, safety, fa, pathTokens } = climb
+
+  const gradesObj = new Grade(parent.gradeContext, grades, type, parent.metadata.isBoulder)
 
   const faText = fa != null ? `FA: ${fa}` : ''
   let wall = ''
@@ -22,8 +25,9 @@ export const useClimbSeo = ({ climb, imageList = [] }: ClimbSeoProps): SeoHookTy
   const pageDescription = `${faText} · Located in ${wall}`
 
   const disciplinesText = disciplineTypeToDisplay(type).join(' ')
+
   const safetyText = safety != null && safety !== SafetyType.UNSPECIFIED ? ' ' + safety : ''
-  const gradeText = `${yds}${safetyText}`
+  const gradeText = `${gradesObj.toString() ?? ''}${safetyText}`
 
   const pageTitle = [sanitizeName(name), gradeText, disciplinesText].join(' · ')
 

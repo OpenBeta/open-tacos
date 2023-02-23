@@ -23,6 +23,7 @@ import EditModeToggle from '../editor/EditModeToggle'
 import { FormSaveActionProps } from '../../components/editor/FormSaveAction'
 import { ArticleLastUpdate } from '../edit/ArticleLastUpdate'
 import Tooltip from '../ui/Tooltip'
+import Grade from '../../js/grades/Grade'
 
 export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName' | 'climbs' | 'children' | 'totalClimbs'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 
@@ -30,7 +31,7 @@ export interface EditableClimbType {
   id: string
   climbId: string
   name: string
-  yds: string
+  gradeStr?: string
   leftRightIndex: number
   error?: string
   isNew?: boolean
@@ -55,6 +56,7 @@ export default function CragSummary (props: AreaType): JSX.Element {
     content: { description: initDescription },
     metadata: areaMeta, climbs, ancestors, pathTokens,
     children: childAreas,
+    gradeContext,
     createdAt, createdBy, updatedAt, updatedBy
   } = props
 
@@ -108,11 +110,11 @@ export default function CragSummary (props: AreaType): JSX.Element {
     description: initDescription,
     latlng: `${initLat.toString()},${initLng.toString()}`,
     areaType: areaDesignationToForm(areaMeta),
-    climbList: sortClimbsByLeftRightIndex(climbs).map(({ id, name, yds, metadata: { leftRightIndex } }) => ({
+    climbList: sortClimbsByLeftRightIndex(climbs).map(({ id, name, grades, type: disciplines, metadata: { leftRightIndex } }) => ({
       id, // to be used as react key
       climbId: id,
       name,
-      yds,
+      gradeStr: (new Grade(gradeContext, grades, disciplines, areaMeta.isBoulder)).toString(),
       leftRightIndex
     }))
   })
@@ -155,7 +157,7 @@ export default function CragSummary (props: AreaType): JSX.Element {
     const { uuid, areaName, description, latlng, areaType, climbList } = formData
     const [lat, lng] = latlng.split(',')
 
-    const updatedClimbs = extractDirtyClimbs(dirtyFields?.climbList, climbList, cache.climbList)
+    const updatedClimbs = extractDirtyClimbs(dirtyFields?.climbList, climbList, currentareaType === 'boulder')
     const deleteCandidiates = findDeletedCandidates(cache.climbList, climbList)
 
     // Extract only dirty fields to send to the Update Area API
@@ -239,7 +241,7 @@ export default function CragSummary (props: AreaType): JSX.Element {
   useEffect(() => {
     if (data?.area != null) {
       setChildAreasCache(data.area.children)
-      const { uuid, areaName, metadata, content } = data.area
+      const { uuid, areaName, metadata, content, climbs } = data.area
       const { lat, lng } = metadata
       setCache(current => ({
         ...current,
@@ -247,7 +249,14 @@ export default function CragSummary (props: AreaType): JSX.Element {
         areaName,
         description: content.description,
         areaType: areaDesignationToForm(metadata),
-        latlng: `${lat.toString()},${lng.toString()}`
+        latlng: `${lat.toString()},${lng.toString()}`,
+        climbList: sortClimbsByLeftRightIndex(climbs).map(({ id, name, grades, type: disciplines, metadata: { leftRightIndex } }) => ({
+          id, // to be used as react key
+          climbId: id,
+          name,
+          gradeStr: (new Grade(gradeContext, grades, disciplines, areaMeta.isBoulder)).toString(),
+          leftRightIndex
+        }))
       }))
     }
   }, [data?.area])
@@ -305,7 +314,6 @@ export default function CragSummary (props: AreaType): JSX.Element {
                     name='latlng'
                     reset={resetSignal}
                     editable={editMode}
-                    className='text-xs'
                     placeholder='Enter a latitude,longitude. Ex: 46.433333,11.85'
                     rules={AREA_LATLNG_FORM_VALIDATION_RULES}
                   />
@@ -403,10 +411,8 @@ type ClimbDirtyFieldsType = Partial<Record<keyof EditableClimbType, boolean>>
  * Use react-hook-form's dirty field flags to return only updated fields
  * @param dirtyFields See react-hook-form
  * @param climbList Active list extracted from form
- * @param cacheList Cache/default list
- * @returns
  */
-const extractDirtyClimbs = (dirtyFields: ClimbDirtyFieldsType[] = [], climbList: EditableClimbType[], cacheList: EditableClimbType[]): IndividualClimbChangeInput[] => {
+const extractDirtyClimbs = (dirtyFields: ClimbDirtyFieldsType[] = [], climbList: EditableClimbType[], isBoulder: boolean): IndividualClimbChangeInput[] => {
   // Reduce climb list in html form to list of objects compatible with `updateClimbs` API
   const updateList = climbList.reduce<IndividualClimbChangeInput[]>((acc, curr, index) => {
     const dirtyObj = dirtyFields?.[index] ?? {}
@@ -420,7 +426,8 @@ const extractDirtyClimbs = (dirtyFields: ClimbDirtyFieldsType[] = [], climbList:
     acc.push({
       id: climbId, // A new random ID will add as a new climb
       ...dirtyObj?.name === true && { name }, // Include name if changed
-      ...dirtyObj?.id === true && { leftRightIndex } // Include ordering index if array index has changed
+      ...dirtyObj?.id === true && { leftRightIndex }, // Include ordering index if array index has changed
+      ...isBoulder && { disciplines: { bouldering: true } }
     })
     return acc
   }, [])

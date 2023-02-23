@@ -59,7 +59,7 @@ type ClimbEntryProps = EditableClimbTypeWithFieldId & {
   editMode: boolean
 }
 
-const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict, toBeDeleted = false, showBorderBottom = false, editMode }: ClimbEntryProps): JSX.Element => {
+const ClimbEntry = ({ id, isNew = false, climbId, name, gradeStr, index, defaultDict, toBeDeleted = false, showBorderBottom = false, editMode }: ClimbEntryProps): JSX.Element => {
   const isDirty = climbId != null && defaultDict?.[climbId]?.name !== name
   return (
     <div className='flex items-center gap-4 fadeinEffect break-inside-avoid-column break-inside-avoid'>
@@ -82,7 +82,7 @@ const ClimbEntry = ({ id, isNew = false, climbId, name, yds, index, defaultDict,
         }
       >
         <WrapLink climbId={climbId} text={name} noLink={isNew} newWindow={!editMode} />
-        <div className='text-inherit'>{yds}</div>
+        <div className={clx(gradeStr == null || gradeStr.trim() === '' ? 'text-base-200' : 'text-inherit')}>{gradeStr ?? 'UNKNOWN'}</div>
       </div>
     </div>
   )

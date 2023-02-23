@@ -241,7 +241,7 @@ p {
   }
 
   .editor-container {
-    @apply -mx-2 p-2 rounded-lg ;
+    @apply -mx-2 p-2 rounded-lg !important;
   }
 
   .editor-input {

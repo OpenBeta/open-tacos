@@ -23,13 +23,15 @@ interface EditorProps {
   placeholder?: string
   className?: string
   rules?: RulesType
+  helperText?: JSX.Element | JSX.Element[] | string
 }
 
 /**
  * A single-line inplace editor that behaves like a react-hook-form input field.  Support validation rules and error label.
  */
-export default function InplaceTextInput ({ initialValue = '', name, editable = false, reset, placeholder = 'Enter some text...', className = '', rules }: EditorProps): JSX.Element {
+export default function InplaceTextInput ({ initialValue = '', name, editable = false, reset, placeholder = 'Enter some text...', className = '', rules, helperText }: EditorProps): JSX.Element {
   const { field, fieldState: { error } } = useController({ name, rules })
+  const { onBlur } = field
 
   const onChangeHandler = (arg0, arg1): void => {
     onChange(arg0, arg1, field)
@@ -38,7 +40,10 @@ export default function InplaceTextInput ({ initialValue = '', name, editable = 
   return (
     <LexicalComposer initialConfig={editorConfigPlain(initialValue)}>
       <div className='form-control'>
-        <div className={clx('editor-container', editable ? 'bg-slate-200' : '', className)}>
+        <div
+          className={clx('editor-container', className, editable ? 'bg-slate-200' : '')}
+          onBlur={onBlur}
+        >
           <PlainTextPlugin
             contentEditable={<ContentEditable className='editor-input' />}
             placeholder={<Placeholder text={placeholder} />}
@@ -53,7 +58,7 @@ export default function InplaceTextInput ({ initialValue = '', name, editable = 
         <label className='label' id={`${name}-helper`} htmlFor={name}>
           {error?.message != null &&
            (<span className='label-text-alt text-error tracking-normal font-normal'>{error?.message}</span>)}
-          {/* {(error == null) && helper} */}
+          {error?.message == null && helperText}
         </label>
       </div>
     </LexicalComposer>
