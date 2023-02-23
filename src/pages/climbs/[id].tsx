@@ -30,6 +30,7 @@ import { getImageDimensionsHack } from '../../js/utils/hacks'
 import { ArticleLastUpdate } from '../../components/edit/ArticleLastUpdate'
 import { BoulderingGradeInput } from '../../components/edit/form/GradeTextInput'
 import Grade from '../../js/grades/Grade'
+import { removeTypenameFromDisciplines } from '../../js/utils'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -105,14 +106,10 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
 
   const [editMode, setEditMode] = useState(false)
   const [resetSignal, setResetSignal] = useState(0)
-  const [cache, setCache] = useState({ name, ...content, disciplines: type, gradeStr: gradesObj.toString() })
+  const [cache, setCache] = useState({ name, ...content, disciplines: removeTypenameFromDisciplines(type), gradeStr: gradesObj.toString() })
 
   const router = useRouter()
   const session = useSession()
-
-  // useEffect(() => {
-  //   setCache({ name, ...content })
-  // }, [name, content])
 
   /**
    * Update refs to divs inside the main form
