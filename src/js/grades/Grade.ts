@@ -32,6 +32,7 @@ export default class Grade {
   disciplines: ClimbDisciplineRecord
   isBoulder: boolean
   gradescales: any
+
   constructor (gradeContext: GradeContextType, values: GradeValuesType, disciplines: ClimbDisciplineRecord, isBoulder: boolean) {
     if (gradeContext == null) throw new Error('Missing grade context')
     this.context = gradeContext
@@ -66,10 +67,14 @@ export default class Grade {
   }
 
   get boulderingScaleName (): string {
-    return getScale(this.gradescales.bouldering)?.displayName ?? ''
+    return getScale(this.gradescales.bouldering)?.name ?? ''
   }
 
-  boulderingValidationRules (): RulesType {
+  get routeScaleName (): string {
+    return getScale(this.gradescales.sport)?.name.toUpperCase() ?? ''
+  }
+
+  get boulderingValidationRules (): RulesType {
     const isValidGrade = (userInput: string): string | undefined => {
       if (userInput == null || userInput === '') return undefined
       const score = getScale(this.gradescales.bouldering)?.getScore(userInput) ?? -1
@@ -78,6 +83,29 @@ export default class Grade {
     return {
       validate: {
         isValidGrade
+      }
+    }
+  }
+
+  getSportTradValidationRules (discipline: 'sport' | 'trad' | 'tr'): RulesType {
+    const isValidGrade = (userInput: string): string | undefined => {
+      if (userInput == null || userInput === '') return undefined
+      const score = getScale(this.gradescales[discipline])?.getScore(userInput) ?? -1
+      return score >= 0 || Array.isArray(score) ? undefined : 'Invalid grade'
+    }
+    return {
+      validate: {
+        isValidGrade
+      }
+    }
+  }
+
+  get defaultValidationRules (): RulesType {
+    return {
+      validate: {
+        isValidGrade: () => {
+          return 'Please select a discipline'
+        }
       }
     }
   }

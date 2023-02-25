@@ -376,7 +376,7 @@ input:checked + label {
 }
 
 .fadeinEffect {
-  animation: fadeIn 1s;
+  animation: fadeIn 1.5s;
 }
 
 .bottom-shadow {
