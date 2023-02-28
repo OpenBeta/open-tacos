@@ -31,6 +31,7 @@ import { ArticleLastUpdate } from '../../components/edit/ArticleLastUpdate'
 import { TradSportGradeInput, BoulderingGradeInput } from '../../components/edit/form/GradeTextInput'
 import Grade from '../../js/grades/Grade'
 import { removeTypenameFromDisciplines } from '../../js/utils'
+import { keyboardTips } from '../../components/media/slideshow/SlideViewer'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -321,8 +322,11 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                 {/* Mobile-only */}
                 {FormAction}
               </div>
-            </div>
 
+              <div className='mt-16'>
+                {keyboardTips}
+              </div>
+            </div>
           </div>
         </form>
       </FormProvider>

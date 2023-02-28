@@ -180,6 +180,16 @@ interface InfoContainerProps {
   onClose?: () => void
 }
 
+export const keyboardTips = (
+  <div className='mb-2 flex flex-col gap-4 text-sm text-base-300 font-semibold'>
+    <div> Keyboard shortcuts:</div>
+    <div className='flex flex-col gap-2'>
+      <span><kbd className='mr-2 kbd'>◀︎</kbd>PREVIOUS</span>
+      <span><kbd className='mr-2 kbd'>▶︎</kbd>NEXT</span>
+    </div>
+  </div>
+)
+
 const InfoContainer = ({ currentImage, tagList, auth, keyboardTip = true, onClose }: InfoContainerProps): ReactElement | null => {
   if (currentImage == null) return null
 
@@ -207,14 +217,7 @@ const InfoContainer = ({ currentImage, tagList, auth, keyboardTip = true, onClos
 
       <div className='flex-1' />
       {keyboardTip &&
-        <div className='mb-2 flex flex-col gap-4 text-sm text-base-300 font-semibold'>
-          <div> Keyboard shortcuts:</div>
-          <div className='flex flex-col gap-2'>
-            <span><kbd className='mr-2 kbd'>◀︎</kbd>PREVIOUS</span>
-            <span><kbd className='mr-2 kbd'>▶︎</kbd>NEXT</span>
-          </div>
-
-        </div>}
+        keyboardTips}
       {auth.isAuthorized &&
         <div className='my-8 flex items-center hover:bg-rose-50 p-2 rounded-lg transition'>
           <div className='text-primary text-sm flex-1'>Enable <b>Power mode</b> to delete this image</div>
