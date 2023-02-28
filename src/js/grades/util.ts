@@ -9,3 +9,15 @@ export const disciplineTypeToDisplay = (type: ClimbDisciplineRecord): string[] =
   }
   return ret
 }
+
+export const defaultDisciplines = (): ClimbDisciplineRecord => ({
+  sport: false,
+  trad: false,
+  bouldering: false,
+  aid: false,
+  ice: false,
+  alpine: false,
+  mixed: false,
+  tr: false,
+  snow: false
+})

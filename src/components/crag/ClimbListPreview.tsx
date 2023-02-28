@@ -4,6 +4,8 @@ import { indexBy, Dictionary } from 'underscore'
 import clx from 'classnames'
 
 import { EditableClimbType } from './cragSummary'
+import { ClimbDisciplineRecord } from '../../js/types'
+import { disciplineTypeToDisplay } from '../../js/grades/util'
 
 type EditableClimbTypeWithFieldId = EditableClimbType & { id: string }
 interface Props {
@@ -16,8 +18,8 @@ interface Props {
 export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
   const { formState: { defaultValues } } = useController({ name: 'climbList' })
 
-  const watchList = useWatch({ name: 'climbList' })
-
+  const watchList: EditableClimbType[] = useWatch({ name: 'climbList' })
+  console.log('##climb list', watchList)
   const toBeDeleted = findDeletedCandidates(defaultValues?.climbList, watchList)
   const defaultDict = indexBy(defaultValues?.climbList, 'climbId')
 
@@ -28,14 +30,37 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
       <hr className='mt-1 mb-8 border-1 border-base-content' />
 
       <section className='two-column-table'>
-        {watchList.map((entry, index: number) =>
-          <ClimbEntry
-            key={entry.id} {...entry}
-            index={index}
-            showBorderBottom={index === lastItemOfFirstColumn || index === watchList.length - 1}
-            defaultDict={defaultDict}
-            editMode={editable}
-          />)}
+        {watchList.map((entry, index: number) => {
+          const { climbId, name } = entry
+          const dirty = climbId != null && defaultDict?.[climbId]?.name !== name
+          return (
+            <ClimbEntry
+              key={entry.id} {...entry}
+              index={index}
+              showBorderBottom={index === lastItemOfFirstColumn || index === watchList.length - 1}
+              dirty={dirty}
+              editMode={editable}
+            />
+          )
+        })}
+        {watchList.length === 0 && <div className='text-base-300 italic'>None</div>}
+      </section>
+
+      <section className='two-column-table'>
+        {watchList.map((entry, index: number) => {
+          const { climbId, name } = entry
+          const dirty = climbId != null && defaultDict?.[climbId]?.name !== name
+
+          return (
+            <Row
+              key={entry.id} {...entry}
+              index={index}
+              showBorderBottom={index === lastItemOfFirstColumn || index === watchList.length - 1}
+              dirty={dirty}
+              editMode={editable}
+            />
+          )
+        })}
         {watchList.length === 0 && <div className='text-base-300 italic'>None</div>}
       </section>
 
@@ -43,7 +68,7 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
         <>
           <h3 className='mt-6 text-base-300 fadeinEffect'>To Be Deleted <span className=''>({toBeDeleted.length})</span></h3>
           <section className='lg:columns-2 lg:gap-16'>
-            {toBeDeleted.map((entry, index) => <ClimbEntry key={entry.id} {...entry} index={index} toBeDeleted editMode={editable} />)}
+            {toBeDeleted.map((entry, index) => <ClimbEntry key={entry.id} {...entry} index={index} toBeDeleted editMode={editable} dirty={false} />)}
             {toBeDeleted?.length === 0 && <div className='text-base-300 italic'>None</div>}
           </section>
         </>)}
@@ -56,16 +81,16 @@ type ClimbEntryProps = EditableClimbTypeWithFieldId & {
   defaultDict?: Dictionary<EditableClimbType>
   toBeDeleted?: boolean
   showBorderBottom?: boolean
+  dirty: boolean
   editMode: boolean
 }
 
-const ClimbEntry = ({ id, isNew = false, climbId, name, gradeStr, index, defaultDict, toBeDeleted = false, showBorderBottom = false, editMode }: ClimbEntryProps): JSX.Element => {
-  const isDirty = climbId != null && defaultDict?.[climbId]?.name !== name
+const ClimbEntry = ({ id, isNew = false, climbId, name, gradeStr, index, dirty, toBeDeleted = false, showBorderBottom = false, editMode }: ClimbEntryProps): JSX.Element => {
   return (
     <div className='flex items-center gap-4 fadeinEffect break-inside-avoid-column break-inside-avoid'>
       <div className={
         clx('rounded-full h-8 w-8 grid place-content-center text-sm bg-primary/90 text-base-100 indicator',
-          isDirty && !isNew && !toBeDeleted ? 'outline-2 outline-secondary outline-offset-4 outline-dashed' : '',
+          dirty && !isNew && !toBeDeleted ? 'outline-2 outline-secondary outline-offset-4 outline-dashed' : '',
           toBeDeleted ? 'bg-opacity-60' : ''
         )
         }
@@ -76,7 +101,7 @@ const ClimbEntry = ({ id, isNew = false, climbId, name, gradeStr, index, default
       </div>
       <div className={
         clx('border-t grow py-4 uppercase font-semibold flex items-center justify-between',
-          (isDirty && !toBeDeleted) || isNew ? 'italic text-secondary' : '',
+          (dirty && !toBeDeleted) || isNew ? 'italic text-secondary' : '',
           toBeDeleted ? 'italic text-base-300' : '',
           showBorderBottom ? 'border-b' : '')
         }
@@ -86,6 +111,60 @@ const ClimbEntry = ({ id, isNew = false, climbId, name, gradeStr, index, default
       </div>
     </div>
   )
+}
+
+const Row: React.FC<ClimbEntryProps> = (props) => {
+  const { showBorderBottom = false } = props
+  return (
+    <div className={clx('area-row', showBorderBottom ? 'border-b' : '')}>
+      <RowIndex {...props} /><RowContent {...props} />
+    </div>
+  )
+}
+
+const RowIndex: React.FC<ClimbEntryProps> = ({ index, dirty, isNew = false, toBeDeleted = false, disciplines }) => {
+  const strictlySport = (disciplines?.sport ?? false) && !((disciplines?.trad ?? false) || (disciplines?.aid ?? false))
+  return (
+    <div className={
+      clx('rounded-full h-8 w-8 grid place-content-center text-sm text-base-100 indicator',
+        dirty && !isNew && !toBeDeleted ? 'outline-2 outline-secondary outline-offset-4 outline-dashed' : '',
+        toBeDeleted ? 'bg-opacity-60' : '',
+        strictlySport ? 'bg-sport-climb-cue' : 'bg-primary/90'
+      )
+      }
+    >
+      {isNew && !toBeDeleted &&
+        <span className='indicator-item indicator-item-mod badge badge-xs badge-success' />}
+      {index + 1}
+    </div>
+  )
+}
+
+const RowContent: React.FC<ClimbEntryProps> = ({ name, disciplines }) => {
+  return (
+    <div className='flex flex-col items-start items-stretch grow gap-y-1'>
+      <div className='font-semibold uppercase thick-link'>
+        {name}
+      </div>
+      <div className='flex gap-2 items-center'>
+        <DisciplinesInfo disciplines={disciplines} />
+      </div>
+    </div>
+  )
+}
+
+interface DisciplineInfoProps {
+  disciplines: ClimbDisciplineRecord
+}
+
+const DisciplinesInfo: React.FC<DisciplineInfoProps> = ({ disciplines }) => {
+  const tokens = disciplineTypeToDisplay(disciplines)
+  return tokens.length === 0
+    ? null
+    : (
+      <div className='text-base-200 text-xs'>
+        {tokens.join(' · ')}
+      </div>)
 }
 
 interface WrapLinkProps {

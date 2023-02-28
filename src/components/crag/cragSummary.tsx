@@ -7,7 +7,7 @@ import * as Portal from '@radix-ui/react-portal'
 import { MapPinIcon, PencilSquareIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
 
-import { AreaUpdatableFieldsType, AreaType } from '../../js/types'
+import { AreaUpdatableFieldsType, AreaType, ClimbDisciplineRecord, ClimbDiscipline } from '../../js/types'
 import { IndividualClimbChangeInput, UpdateOneAreaInputType } from '../../js/graphql/gql/contribs'
 import { getMapHref, sortClimbsByLeftRightIndex } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
@@ -35,6 +35,7 @@ export interface EditableClimbType {
   leftRightIndex: number
   error?: string
   isNew?: boolean
+  disciplines: ClimbDisciplineRecord
 }
 
 type BulkClimbList = EditableClimbType[]
@@ -115,7 +116,8 @@ export default function CragSummary (props: AreaType): JSX.Element {
       climbId: id,
       name,
       gradeStr: (new Grade(gradeContext, grades, disciplines, areaMeta.isBoulder)).toString(),
-      leftRightIndex
+      leftRightIndex,
+      disciplines
     }))
   })
 
@@ -255,7 +257,8 @@ export default function CragSummary (props: AreaType): JSX.Element {
           climbId: id,
           name,
           gradeStr: (new Grade(gradeContext, grades, disciplines, areaMeta.isBoulder)).toString(),
-          leftRightIndex
+          leftRightIndex,
+          disciplines
         }))
       }))
     }
@@ -405,7 +408,9 @@ const parseLatLng = (s: string): [number, number] | null => {
   return [lat, lng]
 }
 
-type ClimbDirtyFieldsType = Partial<Record<keyof EditableClimbType, boolean>>
+type ClimbDirtyFieldsType = Omit<Partial<Record<keyof EditableClimbType, boolean>>, 'disciplines'> & {
+  disciplines?: Partial<Record<ClimbDiscipline, boolean>>
+}
 
 /**
  * Use react-hook-form's dirty field flags to return only updated fields
@@ -428,6 +433,7 @@ const extractDirtyClimbs = (dirtyFields: ClimbDirtyFieldsType[] = [], climbList:
       ...dirtyObj?.name === true && { name }, // Include name if changed
       ...dirtyObj?.id === true && { leftRightIndex }, // Include ordering index if array index has changed
       ...isBoulder && { disciplines: { bouldering: true } }
+      // Todo: determine disciplines record have changed
     })
     return acc
   }, [])

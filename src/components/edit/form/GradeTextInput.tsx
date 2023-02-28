@@ -8,7 +8,7 @@ import Tooltip from '../../ui/Tooltip'
 import { RulesType } from '../../../js/types'
 
 export const TradSportGradeInput: React.FC<BaseGradeInput> = ({ gradeObj }) => {
-  const [validationRules, setValidationRules] = useState<RulesType>(gradeObj.defaultValidationRules)
+  const [validationRules, setValidationRules] = useState<RulesType>(gradeObj.getSportTradValidationRules())
   const { register } = useFormContext()
   const currentDisciplines = useWatch({ name: 'disciplines' })
 
@@ -33,7 +33,7 @@ export const TradSportGradeInput: React.FC<BaseGradeInput> = ({ gradeObj }) => {
           <span className='label-text font-semibold'>Disciplines</span>
           <Tooltip content='A crag can only have rope climbs. Please create a separate boulder to add problems.'>
             <div className='flex items-center gap-2 text-xs'>
-              <span className='link-dotted hidden sm:inline-block text-info'>Want to add boulder problems?</span
+              <span className='link-dotted hidden sm:inline-block text-info'>How to add boulder problems?</span
               ><QuestionMarkCircleIcon className='text-info w-5 h-5' />
             </div>
           </Tooltip>

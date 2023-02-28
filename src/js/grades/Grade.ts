@@ -87,7 +87,7 @@ export default class Grade {
     }
   }
 
-  getSportTradValidationRules (discipline: 'sport' | 'trad' | 'tr'): RulesType {
+  getSportTradValidationRules (discipline: 'sport' | 'trad' | 'tr' = 'trad'): RulesType {
     const isValidGrade = (userInput: string): string | undefined => {
       if (userInput == null || userInput === '') return undefined
       const score = getScale(this.gradescales[discipline])?.getScore(userInput) ?? -1
@@ -96,16 +96,6 @@ export default class Grade {
     return {
       validate: {
         isValidGrade
-      }
-    }
-  }
-
-  get defaultValidationRules (): RulesType {
-    return {
-      validate: {
-        isValidGrade: () => {
-          return 'Please select a discipline'
-        }
       }
     }
   }
