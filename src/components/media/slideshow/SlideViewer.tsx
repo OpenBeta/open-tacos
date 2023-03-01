@@ -213,7 +213,6 @@ const InfoContainer = ({ currentImage, tagList, auth, keyboardTip = true, onClos
             <span><kbd className='mr-2 kbd'>◀︎</kbd>PREVIOUS</span>
             <span><kbd className='mr-2 kbd'>▶︎</kbd>NEXT</span>
           </div>
-
         </div>}
       {auth.isAuthorized &&
         <div className='my-8 flex items-center hover:bg-rose-50 p-2 rounded-lg transition'>

@@ -28,7 +28,7 @@ import { StickyHeader } from '../../components/crag/StickyHeader'
 import { ClientSideFormSaveAction, Skeleton as ContentSkeleton } from '../../components/crag/cragSummary'
 import { getImageDimensionsHack } from '../../js/utils/hacks'
 import { ArticleLastUpdate } from '../../components/edit/ArticleLastUpdate'
-import { BoulderingGradeInput } from '../../components/edit/form/GradeTextInput'
+import { TradSportGradeInput, BoulderingGradeInput } from '../../components/edit/form/GradeTextInput'
 import Grade from '../../js/grades/Grade'
 import { removeTypenameFromDisciplines } from '../../js/utils'
 
@@ -171,7 +171,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
       ...dirtyFields?.description === true && { description },
       ...dirtyFields?.location === true && { location },
       ...dirtyFields?.protection === true && { protection },
-      ...dirtyFields?.gradeStr === true && { grade: gradeStr }
+      ...dirtyFields?.gradeStr === true && disciplines != null && { grade: gradeStr, disciplines }
     }
 
     if (Object.values(dirtyFields?.disciplines ?? []).some(value => value && true)) {
@@ -243,6 +243,8 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
               <div className='mt-6'>
                 {editMode && isBouldering &&
                   <BoulderingGradeInput gradeObj={gradesObj} />}
+                {editMode && !isBouldering &&
+                  <TradSportGradeInput gradeObj={gradesObj} />}
                 <div className='flex items-center space-x-2 w-full'>
                   {!editMode && cache.gradeStr != null && <RouteGradeChip gradeStr={cache.gradeStr} safety={safety} />}
                   {!editMode && <RouteTypeChips type={disciplinesField} />}
@@ -320,7 +322,6 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                 {FormAction}
               </div>
             </div>
-
           </div>
         </form>
       </FormProvider>

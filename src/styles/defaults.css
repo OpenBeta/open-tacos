@@ -97,7 +97,7 @@ html {
   A slightly deemphasized dotted underline for a tag in order to not competing with horizontal rulers
   */
   .link-dotted {
-    @apply underline decoration-dotted underline-offset-2 decoration-base-200;
+    @apply underline decoration-dotted underline-offset-2 decoration-inherit;
   }
 
   .home-hero-bg-img {
@@ -376,7 +376,7 @@ input:checked + label {
 }
 
 .fadeinEffect {
-  animation: fadeIn 1s;
+  animation: fadeIn 1.5s;
 }
 
 .bottom-shadow {
@@ -433,7 +433,7 @@ table td.dtable-my-range {
 
 .area-entity-box {
   box-shadow: 2px 2px 0px #fe4f1a;
-  @apply rounded h-8 w-8 grid place-content-center bg-area-coded text-base-100 text-sm hover:decoration-0 hover:no-underline;
+  @apply rounded h-8 w-8 grid place-content-center bg-area-cue text-base-100 text-sm hover:decoration-0 hover:no-underline;
 }
 
 .thick-link {

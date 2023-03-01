@@ -4,6 +4,7 @@ import { validate as isUuid, v4 as uuidV4 } from 'uuid'
 import { indexBy, Dictionary } from 'underscore'
 
 import { EditableClimbType } from '../crag/cragSummary'
+import { defaultDisciplines } from '../../js/grades/util'
 
 export default function onChange (editorState: EditorState, editor: LexicalEditor, field: ControllerRenderProps): void {
   if (field?.onChange == null) return
@@ -49,7 +50,8 @@ export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Di
       name,
       leftRightIndex: index,
       gradeStr: climbId != null && defaultClimbDict?.[climbId] != null ? defaultClimbDict?.[climbId].gradeStr : undefined,
-      isNew: !climbIdValidFormat
+      isNew: !climbIdValidFormat,
+      disciplines: defaultClimbDict?.[climbId] != null ? defaultClimbDict[climbId].disciplines : defaultDisciplines()
     }
   }
   if (tokens.length === 1) {
@@ -60,7 +62,8 @@ export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Di
         climbId,
         name: `Untitled ${index + 1}`,
         leftRightIndex: index,
-        gradeStr: climbId != null && defaultClimbDict?.[climbId] != null ? defaultClimbDict?.[climbId].gradeStr : undefined
+        gradeStr: climbId != null && defaultClimbDict?.[climbId] != null ? defaultClimbDict?.[climbId].gradeStr : undefined,
+        disciplines: defaultClimbDict?.[climbId] != null ? defaultClimbDict[climbId].disciplines : defaultDisciplines()
       }
     }
     const name = tokens[0].trim()
@@ -71,7 +74,9 @@ export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Di
       name,
       leftRightIndex: index,
       gradeStr: undefined,
-      isNew: true
+      isNew: true,
+      disciplines: defaultDisciplines()
+
     }
   }
   return {
@@ -80,6 +85,7 @@ export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Di
     name: `Untitled ${index + 1}`,
     leftRightIndex: index,
     gradeStr: undefined,
-    isNew: true
+    isNew: true,
+    disciplines: defaultDisciplines()
   }
 }
