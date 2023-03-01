@@ -30,6 +30,8 @@ export const TradSportGradeInput: React.FC<BaseGradeInput> = ({ gradeObj }) => {
     }
   }, [currentDisciplines])
 
+  // @eslint-expect-error
+  const disciplinesError = (errors?.disciplines?.message) as string
   return (
     <div className='w-full mb-6 fadeinEffect'>
       <div className='w-52'>
@@ -64,9 +66,13 @@ export const TradSportGradeInput: React.FC<BaseGradeInput> = ({ gradeObj }) => {
           </label>
         </div>
         <label className='label'>
-          {errors?.disciplines?.message != null ? <div className='label-text-alt text-error'>{errors?.disciplines?.message.toString() ?? ''}</div> : null}
+          {disciplinesError != null
+            ? (
+              <div className='label-text-alt text-error'>
+                {disciplinesError}
+              </div>)
+            : null}
         </label>
-        {/* {errors.disciplines != null ? errors.disciplines : null} */}
       </div>
     </div>
   )
