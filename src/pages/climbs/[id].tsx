@@ -31,7 +31,6 @@ import { ArticleLastUpdate } from '../../components/edit/ArticleLastUpdate'
 import { TradSportGradeInput, BoulderingGradeInput } from '../../components/edit/form/GradeTextInput'
 import Grade from '../../js/grades/Grade'
 import { removeTypenameFromDisciplines } from '../../js/utils'
-import { keyboardTips } from '../../components/media/slideshow/SlideViewer'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -172,7 +171,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
       ...dirtyFields?.description === true && { description },
       ...dirtyFields?.location === true && { location },
       ...dirtyFields?.protection === true && { protection },
-      ...dirtyFields?.gradeStr === true && { grade: gradeStr }
+      ...dirtyFields?.gradeStr === true && disciplines != null && { grade: gradeStr, disciplines }
     }
 
     if (Object.values(dirtyFields?.disciplines ?? []).some(value => value && true)) {
@@ -321,10 +320,6 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
               <div className='mt-4 block lg:hidden'>
                 {/* Mobile-only */}
                 {FormAction}
-              </div>
-
-              <div className='mt-16'>
-                {keyboardTips}
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import { useFormContext, useWatch } from 'react-hook-form'
 import Grade from '../../../js/grades/Grade'
+import { disciplineTypeToDisplay } from '../../../js/grades/util'
 
 import { Input } from '../../ui/form'
 import Tooltip from '../../ui/Tooltip'
@@ -9,10 +10,16 @@ import { RulesType } from '../../../js/types'
 
 export const TradSportGradeInput: React.FC<BaseGradeInput> = ({ gradeObj }) => {
   const [validationRules, setValidationRules] = useState<RulesType>(gradeObj.getSportTradValidationRules())
-  const { register } = useFormContext()
+  const { register, setError, clearErrors, formState: { errors } } = useFormContext()
   const currentDisciplines = useWatch({ name: 'disciplines' })
 
   useEffect(() => {
+    const tokens = disciplineTypeToDisplay(currentDisciplines)
+    if (tokens.length === 0) {
+      setError('disciplines', { type: 'custom', message: 'Please set at least 1 discipline' })
+    } else {
+      clearErrors('disciplines')
+    }
     const { trad, sport, tr } = currentDisciplines
     if (trad === true) {
       setValidationRules(gradeObj.getSportTradValidationRules('trad'))
@@ -56,6 +63,10 @@ export const TradSportGradeInput: React.FC<BaseGradeInput> = ({ gradeObj }) => {
             <input type='checkbox' className='checkbox' {...register('disciplines.tr')} />
           </label>
         </div>
+        <label className='label'>
+          {errors?.disciplines?.message != null ? <div className='label-text-alt text-error'>{errors?.disciplines?.message.toString() ?? ''}</div> : null}
+        </label>
+        {/* {errors.disciplines != null ? errors.disciplines : null} */}
       </div>
     </div>
   )

@@ -19,7 +19,6 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
   const { formState: { defaultValues } } = useController({ name: 'climbList' })
 
   const watchList: EditableClimbType[] = useWatch({ name: 'climbList' })
-  console.log('##climb list', watchList)
   const toBeDeleted = findDeletedCandidates(defaultValues?.climbList, watchList)
   const defaultDict = indexBy(defaultValues?.climbList, 'climbId')
 
