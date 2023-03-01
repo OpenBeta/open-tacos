@@ -7,7 +7,7 @@ import * as Portal from '@radix-ui/react-portal'
 import { MapPinIcon, PencilSquareIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
 
-import { AreaUpdatableFieldsType, AreaType } from '../../js/types'
+import { AreaUpdatableFieldsType, AreaType, ClimbDisciplineRecord, ClimbDiscipline } from '../../js/types'
 import { IndividualClimbChangeInput, UpdateOneAreaInputType } from '../../js/graphql/gql/contribs'
 import { getMapHref, sortClimbsByLeftRightIndex } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
@@ -35,6 +35,7 @@ export interface EditableClimbType {
   leftRightIndex: number
   error?: string
   isNew?: boolean
+  disciplines: ClimbDisciplineRecord
 }
 
 type BulkClimbList = EditableClimbType[]
@@ -115,7 +116,8 @@ export default function CragSummary (props: AreaType): JSX.Element {
       climbId: id,
       name,
       gradeStr: (new Grade(gradeContext, grades, disciplines, areaMeta.isBoulder)).toString(),
-      leftRightIndex
+      leftRightIndex,
+      disciplines
     }))
   })
 
@@ -255,7 +257,8 @@ export default function CragSummary (props: AreaType): JSX.Element {
           climbId: id,
           name,
           gradeStr: (new Grade(gradeContext, grades, disciplines, areaMeta.isBoulder)).toString(),
-          leftRightIndex
+          leftRightIndex,
+          disciplines
         }))
       }))
     }
@@ -381,7 +384,7 @@ export default function CragSummary (props: AreaType): JSX.Element {
             <div className='collapse mt-12 fadeinEffect flex flex-col gap-4'>
               <div className='flex items-center gap-4'>
                 <PencilSquareIcon className='w-8 h-8 rounded-full p-2 bg-secondary shadow-lg' />
-                <span className='font-semibold text-base-300'>CSV Editor</span>
+                <span className='font-semibold text-base-300'>Power Editor</span>
                 <EditorTooltip />
               </div>
               <ClimbBulkEditor name='climbList' initialClimbs={cache.climbList} resetSignal={resetSignal} editable />
@@ -405,7 +408,9 @@ const parseLatLng = (s: string): [number, number] | null => {
   return [lat, lng]
 }
 
-type ClimbDirtyFieldsType = Partial<Record<keyof EditableClimbType, boolean>>
+type ClimbDirtyFieldsType = Omit<Partial<Record<keyof EditableClimbType, boolean>>, 'disciplines'> & {
+  disciplines?: Partial<Record<ClimbDiscipline, boolean>>
+}
 
 /**
  * Use react-hook-form's dirty field flags to return only updated fields
@@ -428,6 +433,7 @@ const extractDirtyClimbs = (dirtyFields: ClimbDirtyFieldsType[] = [], climbList:
       ...dirtyObj?.name === true && { name }, // Include name if changed
       ...dirtyObj?.id === true && { leftRightIndex }, // Include ordering index if array index has changed
       ...isBoulder && { disciplines: { bouldering: true } }
+      // Todo: determine disciplines record have changed
     })
     return acc
   }, [])
@@ -444,7 +450,7 @@ const EditorTooltip: React.FC = () => (
         <strong>Delete climbs</strong><br />Delete the entire line
       </li>
       <li>
-        <strong>Set difficulty/grade</strong><br />Coming soon!
+        <strong>Set climb attributes, grade, sport vs trad, etc.</strong><br />First create new climbs and save.  Then go to individual climb page to edit.
       </li>
       <li>
         <strong>Change left-to-right order</strong><br />Copy-n-paste lines
@@ -458,7 +464,7 @@ const EditorTooltip: React.FC = () => (
     </ul>
     }
   >
-    <div className='flex items-center gap-2 text-xs'><span className='link-dotted'>Help</span><QuestionMarkCircleIcon className='text-info w-5 h-5' /></div>
+    <div className='flex items-center gap-2 text-xs'><span className='text-info link-dotted'>Help</span><QuestionMarkCircleIcon className='text-info w-5 h-5' /></div>
   </Tooltip>)
 
 /**

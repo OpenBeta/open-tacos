@@ -11,6 +11,9 @@ interface ClimbSeoProps {
   imageList: MediaBaseTag[]
 }
 
+/**
+ * Hook for generating dynamic page SEO data
+ */
 export const useClimbSeo = ({ climb, imageList = [] }: ClimbSeoProps): SeoHookType => {
   const { name, type, grades, parent, safety, fa, pathTokens } = climb
 
@@ -29,7 +32,10 @@ export const useClimbSeo = ({ climb, imageList = [] }: ClimbSeoProps): SeoHookTy
   const safetyText = safety != null && safety !== SafetyType.UNSPECIFIED ? ' ' + safety : ''
   const gradeText = `${gradesObj.toString() ?? ''}${safetyText}`
 
-  const pageTitle = [sanitizeName(name), gradeText, disciplinesText].join(' · ')
+  const s1 = gradeText === '' ? '' : ' · ' + gradeText
+  const s2 = disciplinesText === '' ? '' : ' · ' + disciplinesText
+
+  const pageTitle = `${sanitizeName(name)}${s1}${s2}`
 
   const pageImages = imageList.length > 0 ? getRandomPreviewImages(imageList) : []
 
