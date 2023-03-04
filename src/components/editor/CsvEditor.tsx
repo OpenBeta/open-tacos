@@ -60,7 +60,9 @@ export default function CsvEditor ({ initialClimbs, name, editable = false, rese
           {fields?.map((entry, index) => {
             return (
               <div key={index} className='w-6 h-6'>
-                {entry?.error != null && <XCircleIcon className='w-5 h-5 text-error' />}
+                {// @ts-expect-error
+                entry?.error != null && <XCircleIcon className='w-5 h-5 text-error' />
+                }
               </div>
             )
           })}
