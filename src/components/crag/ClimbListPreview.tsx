@@ -32,7 +32,6 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
         {watchList.map((entry, index: number) => {
           const { climbId, name } = entry
           const dirty = climbId != null && defaultDict?.[climbId]?.name !== name
-
           return (
             <Row
               key={entry.id} {...entry}
@@ -108,7 +107,7 @@ const RowIndex: React.FC<ClimbEntryProps> = ({ index, dirty, isNew = false, toBe
 /**
  * Table row main content
  */
-const RowContent: React.FC<ClimbEntryProps> = ({ name, disciplines, gradeStr }) => {
+const RowContent: React.FC<ClimbEntryProps> = ({ name, disciplines, gradeStr, error }) => {
   return (
     <>
       <div className='flex flex-col items-start items-stretch grow gap-y-1'>
@@ -119,7 +118,7 @@ const RowContent: React.FC<ClimbEntryProps> = ({ name, disciplines, gradeStr }) 
           <DisciplinesInfo disciplines={disciplines} />
         </div>
       </div>
-      <div className='uppercase font-semibold'>{gradeStr}</div>
+      <div className={clx('uppercase font-semibold', error != null ? 'underline decoration-wavy decoration-error underline-offset-2' : '')}>{gradeStr?.substring(0, 10)}</div>
     </>
   )
 }
@@ -131,8 +130,8 @@ interface DisciplineInfoProps {
 const DisciplinesInfo: React.FC<DisciplineInfoProps> = ({ disciplines }) => {
   const tokens = disciplineTypeToDisplay(disciplines)
   return (
-    <div className='text-base-300 text-xs h-2'>
-      {tokens.length === 0 ? '' : tokens.join(' · ')}
+    <div className={clx('text-base-300 text-xs h-2', tokens.length === 0 ? 'italic text-error' : '')}>
+      {tokens.length === 0 ? 'Disciplines not set' : tokens.join(' · ')}
     </div>
   )
 }

@@ -100,3 +100,36 @@ export default class Grade {
     }
   }
 }
+
+export class GradeHelper {
+  gradeScales: any
+  isBoulder: boolean
+
+  constructor (gradeContext: GradeContextType, isBoulder: boolean) {
+    this.gradeScales = gradeContextToGradeScales?.[gradeContext]
+    this.isBoulder = isBoulder
+  }
+
+  getValidationRules (discipline?: 'bouldering' | 'sport' | 'trad' | 'tr'): RulesType {
+    const isValidGrade = (userInput: string): string | undefined => {
+      if (userInput == null || userInput === '') return undefined
+      const _d = discipline == null && this.isBoulder ? 'bouldering' : 'trad'
+      const score = getScale(this.gradeScales[_d])?.getScore(userInput) ?? -1
+      return score >= 0 || Array.isArray(score) ? undefined : 'Invalid grade'
+    }
+    return {
+      validate: {
+        isValidGrade
+      }
+    }
+  }
+
+  validate (gradeStr: string, discipline?: 'bouldering' | 'sport' | 'trad' | 'tr'): string | undefined {
+    const rules = this.getValidationRules(discipline).validate
+    if (rules == null) return undefined
+    // @ts-expect-error
+    // const valid = Object.keys(rules).every(fn => rules[fn].call(gradeStr))
+    const error = rules.isValidGrade(gradeStr)
+    return error == null ? undefined : 'Invalid grade'
+  }
+}

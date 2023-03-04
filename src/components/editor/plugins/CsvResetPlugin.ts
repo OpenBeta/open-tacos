@@ -1,10 +1,10 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { useEffect } from 'react'
 import { useFirstMountState } from 'react-use'
-
 import { $getRoot, $createTextNode, $createParagraphNode } from 'lexical'
 
 import { EditableClimbType } from '../../crag/cragSummary'
+import { disciplinesToCodes } from '../../../js/grades/util'
 
 interface Props {
   initialValue: EditableClimbType[]
@@ -50,6 +50,6 @@ export const $createInitialState = (climbList: EditableClimbType[]): void => {
   })
 }
 
-const individualClimbToCsv = ({ climbId, name }: EditableClimbType): string => {
-  return `${climbId ?? ''} | ${name}`
+const individualClimbToCsv = ({ climbId, name, gradeStr, disciplines }: EditableClimbType): string => {
+  return `${climbId ?? ''} | ${name} | ${gradeStr ?? ''} | ${disciplinesToCodes(disciplines).join(' ')}`
 }

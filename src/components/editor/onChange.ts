@@ -1,10 +1,11 @@
 import { EditorState, LexicalEditor, $getRoot, TextNode } from 'lexical'
-import { ControllerRenderProps, UseFormSetValue, FieldValues } from 'react-hook-form'
+import { ControllerRenderProps, FieldValues, UseFieldArrayReplace, UseFormSetError } from 'react-hook-form'
 import { validate as isUuid, v4 as uuidV4 } from 'uuid'
 import { indexBy, Dictionary } from 'underscore'
 
 import { EditableClimbType } from '../crag/cragSummary'
-import { defaultDisciplines } from '../../js/grades/util'
+import { codesToDisciplines, defaultDisciplines } from '../../js/grades/util'
+import type { GradeHelper } from '../../js/grades/Grade'
 
 export default function onChange (editorState: EditorState, editor: LexicalEditor, field: ControllerRenderProps): void {
   if (field?.onChange == null) return
@@ -14,12 +15,17 @@ export default function onChange (editorState: EditorState, editor: LexicalEdito
   })
 }
 
-export function onChangeCsv (editorState: EditorState, editor: LexicalEditor, replace, fields: any, setValue: UseFormSetValue<FieldValues>): void {
+export function onChangeCsv (
+  editorState: EditorState,
+  editor: LexicalEditor,
+  replace: UseFieldArrayReplace<FieldValues, string>,
+  fields: any[],
+  gradeHelper: GradeHelper, setError, clearErrors): void {
   editorState.read(() => {
     const defaultClimbDict = indexBy<EditableClimbType[]>(fields, 'climbId')
     const root = $getRoot()
     const lines = root.getAllTextNodes().reduce((acc: EditableClimbType[], currentLine, index) => {
-      const curr = parseLine(currentLine, index, defaultClimbDict)
+      const curr = parseLine(currentLine, index, defaultClimbDict, gradeHelper, setError, clearErrors)
       if (curr != null) {
         acc.push(curr)
       }
@@ -31,12 +37,12 @@ export function onChangeCsv (editorState: EditorState, editor: LexicalEditor, re
   })
 }
 
-const parseLine = (line: TextNode, index: number, defaultClimbDict: Dictionary<EditableClimbType>): EditableClimbType | null => {
+const parseLine = (line: TextNode, index: number, defaultClimbDict: Dictionary<EditableClimbType>, gradeHelper: GradeHelper, setError: UseFormSetError<FieldValues>, clearErrors): EditableClimbType | null => {
   const tokens = line.getTextContent()?.trim().split(/\s*\|\s*/)
-  return csvToClimb(tokens, index, defaultClimbDict)
+  return csvToClimb(tokens, index, defaultClimbDict, gradeHelper, setError, clearErrors)
 }
 
-export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Dictionary<EditableClimbType>): EditableClimbType | null => {
+export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Dictionary<EditableClimbType>, gradeHelper: GradeHelper, setError: UseFormSetError<FieldValues>, clearErrors): EditableClimbType | null => {
   if (tokens.length >= 2) {
     const firstToken = tokens[0].trim()
     const climbIdValidFormat = isUuid(firstToken)
@@ -44,14 +50,26 @@ export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Di
     const climbId = climbIdValidFormat ? firstToken : uuidV4()
     const name = tokens[1].trim()
     if (name === '') return null
+
+    const gradeStr = tokens[2] ?? 'foos'
+    const error = gradeHelper.validate(gradeStr)
+
+    const disciplines = codesToDisciplines(tokens[3] ?? '')
+    if (error == null) {
+      clearErrors(`climbList.${index}`)
+    } else {
+      setError(`climbList.${index}`, { type: 'custom', message: error })
+    }
+
     return {
       id: index.toString(),
       climbId,
       name,
       leftRightIndex: index,
-      gradeStr: climbId != null && defaultClimbDict?.[climbId] != null ? defaultClimbDict?.[climbId].gradeStr : undefined,
+      gradeStr,
       isNew: !climbIdValidFormat,
-      disciplines: defaultClimbDict?.[climbId] != null ? defaultClimbDict[climbId].disciplines : defaultDisciplines()
+      error,
+      disciplines
     }
   }
   if (tokens.length === 1) {

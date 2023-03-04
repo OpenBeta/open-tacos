@@ -310,7 +310,7 @@ p {
   p.editor-csv-paragraph span::before {
     display: inline-block;
     text-align:right;
-    width: 2rem;
+    width: 2.85rem;
     min-width: 1rem;
     content: counter(line);
     @apply pr-1 mr-2 border-r border-base-300/50 bg-base-100 text-base-300/60 !important;

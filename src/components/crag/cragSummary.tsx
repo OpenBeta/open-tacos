@@ -23,7 +23,7 @@ import EditModeToggle from '../editor/EditModeToggle'
 import { FormSaveActionProps } from '../../components/editor/FormSaveAction'
 import { ArticleLastUpdate } from '../edit/ArticleLastUpdate'
 import Tooltip from '../ui/Tooltip'
-import Grade from '../../js/grades/Grade'
+import Grade, { GradeHelper } from '../../js/grades/Grade'
 
 export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName' | 'climbs' | 'children' | 'totalClimbs'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 
@@ -387,7 +387,13 @@ export default function CragSummary (props: AreaType): JSX.Element {
                 <span className='font-semibold text-base-300'>Power Editor</span>
                 <EditorTooltip />
               </div>
-              <ClimbBulkEditor name='climbList' initialClimbs={cache.climbList} resetSignal={resetSignal} editable />
+              <ClimbBulkEditor
+                name='climbList'
+                initialClimbs={cache.climbList}
+                resetSignal={resetSignal}
+                editable
+                gradeHelper={new GradeHelper(gradeContext, areaMeta.isBoulder)}
+              />
             </div>)}
         </form>
       </FormProvider>
