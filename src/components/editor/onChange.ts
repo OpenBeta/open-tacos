@@ -1,5 +1,5 @@
 import { EditorState, LexicalEditor, $getRoot, TextNode } from 'lexical'
-import { ControllerRenderProps, FieldValues, UseFieldArrayReplace, UseFormSetError } from 'react-hook-form'
+import { ControllerRenderProps, FieldValues, UseFieldArrayReplace } from 'react-hook-form'
 import { validate as isUuid, v4 as uuidV4 } from 'uuid'
 import { indexBy, Dictionary } from 'underscore'
 
@@ -20,12 +20,12 @@ export function onChangeCsv (
   editor: LexicalEditor,
   replace: UseFieldArrayReplace<FieldValues, string>,
   fields: any[],
-  gradeHelper: GradeHelper, setError, clearErrors): void {
+  gradeHelper: GradeHelper): void {
   editorState.read(() => {
     const defaultClimbDict = indexBy<EditableClimbType[]>(fields, 'climbId')
     const root = $getRoot()
     const lines = root.getAllTextNodes().reduce((acc: EditableClimbType[], currentLine, index) => {
-      const curr = parseLine(currentLine, index, defaultClimbDict, gradeHelper, setError, clearErrors)
+      const curr = parseLine(currentLine, index, defaultClimbDict, gradeHelper)
       if (curr != null) {
         acc.push(curr)
       }
@@ -37,28 +37,32 @@ export function onChangeCsv (
   })
 }
 
-const parseLine = (line: TextNode, index: number, defaultClimbDict: Dictionary<EditableClimbType>, gradeHelper: GradeHelper, setError: UseFormSetError<FieldValues>, clearErrors): EditableClimbType | null => {
+const parseLine = (line: TextNode, index: number, defaultClimbDict: Dictionary<EditableClimbType>, gradeHelper: GradeHelper): EditableClimbType | null => {
   const tokens = line.getTextContent()?.trim().split(/\s*\|\s*/)
-  return csvToClimb(tokens, index, defaultClimbDict, gradeHelper, setError, clearErrors)
+  return csvToClimb(tokens, index, defaultClimbDict, gradeHelper)
 }
 
-export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Dictionary<EditableClimbType>, gradeHelper: GradeHelper, setError: UseFormSetError<FieldValues>, clearErrors): EditableClimbType | null => {
+export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Dictionary<EditableClimbType>, gradeHelper: GradeHelper): EditableClimbType | null => {
   if (tokens.length >= 2) {
     const firstToken = tokens[0].trim()
     const climbIdValidFormat = isUuid(firstToken)
 
-    const climbId = climbIdValidFormat ? firstToken : uuidV4()
-    const name = tokens[1].trim()
-    if (name === '') return null
+    let climbId = uuidV4()
 
-    const gradeStr = tokens[2] ?? 'foos'
-    const error = gradeHelper.validate(gradeStr)
+    if (climbIdValidFormat) {
+      climbId = firstToken
+      tokens.shift()
+    }
+    let name = tokens[0].trim()
+    if (name === '') { name = 'Untitled' }
 
-    const disciplines = codesToDisciplines(tokens[3] ?? '')
-    if (error == null) {
-      clearErrors(`climbList.${index}`)
-    } else {
-      setError(`climbList.${index}`, { type: 'custom', message: error })
+    const gradeStr = tokens[1] ?? 'foos'
+    let error = gradeHelper.validate(gradeStr)
+
+    const disciplines = codesToDisciplines(tokens[2] ?? '')
+
+    if (Object.keys(disciplines).length === 0) {
+      error = 'Disciplines not set'
     }
 
     return {
@@ -69,11 +73,18 @@ export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Di
       gradeStr,
       isNew: !climbIdValidFormat,
       error,
+      errors: {
+        gradeStr: error,
+        disciplines: Object.keys(disciplines).length === 0 ? 'Disciplines not set' : undefined
+      },
       disciplines
     }
   }
+
+  // ONLY 1 TOKEN
   if (tokens.length === 1) {
     if (isUuid(tokens[0].trim())) {
+      // first token is a valid UUID
       const climbId = tokens[0].trim()
       return {
         id: index.toString(),
@@ -84,6 +95,8 @@ export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Di
         disciplines: defaultClimbDict?.[climbId] != null ? defaultClimbDict[climbId].disciplines : defaultDisciplines()
       }
     }
+
+    // First token is not a valid UUID (Common use case) --> first token is a climb name
     const name = tokens[0].trim()
     if (name === '') return null
     return {
@@ -93,8 +106,8 @@ export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Di
       leftRightIndex: index,
       gradeStr: undefined,
       isNew: true,
-      disciplines: defaultDisciplines()
-
+      disciplines: defaultDisciplines(),
+      error: 'Missing grade'
     }
   }
   return {

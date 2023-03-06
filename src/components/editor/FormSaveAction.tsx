@@ -15,8 +15,6 @@ export function FormSaveAction ({ editMode, cache, onReset }: FormSaveActionProp
 
   if (!editMode) return null
 
-  console.log('#save', isValid)
-
   return (
     <div className='bg-base-100 flex justify-center flex-wrap-reverse lg:flex-nowrap gap-x-8 gap-y-4 px-4 lg:pr-0'>
       <button

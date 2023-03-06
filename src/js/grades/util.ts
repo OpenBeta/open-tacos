@@ -34,15 +34,15 @@ const safeCodeMap = {
   B: 'bouldering'
 }
 
-export const codesToDisciplines = (codesStr: string): ClimbDisciplineRecord => {
+export const codesToDisciplines = (codesStr: string): Partial<ClimbDisciplineRecord> => {
   const tokens = codesStr.split(' ')
-  return tokens.reduce<ClimbDisciplineRecord>((acc, token) => {
-    const key = safeCodeMap[token]
+  return tokens.reduce<Partial<ClimbDisciplineRecord>>((acc, token) => {
+    const key = safeCodeMap[token.toUpperCase()]
     if (key != null) {
       acc[key] = true
     }
     return acc
-  }, defaultDisciplines())
+  }, {})
 }
 
 export const defaultDisciplines = (): ClimbDisciplineRecord => ({

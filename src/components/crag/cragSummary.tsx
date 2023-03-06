@@ -34,8 +34,9 @@ export interface EditableClimbType {
   gradeStr?: string
   leftRightIndex: number
   error?: string
+  errors?: Record<'gradeStr'|'disciplines', string|undefined>
   isNew?: boolean
-  disciplines: ClimbDisciplineRecord
+  disciplines: Partial<ClimbDisciplineRecord>
 }
 
 type BulkClimbList = EditableClimbType[]
@@ -414,7 +415,7 @@ const parseLatLng = (s: string): [number, number] | null => {
   return [lat, lng]
 }
 
-type ClimbDirtyFieldsType = Omit<Partial<Record<keyof EditableClimbType, boolean>>, 'disciplines'> & {
+type ClimbDirtyFieldsType = Omit<Partial<Record<keyof EditableClimbType, boolean>>, 'disciplines'|'errors'> & {
   disciplines?: Partial<Record<ClimbDiscipline, boolean>>
 }
 

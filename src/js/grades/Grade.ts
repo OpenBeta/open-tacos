@@ -1,5 +1,6 @@
 import { GradeScales, getScale } from '@openbeta/sandbag'
 import { RulesType, GradeContextType, GradeValuesType, ClimbDisciplineRecord } from '../types'
+import { EditableClimbType } from '../../components/crag/cragSummary'
 
 const gradeContextToGradeScales = {
   US: {
@@ -110,9 +111,20 @@ export class GradeHelper {
     this.isBoulder = isBoulder
   }
 
+  getBulkValidationRules (): RulesType {
+    return {
+      validate: (list: EditableClimbType[]): any => {
+        const z = list.every(({ error }) => error == null)
+        console.log('#bulkvalidator', z, list)
+
+        return z ? undefined : 'Format error'
+      }
+    }
+  }
+
   getValidationRules (discipline?: 'bouldering' | 'sport' | 'trad' | 'tr'): RulesType {
     const isValidGrade = (userInput: string): string | undefined => {
-      if (userInput == null || userInput === '') return undefined
+      if (userInput == null || userInput === '') return 'Missing grade'
       const _d = discipline == null && this.isBoulder ? 'bouldering' : 'trad'
       const score = getScale(this.gradeScales[_d])?.getScore(userInput) ?? -1
       return score >= 0 || Array.isArray(score) ? undefined : 'Invalid grade'

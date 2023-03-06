@@ -1,4 +1,4 @@
-import { useController, useFieldArray, useFormContext } from 'react-hook-form'
+import { useFieldArray } from 'react-hook-form'
 import clx from 'classnames'
 import type { EditorState, LexicalEditor } from 'lexical'
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
@@ -7,7 +7,7 @@ import { ContentEditable } from '@lexical/react/LexicalContentEditable'
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
-import { XCircleIcon } from '@heroicons/react/20/solid'
+import { BugAntIcon } from '@heroicons/react/20/solid'
 
 import { editorConfigCsv } from './editorConfig'
 import { onChangeCsv } from './onChange'
@@ -15,6 +15,7 @@ import { CsvResetPlugin } from './plugins/CsvResetPlugin'
 import { RulesType } from '../../js/types'
 import { EditableClimbType } from '../crag/cragSummary'
 import type { GradeHelper } from '../../js/grades/Grade'
+import Tooltip from '../ui/Tooltip'
 
 interface EditorProps {
   /** true edit mode is active */
@@ -33,43 +34,33 @@ interface EditorProps {
 /**
  * Comma-separate-value editor aka the Power editor that enables bulk editting of multiple climbs.
  */
-export default function CsvEditor ({ initialClimbs, name, editable = false, resetSignal, rules, gradeHelper }: EditorProps): JSX.Element {
-  const { setError, clearErrors } = useFormContext()
-  const { fieldState: { error } } = useController({ name })
-  const { replace, fields } = useFieldArray({ name })
+export default function CsvEditor ({ initialClimbs, name, editable = false, resetSignal, gradeHelper }: EditorProps): JSX.Element {
+  const { replace, fields } = useFieldArray({ name, rules: gradeHelper.getBulkValidationRules() })
 
   const onChangeHandler = (editorState: EditorState, editor: LexicalEditor): void => {
-    onChangeCsv(editorState, editor, replace, fields, gradeHelper, setError, clearErrors)
+    onChangeCsv(editorState, editor, replace, fields, gradeHelper)
   }
-
+  // A more reliable way to check for errors when using react-hook-form field array
+  const thereAreErrors = fields.some((entry: EditableClimbType) => entry.error != null)
   return (
     <LexicalComposer initialConfig={editorConfigCsv(initialClimbs)}>
       <div className='form-control'>
         <div className={clx('editor-csv-container', editable ? 'bg-slate-200' : '')}>
           <RichTextPlugin
-            contentEditable={<ContentEditable className='editor-csv-input' />}
+            contentEditable={<ContentEditable
+              className='editor-csv-input'
+                             />}
             placeholder={<Placeholder />}
             ErrorBoundary={LexicalErrorBoundary}
           />
           <OnChangePlugin onChange={onChangeHandler} ignoreSelectionChange />
           <HistoryPlugin />
           <CsvResetPlugin initialValue={initialClimbs} resetSignal={resetSignal} editable={editable} />
-
         </div>
-        <div className='absolute'>
-          {fields?.map((entry, index) => {
-            return (
-              <div key={index} className='w-6 h-6'>
-                {// @ts-expect-error
-                entry?.error != null && <XCircleIcon className='w-5 h-5 text-error' />
-                }
-              </div>
-            )
-          })}
-        </div>
+        <BugHighlighter fields={fields as EditableClimbType[]} />
         <label className='label' id={`${name}-helper`} htmlFor={name}>
-          {error?.message != null &&
-           (<span className='label-text-alt text-error tracking-normal font-normal'>{error?.message}</span>)}
+          {thereAreErrors &&
+           (<span className='label-text-alt text-error tracking-normal font-normal'>Please check for format errors</span>)}
         </label>
       </div>
     </LexicalComposer>
@@ -78,4 +69,37 @@ export default function CsvEditor ({ initialClimbs, name, editable = false, rese
 
 export function Placeholder (): JSX.Element {
   return <div className='editor-csv-placeholder'>Climb one<br />Climb two</div>
+}
+
+interface BugHighlighterProps {
+  fields: EditableClimbType[]
+}
+
+/**
+ * Highline the erroneous line
+ */
+const BugHighlighter: React.FC<BugHighlighterProps> = ({ fields }) => {
+  return (
+    <div className='absolute'>
+      {fields?.map((entry, index) => {
+        const errorMsg = entry?.error
+        const el = document.querySelector(`div.editor-csv-input>p:nth-child(${index + 1})`)
+        if (el != null) {
+          // THIS IS A HACK!
+          // there may be a better way to tap into Lexical node renderer and style the offending line
+          if (errorMsg != null) {
+            el.className = 'editor-csv-paragraph ltr bg-opacity-30 bg-error '
+          } else {
+            el.className = 'editor-csv-paragraph ltr'
+          }
+        }
+        return (
+          <Tooltip key={index} content={errorMsg ?? ''} className='w-6 h-6 flex justify-center items-center'>
+            {errorMsg != null ? <BugAntIcon className='w-4 h-4 text-error' /> : null}
+          </Tooltip>
+        )
+      }
+      )}
+    </div>
+  )
 }
