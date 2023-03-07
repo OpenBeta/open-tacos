@@ -40,16 +40,21 @@ export default function CsvEditor ({ initialClimbs, name, editable = false, rese
   const onChangeHandler = (editorState: EditorState, editor: LexicalEditor): void => {
     onChangeCsv(editorState, editor, replace, fields, gradeHelper)
   }
+
   // A more reliable way to check for errors when using react-hook-form field array
-  const thereAreErrors = fields.some((entry: EditableClimbType) => entry.error != null)
+  const thereAreErrors = fields.some(
+    (entry: EditableClimbType) => Object.values(entry.errors ?? {}).filter(v => v != null).length > 0)
+
   return (
     <LexicalComposer initialConfig={editorConfigCsv(initialClimbs)}>
       <div className='form-control'>
         <div className={clx('editor-csv-container', editable ? 'bg-slate-200' : '')}>
           <RichTextPlugin
-            contentEditable={<ContentEditable
-              className='editor-csv-input'
-                             />}
+            contentEditable={
+              <ContentEditable
+                className='editor-csv-input'
+              />
+            }
             placeholder={<Placeholder />}
             ErrorBoundary={LexicalErrorBoundary}
           />
@@ -58,9 +63,9 @@ export default function CsvEditor ({ initialClimbs, name, editable = false, rese
           <CsvResetPlugin initialValue={initialClimbs} resetSignal={resetSignal} editable={editable} />
         </div>
         <BugHighlighter fields={fields as EditableClimbType[]} />
-        <label className='label' id={`${name}-helper`} htmlFor={name}>
+        <label className='label ml-12' id={`${name}-helper`} htmlFor={name}>
           {thereAreErrors &&
-           (<span className='label-text-alt text-error tracking-normal font-normal'>Please check for format errors</span>)}
+           (<span className='label-text-alt text-error tracking-normal font-normal'>Please fix formatting errors</span>)}
         </label>
       </div>
     </LexicalComposer>
@@ -82,20 +87,23 @@ const BugHighlighter: React.FC<BugHighlighterProps> = ({ fields }) => {
   return (
     <div className='absolute'>
       {fields?.map((entry, index) => {
-        const errorMsg = entry?.error
+        const errorMsgs = Object.values(entry?.errors ?? {}).filter(k => k != null)
         const el = document.querySelector(`div.editor-csv-input>p:nth-child(${index + 1})`)
         if (el != null) {
           // THIS IS A HACK!
           // there may be a better way to tap into Lexical node renderer and style the offending line
-          if (errorMsg != null) {
-            el.className = 'editor-csv-paragraph ltr bg-opacity-30 bg-error '
+          if (errorMsgs.length > 0) {
+            el.className = 'editor-csv-paragraph ltr bg-opacity-30 bg-error'
           } else {
             el.className = 'editor-csv-paragraph ltr'
           }
         }
         return (
-          <Tooltip key={index} content={errorMsg ?? ''} className='w-6 h-6 flex justify-center items-center'>
-            {errorMsg != null ? <BugAntIcon className='w-4 h-4 text-error' /> : null}
+          <Tooltip
+            key={index} content={<>{errorMsgs.map((s, index) => <div key={index}>· {s}</div>)}</>}
+            className='ml-0.5 h-7 flex justify-center items-center'
+          >
+            {errorMsgs.length > 0 ? <BugAntIcon className='w-4 h-4 text-error' /> : null}
           </Tooltip>
         )
       }

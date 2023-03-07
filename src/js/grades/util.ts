@@ -1,6 +1,6 @@
 import { ClimbDisciplineRecord } from '../types'
 
-export const disciplineTypeToDisplay = (type: ClimbDisciplineRecord): string[] => {
+export const disciplineTypeToDisplay = (type: Partial<ClimbDisciplineRecord>): string[] => {
   const ret: string[] = []
   const entries = Object.entries(type)
   for (const [key, value] of entries) {
@@ -10,7 +10,13 @@ export const disciplineTypeToDisplay = (type: ClimbDisciplineRecord): string[] =
   return ret
 }
 
-export const disciplinesToCodes = (type: ClimbDisciplineRecord): string[] => {
+/**
+ * Convert disciplines object to a space-delimited list of codes.
+ * For example, { trad: true, aid: true } --> 'T A'
+ * @param type Disciplines object
+ * @returns a space-delimited list of codes
+ */
+export const disciplinesToCodes = (type: Partial<ClimbDisciplineRecord>): string[] => {
   const ret: string[] = []
   const entries = Object.entries(type)
   for (const [key, value] of entries) {
@@ -34,15 +40,25 @@ const safeCodeMap = {
   B: 'bouldering'
 }
 
-export const codesToDisciplines = (codesStr: string): Partial<ClimbDisciplineRecord> => {
+/**
+ * Convert a space-delimited list of discipline codes to Climb disciplines object
+ * @param codesStr Example: 'T S A'
+ * @returns [disicpline record, hasError]
+ */
+export const codesToDisciplines = (codesStr: string): [Partial<ClimbDisciplineRecord>, boolean] => {
+  let hasError = false
   const tokens = codesStr.split(' ')
-  return tokens.reduce<Partial<ClimbDisciplineRecord>>((acc, token) => {
+  const ret = tokens.reduce<Partial<ClimbDisciplineRecord>>((acc, token) => {
     const key = safeCodeMap[token.toUpperCase()]
     if (key != null) {
       acc[key] = true
+    } else {
+      hasError = true
     }
     return acc
   }, {})
+
+  return [ret, hasError]
 }
 
 export const defaultDisciplines = (): ClimbDisciplineRecord => ({

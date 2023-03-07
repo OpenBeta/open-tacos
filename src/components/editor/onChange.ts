@@ -56,26 +56,29 @@ export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Di
     let name = tokens[0].trim()
     if (name === '') { name = 'Untitled' }
 
-    const gradeStr = tokens[1] ?? 'foos'
-    let error = gradeHelper.validate(gradeStr)
+    const gradeStr = tokens[1] ?? ''
 
-    const disciplines = codesToDisciplines(tokens[2] ?? '')
+    const [disciplines, disciplinesHaveErrors] = codesToDisciplines(tokens[2] ?? '')
 
-    if (Object.keys(disciplines).length === 0) {
-      error = 'Disciplines not set'
+    let disciplinesError: string | undefined
+    if (disciplinesHaveErrors) {
+      disciplinesError = 'Disciplines formatting error.  Valid codes: B S T TR A.'
+    } else if (Object.keys(disciplines).length === 0) {
+      disciplinesError = 'Disciplines not set'
+    } else {
+      disciplinesError = undefined
     }
 
     return {
-      id: index.toString(),
+      id: climbId,
       climbId,
       name,
       leftRightIndex: index,
       gradeStr,
       isNew: !climbIdValidFormat,
-      error,
       errors: {
-        gradeStr: error,
-        disciplines: Object.keys(disciplines).length === 0 ? 'Disciplines not set' : undefined
+        gradeStr: gradeHelper.validate(gradeStr),
+        disciplines: disciplinesError
       },
       disciplines
     }
@@ -98,16 +101,19 @@ export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Di
 
     // First token is not a valid UUID (Common use case) --> first token is a climb name
     const name = tokens[0].trim()
-    if (name === '') return null
     return {
       id: index.toString(),
       climbId: uuidV4(),
       name,
       leftRightIndex: index,
-      gradeStr: undefined,
+      gradeStr: '',
       isNew: true,
       disciplines: defaultDisciplines(),
-      error: 'Missing grade'
+      errors: {
+        gradeStr: 'Grade not set',
+        disciplines: 'Disciplines not set'
+      }
+
     }
   }
   return {
@@ -115,8 +121,12 @@ export const csvToClimb = (tokens: string[], index: number, defaultClimbDict: Di
     climbId: uuidV4(),
     name: `Untitled ${index + 1}`,
     leftRightIndex: index,
-    gradeStr: undefined,
+    gradeStr: '',
     isNew: true,
-    disciplines: defaultDisciplines()
+    disciplines: defaultDisciplines(),
+    errors: {
+      gradeStr: 'Grade not set',
+      disciplines: 'Disciplines not set'
+    }
   }
 }

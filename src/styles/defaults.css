@@ -296,12 +296,12 @@ p {
   .editor-csv-container {
     position: relative;
     counter-reset: line;
-    @apply overflow-clip rounded-box;
+    @apply overflow-clip rounded-box border;
   }
 
   .editor-csv-input {
     counter-reset: line;
-    @apply focus:bg-info/20 border-none rounded-box outline-none min-h-[8rem];
+    @apply leading-7 focus:bg-info/20 border-none rounded-box outline-none min-h-[8rem];
   }
 
   p.editor-csv-paragraph span {

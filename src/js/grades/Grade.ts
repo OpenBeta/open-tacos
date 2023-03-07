@@ -30,11 +30,11 @@ const gradeContextToGradeScales = {
 export default class Grade {
   context: GradeContextType
   values: GradeValuesType
-  disciplines: ClimbDisciplineRecord
+  disciplines: Partial<ClimbDisciplineRecord>
   isBoulder: boolean
   gradescales: any
 
-  constructor (gradeContext: GradeContextType, values: GradeValuesType, disciplines: ClimbDisciplineRecord, isBoulder: boolean) {
+  constructor (gradeContext: GradeContextType, values: GradeValuesType, disciplines: Partial<ClimbDisciplineRecord>, isBoulder: boolean) {
     if (gradeContext == null) throw new Error('Missing grade context')
     this.context = gradeContext
     this.values = values
@@ -50,11 +50,11 @@ export default class Grade {
   }
 
   isBouldering (): boolean {
-    return this.isBoulder || this.disciplines.bouldering
+    return this.isBoulder || (this.disciplines?.bouldering ?? false)
   }
 
   isTradSportTr (): boolean {
-    return this.disciplines.sport || this.disciplines.trad || this.disciplines.tr || this.disciplines.aid
+    return (this.disciplines?.sport ?? false) || (this.disciplines?.trad ?? false) || (this.disciplines?.tr ?? false) || (this.disciplines?.aid ?? false)
   }
 
   toStringBouldering (): string | undefined {
@@ -114,9 +114,7 @@ export class GradeHelper {
   getBulkValidationRules (): RulesType {
     return {
       validate: (list: EditableClimbType[]): any => {
-        const z = list.every(({ error }) => error == null)
-        console.log('#bulkvalidator', z, list)
-
+        const z = list.every(({ errors }) => Object.values(errors ?? {}).filter(v => v != null).length === 0)
         return z ? undefined : 'Format error'
       }
     }

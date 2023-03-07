@@ -4,12 +4,12 @@ import dynamic from 'next/dynamic'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import * as Portal from '@radix-ui/react-portal'
-import { MapPinIcon, PencilSquareIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
+import { MapPinIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
 
 import { AreaUpdatableFieldsType, AreaType, ClimbDisciplineRecord, ClimbDiscipline } from '../../js/types'
 import { IndividualClimbChangeInput, UpdateOneAreaInputType } from '../../js/graphql/gql/contribs'
-import { getMapHref, sortClimbsByLeftRightIndex } from '../../js/utils'
+import { getMapHref, sortClimbsByLeftRightIndex, removeTypenameFromDisciplines } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
 import { AreaDesignationRadioGroupProps, areaDesignationToDb, areaDesignationToForm } from '../edit/form/AreaDesignationRadioGroup'
 import { ClimbListPreview, findDeletedCandidates } from './ClimbListPreview'
@@ -22,8 +22,8 @@ import { InplaceTextInput, InplaceEditor } from '../editor'
 import EditModeToggle from '../editor/EditModeToggle'
 import { FormSaveActionProps } from '../../components/editor/FormSaveAction'
 import { ArticleLastUpdate } from '../edit/ArticleLastUpdate'
-import Tooltip from '../ui/Tooltip'
 import Grade, { GradeHelper } from '../../js/grades/Grade'
+import { BulkEditorTooltip, BulkEditorTipSheet } from './BulkEditorTooltip'
 
 export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName' | 'climbs' | 'children' | 'totalClimbs'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 
@@ -33,17 +33,14 @@ export interface EditableClimbType {
   name: string
   gradeStr?: string
   leftRightIndex: number
-  error?: string
   errors?: Record<'gradeStr'|'disciplines', string|undefined>
   isNew?: boolean
   disciplines: Partial<ClimbDisciplineRecord>
 }
 
-type BulkClimbList = EditableClimbType[]
-
 type AreaTypeFormProp = 'crag' | 'area' | 'boulder'
 
-type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description'>> & { uuid: string, latlng: string, areaType: AreaTypeFormProp, climbList: BulkClimbList }
+export type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description'>> & { uuid: string, latlng: string, areaType: AreaTypeFormProp, climbList: EditableClimbType[] }
 
 /**
  * Responsive summary of major attributes for a crag / boulder.
@@ -112,14 +109,17 @@ export default function CragSummary (props: AreaType): JSX.Element {
     description: initDescription,
     latlng: `${initLat.toString()},${initLng.toString()}`,
     areaType: areaDesignationToForm(areaMeta),
-    climbList: sortClimbsByLeftRightIndex(climbs).map(({ id, name, grades, type: disciplines, metadata: { leftRightIndex } }) => ({
-      id, // to be used as react key
-      climbId: id,
-      name,
-      gradeStr: (new Grade(gradeContext, grades, disciplines, areaMeta.isBoulder)).toString(),
-      leftRightIndex,
-      disciplines
-    }))
+    climbList: sortClimbsByLeftRightIndex(climbs).map(({ id, name, grades, type: disciplines, metadata: { leftRightIndex } }) => {
+      const sanitizedDisciplines = removeTypenameFromDisciplines(disciplines)
+      return ({
+        id, // to be used as react key
+        climbId: id,
+        name,
+        gradeStr: (new Grade(gradeContext, grades, sanitizedDisciplines, areaMeta.isBoulder)).toString(),
+        leftRightIndex,
+        disciplines: sanitizedDisciplines
+      })
+    })
   })
 
   const { updateClimbCmd, deleteClimbsCmd } = useUpdateClimbsCmd({
@@ -253,14 +253,17 @@ export default function CragSummary (props: AreaType): JSX.Element {
         description: content.description,
         areaType: areaDesignationToForm(metadata),
         latlng: `${lat.toString()},${lng.toString()}`,
-        climbList: sortClimbsByLeftRightIndex(climbs).map(({ id, name, grades, type: disciplines, metadata: { leftRightIndex } }) => ({
-          id, // to be used as react key
-          climbId: id,
-          name,
-          gradeStr: (new Grade(gradeContext, grades, disciplines, areaMeta.isBoulder)).toString(),
-          leftRightIndex,
-          disciplines
-        }))
+        climbList: sortClimbsByLeftRightIndex(climbs).map(({ id, name, grades, type: disciplines, metadata: { leftRightIndex } }) => {
+          const sanitizedDisciplines = removeTypenameFromDisciplines(disciplines)
+          return ({
+            id, // to be used as react key
+            climbId: id,
+            name,
+            gradeStr: (new Grade(gradeContext, grades, sanitizedDisciplines, areaMeta.isBoulder)).toString(),
+            leftRightIndex,
+            disciplines: sanitizedDisciplines
+          })
+        })
       }))
     }
   }, [data?.area])
@@ -382,12 +385,14 @@ export default function CragSummary (props: AreaType): JSX.Element {
           {canAddClimbs && <ClimbListPreview editable={editMode} />}
 
           {editMode && canAddClimbs && (
-            <div className='collapse mt-12 fadeinEffect flex flex-col gap-4'>
+            <div className='mt-12 fadeinEffect flex flex-col gap-4'>
               <div className='flex items-center gap-4'>
-                <PencilSquareIcon className='w-8 h-8 rounded-full p-2 bg-secondary shadow-lg' />
-                <span className='font-semibold text-base-300'>Power Editor</span>
-                <EditorTooltip />
+                <h3>Power Editor</h3>
+                <BulkEditorTooltip />
               </div>
+
+              <BulkEditorTipSheet />
+
               <ClimbBulkEditor
                 name='climbList'
                 initialClimbs={cache.climbList}
@@ -434,45 +439,21 @@ const extractDirtyClimbs = (dirtyFields: ClimbDirtyFieldsType[] = [], climbList:
     }
 
     // There's a change
-    const { climbId, name, leftRightIndex } = curr
+    const { climbId, name, leftRightIndex, gradeStr, disciplines } = curr
+
+    const isDirtyDisciplines = Object.values(dirtyObj?.disciplines ?? {}).filter(v => v).length > 0
     acc.push({
-      id: climbId, // A new random ID will add as a new climb
+      id: climbId, // A new random ID will cause an 'upsert', adding it as a new climb
       ...dirtyObj?.name === true && { name }, // Include name if changed
       ...dirtyObj?.id === true && { leftRightIndex }, // Include ordering index if array index has changed
-      ...isBoulder && { disciplines: { bouldering: true } }
-      // Todo: determine disciplines record have changed
+      ...isBoulder && { disciplines: { bouldering: true } },
+      ...dirtyObj?.gradeStr === true && { grade: gradeStr, disciplines },
+      ...isDirtyDisciplines && { disciplines }
     })
     return acc
   }, [])
   return updateList
 }
-
-const EditorTooltip: React.FC = () => (
-  <Tooltip content={
-    <ul className='px-4 py-2 list-disc space-y-2'>
-      <li>
-        <strong>Create new climbs</strong><br /> Enter one climb per line
-      </li>
-      <li>
-        <strong>Delete climbs</strong><br />Delete the entire line
-      </li>
-      <li>
-        <strong>Set climb attributes, grade, sport vs trad, etc.</strong><br />First create new climbs and save.  Then go to individual climb page to edit.
-      </li>
-      <li>
-        <strong>Change left-to-right order</strong><br />Copy-n-paste lines
-      </li>
-      <li>
-        <strong>Climb ID</strong><br />Don't edit the strange text: <i>646756eb-7552-4715-8e17-d4c1073b5d51</i>
-      </li>
-      <li>
-        Remember to press <strong>Save</strong> when done 😀
-      </li>
-    </ul>
-    }
-  >
-    <div className='flex items-center gap-2 text-xs'><span className='text-info link-dotted'>Help</span><QuestionMarkCircleIcon className='text-info w-5 h-5' /></div>
-  </Tooltip>)
 
 /**
  * Area/climb main skeleton

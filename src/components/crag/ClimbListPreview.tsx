@@ -3,7 +3,7 @@ import { useController, useWatch } from 'react-hook-form'
 import { indexBy, Dictionary } from 'underscore'
 import clx from 'classnames'
 
-import { EditableClimbType } from './cragSummary'
+import { EditableClimbType, SummaryHTMLFormProps } from './cragSummary'
 import { ClimbDisciplineRecord } from '../../js/types'
 import { disciplineTypeToDisplay } from '../../js/grades/util'
 
@@ -16,11 +16,12 @@ interface Props {
  * Rendering the climb table.  The list is coming from react-hook-form context.
  */
 export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
-  const { formState: { defaultValues } } = useController({ name: 'climbList' })
+  const { formState: { defaultValues, dirtyFields } } = useController<SummaryHTMLFormProps>({ name: 'climbList' })
 
   const watchList: EditableClimbType[] = useWatch({ name: 'climbList' })
-  const toBeDeleted = findDeletedCandidates(defaultValues?.climbList, watchList)
-  const defaultDict = indexBy(defaultValues?.climbList, 'climbId')
+  const defaultList = (defaultValues?.climbList ?? []) as EditableClimbType[]
+  const dirtyFieldsClimbList = dirtyFields?.climbList
+  const toBeDeleted = findDeletedCandidates(defaultList, watchList)
 
   const lastItemOfFirstColumn = Math.ceil(watchList.length / 2) - 1
   return (
@@ -30,15 +31,15 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
 
       <section className='two-column-table'>
         {watchList.map((entry, index: number) => {
-          const { climbId, name } = entry
-          const dirty = climbId != null && defaultDict?.[climbId]?.name !== name
+          const rowDirty = (dirtyFieldsClimbList?.[index]?.name ?? false) || (dirtyFieldsClimbList?.[index]?.gradeStr ?? false)
           return (
             <Row
               key={entry.id} {...entry}
               index={index}
               showBorderBottom={index === lastItemOfFirstColumn || index === watchList.length - 1}
-              dirty={dirty}
+              dirty={rowDirty}
               editMode={editable}
+              dirtyFlags={dirtyFieldsClimbList?.[index] as ClimbEntryDirtyType}
             />
           )
         })}
@@ -51,7 +52,11 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
           <section className='two-column-table'>
             {toBeDeleted.map((entry, index) => (
               <Row
-                key={entry.id} {...entry} index={index} toBeDeleted editMode={editable} dirty={false}
+                key={entry.id} {...entry}
+                index={index}
+                toBeDeleted
+                editMode={editable}
+                dirty={false}
                 showBorderBottom={index === Math.ceil(toBeDeleted.length / 2) - 1 || index === toBeDeleted.length - 1}
               />
             ))}
@@ -62,6 +67,7 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
   )
 }
 
+type ClimbEntryDirtyType = Record<keyof EditableClimbType, boolean|undefined>
 type ClimbEntryProps = EditableClimbTypeWithFieldId & {
   index: number
   defaultDict?: Dictionary<EditableClimbType>
@@ -69,6 +75,7 @@ type ClimbEntryProps = EditableClimbTypeWithFieldId & {
   showBorderBottom?: boolean
   dirty: boolean
   editMode: boolean
+  dirtyFlags?: ClimbEntryDirtyType
 }
 
 /**
@@ -77,7 +84,7 @@ type ClimbEntryProps = EditableClimbTypeWithFieldId & {
 const Row: React.FC<ClimbEntryProps> = (props) => {
   const { climbId, isNew = false, editMode, showBorderBottom = false } = props
   return (
-    <WrapLink climbId={climbId} noLink={isNew} newWindow={!editMode} className={clx('area-row w-full', showBorderBottom ? 'border-b' : '')}>
+    <WrapLink climbId={climbId} noLink={isNew} newWindow={editMode} className={clx('area-row w-full', showBorderBottom ? 'border-b' : '')}>
       <RowIndex {...props} /><RowContent {...props} />
     </WrapLink>
   )
@@ -91,7 +98,7 @@ const RowIndex: React.FC<ClimbEntryProps> = ({ index, dirty, isNew = false, toBe
   return (
     <div className={
       clx('rounded-full h-8 w-8 grid place-content-center text-sm text-base-100 indicator',
-        dirty && !isNew && !toBeDeleted ? 'outline-2 outline-secondary outline-offset-4 outline-dashed' : '',
+        dirty && !isNew && !toBeDeleted ? 'outline-2 outline-accent outline-offset-4 outline-dashed' : '',
         strictlySport ? 'bg-sport-climb-cue' : 'bg-primary/90',
         toBeDeleted ? 'bg-opacity-60' : ''
       )
@@ -107,24 +114,34 @@ const RowIndex: React.FC<ClimbEntryProps> = ({ index, dirty, isNew = false, toBe
 /**
  * Table row main content
  */
-const RowContent: React.FC<ClimbEntryProps> = ({ name, disciplines, gradeStr, error }) => {
+const RowContent: React.FC<ClimbEntryProps> = ({ name, disciplines, gradeStr, errors, dirtyFlags }) => {
   return (
     <>
       <div className='flex flex-col items-start items-stretch grow gap-y-1'>
-        <div className='font-semibold uppercase'>
+        <div className={clx('font-semibold uppercase', dirtyFlags?.name ?? false ? 'italic text-accent' : '')}>
           {name}
         </div>
-        <div className='flex gap-2 items-center'>
+        <div className={clx('flex gap-2 items-center', dirtyFlags?.disciplines)}>
           <DisciplinesInfo disciplines={disciplines} />
         </div>
       </div>
-      <div className={clx('uppercase font-semibold', error != null ? 'underline decoration-wavy decoration-error underline-offset-2' : '')}>{gradeStr?.substring(0, 10)}</div>
+
+      {gradeStr === ''
+        ? (<div className='text-sm italic text-error'>Grade not set</div>)
+        : (
+          <div className={clx(
+            dirtyFlags?.gradeStr ?? false ? 'italic text-accent' : '',
+            errors?.gradeStr != null ? 'italic underline decoration-wavy decoration-error underline-offset-2' : 'uppercase font-semibold')}
+          >
+            {gradeStr?.substring(0, 10)}
+          </div>
+          )}
     </>
   )
 }
 
 interface DisciplineInfoProps {
-  disciplines: ClimbDisciplineRecord
+  disciplines: Partial<ClimbDisciplineRecord>
 }
 
 const DisciplinesInfo: React.FC<DisciplineInfoProps> = ({ disciplines }) => {
@@ -156,8 +173,8 @@ const WrapLink: React.FC<WrapLinkProps> = ({ climbId, className, noLink, newWind
     return <div className={className}>{children}</div>
   } else {
     return (
-      <Link href={`/climbs/${climbId}`} {...newWindow ? { target: '_blank', rel: 'noreferrer' } : undefined}>
-        <a className={className}>
+      <Link href={`/climbs/${climbId}`}>
+        <a className={className} {...newWindow ? { target: '_blank', rel: 'noreferrer' } : undefined}>
           {children}
         </a>
       </Link>
