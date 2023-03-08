@@ -1,4 +1,5 @@
-import { checkUsername, checkWebsiteUrl } from '../utils'
+import { ClimbDisciplineRecord } from '../types'
+import { checkUsername, checkWebsiteUrl, removeTypenameFromDisciplines } from '../utils'
 
 it('Valid usernames', () => {
   expect(checkUsername('cool-user')).toBeTruthy()
@@ -38,6 +39,25 @@ it('Invalid ULS', () => {
   expect(checkWebsiteUrl('')).toBeNull()
   expect(checkWebsiteUrl(undefined as any)).toBeNull()
   expect(checkWebsiteUrl(null as any)).toBeNull()
+})
+
+it('removes __typename from disciplines obj', () => {
+  const disciplines: ClimbDisciplineRecord = {
+    sport: true,
+    trad: false,
+    aid: false,
+    bouldering: false,
+    mixed: false,
+    ice: false,
+    alpine: false,
+    snow: false,
+    tr: false
+  }
+  // @ts-expect-error
+  disciplines.__typename = 'ClimbDiscipline'
+  expect(removeTypenameFromDisciplines(disciplines)).toEqual({
+    sport: true
+  })
 })
 
 export {}
