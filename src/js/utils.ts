@@ -252,11 +252,11 @@ export const sortClimbsByLeftRightIndex = (climbs: ClimbType[]): ClimbType[] => 
 const compareFn = (a: ClimbType, b: ClimbType): number => (a.metadata.leftRightIndex - b.metadata.leftRightIndex)
 
 /**
- * Remove __typename from climb disciplines object.  See https://github.com/apollographql/apollo-client/issues/1913
+ * Remove non-true and __typename fields from climb disciplines object.  See https://github.com/apollographql/apollo-client/issues/1913
  * @param discplines
  * @returns disciplines object without __typename if exists
  */
-export const removeTypenameFromDisciplines = (discplines: ClimbDisciplineRecord): ClimbDisciplineRecord => {
-  const omitTypename = (key: string, value: boolean): boolean | undefined => (key === '__typename' ? undefined : value)
+export const removeTypenameFromDisciplines = (discplines: ClimbDisciplineRecord): Partial<ClimbDisciplineRecord> => {
+  const omitTypename = (key: string, value: boolean): boolean | undefined => (key === '__typename' || !value ? undefined : value)
   return JSON.parse(JSON.stringify(discplines), omitTypename)
 }

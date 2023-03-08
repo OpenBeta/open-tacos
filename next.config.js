@@ -1,6 +1,16 @@
 module.exports = {
   images: {
-    domains: ['live.staticflickr.com', 'upload.wikimedia.org', 'openbeta.sirv.com', 'openbeta-dev.sirv.com']
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'openbeta.sirv.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'openbeta-dev.sirv.com',
+        pathname: '*'
+      }
+    ]
   },
   typescript: {
     ignoreBuildErrors: false
