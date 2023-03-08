@@ -1,5 +1,6 @@
 import { GradeScales, getScale } from '@openbeta/sandbag'
 import { RulesType, GradeContextType, GradeValuesType, ClimbDisciplineRecord } from '../types'
+import { EditableClimbType } from '../../components/crag/cragSummary'
 
 const gradeContextToGradeScales = {
   US: {
@@ -29,11 +30,11 @@ const gradeContextToGradeScales = {
 export default class Grade {
   context: GradeContextType
   values: GradeValuesType
-  disciplines: ClimbDisciplineRecord
+  disciplines: Partial<ClimbDisciplineRecord>
   isBoulder: boolean
   gradescales: any
 
-  constructor (gradeContext: GradeContextType, values: GradeValuesType, disciplines: ClimbDisciplineRecord, isBoulder: boolean) {
+  constructor (gradeContext: GradeContextType, values: GradeValuesType, disciplines: Partial<ClimbDisciplineRecord>, isBoulder: boolean) {
     if (gradeContext == null) throw new Error('Missing grade context')
     this.context = gradeContext
     this.values = values
@@ -49,11 +50,11 @@ export default class Grade {
   }
 
   isBouldering (): boolean {
-    return this.isBoulder || this.disciplines.bouldering
+    return this.isBoulder || (this.disciplines?.bouldering ?? false)
   }
 
   isTradSportTr (): boolean {
-    return this.disciplines.sport || this.disciplines.trad || this.disciplines.tr || this.disciplines.aid
+    return (this.disciplines?.sport ?? false) || (this.disciplines?.trad ?? false) || (this.disciplines?.tr ?? false) || (this.disciplines?.aid ?? false)
   }
 
   toStringBouldering (): string | undefined {
@@ -98,5 +99,47 @@ export default class Grade {
         isValidGrade
       }
     }
+  }
+}
+
+export class GradeHelper {
+  gradeScales: any
+  isBoulder: boolean
+
+  constructor (gradeContext: GradeContextType, isBoulder: boolean) {
+    this.gradeScales = gradeContextToGradeScales?.[gradeContext]
+    this.isBoulder = isBoulder
+  }
+
+  getBulkValidationRules (): RulesType {
+    return {
+      validate: (list: EditableClimbType[]): any => {
+        const z = list.every(({ errors }) => Object.values(errors ?? {}).filter(v => v != null).length === 0)
+        return z ? undefined : 'Format error'
+      }
+    }
+  }
+
+  getValidationRules (discipline?: 'bouldering' | 'sport' | 'trad' | 'tr'): RulesType {
+    const isValidGrade = (userInput: string): string | undefined => {
+      if (userInput == null || userInput === '') return 'Missing grade'
+      const _d = discipline == null && this.isBoulder ? 'bouldering' : 'trad'
+      const score = getScale(this.gradeScales[_d])?.getScore(userInput) ?? -1
+      return score >= 0 || Array.isArray(score) ? undefined : 'Invalid grade'
+    }
+    return {
+      validate: {
+        isValidGrade
+      }
+    }
+  }
+
+  validate (gradeStr: string, discipline?: 'bouldering' | 'sport' | 'trad' | 'tr'): string | undefined {
+    const rules = this.getValidationRules(discipline).validate
+    if (rules == null) return undefined
+    // @ts-expect-error
+    // const valid = Object.keys(rules).every(fn => rules[fn].call(gradeStr))
+    const error = rules.isValidGrade(gradeStr)
+    return error == null ? undefined : 'Invalid grade'
   }
 }

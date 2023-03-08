@@ -5,8 +5,8 @@ import Card from '../Card/Card'
 import Image from 'next/image'
 
 test('Card renders a header and a body', async () => {
-  // Using a random image hosted on placeimg.com to render an image.
-  const imageURL = 'https://placeimg.com/400/225/arch'
+  // Must use an image hosted by whitelisted domains in next.config.js
+  const imageURL = 'https://openbeta-dev.sirv.com/u/b9f8ab3b-e6e5-4467-9adb-65d91c7ebe7c/6wFDRfFJD9.jpeg'
 
   render(
     <Card

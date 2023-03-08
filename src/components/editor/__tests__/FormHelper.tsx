@@ -7,12 +7,12 @@ export function FormHelper ({ initialValue, children, submitHandler }): JSX.Elem
       defaultValues: { title: initialValue }
     })
 
-  const { handleSubmit } = form
+  const { handleSubmit, formState: { isValid } } = form
   return (
     <FormProvider {...form}>
       <form onSubmit={handleSubmit(submitHandler)}>
         {children}
-        <button type='submit'>Submit</button>
+        <button type='submit' disabled={!isValid}>Submit</button>
       </form>
     </FormProvider>
   )
@@ -25,12 +25,12 @@ export function CSVFormHelper ({ initialClimbs, children, submitHandler }): JSX.
       defaultValues: { climbs: initialClimbs }
     })
 
-  const { handleSubmit } = form
+  const { handleSubmit, formState: { isValid } } = form
   return (
     <FormProvider {...form}>
       <form onSubmit={handleSubmit(submitHandler)}>
         {children}
-        <button type='submit'>Submit</button>
+        <button type='submit' disabled={!isValid}>Submit</button>
       </form>
     </FormProvider>
   )
