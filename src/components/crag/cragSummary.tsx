@@ -354,7 +354,7 @@ export default function CragSummary (props: AreaType): JSX.Element {
                   </div>
                 </div>)}
 
-              {!editMode && (<LCOBanner pathTokens={pathTokens} />)}
+              {!editMode && (<LCOBanner ancestors={ancestors} />)}
 
             </div>
             <div className='area-climb-page-summary-right'>
