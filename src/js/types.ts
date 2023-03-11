@@ -49,6 +49,7 @@ export type Climb = EditMetadataType & {
   name: string
   fa: string
   yds: string
+  length: number
   grades: GradeValuesType
   metadata: ClimbMetadataType
   type: ClimbDisciplineRecord
@@ -352,4 +353,4 @@ export interface TagsLeaderboardType {
 /**
  * Validation rules for react-hook-form
  */
-export type RulesType = Pick<RegisterOptions, 'minLength' | 'maxLength' | 'min' | 'max' | 'required' | 'validate'>
+export type RulesType = Pick<RegisterOptions, 'minLength' | 'maxLength' | 'min' | 'max' | 'required' | 'validate' | 'valueAsNumber'>
