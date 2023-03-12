@@ -24,7 +24,7 @@ import { FormSaveActionProps } from '../../components/editor/FormSaveAction'
 import { ArticleLastUpdate } from '../edit/ArticleLastUpdate'
 import Grade, { GradeHelper } from '../../js/grades/Grade'
 import { BulkEditorTooltip, BulkEditorTipSheet } from './BulkEditorTooltip'
-
+import { PageBanner as LCOBanner } from '../lco/PageBanner'
 export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName' | 'climbs' | 'children' | 'totalClimbs'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 
 export interface EditableClimbType {
@@ -353,6 +353,8 @@ export default function CragSummary (props: AreaType): JSX.Element {
                     <div className='ml-2' id='deleteButtonPlaceholder' />
                   </div>
                 </div>)}
+
+              {!editMode && (<LCOBanner ancestors={ancestors} />)}
 
             </div>
             <div className='area-climb-page-summary-right'>
