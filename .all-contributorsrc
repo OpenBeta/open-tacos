@@ -432,6 +432,16 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "musoke",
+      "name": "Nathan Musoke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16665084?v=4",
+      "profile": "http://nathan.musoke.ca",
+      "contributions": [
+        "ideas",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
