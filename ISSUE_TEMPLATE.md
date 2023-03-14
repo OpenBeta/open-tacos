@@ -2,31 +2,28 @@ This issue tracker is **ONLY** used for reporting bugs!
 
 <!--- Provide a general summary of the issue in the Title above -->
 
-## Expected Behavior
-<!--- Tell us what should happen -->
+## Context (Environment)
+<!--- How has this issue affected you? What are you trying to accomplish? -->
+<!--- Providing context helps us come up with a solution that is most useful in the real world -->
 
-## Current Behavior
-<!--- Tell us what happens instead of the expected behavior -->
-
-## Possible Solution
-<!--- Not obligatory, but suggest a fix/reason for the bug, -->
 
 ## Steps to Reproduce
 <!--- Provide a link to a live example, or an unambiguous set of steps to -->
-<!--- reproduce this bug. Include a screen shot if it's easier. -->
+<!--- reproduce this bug. Include screen shots if they help. -->
 1.
 2.
 3.
 4.
 
-## Context (Environment)
-<!--- How has this issue affected you? What are you trying to accomplish? -->
-<!--- Providing context helps us come up with a solution that is most useful in the real world -->
+## Expected Behavior
+<!--- Tell us what should happen -->
 
-<!--- Provide a general summary of the issue in the Title above -->
 
-## Detailed Description
-<!--- Provide a detailed description of the change or addition you are proposing -->
+## Current Behavior
+<!--- Tell us what happens instead of the expected behavior -->
 
-## Possible Implementation
-<!--- Not obligatory, but suggest an idea for implementing addition or change -->
+
+## Possible Solution
+<!--- Not obligatory, but you can suggest a reason/fix/implementation the bug, -->
+
+
