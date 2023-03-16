@@ -90,7 +90,7 @@ export default class Grade {
 
   getSportTradValidationRules (discipline: 'sport' | 'trad' | 'tr' = 'trad'): RulesType {
     const isValidGrade = (userInput: string): string | undefined => {
-      if (userInput == null || userInput === '') return undefined
+      if (userInput == null || userInput === '') return undefined // possible to have unknown grade (Ex: route under development)
       const score = getScale(this.gradescales[discipline])?.getScore(userInput) ?? -1
       return score >= 0 || Array.isArray(score) ? undefined : 'Invalid grade'
     }

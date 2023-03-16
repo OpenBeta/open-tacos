@@ -9,6 +9,7 @@ import * as Portal from '@radix-ui/react-portal'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useSwipeable } from 'react-swipeable'
 import { toast } from 'react-toastify'
+import ArrowVertical from '../../assets/icons/arrow-vertical.svg'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
@@ -31,6 +32,7 @@ import { ArticleLastUpdate } from '../../components/edit/ArticleLastUpdate'
 import { TradSportGradeInput, BoulderingGradeInput } from '../../components/edit/form/GradeTextInput'
 import Grade from '../../js/grades/Grade'
 import { removeTypenameFromDisciplines } from '../../js/utils'
+import { TotalLengthInput } from '../../components/edit/form/TotalLengthInput'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -84,18 +86,20 @@ const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
 
 export default ClimbPage
 
-interface ClimbEditFormProps {
+export interface ClimbEditFormProps {
   name: string
   description: string
   location: string
   protection: string
   gradeStr: string
   disciplines: ClimbDisciplineRecord
+  fa: string
+  length?: number
 }
 
 const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
   const {
-    id, name, fa, yds, grades, type, content, safety, metadata, ancestors, pathTokens, createdAt, createdBy, updatedAt, updatedBy,
+    id, name, fa, length, yds, grades, type, content, safety, metadata, ancestors, pathTokens, createdAt, createdBy, updatedAt, updatedBy,
     parent
   } = climb
   const { climbId } = metadata
@@ -106,7 +110,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
 
   const [editMode, setEditMode] = useState(false)
   const [resetSignal, setResetSignal] = useState(0)
-  const [cache, setCache] = useState({ name, ...content, disciplines: removeTypenameFromDisciplines(type), gradeStr: gradesObj.toString() })
+  const [cache, setCache] = useState({ name, ...content, fa, ...length > 0 && { length }, disciplines: removeTypenameFromDisciplines(type), gradeStr: gradesObj.toString() })
 
   const router = useRouter()
   const session = useSession()
@@ -154,7 +158,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
 
   // React hook form declaration
   const form = useForm<ClimbEditFormProps>({
-    mode: 'onBlur',
+    mode: 'onChange',
     defaultValues: { ...cache }
   })
 
@@ -163,15 +167,16 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
   const disciplinesField = watch('disciplines')
   const isBouldering = parent.metadata.isBoulder || (disciplinesField.bouldering && !(disciplinesField.trad || disciplinesField.sport || disciplinesField.aid))
 
-  const submitHandler = async (formData): Promise<void> => {
-    const { description, location, protection, name, gradeStr, disciplines } = formData
+  const submitHandler = async (formData: ClimbEditFormProps): Promise<void> => {
+    const { description, location, protection, name, gradeStr, disciplines, length } = formData
 
     const onlyDirtyFields: Partial<ClimbEditFormProps> = {
       ...dirtyFields?.name === true && { name },
       ...dirtyFields?.description === true && { description },
       ...dirtyFields?.location === true && { location },
       ...dirtyFields?.protection === true && { protection },
-      ...dirtyFields?.gradeStr === true && disciplines != null && { grade: gradeStr, disciplines }
+      ...dirtyFields?.gradeStr === true && disciplines != null && { grade: gradeStr, disciplines },
+      ...length != null && length > 0 && { length }
     }
 
     if (Object.values(dirtyFields?.disciplines ?? []).some(value => value && true)) {
@@ -250,8 +255,16 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                   {!editMode && <RouteTypeChips type={disciplinesField} />}
                 </div>
 
+                {length !== -1 && !editMode && (
+                  <div className='mt-6 inline-flex items-center justify-left border-2 border-neutral/80 rounded'>
+                    <ArrowVertical className='h-5 w-5' />
+                    <span className='bg-neutral/80 text-base-100 px-2 text-sm'>{length}m</span>
+                  </div>
+                )}
+                {editMode && <TotalLengthInput />}
+
                 <div
-                  title='First Assent'
+                  title='First Ascent'
                   className='text-slate-700 mt-4 text-sm'
                 >
                   <strong>FA: </strong>{fa ?? 'Unknown'}
@@ -348,6 +361,7 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
       uuid
       name
       fa
+      length
       yds
       grades {
         font

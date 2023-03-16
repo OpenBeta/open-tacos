@@ -194,7 +194,6 @@ const Step2a = (): JSX.Element => {
       name='newAreaName'
       placeholder='New area name'
       registerOptions={{ required: 'Name is required.' }}
-      formContext={context}
       className='input input-primary input-bordered input-md'
     />
   )
