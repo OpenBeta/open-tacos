@@ -9,6 +9,7 @@ import * as Portal from '@radix-ui/react-portal'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useSwipeable } from 'react-swipeable'
 import { toast } from 'react-toastify'
+import ArrowVertical from '../../assets/icons/arrow-vertical.svg'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
@@ -255,14 +256,15 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                 </div>
 
                 {length !== -1 && !editMode && (
-                  <div>
-                    <strong>Length: </strong>
-                    {length}
-                  </div>)}
+                  <div className='mt-6 inline-flex items-center justify-left border-2 border-neutral/80 rounded'>
+                    <ArrowVertical className='h-5 w-5' />
+                    <span className='bg-neutral/80 text-base-100 px-2 text-sm'>{length}m</span>
+                  </div>
+                )}
                 {editMode && <TotalLengthInput />}
 
                 <div
-                  title='First Assent'
+                  title='First Ascent'
                   className='text-slate-700 mt-4 text-sm'
                 >
                   <strong>FA: </strong>{fa ?? 'Unknown'}
