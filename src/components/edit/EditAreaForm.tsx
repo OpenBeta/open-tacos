@@ -9,7 +9,7 @@ import { AreaType, AreaUpdatableFieldsType, RulesType } from '../../js/types'
 import { areaDesignationToForm, areaDesignationToDb, AreaTypeFormProp, AreaDesignationRadioGroup } from './form/AreaDesignationRadioGroup'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 
-export const LATLNG_PATTERN = /(?<lat>^[-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)),(?<lng>[-+]?(?:180(?:\.0+)?|(?:1[0-7]\d|[1-9]?\d)(?:\.\d+)?))$/
+export const LATLNG_PATTERN = /^\s*(?<lat>[-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?))\s*,\s*(?<lng>[-+]?(?:180(?:\.0+)?|(?:1[0-7]\d|[1-9]?\d)(?:\.\d+)?))\s*$/
 
 export const AREA_NAME_FORM_VALIDATION_RULES: RulesType = {
   required: 'A name is required.',
