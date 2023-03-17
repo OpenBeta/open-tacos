@@ -74,6 +74,8 @@ export interface IndividualClimbChangeInput {
   grade?: string
   leftRightIndex?: number
   disciplines?: Partial<ClimbDisciplineRecord>
+  length?: number
+  fa?: string
 }
 
 export interface UpdateClimbsInput {

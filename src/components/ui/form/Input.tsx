@@ -3,6 +3,7 @@ import clx from 'classnames'
 
 interface InputProps {
   label: string
+  labelAlt?: string | JSX.Element
   unitLabel?: string
   name: string
   placeholder?: string
@@ -41,7 +42,7 @@ export const BaseInput: React.FC<BaseInputProps> = ({ label, name, placeholder =
 /**
  * A reusable react-hook-form input field
  */
-export default function Input ({ label, unitLabel, name, registerOptions, placeholder = '', className = '', classDefault = INPUT_DEFAULT_CSS, helper, disabled = false, readOnly = false, type }: InputProps): JSX.Element {
+export default function Input ({ label, labelAlt, unitLabel, name, registerOptions, placeholder = '', className = '', classDefault = INPUT_DEFAULT_CSS, helper, disabled = false, readOnly = false, type }: InputProps): JSX.Element {
   const formContext = useFormContext()
   const { formState: { errors } } = formContext
 
@@ -50,6 +51,7 @@ export default function Input ({ label, unitLabel, name, registerOptions, placeh
     <div className='form-control'>
       <label className='label' htmlFor={name}>
         <span className='label-text font-semibold'>{label}</span>
+        {labelAlt != null && <span className='label-text-alt'>{labelAlt}</span>}
       </label>
       {unitLabel == null
         ? (<BaseInput
