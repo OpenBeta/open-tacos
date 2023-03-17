@@ -19,7 +19,9 @@ export function FormSaveAction ({ editMode, cache, onReset }: FormSaveActionProp
     <div className='bg-base-100 flex justify-center flex-wrap-reverse lg:flex-nowrap gap-x-8 gap-y-4 px-4 lg:pr-0'>
       <button
         disabled={!isDirty}
-        className={clx('bg-opacity-80 btn btn-md btn-link', isDirty ? '' : 'no-underline')} type='reset' onClick={() => {
+        className={clx('bg-opacity-80 btn btn-md btn-link', isDirty ? '' : 'no-underline')}
+        type='button'
+        onClick={() => {
           reset({ ...cache }, { keepValues: false })
           onReset()
         }}

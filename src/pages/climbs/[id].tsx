@@ -33,6 +33,7 @@ import { TradSportGradeInput, BoulderingGradeInput } from '../../components/edit
 import Grade from '../../js/grades/Grade'
 import { removeTypenameFromDisciplines } from '../../js/utils'
 import { TotalLengthInput } from '../../components/edit/form/TotalLengthInput'
+import { LegacyFAInput } from '../../components/edit/form/LegacyFAInput'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -93,13 +94,13 @@ export interface ClimbEditFormProps {
   protection: string
   gradeStr: string
   disciplines: ClimbDisciplineRecord
-  fa: string
+  legacyFA: string
   length?: number
 }
 
 const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
   const {
-    id, name, fa, length, yds, grades, type, content, safety, metadata, ancestors, pathTokens, createdAt, createdBy, updatedAt, updatedBy,
+    id, name, fa: legacyFA, length, yds, grades, type, content, safety, metadata, ancestors, pathTokens, createdAt, createdBy, updatedAt, updatedBy,
     parent
   } = climb
   const { climbId } = metadata
@@ -110,7 +111,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
 
   const [editMode, setEditMode] = useState(false)
   const [resetSignal, setResetSignal] = useState(0)
-  const [cache, setCache] = useState({ name, ...content, fa, ...length > 0 && { length }, disciplines: removeTypenameFromDisciplines(type), gradeStr: gradesObj.toString() })
+  const [cache, setCache] = useState({ name, ...content, legacyFA, ...length > 0 && { length }, disciplines: removeTypenameFromDisciplines(type), gradeStr: gradesObj.toString() })
 
   const router = useRouter()
   const session = useSession()
@@ -168,7 +169,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
   const isBouldering = parent.metadata.isBoulder || (disciplinesField.bouldering && !(disciplinesField.trad || disciplinesField.sport || disciplinesField.aid))
 
   const submitHandler = async (formData: ClimbEditFormProps): Promise<void> => {
-    const { description, location, protection, name, gradeStr, disciplines, length } = formData
+    const { description, location, protection, name, gradeStr, disciplines, length, legacyFA } = formData
 
     const onlyDirtyFields: Partial<ClimbEditFormProps> = {
       ...dirtyFields?.name === true && { name },
@@ -176,7 +177,8 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
       ...dirtyFields?.location === true && { location },
       ...dirtyFields?.protection === true && { protection },
       ...dirtyFields?.gradeStr === true && disciplines != null && { grade: gradeStr, disciplines },
-      ...length != null && length > 0 && { length }
+      ...length != null && length > 0 && { length },
+      ...legacyFA != null && { fa: legacyFA.trim() }
     }
 
     if (Object.values(dirtyFields?.disciplines ?? []).some(value => value && true)) {
@@ -263,11 +265,12 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                 )}
                 {editMode && <TotalLengthInput />}
 
-                <div
-                  title='First Ascent'
-                  className='text-slate-700 mt-4 text-sm'
-                >
-                  <strong>FA: </strong>{fa ?? 'Unknown'}
+                <div className='mt-6'>{editMode
+                  ? (<LegacyFAInput />)
+                  : (
+                    <div className='text-sm font-medium text-base-content'>
+                      {trimLegacyFA(legacyFA)}
+                    </div>)}
                 </div>
 
                 {(createdAt != null || updatedAt != null) &&
@@ -275,9 +278,10 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                     <ArticleLastUpdate createdAt={createdAt} createdBy={createdBy} updatedAt={updatedAt} updatedBy={updatedBy} />
                   </div>}
 
-                <div className='mt-8'>
-                  <TickButton climbId={climbId} name={name} grade={yds} />
-                </div>
+                {!editMode &&
+                  <div className='mt-8'>
+                    <TickButton climbId={climbId} name={name} grade={yds} />
+                  </div>}
 
               </div>
 
@@ -489,6 +493,11 @@ const fetchSortedClimbsInArea = async (uuid: string): Promise<ClimbType[]> => {
   )
 }
 
+const trimLegacyFA = (s: string): string => {
+  if (s == null || s.trim() === '') return 'FA Unknown'
+  if (s.startsWith('FA')) return s
+  return 'FA ' + s
+}
 /**
  * Generate dynamic meta tags for page
  */
