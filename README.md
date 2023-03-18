@@ -22,13 +22,10 @@
   </h2>
 </p>
 
----
-
 <p align="center">
 The project is currently in MVP stage.<br>
 <b>We'd love to hear your feedback.</b>  Chat with the dev team on <a href="https://discord.gg/ptpnWWNkJx">Discord</a>.
 </p>
-
 
 <p align="center">
   <a href="https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Adevelop"><img src="https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=develop" alt="Develop branch"/>
