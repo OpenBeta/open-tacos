@@ -72,7 +72,9 @@ export function ImportFromMtnProj ({ isButton }: Props): JSX.Element {
             input: ticks
           }
         })
-        toast.info('Your ticks have been imported!')
+
+        const ticksCount = ticks?.length ?? 0;
+        toast.info(`${ticksCount} ticks have been imported!`)
       } else {
         setErrors(['Sorry, something went wrong. Please try again later'])
       }
