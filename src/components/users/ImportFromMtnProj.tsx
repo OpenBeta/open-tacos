@@ -3,6 +3,7 @@ import { Transition } from '@headlessui/react'
 import { FolderArrowDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
+import { toast } from 'react-toastify'
 import { graphqlClient } from '../../js/graphql/Client'
 import { Button, ButtonVariant } from '../ui/BaseButton'
 import { MUTATION_IMPORT_TICKS } from '../../js/graphql/gql/fragments'
@@ -71,6 +72,7 @@ export function ImportFromMtnProj ({ isButton }: Props): JSX.Element {
             input: ticks
           }
         })
+        toast.info('Your ticks have been imported!')
       } else {
         setErrors(['Sorry, something went wrong. Please try again later'])
       }
