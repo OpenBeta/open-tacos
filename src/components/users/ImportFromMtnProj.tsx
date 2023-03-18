@@ -73,7 +73,7 @@ export function ImportFromMtnProj ({ isButton }: Props): JSX.Element {
           }
         })
 
-        const ticksCount = ticks?.length ?? 0;
+        const ticksCount: number = ticks?.length ?? 0
         toast.info(`${ticksCount} ticks have been imported!`)
       } else {
         setErrors(['Sorry, something went wrong. Please try again later'])
