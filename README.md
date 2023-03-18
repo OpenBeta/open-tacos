@@ -4,21 +4,28 @@
   </a>
 </p>
 <h1 align="center">
-  OpenBeta v0.4
+  OpenBeta v0.7
 </h1>
 <p align="center">
   <strong>
     Open source. Rock climbing.  Catalog.
   </strong>
 </p>
+
 <p align="center">
-  We're building the first <i>free</i> and <i>open source</i> rock climbing catalog.  </br>The project is currently in MVP stage.<br>
-  <b>We'd love to hear your feedback.</b>  Chat with the dev team on <a href="https://discord.gg/ptpnWWNkJx">Discord</a>.
+  We're building the first <i>free</i> and <i>open source</i> rock climbing catalog.
+</p
+
+<p align="center">
+  <h2 align="center">
+    <a href="https://openbeta.io">Take me to the site</a> 🚀
+  </h2>
 </p>
 
-<h2 align="center">
-  <a href="https://openbeta.io">Take me to the site</a> 🚀
-</h2>
+<p align="center">
+The project is currently in MVP stage.<br>
+<b>We'd love to hear your feedback.</b>  Chat with the dev team on <a href="https://discord.gg/ptpnWWNkJx">Discord</a>.
+</p>
 
 <p align="center">
   <a href="https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Adevelop"><img src="https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=develop" alt="Develop branch"/>
@@ -29,11 +36,11 @@
 
 ## Screenshot
 
-<img alt="OpenBeta screenshot" src="./openbeta-v0.4-screenshot.png"/>
+<img alt="OpenBeta screenshot" src="./openbeta-v0.7-screenshot.png"/>
 
 ## Tech stack
 
-1. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql)): Apollo GraphQL,MongoDB, Node.js.
+1. Backend GraphQL API ([openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql)): Apollo GraphQL, MongoDB, Node.js.
 
 2. Frontend: (this repo)
 
@@ -43,13 +50,14 @@ Learn more about [Jamstack](https://jamstack.org)
 
 ### High level architecture
 
-![Architecture overview](./OpenBeta-arch1.png)
+![Architecture overview](./ob-arch-v0.7.png)
 
 ## Live instances
 
-| Env  | Link                      | Branch  | Content     | Build                                                                                                                                                                                                                               |
-| ---- | ------------------------- | ------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Prod | https://tacos.openbeta.io | develop | Complete DB | <a href="https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Adevelop"><img src="https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=develop" alt="Develop branch"/> |
+| Env     | Link                    | Branch  | Content     | Build                                                                                                                                                                                                                               |
+| ------- | ----------------------- | ------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prod    | https://openbeta.io     | develop | Complete DB | <a href="https://github.com/OpenBeta/open-tacos/actions/workflows/nodejs.yml?query=branch%3Adevelop"><img src="https://github.com/openbeta/open-tacos/actions/workflows/nodejs.yml/badge.svg?branch=develop" alt="Develop branch"/> |
+| Staging | https://stg.openbeta.io | develop | Partial     |                                                                                                                                                                                                                                     |
 
 ## How to build
 
@@ -60,7 +68,7 @@ Make sure you have the following tools installed on your computer:
 - [npm](https://www.npmjs.com/get-npm)
 - [yarn](https://classic.yarnpkg.com/en/docs/install)
 
-Important: For frontend development you **don't** need to set up the [Graph API](https://github.com/OpenBeta/openbeta-graphql) server unless you intend to work on both.
+Important: For frontend development work you **don't** need to set up the [GraphQL API server](https://github.com/OpenBeta/openbeta-graphql) server project (unless you intend to work on both).
 
 1.  Download the repo to your local machine
 
@@ -94,8 +102,8 @@ If you just want to run the app locally without installing node, npm, etc., you 
 docker compose up
 ```
 
-The application is now available at http://localhost:3000.  The project will rebuild automatically when you make changes to files in `./src` dir.
-  
+The application is now available at http://localhost:3000. The project will rebuild automatically when you make changes to files in `./src` dir.
+
 Note: If you install new NPM packages, you will need to rebuild the docker image with
 
 ```
@@ -108,11 +116,11 @@ The application is now available at `http://localhost:3000`
 
 ### API key errors
 
-Some parts of the code such as user authentication and photo upload require API keys. Without them you'll see a bunch of errors in the log. If you want to work on those tasks, email viet at openbeta.io for API keys. See https://github.com/OpenBeta/open-tacos/issues/389 for more info.
+Some parts of the code such as page edit and photo upload require additional API keys. Without them you'll see a bunch of errors in the log. If you want to work on those tasks, email viet at openbeta.io for API keys. See https://github.com/OpenBeta/open-tacos/issues/389 for more info.
 
 ### Full stack dev
 
-By default, your dev environment connects to our hosted GraphAPI. To connect your environment to the Graph API server running locally:
+By default, your local dev environment connects to our staging GraphQL API server. To connect your environment to the Graph API server running locally:
 
 ```
 yarn dev-local
@@ -124,7 +132,8 @@ See our general [How to contribute guide](https://docs.openbeta.io/how-to-contri
 
 ## Support Us
 
-OpenBeta is free because we want to make climbing information accessible for everyone.  Please consider [making a donation today](https://opencollective.com/openbeta).
+- Give this repo a star
+- Please consider [making a donation today](https://opencollective.com/openbeta) to help us pay our infrastructure expenses (> $100/month).
 
 ## Contributors
 
