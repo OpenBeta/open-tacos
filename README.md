@@ -16,9 +16,13 @@
   We're building the first <i>free</i> and <i>open source</i> rock climbing catalog.
 </p
 
-<h2 align="center">
-  <a href="https://openbeta.io">Take me to the site</a> 🚀
-</h2>
+<p align="center">
+  <h2 align="center">
+    <a href="https://openbeta.io">Take me to the site</a> 🚀
+  </h2>
+</p>
+
+---
 
 <p align="center">
 The project is currently in MVP stage.<br>
