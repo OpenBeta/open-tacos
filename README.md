@@ -204,6 +204,7 @@ Thanks goes to these wonderful people:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/daniel-n-kaye"><img src="https://avatars.githubusercontent.com/u/62715496?v=4?s=100" width="100px;" alt="daniel-n-kaye"/><br /><sub><b>daniel-n-kaye</b></sub></a><br /><a href="#ideas-daniel-n-kaye" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://kaomorphism.com"><img src="https://avatars.githubusercontent.com/u/3641356?v=4?s=100" width="100px;" alt="zkao"/><br /><sub><b>zkao</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=zichongkao" title="Code">💻</a> <a href="#ideas-zichongkao" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://nathan.musoke.ca"><img src="https://avatars.githubusercontent.com/u/16665084?v=4?s=100" width="100px;" alt="Nathan Musoke"/><br /><sub><b>Nathan Musoke</b></sub></a><br /><a href="#ideas-musoke" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/OpenBeta/open-tacos/commits?author=musoke" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/bermanuri/"><img src="https://avatars.githubusercontent.com/u/508428?v=4?s=100" width="100px;" alt="Uri Berman"/><br /><sub><b>Uri Berman</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=Urik" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
