@@ -442,6 +442,15 @@
         "ideas",
         "code"
       ]
+    },
+    {
+      "login": "Urik",
+      "name": "Uri Berman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/508428?v=4",
+      "profile": "https://www.linkedin.com/in/bermanuri/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
