@@ -44,11 +44,17 @@ export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
 
 export const CLIMB_LOCATION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
+    value: 3500,
+    message: 'Maxium 3500 characters.'
+  }
+}
+
+export const CLIMB_PROTECTON_FORM_VALIDATION_RULES: RulesType = {
+  maxLength: {
     value: 800,
     message: 'Maxium 800 characters.'
   }
 }
-
 interface ClimbPageProps {
   climb: ClimbType
   mediaListWithUsernames: MediaBaseTag[]
@@ -299,7 +305,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                 initialValue={cache.description}
                 editable={editMode}
                 name='description'
-                placeholder='Enter a description'
+                placeholder={editMode ? 'Enter a description' : 'This climb is missing some beta. Turn on Edit mode and help us improve this page.'}
                 rules={CLIMB_DESCRIPTION_FORM_VALIDATION_RULES}
               />
 
@@ -329,7 +335,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                         initialValue={cache.protection}
                         editable={editMode}
                         placeholder='Example: 16 quickdraws'
-                        rules={CLIMB_LOCATION_FORM_VALIDATION_RULES}
+                        rules={CLIMB_PROTECTON_FORM_VALIDATION_RULES}
                       />
                     </>
                   )}

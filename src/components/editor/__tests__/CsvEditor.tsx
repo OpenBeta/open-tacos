@@ -103,9 +103,7 @@ describe('Inplace CSV editor tests', () => {
 
     screen.queryByText('Please fix formatting errors')
 
-    const submitButton = screen.getByRole('button', { name: 'Submit' })
-
-    expect(submitButton).toBeDisabled()
+    expect(await (screen.findByRole('button', { name: 'Submit' }))).toBeDisabled()
 
     await user.type(editor, '{arrowleft>4}{backspace}b') // Change a grade to '5b'
 
