@@ -13,7 +13,7 @@ export interface AreaMetadataType {
   lat: number
   lng: number
   bbox: [number, number, number, number]
-  left_right_index: number
+  leftRightIndex: number
   mp_id: string
   area_id: string
   areaId: string
