@@ -123,7 +123,7 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
         isBoulder
         lat
         lng 
-        left_right_index
+        leftRightIndex
       }
       pathTokens  
       ancestors
