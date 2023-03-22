@@ -120,7 +120,7 @@ export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
       isBoulder
       lat
       lng 
-      left_right_index
+      leftRightIndex
     }
     pathTokens  
     ancestors
