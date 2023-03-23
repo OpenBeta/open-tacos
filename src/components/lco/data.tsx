@@ -3,7 +3,7 @@ import { LCOProfileType } from './PageBanner'
 export const LCO_LIST: LCOProfileType[] = [
   {
     id: 'a791edd2-6a19-4f12-b69d-cbd499fed81f',
-    areaIdList: ['e519a674-a620-509c-9e86-a246f84a8e40'],
+    areaIdList: ['e519a674-a620-509c-9e86-a246f84a8e40', '8af5df63-9dd1-5fb2-9ef1-c3c3860494f5', '9c4813f1-30d1-5705-96de-19a23e027a4b', '1621a45a-659f-5708-9ba0-bc0a295bfc73', '10f12d5c-d05a-52d0-ae46-729c528928e5', '279c5542-b8d6-5385-b9f0-746ce842d276'],
     name: 'Boulder Climbing Community',
     instagram: 'https://www.instagram.com/boulderclimbingcommunity/',
     website: 'https://www.boulderclimbers.org/',
