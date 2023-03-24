@@ -25,6 +25,7 @@ import { ArticleLastUpdate } from '../edit/ArticleLastUpdate'
 import Grade, { GradeHelper } from '../../js/grades/Grade'
 import { BulkEditorTooltip, BulkEditorTipSheet } from './BulkEditorTooltip'
 import { PageBanner as LCOBanner } from '../lco/PageBanner'
+import { Button, ButtonVariant } from '../ui/BaseButton'
 export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName' | 'climbs' | 'children' | 'totalClimbs'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 
 export interface EditableClimbType {
@@ -298,8 +299,15 @@ export default function CragSummary (props: AreaType): JSX.Element {
             formAction={FormAction}
           />
 
-          <div className='mt-4 text-right' id='editTogglePlaceholder'>
-            <EditModeToggle onChange={setEditMode} />
+          <div className='mt-4 justify-end flex flex-row' id='editTogglePlaceholder'>
+            <div className='mr-2' id='editTogglePlaceholder'>
+              <EditModeToggle onChange={setEditMode} />
+            </div>
+            <Button
+              label='Show Change History'
+              size='sm'
+              variant={ButtonVariant.OUTLINED_SECONDARY}
+            />
           </div>
 
           <div className='area-climb-page-summary'>
