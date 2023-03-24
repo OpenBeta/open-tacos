@@ -7,7 +7,7 @@ import * as Portal from '@radix-ui/react-portal'
 import { MapPinIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
 
-import { AreaUpdatableFieldsType, AreaType, ClimbDisciplineRecord, ClimbDiscipline } from '../../js/types'
+import { AreaUpdatableFieldsType, AreaType, ClimbDisciplineRecord, ClimbDiscipline, ChangesetType } from '../../js/types'
 import { IndividualClimbChangeInput, UpdateOneAreaInputType } from '../../js/graphql/gql/contribs'
 import { getMapHref, sortClimbsByLeftRightIndex, removeTypenameFromDisciplines } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
@@ -26,6 +26,9 @@ import Grade, { GradeHelper } from '../../js/grades/Grade'
 import { BulkEditorTooltip, BulkEditorTipSheet } from './BulkEditorTooltip'
 import { PageBanner as LCOBanner } from '../lco/PageBanner'
 import { Button, ButtonVariant } from '../ui/BaseButton'
+import { DialogContent, DialogTrigger, MobileDialog } from '../ui/MobileDialog'
+import RecentChangeHistory from '../edit/RecentChangeHistory'
+import { isEmpty } from 'underscore'
 export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName' | 'climbs' | 'children' | 'totalClimbs'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 
 export interface EditableClimbType {
@@ -50,7 +53,13 @@ export type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaN
  * because react-hook-form `handleSubmit()` handles it for us and sends exeptions
  * to `onError()` callback.
  */
-export default function CragSummary (props: AreaType): JSX.Element {
+
+interface CragSummaryProps {
+  area: AreaType
+  history: ChangesetType[]
+}
+export default function CragSummary ({ area, history }: CragSummaryProps): JSX.Element {
+  console.log(history)
   const {
     uuid, areaName: initTitle,
     content: { description: initDescription },
@@ -58,7 +67,7 @@ export default function CragSummary (props: AreaType): JSX.Element {
     children: childAreas,
     gradeContext,
     createdAt, createdBy, updatedAt, updatedBy
-  } = props
+  } = area
 
   const { lat: initLat, lng: initLng } = areaMeta
 
@@ -303,11 +312,19 @@ export default function CragSummary (props: AreaType): JSX.Element {
             <div className='mr-2' id='editTogglePlaceholder'>
               <EditModeToggle onChange={setEditMode} />
             </div>
-            <Button
-              label='Show Change History'
-              size='sm'
-              variant={ButtonVariant.OUTLINED_SECONDARY}
-            />
+            {!isEmpty(history) && (
+              <MobileDialog>
+                <DialogTrigger>
+                  <Button
+                    label='Show Change History'
+                    variant={ButtonVariant.OUTLINED_SECONDARY}
+                  />
+                </DialogTrigger>
+                <DialogContent title='Change history'>
+                  <RecentChangeHistory history={history} />
+                </DialogContent>
+              </MobileDialog>
+            )}
           </div>
 
           <div className='area-climb-page-summary'>

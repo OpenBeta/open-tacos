@@ -33,7 +33,7 @@ const CragPage: NextPage<CragProps> = (props) => {
 }
 export default CragPage
 
-const Body = ({ area, mediaListWithUsernames: photoList }: CragProps): JSX.Element => {
+const Body = ({ area, mediaListWithUsernames: photoList, history }: CragProps): JSX.Element => {
   const level = area?.ancestors.length ?? 0
   const { isFallback: showSkeleton } = useRouter()
   return (
@@ -45,8 +45,8 @@ const Body = ({ area, mediaListWithUsernames: photoList }: CragProps): JSX.Eleme
           {showSkeleton
             ? <AreaContentSkeleton />
             : <CragSummary
-                key={area.uuid}
-                {...area}
+                area={area}
+                history={history}
               />}
         </div>
       </article>
