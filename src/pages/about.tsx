@@ -38,8 +38,8 @@ const About = (): JSX.Element => {
           <Image src={Watering} width={64} height={64} alt='watering can' />
           <h2 className='mb-2'>Why we need your donations</h2>
           <p className='text-xl text-black'>
-            OpenBeta is not backed by venture capitalists, nor it is supported by ads.
-            Fortunately there is a small and active group of volunteers donating their time and expertise to keep the project running and develop it further.
+            OpenBeta is not backed by venture capitalists, nor is it supported by ads.
+            Fortunately, there is a small and active group of volunteers donating their time and expertise to keep the project running and develop it further.
           </p>
           <p className='text-xl text-black'>
             For the project to survive and continue to evolve, we need your financial support and ask for your donation today.
