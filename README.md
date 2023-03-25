@@ -206,6 +206,9 @@ Thanks goes to these wonderful people:
       <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/bermanuri/"><img src="https://avatars.githubusercontent.com/u/508428?v=4?s=100" width="100px;" alt="Uri Berman"/><br /><sub><b>Uri Berman</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=Urik" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/actuallyyun"><img src="https://avatars.githubusercontent.com/u/87448230?v=4?s=100" width="100px;" alt="Yun Ji"/><br /><sub><b>Yun Ji</b></sub></a><br /><a href="#ideas-actuallyyun" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/danekshea"><img src="https://avatars.githubusercontent.com/u/9020580?v=4?s=100" width="100px;" alt="Dane Shea"/><br /><sub><b>Dane Shea</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=danekshea" title="Code">💻</a> <a href="#ideas-danekshea" title="Ideas, Planning, & Feedback">🤔</a> <a href="#financial-danekshea" title="Financial">💵</a></td>
+    </tr>
   </tbody>
 </table>
 
