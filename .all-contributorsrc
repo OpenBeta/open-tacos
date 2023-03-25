@@ -460,6 +460,17 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "danekshea",
+      "name": "Dane Shea",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9020580?v=4",
+      "profile": "https://github.com/danekshea",
+      "contributions": [
+        "code",
+        "ideas",
+        "financial"
+      ]
     }
   ],
   "contributorsPerLine": 7,
