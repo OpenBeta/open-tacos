@@ -136,7 +136,7 @@ export function ImportFromMtnProj ({ isButton }: Props): JSX.Element {
                     <p className='text-sm font-medium text-gray-900'>{showInput ? 'Input your mountain project profile link' : 'Import your ticks from Mtn Project'}</p>
                     {!showInput &&
                       <p className='mt-1 text-sm text-gray-500'>
-                        Don't loose your progress, bring it over to Open Beta.
+                        Don't lose your progress, bring it over to Open Beta.
                       </p>}
                     {showInput &&
                       <div>
