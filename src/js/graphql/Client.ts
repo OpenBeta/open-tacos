@@ -1,46 +1,61 @@
-import {
-  ApolloClient, HttpLink, InMemoryCache
-} from '@apollo/client'
+import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client'
+import { onError } from '@apollo/client/link/error'
 
 const uri: string = process.env.NEXT_PUBLIC_API_SERVER ?? ''
+const httpLinkPro = new HttpLink({
+  uri: uri
+})
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors !== null && graphQLErrors !== undefined) {
+    graphQLErrors.forEach(({ message, locations, path }) => {
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+          locations ?? []
+        )}, Path: ${JSON.stringify(path ?? [])}`
+      )
+    })
+  }
+
+  if (networkError !== null && networkError !== undefined) {
+    console.log(`[Network error]: ${JSON.stringify(networkError)}`)
+  }
+})
 
 export const graphqlClient = new ApolloClient({
-  uri,
-  cache: new InMemoryCache(
-    {
-      addTypename: true,
-      typePolicies: {
-        CragsNear: {
-          keyFields: ['placeId', '_id']
-        },
-        Area: {
-          keyFields: ['uuid']
-        },
-        AreaMetadata: {
-          keyFields: ['areaId']
-        },
-        Climb: {
-          keyFields: ['id']
-        },
-        ClimbTag: {
-          keyFields: ['mediaUuid', 'climb', ['id']]
-        },
-        ClimbMetadata: {
-          keyFields: ['climbId']
-        },
-        History: {
-          keyFields: ['id']
-        }
+  link: from([errorLink, httpLinkPro]),
+  cache: new InMemoryCache({
+    addTypename: true,
+    typePolicies: {
+      CragsNear: {
+        keyFields: ['placeId', '_id']
+      },
+      Area: {
+        keyFields: ['uuid']
+      },
+      AreaMetadata: {
+        keyFields: ['areaId']
+      },
+      Climb: {
+        keyFields: ['id']
+      },
+      ClimbTag: {
+        keyFields: ['mediaUuid', 'climb', ['id']]
+      },
+      ClimbMetadata: {
+        keyFields: ['climbId']
+      },
+      History: {
+        keyFields: ['id']
       }
     }
-  ),
+  }),
   ssrMode: false // We relies on NextJS for SSR data management
 })
 
 const httpLink = new HttpLink({ uri: 'https://stg-api.openbeta.io' })
 
 export const stagingGraphQLClient = new ApolloClient({
-  link: httpLink,
+  link: from([errorLink, httpLink]),
   cache: new InMemoryCache()
 })
 
