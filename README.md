@@ -208,6 +208,7 @@ Thanks goes to these wonderful people:
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/danekshea"><img src="https://avatars.githubusercontent.com/u/9020580?v=4?s=100" width="100px;" alt="Dane Shea"/><br /><sub><b>Dane Shea</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=danekshea" title="Code">💻</a> <a href="#ideas-danekshea" title="Ideas, Planning, & Feedback">🤔</a> <a href="#financial-danekshea" title="Financial">💵</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Colb131"><img src="https://avatars.githubusercontent.com/u/64448561?v=4?s=100" width="100px;" alt="Colb131"/><br /><sub><b>Colb131</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/issues?q=author%3AColb131" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
