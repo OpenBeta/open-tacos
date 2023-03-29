@@ -8,18 +8,20 @@ const httpLinkPro = new HttpLink({
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors !== null && graphQLErrors !== undefined) {
     graphQLErrors.forEach(({ message, locations, path }) => {
-      console.error('GraphQL error',  
-      { message: message , locations: locations, path:path })
+      console.error('GraphQL error', {
+        message: message,
+        locations: locations,
+        path: path
+      })
     })
   }
 
   if (networkError !== null && networkError !== undefined) {
-    console.error('Network error',
-    {
-      name:networkError.name,
-      statusCode:networkError.statusCode,
-      erros:JSON.stringify(networkError.result),
-      extentions:JSON.stringify(networkError.extensions),
+    console.error('Network error', {
+      name: networkError.name,
+      statusCode: networkError.statusCode,
+      erros: JSON.stringify(networkError.result),
+      extentions: JSON.stringify(networkError.extensions)
     })
   }
 })
