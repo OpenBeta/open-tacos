@@ -29,6 +29,7 @@ import { Button, ButtonVariant } from '../ui/BaseButton'
 import { DialogContent, DialogTrigger, MobileDialog } from '../ui/MobileDialog'
 import RecentChangeHistory from '../edit/RecentChangeHistory'
 import { isEmpty } from 'underscore'
+import { useAreaHistory } from '../../js/hooks/useGetAreaHistory'
 export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName' | 'climbs' | 'children' | 'totalClimbs'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 
 export interface EditableClimbType {
@@ -59,7 +60,6 @@ interface CragSummaryProps {
   history: ChangesetType[]
 }
 export default function CragSummary ({ area, history }: CragSummaryProps): JSX.Element {
-  console.log(history)
   const {
     uuid, areaName: initTitle,
     content: { description: initDescription },
@@ -74,6 +74,9 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
   const router = useRouter()
 
   const session = useSession()
+
+  const { data: areaHistoryData, error } = useAreaHistory(uuid)
+  console.log(areaHistoryData, error)
 
   /**
    * Hold the ref to the area add & delete components.
