@@ -29,7 +29,7 @@ import { Button, ButtonVariant } from '../ui/BaseButton'
 import { DialogContent, DialogTrigger, MobileDialog } from '../ui/MobileDialog'
 import RecentChangeHistory from '../edit/RecentChangeHistory'
 import { isEmpty } from 'underscore'
-import { useAreaHistory } from '../../js/hooks/useGetAreaHistory'
+import { useUpdateAreaHistory } from '../../js/hooks/useGetAreaHistory'
 export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName' | 'climbs' | 'children' | 'totalClimbs'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 
 export interface EditableClimbType {
@@ -72,11 +72,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
   const { lat: initLat, lng: initLng } = areaMeta
 
   const router = useRouter()
-
   const session = useSession()
-
-  const { data: areaHistoryData, error } = useAreaHistory(uuid)
-  console.log(areaHistoryData, error)
 
   /**
    * Hold the ref to the area add & delete components.
@@ -98,6 +94,11 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
   const [resetSignal, setResetSignal] = useState(0)
 
   const [editMode, setEditMode] = useState(false)
+
+  const {
+    getAreaHistory,
+    changeHistory
+  } = useUpdateAreaHistory(area.uuid, history)
 
   /**
    * False during SSR or Next build.
@@ -218,6 +219,8 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
       })
     }
     setCache({ ...formData })
+
+    await getAreaHistory()
     reset(formData, { keepValues: true })
   }
 
@@ -315,7 +318,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
             <div className='mr-2' id='editTogglePlaceholder'>
               <EditModeToggle onChange={setEditMode} />
             </div>
-            {!isEmpty(history) && (
+            {!isEmpty(changeHistory) && (
               <MobileDialog>
                 <DialogTrigger>
                   <Button
@@ -324,7 +327,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
                   />
                 </DialogTrigger>
                 <DialogContent title='Change history'>
-                  <RecentChangeHistory history={history} />
+                  <RecentChangeHistory history={changeHistory} />
                 </DialogContent>
               </MobileDialog>
             )}
