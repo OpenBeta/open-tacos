@@ -1,5 +1,9 @@
 import { LCOProfileType } from './PageBanner'
 
+/**
+ * A hand-coded list of LCOs.
+ * Use https://www.uuidgenerator.net to generate a new `id`
+ */
 export const LCO_LIST: LCOProfileType[] = [
   {
     id: 'a791edd2-6a19-4f12-b69d-cbd499fed81f',
@@ -22,5 +26,15 @@ export const LCO_LIST: LCOProfileType[] = [
     instagram: 'https://www.instagram.com/portlandclimbing/',
     website: 'https://www.oregonclimbers.org/',
     report: 'https://forms.gle/BofUZFFhF6Ann1oZ7'
+  }, {
+    id: 'ee25d0f6-842e-4f43-b9ac-f90ff1fe3a9d',
+    areaIdList: [
+      'c1fdee82-93e7-5a55-9103-7defbe7f0b10', // Central AZ
+    ],
+    name: 'Central Arizona Bolt Replacement Program',
+    instagram: 'https://www.instagram.com/centralarizonaboltreplacement/',
+    website: 'https://cabrp.org/',
+    report: 'https://cabrp.org/contact',
+    donation: 'https://cabrp.org/donate'
   }
 ]
