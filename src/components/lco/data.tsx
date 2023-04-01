@@ -29,7 +29,7 @@ export const LCO_LIST: LCOProfileType[] = [
   }, {
     id: 'ee25d0f6-842e-4f43-b9ac-f90ff1fe3a9d',
     areaIdList: [
-      'c1fdee82-93e7-5a55-9103-7defbe7f0b10', // Central AZ
+      'c1fdee82-93e7-5a55-9103-7defbe7f0b10' // Central AZ
     ],
     name: 'Central Arizona Bolt Replacement Program',
     instagram: 'https://www.instagram.com/centralarizonaboltreplacement/',
