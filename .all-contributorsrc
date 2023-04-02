@@ -480,6 +480,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "sjdex",
+      "name": "Shubham Jadhav",
+      "avatar_url": "https://avatars.githubusercontent.com/u/110608231?v=4",
+      "profile": "https://github.com/sjdex",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
