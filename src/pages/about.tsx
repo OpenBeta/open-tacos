@@ -14,7 +14,7 @@ const About = (): JSX.Element => {
       <div className='max-w-screen-md mx-auto py-8 px-4 md:px-8 md:py-12'>
         <div className='text-center'>
           <h1>An Open Source Resource For Rock Climbers</h1>
-          <h3 className='text-3xl my-12'>Inspired by Wikipedia and OpenStreetMap, we're building the first open source &#38; open license rock climbing catalog.</h3>
+          <h3 className='text-3xl my-12'>Inspired by Wikipedia and OpenStreetMap, we're building an open source &#38; open license rock climbing catalog.</h3>
         </div>
         <div className='text-center py-8'>
           <Image className='opacity-80' src={Cairn} width={48} height={48} alt='cairn' />
