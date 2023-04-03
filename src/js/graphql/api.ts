@@ -159,7 +159,8 @@ export const getTicksByUserAndClimb = async (climbId: string, userId: string): P
       variables: {
         climbId,
         userId
-      }
+      },
+      fetchPolicy: 'no-cache'
     })
 
     if (Array.isArray(res.data?.userTicksByClimbId)) {
@@ -177,7 +178,8 @@ export const getTicksByUser = async (userId: string): Promise<TickType[]> => {
       query: QUERY_TICKS_BY_USER,
       variables: {
         userId
-      }
+      },
+      fetchPolicy: 'no-cache'
     })
 
     if (Array.isArray(res.data?.userTicks)) {

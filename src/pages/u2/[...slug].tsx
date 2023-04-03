@@ -70,7 +70,8 @@ export const getStaticProps: GetStaticProps<TicksIndexPageProps, {slug: string[]
     const { uuid } = userProfile
     const ticks = await getTicksByUser(uuid)
     return {
-      props: { uid, ticks }
+      props: { uid, ticks },
+      revalidate: 10
     }
   } catch (e) {
     return { notFound: true }
