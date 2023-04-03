@@ -19,7 +19,7 @@ export const AREA_NAME_FORM_VALIDATION_RULES: RulesType = {
   },
   maxLength: {
     value: 120,
-    message: 'Maxium 120 characters.'
+    message: 'Maximum 120 characters.'
   }
 }
 
@@ -36,7 +36,7 @@ export const AREA_LATLNG_FORM_VALIDATION_RULES: RulesType = {
 export const AREA_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
     value: 3500,
-    message: 'Maxium 3500 characters.'
+    message: 'Maximum 3500 characters.'
   }
 }
 
@@ -156,9 +156,9 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
           className='uppercase'
         />
         <Input
-          label='Latitude, longtitude:'
+          label='Latitude, longitude:'
           name='latlng'
-          placeholder='latitude, longtitude'
+          placeholder='latitude, longitude'
           registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
         />
         <AreaDesignationRadioGroup disabled={!canChangeAreaType} />
