@@ -15,7 +15,7 @@ const UserProfileSchema = Yup.object().shape({
     .min(2, 'Minimum 2 characters')
     .max(30, 'Maximum 30 characters')
     .required('Minimum 2 characters')
-    .test('special-rules', 'Must start and end with a letter or a number.', checkUsername),
+    .test('special-rules', 'User name cannot contain spaces.', checkUsername),
   name: Yup.string()
     .max(50, 'Maximum 50 characters.'),
   bio: Yup.string()
