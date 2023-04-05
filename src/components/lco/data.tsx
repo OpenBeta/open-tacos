@@ -16,7 +16,7 @@ export const LCO_LIST: LCOProfileType[] = [
   },
   {
     id: 'ad96a3d9-bbd1-4680-84a0-de9c69eed184',
-    areaIdList: ['https://openbeta.io/crag/d0ca78b6-a3cb-517c-adee-d9c6f8c2d2d8'],
+    areaIdList: ['d0ca78b6-a3cb-517c-adee-d9c6f8c2d2d8'],
     name: 'Flatirons Climbing Council',
     instagram: 'https://www.instagram.com/flatironsclimbingcouncil/',
     website: 'http://flatironsclimbing.org/',
