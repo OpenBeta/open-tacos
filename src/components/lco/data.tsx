@@ -13,7 +13,17 @@ export const LCO_LIST: LCOProfileType[] = [
     website: 'https://www.boulderclimbers.org/',
     report: 'https://docs.google.com/forms/d/e/1FAIpQLSfRditFRHJIt7ayZ1SPet2gkl5wh7QF8DnoqRGf1kdzCgegQg/viewform',
     donation: 'https://secure.givelively.org/donate/boulder-climbing-community/donation'
-  }, {
+  },
+  {
+    id: 'ad96a3d9-bbd1-4680-84a0-de9c69eed184',
+    areaIdList: ['d0ca78b6-a3cb-517c-adee-d9c6f8c2d2d8'],
+    name: 'Flatirons Climbing Council',
+    instagram: 'https://www.instagram.com/flatironsclimbingcouncil/',
+    website: 'http://flatironsclimbing.org/',
+    report: 'https://docs.google.com/forms/d/e/1FAIpQLSfRditFRHJIt7ayZ1SPet2gkl5wh7QF8DnoqRGf1kdzCgegQg/viewform',
+    donation: 'https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=YPUFRGB5N2AVG&ssrt=1680716384172'
+  },
+  {
     id: '8801b124-ab19-4b66-a292-738dc56e446a',
     areaIdList: [
       'c80d3abd-beab-5467-a559-edee707f68bd', // Portland & The Gorges
