@@ -114,7 +114,7 @@ The application is now available at `http://localhost:3000`
 
 ### API key errors
 
-Some parts of the code such as page edit and photo upload require additional API keys.  Without them you'll see a bunch of errors in the log.  If you want to work on those tasks, email viet at openbeta.io for API keys.  See https://github.com/OpenBeta/open-tacos/issues/389 for more info.
+Some parts of the code such as user profiles, page edit and photo upload require additional API keys.  Without them you'll see a bunch of errors in the log.  If you want to work on those tasks, email viet at openbeta.io for API keys.  See https://github.com/OpenBeta/open-tacos/issues/389 for more info.
 
 ### Full stack dev
 
