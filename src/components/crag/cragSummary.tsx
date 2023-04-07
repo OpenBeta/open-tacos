@@ -306,14 +306,15 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
             formAction={FormAction}
           />
 
-          <div className='mt-4 justify-end flex flex-row' id='editTogglePlaceholder'>
+          <div className='mt-4 justify-end items-center flex flex-row' id='editTogglePlaceholder'>
+
             <div className='mr-2' id='editTogglePlaceholder'>
               <EditModeToggle onChange={setEditMode} />
             </div>
             {!isEmpty(history) && (
               <MobileDialog>
-                <DialogTrigger>
-                  <button className='btn btn-secondary'>Show Change History</button>
+                <DialogTrigger className='btn btn-secondary btn-sm'>
+                  Show Change History
                 </DialogTrigger>
                 <DialogContent title='Change history'>
                   <RecentChangeHistory history={history} />
