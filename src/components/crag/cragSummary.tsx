@@ -25,7 +25,6 @@ import { ArticleLastUpdate } from '../edit/ArticleLastUpdate'
 import Grade, { GradeHelper } from '../../js/grades/Grade'
 import { BulkEditorTooltip, BulkEditorTipSheet } from './BulkEditorTooltip'
 import { PageBanner as LCOBanner } from '../lco/PageBanner'
-import { Button, ButtonVariant } from '../ui/BaseButton'
 import { DialogContent, DialogTrigger, MobileDialog } from '../ui/MobileDialog'
 import RecentChangeHistory from '../edit/RecentChangeHistory'
 import { isEmpty } from 'underscore'
@@ -321,10 +320,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
             {!isEmpty(changeHistory) && (
               <MobileDialog>
                 <DialogTrigger>
-                  <Button
-                    label='Show Change History'
-                    variant={ButtonVariant.OUTLINED_SECONDARY}
-                  />
+                  <button className='btn btn-secondary'>Show Change History</button>
                 </DialogTrigger>
                 <DialogContent title='Change history'>
                   <RecentChangeHistory history={changeHistory} />
