@@ -28,7 +28,6 @@ import { PageBanner as LCOBanner } from '../lco/PageBanner'
 import { DialogContent, DialogTrigger, MobileDialog } from '../ui/MobileDialog'
 import RecentChangeHistory from '../edit/RecentChangeHistory'
 import { isEmpty } from 'underscore'
-import { useUpdateAreaHistory } from '../../js/hooks/useGetAreaHistory'
 export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName' | 'climbs' | 'children' | 'totalClimbs'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 
 export interface EditableClimbType {
@@ -93,11 +92,6 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
   const [resetSignal, setResetSignal] = useState(0)
 
   const [editMode, setEditMode] = useState(false)
-
-  const {
-    getAreaHistory,
-    changeHistory
-  } = useUpdateAreaHistory(area.uuid, history)
 
   /**
    * False during SSR or Next build.
@@ -219,7 +213,6 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
     }
     setCache({ ...formData })
 
-    await getAreaHistory()
     reset(formData, { keepValues: true })
   }
 
@@ -317,13 +310,13 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
             <div className='mr-2' id='editTogglePlaceholder'>
               <EditModeToggle onChange={setEditMode} />
             </div>
-            {!isEmpty(changeHistory) && (
+            {!isEmpty(history) && (
               <MobileDialog>
                 <DialogTrigger>
                   <button className='btn btn-secondary'>Show Change History</button>
                 </DialogTrigger>
                 <DialogContent title='Change history'>
-                  <RecentChangeHistory history={changeHistory} />
+                  <RecentChangeHistory history={history} />
                 </DialogContent>
               </MobileDialog>
             )}
