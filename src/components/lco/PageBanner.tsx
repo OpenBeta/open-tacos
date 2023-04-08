@@ -8,14 +8,19 @@ export interface LCOProfileType {
   areaIdList: string[]
   /** Official name */
   name: string
-  /** IG Url */
-  instagram: string
   /** Official website */
   website: string
   /** Bad hardware report form url */
-  report?: string
+  report: string | null
   /** Donation url */
-  donation?: string
+  donation: string | null
+
+  /** IG Url */
+  instagram: string | null
+  bio: string | null
+  email: string | null
+  facebook: string | null
+  logo: string | null
 }
 
 const findLCOs = (lcoList: LCOProfileType[], currentPageAncestors: string[]): LCOProfileType[] => {
@@ -85,12 +90,18 @@ const Card: React.FC<ContentProps> = ({ profile }) => {
         <h2 className='card-title my-2 uppercase'>{name}</h2>
         <div className='flex gap-4'>
           <a className='badge badge-outline opacity-60' href={website} target='_blank' rel='noreferrer'>website</a>
-          <a className='badge badge-outline opacity-60' href={instagram} target='_blank' rel='noreferrer'>instagram</a>
+          {
+            instagram !== null &&
+              <a className='badge badge-outline opacity-60' href={instagram} target='_blank' rel='noreferrer'>instagram</a>
+          }
           {donation != null && <a className='badge opacity-60 px-4' href={donation} target='_blank' rel='noreferrer'>Donate</a>}
         </div>
       </div>
       <div className='card-actions bg-base-100 flex justify-end p-4'>
-        <a className='btn btn-primary btn-sm opacity-80' href={report} target='_blank' rel='noreferrer'>Report bad bolts</a>
+        {
+          report !== null &&
+            <a className='btn btn-primary btn-sm opacity-80' href={report} target='_blank' rel='noreferrer'>Report bad bolts</a>
+        }
       </div>
     </div>
   )
