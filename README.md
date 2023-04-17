@@ -125,6 +125,9 @@ yarn dev-local
 ### Build errors
 You might get build errors or be prompted to downgrade your version of TypeScript. This is due to the linter ```ts-standard``` using an older version fo TypeScript. To commit without pre-build tests because you're doing a simple/unrelated change then run: ```yarn lint``` and commit with the ```--no-verify``` flag.
 
+### Linting erros
+You might get linting erros when run ```yarn lint```. To fix this, if you use VS Code,please make sure you have ```StandardJS``` extension installed and enabled.
+
 ## How to contribute
 
 See our general [How to contribute guide](https://docs.openbeta.io/how-to-contribute/overview) for more details.
