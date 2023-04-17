@@ -1,0 +1,19 @@
+{
+  "git.ignoreLimitWarning": true,
+  "[typescriptreact]": {
+    "editor.formatOnType": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "standard.vscode-standard"
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "standard.vscode-standard"
+  },
+  "standard.enable": true,
+  "standard.autoFixOnSave": true,
+  "standard.engine": "ts-standard",
+  "standard.treatErrorsAsWarnings": true,
+  "javascript.format.enable": false,
+  "javascript.format.semicolons": "remove",
+  "typescript.format.enable": false
+}

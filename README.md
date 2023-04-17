@@ -122,8 +122,18 @@ By default, your local dev environment connects to our staging GraphQL API serve
 ```
 yarn dev-local
 ```
-### Build errors
-You might get build errors or be prompted to downgrade your version of TypeScript. This is due to the linter ```ts-standard``` using an older version fo TypeScript. To commit without pre-build tests because you're doing a simple/unrelated change then run: ```yarn lint``` and commit with the ```--no-verify``` flag.
+### Typescript version warning
+You might get build errors or be prompted to downgrade your version of TypeScript. This is due to the linter ```ts-standard``` using an older version of TypeScript.  You can ignore the warning message.
+
+### Commit your work-in-progress
+To commit without passing pre-build tests because you're doing a simple/unrelated change or simply wish to save your work-in-progres, run commit with the `--no-verify` flag.  Example:
+
+```
+git commit --no-verify -am "saving my work before going climbing"
+```
+
+### Linting errors
+You might get linting errors when run ```yarn lint```. To fix this, if you use VS Code, please make sure you have ```StandardJS``` extension installed and enabled.
 
 ## How to contribute
 
