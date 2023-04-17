@@ -37,9 +37,9 @@ type PageBannerProps = Pick<ClimbType, 'ancestors'>
 export const PageBanner: React.FC<PageBannerProps> = ({ ancestors }) => {
   const orgs = findLCOs(LCO_LIST, ancestors)
   return (
-    <div className='grid pb-16 pt-16'>
-      <div className='col-span-full flex justify-start pb-6'>
-        <h3>Local climbing organizations</h3>
+    <div className='grid pt-6 pb-4 lg:pb-16 lg:pt-16'>
+      <div className='col-span-full flex justify-start items-center pb-6'>
+        <h3 className='mr-4'>Local climbing organizations</h3>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           viewBox='0 0 24 24'
@@ -53,33 +53,31 @@ export const PageBanner: React.FC<PageBannerProps> = ({ ancestors }) => {
           />
         </svg>
       </div>
-      <div className='flex-auto'>
+      <div className=''>
 
         {orgs.length === 0
           ? (
-              <p className='italic text-tertiary-contrast'>No organizationa found for this area</p>
-          ) 
-        : (orgs.map((orgProfile) => (
-          <IndividualBanner key={orgProfile.id} profile={orgProfile} />
-        )))
+            <p className='italic text-tertiary-contrast'>No organizationa found for this area</p>
+            )
+          : (orgs.map((orgProfile) => (
+            <IndividualBanner key={orgProfile.id} profile={orgProfile} />
+            )))
         }
       </div>
     </div>
   )
 }
 
-
-
 const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
   <>
-    <div className='inline-block'>
-      <div className='flex items-center bg-slate-50 pl-5 pr-7 rounded-2xl'>
+    <div className='inline-block mr-6 mb-6'>
+      <div className='flex items-center bg-light hover:bg-on-hover pl-5 pr-7 rounded-2xl'>
         <img
           className='h-10 w-10'
           src='https://fastly.picsum.photos/id/625/200/200.jpg?hmac=oIwf4IzbglfXYZo-9VXZTHju2-ox3D-Vooeuioav_nw'
-          alt='default LCO logo'
+          alt='placeholder LCO logo'
         />
-        <div className='py-5  pl-4'>
+        <div className='py-5  pl-4 overflow-hidden'>
           <p className='text-base leading-6'>{profile.name}</p>
 
           <p className='text-xs underline'>
