@@ -36,7 +36,6 @@ type PageBannerProps = Pick<ClimbType, 'ancestors'>
  */
 export const PageBanner: React.FC<PageBannerProps> = ({ ancestors }) => {
   const orgs = findLCOs(LCO_LIST, ancestors)
-  if (orgs.length === 0) return null
   return (
     <div className='grid pb-16 pt-16'>
       <div className='col-span-full flex justify-start pb-6'>
@@ -55,13 +54,21 @@ export const PageBanner: React.FC<PageBannerProps> = ({ ancestors }) => {
         </svg>
       </div>
       <div className='flex-auto'>
-        {orgs.map((orgProfile) => (
+
+        {orgs.length === 0
+          ? (
+              <p className='italic text-tertiary-contrast'>No organizationa found for this area</p>
+          ) 
+        : (orgs.map((orgProfile) => (
           <IndividualBanner key={orgProfile.id} profile={orgProfile} />
-        ))}
+        )))
+        }
       </div>
     </div>
   )
 }
+
+
 
 const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
   <>
@@ -81,7 +88,6 @@ const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
         </div>
       </div>
     </div>
-    <Card profile={profile} />
   </>
 )
 
@@ -102,21 +108,4 @@ const ContentTrigger: React.FC<ContentProps> = ({ profile }) => {
   )
 }
 
-const Card: React.FC<ContentProps> = ({ profile }) => {
-  const { name, website, instagram, report, donation } = profile
-  return (
-    <div className='card w-96 bg-secondary shadow-xl z-50 overflow-clip border-base-200'>
-      <div className='p-8 pt-10'>
-        <h2 className='card-title my-2 uppercase'>{name}</h2>
-        <div className='flex gap-4'>
-          <a className='badge badge-outline opacity-60' href={website} target='_blank' rel='noreferrer'>website</a>
-          <a className='badge badge-outline opacity-60' href={instagram} target='_blank' rel='noreferrer'>instagram</a>
-          {donation != null && <a className='badge opacity-60 px-4' href={donation} target='_blank' rel='noreferrer'>Donate</a>}
-        </div>
-      </div>
-      <div className='card-actions bg-base-100 flex justify-end p-4'>
-        <a className='btn btn-primary btn-sm opacity-80' href={report} target='_blank' rel='noreferrer'>Report bad bolts</a>
-      </div>
-    </div>
-  )
-}
+
