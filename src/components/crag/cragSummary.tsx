@@ -36,14 +36,21 @@ export interface EditableClimbType {
   name: string
   gradeStr?: string
   leftRightIndex: number
-  errors?: Record<'gradeStr'|'disciplines', string|undefined>
+  errors?: Record<'gradeStr' | 'disciplines', string | undefined>
   isNew?: boolean
   disciplines: Partial<ClimbDisciplineRecord>
 }
 
 type AreaTypeFormProp = 'crag' | 'area' | 'boulder'
 
-export type SummaryHTMLFormProps = Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description'>> & { uuid: string, latlng: string, areaType: AreaTypeFormProp, climbList: EditableClimbType[] }
+export type SummaryHTMLFormProps = Required<
+Pick<AreaUpdatableFieldsType, 'areaName' | 'description'>
+> & {
+  uuid: string
+  latlng: string
+  areaType: AreaTypeFormProp
+  climbList: EditableClimbType[]
+}
 
 /**
  * Responsive summary of major attributes for a crag / boulder.
@@ -59,9 +66,13 @@ interface CragSummaryProps {
 }
 export default function CragSummary ({ area, history }: CragSummaryProps): JSX.Element {
   const {
-    uuid, areaName: initTitle,
+    uuid,
+    areaName: initTitle,
     content: { description: initDescription },
-    metadata: areaMeta, climbs, ancestors, pathTokens,
+    metadata: areaMeta,
+    climbs,
+    ancestors,
+    pathTokens,
     children: childAreas,
     gradeContext,
     createdAt, createdBy, updatedAt, updatedBy
@@ -77,8 +88,10 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
    * We use Portal to avoid nesting the add/delete form inside the Edit form which causes
    * unwanted submit.
    */
-  const [deletePlaceholderRef, setDeletePlaceholderRef] = useState<HTMLElement|null>()
-  const [addAreaPlaceholderRef, setAddAreaPlaceholderRef] = useState<HTMLElement|null>()
+  const [deletePlaceholderRef, setDeletePlaceholderRef] =
+    useState<HTMLElement | null>()
+  const [addAreaPlaceholderRef, setAddAreaPlaceholderRef] =
+    useState<HTMLElement | null>()
 
   /**
    * Change this value will trigger a form control reset to Lexical-backed components.
@@ -116,17 +129,30 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
     description: initDescription,
     latlng: `${initLat.toString()},${initLng.toString()}`,
     areaType: areaDesignationToForm(areaMeta),
-    climbList: sortClimbsByLeftRightIndex(climbs).map(({ id, name, grades, type: disciplines, metadata: { leftRightIndex } }) => {
-      const sanitizedDisciplines = removeTypenameFromDisciplines(disciplines)
-      return ({
-        id, // to be used as react key
-        climbId: id,
+    climbList: sortClimbsByLeftRightIndex(climbs).map(
+      ({
+        id,
         name,
-        gradeStr: (new Grade(gradeContext, grades, sanitizedDisciplines, areaMeta.isBoulder)).toString(),
-        leftRightIndex,
-        disciplines: sanitizedDisciplines
-      })
-    })
+        grades,
+        type: disciplines,
+        metadata: { leftRightIndex }
+      }) => {
+        const sanitizedDisciplines = removeTypenameFromDisciplines(disciplines)
+        return {
+          id, // to be used as react key
+          climbId: id,
+          name,
+          gradeStr: new Grade(
+            gradeContext,
+            grades,
+            sanitizedDisciplines,
+            areaMeta.isBoulder
+          ).toString(),
+          leftRightIndex,
+          disciplines: sanitizedDisciplines
+        }
+      }
+    )
   })
 
   const { updateClimbCmd, deleteClimbsCmd } = useUpdateClimbsCmd({
@@ -134,10 +160,12 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
     accessToken: session?.data?.accessToken as string
   })
 
-  const { updateOneAreaCmd: updateAreaCmd, getAreaByIdCmd } = useUpdateAreasCmd({
-    areaId: uuid,
-    accessToken: session?.data?.accessToken as string
-  })
+  const { updateOneAreaCmd: updateAreaCmd, getAreaByIdCmd } = useUpdateAreasCmd(
+    {
+      areaId: uuid,
+      accessToken: session?.data?.accessToken as string
+    }
+  )
 
   const { data, refetch } = getAreaByIdCmd({ skip: !clientSide || !editMode })
 
@@ -154,7 +182,12 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
     defaultValues: { ...cache }
   })
 
-  const { handleSubmit, formState: { dirtyFields }, reset, watch } = form
+  const {
+    handleSubmit,
+    formState: { dirtyFields },
+    reset,
+    watch
+  } = form
 
   const currentLatLngStr = watch('latlng')
   const currentClimbList = watch('climbList')
@@ -163,19 +196,31 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
   /**
    * Form submit handler
    */
-  const submitHandler = async (formData: SummaryHTMLFormProps): Promise<void> => {
-    const { uuid, areaName, description, latlng, areaType, climbList } = formData
+  const submitHandler = async (
+    formData: SummaryHTMLFormProps
+  ): Promise<void> => {
+    const { uuid, areaName, description, latlng, areaType, climbList } =
+      formData
     const [lat, lng] = latlng.split(',')
 
-    const updatedClimbs = extractDirtyClimbs(dirtyFields?.climbList, climbList, currentareaType === 'boulder')
+    const updatedClimbs = extractDirtyClimbs(
+      dirtyFields?.climbList,
+      climbList,
+      currentareaType === 'boulder'
+    )
     const deleteCandidiates = findDeletedCandidates(cache.climbList, climbList)
 
     // Extract only dirty fields to send to the Update Area API
     const onlyDirtyFields: UpdateOneAreaInputType = {
-      ...dirtyFields?.areaName === true && { areaName },
-      ...dirtyFields?.areaType === true && canChangeAreaType && areaDesignationToDb(areaType),
-      ...dirtyFields?.latlng === true && { lat: parseFloat(lat), lng: parseFloat(lng) },
-      ...dirtyFields?.description === true && { description }
+      ...(dirtyFields?.areaName === true && { areaName }),
+      ...(dirtyFields?.areaType === true &&
+        canChangeAreaType &&
+        areaDesignationToDb(areaType)),
+      ...(dirtyFields?.latlng === true && {
+        lat: parseFloat(lat),
+        lng: parseFloat(lng)
+      }),
+      ...(dirtyFields?.description === true && { description })
     }
 
     /**
@@ -193,7 +238,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
     }
 
     if (hasSomethingToDelete) {
-      const idList = deleteCandidiates.map(entry => entry.climbId)
+      const idList = deleteCandidiates.map((entry) => entry.climbId)
       await deleteClimbsCmd(idList)
     }
 
@@ -218,7 +263,9 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
 
   const FormAction = (
     <ClientSideFormSaveAction
-      cache={cache} editMode={editMode} onReset={() => setResetSignal(Date.now())}
+      cache={cache}
+      editMode={editMode}
+      onReset={() => setResetSignal(Date.now())}
     />
   )
 
@@ -227,9 +274,14 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
   const latlngPair = parseLatLng(currentLatLngStr)
 
   // we're allowed to change area designation when the area has neither climbs nor areas.
-  const canChangeAreaType = currentClimbList.length === 0 && cache.climbList.length === 0 && childAreasCache.length === 0
+  const canChangeAreaType =
+    currentClimbList.length === 0 &&
+    cache.climbList.length === 0 &&
+    childAreasCache.length === 0
 
-  const canAddAreas = (currentareaType === 'area' || cache.areaType === 'area') && cache.climbList.length === 0
+  const canAddAreas =
+    (currentareaType === 'area' || cache.areaType === 'area') &&
+    cache.climbList.length === 0
   const canAddClimbs = !canAddAreas
 
   /**
@@ -254,24 +306,38 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
       setChildAreasCache(data.area.children)
       const { uuid, areaName, metadata, content, climbs } = data.area
       const { lat, lng } = metadata
-      setCache(current => ({
+      setCache((current) => ({
         ...current,
         uuid,
         areaName,
         description: content.description,
         areaType: areaDesignationToForm(metadata),
         latlng: `${lat.toString()},${lng.toString()}`,
-        climbList: sortClimbsByLeftRightIndex(climbs).map(({ id, name, grades, type: disciplines, metadata: { leftRightIndex } }) => {
-          const sanitizedDisciplines = removeTypenameFromDisciplines(disciplines)
-          return ({
-            id, // to be used as react key
-            climbId: id,
+        climbList: sortClimbsByLeftRightIndex(climbs).map(
+          ({
+            id,
             name,
-            gradeStr: (new Grade(gradeContext, grades, sanitizedDisciplines, areaMeta.isBoulder)).toString(),
-            leftRightIndex,
-            disciplines: sanitizedDisciplines
-          })
-        })
+            grades,
+            type: disciplines,
+            metadata: { leftRightIndex }
+          }) => {
+            const sanitizedDisciplines =
+              removeTypenameFromDisciplines(disciplines)
+            return {
+              id, // to be used as react key
+              climbId: id,
+              name,
+              gradeStr: new Grade(
+                gradeContext,
+                grades,
+                sanitizedDisciplines,
+                areaMeta.isBoulder
+              ).toString(),
+              leftRightIndex,
+              disciplines: sanitizedDisciplines
+            }
+          }
+        )
       }))
     }
   }, [data?.area])
@@ -285,21 +351,35 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
 
   return (
     <>
-      {deletePlaceholderRef != null &&
+      {deletePlaceholderRef != null && (
         <Portal.Root container={deletePlaceholderRef}>
-          {editMode &&
-            <DeleteAreaTrigger areaName={areaName} areaUuid={uuid} parentUuid={parentAreaId} disabled={!canChangeAreaType} />}
-        </Portal.Root>}
+          {editMode && (
+            <DeleteAreaTrigger
+              areaName={areaName}
+              areaUuid={uuid}
+              parentUuid={parentAreaId}
+              disabled={!canChangeAreaType}
+            />
+          )}
+        </Portal.Root>
+      )}
 
-      {addAreaPlaceholderRef != null &&
+      {addAreaPlaceholderRef != null && (
         <Portal.Root container={addAreaPlaceholderRef}>
-          {canAddAreas &&
-            <AreaCRUD uuid={uuid} areaName={areaName} childAreas={childAreasCache} onChange={onAreaCRUDChangeHandler} editMode={editMode} />}
-        </Portal.Root>}
+          {canAddAreas && (
+            <AreaCRUD
+              uuid={uuid}
+              areaName={areaName}
+              childAreas={childAreasCache}
+              onChange={onAreaCRUDChangeHandler}
+              editMode={editMode}
+            />
+          )}
+        </Portal.Root>
+      )}
 
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(submitHandler)}>
-
           <StickyHeader
             ancestors={ancestors}
             pathTokens={pathTokens}
@@ -337,29 +417,44 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
               </h1>
 
               {editMode
-                ? <InplaceTextInput
-                    initialValue={currentLatLngStr}
-                    name='latlng'
-                    reset={resetSignal}
-                    editable={editMode}
-                    placeholder='Enter a latitude,longitude. Ex: 46.433333,11.85'
-                    rules={AREA_LATLNG_FORM_VALIDATION_RULES}
-                  />
-                : (
-                    latlngPair != null && (
-                      <div className='flex flex-col text-xs text-base-300 border-t border-b  divide-y'>
-                        <a
-                          href={getMapHref({ lat: latlngPair[0], lng: latlngPair[1] })} target='blank' className='flex items-center gap-2 py-3'
-                        >
-                          <MapPinIcon className='w-5 h-5' />
-                          <span className='mt-0.5'>
-                            <b>LAT,LNG</b>&nbsp;<span className='link-dotted'>{latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}</span>
-                          </span>
-                        </a>
-                        <ArticleLastUpdate updatedAt={updatedAt} updatedBy={updatedBy} createdAt={createdAt} createdBy={createdBy} />
-                      </div>
-                    )
-                  )}
+? (
+                <InplaceTextInput
+                  initialValue={currentLatLngStr}
+                  name='latlng'
+                  reset={resetSignal}
+                  editable={editMode}
+                  placeholder='Enter a latitude,longitude. Ex: 46.433333,11.85'
+                  rules={AREA_LATLNG_FORM_VALIDATION_RULES}
+                />
+              )
+: (
+                latlngPair != null && (
+                  <div className='flex flex-col text-xs text-base-300 border-t border-b  divide-y'>
+                    <a
+                      href={getMapHref({
+                        lat: latlngPair[0],
+                        lng: latlngPair[1]
+                      })}
+                      target='blank'
+                      className='flex items-center gap-2 py-3'
+                    >
+                      <MapPinIcon className='w-5 h-5' />
+                      <span className='mt-0.5'>
+                        <b>LAT,LNG</b>&nbsp;
+                        <span className='link-dotted'>
+                          {latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}
+                        </span>
+                      </span>
+                    </a>
+                    <ArticleLastUpdate
+                      updatedAt={updatedAt}
+                      updatedBy={updatedBy}
+                      createdAt={createdAt}
+                      createdBy={createdBy}
+                    />
+                  </div>
+                )
+              )}
 
               {editMode && (
                 <div className='fadeinEffect'>
@@ -369,14 +464,14 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
                   </div>
                   <div className='mt-6 form-control'>
                     <label className='label'>
-                      <span className='label-text font-semibold'>Permanently delete this area</span>
+                      <span className='label-text font-semibold'>
+                        Permanently delete this area
+                      </span>
                     </label>
                     <div className='ml-2' id='deleteButtonPlaceholder' />
                   </div>
-                </div>)}
-
-              {!editMode && (<LCOBanner ancestors={ancestors} />)}
-
+                </div>
+              )}
             </div>
             <div className='area-climb-page-summary-right'>
               {/* <div className='flex-1 flex justify-end'>
@@ -394,6 +489,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
                 placeholder='Area description'
                 rules={AREA_DESCRIPTION_FORM_VALIDATION_RULES}
               />
+              {!editMode && <LCOBanner ancestors={ancestors} />}
             </div>
           </div>
 
@@ -402,8 +498,9 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
             {FormAction}
           </div>
 
-          {canAddAreas &&
-            <div className='block mt-16 min-h-[8rem]' id='addAreaPlaceholder' />}
+          {canAddAreas && (
+            <div className='block mt-16 min-h-[8rem]' id='addAreaPlaceholder' />
+          )}
 
           {canAddClimbs && <ClimbListPreview editable={editMode} />}
 
@@ -423,7 +520,8 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
                 editable
                 gradeHelper={new GradeHelper(gradeContext, areaMeta.isBoulder)}
               />
-            </div>)}
+            </div>
+          )}
         </form>
       </FormProvider>
     </>
@@ -443,7 +541,10 @@ const parseLatLng = (s: string): [number, number] | null => {
   return [lat, lng]
 }
 
-type ClimbDirtyFieldsType = Omit<Partial<Record<keyof EditableClimbType, boolean>>, 'disciplines'|'errors'> & {
+type ClimbDirtyFieldsType = Omit<
+Partial<Record<keyof EditableClimbType, boolean>>,
+'disciplines' | 'errors'
+> & {
   disciplines?: Partial<Record<ClimbDiscipline, boolean>>
 }
 
@@ -452,29 +553,37 @@ type ClimbDirtyFieldsType = Omit<Partial<Record<keyof EditableClimbType, boolean
  * @param dirtyFields See react-hook-form
  * @param climbList Active list extracted from form
  */
-const extractDirtyClimbs = (dirtyFields: ClimbDirtyFieldsType[] = [], climbList: EditableClimbType[], isBoulder: boolean): IndividualClimbChangeInput[] => {
+const extractDirtyClimbs = (
+  dirtyFields: ClimbDirtyFieldsType[] = [],
+  climbList: EditableClimbType[],
+  isBoulder: boolean
+): IndividualClimbChangeInput[] => {
   // Reduce climb list in html form to list of objects compatible with `updateClimbs` API
-  const updateList = climbList.reduce<IndividualClimbChangeInput[]>((acc, curr, index) => {
-    const dirtyObj = dirtyFields?.[index] ?? {}
-    if (Object.keys(dirtyObj).length === 0) {
-      // Climb object unchanged, skip
+  const updateList = climbList.reduce<IndividualClimbChangeInput[]>(
+    (acc, curr, index) => {
+      const dirtyObj = dirtyFields?.[index] ?? {}
+      if (Object.keys(dirtyObj).length === 0) {
+        // Climb object unchanged, skip
+        return acc
+      }
+
+      // There's a change
+      const { climbId, name, leftRightIndex, gradeStr, disciplines } = curr
+
+      const isDirtyDisciplines =
+        Object.values(dirtyObj?.disciplines ?? {}).filter((v) => v).length > 0
+      acc.push({
+        id: climbId, // A new random ID will cause an 'upsert', adding it as a new climb
+        ...(dirtyObj?.name === true && { name }), // Include name if changed
+        ...(dirtyObj?.id === true && { leftRightIndex }), // Include ordering index if array index has changed
+        ...(isBoulder && { disciplines: { bouldering: true } }),
+        ...(dirtyObj?.gradeStr === true && { grade: gradeStr, disciplines }),
+        ...(isDirtyDisciplines && { disciplines })
+      })
       return acc
-    }
-
-    // There's a change
-    const { climbId, name, leftRightIndex, gradeStr, disciplines } = curr
-
-    const isDirtyDisciplines = Object.values(dirtyObj?.disciplines ?? {}).filter(v => v).length > 0
-    acc.push({
-      id: climbId, // A new random ID will cause an 'upsert', adding it as a new climb
-      ...dirtyObj?.name === true && { name }, // Include name if changed
-      ...dirtyObj?.id === true && { leftRightIndex }, // Include ordering index if array index has changed
-      ...isBoulder && { disciplines: { bouldering: true } },
-      ...dirtyObj?.gradeStr === true && { grade: gradeStr, disciplines },
-      ...isDirtyDisciplines && { disciplines }
-    })
-    return acc
-  }, [])
+    },
+    []
+  )
   return updateList
 }
 
@@ -489,19 +598,33 @@ export const Skeleton: React.FC = () => (
     </div>
     <div className='area-climb-page-summary'>
       <div className='area-climb-page-summary-left'>
-        <h1 className='text-4xl md:text-5xl rounded-box bg-base-200/10 w-72'>&nbsp;</h1>
+        <h1 className='text-4xl md:text-5xl rounded-box bg-base-200/10 w-72'>
+          &nbsp;
+        </h1>
       </div>
       <div className='area-climb-page-summary-right'>
         <h3 className='rounded-box bg-base-200/10 w-48'>&nbsp;</h3>
         <div className='mt-4 rounded-box bg-base-200/10 w-full h-80' />
       </div>
     </div>
-  </div>)
+  </div>
+)
 
-export const ClientSideFormSaveAction = dynamic<FormSaveActionProps>(async () => await import('../../components/editor/FormSaveAction').then(module => module.FormSaveAction), {
-  ssr: false
-})
+export const ClientSideFormSaveAction = dynamic<FormSaveActionProps>(
+  async () =>
+    await import('../../components/editor/FormSaveAction').then(
+      (module) => module.FormSaveAction
+    ),
+  {
+    ssr: false
+  }
+)
 
 const ClimbBulkEditor = dynamic(async () => await import('../editor/CsvEditor'))
 
-const AreaDesignationRadioGroup = dynamic<AreaDesignationRadioGroupProps>(async () => await import('../edit/form/AreaDesignationRadioGroup').then(module => module.AreaDesignationRadioGroup))
+const AreaDesignationRadioGroup = dynamic<AreaDesignationRadioGroupProps>(
+  async () =>
+    await import('../edit/form/AreaDesignationRadioGroup').then(
+      (module) => module.AreaDesignationRadioGroup
+    )
+)
