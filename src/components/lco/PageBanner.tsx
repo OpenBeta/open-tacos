@@ -3,6 +3,7 @@ import { ClimbType } from '../../js/types'
 import { LCO_LIST } from './data'
 import Tooltip from '../../components/ui/Tooltip'
 import { InformationCircleIcon } from '@heroicons/react/20/solid'
+import { UsersIcon } from '@heroicons/react/24/outline'
 
 export interface LCOProfileType {
   /** Org unique id  */
@@ -72,11 +73,7 @@ const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
   <>
     <div className='sm:inline-block mr-6 mb-6'>
       <div className='flex items-center bg-light hover:bg-on-hover pl-5 pr-7 rounded-2xl'>
-        <img
-          className='h-10 w-10'
-          src='https://fastly.picsum.photos/id/625/200/200.jpg?hmac=oIwf4IzbglfXYZo-9VXZTHju2-ox3D-Vooeuioav_nw'
-          alt='placeholder LCO logo'
-        />
+        <UsersIcon className="h-10 w-10"/>
         <div className='py-5  pl-4 overflow-hidden'>
           <p className='text-base leading-6'>{profile.name}</p>
 
@@ -93,7 +90,7 @@ interface ContentProps {
   profile: LCOProfileType
 }
 
-// Previous implementation using hover card 
+// Previous implementation using hover card
 // const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
 //  <HoverCard.Root openDelay={300}>
 //    <HoverCard.Trigger>
