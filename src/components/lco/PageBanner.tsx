@@ -55,7 +55,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({ ancestors }) => {
       <div className=''>
         {orgs.length === 0
           ? (
-            <p className='italic text-tertiary-contrast'>
+            <p className='italic text-base-content/60'>
               No organizationa found for this area
             </p>
             )
@@ -73,7 +73,7 @@ const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
   <>
     <div className='sm:inline-block mr-6 mb-6'>
       <div className='flex items-center bg-light hover:bg-on-hover pl-5 pr-7 rounded-2xl'>
-        <UsersIcon className="h-10 w-10"/>
+        <UsersIcon className='h-10 w-10' />
         <div className='py-5  pl-4 overflow-hidden'>
           <p className='text-base leading-6'>{profile.name}</p>
 
