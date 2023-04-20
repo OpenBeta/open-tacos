@@ -1,4 +1,4 @@
-import * as HoverCard from '@radix-ui/react-hover-card'
+// import * as HoverCard from '@radix-ui/react-hover-card'
 import { ClimbType } from '../../js/types'
 import { LCO_LIST } from './data'
 import Tooltip from '../../components/ui/Tooltip'
