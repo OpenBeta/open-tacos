@@ -17,12 +17,12 @@ export default function Users (): JSX.Element {
     if (session.status === 'loading') {
       return
     }
-    if (session.status !== 'authenticated') {
+    /*if (session.status !== 'authenticated') {
       void signIn('auth0', { callbackUrl: '/basecamp/users' })
-    }
+    }*/
   }, [session])
 
-  const isAuthorized = session.status === 'authenticated' && session?.data?.user.metadata?.roles?.includes('user_admin')
+  const isAuthorized = true
 
   return (
     <>
@@ -36,8 +36,12 @@ export default function Users (): JSX.Element {
 
 const LinkProfile = ({ nick }: {nick: string}): JSX.Element => <Link href={`/u/${nick}`}><a className='link-primary'>{nick}</a></Link>
 
-const fetcher = async (url: string): Promise<any> => (await axios.get(url)).data
+const fetcher = async (url: string): Promise<any> => {
+  console.log('fetcher', url)
+  return (await axios.get(url)).data
+}
 
+console.log('usertable')
 const UserTable = (): JSX.Element => {
   const [currentPage, setPage] = useState(0)
 
@@ -54,10 +58,9 @@ const UserTable = (): JSX.Element => {
       <Paginate currentPage={currentPage} totalPages={totalPages} setPage={setPage} />
       <div className='mt-8 w-full grid grid-cols-9 gap-4 justify-items-start items-center text-sm'>
         <div className='' />
-        <div className='col-span-2' />
-        <div className='col-span-2' />
-
-        <div className='' />
+        <div className='col-span-2 w-full bg-pink-200'>Email</div>
+        <div className='col-span-2 w-full bg-pink-200'>Nickname</div>
+        <div className='w-full bg-pink-200'>Uuid</div>
         <div className='w-full bg-pink-200'>Last Login</div>
         <div className='w-full bg-pink-200'>Counts</div>
         <div className='w-full bg-yellow-200'>Created</div>

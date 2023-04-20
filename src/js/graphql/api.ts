@@ -1,10 +1,11 @@
 import { gql } from '@apollo/client'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
-import { AreaType, TickType, HybridMediaTag, MediaByAuthor, CountrySummaryType } from '../types'
+import { AreaType, TickType, OrganizationType, HybridMediaTag, MediaByAuthor, CountrySummaryType } from '../types'
 import { graphqlClient } from './Client'
 import { CORE_CRAG_FIELDS, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
 import { QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA } from './gql/tags'
+import { QUERY_All_ORGANIZATIONS } from '../../js/graphql/gql/organization'
 
 interface CragsDetailsNearType {
   data: AreaType[] // Should use Omit or Pick
@@ -202,6 +203,20 @@ export const getAllCountries = async (): Promise<CountrySummaryType[]> => {
     }
   } catch (e) {
     console.error('Error fetching all countries', e)
+  }
+  return []
+}
+
+export const getAllOrganizations = async (): Promise<OrganizationType[]> => {
+  try {
+    const res = await graphqlClient.query<{ organizations: OrganizationType[] }>({
+      query: QUERY_All_ORGANIZATIONS,
+    })
+    if (Array.isArray(res.data?.organizations)) {
+      return res.data.organizations
+    }
+  } catch (e) {
+    console.error('Error fetching all organizations', e)
   }
   return []
 }

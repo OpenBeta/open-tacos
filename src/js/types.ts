@@ -109,6 +109,40 @@ export interface AggregateType {
 
 }
 
+export enum OrgType {
+  LOCAL_CLIMBING_ORGANIZATION = 'LOCAL_CLIMBING_ORGANIZATION'
+}
+
+export type OrganizationType =
+  EditMetadataType & {
+  id: string
+  orgId: string
+  orgType: OrgType
+  displayName: string
+  associatedAreaIds?: string[]
+  excludedAreaIds?: string[]
+  content?: OrganizationContentType
+}
+
+export type OrganizationContentType = {
+  website?: string
+  email?: string
+  donationLink?: string
+  instagramLink?: string
+  description?: string
+}
+
+export type OrganizationEditableFieldsType = {
+  displayName?: string
+  associatedAreaIds?: string[]
+  excludedAreaIds?: string[]
+  website?: string
+  email?: string
+  donationLink?: string
+  instagramLink?: string
+  description?: string
+}
+
 export interface EditMetadataType {
   updatedAt?: number
   updatedBy?: string

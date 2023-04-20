@@ -58,6 +58,11 @@ export const DropdownSeparator = (): JSX.Element => (
     <hr />
   </DropdownPrimitive.Separator>)
 
+
+interface DropdownRootProps {
+  children: JSX.Element[]
+  modal?: boolean
+}
 /**
  * A reuseable dropdown menu.  Anatomy:
  * ```
@@ -72,7 +77,11 @@ export const DropdownSeparator = (): JSX.Element => (
  * </DropdownMenu>
  * ```
  */
-export const DropdownMenu = DropdownPrimitive.Root
+export const DropdownMenu = ({ children, modal=true }: DropdownRootProps): JSX.Element => (
+  <DropdownPrimitive.Root modal={modal}>
+    {children}
+  </DropdownPrimitive.Root>
+)
 
 /**
  * A button used to activate the menu
