@@ -1,7 +1,7 @@
 // import * as HoverCard from '@radix-ui/react-hover-card'
 import { ClimbType } from '../../js/types'
 import { LCO_LIST } from './data'
-import Tooltip from '../../components/ui/Tooltip'
+// import Tooltip from '../../components/ui/Tooltip'
 import { InformationCircleIcon } from '@heroicons/react/20/solid'
 import { UsersIcon } from '@heroicons/react/24/outline'
 
@@ -48,11 +48,9 @@ export const PageBanner: React.FC<PageBannerProps> = ({ ancestors }) => {
     <div className='grid pt-6 pb-4 lg:pb-16 lg:pt-16'>
       <div className='col-span-full flex justify-start items-center pb-6'>
         <h3 className='mr-4'>Local climbing organizations</h3>
-        <Tooltip content='infos about why lco is important'>
-          <InformationCircleIcon className='h-6 w-6' />
-        </Tooltip>
+        <InformationCircleIcon className='h-6 w-6' />
       </div>
-      <div className=''>
+      <div>
         {orgs.length === 0
           ? (
             <p className='italic text-base-content/60'>
