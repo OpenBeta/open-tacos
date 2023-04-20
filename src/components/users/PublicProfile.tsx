@@ -21,7 +21,7 @@ export default function PublicProfile ({ userProfile: initialUserProfile }: Publ
     setUserProfile(initialUserProfile)
   }, [initialUserProfile])
 
-  const { name, nick, avatar, bio, website } = userProfile ?? {}
+  const { name, nick, avatar, bio, website, loginsCount } = userProfile ?? {}
   let websiteWithScheme: string | null = null
   if (website != null) {
     websiteWithScheme = website.startsWith('http') ? website : `//${website}`
@@ -40,7 +40,7 @@ export default function PublicProfile ({ userProfile: initialUserProfile }: Publ
           <div className='text-2xl font-bold mr-4'>
             {nick}
           </div>
-          <EditProfileButton ownerProfile={initialUserProfile} />
+          <EditProfileButton ownerProfile={initialUserProfile} loginsCount={loginsCount} />
           {userProfile != null && isAuthorized && <ImportFromMtnProj isButton />}
           {userProfile != null && <APIKey ownerProfile={initialUserProfile} />}
         </div>
