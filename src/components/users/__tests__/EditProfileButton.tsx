@@ -28,9 +28,9 @@ test('EditProfileButton renders null when the user hasn\'t logged in', async () 
   expect(screen.queryByRole('button')).toBeNull()
 })
 
-test('EditProfileButton renders the tooltip when loginsCount is 2', async () => { // (the loginsCount is 2 after making the account and logging in)
+test('EditProfileButton renders the tooltip when loginsCount is 1', async () => { // (the loginsCount is 1 after making the account and logging in)
   (usePermissions as jest.Mock).mockReturnValue({ isAuthorized: true })
-  render(<EditProfileButton loginsCount={2} />)
+  render(<EditProfileButton loginsCount={1} />)
   const tooltip = screen.queryByText(
     'It looks like this is your first time logging in, click here to change your username!'
   )

@@ -16,7 +16,7 @@ interface EditProfileButtonProps extends WithOwnerProfile {
 function EditProfileButton ({ loginsCount }: EditProfileButtonProps): JSX.Element {
   return (
     <>
-      {loginsCount === 2 // the loginsCount is 2 after the user creates their account
+      {loginsCount === 1
         ? (
           <Tooltip
             side='bottom'
@@ -32,7 +32,7 @@ function EditProfileButton ({ loginsCount }: EditProfileButtonProps): JSX.Elemen
             />
           </Tooltip>
           )
-        : loginsCount !== undefined && loginsCount > 0
+        : loginsCount !== undefined && loginsCount > 1
           ? (
             <Button
               href='/account/edit'
