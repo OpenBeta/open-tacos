@@ -9,27 +9,20 @@ export const QUERY_AREA_BY_ID = gql`
       id
       uuid
       areaName
-      shortCode
-      ancestors
-      pathTokens
-      metadata {
-        lat
-        lng 
-        leaf
-        bbox
-        areaId
-      } 
-      content {
-        description 
-      } 
+      gradeContext
+      media {
+        mediaUrl
+        mediaUuid
+        destination
+        destType
+      }
+      totalClimbs
       aggregate {
-          byGradeBand {
-            intermediate
-            expert
-            beginner
-            advanced
-          }
-          byDiscipline {
+        byGrade {
+          count
+          label
+        }
+        byDiscipline {
             sport {
               total
             }
@@ -42,59 +35,65 @@ export const QUERY_AREA_BY_ID = gql`
             aid {
               total
             }
-          }
+          }        
       }
-
-      totalClimbs
-
-      children {
-        id
-        uuid
-        areaName
-        aggregate {
-          byGradeBand {
-            intermediate
-            expert
-            beginner
-            advanced
-          }
-          byDiscipline {
-            sport {
-              total
-            }
-            trad {
-              total
-            }
-            boulder {
-              total
-            }
-          }
-        }
-        children {
-          id
-        }
-        totalClimbs
-        content {
-          description 
-        } 
-        metadata {
-          areaId
-          leaf
-          lat
-          lng
-        }
+      metadata {
+        areaId
+        leaf
+        isBoulder
+        lat
+        lng 
+        leftRightIndex
       }
-
+      pathTokens  
+      ancestors
       climbs {
         id
+        name
+        fa
+        grades {
+          font
+          french
+          vscale
+          yds
+        }
+        safety
+        type {
+          trad
+          tr
+          sport
+          mixed
+          bouldering
+          alpine
+          aid
+        }
+        metadata {
+          climbId
+          leftRightIndex
+        }
+        content {
+          description
+        }
       }
-
-      media {
-        mediaUrl
-        mediaUuid
-        destination
-        destType
+      children {
+        uuid
+        areaName
+        totalClimbs
+        metadata {
+          leaf
+          isBoulder
+        }
+        children {
+          uuid
+        }
       }
+      content {
+        description 
+      }
+      updatedAt
+      updatedBy
+      createdAt
+      createdBy 
     }
     getAreaHistory(filter: {areaId: $uuid}) {
        ...ChangeHistoryFields
