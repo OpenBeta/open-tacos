@@ -16,7 +16,7 @@ interface EditProfileButtonProps extends WithOwnerProfile {
 function EditProfileButton ({ loginsCount }: EditProfileButtonProps): JSX.Element {
   return (
     <>
-      {loginsCount === 1
+      {loginsCount === 2 // the loginsCount is 2 after the user creates their account
         ? (
           <Tooltip
             side='bottom'
