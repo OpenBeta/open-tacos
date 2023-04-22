@@ -1,6 +1,5 @@
 import { GetStaticProps, NextPage } from 'next'
 import dynamic from 'next/dynamic'
-import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { shuffle } from 'underscore'
 
@@ -13,6 +12,7 @@ import { getImageDimensionsHack } from '../../js/utils/hacks'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { UploadCTACragBanner } from '../../components/media/UploadCTA'
 import CragSummary, { Skeleton as AreaContentSkeleton } from '../../components/crag/cragSummary'
+import { QUERY_AREA_BY_ID } from '../../js/graphql/gql/areaById'
 
 interface CragProps {
   area: AreaType
@@ -33,7 +33,7 @@ const CragPage: NextPage<CragProps> = (props) => {
 }
 export default CragPage
 
-const Body = ({ area, mediaListWithUsernames: photoList }: CragProps): JSX.Element => {
+const Body = ({ area, mediaListWithUsernames: photoList, history }: CragProps): JSX.Element => {
   const level = area?.ancestors.length ?? 0
   const { isFallback: showSkeleton } = useRouter()
   return (
@@ -45,8 +45,8 @@ const Body = ({ area, mediaListWithUsernames: photoList }: CragProps): JSX.Eleme
           {showSkeleton
             ? <AreaContentSkeleton />
             : <CragSummary
-                key={area.uuid}
-                {...area}
+                area={area}
+                history={history}
               />}
         </div>
       </article>
@@ -84,101 +84,9 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
       notFound: true
     }
   }
-  const query = gql`query AreaByID($uuid: ID) {
-    area(uuid: $uuid) {
-      id
-      uuid
-      areaName
-      gradeContext
-      media {
-        mediaUrl
-        mediaUuid
-        destination
-        destType
-      }
-      totalClimbs
-      aggregate {
-        byGrade {
-          count
-          label
-        }
-        byDiscipline {
-            sport {
-              total
-            }
-            trad {
-              total
-            }
-            boulder {
-              total
-            }
-            aid {
-              total
-            }
-          }        
-      }
-      metadata {
-        areaId
-        leaf
-        isBoulder
-        lat
-        lng 
-        leftRightIndex
-      }
-      pathTokens  
-      ancestors
-      climbs {
-        id
-        name
-        fa
-        grades {
-          font
-          french
-          vscale
-          yds
-        }
-        safety
-        type {
-          trad
-          tr
-          sport
-          mixed
-          bouldering
-          alpine
-          aid
-        }
-        metadata {
-          climbId
-          leftRightIndex
-        }
-        content {
-          description
-        }
-      }
-      children {
-        uuid
-        areaName
-        totalClimbs
-        metadata {
-          leaf
-          isBoulder
-        }
-        children {
-          uuid
-        }
-      }
-      content {
-        description 
-      }
-      updatedAt
-      updatedBy
-      createdAt
-      createdBy 
-    }
-  }`
 
-  const rs = await graphqlClient.query<{ area: AreaType }>({
-    query,
+  const rs = await graphqlClient.query<{ area: AreaType, getAreaHistory: ChangesetType[] }>({
+    query: QUERY_AREA_BY_ID,
     variables: {
       uuid: params.id
     },
@@ -197,7 +105,7 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
   return {
     props: {
       area: rs.data.area,
-      history: [],
+      history: rs.data.getAreaHistory,
       mediaListWithUsernames: mediaListWithDimensions
     },
     revalidate: 30
