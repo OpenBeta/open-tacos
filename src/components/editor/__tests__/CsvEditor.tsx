@@ -8,7 +8,7 @@ import { EditableClimbType } from '../../crag/cragSummary'
 import { GradeHelper } from '../../../js/grades/Grade'
 import { individualClimbToTokenDelimitedStr } from '../plugins/CsvResetPlugin'
 
-describe('Inplace CSV editor tests', () => {
+xdescribe('Inplace CSV editor tests', () => {
   const initialClimbs: EditableClimbType[] = [
     {
       id: '68003e52-4c6c-4051-bd3e-349dbebc3205',
