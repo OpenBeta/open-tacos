@@ -1,6 +1,5 @@
 
 import React from 'react'
-
 import { WithOwnerProfile } from '../types/User'
 import usePermissions from '../hooks/auth/usePermissions'
 
