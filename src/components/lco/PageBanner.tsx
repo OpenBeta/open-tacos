@@ -74,9 +74,8 @@ const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
         <UsersIcon className='h-10 w-10' />
         <div className='py-5  pl-4 overflow-hidden'>
           <p className='text-base leading-6'>{profile.name}</p>
-
           <p className='text-xs underline'>
-            <a href={profile.website}>{profile.website}</a>
+            <a href={profile.website} target='_blank' rel='noreferrer'>{profile.website}</a>
           </p>
         </div>
       </div>
