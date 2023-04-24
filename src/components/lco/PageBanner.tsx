@@ -1,7 +1,7 @@
 // import * as HoverCard from '@radix-ui/react-hover-card'
 import { ClimbType } from '../../js/types'
 import { LCO_LIST } from './data'
-// import Tooltip from '../../components/ui/Tooltip'
+import Tooltip from '../../components/ui/Tooltip'
 import { InformationCircleIcon } from '@heroicons/react/20/solid'
 import { UsersIcon } from '@heroicons/react/24/outline'
 
@@ -48,7 +48,16 @@ export const PageBanner: React.FC<PageBannerProps> = ({ ancestors }) => {
     <div className='grid pt-6 pb-4 lg:pb-16 lg:pt-16'>
       <div className='col-span-full flex justify-start items-center pb-6'>
         <h3 className='mr-4'>Local climbing organizations</h3>
-        <InformationCircleIcon className='h-6 w-6' />
+        <Tooltip content={
+          <p>Learn more about our&nbsp;
+            <a href='https://openbeta.substack.com/p/openbeta-and-lcos' target='_blank' rel='noreferrer' className='underline'>
+              initiative
+            </a>.
+          </p>
+        }
+        >
+          <InformationCircleIcon className='h-6 w-6' />
+        </Tooltip>
       </div>
       <div>
         {orgs.length === 0
