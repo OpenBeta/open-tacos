@@ -58,7 +58,6 @@ export const DropdownSeparator = (): JSX.Element => (
     <hr />
   </DropdownPrimitive.Separator>)
 
-
 interface DropdownRootProps {
   children: JSX.Element[]
   modal?: boolean
@@ -77,7 +76,7 @@ interface DropdownRootProps {
  * </DropdownMenu>
  * ```
  */
-export const DropdownMenu = ({ children, modal=true }: DropdownRootProps): JSX.Element => (
+export const DropdownMenu = ({ children, modal = true }: DropdownRootProps): JSX.Element => (
   <DropdownPrimitive.Root modal={modal}>
     {children}
   </DropdownPrimitive.Root>

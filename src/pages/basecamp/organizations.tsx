@@ -24,22 +24,16 @@ const Organizations: NextPage<OrganizationHomeProps> = () => {
       >
         <div className='max-w-screen-2xl mx-auto flex flex-col items-center 2xl:px-8'>
           <div className='flex flex-row w-full'>
-            <LinkButton 
-             href='/basecamp/users'
-             className='btn btn-sm btn-outline'
+            <LinkButton
+              href='/basecamp/users'
+              className='btn btn-sm btn-outline'
             >
               Users
             </LinkButton>
             <LinkButton
-             href='/basecamp/areas'
-             className='btn btn-sm btn-outline ml-4'
-            >
-              Areas
-            </LinkButton>
-            <LinkButton
-             href='/basecamp/organizations'
-             className='btn btn-sm btn-outline ml-4'
-             buttonProps={{disabled: true}}
+              href='/basecamp/organizations'
+              className='btn btn-sm btn-outline ml-4'
+              buttonProps={{ disabled: true }}
             >
               Organizations
             </LinkButton>

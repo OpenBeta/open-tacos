@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 import { OrgType } from '../../types'
 
-export const QUERY_All_ORGANIZATIONS = gql`
+export const QUERY_ALL_ORGANIZATIONS = gql`
 query ($filter: OrgFilter, $sort: OrgSort) {
   organizations(filter: $filter, sort: $sort) {
     orgId

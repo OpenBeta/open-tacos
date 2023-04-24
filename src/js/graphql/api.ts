@@ -5,7 +5,7 @@ import { AreaType, TickType, OrganizationType, HybridMediaTag, MediaByAuthor, Co
 import { graphqlClient } from './Client'
 import { CORE_CRAG_FIELDS, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
 import { QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA } from './gql/tags'
-import { QUERY_All_ORGANIZATIONS } from '../../js/graphql/gql/organization'
+import { QUERY_ALL_ORGANIZATIONS } from '../../js/graphql/gql/organization'
 
 interface CragsDetailsNearType {
   data: AreaType[] // Should use Omit or Pick
@@ -210,7 +210,7 @@ export const getAllCountries = async (): Promise<CountrySummaryType[]> => {
 export const getAllOrganizations = async (): Promise<OrganizationType[]> => {
   try {
     const res = await graphqlClient.query<{ organizations: OrganizationType[] }>({
-      query: QUERY_All_ORGANIZATIONS,
+      query: QUERY_ALL_ORGANIZATIONS
     })
     if (Array.isArray(res.data?.organizations)) {
       return res.data.organizations

@@ -1,7 +1,6 @@
 import { Controller, RegisterOptions, useFormContext, UseFormReturn } from 'react-hook-form'
 import clx from 'classnames'
 import { DropdownMenu, DropdownContent, DropdownItem, DropdownTrigger, DropdownSeparator } from '../DropdownMenu'
-import { ChevronDoubleDownIcon } from '@heroicons/react/24/outline'
 
 interface SelectProps {
   label: string
@@ -12,22 +11,22 @@ interface SelectProps {
   helper?: string | JSX.Element
 }
 
-type BaseSelectProps = {
-  name: string,
+interface BaseSelectProps {
+  name: string
   formContext: UseFormReturn
-  defaultOption: string,
+  defaultOption: string
   options: string[]
-  btnClassName?: string,
+  selectClassName?: string
 }
 
 /**
  * Wraps our custom DropdownMenu in react-hook-form's Controller
  * so that it can be used within a FormProvider.
  * @param param0
- * @returns 
+ * @returns
  */
 export const BaseSelect: React.FC<BaseSelectProps> = ({
- name, formContext, defaultOption, options, btnClassName = ''
+  name, formContext, defaultOption, options, selectClassName = ''
 }) => {
   const { control } = formContext
 
@@ -36,33 +35,33 @@ export const BaseSelect: React.FC<BaseSelectProps> = ({
       name={name}
       control={control}
       defaultValue={defaultOption}
-      render={({ 
+      render={({
         field: { onChange, value }
       }) => (
         <DropdownMenu modal={false}>
-          <DropdownTrigger className={clx(BUTTON_DEFAULT_CSS, btnClassName)}>
-            {value} <ChevronDoubleDownIcon className='w-3 h-3 lg:w-4 lg:w-4' />
+          <DropdownTrigger className={clx(SELECT_DEFAULT_CSS, selectClassName)}>
+            {value}
           </DropdownTrigger>
 
           <DropdownContent align='start'>
-            <>
-            {options.length >= 1 && 
-              <DropdownItem
-                text={options[0]}
-                onSelect={() => onChange(options[0])}
-              />
-            }
-            </>
-            <>
-            {options.length > 1 &&
-              options.slice(1).map(option => <>
-                <DropdownSeparator />
+            <div key={0}>
+              {options.length >= 1 &&
                 <DropdownItem
-                  text={option}
-                  onSelect={() => onChange(option)}
-                />
-              </>)
-            }
+                  text={options[0]}
+                  onSelect={() => onChange(options[0])}
+                />}
+            </div>
+            <>
+              {options.length > 1 &&
+              options.slice(1).map((option, idx) =>
+                <div key={idx+1}>
+                  <DropdownSeparator />
+                  <DropdownItem
+                    text={option}
+                    onSelect={() => onChange(option)}
+                  />
+                </div>
+              )}
             </>
           </DropdownContent>
         </DropdownMenu>
@@ -75,7 +74,7 @@ export const BaseSelect: React.FC<BaseSelectProps> = ({
  * A reusable react-hook-form select field
  */
 export default function Select ({
-  label, labelAlt, name, options, defaultOption, helper,
+  label, labelAlt, name, options, defaultOption, helper
 }: SelectProps): JSX.Element {
   const formContext = useFormContext()
   const { formState: { errors } } = formContext
@@ -102,4 +101,4 @@ export default function Select ({
   )
 }
 
-const BUTTON_DEFAULT_CSS = 'btn btn-sm btn-outline w-fit gap-2'
+const SELECT_DEFAULT_CSS = 'select select-sm input-primary font-normal'

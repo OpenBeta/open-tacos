@@ -11,11 +11,11 @@ export default function Organizations (): JSX.Element {
   const session = useSession()
   useEffect(() => {
     if (session.status === 'loading') {
-      return
+
     }
-    /*if (session.status !== 'authenticated') {
+    /* if (session.status !== 'authenticated') {
       void signIn('auth0', { callbackUrl: '/basecamp/users' })
-    }*/
+    } */
   }, [session])
 
   const isAuthorized = true
@@ -45,9 +45,9 @@ const OrganizationTable = (): JSX.Element => {
 
   return (
     <div className='my-8'>
-      <CreateUpdateModal 
+      <CreateUpdateModal
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        setOpen={setModalOpen}
         contentContainer={
           <OrganizationForm
             existingOrg={focussedOrg}
@@ -58,15 +58,15 @@ const OrganizationTable = (): JSX.Element => {
       <div className='flex flex-row justify-between items-center border-b border-t border-primary'>
         <h2>Organizations: {orgs?.length}</h2>
         <div>
-          <button 
-           className='btn btn-sm btn-outline my-2'
-            onClick={() => saveAsCSVFile(usersToCsv(orgs), `openbeta_organizations.csv`)}
+          <button
+            className='btn btn-sm btn-outline my-2'
+            onClick={() => saveAsCSVFile(usersToCsv(orgs), 'openbeta_organizations.csv')}
           >
             Download
           </button>
           <button
-           className='btn btn-sm btn-secondary my-2 ml-2'
-           onClick={() => setModalOpen(true)}
+            className='btn btn-sm btn-secondary my-2 ml-2'
+            onClick={() => setModalOpen(true)}
           >
             + Create
           </button>

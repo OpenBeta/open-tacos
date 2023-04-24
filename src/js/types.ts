@@ -115,16 +115,16 @@ export enum OrgType {
 
 export type OrganizationType =
   EditMetadataType & {
-  id: string
-  orgId: string
-  orgType: OrgType
-  displayName: string
-  associatedAreaIds?: string[]
-  excludedAreaIds?: string[]
-  content?: OrganizationContentType
-}
+    id: string
+    orgId: string
+    orgType: OrgType
+    displayName: string
+    associatedAreaIds?: string[]
+    excludedAreaIds?: string[]
+    content?: OrganizationContentType
+  }
 
-export type OrganizationContentType = {
+export interface OrganizationContentType {
   website?: string
   email?: string
   donationLink?: string
@@ -132,7 +132,7 @@ export type OrganizationContentType = {
   description?: string
 }
 
-export type OrganizationEditableFieldsType = {
+export interface OrganizationEditableFieldsType {
   displayName?: string
   associatedAreaIds?: string[]
   excludedAreaIds?: string[]

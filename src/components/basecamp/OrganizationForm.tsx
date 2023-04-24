@@ -85,8 +85,8 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
   }
 
   return (
-    <div className='px-8 py-4 flex flex-row'>
-      <div className='flex-none w-48'>
+    <div className='px-8 pt-12 pb-4 flex flex-row flex-wrap'>
+      <div className='basis-1/3 shink-0 grow min-w-[10em] pr-2'>
         <h2>Organization Editor</h2>
         {existingOrg !== null && ( // Id, OrgId, OrgTypes are immutable and only exist during updating.
           <div className='mt-4'>
@@ -105,7 +105,7 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
           </div>
         )}
       </div>
-      <div className='flex-auto'>
+      <div className='basis-2/3 grow'>
         <FormProvider {...form}>
         <form onSubmit={handleSubmit(submitHandler)} className='min-w-[16em]'>
           <Input
