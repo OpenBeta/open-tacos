@@ -12,13 +12,12 @@ export default function Organizations (): JSX.Element {
   useEffect(() => {
     if (session.status === 'loading') {
 
+    } else if (session.status !== 'authenticated') {
+      void signIn('auth0', { callbackUrl: '/basecamp/organizations' })
     }
-    /* if (session.status !== 'authenticated') {
-      void signIn('auth0', { callbackUrl: '/basecamp/users' })
-    } */
   }, [session])
 
-  const isAuthorized = true
+  const isAuthorized = session.status === 'authenticated' && session?.data?.user.metadata?.roles?.includes('user_admin')
 
   return (
     <>
@@ -32,7 +31,6 @@ const OrganizationTable = (): JSX.Element => {
   const [orgs, setOrgs] = useState<OrganizationType[]>([])
   const [modalOpen, setModalOpen] = useState(false)
   const [focussedOrg, setfocussedOrg] = useState<OrganizationType | null>(null)
-  console.log('modalOpen', modalOpen)
 
   useEffect(() => {
     console.log('getallOrgs')

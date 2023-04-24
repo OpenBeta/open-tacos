@@ -16,13 +16,12 @@ export default function Users (): JSX.Element {
   useEffect(() => {
     if (session.status === 'loading') {
 
-    }
-    /* if (session.status !== 'authenticated') {
+    } else if (session.status !== 'authenticated') {
       void signIn('auth0', { callbackUrl: '/basecamp/users' })
-    } */
+    }
   }, [session])
 
-  const isAuthorized = true
+  const isAuthorized = session.status === 'authenticated' && session?.data?.user.metadata?.roles?.includes('user_admin')
 
   return (
     <>
@@ -41,7 +40,6 @@ const fetcher = async (url: string): Promise<any> => {
   return (await axios.get(url)).data
 }
 
-console.log('usertable')
 const UserTable = (): JSX.Element => {
   const [currentPage, setPage] = useState(0)
 
