@@ -4,7 +4,7 @@ import clx from 'classnames'
 import Card from '../ui/Card/Card'
 import TagList from '../media/TagList'
 import { MobileLoader } from '../../js/sirv/util'
-import { MediaType, HybridMediaTag } from '../../js/types'
+import { HybridMediaTag } from '../../js/types'
 import { getUploadDateSummary } from '../../js/utils'
 import { PostHeader } from './Post'
 import { resolver as urlResolver } from '../media/Tag'
@@ -13,30 +13,29 @@ const MOBILE_IMAGE_MAX_WIDITH = 600
 
 interface RecentImageCardProps {
   header?: JSX.Element
-  imageInfo: MediaType
+  // imageInfo: MediaBaseTag
   tagList: HybridMediaTag[]
 }
 /**
  * Image card for the home page
  */
 export const RecentImageCard = ({
-  imageInfo,
+  // imageInfo,
   tagList
 }: RecentImageCardProps): JSX.Element => {
   const [loaded, setLoaded] = useState(false)
-  const { filename, meta } = imageInfo
-  const { width, height } = meta
+  const { mediaUrl, width, height } = tagList[0]
   const [firstUrl] = urlResolver(tagList[0])
   const imageRatio = width / height
   return (
     <Card
-      header={<PostHeader username={tagList[0].uid} />}
+      header={<PostHeader username={tagList[0].username} />}
       image={
         <Link href={firstUrl ?? '#'}>
           <a className='relative'>
             <img
               src={MobileLoader({
-                src: filename,
+                src: mediaUrl,
                 width: MOBILE_IMAGE_MAX_WIDITH
               })}
               width={MOBILE_IMAGE_MAX_WIDITH}
@@ -65,10 +64,10 @@ export const RecentImageCard = ({
               showActions={false}
               isAuthorized={false}
               isAuthenticated={false}
-              imageInfo={imageInfo}
+              imageInfo={tagList[0]}
             />
             <span className='uppercase text-xs text-base-200'>
-              {getUploadDateSummary(imageInfo.ctime)}
+              {getUploadDateSummary(tagList[0].birthTime)}
             </span>
           </section>
         </>

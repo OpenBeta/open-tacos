@@ -18,7 +18,8 @@ import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import RecentTaggedMedia from '../components/home/RecentMedia'
 import { enhanceMediaListWithUsernames } from '../js/usernameUtil'
-import { getImagesByFilenames } from '../js/sirv/SirvClient'
+// import { getImagesByFilenames } from '../js/sirv/SirvClient'
+import { getImagesByFilenames } from '../js/cdn/cdnClient'
 
 const allowedViews = ['explore', 'newTags', 'map', 'edit', 'pulse']
 
@@ -210,21 +211,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const recentTags = recentMediaList?.flatMap(entry => entry.tagList.slice(0, 10)) ?? []
 
-  const recentMediaIDList = recentTags.map(entry => entry.mediaUuid)
+  const tagsByMedia = groupBy(recentTags as HybridMediaTag[], 'mediaUrl')
 
-  // Get tag objects with climb & area name
-  const tags = await getTagsByMediaId(recentMediaIDList)
-
-  const tagsWithUsernames = await enhanceMediaListWithUsernames(tags)
-
-  const tagsByMedia = groupBy(tagsWithUsernames as HybridMediaTag[], 'mediaUrl')
-
-  const list = await getImagesByFilenames(Object.keys(tagsByMedia).slice(0, 30))
   return {
     props: {
       exploreData: rs.data,
       tagsByMedia,
-      mediaList: list.mediaList
+      mediaList: []
     },
     revalidate: 60
   }

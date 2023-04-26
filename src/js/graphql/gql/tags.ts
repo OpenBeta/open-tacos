@@ -5,9 +5,13 @@ import { TagTargetType } from '../../types'
 export const FRAGMENT_CLIMB_TAG = gql`
  fragment ClimbTagFields on ClimbTag {
     id
+    username
     mediaUuid
     mediaUrl
     destType
+    width
+    height
+    birthTime
     climb {
       id
       name
@@ -17,9 +21,13 @@ export const FRAGMENT_CLIMB_TAG = gql`
 export const FRAGMENT_AREA_TAG = gql`
  fragment AreaTagFields on AreaTag {
     id
+    username
     mediaUuid
     mediaUrl
     destType
+    width
+    height
+    birthTime
     area {
         uuid
         areaName
@@ -79,15 +87,14 @@ export const QUERY_TAGS_BY_MEDIA_ID = gql`
 `
 
 export const QUERY_RECENT_MEDIA = gql`
+  ${FRAGMENT_CLIMB_TAG}
+  ${FRAGMENT_AREA_TAG}
   query ($userLimit: Int) {
     getRecentTags(userLimit: $userLimit) {
       authorUuid
       tagList {
-        mediaUuid
-        destType
-        mediaUrl
-        mediaType
-        destination
+        ... ClimbTagFields
+        ... AreaTagFields
       }
     }
   }

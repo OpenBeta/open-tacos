@@ -7,6 +7,7 @@
     "@algolia/autocomplete-js": "1.7.1",
     "@algolia/autocomplete-theme-classic": "1.7.1",
     "@apollo/client": "^3.6.9",
+    "@google-cloud/storage": "^6.9.5",
     "@headlessui/react": "^1.6.4",
     "@heroicons/react": "2.0.13",
     "@lexical/react": "^0.7.5",

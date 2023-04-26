@@ -11,10 +11,13 @@ export const QUERY_AREA_BY_ID = gql`
       areaName
       gradeContext
       media {
+        username
         mediaUrl
         mediaUuid
         destination
         destType
+        width
+        height
       }
       totalClimbs
       aggregate {
@@ -108,6 +111,7 @@ export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
     areaName
     gradeContext
     media {
+      username
       mediaUrl
       mediaUuid
       destination

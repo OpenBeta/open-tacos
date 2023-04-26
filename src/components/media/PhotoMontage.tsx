@@ -46,7 +46,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
   if (!showSkeleton && (shuffledList == null || shuffledList?.length === 0)) { return null }
 
   if (isMobile) {
-    const { uid, mediaUrl, destType, destination } = shuffledList[0]
+    const { username, mediaUrl, destType, destination } = shuffledList[0]
     return (
       <div className='block relative w-full h-60 fadeinEffect'>
         {showPhotoGalleryModal ? photoGalleryModal : undefined}
@@ -60,7 +60,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
           priority={isHero}
           onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)}
         />
-        <PhotoFooter username={uid} destType={destType} destination={destination} hover />
+        <PhotoFooter username={username} destType={destType} destination={destination} hover />
       </div>
     )
   }
@@ -73,7 +73,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
         onMouseLeave={() => setHover(false)}
       >
         {showPhotoGalleryModal ? photoGalleryModal : undefined}
-        {shuffledList.slice(0, 2).map(({ mediaUrl, mediaUuid, uid, destination, destType }) => {
+        {shuffledList.slice(0, 2).map(({ mediaUrl, mediaUuid, username, destination, destType }) => {
           return (
             <div
               key={mediaUuid}
@@ -84,7 +84,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
               }
             >
               <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
-              <PhotoFooter username={uid} destType={destType} destination={destination} hover={hover} />
+              <PhotoFooter username={username} destType={destType} destination={destination} hover={hover} />
             </div>
           )
         })}
@@ -103,16 +103,16 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
       {showPhotoGalleryModal ? photoGalleryModal : undefined}
       <div className='block relative col-start-1 col-span-2 row-span-2 col-end-3'>
         <ResponsiveImage mediaUrl={first.mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
-        <PhotoFooter username={first.uid} destType={first.destType} destination={first.destination} hover={hover} />
+        <PhotoFooter username={first.username} destType={first.destType} destination={first.destination} hover={hover} />
       </div>
-      {theRest.map(({ mediaUrl, mediaUuid, uid, destination, destType }, i) => {
+      {theRest.map(({ mediaUrl, mediaUuid, username, destination, destType }, i) => {
         return (
           <div
             key={`${mediaUuid}_${i}`}
             className='block relative'
           >
             <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
-            <PhotoFooter username={uid} destType={destType} destination={destination} hover={hover} />
+            <PhotoFooter username={username} destType={destType} destination={destination} hover={hover} />
           </div>
         )
       })}

@@ -240,8 +240,10 @@ export interface MediaBaseTag {
   mediaType: number
   destType: number
   destination: string | null
-  uid: string | null
-  mediaInfo?: MediaType
+  username: string | null
+  width: number
+  height: number
+  birthTime: Date
 }
 
 export interface MediaTagWithClimb extends MediaBaseTag {

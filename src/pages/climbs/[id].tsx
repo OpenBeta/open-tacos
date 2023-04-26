@@ -27,7 +27,6 @@ import { AREA_NAME_FORM_VALIDATION_RULES } from '../../components/edit/EditAreaF
 import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 import { StickyHeader } from '../../components/crag/StickyHeader'
 import { ClientSideFormSaveAction, Skeleton as ContentSkeleton } from '../../components/crag/cragSummary'
-import { getImageDimensionsHack } from '../../js/utils/hacks'
 import { ArticleLastUpdate } from '../../components/edit/ArticleLastUpdate'
 import { TradSportGradeInput, BoulderingGradeInput } from '../../components/edit/form/GradeTextInput'
 import Grade from '../../js/grades/Grade'
@@ -390,10 +389,13 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
         aid
       }
       media {
+        username
         mediaUrl
         mediaUuid
         destination
         destType
+        width
+        height
       }
       content {
         description
@@ -433,9 +435,6 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
     }
   }
 
-  const mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.climb.media)
-  const mediaListWithDimensions = await getImageDimensionsHack(mediaListWithUsernames)
-
   const sortedClimbsInArea = await fetchSortedClimbsInArea(rs.data.climb.ancestors[rs.data.climb.ancestors.length - 1])
   let leftClimb: ClimbType | null = null
   let rightClimb: ClimbType | null = null
@@ -452,7 +451,7 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
     props: {
       key: rs.data.climb.id,
       climb: rs.data.climb,
-      mediaListWithUsernames: mediaListWithDimensions,
+      mediaListWithUsernames: rs.data.climb.media,
       leftClimb,
       rightClimb
     },

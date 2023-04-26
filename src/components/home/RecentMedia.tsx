@@ -13,7 +13,22 @@ export default function RecentTags ({
   return (
     <>
       <div className='sm:px-6 gap-6 columns-xs'>
-        {mediaList?.map((media, index) => {
+        {
+          Object.entries(allTags).map(([key, tags]) => {
+            return (
+              <div
+                key={key} className='p-0 overflow-hidden mt-0 mb-4 break-inside-avoid-column break-inside-avoid relative block'
+                onClick={(e) => e.preventDefault()}
+              ><RecentImageCard
+                key={key}
+                tagList={tags}
+              />
+              </div>
+            )
+          }
+          )
+        }
+        {/* {mediaList?.map((media, index) => {
           const { filename } = media
           const tagList = allTags[filename] ?? []
           const key = `${media.mediaId}${index}`
@@ -30,7 +45,7 @@ export default function RecentTags ({
               />
             </div>
           )
-        })}
+        })} */}
       </div>
       <div className='my-6 w-full text-xs text-secondary text-center'>
         All photos are copyrighted by their respective owners. All Rights

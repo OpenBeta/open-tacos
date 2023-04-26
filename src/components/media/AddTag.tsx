@@ -1,11 +1,11 @@
 import { PlusIcon } from '@heroicons/react/24/outline'
 
 import ClimbSearchForTagging from '../search/ClimbSearchForTagging'
-import { EntityType, MediaType, TagTargetType, TypesenseAreaType, TypesenseDocumentType } from '../../js/types'
+import { EntityType, MediaBaseTag, TagTargetType, TypesenseAreaType, TypesenseDocumentType } from '../../js/types'
 import usePhotoTagCmd from '../../js/hooks/usePhotoTagCmd'
 
 interface ImageTaggerProps {
-  imageInfo: MediaType
+  imageInfo: MediaBaseTag
   label?: JSX.Element
   openSearch?: boolean
   onCancel?: () => void
@@ -30,8 +30,8 @@ export default function AddTag ({ imageInfo, onCancel, label, openSearch = false
             : (props as TypesenseAreaType).id
 
           await tagPhotoCmd({
-            mediaUuid: imageInfo.mediaId,
-            mediaUrl: imageInfo.filename,
+            mediaUuid: imageInfo.mediaUuid,
+            mediaUrl: imageInfo.mediaUrl,
             destinationId: linkedEntityId,
             destType: props.type === EntityType.climb ? TagTargetType.climb : TagTargetType.area
           })

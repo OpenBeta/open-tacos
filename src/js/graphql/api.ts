@@ -121,7 +121,7 @@ export const getRecentMedia = async (userLimit = 10): Promise<MediaByAuthor[]> =
     console.log('WARNING: getRecentMedia() returns non-array data')
     return []
   } catch (e) {
-    console.log('getRecentMedia() error', e)
+    console.log('####### getRecentMedia() error', e)
   }
   return []
 }

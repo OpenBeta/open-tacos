@@ -6,9 +6,7 @@ import { shuffle } from 'underscore'
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
-import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { PageMeta } from '../areas/[id]'
-import { getImageDimensionsHack } from '../../js/utils/hacks'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { UploadCTACragBanner } from '../../components/media/UploadCTA'
 import CragSummary, { Skeleton as AreaContentSkeleton } from '../../components/crag/cragSummary'
@@ -99,14 +97,11 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
     }
   }
 
-  const mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.area.media)
-  const mediaListWithDimensions = await getImageDimensionsHack(mediaListWithUsernames)
-
   return {
     props: {
       area: rs.data.area,
       history: rs.data.getAreaHistory,
-      mediaListWithUsernames: mediaListWithDimensions
+      mediaListWithUsernames: rs.data.area.media
     },
     revalidate: 30
   }

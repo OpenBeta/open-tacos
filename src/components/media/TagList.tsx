@@ -6,7 +6,7 @@ import { DropdownMenuItem as PrimitiveDropdownMenuItem } from '@radix-ui/react-d
 import AddTag from './AddTag'
 import { DropdownMenu, DropdownContent, DropdownTrigger, DropdownItem, DropdownSeparator } from '../ui/DropdownMenu'
 import useDeleteTagBackend from '../../js/hooks/useDeleteTagBackend'
-import { HybridMediaTag, MediaType } from '../../js/types'
+import { HybridMediaTag, MediaBaseTag } from '../../js/types'
 import Tag from './Tag'
 import { signIn } from 'next-auth/react'
 
@@ -17,7 +17,7 @@ interface TagsProps {
   showDelete?: boolean
   showActions?: boolean
   className?: string
-  imageInfo: MediaType
+  imageInfo: MediaBaseTag
 }
 
 /**
@@ -60,7 +60,7 @@ interface TagListProps {
   list: HybridMediaTag[]
   isAuthorized?: boolean
   children?: JSX.Element
-  imageInfo: MediaType
+  imageInfo: MediaBaseTag
 }
 
 /**
