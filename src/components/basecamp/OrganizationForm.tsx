@@ -8,8 +8,9 @@ import { useSession } from 'next-auth/react'
 import {
   MUTATION_ADD_ORGANIZATION,
   MUTATION_UPDATE_ORGANIZATION,
+  // QUERY_ORGANIZATIONS,
   AddOrganizationProps,
-  UpdateOrganizationProps,
+  UpdateOrganizationProps
 } from '../../js/graphql/gql/organization'
 import { toast } from 'react-toastify'
 
@@ -22,13 +23,15 @@ const DISPLAY_NAME_FORM_VALIDATION_RULES: RulesType = {
 }
 
 interface HtmlFormProps extends OrganizationEditableFieldsType {
+  conjoinedAssociatedAreaIds: string // Form will return one large conjoined string
+  conjoinedExcludedAreaIds: string // Form will return one large conjoined string
   orgId: string
   orgType: OrgType
 }
 
 interface OrganizationFormProps {
   existingOrg: OrganizationType | null
-  onClose: (arg0: OrganizationType | null) => void
+  onClose: () => void
 }
 
 /*
@@ -41,27 +44,36 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
   const [addOrganization] = useMutation<{ addOrganization: OrganizationType }, { input: AddOrganizationProps }>(
     MUTATION_ADD_ORGANIZATION, {
       client: graphqlClient,
-      /*onCompleted: (data) => {
-        wizardActions.addAreaStore.recordStepFinal()
-        void fetch(`/api/revalidate?a=${data.addArea.uuid}`)
-        void fetch('/api/revalidate?page=/edit')
-      },*/
       onError: (error) => toast.error(`Unexpected error: ${error.message}`)
     }
   )
   const [updateOrganization] = useMutation<{ updateOrganization: OrganizationType }, { input: UpdateOrganizationProps }>(
     MUTATION_UPDATE_ORGANIZATION, {
       client: graphqlClient,
-      onError: (error) => toast.error(`Unexpected error: ${error.message}`)
+      onError: (error) => toast.error(`Unexpected error: ${error.message}`),
+      // refetchQueries: [{query: QUERY_ORGANIZATIONS}]
     }
   )
   // React-hook-form declaration
   const form = useForm<HtmlFormProps>({
     mode: 'onBlur',
-    defaultValues: existingOrg == null ? {} : existingOrg
+    defaultValues: existingOrg == null 
+      ? {} 
+      : {
+        displayName: existingOrg.displayName,
+        orgType: existingOrg.orgType,
+        conjoinedAssociatedAreaIds: existingOrg.associatedAreaIds?.join(', '),
+        conjoinedExcludedAreaIds: existingOrg.excludedAreaIds?.join(', '),
+        description: existingOrg.content?.description,
+        website: existingOrg.content?.website,
+        email: existingOrg.content?.email,
+        instagramLink: existingOrg.content?.instagramLink,
+        donationLink: existingOrg.content?.donationLink,
+        facebookLink: existingOrg.content?.facebookLink,
+      }
   })
 
-  const { handleSubmit, formState: { isSubmitting, dirtyFields }, reset, getValues } = form
+  const { handleSubmit, formState: { isSubmitting } } = form
 
   /**
    * Routes to addOrganization or updateOrganization GraphQL calls
@@ -83,8 +95,8 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
       const input = removeNullUndefined({
         orgType: formProps.orgType,
         displayName: formProps.displayName,
-        associatedAreaIds: formProps.associatedAreaIds,
-        excludedAreaIds: formProps.excludedAreaIds,
+        associatedAreaIds: formProps.conjoinedAssociatedAreaIds?.split(',').map(s => s.trim()),
+        excludedAreaIds: formProps.conjoinedExcludedAreaIds?.split(',').map(s => s.trim()),
         website: formProps.website,
         email: formProps.email,
         donationLink: formProps.donationLink,
@@ -92,34 +104,21 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
         facebookLink: formProps.facebookLink,
         description: formProps.description
       }) as AddOrganizationProps
-      const newOrg = await addOrganization({
+      await addOrganization({
         variables: { input },
         context: {
           headers: {
             authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
           }
         }
-      }).then((res) => {
-        if (res.errors) {
-          toast.error(`[addOrganization] Errors: ${res.errors}`)
-          console.error(`[addOrganization] Errors: ${res.errors}`)
-          return null
-        } 
-        if (res.data?.addOrganization == null) {
-          toast.error(`[addOrganization] No data returned`)
-          console.error('[addOrganization] No data returned')
-          return null
-        }
-        return res.data.addOrganization
       })
-      onClose(newOrg)
     } else {
       console.log('update', formProps)
       const input = removeNullUndefined({
         orgId: existingOrg.orgId,
         displayName: formProps.displayName,
-        associatedAreaIds: formProps.associatedAreaIds,
-        excludedAreaIds: formProps.excludedAreaIds,
+        associatedAreaIds: formProps.conjoinedAssociatedAreaIds?.split(',').map(s => s.trim()),
+        excludedAreaIds: formProps.conjoinedExcludedAreaIds?.split(',').map(s => s.trim()),
         website: formProps.website,
         email: formProps.email,
         donationLink: formProps.donationLink,
@@ -127,29 +126,16 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
         // facebookLink: formProps.facebookLink,
         description: formProps.description
       }) as UpdateOrganizationProps
-      const updatedOrg = await updateOrganization({
+      await updateOrganization({
         variables: { input },
         context: {
           headers: {
             authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
           }
         }
-      }).then((res) => {
-        if (res.errors) {
-          toast.error(`[updateOrganization] Errors: ${res.errors}`)
-          console.error(`[updateOrganization] Errors: ${res.errors}`)
-          return null
-        } 
-        if (res.data?.updateOrganization == null) {
-          toast.error(`[updateOrganization] No data returned`)
-          console.error('[updateOrganization] No data returned')
-          console.error(res.errors)
-          return null
-        }
-        return res.data.updateOrganization
       })
-      onClose(updatedOrg)
     }
+    onClose()
   }
 
   return (
@@ -190,6 +176,17 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
               name='description'
               placeholder='Seattle-based group founded in 1979 to steward climbing areas across the Pacific Northwest.'
               rows={2}
+            />
+            <Input
+              label='Associated Area Ids:'
+              name='conjoinedAssociatedAreaIds'
+              placeholder='49017dad-7baf-5fde-8078-f3a4b1230bbb, 59e17fad-6bb8-de47-aa80-bba4b1a29be1'
+            />
+            <Input
+              label='Excluded Area Ids:'
+              labelAlt='Areas the organization explicitly chooses not to be associated with. Takes precedence over Associated Area Ids.'
+              name='conjoinedExcludedAreaIds'
+              placeholder='88352d11-eb85-5fde-8078-889bb1230b11'
             />
             <Input
               label='Email:'

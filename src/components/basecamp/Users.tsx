@@ -15,8 +15,9 @@ export default function Users (): JSX.Element {
   const session = useSession()
   useEffect(() => {
     if (session.status === 'loading') {
-
-    } else if (session.status !== 'authenticated') {
+      return
+    }
+    if (session.status !== 'authenticated') {
       void signIn('auth0', { callbackUrl: '/basecamp/users' })
     }
   }, [session])
