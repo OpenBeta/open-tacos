@@ -15,13 +15,12 @@ import {
 } from '../../js/graphql/gql/organization'
 import { toast } from 'react-toastify'
 
-
 const DISPLAY_NAME_FORM_VALIDATION_RULES: RulesType = {
   required: 'A display name is required.',
   minLength: {
     value: 2,
     message: 'Minimum 2 characters.'
-  },
+  }
 }
 
 interface HtmlFormProps extends OrganizationEditableFieldsType {
@@ -29,7 +28,7 @@ interface HtmlFormProps extends OrganizationEditableFieldsType {
   orgType: OrgType
 }
 
-interface OrganizationFormProps = {
+interface OrganizationFormProps {
   existingOrg: OrganizationType | null
   onClose: () => void
 }
@@ -61,7 +60,7 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
   // React-hook-form declaration
   const form = useForm<HtmlFormProps>({
     mode: 'onBlur',
-    defaultValues: existingOrg || {}
+    defaultValues: existingOrg == null ? {} : existingOrg
   })
 
   const { handleSubmit, formState: { isSubmitting, dirtyFields }, reset, getValues } = form
@@ -72,7 +71,7 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
    * @param formProps Data populated by the user in the form
    * @returns
    */
-  const submitHandler = async (formProps: HtmlFormProps) => {
+  const submitHandler = async (formProps: HtmlFormProps): Promise<void> => {
     if (existingOrg === null) {
       console.log('create', formProps)
       if (formProps.displayName == null) {
@@ -168,12 +167,12 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
               placeholder='Seattle-based group founded in 1979 to steward climbing areas across the Pacific Northwest.'
               rows={2}
             />
-            <Input 
+            <Input
               label='Email:'
               name='email'
               placeholder='admin@climbingorg.com'
             />
-            <Input 
+            <Input
               label='Website:'
               name='website'
               placeholder='https://www.climbingorg.com'

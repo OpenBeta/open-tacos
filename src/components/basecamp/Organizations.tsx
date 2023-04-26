@@ -78,8 +78,8 @@ const OrganizationTable = (): JSX.Element => {
         <div className='col-span-1 w-full bg-pink-200'>Email</div>
         <div className='col-span-1 w-full bg-yellow-200'>Created</div>
         <div className='w-full bg-yellow-200'></div>
-        {orgs?.map((org, index: number) => {
-          return (<OrgRow
+        {orgs?.map((org, index: number) =>
+          <OrgRow
             key={org.orgId}
             index={index}
             org={org}
@@ -87,8 +87,8 @@ const OrganizationTable = (): JSX.Element => {
               setfocussedOrg(org)
               setModalOpen(true)
             }}
-          />)
-        })}
+          />
+        )}
       </div>
     </div>
   )
@@ -114,7 +114,7 @@ const OrgRow = ({ index, org, updateOrg }: OrgRowProps): JSX.Element => {
       <div className='col-span-1 w-full break-words'>{orgType}</div>
       <div className='col-span-1 w-full'>{email}</div>
       <div className='col-span-1 w-full'>{createdAt !== undefined ? formatDistanceToNow(createdAt) : null}</div>
-      <div> 
+      <div>
         <button
           className='btn btn-sm btn-outline'
           onClick={updateOrg}
