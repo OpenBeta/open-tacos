@@ -246,6 +246,8 @@ export interface MediaBaseTag {
   birthTime: Date
 }
 
+export type TagSource = Pick<MediaBaseTag, 'mediaUrl' | 'mediaUuid'>
+
 export interface MediaTagWithClimb extends MediaBaseTag {
   climb: Pick<Climb, 'id' | 'name'>
 }

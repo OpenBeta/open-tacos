@@ -6,7 +6,7 @@ import { DropdownMenuItem as PrimitiveDropdownMenuItem } from '@radix-ui/react-d
 import AddTag from './AddTag'
 import { DropdownMenu, DropdownContent, DropdownTrigger, DropdownItem, DropdownSeparator } from '../ui/DropdownMenu'
 import useDeleteTagBackend from '../../js/hooks/useDeleteTagBackend'
-import { HybridMediaTag, MediaBaseTag } from '../../js/types'
+import { HybridMediaTag, TagSource } from '../../js/types'
 import Tag from './Tag'
 import { signIn } from 'next-auth/react'
 
@@ -17,13 +17,13 @@ interface TagsProps {
   showDelete?: boolean
   showActions?: boolean
   className?: string
-  imageInfo: MediaBaseTag
+  tagSource: TagSource
 }
 
 /**
  * A horizontal tag list.  The last item is a CTA.
  */
-export default function TagList ({ list, isAuthorized = false, isAuthenticated = false, showDelete = false, showActions = true, imageInfo, className = '' }: TagsProps): JSX.Element | null {
+export default function TagList ({ list, isAuthorized = false, isAuthenticated = false, showDelete = false, showActions = true, tagSource, className = '' }: TagsProps): JSX.Element | null {
   const { onDelete } = useDeleteTagBackend()
   if (list == null) {
     return null
@@ -47,7 +47,7 @@ export default function TagList ({ list, isAuthorized = false, isAuthenticated =
         />)}
       {showActions && isAuthorized &&
         <AddTag
-          imageInfo={imageInfo}
+          tagSource={tagSource}
           label={<AddTagBadge />}
         />}
       {showActions && !isAuthenticated &&
@@ -60,13 +60,12 @@ interface TagListProps {
   list: HybridMediaTag[]
   isAuthorized?: boolean
   children?: JSX.Element
-  imageInfo: MediaBaseTag
 }
 
 /**
  * Mobile-first tag list wrapped in a popup menu
  */
-export const MobilePopupTagList = ({ list, imageInfo, isAuthorized = false }: TagListProps): JSX.Element => {
+export const MobilePopupTagList = ({ list, isAuthorized = false }: TagListProps): JSX.Element => {
   const { onDelete } = useDeleteTagBackend()
   const [openSearch, setOpenSearch] = useState(false)
   return (
@@ -109,7 +108,7 @@ export const MobilePopupTagList = ({ list, imageInfo, isAuthorized = false }: Ta
       <AddTag
         onCancel={() => setOpenSearch(false)}
         openSearch={openSearch}
-        imageInfo={imageInfo}
+        tagSource={list[0]}
         label={<div className='hidden' />}
       />
     </div>

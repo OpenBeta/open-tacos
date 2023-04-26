@@ -189,11 +189,15 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
                 <MobileMediaCard
                   key={key}
                   tagList={tags}
-                  imageInfo={imageInfo}
                   showTagActions
                   {...auth}
                 />
               )
+            }
+
+            const tagSource = {
+              mediaUrl: imageInfo.filename,
+              mediaUuid: imageInfo.mediaId
             }
             return (
               <div
@@ -221,7 +225,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
                   <TagList
                     key={key}
                     list={tags}
-                    imageInfo={imageInfo}
+                    tagSource={tagSource}
                     {...auth}
                     showDelete
                   />

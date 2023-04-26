@@ -182,7 +182,10 @@ interface InfoContainerProps {
 
 const InfoContainer = ({ currentImage, tagList, auth, keyboardTip = true, onClose }: InfoContainerProps): ReactElement | null => {
   if (currentImage == null) return null
-
+  const tagSource = {
+    mediaUrl: currentImage.filename,
+    mediaUuid: currentImage.mediaId
+  }
   return (
     <>
       <div className='my-8'>
@@ -192,7 +195,7 @@ const InfoContainer = ({ currentImage, tagList, auth, keyboardTip = true, onClos
         {tagList?.length > 0 &&
           <TagList
             list={tagList}
-            imageInfo={currentImage}
+            tagSource={tagSource}
             {...auth}
             showDelete
             className='my-2'

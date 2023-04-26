@@ -11,25 +11,21 @@ import classNames from 'classnames'
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
 import { graphqlClient } from '../js/graphql/Client'
-import { getRecentMedia, getTagsByMediaId } from '../js/graphql/api'
+import { getRecentMedia } from '../js/graphql/api'
 
-import { HybridMediaTag, IndexResponseType, MediaType } from '../js/types'
+import { HybridMediaTag, IndexResponseType } from '../js/types'
 import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import RecentTaggedMedia from '../components/home/RecentMedia'
-import { enhanceMediaListWithUsernames } from '../js/usernameUtil'
-// import { getImagesByFilenames } from '../js/sirv/SirvClient'
-import { getImagesByFilenames } from '../js/cdn/cdnClient'
 
 const allowedViews = ['explore', 'newTags', 'map', 'edit', 'pulse']
 
 interface HomePageType {
   exploreData: IndexResponseType
   tagsByMedia: Dictionary<HybridMediaTag[]>
-  mediaList: MediaType[]
 }
 
-const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) => {
+const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia }) => {
   const router = useRouter()
   const [activeTab, setTab] = useState<string>('')
   const { areas } = exploreData
@@ -128,7 +124,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
               <DynamicDenseAreas areas={areas} />
             </Tabs.Content>
             <Tabs.Content value='newTags' className='w-full'>
-              <RecentTaggedMedia tags={tagsByMedia} mediaList={mediaList} />
+              <RecentTaggedMedia tags={tagsByMedia} />
             </Tabs.Content>
             <Tabs.Content value='map' className='z-0 h-full'>
               <DynamicMap />
@@ -216,8 +212,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       exploreData: rs.data,
-      tagsByMedia,
-      mediaList: []
+      tagsByMedia
     },
     revalidate: 60
   }

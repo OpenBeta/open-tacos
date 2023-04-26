@@ -1,51 +1,32 @@
 import { Dictionary } from 'underscore'
-import { HybridMediaTag, MediaType } from '../../js/types'
+import { HybridMediaTag } from '../../js/types'
 import { RecentImageCard } from './RecentMediaCard'
+
 export interface RecentTagsProps {
   tags: Dictionary<HybridMediaTag[]>
-  mediaList: MediaType[]
 }
 
 export default function RecentTags ({
-  tags: allTags,
-  mediaList
+  tags: allTags
 }: RecentTagsProps): JSX.Element {
   return (
     <>
       <div className='sm:px-6 gap-6 columns-xs'>
         {
-          Object.entries(allTags).map(([key, tags]) => {
-            return (
-              <div
-                key={key} className='p-0 overflow-hidden mt-0 mb-4 break-inside-avoid-column break-inside-avoid relative block'
-                onClick={(e) => e.preventDefault()}
-              ><RecentImageCard
-                key={key}
-                tagList={tags}
-              />
-              </div>
-            )
-          }
-          )
-        }
-        {/* {mediaList?.map((media, index) => {
-          const { filename } = media
-          const tagList = allTags[filename] ?? []
-          const key = `${media.mediaId}${index}`
-          return (
+          Object.entries(allTags).map(([key, tags]) => (
             <div
-              key={`${filename}`}
-              className='p-0 overflow-hidden mt-0 mb-4 break-inside-avoid-column break-inside-avoid relative block'
+              key={key} className='p-0 overflow-hidden mt-0 mb-4 break-inside-avoid-column break-inside-avoid relative block'
               onClick={(e) => e.preventDefault()}
             >
               <RecentImageCard
                 key={key}
-                tagList={tagList}
-                imageInfo={media}
+                tagList={tags}
               />
             </div>
           )
-        })} */}
+
+          )
+        }
       </div>
       <div className='my-6 w-full text-xs text-secondary text-center'>
         All photos are copyrighted by their respective owners. All Rights

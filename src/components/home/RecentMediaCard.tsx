@@ -13,14 +13,12 @@ const MOBILE_IMAGE_MAX_WIDITH = 600
 
 interface RecentImageCardProps {
   header?: JSX.Element
-  // imageInfo: MediaBaseTag
   tagList: HybridMediaTag[]
 }
 /**
  * Image card for the home page
  */
 export const RecentImageCard = ({
-  // imageInfo,
   tagList
 }: RecentImageCardProps): JSX.Element => {
   const [loaded, setLoaded] = useState(false)
@@ -64,7 +62,7 @@ export const RecentImageCard = ({
               showActions={false}
               isAuthorized={false}
               isAuthenticated={false}
-              imageInfo={tagList[0]}
+              tagSource={tagList[0]}
             />
             <span className='uppercase text-xs text-base-200'>
               {getUploadDateSummary(tagList[0].birthTime)}
