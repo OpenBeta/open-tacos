@@ -1,6 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import CSVEditor from '../CsvEditor'
 import { CSVFormHelper } from './FormHelper'
@@ -8,7 +8,7 @@ import { EditableClimbType } from '../../crag/cragSummary'
 import { GradeHelper } from '../../../js/grades/Grade'
 import { individualClimbToTokenDelimitedStr } from '../plugins/CsvResetPlugin'
 
-xdescribe('Inplace CSV editor tests', () => {
+describe('Inplace CSV editor tests', () => {
   const initialClimbs: EditableClimbType[] = [
     {
       id: '68003e52-4c6c-4051-bd3e-349dbebc3205',
@@ -103,7 +103,8 @@ xdescribe('Inplace CSV editor tests', () => {
 
     screen.queryByText('Please fix formatting errors')
 
-    expect(await (screen.findByRole('button', { name: 'Submit' }))).toBeDisabled()
+    // Wait for the button to be disabled
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Submit' })).toBeDisabled())
 
     await user.type(editor, '{arrowleft>4}{backspace}b') // Change a grade to '5b'
 
