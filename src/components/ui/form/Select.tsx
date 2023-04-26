@@ -54,7 +54,7 @@ export const BaseSelect: React.FC<BaseSelectProps> = ({
             <>
               {options.length > 1 &&
               options.slice(1).map((option, idx) =>
-                <div key={idx+1}>
+                <div key={idx + 1}>
                   <DropdownSeparator />
                   <DropdownItem
                     text={option}

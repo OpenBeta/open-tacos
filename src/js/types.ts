@@ -129,6 +129,7 @@ export interface OrganizationContentType {
   email?: string
   donationLink?: string
   instagramLink?: string
+  facebookLink?: string
   description?: string
 }
 
@@ -140,6 +141,7 @@ export interface OrganizationEditableFieldsType {
   email?: string
   donationLink?: string
   instagramLink?: string
+  facebookLink?: string
   description?: string
 }
 

@@ -34,7 +34,7 @@ const OrganizationTable = (): JSX.Element => {
 
   useEffect(() => {
     console.log('getallOrgs')
-    getAllOrganizations()
+    void getAllOrganizations()
       .then((orgs) => {
         console.log('res', orgs)
         setOrgs(orgs)
@@ -70,14 +70,25 @@ const OrganizationTable = (): JSX.Element => {
           </button>
         </div>
       </div>
-      <div className='mt-8 w-full grid grid-cols-9 gap-4 justify-items-start items-center text-sm'>
+      <div className='mt-8 w-full grid grid-cols-7 gap-4 justify-items-start items-center text-sm'>
         <div className='' />
-        <div className='col-span-2 w-full bg-pink-200'>Display Name</div>
-        <div className='col-span-2 w-full bg-pink-200'>Email</div>
-        <div className='w-full bg-pink-200'>OrgId</div>
-        <div className='col-span-2 w-full bg-pink-200'>Org Type</div>
-        <div className='w-full bg-yellow-200'>Created</div>
-        {orgs?.map((org, index: number) => <OrgRow key={org.orgId} index={index} org={org} />)}
+        <div className='col-span-1 w-full bg-pink-200'>Display Name</div>
+        <div className='col-span-1 w-full bg-pink-200'>OrgId</div>
+        <div className='col-span-1 w-full bg-pink-200'>Org Type</div>
+        <div className='col-span-1 w-full bg-pink-200'>Email</div>
+        <div className='col-span-1 w-full bg-yellow-200'>Created</div>
+        <div className='w-full bg-yellow-200'></div>
+        {orgs?.map((org, index: number) => {
+          return (<OrgRow
+            key={org.orgId}
+            index={index}
+            org={org}
+            updateOrg={() => {
+              setfocussedOrg(org)
+              setModalOpen(true)
+            }}
+          />)
+        })}
       </div>
     </div>
   )
@@ -85,9 +96,10 @@ const OrganizationTable = (): JSX.Element => {
 interface OrgRowProps {
   index: number
   org: OrganizationType
+  updateOrg: () => void
 }
 
-const OrgRow = ({ index, org }: OrgRowProps): JSX.Element => {
+const OrgRow = ({ index, org, updateOrg }: OrgRowProps): JSX.Element => {
   // eslint-disable-next-line
   const { displayName, orgType, orgId, content, createdAt } = org
   const { email } = content as OrganizationContentType
@@ -97,11 +109,19 @@ const OrgRow = ({ index, org }: OrgRowProps): JSX.Element => {
       <div>
         {index + 1}
       </div>
-      <div className='col-span-2'>{displayName}</div>
-      <div className='col-span-2'>{email}</div>
-      <div className=''>{orgId}</div>
-      <div className='col-span-2'>{orgType}</div>
-      <div>{createdAt !== undefined ? formatDistanceToNow(createdAt) : null}</div>
+      <div className='col-span-1 w-full'>{displayName}</div>
+      <div className='col-span-1 w-full'>{orgId}</div>
+      <div className='col-span-1 w-full break-words'>{orgType}</div>
+      <div className='col-span-1 w-full'>{email}</div>
+      <div className='col-span-1 w-full'>{createdAt !== undefined ? formatDistanceToNow(createdAt) : null}</div>
+      <div> 
+        <button
+          className='btn btn-sm btn-outline'
+          onClick={updateOrg}
+        >
+          Update
+        </button>
+      </div>
     </>
   )
 }

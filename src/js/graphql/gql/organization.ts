@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { OrgType } from '../../types'
+import { OrgType, OrganizationEditableFieldsType } from '../../types'
 
 export const QUERY_ALL_ORGANIZATIONS = gql`
 query ($filter: OrgFilter, $sort: OrgSort) {
@@ -16,6 +16,7 @@ query ($filter: OrgFilter, $sort: OrgSort) {
       instagramLink
       description
     }
+    createdAt
   }
 }
 `
@@ -30,15 +31,22 @@ mutation ($input: AddOrganizationInput!) {
 
 export const MUTATION_UPDATE_ORGANIZATION = gql`
 mutation ($input: OrganizationEditableFieldsInput!) {
-  updateOrganization(input: $input)
+  updateOrganization(input: $input) {
+    orgId
+  }
 }
 `
 
-export interface AddOrganizationProps {
+export interface AddOrganizationProps extends OrganizationEditableFieldsType {
   orgType: OrgType
-  displayName: string
 }
 
+export interface UpdateOrganizationProps extends OrganizationEditableFieldsType {}
+
 export interface AddOrganizationReturnType {
+  orgId: string
+}
+
+export interface UpdateOrganizationReturnType {
   orgId: string
 }

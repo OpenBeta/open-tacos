@@ -1,8 +1,6 @@
 import { MobileDialog, DialogContent } from '../ui/MobileDialog'
 import { ReactElement } from 'react'
 
-import { Button, ButtonVariant } from '../ui/BaseButton'
-
 interface CreateUpdateModalProps {
   isOpen: boolean
   setOpen: (arg0: boolean) => void
@@ -24,7 +22,7 @@ export default function CreateUpdateModal ({
       onOpenChange={setOpen}
     >
       <DialogContent onInteractOutside={() => setOpen(false)}>
-          {contentContainer}
+        {contentContainer}
       </DialogContent>
     </MobileDialog>
   )
