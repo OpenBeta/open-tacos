@@ -5,7 +5,7 @@ import { OrganizationContentType, OrganizationType } from '../../js/types'
 import { usersToCsv, saveAsCSVFile } from '../../js/utils/csv'
 import CreateUpdateModal from './CreateUpdateModal'
 import OrganizationForm from './OrganizationForm'
-import { getAllOrganizations } from '../../js/graphql/api'
+import { getOrganizations } from '../../js/graphql/api'
 
 export default function Organizations (): JSX.Element {
   const session = useSession()
@@ -33,10 +33,9 @@ const OrganizationTable = (): JSX.Element => {
   const [focussedOrg, setfocussedOrg] = useState<OrganizationType | null>(null)
 
   useEffect(() => {
-    console.log('getallOrgs')
-    void getAllOrganizations()
+    void getOrganizations()
       .then((orgs) => {
-        console.log('res', orgs)
+        console.log('getAllOrs res', orgs)
         setOrgs(orgs)
       })
   }, [])
@@ -49,7 +48,16 @@ const OrganizationTable = (): JSX.Element => {
         contentContainer={
           <OrganizationForm
             existingOrg={focussedOrg}
-            onClose={() => setModalOpen(false)}
+            onClose={(org: OrganizationType | null) => {
+              if (org != null) {
+                const updatedOrgs = [
+                  org,
+                  ...orgs.filter(o => o.orgId !== org.orgId)
+                ]
+                setOrgs(updatedOrgs)
+              }
+              setModalOpen(false)
+            }}
           />
         }
       />

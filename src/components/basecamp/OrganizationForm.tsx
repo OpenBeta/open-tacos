@@ -9,9 +9,7 @@ import {
   MUTATION_ADD_ORGANIZATION,
   MUTATION_UPDATE_ORGANIZATION,
   AddOrganizationProps,
-  AddOrganizationReturnType,
   UpdateOrganizationProps,
-  UpdateOrganizationReturnType
 } from '../../js/graphql/gql/organization'
 import { toast } from 'react-toastify'
 
@@ -30,7 +28,7 @@ interface HtmlFormProps extends OrganizationEditableFieldsType {
 
 interface OrganizationFormProps {
   existingOrg: OrganizationType | null
-  onClose: () => void
+  onClose: (arg0: OrganizationType | null) => void
 }
 
 /*
@@ -40,7 +38,7 @@ interface OrganizationFormProps {
 */
 export default function OrganizationForm ({ existingOrg, onClose }: OrganizationFormProps): JSX.Element {
   const session = useSession()
-  const [addOrganization] = useMutation<{ addOrganization: AddOrganizationReturnType }, { input: AddOrganizationProps }>(
+  const [addOrganization] = useMutation<{ addOrganization: OrganizationType }, { input: AddOrganizationProps }>(
     MUTATION_ADD_ORGANIZATION, {
       client: graphqlClient,
       /*onCompleted: (data) => {
@@ -51,7 +49,7 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
       onError: (error) => toast.error(`Unexpected error: ${error.message}`)
     }
   )
-  const [updateOrganization] = useMutation<{ updateOrganization: UpdateOrganizationReturnType }, { input: UpdateOrganizationProps }>(
+  const [updateOrganization] = useMutation<{ updateOrganization: OrganizationType }, { input: UpdateOrganizationProps }>(
     MUTATION_UPDATE_ORGANIZATION, {
       client: graphqlClient,
       onError: (error) => toast.error(`Unexpected error: ${error.message}`)
@@ -94,14 +92,27 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
         facebookLink: formProps.facebookLink,
         description: formProps.description
       }) as AddOrganizationProps
-      await addOrganization({
+      const newOrg = await addOrganization({
         variables: { input },
         context: {
           headers: {
             authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
           }
         }
+      }).then((res) => {
+        if (res.errors) {
+          toast.error(`[addOrganization] Errors: ${res.errors}`)
+          console.error(`[addOrganization] Errors: ${res.errors}`)
+          return null
+        } 
+        if (res.data?.addOrganization == null) {
+          toast.error(`[addOrganization] No data returned`)
+          console.error('[addOrganization] No data returned')
+          return null
+        }
+        return res.data.addOrganization
       })
+      onClose(newOrg)
     } else {
       console.log('update', formProps)
       const input = removeNullUndefined({
@@ -116,16 +127,29 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
         // facebookLink: formProps.facebookLink,
         description: formProps.description
       }) as UpdateOrganizationProps
-      await updateOrganization({
+      const updatedOrg = await updateOrganization({
         variables: { input },
         context: {
           headers: {
             authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
           }
         }
+      }).then((res) => {
+        if (res.errors) {
+          toast.error(`[updateOrganization] Errors: ${res.errors}`)
+          console.error(`[updateOrganization] Errors: ${res.errors}`)
+          return null
+        } 
+        if (res.data?.updateOrganization == null) {
+          toast.error(`[updateOrganization] No data returned`)
+          console.error('[updateOrganization] No data returned')
+          console.error(res.errors)
+          return null
+        }
+        return res.data.updateOrganization
       })
+      onClose(updatedOrg)
     }
-    onClose()
   }
 
   return (

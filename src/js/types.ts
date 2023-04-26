@@ -115,7 +115,6 @@ export enum OrgType {
 
 export type OrganizationType =
   EditMetadataType & {
-    id: string
     orgId: string
     orgType: OrgType
     displayName: string
