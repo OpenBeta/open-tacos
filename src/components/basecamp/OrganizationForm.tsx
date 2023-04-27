@@ -22,6 +22,22 @@ const DISPLAY_NAME_FORM_VALIDATION_RULES: RulesType = {
   }
 }
 
+/**
+ * Detects if string is in uuid-mongodb's "relaxed" hex format.
+ * @param s input string
+ * @returns
+ */
+const isMuuidHexStr = (s: string): boolean => {
+  const regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+  return regex.test(s)
+}
+
+const MUUID_VALIDATION = {
+  validate: (value: string) => {
+    return conjoinedStringToArray(value).every(isMuuidHexStr) || 'Expected comma-separated MUUID hex strings eg. 49017dad-7baf-5fde-8078-f3a4b1230bbb, 88352d11-eb85-5fde-8078-889bb1230b11...'
+  }
+}
+
 interface HtmlFormProps extends OrganizationEditableFieldsType {
   conjoinedAssociatedAreaIds: string // Form will return one large conjoined string
   conjoinedExcludedAreaIds: string // Form will return one large conjoined string
@@ -182,12 +198,14 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
               label='Associated Area Ids:'
               name='conjoinedAssociatedAreaIds'
               placeholder='49017dad-7baf-5fde-8078-f3a4b1230bbb, 59e17fad-6bb8-de47-aa80-bba4b1a29be1'
+              registerOptions={MUUID_VALIDATION}
             />
             <Input
               label='Excluded Area Ids:'
               labelAlt='Areas the organization explicitly chooses not to be associated with. Takes precedence over Associated Area Ids.'
               name='conjoinedExcludedAreaIds'
               placeholder='88352d11-eb85-5fde-8078-889bb1230b11'
+              registerOptions={MUUID_VALIDATION}
             />
             <Input
               label='Email:'
@@ -238,7 +256,7 @@ function removeNullUndefined (obj: {[s: string]: any}): {[s: string]: NonNullabl
 
 /**
  * Convert comma-separated string to array.
- * Notably, '' and ',' return []
+ * Notably, '' and ',' return [].
  */
 function conjoinedStringToArray (conjoined: string): string[] {
   return conjoined.split(',').map(s => s.trim()).filter(s => s !== '')
