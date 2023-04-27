@@ -74,7 +74,7 @@ export default function ProfileEditForm (): ReactElement {
       setIsLoading(true)
       const profile = await getUserProfile()
       console.log(profile)
-      
+
       if (profile != null) {
         setProfile(profile)
         setIsFirstLogin(profile.loginsCount === 0)
