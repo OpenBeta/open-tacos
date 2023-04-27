@@ -27,7 +27,7 @@ export const orgsToCsv = (orgs: undefined | OrganizationType[]): string => {
  */
 const processOrg = (org: OrganizationType): string => {
   return orgFields.map(field => {
-    let value = org?.[field] ?? '';
+    let value = org?.[field] ?? ''
     if ((field === 'createdAt' || field === 'updatedAt') && org[field] !== undefined) {
       value = format(new Date(org[field] as number), 'P')
     }

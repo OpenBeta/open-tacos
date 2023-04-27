@@ -1,4 +1,4 @@
-import { Controller, RegisterOptions, useFormContext, UseFormReturn } from 'react-hook-form'
+import { Controller, useFormContext, UseFormReturn } from 'react-hook-form'
 import clx from 'classnames'
 import { DropdownMenu, DropdownContent, DropdownItem, DropdownTrigger, DropdownSeparator } from '../DropdownMenu'
 

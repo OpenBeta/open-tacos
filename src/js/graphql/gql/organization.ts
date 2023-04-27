@@ -13,6 +13,7 @@ fragment OrganizationFragment on Organization {
       email
       donationLink
       instagramLink
+      facebookLink
       description
     }
     createdAt
@@ -22,8 +23,8 @@ fragment OrganizationFragment on Organization {
 
 export const QUERY_ORGANIZATIONS = gql`
 ${ORGANIZATION_FRAGMENT}
-query ($filter: OrgFilter, $sort: OrgSort) {
-  organizations(filter: $filter, sort: $sort) {
+query ($filter: OrgFilter, $sort: OrgSort $limit: Int) {
+  organizations(filter: $filter, sort: $sort, limit: $limit) {
     ...OrganizationFragment
   }
 }

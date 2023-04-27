@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react'
 import {
   MUTATION_ADD_ORGANIZATION,
   MUTATION_UPDATE_ORGANIZATION,
-  // QUERY_ORGANIZATIONS,
+  QUERY_ORGANIZATIONS,
   AddOrganizationProps,
   UpdateOrganizationProps
 } from '../../js/graphql/gql/organization'
@@ -44,33 +44,34 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
   const [addOrganization] = useMutation<{ addOrganization: OrganizationType }, { input: AddOrganizationProps }>(
     MUTATION_ADD_ORGANIZATION, {
       client: graphqlClient,
-      onError: (error) => toast.error(`Unexpected error: ${error.message}`)
+      onError: (error) => toast.error(`Unexpected error: ${error.message}`),
+      refetchQueries: [{ query: QUERY_ORGANIZATIONS }]
     }
   )
   const [updateOrganization] = useMutation<{ updateOrganization: OrganizationType }, { input: UpdateOrganizationProps }>(
     MUTATION_UPDATE_ORGANIZATION, {
       client: graphqlClient,
       onError: (error) => toast.error(`Unexpected error: ${error.message}`),
-      // refetchQueries: [{query: QUERY_ORGANIZATIONS}]
+      refetchQueries: [{ query: QUERY_ORGANIZATIONS }]
     }
   )
   // React-hook-form declaration
   const form = useForm<HtmlFormProps>({
     mode: 'onBlur',
-    defaultValues: existingOrg == null 
-      ? {} 
+    defaultValues: existingOrg == null
+      ? {}
       : {
-        displayName: existingOrg.displayName,
-        orgType: existingOrg.orgType,
-        conjoinedAssociatedAreaIds: existingOrg.associatedAreaIds?.join(', '),
-        conjoinedExcludedAreaIds: existingOrg.excludedAreaIds?.join(', '),
-        description: existingOrg.content?.description,
-        website: existingOrg.content?.website,
-        email: existingOrg.content?.email,
-        instagramLink: existingOrg.content?.instagramLink,
-        donationLink: existingOrg.content?.donationLink,
-        facebookLink: existingOrg.content?.facebookLink,
-      }
+          displayName: existingOrg.displayName,
+          orgType: existingOrg.orgType,
+          conjoinedAssociatedAreaIds: existingOrg.associatedAreaIds?.join(', '),
+          conjoinedExcludedAreaIds: existingOrg.excludedAreaIds?.join(', '),
+          description: existingOrg.content?.description,
+          website: existingOrg.content?.website,
+          email: existingOrg.content?.email,
+          instagramLink: existingOrg.content?.instagramLink,
+          donationLink: existingOrg.content?.donationLink,
+          facebookLink: existingOrg.content?.facebookLink
+        }
   })
 
   const { handleSubmit, formState: { isSubmitting } } = form
@@ -83,7 +84,6 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
    */
   const submitHandler = async (formProps: HtmlFormProps): Promise<void> => {
     if (existingOrg === null) {
-      console.log('create', formProps)
       if (formProps.displayName == null) {
         console.error('`displayName` cannot be null when creating organization.')
         return
@@ -95,8 +95,8 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
       const input = removeNullUndefined({
         orgType: formProps.orgType,
         displayName: formProps.displayName,
-        associatedAreaIds: formProps.conjoinedAssociatedAreaIds?.split(',').map(s => s.trim()),
-        excludedAreaIds: formProps.conjoinedExcludedAreaIds?.split(',').map(s => s.trim()),
+        associatedAreaIds: conjoinedStringToArray(formProps.conjoinedAssociatedAreaIds),
+        excludedAreaIds: conjoinedStringToArray(formProps.conjoinedExcludedAreaIds),
         website: formProps.website,
         email: formProps.email,
         donationLink: formProps.donationLink,
@@ -104,6 +104,7 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
         facebookLink: formProps.facebookLink,
         description: formProps.description
       }) as AddOrganizationProps
+      console.log('create', input)
       await addOrganization({
         variables: { input },
         context: {
@@ -113,19 +114,19 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
         }
       })
     } else {
-      console.log('update', formProps)
       const input = removeNullUndefined({
         orgId: existingOrg.orgId,
         displayName: formProps.displayName,
-        associatedAreaIds: formProps.conjoinedAssociatedAreaIds?.split(',').map(s => s.trim()),
-        excludedAreaIds: formProps.conjoinedExcludedAreaIds?.split(',').map(s => s.trim()),
+        associatedAreaIds: conjoinedStringToArray(formProps.conjoinedAssociatedAreaIds),
+        excludedAreaIds: conjoinedStringToArray(formProps.conjoinedExcludedAreaIds),
         website: formProps.website,
         email: formProps.email,
         donationLink: formProps.donationLink,
         instagramLink: formProps.instagramLink,
-        // facebookLink: formProps.facebookLink,
+        facebookLink: formProps.facebookLink,
         description: formProps.description
       }) as UpdateOrganizationProps
+      console.log('update', input)
       await updateOrganization({
         variables: { input },
         context: {
@@ -233,4 +234,12 @@ function removeNullUndefined (obj: {[s: string]: any}): {[s: string]: NonNullabl
   return Object.fromEntries(
     Object.entries(obj).filter(([_, v]) => v != null)
   )
+}
+
+/**
+ * Convert comma-separated string to array.
+ * Notably, '' and ',' return []
+ */
+function conjoinedStringToArray (conjoined: string): string[] {
+  return conjoined.split(',').map(s => s.trim()).filter(s => s !== '')
 }

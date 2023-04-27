@@ -39,8 +39,8 @@ const OrganizationTable = (): JSX.Element => {
     QUERY_ORGANIZATIONS,
     {
       variables: {
-        /*sort: { updatedAt: 'DESC' },
-        limit: 20*/
+        sort: { updatedAt: -1 },
+        limit: 20
       },
       client: graphqlClient
     }
@@ -88,7 +88,7 @@ const OrganizationTable = (): JSX.Element => {
         <div className='col-span-1 w-full bg-pink-200'>Email</div>
         <div className='col-span-1 w-full bg-yellow-200'>Created</div>
         <div className='col-span-1 w-full bg-yellow-200'>Updated</div>
-        <div className='w-full bg-yellow-200'></div>
+        <div className='w-full' />
         {orgs?.map((org, index: number) =>
           <OrgRow
             key={org.orgId}
