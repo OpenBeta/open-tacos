@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client'
 import { formatDistanceToNow } from 'date-fns'
 import { useSession, signIn } from 'next-auth/react'
 import { OrganizationContentType, OrganizationType } from '../../js/types'
-import { usersToCsv, saveAsCSVFile } from '../../js/utils/csv'
+import { orgsToCsv, saveAsCSVFile } from '../../js/utils/csv'
 import CreateUpdateModal from './CreateUpdateModal'
 import OrganizationForm from './OrganizationForm'
 import { graphqlClient } from '../../js/graphql/Client'
@@ -65,7 +65,7 @@ const OrganizationTable = (): JSX.Element => {
         <div>
           <button
             className='btn btn-sm btn-outline my-2'
-            onClick={() => saveAsCSVFile(usersToCsv(orgs), 'openbeta_organizations.csv')}
+            onClick={() => saveAsCSVFile(orgsToCsv(orgs), 'openbeta_organizations.csv')}
           >
             Download
           </button>
