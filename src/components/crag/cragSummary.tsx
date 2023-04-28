@@ -417,44 +417,44 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
               </h1>
 
               {editMode
-? (
-                <InplaceTextInput
-                  initialValue={currentLatLngStr}
-                  name='latlng'
-                  reset={resetSignal}
-                  editable={editMode}
-                  placeholder='Enter a latitude,longitude. Ex: 46.433333,11.85'
-                  rules={AREA_LATLNG_FORM_VALIDATION_RULES}
-                />
-              )
-: (
-                latlngPair != null && (
-                  <div className='flex flex-col text-xs text-base-300 border-t border-b  divide-y'>
-                    <a
-                      href={getMapHref({
-                        lat: latlngPair[0],
-                        lng: latlngPair[1]
-                      })}
-                      target='blank'
-                      className='flex items-center gap-2 py-3'
-                    >
-                      <MapPinIcon className='w-5 h-5' />
-                      <span className='mt-0.5'>
-                        <b>LAT,LNG</b>&nbsp;
-                        <span className='link-dotted'>
-                          {latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}
-                        </span>
-                      </span>
-                    </a>
-                    <ArticleLastUpdate
-                      updatedAt={updatedAt}
-                      updatedBy={updatedBy}
-                      createdAt={createdAt}
-                      createdBy={createdBy}
-                    />
-                  </div>
-                )
-              )}
+                ? (
+                  <InplaceTextInput
+                    initialValue={currentLatLngStr}
+                    name='latlng'
+                    reset={resetSignal}
+                    editable={editMode}
+                    placeholder='Enter a latitude,longitude. Ex: 46.433333,11.85'
+                    rules={AREA_LATLNG_FORM_VALIDATION_RULES}
+                  />
+                  )
+                : (
+                    latlngPair != null && (
+                      <div className='flex flex-col text-xs text-base-300 border-t border-b  divide-y'>
+                        <a
+                          href={getMapHref({
+                            lat: latlngPair[0],
+                            lng: latlngPair[1]
+                          })}
+                          target='blank'
+                          className='flex items-center gap-2 py-3'
+                        >
+                          <MapPinIcon className='w-5 h-5' />
+                          <span className='mt-0.5'>
+                            <b>LAT,LNG</b>&nbsp;
+                            <span className='link-dotted'>
+                              {latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}
+                            </span>
+                          </span>
+                        </a>
+                        <ArticleLastUpdate
+                          updatedAt={updatedAt}
+                          updatedBy={updatedBy}
+                          createdAt={createdAt}
+                          createdBy={createdBy}
+                        />
+                      </div>
+                    )
+                  )}
 
               {editMode && (
                 <div className='fadeinEffect'>
