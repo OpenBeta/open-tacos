@@ -1,11 +1,12 @@
 import { gql } from '@apollo/client'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
-import { AreaType, TickType, HybridMediaTag, MediaByAuthor, CountrySummaryType, MediaWithTags } from '../types'
+import { AreaType, ClimbType, TickType, HybridMediaTag, MediaByAuthor, CountrySummaryType, MediaWithTags } from '../types'
 import { graphqlClient } from './Client'
 import { CORE_CRAG_FIELDS, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
 import { QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA } from './gql/tags'
 import { QUERY_USER_MEDIA } from './gql/users'
+import { QUERY_CLIMB_BY_ID } from './gql/climbById'
 
 interface CragsDetailsNearType {
   data: AreaType[] // Should use Omit or Pick
@@ -207,12 +208,28 @@ export const getAllCountries = async (): Promise<CountrySummaryType[]> => {
   return []
 }
 
-export const getUserMedia = async (userUuid: string): Promise<MediaWithTags[]> => {
-  const res = await graphqlClient.query<{ getUserMedia: MediaWithTags[] }, { userUuid: string }>({
+export const getUserMedia = async (userUuid: string, limit = 1000): Promise<MediaWithTags[]> => {
+  const res = await graphqlClient.query<{ getUserMedia: MediaWithTags[] }, { userUuid: string, limit: number }>({
     query: QUERY_USER_MEDIA,
     variables: {
-      userUuid
+      userUuid,
+      limit
     }
   })
   return res.data.getUserMedia
+}
+
+/**
+ * Get climb by id
+ * @param id climb id as string in uuid v4 format
+ */
+export const getClimbById = async (id: string): Promise<ClimbType> => {
+  const res = await graphqlClient.query<{ climb: ClimbType }, { id: string }>({
+    query: QUERY_CLIMB_BY_ID,
+    variables: {
+      id
+    },
+    fetchPolicy: 'no-cache'
+  })
+  return res.data.climb
 }

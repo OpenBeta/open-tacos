@@ -65,7 +65,7 @@ export type Climb = EditMetadataType & {
   }
   ancestors: string[]
   pathTokens: string[]
-  media: MediaBaseTag[]
+  media: MediaWithTags[]
   parent: AreaType
 }
 
@@ -235,6 +235,7 @@ export interface MarkerStateType {
  */
 
 export interface MediaMetadata {
+  username?: string
   mediaUrl: string
   width: number
   height: number

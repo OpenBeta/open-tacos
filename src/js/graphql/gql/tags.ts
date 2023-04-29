@@ -38,6 +38,25 @@ export const FRAGMENT_AREA_TAG = gql`
     }
   }`
 
+export const FRAGMENT_MEDIA_WITH_TAGS = gql`
+ fragment MediaWithTagsFields on MediaWithTags {
+    username
+    mediaUrl
+    width
+    height
+    birthTime
+    climbTags {
+      id
+      name
+      type
+    }
+    areaTags {
+      id
+      name
+      type
+    }
+  }`
+
 export interface SetTagType {
   mediaUuid: string
   mediaUrl: string

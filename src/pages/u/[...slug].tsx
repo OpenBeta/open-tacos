@@ -1,6 +1,5 @@
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
-import { Dictionary } from 'underscore'
 import dynamic from 'next/dynamic'
 
 import Layout from '../../components/layout'
@@ -90,13 +89,6 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
 export default UserHomePage
 
 export async function getStaticPaths (): Promise<any> {
-  // let paths: any = []
-  // try {
-  //   const users = await getAllUsersMetadata()
-  //   paths = users.map(user => ({ params: { slug: [user.user_metadata.nick] } }))
-  // } catch (e) {
-  //   console.log('Warning: Error fetching user metadata from Auth provider.  User profile pages will not be pre-generated at build time.')
-  // }
   return {
     paths: [],
     fallback: true

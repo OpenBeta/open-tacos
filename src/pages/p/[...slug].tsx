@@ -1,53 +1,47 @@
 import { NextPage, GetStaticProps } from 'next'
-import { useRouter } from 'next/router'
-import { groupBy, Dictionary } from 'underscore'
-import dynamic from 'next/dynamic'
+// import { useRouter } from 'next/router'
+// import dynamic from 'next/dynamic'
 
-import Layout from '../../components/layout'
-import SeoTags from '../../components/SeoTags'
-import { getTagsByMediaId } from '../../js/graphql/api'
-import { getUserImages, getFileInfo } from '../../js/sirv/SirvClient'
-import { IUserProfile, MediaType, HybridMediaTag } from '../../js/types'
+// import Layout from '../../components/layout'
+// import SeoTags from '../../components/SeoTags'
+// import { getUserMedia } from '../../js/graphql/api'
+// import { getUserImages, getFileInfo } from '../../js/sirv/SirvClient'
+import { IUserProfile, MediaWithTags } from '../../js/types'
 import { getUserProfileByNick } from '../../js/auth/ManagementClient'
-import usePermissions from '../../js/hooks/auth/usePermissions'
-import { useUserProfileSeo } from '../../js/hooks/seo'
-import useMediaDataStore from '../../js/hooks/useMediaDS'
-import type { UserSingleImageViewProps } from '../../components/media/UserSingleImageView'
+// import usePermissions from '../../js/hooks/auth/usePermissions'
+// import { useUserProfileSeo } from '../../js/hooks/seo'
+// import type { UserSingleImageViewProps } from '../../components/media/UserSingleImageView'
 
 interface UserSinglePostViewProps {
   uid: string
   postId: string | null
-  serverMainMedia: MediaType | null
-  serverMediaList: MediaType[]
-  serverTagMap: Dictionary<HybridMediaTag[]>
+  serverMediaList: MediaWithTags[]
   userProfile: IUserProfile
 }
 
-const UserSinglePostView: NextPage<UserSinglePostViewProps> = ({ uid, postId = null, serverMediaList, serverTagMap, userProfile, serverMainMedia }) => {
-  const router = useRouter()
-  const auth = usePermissions({ ownerProfileOnPage: userProfile })
+const UserSinglePostView: NextPage<UserSinglePostViewProps> = ({ uid, postId = null, serverMediaList, userProfile }) => {
+  // const router = useRouter()
+  // const auth = usePermissions({ ownerProfileOnPage: userProfile })
 
-  const { isAuthorized } = auth
+  // const { isAuthorized } = auth
 
-  const { mediaList, tagMap } = useMediaDataStore({ isAuthorized, uid, serverMediaList, serverTagMap })
+  // const { author, pageTitle, pageImages } = useUserProfileSeo({
+  //   username: uid,
+  //   fullName: userProfile?.name,
+  //   imageList: serverMediaList
+  // })
 
-  const { author, pageTitle, pageImages } = useUserProfileSeo({
-    username: uid,
-    fullName: userProfile?.name,
-    imageList: serverMediaList
-  })
-
-  const { isFallback } = router
+  // const { isFallback } = router
 
   return (
     <>
-      <SeoTags
+      {/* <SeoTags
         description='Share your climbing adventure photos and contribute to the Wiki.'
         title={pageTitle}
-        images={serverMainMedia?.filename != null ? [serverMainMedia.filename] : pageImages}
+        images={serverMediaList?.filename != null ? [serverMainMedia.filename] : pageImages}
         author={author}
-      />
-
+      /> */}
+      {/*
       <Layout
         contentContainerClass='content-default with-standard-y-margin'
         showFilterBar={false}
@@ -69,7 +63,7 @@ const UserSinglePostView: NextPage<UserSinglePostViewProps> = ({ uid, postId = n
             </div>
           )}
         </div>
-      </Layout>
+      </Layout> */}
     </>
 
   )
@@ -85,7 +79,7 @@ export async function getStaticPaths (): Promise<any> {
 
 export const getStaticProps: GetStaticProps<UserSinglePostViewProps, {slug: string[]}> = async ({ params }) => {
   const uid = params?.slug?.[0] ?? null
-  const postId = params?.slug?.[1] ?? null
+  // const postId = params?.slug?.[1] ?? null
 
   if (uid == null) {
     return { notFound: true }
@@ -98,37 +92,21 @@ export const getStaticProps: GetStaticProps<UserSinglePostViewProps, {slug: stri
       throw new Error('Bad user profile data')
     }
 
-    const { uuid } = userProfile
-    const filename = postId != null ? `/u/${uuid}/${postId}` : null
+    // const { uuid } = userProfile
+    // const filename = postId != null ? `/u/${uuid}/${postId}` : null
 
-    let mainMedia: MediaType | null = null
-    if (filename != null) {
-      mainMedia = await getFileInfo(uuid, filename)
-    }
+    // const list = await getUserMedia(uuid, 4)
 
-    const { mediaList, mediaIdList } = await getUserImages(uuid, 100)
-
-    let tagsByMediaId: Dictionary<HybridMediaTag[]> = {}
-
-    if (mediaList.length > 0) {
-      if (mainMedia?.mediaId != null) {
-        mediaIdList.push(mainMedia?.mediaId)
-      }
-      const tagArray = await getTagsByMediaId(mediaIdList)
-      tagsByMediaId = groupBy(tagArray, 'mediaUuid')
-    }
-
-    const data = {
-      uid,
-      postId,
-      serverMainMedia: mainMedia,
-      serverMediaList: mediaList,
-      serverTagMap: tagsByMediaId,
-      userProfile
-    }
+    // const data = {
+    //   uid,
+    //   postId,
+    //   serverMediaList: [],
+    //   userProfile
+    // }
     return {
-      props: data,
-      revalidate: 120
+      notFound: true // Just direct to a 404.  I'll fix this in another PR.
+      // props: data,
+      // revalidate: 120
     }
   } catch (e) {
     console.log('Error in getStaticProps()', e)
@@ -139,8 +117,8 @@ export const getStaticProps: GetStaticProps<UserSinglePostViewProps, {slug: stri
   }
 }
 
-const DynamicUserFeatureImageview = dynamic<UserSingleImageViewProps>(
-  async () =>
-    await import('../../components/media/UserSingleImageView').then(
-      module => module.default), { ssr: true }
-)
+// const DynamicUserFeatureImageview = dynamic<UserSingleImageViewProps>(
+//   async () =>
+//     await import('../../components/media/UserSingleImageView').then(
+//       module => module.default), { ssr: true }
+// )

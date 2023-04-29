@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 
 import { checkUsername } from './utils'
 import { httpClient as cdnHttpClient } from './cdn/cdnClient'

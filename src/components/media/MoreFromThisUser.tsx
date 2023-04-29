@@ -1,17 +1,14 @@
-import { Dictionary } from 'underscore'
-
-import { MediaType, HybridMediaTag } from '../../js/types'
+import { MediaWithTags } from '../../js/types'
 import UserMedia, { ImagePlaceholder } from './UserMedia'
 import { ProfileATag } from '../users/PublicProfile'
 
 interface MoreFromThisUserProps {
   loaded: boolean
   uid: string
-  mediaList?: MediaType[]
-  tagMap: Dictionary<HybridMediaTag[]>
+  mediaList: MediaWithTags[]
 }
 
-export default function MoreFromThisUser ({ loaded, uid, mediaList = [], tagMap = {} }: MoreFromThisUserProps): JSX.Element {
+export default function MoreFromThisUser ({ loaded, uid, mediaList = [] }: MoreFromThisUserProps): JSX.Element {
   return (
     <>
       <div className='block xl:grid xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4 with-standard-y-margin-2x'>
@@ -30,13 +27,11 @@ export default function MoreFromThisUser ({ loaded, uid, mediaList = [], tagMap 
             <ImagePlaceholder uniqueKey='more-4' />
           </>)}
         {mediaList.map((mediaInfo, index) => {
-          const tags = tagMap?.[mediaInfo.mediaId] ?? []
           return (
             <UserMedia
               index={index}
-              key={mediaInfo.mediaId}
+              key={mediaInfo.mediaUrl}
               uid={uid}
-              tagList={tags}
               mediaWithTags={mediaInfo}
               isAuthorized={false}
             />
