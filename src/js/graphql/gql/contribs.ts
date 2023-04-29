@@ -99,6 +99,7 @@ export const FRAGMENT_CHANGE_HISTORY = gql`
         updatedFields
       }
       fullDocument {
+        __typename
         ... on Area {
           areaName
           uuid
@@ -111,6 +112,9 @@ export const FRAGMENT_CHANGE_HISTORY = gql`
           id
           name
           uuid
+        }
+        ... on Organization {
+          displayName
         }
       }
     }

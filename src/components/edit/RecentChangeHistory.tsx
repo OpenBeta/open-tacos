@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { PlusIcon, UserCircleIcon, MinusIcon, PencilIcon, PencilSquareIcon, MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
 
-import { ChangesetType, ChangeType, AreaType, ClimbType } from '../../js/types'
+import { ChangesetType, ChangeType, AreaType, ClimbType, OrganizationType, DocumentTypeName } from '../../js/types'
 
 export interface RecentChangeHistoryProps {
   history: ChangesetType[]
@@ -43,6 +43,7 @@ const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
             <React.Fragment key={change.changeId}>
               <AreaChange {...change} />
               <ClimbChange {...change} />
+              <OrganizationChange {...change} />
             </React.Fragment>))}
         </div>
       </div>
@@ -51,7 +52,7 @@ const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
 }
 
 const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element | null => {
-  if ((fullDocument as ClimbType)?.name == null) {
+  if (fullDocument.__typeName !== DocumentTypeName.Climb) {
     return null
   }
   const { name, id } = fullDocument as ClimbType
@@ -76,9 +77,7 @@ const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: Change
 }
 
 const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element | null => {
-  // @ts-expect-error
-  // eslint-disable-next-line
-  if (fullDocument?.areaName == null) {
+  if (fullDocument.__typeName !== DocumentTypeName.Area) {
     return null
   }
   const { areaName, uuid } = fullDocument as AreaType
@@ -94,6 +93,28 @@ const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeT
           {dbOp === 'delete'
             ? <span>{areaName}</span>
             : (<Link href={url}><a className='link link-hover'>{areaName}</a></Link>)}
+        </div>
+        <div className='text-xs text-base-300'>
+          <UpdatedFields fields={updateDescription?.updatedFields} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const OrganizationChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element | null => {
+  if (fullDocument.__typeName !== DocumentTypeName.Organization) {
+    return null
+  }
+  const { displayName } = fullDocument as OrganizationType
+
+  return (
+    <div className='ml-2 flex gap-x-2'>
+      <div className='flex gap-2'>{dbOpIcon[dbOp]} <span className='badge badge-sm badge-warning'>Organization</span></div>
+
+      <div className=''>
+        <div className=''>
+          <span>{displayName}</span>
         </div>
         <div className='text-xs text-base-300'>
           <UpdatedFields fields={updateDescription?.updatedFields} />
