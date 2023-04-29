@@ -27,6 +27,10 @@ export enum SafetyType {
   X = 'X',
 }
 
+export enum OrgType {
+  LOCAL_CLIMBING_ORGANIZATION = 'LOCAL_CLIMBING_ORGANIZATION',
+}
+
 export interface ClimbMetadataType {
   lat: number
   lng: number
@@ -110,6 +114,22 @@ export interface EditMetadataType {
   updatedBy?: string
   createdAt?: number
   createdBy?: string
+}
+
+export type OrganizationType = EditMetadataType & {
+  orgId: string
+  orgType: OrgType
+  associatedAreaIds: string[]
+  excludedAreaIds: string[]
+  displayName: string
+  content: {
+    facebookLink: string
+    instagramLink: string
+    donationLink: string
+    description: string
+    website: string
+    email: string
+  }
 }
 
 export type AreaType = EditMetadataType & {
@@ -282,10 +302,20 @@ export interface UpdateDescriptionType {
   truncatedArrays?: any[]
 }
 
+export enum DocumentTypeName {
+  Area = 'Area',
+  Climb = 'Climb',
+  Organization = 'Organization',
+}
+
+export interface WithDocumentTypeName {
+  __typeName: DocumentTypeName
+}
+
 export interface ChangeType {
   dbOp: string
   changeId: string
-  fullDocument: AreaType | ClimbType
+  fullDocument: (AreaType | ClimbType | OrganizationType) & WithDocumentTypeName
   updateDescription: UpdateDescriptionType
 }
 
