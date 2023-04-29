@@ -37,7 +37,7 @@ export default function MoreFromThisUser ({ loaded, uid, mediaList = [], tagMap 
               key={mediaInfo.mediaId}
               uid={uid}
               tagList={tags}
-              imageInfo={mediaInfo}
+              mediaWithTags={mediaInfo}
               isAuthorized={false}
             />
           )

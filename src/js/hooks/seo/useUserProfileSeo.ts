@@ -1,12 +1,12 @@
 import { shuffle } from 'underscore'
 import { SIRV_CONFIG } from '../../sirv/SirvClient'
-import { MediaType } from '../../types'
+import { MediaWithTags } from '../../types'
 import { SeoHookType } from './index'
 
 interface SeoTagsHookProps {
   username?: string
   fullName?: string
-  imageList: MediaType[]
+  imageList: MediaWithTags[]
 }
 
 /**
@@ -21,9 +21,9 @@ export const useUserProfileSeo = ({ username = '', fullName = '', imageList = []
   return { author, pageTitle, pageImages }
 }
 
-const getRandomPreviewImages = (list: MediaType[]): string[] => {
+const getRandomPreviewImages = (list: MediaWithTags[]): string[] => {
   const shortList = shuffle(list.slice(0, 10))
   return shortList.slice(0, 4).map(image =>
-    (`${SIRV_CONFIG.baseUrl}${image.filename}?w=1200&ch=630&cy=center&format=jpg&q=90`)
+    (`${SIRV_CONFIG.baseUrl}${image.mediaUrl}?w=1200&ch=630&cy=center&format=jpg&q=90`)
   )
 }

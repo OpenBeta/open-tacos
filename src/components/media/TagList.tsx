@@ -2,32 +2,33 @@ import { useState, MouseEventHandler } from 'react'
 import classNames from 'classnames'
 import { TagIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { DropdownMenuItem as PrimitiveDropdownMenuItem } from '@radix-ui/react-dropdown-menu'
+import { signIn } from 'next-auth/react'
 
 import AddTag from './AddTag'
 import { DropdownMenu, DropdownContent, DropdownTrigger, DropdownItem, DropdownSeparator } from '../ui/DropdownMenu'
 import useDeleteTagBackend from '../../js/hooks/useDeleteTagBackend'
-import { HybridMediaTag, TagSource } from '../../js/types'
+import { MediaWithTags, SimpleTag } from '../../js/types'
 import Tag from './Tag'
-import { signIn } from 'next-auth/react'
 
 interface TagsProps {
-  list: HybridMediaTag[]
+  mediaWithTags: MediaWithTags
   isAuthorized?: boolean
   isAuthenticated?: boolean
   showDelete?: boolean
   showActions?: boolean
   className?: string
-  tagSource: TagSource
 }
 
 /**
  * A horizontal tag list.  The last item is a CTA.
  */
-export default function TagList ({ list, isAuthorized = false, isAuthenticated = false, showDelete = false, showActions = true, tagSource, className = '' }: TagsProps): JSX.Element | null {
+export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthenticated = false, showDelete = false, showActions = true, className = '' }: TagsProps): JSX.Element | null {
   const { onDelete } = useDeleteTagBackend()
-  if (list == null) {
+  if (mediaWithTags == null) {
     return null
   }
+
+  const { climbTags, areaTags } = mediaWithTags
 
   return (
     <div className={
@@ -37,7 +38,7 @@ export default function TagList ({ list, isAuthorized = false, isAuthenticated =
           )
           }
     >
-      {list.map((tag: HybridMediaTag) =>
+      {climbTags.concat(areaTags).map((tag: SimpleTag) =>
         <Tag
           key={`${tag.id}`}
           tag={tag}
@@ -47,7 +48,7 @@ export default function TagList ({ list, isAuthorized = false, isAuthenticated =
         />)}
       {showActions && isAuthorized &&
         <AddTag
-          tagSource={tagSource}
+          mediaWithTags={mediaWithTags}
           label={<AddTagBadge />}
         />}
       {showActions && !isAuthenticated &&
@@ -57,7 +58,7 @@ export default function TagList ({ list, isAuthorized = false, isAuthenticated =
 }
 
 interface TagListProps {
-  list: HybridMediaTag[]
+  mediaWithTags: MediaWithTags
   isAuthorized?: boolean
   children?: JSX.Element
 }
@@ -65,9 +66,10 @@ interface TagListProps {
 /**
  * Mobile-first tag list wrapped in a popup menu
  */
-export const MobilePopupTagList = ({ list, isAuthorized = false }: TagListProps): JSX.Element => {
+export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAuthorized = false }) => {
   const { onDelete } = useDeleteTagBackend()
   const [openSearch, setOpenSearch] = useState(false)
+  const { climbTags, areaTags } = mediaWithTags
   return (
     <div aria-label='tag popup'>
       <DropdownMenu>
@@ -76,7 +78,7 @@ export const MobilePopupTagList = ({ list, isAuthorized = false }: TagListProps)
         </DropdownTrigger>
         <DropdownContent align='end'>
           <>
-            {list.map((tag: HybridMediaTag) => (
+            {climbTags.concat(areaTags).map(tag => (
               <PrimitiveDropdownMenuItem key={`${tag.id}`} className='px-2 py-3'>
                 <Tag
                   tag={tag}
@@ -108,7 +110,7 @@ export const MobilePopupTagList = ({ list, isAuthorized = false }: TagListProps)
       <AddTag
         onCancel={() => setOpenSearch(false)}
         openSearch={openSearch}
-        tagSource={list[0]}
+        mediaWithTags={mediaWithTags}
         label={<div className='hidden' />}
       />
     </div>

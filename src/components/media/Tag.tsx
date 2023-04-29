@@ -3,10 +3,10 @@ import { XCircleIcon } from '@heroicons/react/20/solid'
 import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
 
 import clx from 'classnames'
-import { HybridMediaTag, MediaTagWithArea, MediaTagWithClimb, TagTargetType } from '../../js/types'
+import { HybridMediaTag, MediaTagWithArea, MediaTagWithClimb, SimpleTag, TagTargetType } from '../../js/types'
 
 interface PhotoTagProps {
-  tag: HybridMediaTag
+  tag: SimpleTag
   onDelete: (tagId: string) => void
   isAuthorized?: boolean
   showDelete?: boolean
@@ -54,24 +54,16 @@ const stopPropagation = (event): void => event.stopPropagation()
 
 /**
  * Extract entity url and name from a tag
- * @param tag HybridMediaTag
+ * @param tag
  * @returns [url, name]
  */
-export const resolver = (tag: HybridMediaTag): [string, string] | [null, null] => {
-  switch (tag.destType) {
+export const resolver = ({ id, name, type }: SimpleTag): [string, string] | [null, null] => {
+  switch (type) {
     case TagTargetType.climb: {
-      const climb = (tag as MediaTagWithClimb).climb
-      if (climb?.id == null) {
-        return [null, null]
-      }
-      return [`/climbs/${climb.id}`, climb.name]
+      return [`/climbs/${id}`, name]
     }
     case TagTargetType.area: {
-      const area = (tag as MediaTagWithArea).area
-      if (area?.uuid == null) {
-        return [null, null]
-      }
-      return [`/crag/${area.uuid}`, area.areaName]
+      return [`/crag/${id}`, name]
     }
     default: return [null, null]
   }

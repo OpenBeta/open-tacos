@@ -8,7 +8,7 @@ import clx from 'classnames'
 import UserMedia from './UserMedia'
 import MobileMediaCard from './MobileMediaCard'
 import useImageTagHelper from './useImageTagHelper'
-import { HybridMediaTag, MediaType, IUserProfile } from '../../js/types'
+import { MediaWithTags, IUserProfile } from '../../js/types'
 import UploadCTA from './UploadCTA'
 import { actions } from '../../js/stores'
 import SlideViewer from './slideshow/SlideViewer'
@@ -23,8 +23,8 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 export interface UserGalleryProps {
   uid: string
   userProfile: IUserProfile
-  initialImageList: MediaType[]
-  initialTagsByMediaId: Dictionary<HybridMediaTag[]>
+  initialImageList: MediaWithTags[]
+  // initialTagsByMediaId: Dictionary<HybridMediaTag[]>
   auth: WithPermission
   postId: string | null
 }
@@ -35,21 +35,12 @@ export interface UserGalleryProps {
  *  - remove bulk taging mode
  *  - simplify back button logic with NextJS Layout
  */
-export default function UserGallery ({ uid, postId: initialPostId, auth, userProfile, initialImageList, initialTagsByMediaId: initialTagMap }: UserGalleryProps): JSX.Element | null {
+export default function UserGallery ({ uid, postId: initialPostId, auth, userProfile, initialImageList }: UserGalleryProps): JSX.Element | null {
   const router = useRouter()
   const imageList = initialImageList
 
   const [selectedMediaId, setSlideNumber] = useState<number>(-1)
   const [tagModeOn, setTagMode] = useState<boolean>(false) // Bulk tagging
-  const [hoveredPicture, setHoveredPicture] = useState(-1)
-
-  const showTagHandler = (index: number): void => {
-    setHoveredPicture(index)
-  }
-
-  const hideTagHandler = (): void => {
-    setHoveredPicture(-1)
-  }
 
   const imageHelper = useImageTagHelper()
   const { isMobile } = useResponsive()
@@ -76,7 +67,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
   useEffect(() => {
     if (initialPostId != null) {
       // we get here when the user navigates to other pages beyond the gallery, then hits the back button
-      const found = imageList?.findIndex(entry => basename(entry.filename) === initialPostId)
+      const found = imageList?.findIndex(entry => basename(entry.mediaUrl) === initialPostId)
       if (found !== -1) {
         setSlideNumber(found)
       }
@@ -86,7 +77,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
     // Handle browser forward/back button
     if (router.asPath.length > baseUrl.length && selectedMediaId === -1) {
       const newPostId = basename(router.asPath)
-      const found = imageList?.findIndex(entry => basename(entry.filename) === newPostId)
+      const found = imageList?.findIndex(entry => basename(entry.mediaUrl) === newPostId)
       if (found !== -1) {
         setSlideNumber(found)
       }
@@ -123,7 +114,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
 
   const navigateHandler = async (newIndex: number): Promise<void> => {
     const currentImage = imageList[newIndex]
-    const pathname = `${baseUrl}/${basename(currentImage.filename)}`
+    const pathname = `${baseUrl}/${basename(currentImage.mediaUrl)}`
 
     if (selectedMediaId === -1 && newIndex !== selectedMediaId) {
       await router.push({ pathname, query: { gallery: true } }, pathname, { shallow: true })
@@ -135,7 +126,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
   }
 
   const [hasMore, setHasMore] = useState(true)
-  const [imageListToShow, setImageListToShow] = useState<MediaType[]>([])
+  const [imageListToShow, setImageListToShow] = useState<MediaWithTags[]>([])
 
   // to load more images when user scrolls to the 'scrollThreshold' value of the page
   const fetchMoreData = (): void => {
@@ -181,51 +172,41 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
       >
         <div className='flex flex-col gap-x-6 gap-y-10 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>
           {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
-          {imageListToShow?.map((imageInfo, index) => {
-            const tags = initialTagMap?.[imageInfo.mediaId] ?? []
-            const key = `${imageInfo.mediaId}${index}`
+          {imageListToShow?.map((mediaWithTags, index) => {
+            const { mediaUrl, climbTags, areaTags } = mediaWithTags
+            const key = `${mediaUrl}${index}`
             if (isMobile) {
               return (
                 <MobileMediaCard
                   key={key}
-                  tagList={tags}
+                  mediaWithTags={mediaWithTags}
                   showTagActions
                   {...auth}
                 />
               )
             }
 
-            const tagSource = {
-              mediaUrl: imageInfo.filename,
-              mediaUuid: imageInfo.mediaId
-            }
             return (
-              <div
-                className='relative' key={key}
-                onMouseOver={() => showTagHandler(index)}
-                onMouseOut={() => hideTagHandler()}
-              >
+              <div className='relative' key={key}>
                 <UserMedia
                   uid={uid}
                   index={index}
-                  tagList={tags}
-                  imageInfo={imageInfo}
+                  mediaWithTags={mediaWithTags}
                   onClick={imageOnClickHandler}
                   isAuthorized={isAuthorized && (stateRef?.current ?? false)}
                 />
                 <div
                   className={
                       clx(
-                        !isAuthorized && tags.length === 0 ? 'hidden' : '',
-                        'absolute inset-x-0 bottom-0 p-2 flex items-center opacity-90',
-                        hoveredPicture === index ? 'transition-opacity duration-300 ease-in opacity-100 bg-base-100 bg-opacity-90 visible' : 'duration-300 ease-out opacity-0 invisible'
+                        !isAuthorized && climbTags.length === 0 && areaTags.length === 0
+                          ? 'hidden'
+                          : 'absolute inset-x-0 bottom-0 p-2 flex items-center bg-base-100 bg-opacity-60'
                       )
                       }
                 >
                   <TagList
                     key={key}
-                    list={tags}
-                    tagSource={tagSource}
+                    mediaWithTags={mediaWithTags}
                     {...auth}
                     showDelete
                   />
@@ -238,12 +219,11 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
         </div>
       </InfiniteScroll>
 
-      {!isMobile &&
+      {!isMobile && selectedMediaId >= 0 &&
         <SlideViewer
           isOpen={selectedMediaId >= 0}
           initialIndex={selectedMediaId}
           imageList={imageList ?? []}
-          tagsByMediaId={initialTagMap}
           userinfo={<TinyProfile
             userProfile={userProfile} onClick={slideViewerCloseHandler}
                     />}
@@ -258,7 +238,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
 
 interface ActionToolbarProps {
   isAuthorized: boolean
-  imageList: MediaType[]
+  imageList: MediaWithTags[]
   tagModeOn: boolean
   setTagMode: Dispatch<SetStateAction<boolean>>
 }

@@ -230,8 +230,32 @@ export interface MarkerStateType {
   lnglat: number[]
 }
 
-/// /////////////////////////////////////////////
-// Media tags
+/**
+ * Media and tags
+ */
+
+export interface MediaMetadata {
+  mediaUrl: string
+  width: number
+  height: number
+  format: string
+  size: number
+  mtime: Date
+  birthTime: Date
+}
+
+export interface SimpleTag {
+  id: string
+  name: string
+  type: number
+}
+/**
+ * Media with climb & area tags
+ */
+export interface MediaWithTags extends MediaMetadata {
+  climbTags: SimpleTag[]
+  areaTags: SimpleTag[]
+}
 
 export interface MediaBaseTag {
   id: string
@@ -281,13 +305,13 @@ export enum TagTargetType {
   area = 1
 }
 
-export interface XViewStateType extends ViewState{
+export interface XViewStateType extends ViewState {
   width: number
   height: number
   bbox: BBox
 }
 
-export interface TickType{
+export interface TickType {
   _id: string
   userId: string
   name: string

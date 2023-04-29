@@ -3,7 +3,7 @@ import ContentLoader from 'react-content-loader'
 import { basename } from 'path'
 import Link from 'next/link'
 
-import { HybridMediaTag, MediaType } from '../../js/types'
+import { MediaWithTags } from '../../js/types'
 import ResponsiveImage from '../media/slideshow/ResponsiveImage'
 import { DesktopPreviewLoader } from '../../js/sirv/util'
 import RemoveImage from './RemoveImage'
@@ -11,9 +11,8 @@ import RemoveImage from './RemoveImage'
 interface UserMediaProps {
   uid: string
   index: number
-  imageInfo: MediaType
+  mediaWithTags: MediaWithTags
   onClick?: (props: any) => void
-  tagList: HybridMediaTag[]
   isAuthorized?: boolean
 }
 
@@ -24,11 +23,11 @@ interface UserMediaProps {
 export default function UserMedia ({
   index,
   uid,
-  imageInfo,
+  mediaWithTags,
   onClick,
-  tagList,
   isAuthorized = false
 }: UserMediaProps): JSX.Element {
+  const { mediaUrl, climbTags, areaTags } = mediaWithTags
   const onClickHandler = useCallback((event) => {
     if (onClick != null) {
       // we want to show URL in browser status bar and let the user open link in a new tab,
@@ -36,31 +35,33 @@ export default function UserMedia ({
       event.preventDefault()
       event.stopPropagation()
 
-      onClick({ mouseXY: [event.clientX, event.clientY], imageInfo, index })
+      onClick({ mouseXY: [event.clientX, event.clientY], mediaWithTags, index })
     }
   }, [])
 
-  const shareableUrl = `/p/${uid}/${basename(imageInfo.filename)}`
+  const shareableUrl = `/p/${uid}/${basename(mediaUrl)}`
 
+  const canRemoveImage = climbTags.length === 0 && areaTags.length === 0 && isAuthorized
   return (
     <figure
-      key={imageInfo.filename}
+      key={mediaUrl}
       className='block relative rounded-box overflow-hidden hover:shadow transition w-[300px] h-[300px] hover:brightness-75'
 
     >
       <Link href={shareableUrl}>
         <a onClick={onClickHandler}>
           <ResponsiveImage
-            mediaUrl={imageInfo.filename}
+            mediaUrl={mediaUrl}
             isHero={index === 0}
+            isSquare
             loader={DesktopPreviewLoader}
           />
         </a>
       </Link>
 
-      {tagList?.length === 0 && isAuthorized && (
+      {canRemoveImage && (
         <div className='absolute top-0 right-0 p-1.5'>
-          <RemoveImage imageInfo={imageInfo} tagCount={tagList?.length ?? 0} />
+          <RemoveImage imageInfo={mediaWithTags} />
         </div>
       )}
     </figure>

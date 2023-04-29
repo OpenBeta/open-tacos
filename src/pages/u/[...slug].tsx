@@ -1,36 +1,34 @@
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
-import { groupBy, Dictionary } from 'underscore'
+import { Dictionary } from 'underscore'
 import dynamic from 'next/dynamic'
 
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
-import { getTagsByMediaId } from '../../js/graphql/api'
-import { getUserImages } from '../../js/sirv/SirvClient'
-import { IUserProfile, MediaType, HybridMediaTag } from '../../js/types'
+import { getUserMedia } from '../../js/graphql/api'
+import { IUserProfile, MediaWithTags } from '../../js/types'
 import PublicProfile from '../../components/users/PublicProfile'
 import { getUserProfileByNick } from '../../js/auth/ManagementClient'
 import usePermissions from '../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../js/hooks/seo'
-import useMediaDataStore from '../../js/hooks/useMediaDS'
+// import useMediaDataStore from '../../js/hooks/useMediaDS'
 import type { UserGalleryProps } from '../../components/media/UserGallery'
 
 interface UserHomeProps {
   uid: string
   postId: string | null
-  serverMediaList: MediaType[]
-  serverTagMap: Dictionary<HybridMediaTag[]>
+  serverMediaList: MediaWithTags[]
   userProfile: IUserProfile
 }
 
-const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMediaList, serverTagMap, userProfile }) => {
+const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMediaList, userProfile }) => {
   const router = useRouter()
 
   const auth = usePermissions({ ownerProfileOnPage: userProfile })
 
   const { isAuthorized } = auth
 
-  const { mediaList, tagMap } = useMediaDataStore({ isAuthorized, uid, serverMediaList, serverTagMap })
+  // const { mediaList } = useMediaDataStore({ isAuthorized, uid, serverMediaList })
 
   const { author, pageTitle, pageImages } = useUserProfileSeo({
     username: uid,
@@ -61,7 +59,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
             <div className='flex justify-center mt-8 text-secondary text-sm whitespace-normal px-4 lg:px-0'>
               <div className='border rounded-md px-6 py-2 shadow'>
                 <ul className='list-disc'>
-                  <li>Please upload 3 photos to complete your profile {mediaList?.length >= 3 && <span>&#10004;</span>}</li>
+                  <li>Please upload 3 photos to complete your profile {serverMediaList?.length >= 3 && <span>&#10004;</span>}</li>
                   <li>Upload only your own photos</li>
                   <li>Keep it <b>Safe For Work</b> and climbing-related</li>
                 </ul>
@@ -75,8 +73,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
             uid={uid}
             postId={postId}
             userProfile={userProfile}
-            initialImageList={mediaList}
-            initialTagsByMediaId={tagMap}
+            initialImageList={serverMediaList}
           />
 
           {!isAuthorized && !isFallback && (
@@ -134,18 +131,12 @@ export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> =
 
     const { uuid } = userProfile
 
-    const { mediaList, mediaIdList } = await getUserImages(uuid, 100)
-
-    let tagsByMediaId: Dictionary<HybridMediaTag[]> = {}
-
-    const tagArray = await getTagsByMediaId(mediaIdList)
-    tagsByMediaId = groupBy(tagArray, 'mediaUuid')
+    const list = await getUserMedia(uuid)
 
     const data = {
       uid,
       postId,
-      serverMediaList: mediaList,
-      serverTagMap: tagsByMediaId,
+      serverMediaList: list,
       userProfile
     }
     return {

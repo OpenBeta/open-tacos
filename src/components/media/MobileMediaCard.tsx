@@ -2,26 +2,28 @@
 import Card from '../ui/Card/Card'
 import TagList, { MobilePopupTagList } from './TagList'
 import { MobileLoader } from '../../js/sirv/util'
-import { HybridMediaTag } from '../../js/types'
+import { MediaWithTags } from '../../js/types'
 import { getUploadDateSummary } from '../../js/utils'
 
 const MOBILE_IMAGE_MAX_WIDITH = 914
 
 interface MobileMediaCardProps {
   header?: JSX.Element
-  tagList: HybridMediaTag[]
+  mediaWithTags: MediaWithTags
   showTagActions?: boolean
   isAuthorized?: boolean
   isAuthenticated?: boolean
 }
 
-export default function MobileMediaCard ({ header, showTagActions = false, isAuthorized = false, isAuthenticated = false, tagList }: MobileMediaCardProps): JSX.Element {
+export default function MobileMediaCard ({ header, showTagActions = false, isAuthorized = false, isAuthenticated = false, mediaWithTags }: MobileMediaCardProps): JSX.Element {
+  const { mediaUrl, areaTags, climbTags, birthTime } = mediaWithTags
+  const tagCount = areaTags.length + climbTags.length
   return (
     <Card
       header={header}
       image={<img
         src={MobileLoader({
-          src: tagList[0].mediaUrl,
+          src: mediaUrl,
           width: MOBILE_IMAGE_MAX_WIDITH
         })}
         width={MOBILE_IMAGE_MAX_WIDITH}
@@ -30,25 +32,24 @@ export default function MobileMediaCard ({ header, showTagActions = false, isAut
       imageActions={
         <section className='flex items-center justify-between'>
           <div>&nbsp;</div>
-          <MobilePopupTagList list={tagList} isAuthorized={isAuthorized} />
+          <MobilePopupTagList mediaWithTags={mediaWithTags} isAuthorized={isAuthorized} />
         </section>
       }
       body={
         <>
           <section className='-mt-2'>
-            {tagList?.length > 0 &&
+            {tagCount > 0 &&
             (
               <TagList
-                list={tagList}
+                mediaWithTags={mediaWithTags}
                 showActions={showTagActions}
                 isAuthorized={isAuthorized}
                 isAuthenticated={isAuthenticated}
-                tagSource={tagList[0]}
               />
             )}
           </section>
           <section className='mt-2 uppercase text-base-300 text-xs' aria-label='timestamp'>
-            {getUploadDateSummary(tagList[0].birthTime)}
+            {getUploadDateSummary(birthTime)}
           </section>
         </>
       }
