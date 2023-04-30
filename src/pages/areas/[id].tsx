@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 
-import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
+import { AreaType, ChangesetType } from '../../js/types'
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
@@ -17,7 +17,6 @@ import AreaEditTrigger from '../../components/edit/AreaEditTrigger'
 interface AreaPageProps {
   area: AreaType
   history: ChangesetType[]
-  mediaListWithUsernames: MediaBaseTag[]
 }
 
 /**
@@ -47,7 +46,7 @@ const Area: NextPage<AreaPageProps> = (props) => {
 
 export default Area
 
-const Body = ({ area, mediaListWithUsernames: enhancedMediaList, history }: AreaPageProps): JSX.Element => {
+const Body = ({ area, history }: AreaPageProps): JSX.Element => {
   const [focused, setFocused] = useState<null | string>(null)
   const [selected, setSelected] = useState<null | string>(null)
   const navbarOffset = getNavBarOffset()
@@ -82,7 +81,7 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList, history }: Area
           <div className='pt-4'>
             <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
             <div className='mt-4' />
-            <PhotoMontage isHero photoList={enhancedMediaList} />
+            <PhotoMontage isHero photoList={area.media} />
           </div>
           <div className='mt-4 md:flex md:justify-end'>
             <AreaEditTrigger {...area} history={history} />
@@ -147,8 +146,8 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
 /**
  * Generate dynamic meta tags for page
  */
-export const PageMeta = ({ area, mediaListWithUsernames }: AreaPageProps): JSX.Element => {
-  const { pageImages, pageTitle, pageDescription } = useAreaSeo({ area, imageList: mediaListWithUsernames })
+export const PageMeta = ({ area }: AreaPageProps): JSX.Element => {
+  const { pageImages, pageTitle, pageDescription } = useAreaSeo({ area })
   return (
     <SeoTags
       title={pageTitle}

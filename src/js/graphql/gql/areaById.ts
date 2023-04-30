@@ -1,9 +1,11 @@
 import { gql } from '@apollo/client'
 
 import { FRAGMENT_CHANGE_HISTORY } from './contribs'
+import { FRAGMENT_MEDIA_WITH_TAGS } from './tags'
 
 export const QUERY_AREA_BY_ID = gql`
   ${FRAGMENT_CHANGE_HISTORY}
+  ${FRAGMENT_MEDIA_WITH_TAGS}
   query ($uuid: ID) {
     area(uuid: $uuid) {
       id
@@ -11,13 +13,7 @@ export const QUERY_AREA_BY_ID = gql`
       areaName
       gradeContext
       media {
-        username
-        mediaUrl
-        mediaUuid
-        destination
-        destType
-        width
-        height
+        ... MediaWithTagsFields
       }
       totalClimbs
       aggregate {

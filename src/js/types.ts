@@ -148,7 +148,7 @@ export type AreaType = EditMetadataType & {
   }
   children: AreaType[]
   climbs: Climb[]
-  media: MediaBaseTag[]
+  media: MediaWithTags[]
   gradeContext: GradeContextType
 }
 
