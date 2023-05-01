@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { formatDistanceToNow } from 'date-fns'
 import { useSession, signIn } from 'next-auth/react'
-import { OrganizationContentType, OrganizationType } from '../../js/types'
+import { OrganizationType } from '../../js/types'
 import { orgsToCsv, saveAsCSVFile } from '../../js/utils/csv'
 import CreateUpdateModal from './CreateUpdateModal'
 import OrganizationForm from './OrganizationForm'
@@ -114,7 +114,7 @@ interface OrgRowProps {
 const OrgRow = ({ index, org, updateOrg }: OrgRowProps): JSX.Element => {
   // eslint-disable-next-line
   const { displayName, orgType, orgId, content, createdAt, updatedAt } = org
-  const { email } = content as OrganizationContentType
+  const { email } = content ?? {}
 
   return (
     <>

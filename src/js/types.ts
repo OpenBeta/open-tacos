@@ -109,10 +109,6 @@ export interface AggregateType {
 
 }
 
-export enum OrgType {
-  LOCAL_CLIMBING_ORGANIZATION = 'LOCAL_CLIMBING_ORGANIZATION'
-}
-
 export type OrganizationType =
   EditMetadataType & {
     orgId: string
@@ -132,16 +128,10 @@ export interface OrganizationContentType {
   description?: string
 }
 
-export interface OrganizationEditableFieldsType {
+export interface OrganizationEditableFieldsType extends OrganizationContentType {
   displayName?: string
   associatedAreaIds?: string[]
   excludedAreaIds?: string[]
-  website?: string
-  email?: string
-  donationLink?: string
-  instagramLink?: string
-  facebookLink?: string
-  description?: string
 }
 
 export interface EditMetadataType {
@@ -149,22 +139,6 @@ export interface EditMetadataType {
   updatedBy?: string
   createdAt?: number
   createdBy?: string
-}
-
-export type OrganizationType = EditMetadataType & {
-  orgId: string
-  orgType: OrgType
-  associatedAreaIds: string[]
-  excludedAreaIds: string[]
-  displayName: string
-  content: {
-    facebookLink: string
-    instagramLink: string
-    donationLink: string
-    description: string
-    website: string
-    email: string
-  }
 }
 
 export type AreaType = EditMetadataType & {

@@ -13,6 +13,7 @@ import {
   UpdateOrganizationProps
 } from '../../js/graphql/gql/organization'
 import { toast } from 'react-toastify'
+import { validate as uuidValidate } from 'uuid'
 
 const DISPLAY_NAME_FORM_VALIDATION_RULES: RulesType = {
   required: 'A display name is required.',
@@ -22,19 +23,9 @@ const DISPLAY_NAME_FORM_VALIDATION_RULES: RulesType = {
   }
 }
 
-/**
- * Detects if string is in uuid-mongodb's "relaxed" hex format.
- * @param s input string
- * @returns
- */
-const isMuuidHexStr = (s: string): boolean => {
-  const regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
-  return regex.test(s)
-}
-
 const MUUID_VALIDATION = {
   validate: (value: string) => {
-    return conjoinedStringToArray(value).every(isMuuidHexStr) || 'Expected comma-separated MUUID hex strings eg. 49017dad-7baf-5fde-8078-f3a4b1230bbb, 88352d11-eb85-5fde-8078-889bb1230b11...'
+    return conjoinedStringToArray(value).every(uuidValidate) || 'Expected comma-separated MUUID hex strings eg. 49017dad-7baf-5fde-8078-f3a4b1230bbb, 88352d11-eb85-5fde-8078-889bb1230b11...'
   }
 }
 
@@ -61,36 +52,46 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
     MUTATION_ADD_ORGANIZATION, {
       client: graphqlClient,
       onError: (error) => toast.error(`Unexpected error: ${error.message}`),
-      refetchQueries: [{ query: QUERY_ORGANIZATIONS }]
+      refetchQueries: [{
+        query: QUERY_ORGANIZATIONS,
+        variables: {
+          sort: { updatedAt: -1 },
+          limit: 20
+        }
+      }]
     }
   )
   const [updateOrganization] = useMutation<{ updateOrganization: OrganizationType }, { input: UpdateOrganizationProps }>(
     MUTATION_UPDATE_ORGANIZATION, {
       client: graphqlClient,
       onError: (error) => toast.error(`Unexpected error: ${error.message}`),
-      refetchQueries: [{ query: QUERY_ORGANIZATIONS }]
+      refetchQueries: [{
+        query: QUERY_ORGANIZATIONS,
+        variables: {
+          sort: { updatedAt: -1 },
+          limit: 20
+        }
+      }]
     }
   )
   // React-hook-form declaration
   const form = useForm<HtmlFormProps>({
     mode: 'onBlur',
-    defaultValues: existingOrg == null
-      ? {}
-      : {
-          displayName: existingOrg.displayName,
-          orgType: existingOrg.orgType,
-          conjoinedAssociatedAreaIds: existingOrg.associatedAreaIds?.join(', '),
-          conjoinedExcludedAreaIds: existingOrg.excludedAreaIds?.join(', '),
-          description: existingOrg.content?.description,
-          website: existingOrg.content?.website,
-          email: existingOrg.content?.email,
-          instagramLink: existingOrg.content?.instagramLink,
-          donationLink: existingOrg.content?.donationLink,
-          facebookLink: existingOrg.content?.facebookLink
-        }
+    defaultValues: {
+      displayName: existingOrg?.displayName ?? '',
+      orgType: existingOrg?.orgType ?? OrgType.LOCAL_CLIMBING_ORGANIZATION,
+      conjoinedAssociatedAreaIds: existingOrg?.associatedAreaIds?.join(', ') ?? '',
+      conjoinedExcludedAreaIds: existingOrg?.excludedAreaIds?.join(', ') ?? '',
+      description: existingOrg?.content?.description ?? '',
+      website: existingOrg?.content?.website ?? '',
+      email: existingOrg?.content?.email ?? '',
+      instagramLink: existingOrg?.content?.instagramLink ?? '',
+      donationLink: existingOrg?.content?.donationLink ?? '',
+      facebookLink: existingOrg?.content?.facebookLink ?? ''
+    }
   })
 
-  const { handleSubmit, formState: { isSubmitting } } = form
+  const { handleSubmit, formState: { isSubmitting, dirtyFields } } = form
 
   /**
    * Routes to addOrganization or updateOrganization GraphQL calls
@@ -98,29 +99,34 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
    * @param formProps Data populated by the user in the form
    * @returns
    */
-  const submitHandler = async (formProps: HtmlFormProps): Promise<void> => {
-    if (existingOrg === null) {
-      if (formProps.displayName == null) {
-        console.error('`displayName` cannot be null when creating organization.')
-        return
+  const submitHandler = async ({
+    orgType,
+    displayName,
+    conjoinedAssociatedAreaIds,
+    conjoinedExcludedAreaIds,
+    website,
+    email,
+    donationLink,
+    facebookLink,
+    instagramLink,
+    description
+  }: HtmlFormProps): Promise<void> => {
+    const dirtyEditableFields: OrganizationEditableFieldsType = {
+      ...dirtyFields?.displayName === true && { displayName },
+      ...dirtyFields?.conjoinedAssociatedAreaIds === true && { associatedAreaIds: conjoinedStringToArray(conjoinedAssociatedAreaIds) },
+      ...dirtyFields?.conjoinedExcludedAreaIds === true && { excludedAreaIds: conjoinedStringToArray(conjoinedExcludedAreaIds) },
+      ...dirtyFields?.website === true && { website },
+      ...dirtyFields?.email === true && { email },
+      ...dirtyFields?.donationLink === true && { donationLink },
+      ...dirtyFields?.facebookLink === true && { facebookLink },
+      ...dirtyFields?.instagramLink === true && { instagramLink },
+      ...dirtyFields?.description === true && { description }
+    }
+    if (existingOrg == null) {
+      const input: AddOrganizationProps = {
+        orgType,
+        ...dirtyEditableFields
       }
-      if (formProps.orgType == null) {
-        console.error('`orgType` cannot be null when creating organization.')
-        return
-      }
-      const input = removeNullUndefined({
-        orgType: formProps.orgType,
-        displayName: formProps.displayName,
-        associatedAreaIds: conjoinedStringToArray(formProps.conjoinedAssociatedAreaIds),
-        excludedAreaIds: conjoinedStringToArray(formProps.conjoinedExcludedAreaIds),
-        website: formProps.website,
-        email: formProps.email,
-        donationLink: formProps.donationLink,
-        instagramLink: formProps.instagramLink,
-        facebookLink: formProps.facebookLink,
-        description: formProps.description
-      }) as AddOrganizationProps
-      console.log('create', input)
       await addOrganization({
         variables: { input },
         context: {
@@ -130,19 +136,10 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
         }
       })
     } else {
-      const input = removeNullUndefined({
+      const input: UpdateOrganizationProps = {
         orgId: existingOrg.orgId,
-        displayName: formProps.displayName,
-        associatedAreaIds: conjoinedStringToArray(formProps.conjoinedAssociatedAreaIds),
-        excludedAreaIds: conjoinedStringToArray(formProps.conjoinedExcludedAreaIds),
-        website: formProps.website,
-        email: formProps.email,
-        donationLink: formProps.donationLink,
-        instagramLink: formProps.instagramLink,
-        facebookLink: formProps.facebookLink,
-        description: formProps.description
-      }) as UpdateOrganizationProps
-      console.log('update', input)
+        ...dirtyEditableFields
+      }
       await updateOrganization({
         variables: { input },
         context: {
@@ -181,7 +178,7 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
               placeholder='Climbing Org'
               registerOptions={DISPLAY_NAME_FORM_VALIDATION_RULES}
             />
-            {existingOrg === null &&
+            {existingOrg == null &&
               <Select
                 label='Organization Type:'
                 name='orgType'
@@ -245,12 +242,6 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
         </FormProvider>
       </div>
     </div>
-  )
-}
-
-function removeNullUndefined (obj: {[s: string]: any}): {[s: string]: NonNullable<any>} {
-  return Object.fromEntries(
-    Object.entries(obj).filter(([_, v]) => v != null)
   )
 }
 

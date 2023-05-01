@@ -52,4 +52,6 @@ export interface AddOrganizationProps extends OrganizationEditableFieldsType {
   orgType: OrgType
 }
 
-export interface UpdateOrganizationProps extends OrganizationEditableFieldsType {}
+export interface UpdateOrganizationProps extends OrganizationEditableFieldsType {
+  orgId: string
+}
