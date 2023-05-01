@@ -3,6 +3,7 @@ import clx from 'classnames'
 
 interface InputProps {
   label: string
+  labelAlt?: string
   name: string
   placeholder?: string
   registerOptions?: RegisterOptions
@@ -15,7 +16,7 @@ interface InputProps {
   rows?: number
 }
 
-export default function TextArea ({ label, name, rows = 5, registerOptions, placeholder = '', className = '', classDefault = INPUT_DEFAULT_CSS, helper, formContext, disabled = false, readOnly = false }: InputProps): JSX.Element {
+export default function TextArea ({ label, labelAlt, name, rows = 5, registerOptions, placeholder = '', className = '', classDefault = INPUT_DEFAULT_CSS, helper, formContext, disabled = false, readOnly = false }: InputProps): JSX.Element {
   const context = formContext == null ? useFormContext() : formContext
   const { register, formState: { errors } } = context
   const inputProps = register(name, registerOptions)
@@ -24,6 +25,7 @@ export default function TextArea ({ label, name, rows = 5, registerOptions, plac
     <div className='form-control'>
       <label className='label' htmlFor={name}>
         <span className='label-text font-semibold'>{label}</span>
+        {labelAlt != null && <span className='label-text-alt'>{labelAlt}</span>}
       </label>
       <textarea
         id={name}

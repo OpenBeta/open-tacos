@@ -6,29 +6,43 @@ function classNames (...classes): string {
   return classes.filter(Boolean).join(' ')
 }
 
-interface ValueObj{
+export interface ValueObj{
   id: number
   name: string
+  disabled?: boolean
 }
 
-interface ComboBoxProps{
+interface ComboBoxSingleProps {
   options: ValueObj[]
   value: ValueObj
   onChange: (value: ValueObj) => void
   label: string
+  selectClassName?: string
 }
-export default function ComboBox ({ options, value, onChange, label }: ComboBoxProps): JSX.Element {
+interface ComboBoxMultiProps {
+  options: ValueObj[]
+  value: ValueObj[]
+  onChange: (value: ValueObj[]) => void
+  label: string
+  multiple: true
+  selectClassName?: string
+}
+type ComboBoxProps = ComboBoxSingleProps | ComboBoxMultiProps
+
+export default function ComboBox (props: ComboBoxProps): JSX.Element {
+  const { options, value, onChange, label, selectClassName = '' } = props
   return (
-    <Listbox value={value} onChange={onChange}>
+    <Listbox value={value} onChange={onChange} multiple={'multiple' in props ? props.multiple : false}>
       {({ open }) => (
         <>
-          <Listbox.Label className='block text-sm font-medium text-gray-700 mt-2'>{label}</Listbox.Label>
+          {label !== '' && <Listbox.Label className='block text-sm font-medium text-gray-700 mt-2'>{label}</Listbox.Label>}
           <div className='mt-1 relative'>
-            <Listbox.Button className='relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'>
-              <span className='block truncate'>{value.name}</span>
-              <span className='absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none'>
-                <ChevronUpDownIcon className='h-5 w-5 text-gray-400' aria-hidden='true' />
-              </span>
+            <Listbox.Button className={selectClassName !== '' ? selectClassName : SELECT_DEFAULT_CSS}>
+              <span className='block truncate'>{Array.isArray(value) ? value.map(valueObj => valueObj.name).join(', ') : value.name}</span>
+              {selectClassName === '' && // Set icon by className
+                <span className='absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none'>
+                  <ChevronUpDownIcon className='h-5 w-5 text-gray-400' aria-hidden='true' />
+                </span>}
             </Listbox.Button>
 
             <Transition
@@ -48,6 +62,7 @@ export default function ComboBox ({ options, value, onChange, label }: ComboBoxP
                         'cursor-default select-none relative py-2 pl-8 pr-4'
                       )}
                     value={type}
+                    disabled={type.disabled}
                   >
                     {({ selected, active }) => (
                       <>
@@ -79,3 +94,5 @@ export default function ComboBox ({ options, value, onChange, label }: ComboBoxP
     </Listbox>
   )
 }
+
+const SELECT_DEFAULT_CSS = 'relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'

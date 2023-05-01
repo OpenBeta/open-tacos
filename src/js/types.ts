@@ -3,9 +3,10 @@ import { ViewState } from 'react-map-gl'
 import { BaseItem } from '@algolia/autocomplete-core'
 import { RegisterOptions } from 'react-hook-form'
 import { GradeScalesTypes } from '@openbeta/sandbag'
-import { IUserProfile } from './types/User'
+import { IUserProfile, UserRole } from './types/User'
 
 export type { IUserProfile }
+export { UserRole }
 export interface AreaMetadataType {
   leaf: boolean
   isDestination: boolean
