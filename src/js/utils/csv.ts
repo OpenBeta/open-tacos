@@ -1,12 +1,42 @@
 import { format, parseISO } from 'date-fns'
 import { saveAs } from 'file-saver'
+import { OrganizationType } from '../types'
 
 const SEPARATOR = '|'
 
 /**
  * Fields to be exported
  */
-const fields = ['email', 'created_at', 'last_login']
+const userFields = ['email', 'created_at', 'last_login']
+const orgFields = ['orgId', 'orgType', 'displayName', 'associatedAreaIds', 'excludedAreaIds', 'website', 'instagramLink', 'description', 'donationLink', 'email', 'createdAt', 'updatedAt']
+
+/**
+ * Transform an array of organization objects to CSV string
+ * @param orgs org array
+ * @returns csv
+ */
+export const orgsToCsv = (orgs: undefined | OrganizationType[]): string => {
+  if (orgs == null) return ''
+  return orgs?.map(processOrg).join('\r\n')
+}
+
+/**
+ * Extract selected fields from the organization object
+ * @param org Organization
+ * @returns csv
+ */
+const processOrg = (org: OrganizationType): string => {
+  return orgFields.map(field => {
+    let value = org?.[field] ?? ''
+    if ((field === 'createdAt' || field === 'updatedAt') && org[field] !== undefined) {
+      value = format(new Date(org[field] as number), 'P')
+    }
+    if (['website', 'donationLink', 'instagramLink', 'email', 'description'].includes(field)) {
+      value = org.content?.[field] ?? ''
+    }
+    return JSON.stringify(value, replacer) // calling JSON.stringify() to get value quoted
+  }).join(SEPARATOR)
+}
 
 /**
  * Transform an array of Auth0 user objects to CSV string
@@ -26,12 +56,12 @@ const replacer = (key, value): string => value == null ? '' : value // specify h
  * @returns csv
  */
 const processUser = (user: any): string => {
-  return fields.map(field => {
+  return userFields.map(field => {
     let value = user?.[field] ?? ''
     if (value !== '' && (field === 'created_at' || field === 'last_login')) {
       value = format(parseISO(user[field]), 'P')
     }
-    return JSON.stringify(value, replacer) // calling JSON.strigify() to get value quoted
+    return JSON.stringify(value, replacer) // calling JSON.stringify() to get value quoted
   }).join(SEPARATOR)
 }
 

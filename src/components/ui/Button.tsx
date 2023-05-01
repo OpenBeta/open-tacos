@@ -17,30 +17,31 @@ export interface LinkButtonProps {
   href: string
   children: JSX.Element | JSX.Element[] | string
   className: string
-  theRest?: any
+  linkProps?: any
+  buttonProps?: any
 }
 
 /**
  * Make URL link looks like a button.  In most cases you should try to use
  * HTML `<a href=` for external link and NextJS `Link` for client-side routing.
  */
-export const LinkButton = ({ href, children, className, theRest }: LinkButtonProps): any => {
+export const LinkButton = ({ href, children, className, linkProps, buttonProps }: LinkButtonProps): any => {
   if (href == null) {
     return null
   }
   if (href.startsWith('http')) {
     return (
-      <a href={href} {...theRest}>
-        <button className={className}>
+      <a href={href} {...linkProps}>
+        <button className={className} {...buttonProps}>
           {children}
         </button>
       </a>
     )
   }
   return (
-    <Link href={href} {...theRest}>
+    <Link href={href} {...linkProps}>
       <a>
-        <button className={className}>
+        <button className={className} {...buttonProps}>
           {children}
         </button>
       </a>

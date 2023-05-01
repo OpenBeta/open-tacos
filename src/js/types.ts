@@ -109,27 +109,36 @@ export interface AggregateType {
 
 }
 
+export type OrganizationType =
+  EditMetadataType & {
+    orgId: string
+    orgType: OrgType
+    displayName: string
+    associatedAreaIds?: string[]
+    excludedAreaIds?: string[]
+    content?: OrganizationContentType
+  }
+
+export interface OrganizationContentType {
+  website?: string
+  email?: string
+  donationLink?: string
+  instagramLink?: string
+  facebookLink?: string
+  description?: string
+}
+
+export interface OrganizationEditableFieldsType extends OrganizationContentType {
+  displayName?: string
+  associatedAreaIds?: string[]
+  excludedAreaIds?: string[]
+}
+
 export interface EditMetadataType {
   updatedAt?: number
   updatedBy?: string
   createdAt?: number
   createdBy?: string
-}
-
-export type OrganizationType = EditMetadataType & {
-  orgId: string
-  orgType: OrgType
-  associatedAreaIds: string[]
-  excludedAreaIds: string[]
-  displayName: string
-  content: {
-    facebookLink: string
-    instagramLink: string
-    donationLink: string
-    description: string
-    website: string
-    email: string
-  }
 }
 
 export type AreaType = EditMetadataType & {
