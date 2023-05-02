@@ -91,7 +91,7 @@ export const FRAGMENT_CHANGE_HISTORY = gql`
     id
     createdAt
     operation
-    editedBy
+    editedByUser
     changes {
       dbOp
       changeId
@@ -119,6 +119,14 @@ export const FRAGMENT_CHANGE_HISTORY = gql`
       }
     }
   }`
+
+export const FRAGMENT_AUTHOR_METADATA = gql`
+  fragment AuthorMetadataFields on Area {
+       createdAt
+       updatedAt
+       createdByUser
+       updatedByUser
+}`
 
 export const QUERY_RECENT_CHANGE_HISTORY = gql`
   ${FRAGMENT_CHANGE_HISTORY}

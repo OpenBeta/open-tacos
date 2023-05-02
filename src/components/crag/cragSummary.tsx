@@ -64,7 +64,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
     metadata: areaMeta, climbs, ancestors, pathTokens,
     children: childAreas,
     gradeContext,
-    createdAt, createdBy, updatedAt, updatedBy
+    authorMetadata
   } = area
 
   const { lat: initLat, lng: initLng } = areaMeta
@@ -356,7 +356,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
                             <b>LAT,LNG</b>&nbsp;<span className='link-dotted'>{latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}</span>
                           </span>
                         </a>
-                        <ArticleLastUpdate updatedAt={updatedAt} updatedBy={updatedBy} createdAt={createdAt} createdBy={createdBy} />
+                        <ArticleLastUpdate {...authorMetadata} />
                       </div>
                     )
                   )}

@@ -48,7 +48,7 @@ export type ClimbDisciplineRecord = Record<ClimbDiscipline, boolean>
 
 export type GradeValuesType = { [Key in GradeScalesTypes]?: string}
 
-export type Climb = EditMetadataType & {
+export interface Climb {
   id: string
   name: string
   fa: string
@@ -67,6 +67,7 @@ export type Climb = EditMetadataType & {
   pathTokens: string[]
   media: MediaWithTags[]
   parent: AreaType
+  authorMetadata: AuthorMetadata
 }
 
 export type ClimbType = Climb
@@ -109,14 +110,14 @@ export interface AggregateType {
 
 }
 
-export interface EditMetadataType {
-  updatedAt?: number
-  updatedBy?: string
-  createdAt?: number
-  createdBy?: string
+export interface AuthorMetadata {
+  updatedAt?: Date
+  updatedByUser?: string
+  createdAt?: Date
+  createdByUser?: string
 }
 
-export type OrganizationType = EditMetadataType & {
+export type OrganizationType = AuthorMetadata & {
   orgId: string
   orgType: OrgType
   associatedAreaIds: string[]
@@ -132,7 +133,7 @@ export type OrganizationType = EditMetadataType & {
   }
 }
 
-export type AreaType = EditMetadataType & {
+export interface AreaType {
   id: string
   uuid: string
   areaName: string
@@ -150,6 +151,7 @@ export type AreaType = EditMetadataType & {
   climbs: Climb[]
   media: MediaWithTags[]
   gradeContext: GradeContextType
+  authorMetadata: AuthorMetadata
 }
 
 export interface AreaUpdatableFieldsType {
@@ -352,7 +354,7 @@ export interface ChangeType {
 export interface ChangesetType {
   id: string
   createdAt: number
-  editedBy: string
+  editedByUser: string
   operation: string
   changes: ChangeType[]
 }
@@ -398,7 +400,7 @@ export interface FinancialBackerAccountType {
   }
 }
 
-export type CountrySummaryType = Pick<AreaType, 'areaName' | 'uuid' | 'totalClimbs' | 'updatedAt' | 'metadata'> & { metadata: Pick<AreaMetadataType, 'lat' | 'lng' | 'areaId'> }
+export type CountrySummaryType = Pick<AreaType, 'areaName' | 'uuid' | 'totalClimbs' | 'authorMetadata' | 'metadata'> & { metadata: Pick<AreaMetadataType, 'lat' | 'lng' | 'areaId'> }
 
 export interface TagsByUserType {
   userUuid: string

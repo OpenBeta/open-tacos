@@ -13,7 +13,7 @@ import ArrowVertical from '../../assets/icons/arrow-vertical.svg'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, ClimbDisciplineRecord, ClimbType, MediaWithTags, RulesType } from '../../js/types'
+import { AreaType, ClimbDisciplineRecord, ClimbType, RulesType } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
@@ -104,7 +104,7 @@ export interface ClimbEditFormProps {
 
 const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
   const {
-    id, name, fa: legacyFA, length, yds, grades, type, content, safety, metadata, ancestors, pathTokens, createdAt, createdBy, updatedAt, updatedBy,
+    id, name, fa: legacyFA, length, yds, grades, type, content, safety, metadata, ancestors, pathTokens, authorMetadata,
     parent
   } = climb
   const { climbId } = metadata
@@ -277,9 +277,9 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
                     </div>)}
                 </div>
 
-                {(createdAt != null || updatedAt != null) &&
+                {(authorMetadata.createdAt != null || authorMetadata.updatedAt != null) &&
                   <div className='mt-8  border-t border-b'>
-                    <ArticleLastUpdate createdAt={createdAt} createdBy={createdBy} updatedAt={updatedAt} updatedBy={updatedBy} />
+                    <ArticleLastUpdate {...authorMetadata} />
                   </div>}
 
                 {!editMode &&

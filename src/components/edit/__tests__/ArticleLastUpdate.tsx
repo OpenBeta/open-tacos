@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
-import { EditMetadataType } from '../../../js/types'
+import { AuthorMetadata } from '../../../js/types'
 
 jest.mock('../../../assets/icons/tree.svg', () => 'svg')
 jest.mock('../../../js/usernameUtil', () => ({
@@ -22,7 +22,7 @@ describe('Article last update', () => {
   })
 
   test('component linking to editor profiles', async () => {
-    const data: EditMetadataType = {
+    const data: AuthorMetadata = {
       createdAt: 1673595471992,
       createdBy: 'b9f8ab3b-e6e5-4467-9adb-65d91c7ebe7c',
       updatedAt: 1674761647299,

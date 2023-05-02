@@ -1,9 +1,11 @@
 import { gql } from '@apollo/client'
 
 import { FRAGMENT_MEDIA_WITH_TAGS } from './tags'
+import { FRAGMENT_AUTHOR_METADATA } from './contribs'
 
 export const QUERY_CLIMB_BY_ID = gql`
   ${FRAGMENT_MEDIA_WITH_TAGS}
+  ${FRAGMENT_AUTHOR_METADATA}
   query ClimbByUUID($id: ID) {
     climb(uuid: $id) {
       id
@@ -47,9 +49,8 @@ export const QUERY_CLIMB_BY_ID = gql`
           isBoulder
         }
       }
-      createdAt
-      createdBy
-      updatedAt
-      updatedBy
+      authorMetadata {
+        ... AreaAuthorMetadataFields
+      }
     }
   }`
