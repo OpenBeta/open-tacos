@@ -233,8 +233,7 @@ export interface MarkerStateType {
 /**
  * Media and tags
  */
-
-export interface MediaMetadata {
+export interface MediaObject {
   username?: string
   mediaUrl: string
   width: number
@@ -243,17 +242,18 @@ export interface MediaMetadata {
   size: number
   mtime: Date
   birthTime: Date
+  uploadTime: Date
 }
 
 export interface SimpleTag {
-  id: string
+  targetId: string
   name: string
   type: number
 }
 /**
  * Media with climb & area tags
  */
-export interface MediaWithTags extends MediaMetadata {
+export interface MediaWithTags extends MediaObject {
   climbTags: SimpleTag[]
   areaTags: SimpleTag[]
 }
@@ -283,9 +283,10 @@ export interface MediaTagWithArea extends MediaBaseTag {
 
 export type HybridMediaTag = MediaTagWithArea | MediaTagWithClimb
 
-export interface MediaByAuthor {
-  authorUuid: string
-  tagList: MediaBaseTag[]
+export interface MediaByUsers {
+  username: string
+  userUuid: string
+  mediaWithTags: MediaWithTags[]
 }
 export interface WithUid {
   uid: string
@@ -400,13 +401,16 @@ export interface FinancialBackerAccountType {
 export type CountrySummaryType = Pick<AreaType, 'areaName' | 'uuid' | 'totalClimbs' | 'updatedAt' | 'metadata'> & { metadata: Pick<AreaMetadataType, 'lat' | 'lng' | 'areaId'> }
 
 export interface TagsByUserType {
-  username: string | null
+  userUuid: string
+  username?: string
   total: number
 }
 
 export interface TagsLeaderboardType {
-  grandTotal: number
-  list: TagsByUserType[]
+  allTime: {
+    totalMediaWithTags: number
+    byUsers: TagsByUserType[]
+  }
 }
 
 /**

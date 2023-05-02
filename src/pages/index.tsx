@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import * as Tabs from '@radix-ui/react-tabs'
 import { gql } from '@apollo/client'
-import { groupBy, Dictionary } from 'underscore'
 import { TagIcon, LightBulbIcon, MapPinIcon, PencilIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 
@@ -12,8 +11,9 @@ import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
 import { graphqlClient } from '../js/graphql/Client'
 import { getRecentMedia } from '../js/graphql/api'
+import { FRAGMENT_MEDIA_WITH_TAGS } from '../js/graphql/gql/tags'
 
-import { HybridMediaTag, IndexResponseType } from '../js/types'
+import { IndexResponseType, MediaWithTags } from '../js/types'
 import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import RecentTaggedMedia from '../components/home/RecentMedia'
@@ -22,10 +22,10 @@ const allowedViews = ['explore', 'newTags', 'map', 'edit', 'pulse']
 
 interface HomePageType {
   exploreData: IndexResponseType
-  tagsByMedia: Dictionary<HybridMediaTag[]>
+  recentMediaWithTags: MediaWithTags[]
 }
 
-const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia }) => {
+const Home: NextPage<HomePageType> = ({ exploreData, recentMediaWithTags }) => {
   const router = useRouter()
   const [activeTab, setTab] = useState<string>('')
   const { areas } = exploreData
@@ -124,7 +124,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia }) => {
               <DynamicDenseAreas areas={areas} />
             </Tabs.Content>
             <Tabs.Content value='newTags' className='w-full'>
-              <RecentTaggedMedia tags={tagsByMedia} />
+              <RecentTaggedMedia recentMediaWithTags={recentMediaWithTags ?? []} />
             </Tabs.Content>
             <Tabs.Content value='map' className='z-0 h-full'>
               <DynamicMap />
@@ -137,7 +137,10 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia }) => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const query = gql`query UsaAreas( $filter: Filter) {
+//  ${FRAGMENT_MEDIA_WITH_TAGS}
+
+  const query = gql`
+  query UsaAreas( $filter: Filter) {
     areas(filter: $filter, sort: { totalClimbs: -1 }) {
       id
       uuid
@@ -175,10 +178,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         lng
         areaId
       }
-      media {
-        mediaUrl
-        mediaUuid
-      }
+      # media {
+      #   ... MediaWithTagsFields
+      # }
     }
   }`
 
@@ -199,20 +201,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   })
 
-  /**
-   * Inefficient queries to get recent tagged media.
-   * See https://github.com/OpenBeta/open-tacos/issues/659
-   */
-  const recentMediaList = await getRecentMedia()
+  const recentTagsByUsers = await getRecentMedia()
 
-  const recentTags = recentMediaList?.flatMap(entry => entry.tagList.slice(0, 10)) ?? []
-
-  const tagsByMedia = groupBy(recentTags as HybridMediaTag[], 'mediaUrl')
+  const recentTags = recentTagsByUsers?.flatMap(entry => entry.mediaWithTags.slice(0, 10)) ?? []
 
   return {
     props: {
       exploreData: rs.data,
-      tagsByMedia
+      recentMediaWithTags: recentTags
     },
     revalidate: 60
   }

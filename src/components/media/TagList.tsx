@@ -40,7 +40,7 @@ export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthen
     >
       {climbTags.concat(areaTags).map((tag: SimpleTag) =>
         <Tag
-          key={`${tag.id}`}
+          key={`${tag.targetId}`}
           tag={tag}
           onDelete={onDelete}
           isAuthorized={isAuthorized}
@@ -79,7 +79,7 @@ export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAu
         <DropdownContent align='end'>
           <>
             {climbTags.concat(areaTags).map(tag => (
-              <PrimitiveDropdownMenuItem key={`${tag.id}`} className='px-2 py-3'>
+              <PrimitiveDropdownMenuItem key={`${tag.targetId}`} className='px-2 py-3'>
                 <Tag
                   tag={tag}
                   isAuthorized={isAuthorized}

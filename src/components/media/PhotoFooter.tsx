@@ -52,7 +52,7 @@ type DescriptionLinkProps = SimpleTag
  * A link to a tag
  */
 const DestinationLink: React.FC<DescriptionLinkProps> = ({
-  id, type
+  targetId: id, type
 }) => {
   const url = urlResolver(type, id)
   if (url == null) return null

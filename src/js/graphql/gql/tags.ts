@@ -45,13 +45,14 @@ export const FRAGMENT_MEDIA_WITH_TAGS = gql`
     width
     height
     birthTime
+    uploadTime
     climbTags {
-      id
+      targetId
       name
       type
     }
     areaTags {
-      id
+      targetId
       name
       type
     }
@@ -106,14 +107,13 @@ export const QUERY_TAGS_BY_MEDIA_ID = gql`
 `
 
 export const QUERY_RECENT_MEDIA = gql`
-  ${FRAGMENT_CLIMB_TAG}
-  ${FRAGMENT_AREA_TAG}
+  ${FRAGMENT_MEDIA_WITH_TAGS}
   query ($userLimit: Int) {
     getRecentTags(userLimit: $userLimit) {
-      authorUuid
-      tagList {
-        ... ClimbTagFields
-        ... AreaTagFields
+      username
+      userUuid
+      mediaWithTags {
+        ... MediaWithTagsFields
       }
     }
   }

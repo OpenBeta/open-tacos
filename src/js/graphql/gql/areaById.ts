@@ -109,7 +109,6 @@ export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
     media {
       username
       mediaUrl
-      mediaUuid
       destination
       destType
     }

@@ -3,7 +3,7 @@ import { XCircleIcon } from '@heroicons/react/20/solid'
 import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
 
 import clx from 'classnames'
-import { HybridMediaTag, MediaTagWithArea, MediaTagWithClimb, SimpleTag, TagTargetType } from '../../js/types'
+import { SimpleTag, TagTargetType } from '../../js/types'
 
 interface PhotoTagProps {
   tag: SimpleTag
@@ -35,7 +35,7 @@ export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, i
         {isAuthorized && showDelete &&
           <button
             onClick={(e) => {
-              onDelete(tag.id)
+              onDelete(tag.targetId)
               e.preventDefault()
             }}
             title='Delete tag'
@@ -57,7 +57,7 @@ const stopPropagation = (event): void => event.stopPropagation()
  * @param tag
  * @returns [url, name]
  */
-export const resolver = ({ id, name, type }: SimpleTag): [string, string] | [null, null] => {
+export const resolver = ({ targetId: id, name, type }: SimpleTag): [string, string] | [null, null] => {
   switch (type) {
     case TagTargetType.climb: {
       return [`/climbs/${id}`, name]

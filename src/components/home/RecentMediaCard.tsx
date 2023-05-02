@@ -4,7 +4,7 @@ import clx from 'classnames'
 import Card from '../ui/Card/Card'
 import TagList from '../media/TagList'
 import { MobileLoader } from '../../js/sirv/util'
-import { HybridMediaTag } from '../../js/types'
+import { MediaWithTags } from '../../js/types'
 import { getUploadDateSummary } from '../../js/utils'
 import { PostHeader } from './Post'
 import { resolver as urlResolver } from '../media/Tag'
@@ -13,21 +13,22 @@ const MOBILE_IMAGE_MAX_WIDITH = 600
 
 interface RecentImageCardProps {
   header?: JSX.Element
-  tagList: HybridMediaTag[]
+  mediaWithTags: MediaWithTags
 }
 /**
  * Image card for the home page
  */
 export const RecentImageCard = ({
-  tagList
+  mediaWithTags
 }: RecentImageCardProps): JSX.Element => {
   const [loaded, setLoaded] = useState(false)
-  const { mediaUrl, width, height } = tagList[0]
-  const [firstUrl] = urlResolver(tagList[0])
+  const { mediaUrl, width, height, climbTags, areaTags, username } = mediaWithTags
+  const allTags = climbTags.concat(areaTags)
+  const [firstUrl] = urlResolver(allTags[0])
   const imageRatio = width / height
   return (
     <Card
-      header={<PostHeader username={tagList[0].username} />}
+      header={<PostHeader username={username ?? '#'} />}
       image={
         <Link href={firstUrl ?? '#'}>
           <a className='relative'>
@@ -58,14 +59,13 @@ export const RecentImageCard = ({
         <>
           <section className='flex flex-col gap-y-4 justify-between'>
             <TagList
-              list={tagList}
+              mediaWithTags={mediaWithTags}
               showActions={false}
               isAuthorized={false}
               isAuthenticated={false}
-              tagSource={tagList[0]}
             />
             <span className='uppercase text-xs text-base-200'>
-              {getUploadDateSummary(tagList[0].birthTime)}
+              {getUploadDateSummary(mediaWithTags.uploadTime)}
             </span>
           </section>
         </>

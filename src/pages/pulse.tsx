@@ -46,7 +46,7 @@ const TagsSummary = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => 
       <div className='stat'>
         <div className='stat-title font-bold'>Photos with tags</div>
         <div className='stat-value'>
-          {tagsLeaderboard.grandTotal}
+          {tagsLeaderboard.allTime.totalMediaWithTags}
         </div>
         <div className='stat-desc whitespace-normal'>Tags help others learn more about the climbing areas.</div>
       </div>
@@ -61,7 +61,7 @@ const TagsLeaderboard = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element
     <Box className='bg-purple-700'>
       <h2>Tags Leaderboard</h2>
       <div className='mt-4 grid grid-cols-6 gap-2 items-center'>
-        {tagsLeaderboard.list.map(LeaderboardRow)}
+        {tagsLeaderboard.allTime.byUsers.map(LeaderboardRow)}
       </div>
     </Box>
   )
@@ -71,8 +71,8 @@ const LeaderboardRow = (value: TagsByUserType, index: number): JSX.Element => {
   const url = `/u/${value?.username ?? ''}`
 
   return (
-    <React.Fragment key={value?.username ?? index}>
-      <div className='text-left align-middle text-xs'>
+    <React.Fragment key={value.userUuid}>
+      <div className='text-left align-middle text-sm'>
         <span className={
           clz(
             'p-1 rounded',
@@ -82,10 +82,10 @@ const LeaderboardRow = (value: TagsByUserType, index: number): JSX.Element => {
           {index + 1}
         </span>
       </div>
-      <div className='text-left col-span-4 text-xs uppercase'>
+      <div className='text-left col-span-4 uppercase thick-link'>
         {value?.username == null ? 'unknown' : <Link href={url}>{value.username}</Link>}
       </div>
-      <div className='text-right opacity-80 font-bold text-sm'>
+      <div className='text-right font-bold text-sm'>
         {value.total}
       </div>
     </React.Fragment>

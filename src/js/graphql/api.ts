@@ -1,10 +1,10 @@
 import { gql } from '@apollo/client'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
-import { AreaType, ClimbType, TickType, HybridMediaTag, MediaByAuthor, CountrySummaryType, MediaWithTags } from '../types'
+import { AreaType, ClimbType, TickType, MediaByUsers, CountrySummaryType, MediaWithTags } from '../types'
 import { graphqlClient } from './Client'
 import { CORE_CRAG_FIELDS, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
-import { QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA } from './gql/tags'
+import { QUERY_RECENT_MEDIA } from './gql/tags'
 import { QUERY_USER_MEDIA } from './gql/users'
 import { QUERY_CLIMB_BY_ID } from './gql/climbById'
 
@@ -83,33 +83,9 @@ export const getAreaByUUID = (uuid: string): AreaType | null => {
   return null
 }
 
-/**
- * Providing a list of media IDs return all tag objects that include climb name or area name
- * @param uuidList An array of media UUIDs
- */
-export const getTagsByMediaId = async (uuidList: string[]): Promise<HybridMediaTag[]> => {
+export const getRecentMedia = async (userLimit = 10): Promise<MediaByUsers[]> => {
   try {
-    const rs = await graphqlClient.query({
-      query: QUERY_TAGS_BY_MEDIA_ID,
-      variables: {
-        uuidList
-      },
-      fetchPolicy: 'network-only',
-      notifyOnNetworkStatusChange: true
-    })
-
-    if (Array.isArray(rs.data?.getTagsByMediaIdList)) {
-      return rs.data?.getTagsByMediaIdList
-    }
-  } catch (e) {
-    console.log('getTagsByMediaId() error', e)
-  }
-  return []
-}
-
-export const getRecentMedia = async (userLimit = 10): Promise<MediaByAuthor[]> => {
-  try {
-    const rs = await graphqlClient.query<{getRecentTags: MediaByAuthor[]}>({
+    const rs = await graphqlClient.query<{getRecentTags: MediaByUsers[]}>({
       query: QUERY_RECENT_MEDIA,
       variables: {
         userLimit

@@ -43,6 +43,7 @@ const Body = ({ area, history }: CragProps): JSX.Element => {
           {showSkeleton
             ? <AreaContentSkeleton />
             : <CragSummary
+                key={area.uuid}
                 area={area}
                 history={history}
               />}

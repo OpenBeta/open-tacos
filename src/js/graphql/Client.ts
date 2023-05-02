@@ -5,10 +5,12 @@ const uri: string = process.env.NEXT_PUBLIC_API_SERVER ?? ''
 const httpLinkPro = new HttpLink({
   uri: uri
 })
-const errorLink = onError(({ graphQLErrors, networkError }) => {
+const errorLink = onError(({ graphQLErrors, networkError, ...rest }) => {
+  console.error('#################### GQL Error  ####################')
+
   if (graphQLErrors != null) {
     graphQLErrors?.forEach(({ message, locations, path }) => {
-      console.error('GraphQL error', {
+      console.error({
         message: message,
         locations: locations,
         path: path
@@ -16,8 +18,12 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     })
   }
 
+  console.error(rest.operation.query.loc)
+
   if (networkError != null) {
-    console.error('Network error', {
+    console.error('#################### Network error  ####################')
+
+    console.error({
       name: networkError.name,
       detail: JSON.stringify(networkError)
     })

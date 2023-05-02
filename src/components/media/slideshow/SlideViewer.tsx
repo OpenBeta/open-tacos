@@ -1,10 +1,9 @@
 import React, { ReactElement } from 'react'
 
 import { LightBulbIcon } from '@heroicons/react/24/outline'
-import { Dictionary } from 'underscore'
 import ContentLoader from 'react-content-loader'
 
-import { MediaType, HybridMediaTag, MediaWithTags } from '../../../js/types'
+import { MediaWithTags } from '../../../js/types'
 import TagList from '../TagList'
 import NextPreviousControl from './NextPreviousControl'
 import ResponsiveImage from './ResponsiveImage'
