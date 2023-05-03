@@ -26,6 +26,7 @@ export default function usePhotoTagCmd (): UsePhotTagReturn {
   )
 
   const tagPhotoCmd = async (props: SetTagType): Promise<any> => {
+    console.log('Tagging temporarily disabled')
     // await tagPhoto({
     //   variables: props
     // })
