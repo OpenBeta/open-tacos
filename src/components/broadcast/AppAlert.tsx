@@ -25,13 +25,13 @@ export default function MiniAlert ({ message }: Props): JSX.Element | null {
   })
   return open
     ? (
-      <div className='w-full z-40 alert alert-info flex-wrap justify-center xl:px-4 xl:py-0.5 rounded-none gap-6'>
-        <div className='inline-flex items-center justify-between'>
+      <div className='w-full z-40 alert alert-info flex-wrap justify-center xl:p-4 rounded-none gap-4'>
+        <div className='block flex flex-col gap-2 items-start'>
           {message}
         </div>
-        <div className='inline-flex w-[210]px grow-1'>
+        <div className='inline-flex w-[210px] grow-1'>
           <button
-            className='btn btn-link btn-sm btn-primary font-light text-opacity-60'
+            className='btn btn-link btn-sm btn-primary font-light text-opacity-60 text-xs'
             onClick={() => {
               localStorage.setItem(STORAGE_KEY, '1')
               setOpen(false)

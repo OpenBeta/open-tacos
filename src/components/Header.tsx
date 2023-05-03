@@ -32,15 +32,18 @@ export default function Header (props: HeaderProps): JSX.Element {
       </div>
       <AppAlert
         message={
-          <div className='flex items-center justify-center flex-wrap'>
-            We created a special&nbsp;
-            <Link href='/crag/18c5dd5c-8186-50b6-8a60-ae2948c548d1'>
-              <a className='link-dotted'>
-                <strong>Test area</strong>
-              </a>
-            </Link>&nbsp;for test driving the new edit feature.
-            &nbsp;<a className='btn btn-xs font-light' href='https://openbeta.substack.com/p/new-year-new-milestone'>Learn more</a>
-          </div>
+          <>
+            <div className='text-sm'>• May 2023: Photo sharing and tagging is temporarily disabled while we're upgrading our media storage.</div>
+            <div className='text-sm'>
+              • January 2023: Use this special&nbsp;
+              <Link href='/crag/18c5dd5c-8186-50b6-8a60-ae2948c548d1'>
+                <a className='link-dotted font-semibold'>
+                  Test area
+                </a>
+              </Link>&nbsp;for test driving the new edit feature&nbsp;<a className='btn-link font-light text-xs' href='https://openbeta.substack.com/p/new-year-new-milestone'>Learn more</a>
+            </div>
+
+          </>
         }
       />
     </>
