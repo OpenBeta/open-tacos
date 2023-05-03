@@ -1,6 +1,8 @@
-import * as HoverCard from '@radix-ui/react-hover-card'
+// import * as HoverCard from '@radix-ui/react-hover-card'
 import { ClimbType } from '../../js/types'
 import { LCO_LIST } from './data'
+import Tooltip from '../../components/ui/Tooltip'
+import { InformationCircleIcon } from '@heroicons/react/20/solid'
 import { UsersIcon, ArrowUpRightIcon } from '@heroicons/react/24/outline'
 export interface LCOProfileType {
   /** Org unique id  */
@@ -19,7 +21,10 @@ export interface LCOProfileType {
   donation?: string
 }
 
-const findLCOs = (lcoList: LCOProfileType[], currentPageAncestors: string[]): LCOProfileType[] => {
+const findLCOs = (
+  lcoList: LCOProfileType[],
+  currentPageAncestors: string[]
+): LCOProfileType[] => {
   return lcoList.reduce<LCOProfileType[]>((acc, curr) => {
     if (isMyCrag(currentPageAncestors, curr.areaIdList)) {
       acc.push(curr)
@@ -28,7 +33,8 @@ const findLCOs = (lcoList: LCOProfileType[], currentPageAncestors: string[]): LC
   }, [])
 }
 
-const isMyCrag = (ancestors: string[], myCrags: string[]): boolean => ancestors.some(path => myCrags.some(myCragId => myCragId === path))
+const isMyCrag = (ancestors: string[], myCrags: string[]): boolean =>
+  ancestors.some((path) => myCrags.some((myCragId) => myCragId === path))
 
 type PageBannerProps = Pick<ClimbType, 'ancestors'>
 
@@ -37,36 +43,85 @@ type PageBannerProps = Pick<ClimbType, 'ancestors'>
  */
 export const PageBanner: React.FC<PageBannerProps> = ({ ancestors }) => {
   const orgs = findLCOs(LCO_LIST, ancestors)
-  if (orgs.length === 0) return null
   return (
-    <>
-      {orgs.map(orgProfile => <IndividualBanner key={orgProfile.id} profile={orgProfile} />)}
-    </>
+    <div className='grid pt-6 pb-4 lg:pb-16 lg:pt-16'>
+      <div className='col-span-full flex justify-start items-center pb-6'>
+        <h3 className='mr-4'>Local climbing organizations</h3>
+        <Tooltip content={
+          <p>Learn more about our&nbsp;
+            <a href='https://openbeta.substack.com/p/openbeta-and-lcos' target='_blank' rel='noreferrer' className='underline'>
+              initiative
+            </a>.
+          </p>
+        }
+        >
+          <InformationCircleIcon className='h-6 w-6' />
+        </Tooltip>
+      </div>
+      <div>
+        {orgs.length === 0
+          ? (
+            <p className='italic text-base-content/60'>
+              No organizationa found for this area
+            </p>
+            )
+          : (
+              orgs.map((orgProfile) => (
+                <IndividualBanner key={orgProfile.id} profile={orgProfile} />
+              ))
+            )}
+      </div>
+    </div>
   )
 }
 
 const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
   <>
-    <Card profile={profile} />
+    <div className='sm:inline-block mr-6 mb-6'>
+      <div className='flex items-center bg-light hover:bg-on-hover pl-5 pr-7 rounded-2xl'>
+        <UsersIcon className='h-10 w-10' />
+        <div className='py-5  pl-4 overflow-hidden'>
+          <p className='text-base leading-6'>{profile.name}</p>
+          <p className='text-xs underline'>
+            <a href={profile.website} target='_blank' rel='noreferrer'>{profile.website}</a>
+          </p>
+        </div>
+      </div>
+    </div>
   </>
 )
 
 interface ContentProps {
   profile: LCOProfileType
 }
-const ContentTrigger: React.FC<ContentProps> = ({ profile }) => {
-  const { name, website } = profile
-  return (
-    <a
-      className='block uppercase hover:underline font-medium'
-      href={website}
-      target='_blank'
-      rel='noreferrer'
-    >
-      {name}
-    </a>
-  )
-}
+
+// Previous implementation using hover card
+// const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
+//  <HoverCard.Root openDelay={300}>
+//    <HoverCard.Trigger>
+//      <ContentTrigger profile={profile} />
+//    </HoverCard.Trigger>
+//    <HoverCard.Portal>
+//      <HoverCard.Content sideOffset={10} side='top' className='z-40'>
+//        <Card profile={profile} />
+//      </HoverCard.Content>
+//    </HoverCard.Portal>
+//  </HoverCard.Root>
+// )
+
+// const ContentTrigger: React.FC<ContentProps> = ({ profile }) => {
+//  const { name, website } = profile
+//  return (
+//    <a
+//      className='block uppercase hover:underline font-medium'
+//      href={website}
+//      target='_blank'
+//      rel='noreferrer'
+//    >
+//      {name}
+//    </a>
+//  )
+// }
 
 const Card: React.FC<ContentProps> = ({ profile }) => {
   const { name, website, instagram, report, donation } = profile
