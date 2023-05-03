@@ -15,6 +15,7 @@ export interface UsePhotTagReturn {
 export default function usePhotoTagCmd (): UsePhotTagReturn {
   const addTagToLocalStore = async (data: any): Promise<void> => await actions.media.addTag(data)
 
+  // eslint-disable-next-line
   const [tagPhoto] = useMutation<any, SetTagType>(
     MUTATION_ADD_CLIMB_TAG_TO_MEDIA, {
       client: graphqlClient,
@@ -25,9 +26,10 @@ export default function usePhotoTagCmd (): UsePhotTagReturn {
   )
 
   const tagPhotoCmd = async (props: SetTagType): Promise<any> => {
-    await tagPhoto({
-      variables: props
-    })
+    console.log('Tagging temporarily disabled')
+    // await tagPhoto({
+    //   variables: props
+    // })
   }
 
   return { tagPhotoCmd }
