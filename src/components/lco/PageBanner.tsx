@@ -4,6 +4,8 @@ import { LCO_LIST } from './data'
 import Tooltip from '../../components/ui/Tooltip'
 import { InformationCircleIcon } from '@heroicons/react/20/solid'
 import { UsersIcon, ArrowUpRightIcon } from '@heroicons/react/24/outline'
+import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
+
 export interface LCOProfileType {
   /** Org unique id  */
   id: string
@@ -67,7 +69,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({ ancestors }) => {
             )
           : (
               orgs.map((orgProfile) => (
-                <IndividualBanner key={orgProfile.id} profile={orgProfile} />
+                <LcoCardTrigger key={orgProfile.id} profile={orgProfile} />
               ))
             )}
       </div>
@@ -75,8 +77,19 @@ export const PageBanner: React.FC<PageBannerProps> = ({ ancestors }) => {
   )
 }
 
+const LcoCardTrigger = ({ profile }): JSX.Element => {
+  return (
+    <MobileDialog modal>
+      <IndividualBanner profile={profile} />
+      <DialogContent>
+        <LcoCard profile={profile} />
+      </DialogContent>
+    </MobileDialog>
+  )
+}
+
 const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
-  <>
+  <DialogTrigger asChild className='flex flex-row items-center gap-4'>
     <div className='sm:inline-block mr-6 mb-6'>
       <div className='flex items-center bg-light hover:bg-on-hover pl-5 pr-7 rounded-2xl'>
         <UsersIcon className='h-10 w-10' />
@@ -88,7 +101,7 @@ const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
         </div>
       </div>
     </div>
-  </>
+  </DialogTrigger>
 )
 
 interface ContentProps {
@@ -123,7 +136,7 @@ interface ContentProps {
 //  )
 // }
 
-const Card: React.FC<ContentProps> = ({ profile }) => {
+const LcoCard: React.FC<ContentProps> = ({ profile }) => {
   const { name, website, instagram, report, donation } = profile
   return (
 
