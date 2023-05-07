@@ -140,9 +140,9 @@ const LcoCard: React.FC<ContentProps> = ({ profile }) => {
   const { name, website, instagram, report, donation } = profile
   return (
 
-    <div className='grid md:grid-cols-6 px-11 pt-11 pb-16 gap-2 md:gap-4 sm:max-w-sm md:max-w-lg bg-white rounded-lg'>
+    <div className='grid md:grid-cols-6 px-11 pt-11 pb-16 gap-2 md:gap-4 bg-white rounded-lg'>
 
-      <div className=' md:col-span-1'>
+      <div className='md:col-span-1'>
         <UsersIcon className='h-12 w-12 rounded-lg border-slate-100 border' />
       </div>
 
@@ -203,7 +203,7 @@ const LcoCard: React.FC<ContentProps> = ({ profile }) => {
           <div>
             {donation != null && (
               <a
-                className='btn btn-primary opacity-60 '
+                className='btn btn-primary btn-outline'
                 href={donation}
                 target='_blank'
                 rel='noreferrer'
@@ -214,7 +214,7 @@ const LcoCard: React.FC<ContentProps> = ({ profile }) => {
           </div>
           <div className='card-actions '>
             <a
-              className='btn btn-primary opacity-80 bg-red-500 border-0'
+              className='btn btn-primary opacity-80 btn-solid bg-red-500 border-0'
               href={report}
               target='_blank'
               rel='noreferrer'
