@@ -10,7 +10,6 @@ import { doesUsernameExist } from '../../../js/userApi/user'
 import { checkUsername, checkWebsiteUrl } from '../../../js/utils'
 import { revalidateUserHomePage } from '../../../js/stores/media'
 import Spinner from '../../ui/Spinner'
-import Stepper from '../../ui/Stepper'
 
 const UserProfileSchema = Yup.object().shape({
   nick: Yup.string()
@@ -50,9 +49,6 @@ export default function ProfileEditForm (): ReactElement {
   const [loadingName, setLoadingUser] = useState(false)
   const [justSubmitted, setJustSubmitted] = useState(false)
   const [isChanged, setChanged] = useState(false)
-  const [currentStep, setCurrentStep] = useState(1)
-  // const [isFirstLogin, setIsFirstLogin] = useState(true)
-  const [isFirstLogin] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
 
   const [profile, setProfile] = useState<IWritableUserMetadata>({
@@ -62,18 +58,6 @@ export default function ProfileEditForm (): ReactElement {
     website: undefined
   })
 
-  const handleStepClick = (index: number): void => {
-    setCurrentStep(index)
-  }
-
-  // const goToNextStep = (): void => {
-  //   setCurrentStep(currentStep + 1)
-  // }
-
-  // const goToPreviousStep = (): void => {
-  //   setCurrentStep(currentStep - 1)
-  // }
-
   useLayoutEffect(() => {
     const asyncLoad = async (): Promise<void> => {
       setIsLoading(true)
@@ -82,7 +66,6 @@ export default function ProfileEditForm (): ReactElement {
 
       if (profile != null) {
         setProfile(profile)
-        // setIsFirstLogin(profile.loginsCount === 1)
       }
       setIsLoading(false)
     }
@@ -133,98 +116,46 @@ export default function ProfileEditForm (): ReactElement {
     setLoadingUser(false)
     return undefined
   }, [profile.nick])
-
-  const steps = [
-    {
-      title: 'Username',
-      content: (
-        <div className='flex relative justify-end'>
-          <TextField
-            name='nick'
-            label='Username'
-            validate={checkUsernameHandler}
-            isChanged={isChanged}
-            validateImmediately
-          />
-          {loadingName && (
-            <div className='absolute bg-ob-primary p-1 rounded-full text-white -right-2 top-2 animate-spin'>
-              <svg xmlns='http://www.w3.org/2000/svg' className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
-                <path strokeLinecap='round' strokeLinejoin='round' d='M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' />
-              </svg>
-            </div>
-          )}
-        </div>
-      )
-    },
-    {
-      title: 'Display Name',
-      content: <TextField name='name' label='Display Name' isChanged />
-    },
-    {
-      title: 'Bio',
-      content: <TextField name='bio' label='Bio' multiline rows={3} spellcheck isChanged />
-    },
-    {
-      title: 'Website',
-      content: <TextField name='website' label='Website (optional)' isChanged />
-    }
-  ]
-
   return (
     <div data-lpignore='true'>
-      <h3 className='text-center mb-6'>
-        Edit your profile details
-      </h3>
+      <h3 className='text-center mb-6'>Edit your profile details</h3>
 
       {isLoading
-        ? <Spinner size={50} />
+        ? (
+          <Spinner size={50} />
+          )
         : (
           <>
-            {isFirstLogin && (
-              <div className='flex justify-start w-full min-w-full'>
-                <Formik
-                  initialValues={profile}
-                  validationSchema={UserProfileSchema}
-                  onSubmit={submitHandler}
-                  enableReinitialize
-                >{({ isValid, isSubmitting, dirty }) => (
+            <div className='flex justify-start w-full min-w-full'>
+              <Formik
+                initialValues={profile}
+                validationSchema={UserProfileSchema}
+                onSubmit={submitHandler}
+                enableReinitialize
+              >
+                {({ isValid, isSubmitting, dirty }) => (
                   <Form>
-                    {isFirstLogin
-                      ? (
-                        <>
-                          <Stepper
-                            currentStep={currentStep} steps={['Username', 'Display Name', 'Bio', 'Website']} onStepClick={handleStepClick}
-                          >
-                            {steps[currentStep].content}
-                          </Stepper>
+                    <div className='flex relative justify-end'>
+                      <TextField
+                        name='nick'
+                        label='Username'
+                        validate={checkUsernameHandler}
+                        isChanged={isChanged}
+                        validateImmediately
+                      />
 
-                        </>
-                        )
-                      : (
-                        <>
-                          <div className='flex relative justify-end'>
-                            <TextField
-                              name='nick'
-                              label='Username'
-                              validate={checkUsernameHandler}
-                              isChanged={isChanged}
-                              validateImmediately
-                            />
+                      {loadingName && (
+                        <div className='absolute bg-ob-primary p-1 rounded-full text-white -right-2 top-2 animate-spin'>
+                          <svg xmlns='http://www.w3.org/2000/svg' className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+                            <path strokeLinecap='round' strokeLinejoin='round' d='M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
 
-                            {loadingName && (
-                              <div className='absolute bg-ob-primary p-1 rounded-full text-white -right-2 top-2 animate-spin'>
-                                <svg xmlns='http://www.w3.org/2000/svg' className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
-                                  <path strokeLinecap='round' strokeLinejoin='round' d='M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' />
-                                </svg>
-                              </div>
-                            )}
-                          </div>
-
-                          <TextField name='name' label='Display Name' isChanged />
-                          <TextField name='bio' label='Bio' multiline rows={3} spellcheck isChanged />
-                          <TextField name='website' label='Website (optional)' isChanged />
-                        </>
-                        )}
+                    <TextField name='name' label='Display Name' isChanged />
+                    <TextField name='bio' label='Bio' multiline rows={3} spellcheck isChanged />
+                    <TextField name='website' label='Website (optional)' isChanged />
 
                     <div className='flex justify-center pt-6'>
                       <Snackbar
@@ -234,31 +165,6 @@ export default function ProfileEditForm (): ReactElement {
                       />
                     </div>
 
-                    {/* <div className='flex space-x-4 justify-end pt-4'>
-                  {isFirstLogin && (
-                    <button
-                      title='Go to previous step'
-                      type='button'
-                      onClick={goToPreviousStep}
-                      disabled={currentStep === 1}
-                      className='btn btn-secondary w-40'
-                    >
-                      Previous
-                    </button>
-                  )}
-                  {isFirstLogin && (
-                    <button
-                      title='Go to next step'
-                      type='button'
-                      onClick={goToNextStep}
-                      disabled={currentStep === 4}
-                      className='btn btn-primary w-40'
-                    >
-                      Next
-                    </button>
-                  )}
-
-                </div> */}
                     <button
                       title='Commit these changes to your profile'
                       type='submit'
@@ -268,12 +174,10 @@ export default function ProfileEditForm (): ReactElement {
                       {isSubmitting ? 'Saving...' : 'Save'}
                     </button>
                     <div className='flex justify-center pt-6' />
-                  </Form>)}
-                </Formik>
-
-              </div>
-            )}
-
+                  </Form>
+                )}
+              </Formik>
+            </div>
           </>
           )}
     </div>

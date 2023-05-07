@@ -14,6 +14,7 @@ import usePermissions from '../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../js/hooks/seo'
 import useMediaDataStore from '../../js/hooks/useMediaDS'
 import type { UserGalleryProps } from '../../components/media/UserGallery'
+import OnboardingChecklist from '../../components/ui/OnboardingChecklist'
 
 interface UserHomeProps {
   uid: string
@@ -57,16 +58,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
 
           <PublicProfile userProfile={userProfile} />
 
-          {isAuthorized && (
-            <div className='flex justify-center mt-8 text-secondary text-sm whitespace-normal px-4 lg:px-0'>
-              <div className='border rounded-md px-6 py-2 shadow'>
-                <ul className='list-disc'>
-                  <li>Please upload 3 photos to complete your profile {mediaList?.length >= 3 && <span>&#10004;</span>}</li>
-                  <li>Upload only your own photos</li>
-                  <li>Keep it <b>Safe For Work</b> and climbing-related</li>
-                </ul>
-              </div>
-            </div>)}
+          {isAuthorized && <OnboardingChecklist mediaCount={mediaList?.length} hasUsername={false} />}
 
           <hr className='mt-8' />
 
