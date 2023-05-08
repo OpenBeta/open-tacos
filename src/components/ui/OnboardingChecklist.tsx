@@ -1,11 +1,18 @@
 import React, { ReactElement } from 'react'
 
 interface OnboardingChecklistProps {
+  /** The number of media items in the user's profile. */
   mediaCount: number
+  /** Whether the user has set a username. */
   hasUsername: boolean
 }
 
-const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({ mediaCount, hasUsername }): ReactElement => {
+/**
+ * A component that displays an onboarding checklist.
+ * @param {OnboardingChecklistProps} props - The component's properties.
+ * @returns {ReactElement} - The component's rendered output.
+ */
+const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({ mediaCount, hasUsername }: OnboardingChecklistProps): ReactElement => {
   const checklistItems = [
     {
       text: 'Add 3 photos to complete your profile',
