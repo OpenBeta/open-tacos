@@ -3,10 +3,6 @@ import { render, screen } from '@testing-library/react'
 import { AuthorMetadata } from '../../../js/types'
 
 jest.mock('../../../assets/icons/tree.svg', () => 'svg')
-jest.mock('../../../js/usernameUtil', () => ({
-  __esModule: 'true',
-  getUserNickFromMediaDir: async () => await Promise.resolve('foos')
-}))
 
 describe('Article last update', () => {
   let ArticleLastUpdate
