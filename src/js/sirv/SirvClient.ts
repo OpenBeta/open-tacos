@@ -5,12 +5,8 @@ import AWS from 'aws-sdk'
 
 import { MediaType } from '../types'
 
-if ((process.env.SIRV_CLIENT_ID_RO ?? null) == null && typeof window === 'undefined') throw new Error('SIRV_CLIENT_ID_RO not set')
-if ((process.env.SIRV_CLIENT_SECRET_RO ?? null) == null && typeof window === 'undefined') throw new Error('SIRV_CLIENT_SECRET_RO not set')
-if ((process.env.NEXT_PUBLIC_SIRV_BASE_URL ?? null) == null) throw new Error('NEXT_PUBLIC_SIRV_BASE_URL not set')
-if ((process.env.NEXT_PUBLIC_CDN_URL ?? null) == null) throw new Error('NEXT_PUBLIC_CDN_URL not set')
-
 /**
+ * @deprecated
  * Server-side configs
  */
 export const SIRV_CONFIG = {
@@ -18,13 +14,10 @@ export const SIRV_CONFIG = {
   clientSecret: process.env.SIRV_CLIENT_SECRET_RO ?? null,
   clientAdminId: process.env.SIRV_CLIENT_ID_RW ?? null,
   clientAdminSecret: process.env.SIRV_CLIENT_SECRET_RW ?? null,
-  baseUrl: process.env.NEXT_PUBLIC_CDN_URL ?? '',
   s3Key: process.env.S3_KEY ?? '',
   s3Secret: process.env.S3_SECRET ?? '',
   s3Bucket: process.env.S3_BUCKET ?? ''
 }
-
-export const userHomeFromUuid = (uuid: string): string => `${SIRV_CONFIG.baseUrl}/u/${uuid}`
 
 AWS.config.update({
   accessKeyId: SIRV_CONFIG.s3Key,

@@ -11,7 +11,7 @@ export const FRAGMENT_CLIMB_TAG = gql`
     destType
     width
     height
-    birthTime
+    uploadTime
     climb {
       id
       name
@@ -27,7 +27,7 @@ export const FRAGMENT_AREA_TAG = gql`
     destType
     width
     height
-    birthTime
+    uploadTime
     area {
         uuid
         areaName
@@ -40,20 +40,17 @@ export const FRAGMENT_AREA_TAG = gql`
 
 export const FRAGMENT_MEDIA_WITH_TAGS = gql`
  fragment MediaWithTagsFields on MediaWithTags {
+    id
     username
     mediaUrl
     width
     height
-    birthTime
     uploadTime
-    climbTags {
+    entityTags {
       targetId
-      name
-      type
-    }
-    areaTags {
-      targetId
-      name
+      climbName
+      areaName
+      ancestors
       type
     }
   }`
@@ -106,10 +103,10 @@ export const QUERY_TAGS_BY_MEDIA_ID = gql`
   }
 `
 
-export const QUERY_RECENT_MEDIA = gql`
+export const QUERY_MEDIA_FOR_FEED = gql`
   ${FRAGMENT_MEDIA_WITH_TAGS}
-  query ($userLimit: Int) {
-    getRecentTags(userLimit: $userLimit) {
+  query ($maxUsers: Int, $maxFiles: Int) {
+    getMediaForFeed(input: { maxUsers: $maxUsers, maxFiles: $maxFiles }) {
       username
       userUuid
       mediaWithTags {

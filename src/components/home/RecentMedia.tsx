@@ -17,7 +17,6 @@ export default function RecentTags ({
             return (
               <div
                 key={mediaUrl} className='p-0 overflow-hidden mt-0 mb-4 break-inside-avoid-column break-inside-avoid relative block'
-                onClick={(e) => e.preventDefault()}
               >
                 <RecentImageCard mediaWithTags={media} />
               </div>

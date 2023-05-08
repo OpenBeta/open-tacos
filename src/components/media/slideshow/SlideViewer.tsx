@@ -38,7 +38,6 @@ export default function SlideViewer ({
 }: SlideViewerProps): JSX.Element {
   const currentImage = imageList[initialIndex]
 
-  const tagCount = currentImage.areaTags.length + currentImage.climbTags.length
   return (
     <DesktopModal
       isOpen={isOpen}
@@ -60,7 +59,7 @@ export default function SlideViewer ({
               onClose={onClose}
             />
           }
-          footer={<><AddTagCta tagCount={tagCount} auth={auth} /></>}
+          footer={<><AddTagCta tagCount={currentImage.entityTags.length} auth={auth} /></>}
         />
       }
       controlContainer={
@@ -175,8 +174,8 @@ interface InfoContainerProps {
 const InfoContainer = ({ currentImage, auth, keyboardTip = true, onClose }: InfoContainerProps): ReactElement | null => {
   if (currentImage == null) return null
 
-  const { climbTags, areaTags } = currentImage
-  const tagCount = climbTags.length + areaTags.length
+  const { entityTags } = currentImage
+  const tagCount = entityTags.length
   return (
     <>
       <div className='my-8'>

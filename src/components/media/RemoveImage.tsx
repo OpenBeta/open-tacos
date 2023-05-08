@@ -12,8 +12,8 @@ interface RemoveImageProps {
 export default function RemoveImage ({ imageInfo }: RemoveImageProps): JSX.Element | null {
   const { data } = useSession()
 
-  const { climbTags, areaTags } = imageInfo
-  if (areaTags.length > 0 || climbTags.length > 0) return null
+  const { entityTags } = imageInfo
+  if (entityTags.length > 0) return null
 
   const remove = async (): Promise<void> => {
     if (data?.user?.metadata == null) {

@@ -5,13 +5,13 @@ import { shuffle } from 'underscore'
 import { AggregateType, AreaType, CountByDisciplineType, DisciplineStatsType } from '../../../js/types'
 import { sanitizeName } from '../../../js/utils'
 import { FeatureImage } from './FeatureImage'
-import { SIRV_CONFIG } from '../../../js/sirv/SirvClient'
+import { CLIENT_CONFIG } from '../../../js/configs/clientConfig'
 
 function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
   const { areaName, pathTokens, aggregate, metadata, totalClimbs, media } = area
   let imageUrl
   if (media != null && media.length > 0) {
-    imageUrl = `${SIRV_CONFIG.baseUrl ?? ''}${shuffle(media)[0].mediaUrl}?format=webp&h=300&q=90`
+    imageUrl = `${CLIENT_CONFIG.CDN_BASE_URL}${shuffle(media)[0].mediaUrl}?format=webp&h=300&q=90`
   }
 
   const image = {

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Transition } from '@headlessui/react'
 import { UserCircleIcon, TagIcon } from '@heroicons/react/24/outline'
 import { urlResolver } from '../../js/utils'
-import { MediaWithTags, SimpleTag } from '../../js/types'
+import { EntityTag, MediaWithTags } from '../../js/types'
 
 interface PhotoFooterProps {
   mediaWithTags: MediaWithTags
@@ -13,15 +13,9 @@ export default function PhotoFooter ({
   mediaWithTags,
   hover
 }: PhotoFooterProps): JSX.Element {
-  const { username, climbTags, areaTags } = mediaWithTags
-  let firstTag: SimpleTag | null
-  if (climbTags.length > 0) {
-    firstTag = climbTags[0]
-  } else if (areaTags.length > 0) {
-    firstTag = areaTags[0]
-  } else {
-    firstTag = null
-  }
+  const { username, entityTags } = mediaWithTags
+  const firstTag = entityTags.length > 0 ? entityTags[0] : null
+
   return (
     <Transition
       show={hover}
@@ -47,11 +41,10 @@ const PhotographerLink = ({ uid }: { uid: string }): JSX.Element => (
   </Link>
 )
 
-type DescriptionLinkProps = SimpleTag
 /**
  * A link to a tag
  */
-const DestinationLink: React.FC<DescriptionLinkProps> = ({
+const DestinationLink: React.FC<EntityTag> = ({
   targetId: id, type
 }) => {
   const url = urlResolver(type, id)

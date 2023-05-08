@@ -27,7 +27,7 @@ export default function UserMedia ({
   onClick,
   isAuthorized = false
 }: UserMediaProps): JSX.Element {
-  const { mediaUrl, climbTags, areaTags } = mediaWithTags
+  const { mediaUrl, entityTags } = mediaWithTags
   const onClickHandler = useCallback((event) => {
     if (onClick != null) {
       // we want to show URL in browser status bar and let the user open link in a new tab,
@@ -41,7 +41,7 @@ export default function UserMedia ({
 
   const shareableUrl = `/p/${uid}/${basename(mediaUrl)}`
 
-  const canRemoveImage = climbTags.length === 0 && areaTags.length === 0 && isAuthorized
+  const canRemoveImage = entityTags.length === 0 && isAuthorized
   return (
     <figure
       key={mediaUrl}

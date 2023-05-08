@@ -3,10 +3,10 @@ import { XCircleIcon } from '@heroicons/react/20/solid'
 import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
 
 import clx from 'classnames'
-import { SimpleTag, TagTargetType } from '../../js/types'
+import { EntityTag, TagTargetType } from '../../js/types'
 
 interface PhotoTagProps {
-  tag: SimpleTag
+  tag: EntityTag
   onDelete: (tagId: string) => void
   isAuthorized?: boolean
   showDelete?: boolean
@@ -16,7 +16,7 @@ interface PhotoTagProps {
 export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, isAuthorized = false }: PhotoTagProps): JSX.Element | null {
   const [url, name] = resolver(tag)
   if (url == null || name == null) return null
-  const isArea = tag.destType === TagTargetType.area
+  const isArea = tag.type === TagTargetType.area
 
   return (
     <Link href={url} prefetch={false}>
@@ -57,13 +57,15 @@ const stopPropagation = (event): void => event.stopPropagation()
  * @param tag
  * @returns [url, name]
  */
-export const resolver = ({ targetId: id, name, type }: SimpleTag): [string, string] | [null, null] => {
+export const resolver = (props: EntityTag): [string, string] | [null, null] => {
+  if (props == null) return [null, null]
+  const { targetId: id, climbName, areaName, type } = props
   switch (type) {
     case TagTargetType.climb: {
-      return [`/climbs/${id}`, name]
+      return [`/climbs/${id}`, climbName ?? '']
     }
     case TagTargetType.area: {
-      return [`/crag/${id}`, name]
+      return [`/crag/${id}`, areaName]
     }
     default: return [null, null]
   }

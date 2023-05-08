@@ -23,10 +23,10 @@ describe('Article last update', () => {
 
   test('component linking to editor profiles', async () => {
     const data: AuthorMetadata = {
-      createdAt: 1673595471992,
-      createdBy: 'b9f8ab3b-e6e5-4467-9adb-65d91c7ebe7c',
-      updatedAt: 1674761647299,
-      updatedBy: 'b9f8ab3b-e6e5-4467-9adb-65d91c7ebe7c'
+      createdAt: new Date(1673595471992),
+      createdByUser: 'jane doe',
+      updatedAt: new Date(1674761647299),
+      updatedByUser: 'Yamada Hanako'
     }
     render(<ArticleLastUpdate {...data} />)
     const links = await screen.findAllByRole('link')

@@ -121,7 +121,7 @@ export const FRAGMENT_CHANGE_HISTORY = gql`
   }`
 
 export const FRAGMENT_AUTHOR_METADATA = gql`
-  fragment AuthorMetadataFields on Area {
+  fragment AuthorMetadataFields on AuthorMetadata {
        createdAt
        updatedAt
        createdByUser

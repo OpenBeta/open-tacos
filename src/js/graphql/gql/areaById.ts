@@ -91,7 +91,7 @@ export const QUERY_AREA_BY_ID = gql`
         description 
       }
       authorMetadata {
-        ... AreaAuthorMetadataFields
+        ... AuthorMetadataFields
       }
     }
     getAreaHistory(filter: {areaId: $uuid}) {

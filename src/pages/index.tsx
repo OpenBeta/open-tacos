@@ -10,9 +10,7 @@ import classNames from 'classnames'
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
 import { graphqlClient } from '../js/graphql/Client'
-import { getRecentMedia } from '../js/graphql/api'
-import { FRAGMENT_MEDIA_WITH_TAGS } from '../js/graphql/gql/tags'
-
+import { getMediaForFeed } from '../js/graphql/api'
 import { IndexResponseType, MediaWithTags } from '../js/types'
 import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
@@ -138,7 +136,6 @@ const Home: NextPage<HomePageType> = ({ exploreData, recentMediaWithTags }) => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
 //  ${FRAGMENT_MEDIA_WITH_TAGS}
-
   const query = gql`
   query UsaAreas( $filter: Filter) {
     areas(filter: $filter, sort: { totalClimbs: -1 }) {
@@ -201,9 +198,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   })
 
-  const recentTagsByUsers = await getRecentMedia()
+  const recentTagsByUsers = await getMediaForFeed(10, 3)
 
-  const recentTags = recentTagsByUsers?.flatMap(entry => entry.mediaWithTags.slice(0, 10)) ?? []
+  const recentTags = recentTagsByUsers.flatMap(entry => entry.mediaWithTags)
 
   return {
     props: {

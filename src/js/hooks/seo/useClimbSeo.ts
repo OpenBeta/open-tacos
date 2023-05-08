@@ -1,5 +1,5 @@
 import { shuffle } from 'underscore'
-import { SIRV_CONFIG } from '../../sirv/SirvClient'
+import { CLIENT_CONFIG } from '../../configs/clientConfig'
 import { Climb, MediaWithTags, SafetyType } from '../../types'
 import { SeoHookType } from './index'
 import { sanitizeName } from '../../utils'
@@ -48,5 +48,5 @@ export const useClimbSeo = ({ climb }: ClimbSeoProps): SeoHookType => {
  */
 const getRandomPreviewImages = (list: MediaWithTags[]): string[] => {
   const shortList = shuffle(list.slice(0, 10)) // shuffle the first 10
-  return shortList.slice(0, 4).map(image => (`${SIRV_CONFIG.baseUrl}${image.mediaUrl}?w=1200&ch=630&cy=center&format=jpg&q=85`))
+  return shortList.slice(0, 4).map(image => (`${CLIENT_CONFIG.CDN_BASE_URL}${image.mediaUrl}?w=1200&ch=630&cy=center&format=jpg&q=85`))
 }

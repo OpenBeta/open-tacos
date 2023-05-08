@@ -232,34 +232,32 @@ export interface MarkerStateType {
   lnglat: number[]
 }
 
+export interface EntityTag {
+  id: string
+  targetId: string
+  type: number
+  ancestors: string
+  climbName?: string
+  areaName: string
+}
 /**
- * Media and tags
+ * Media with climb & area tags
  */
-export interface MediaObject {
+export interface MediaWithTags {
+  id: string
   username?: string
   mediaUrl: string
   width: number
   height: number
   format: string
   size: number
-  mtime: Date
-  birthTime: Date
   uploadTime: Date
+  entityTags: EntityTag[]
 }
 
-export interface SimpleTag {
-  targetId: string
-  name: string
-  type: number
-}
 /**
- * Media with climb & area tags
+ * @deprecated see MediaWithTags
  */
-export interface MediaWithTags extends MediaObject {
-  climbTags: SimpleTag[]
-  areaTags: SimpleTag[]
-}
-
 export interface MediaBaseTag {
   id: string
   mediaUuid: string
@@ -270,7 +268,7 @@ export interface MediaBaseTag {
   username: string | null
   width: number
   height: number
-  birthTime: Date
+  uploadTime: Date
 }
 
 export type TagSource = Pick<MediaBaseTag, 'mediaUrl' | 'mediaUuid'>

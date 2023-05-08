@@ -221,7 +221,7 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
         <EditModeToggle onChange={setEditMode} />
       </Portal.Root>
 
-      <PhotoMontage photoList={climb.media} />
+      <PhotoMontage photoList={climb.media} isHero />
 
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(submitHandler)} className='mt-6 first:mt-0'>

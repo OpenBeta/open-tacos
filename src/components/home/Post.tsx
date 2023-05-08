@@ -6,6 +6,7 @@ import {
   TagIcon
 } from '@heroicons/react/24/outline'
 import { getUploadDateSummary, urlResolver } from '../../js/utils'
+import { ATagWrapper } from '../Utils'
 
 export interface PostBodyProps {
   destUrl: string
@@ -43,7 +44,7 @@ export function PostBody ({
 
 export interface PostHeaderProps {
   profilePhoto?: MediaType | null
-  username: string | null
+  username?: string
 }
 
 export const PostHeader = ({
@@ -51,20 +52,19 @@ export const PostHeader = ({
   username
 }: PostHeaderProps): JSX.Element | null => {
   if (username == null) return null
+
   return (
     <>
-      <Link href={urlResolver(3, username) ?? '#'}>
-        <a className='flex py-2 items-center space-x-2 text-base-300'>
-          {profilePhoto != null
-            ? (
-              <div className='cursor-pointer' />
-              )
-            : (
-              <UserCircleIcon className='h-6 w-6' />
-              )}
-          <div className='text-sm text-base-300 font-semibold'>{username}</div>
-        </a>
-      </Link>
+      <ATagWrapper href={urlResolver(3, username)} className='flex py-2 items-center space-x-2 text-base-300'>
+        {profilePhoto != null
+          ? (
+            <div className='cursor-pointer' />
+            )
+          : (
+            <UserCircleIcon className='h-6 w-6' />
+            )}
+        <div className='text-sm text-base-300 font-semibold'>{username}</div>
+      </ATagWrapper>
     </>
   )
 }

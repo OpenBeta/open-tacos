@@ -123,7 +123,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> =
 
     const { uuid } = userProfile
 
-    const list = await getUserMedia(uuid)
+    const list = await getUserMedia(uuid, 500)
 
     const data = {
       uid,

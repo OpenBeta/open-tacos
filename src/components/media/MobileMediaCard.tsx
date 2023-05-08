@@ -7,7 +7,7 @@ import { getUploadDateSummary } from '../../js/utils'
 
 const MOBILE_IMAGE_MAX_WIDITH = 914
 
-interface MobileMediaCardProps {
+export interface MobileMediaCardProps {
   header?: JSX.Element
   mediaWithTags: MediaWithTags
   showTagActions?: boolean
@@ -16,8 +16,8 @@ interface MobileMediaCardProps {
 }
 
 export default function MobileMediaCard ({ header, showTagActions = false, isAuthorized = false, isAuthenticated = false, mediaWithTags }: MobileMediaCardProps): JSX.Element {
-  const { mediaUrl, areaTags, climbTags, birthTime } = mediaWithTags
-  const tagCount = areaTags.length + climbTags.length
+  const { mediaUrl, entityTags, uploadTime } = mediaWithTags
+  const tagCount = entityTags.length
   return (
     <Card
       header={header}
@@ -49,7 +49,7 @@ export default function MobileMediaCard ({ header, showTagActions = false, isAut
             )}
           </section>
           <section className='mt-2 uppercase text-base-300 text-xs' aria-label='timestamp'>
-            {getUploadDateSummary(birthTime)}
+            {getUploadDateSummary(uploadTime)}
           </section>
         </>
       }

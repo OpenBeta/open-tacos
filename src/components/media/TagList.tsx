@@ -7,7 +7,7 @@ import { signIn } from 'next-auth/react'
 import AddTag from './AddTag'
 import { DropdownMenu, DropdownContent, DropdownTrigger, DropdownItem, DropdownSeparator } from '../ui/DropdownMenu'
 import useDeleteTagBackend from '../../js/hooks/useDeleteTagBackend'
-import { MediaWithTags, SimpleTag } from '../../js/types'
+import { EntityTag, MediaWithTags } from '../../js/types'
 import Tag from './Tag'
 
 interface TagsProps {
@@ -28,7 +28,7 @@ export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthen
     return null
   }
 
-  const { climbTags, areaTags } = mediaWithTags
+  const { entityTags } = mediaWithTags
 
   return (
     <div className={
@@ -38,7 +38,7 @@ export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthen
           )
           }
     >
-      {climbTags.concat(areaTags).map((tag: SimpleTag) =>
+      {entityTags.map((tag: EntityTag) =>
         <Tag
           key={`${tag.targetId}`}
           tag={tag}
@@ -57,7 +57,7 @@ export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthen
   )
 }
 
-interface TagListProps {
+export interface TagListProps {
   mediaWithTags: MediaWithTags
   isAuthorized?: boolean
   children?: JSX.Element
@@ -69,7 +69,7 @@ interface TagListProps {
 export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAuthorized = false }) => {
   const { onDelete } = useDeleteTagBackend()
   const [openSearch, setOpenSearch] = useState(false)
-  const { climbTags, areaTags } = mediaWithTags
+  const { entityTags } = mediaWithTags
   return (
     <div aria-label='tag popup'>
       <DropdownMenu>
@@ -78,8 +78,8 @@ export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAu
         </DropdownTrigger>
         <DropdownContent align='end'>
           <>
-            {climbTags.concat(areaTags).map(tag => (
-              <PrimitiveDropdownMenuItem key={`${tag.targetId}`} className='px-2 py-3'>
+            {entityTags.map(tag => (
+              <PrimitiveDropdownMenuItem key={`${tag.id}`} className='px-2 py-3'>
                 <Tag
                   tag={tag}
                   isAuthorized={isAuthorized}

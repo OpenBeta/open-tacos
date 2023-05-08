@@ -4,7 +4,7 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise'
 import { AreaType, ClimbType, TickType, MediaByUsers, CountrySummaryType, MediaWithTags } from '../types'
 import { graphqlClient } from './Client'
 import { CORE_CRAG_FIELDS, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
-import { QUERY_RECENT_MEDIA } from './gql/tags'
+import { QUERY_MEDIA_FOR_FEED } from './gql/tags'
 import { QUERY_USER_MEDIA } from './gql/users'
 import { QUERY_CLIMB_BY_ID } from './gql/climbById'
 
@@ -83,23 +83,24 @@ export const getAreaByUUID = (uuid: string): AreaType | null => {
   return null
 }
 
-export const getRecentMedia = async (userLimit = 10): Promise<MediaByUsers[]> => {
+export const getMediaForFeed = async (maxUsers: number, maxFiles: number): Promise<MediaByUsers[]> => {
   try {
-    const rs = await graphqlClient.query<{getRecentTags: MediaByUsers[]}>({
-      query: QUERY_RECENT_MEDIA,
+    const rs = await graphqlClient.query<{getMediaForFeed: MediaByUsers[]}>({
+      query: QUERY_MEDIA_FOR_FEED,
       variables: {
-        userLimit
+        maxUsers,
+        maxFiles
       },
       notifyOnNetworkStatusChange: true
     })
 
-    if (Array.isArray(rs.data?.getRecentTags)) {
-      return rs.data?.getRecentTags
+    if (Array.isArray(rs.data?.getMediaForFeed)) {
+      return rs.data?.getMediaForFeed
     }
-    console.log('WARNING: getRecentMedia() returns non-array data')
+    console.log('WARNING: getMediaForFeed() returns non-array data')
     return []
   } catch (e) {
-    console.log('####### getRecentMedia() error', e)
+    console.log('####### getMediaForFeed() error', e)
   }
   return []
 }
@@ -184,13 +185,14 @@ export const getAllCountries = async (): Promise<CountrySummaryType[]> => {
   return []
 }
 
-export const getUserMedia = async (userUuid: string, limit = 1000): Promise<MediaWithTags[]> => {
-  const res = await graphqlClient.query<{ getUserMedia: MediaWithTags[] }, { userUuid: string, limit: number }>({
+export const getUserMedia = async (userUuid: string, maxFiles = 1000): Promise<MediaWithTags[]> => {
+  const res = await graphqlClient.query<{ getUserMedia: MediaWithTags[] }, { userUuid: string, maxFiles: number }>({
     query: QUERY_USER_MEDIA,
     variables: {
       userUuid,
-      limit
-    }
+      maxFiles
+    },
+    fetchPolicy: 'no-cache'
   })
   return res.data.getUserMedia
 }
