@@ -44,5 +44,5 @@ export const useAreaSeo = ({ area }: AreaSeoProps): SeoHookType => {
  */
 export const getRandomPreviewImages = (list: MediaWithTags[]): string[] => {
   const shortList = shuffle(list.slice(0, 10)) // shuffle the first 10
-  return shortList.slice(0, 4).map(image => (`${CLIENT_CONFIG.CDN_BASE_URL}${image.mediaUrl}?w=1200&ch=630&cy=center&format=jpg&q=85`))
+  return shortList.slice(0, 4).map(image => (`${CLIENT_CONFIG.CDN_BASE_URL}/${image.mediaUrl}?w=1200&ch=630&cy=center&format=jpg&q=85`))
 }
