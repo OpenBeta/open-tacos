@@ -125,6 +125,7 @@ export interface OrganizationContentType {
   donationLink?: string
   instagramLink?: string
   facebookLink?: string
+  hardwareReportLink?: string
   description?: string
 }
 

@@ -87,6 +87,7 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
       email: existingOrg?.content?.email ?? '',
       instagramLink: existingOrg?.content?.instagramLink ?? '',
       donationLink: existingOrg?.content?.donationLink ?? '',
+      hardwareReportLink: existingOrg?.content?.hardwareReportLink ?? '',
       facebookLink: existingOrg?.content?.facebookLink ?? ''
     }
   })
@@ -109,6 +110,7 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
     donationLink,
     facebookLink,
     instagramLink,
+    hardwareReportLink,
     description
   }: HtmlFormProps): Promise<void> => {
     const dirtyEditableFields: OrganizationEditableFieldsType = {
@@ -120,6 +122,7 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
       ...dirtyFields?.donationLink === true && { donationLink },
       ...dirtyFields?.facebookLink === true && { facebookLink },
       ...dirtyFields?.instagramLink === true && { instagramLink },
+      ...dirtyFields?.hardwareReportLink === true && { hardwareReportLink },
       ...dirtyFields?.description === true && { description }
     }
     if (existingOrg == null) {
@@ -223,6 +226,11 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
               label='Facebook:'
               name='facebookLink'
               placeholder='https://www.facebook.com/climbingorg'
+            />
+            <Input
+              label='Hardware Report Link:'
+              name='hardwareReportLink'
+              placeholder='https://www.climbingorg.com/reporthardware'
             />
             <Input
               label='Donation Link:'
