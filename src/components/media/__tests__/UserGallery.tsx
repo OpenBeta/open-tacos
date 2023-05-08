@@ -20,6 +20,7 @@ jest.mock('../UploadCTA', () => ({
 
 const useResponsive = jest.requireMock('../../../js/hooks/useResponsive')
 
+// eslint-disable-next-line
 const { pushFn, replaceFn } = jest.requireMock('next/router')
 
 const useResponsiveMock = jest.spyOn(useResponsive, 'default')

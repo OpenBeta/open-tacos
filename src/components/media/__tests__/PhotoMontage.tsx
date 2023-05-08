@@ -1,4 +1,3 @@
-import { v4 } from 'uuid'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import PhotoMontage from '../PhotoMontage'
