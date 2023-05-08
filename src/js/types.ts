@@ -107,7 +107,32 @@ export interface AggregateType {
   byGrade: CountByGroupType[]
   byDiscipline: CountByDisciplineType
   byGradeBand: CountByGradeBandType
+}
 
+export type OrganizationType =
+  AuthorMetadata & {
+    orgId: string
+    orgType: OrgType
+    displayName: string
+    associatedAreaIds?: string[]
+    excludedAreaIds?: string[]
+    content?: OrganizationContentType
+  }
+
+export interface OrganizationContentType {
+  website?: string
+  email?: string
+  donationLink?: string
+  instagramLink?: string
+  facebookLink?: string
+  hardwareReportLink?: string
+  description?: string
+}
+
+export interface OrganizationEditableFieldsType extends OrganizationContentType {
+  displayName?: string
+  associatedAreaIds?: string[]
+  excludedAreaIds?: string[]
 }
 
 export interface AuthorMetadata {
@@ -115,22 +140,6 @@ export interface AuthorMetadata {
   updatedByUser?: string
   createdAt?: Date
   createdByUser?: string
-}
-
-export type OrganizationType = AuthorMetadata & {
-  orgId: string
-  orgType: OrgType
-  associatedAreaIds: string[]
-  excludedAreaIds: string[]
-  displayName: string
-  content: {
-    facebookLink: string
-    instagramLink: string
-    donationLink: string
-    description: string
-    website: string
-    email: string
-  }
 }
 
 export interface AreaType {
