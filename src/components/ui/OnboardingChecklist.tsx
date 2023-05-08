@@ -5,7 +5,7 @@ interface OnboardingChecklistProps {
   hasUsername: boolean
 }
 
-const OnboardingChecklist = ({ mediaCount, hasUsername }: OnboardingChecklistProps): ReactElement => {
+const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({ mediaCount, hasUsername }): ReactElement => {
   const checklistItems = [
     {
       text: 'Add 3 photos to complete your profile',
@@ -18,8 +18,8 @@ const OnboardingChecklist = ({ mediaCount, hasUsername }: OnboardingChecklistPro
   ]
 
   return (
-    <div className='flex justify-center mt-8 text-secondary text-sm whitespace-normal px-4 lg:px-0'>
-      <div className='border rounded-md px-6 py-2 shadow'>
+    <div className='flex justify-center text-secondary text-sm whitespace-normal px-4 lg:px-0'>
+      <div className='px-6 py-2 shadow'>
         <ul className='list-disc'>
           {checklistItems.map((item, index) => (
             <li key={index}>

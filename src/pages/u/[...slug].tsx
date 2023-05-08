@@ -15,6 +15,8 @@ import { useUserProfileSeo } from '../../js/hooks/seo'
 import useMediaDataStore from '../../js/hooks/useMediaDS'
 import type { UserGalleryProps } from '../../components/media/UserGallery'
 import OnboardingChecklist from '../../components/ui/OnboardingChecklist'
+import { useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 interface UserHomeProps {
   uid: string
@@ -39,6 +41,14 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
     imageList: serverMediaList
   })
 
+  useEffect(() => {
+    const showOnboardingToast = (): void => {
+      toast(<OnboardingChecklist mediaCount={3} hasUsername={(uid !== null)} />)
+    }
+
+    showOnboardingToast()
+  }, [])
+
   const { isFallback } = router
 
   return (
@@ -57,8 +67,6 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
         <div className='max-w-screen-2xl mx-auto flex flex-col items-center 2xl:px-8'>
 
           <PublicProfile userProfile={userProfile} />
-
-          {isAuthorized && <OnboardingChecklist mediaCount={mediaList?.length} hasUsername={false} />}
 
           <hr className='mt-8' />
 
