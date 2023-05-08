@@ -14,6 +14,7 @@ fragment OrganizationFragment on Organization {
       donationLink
       instagramLink
       facebookLink
+      hardwareReportLink
       description
     }
     createdAt
