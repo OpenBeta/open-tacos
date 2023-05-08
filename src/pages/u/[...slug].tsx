@@ -43,7 +43,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
 
   useEffect(() => {
     const showOnboardingToast = (): void => {
-      toast(<OnboardingChecklist mediaCount={3} hasUsername={(uid !== null)} />)
+      userProfile.loginsCount < 3 && toast(<OnboardingChecklist mediaCount={mediaList.length} hasUsername={(uid !== null)} />)
     }
 
     showOnboardingToast()
