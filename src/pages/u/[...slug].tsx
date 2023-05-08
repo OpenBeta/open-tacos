@@ -43,11 +43,23 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
 
   useEffect(() => {
     const showOnboardingToast = (): void => {
-      userProfile.loginsCount < 3 && toast(<OnboardingChecklist mediaCount={mediaList.length} hasUsername={(uid !== null)} />)
+      const checklistItems = [
+        {
+          text: 'Add 3 photos to complete your profile',
+          isCompleted: mediaList?.length >= 3
+        },
+        {
+          text: 'Create a username',
+          isCompleted: (uid !== null)
+        }
+      ]
+      if (userProfile?.loginsCount !== undefined && userProfile.loginsCount < 3) {
+        toast(<OnboardingChecklist checklistItems={checklistItems} />)
+      }
     }
 
     showOnboardingToast()
-  }, [])
+  }, [uid, mediaList])
 
   const { isFallback } = router
 
