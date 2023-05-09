@@ -1,9 +1,12 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_CHANGE_HISTORY } from './contribs'
+import { FRAGMENT_AUTHOR_METADATA, FRAGMENT_CHANGE_HISTORY } from './contribs'
+import { FRAGMENT_MEDIA_WITH_TAGS } from './tags'
 
 export const QUERY_AREA_BY_ID = gql`
   ${FRAGMENT_CHANGE_HISTORY}
+  ${FRAGMENT_MEDIA_WITH_TAGS}
+  ${FRAGMENT_AUTHOR_METADATA}
   query ($uuid: ID) {
     area(uuid: $uuid) {
       id
@@ -11,10 +14,7 @@ export const QUERY_AREA_BY_ID = gql`
       areaName
       gradeContext
       media {
-        mediaUrl
-        mediaUuid
-        destination
-        destType
+        ... MediaWithTagsFields
       }
       totalClimbs
       aggregate {
@@ -35,7 +35,7 @@ export const QUERY_AREA_BY_ID = gql`
             aid {
               total
             }
-          }        
+          }
       }
       metadata {
         areaId
@@ -90,10 +90,9 @@ export const QUERY_AREA_BY_ID = gql`
       content {
         description 
       }
-      updatedAt
-      updatedBy
-      createdAt
-      createdBy 
+      authorMetadata {
+        ... AuthorMetadataFields
+      }
     }
     getAreaHistory(filter: {areaId: $uuid}) {
        ...ChangeHistoryFields
@@ -101,6 +100,10 @@ export const QUERY_AREA_BY_ID = gql`
   }
   `
 
+/**
+ * Why having 2 nearly identical queries?
+ * TODO:  Combine this one and the main one above
+ */
 export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
   area(uuid: $uuid) {
     id
@@ -108,8 +111,8 @@ export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
     areaName
     gradeContext
     media {
+      username
       mediaUrl
-      mediaUuid
       destination
       destType
     }

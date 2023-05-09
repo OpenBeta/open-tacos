@@ -3,8 +3,6 @@ import Auth0Provider from 'next-auth/providers/auth0'
 
 import { AUTH_CONFIG_SERVER } from '../../../Config'
 import { IUserMetadata } from '../../../js/types/User'
-import { addUserIdFile } from '../../../js/sirv/SirvClient'
-import { getUserNickFromMediaDir } from '../../../js/usernameUtil'
 
 const CustomClaimsNS = 'https://tacos.openbeta.io/'
 const CustomClaimUserMetadata = CustomClaimsNS + 'user_metadata'
@@ -63,14 +61,6 @@ export default NextAuth({
         token?.userMetadata?.uuid == null || token?.userMetadata?.nick == null) {
         // we must have user uuid and nickname for everything to work
         throw new Error('Missing user uuid and nickname from Auth provider')
-      }
-
-      const { uuid } = token.userMetadata
-      const username = await getUserNickFromMediaDir(uuid)
-      if (username == null) {
-        // id file doesn't exist
-        console.log(`Creating uid.json file for new user: ${uuid}`)
-        await addUserIdFile(`/u/${uuid}/uid.json`, token.userMetadata.nick)
       }
 
       session.user.metadata = token.userMetadata

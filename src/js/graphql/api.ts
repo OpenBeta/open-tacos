@@ -1,10 +1,12 @@
 import { gql } from '@apollo/client'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
-import { AreaType, TickType, HybridMediaTag, MediaByAuthor, CountrySummaryType } from '../types'
+import { AreaType, ClimbType, TickType, MediaByUsers, CountrySummaryType, MediaWithTags } from '../types'
 import { graphqlClient } from './Client'
 import { CORE_CRAG_FIELDS, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
-import { QUERY_TAGS_BY_MEDIA_ID, QUERY_RECENT_MEDIA } from './gql/tags'
+import { QUERY_MEDIA_FOR_FEED } from './gql/tags'
+import { QUERY_USER_MEDIA } from './gql/users'
+import { QUERY_CLIMB_BY_ID } from './gql/climbById'
 
 interface CragsDetailsNearType {
   data: AreaType[] // Should use Omit or Pick
@@ -81,47 +83,24 @@ export const getAreaByUUID = (uuid: string): AreaType | null => {
   return null
 }
 
-/**
- * Providing a list of media IDs return all tag objects that include climb name or area name
- * @param uuidList An array of media UUIDs
- */
-export const getTagsByMediaId = async (uuidList: string[]): Promise<HybridMediaTag[]> => {
+export const getMediaForFeed = async (maxUsers: number, maxFiles: number): Promise<MediaByUsers[]> => {
   try {
-    const rs = await graphqlClient.query({
-      query: QUERY_TAGS_BY_MEDIA_ID,
+    const rs = await graphqlClient.query<{getMediaForFeed: MediaByUsers[]}>({
+      query: QUERY_MEDIA_FOR_FEED,
       variables: {
-        uuidList
-      },
-      fetchPolicy: 'network-only',
-      notifyOnNetworkStatusChange: true
-    })
-
-    if (Array.isArray(rs.data?.getTagsByMediaIdList)) {
-      return rs.data?.getTagsByMediaIdList
-    }
-  } catch (e) {
-    console.log('getTagsByMediaId() error', e)
-  }
-  return []
-}
-
-export const getRecentMedia = async (userLimit = 10): Promise<MediaByAuthor[]> => {
-  try {
-    const rs = await graphqlClient.query<{getRecentTags: MediaByAuthor[]}>({
-      query: QUERY_RECENT_MEDIA,
-      variables: {
-        userLimit
+        maxUsers,
+        maxFiles
       },
       notifyOnNetworkStatusChange: true
     })
 
-    if (Array.isArray(rs.data?.getRecentTags)) {
-      return rs.data?.getRecentTags
+    if (Array.isArray(rs.data?.getMediaForFeed)) {
+      return rs.data?.getMediaForFeed
     }
-    console.log('WARNING: getRecentMedia() returns non-array data')
+    console.log('WARNING: getMediaForFeed() returns non-array data')
     return []
   } catch (e) {
-    console.log('getRecentMedia() error', e)
+    console.log('####### getMediaForFeed() error', e)
   }
   return []
 }
@@ -204,4 +183,31 @@ export const getAllCountries = async (): Promise<CountrySummaryType[]> => {
     console.error('Error fetching all countries', e)
   }
   return []
+}
+
+export const getUserMedia = async (userUuid: string, maxFiles = 1000): Promise<MediaWithTags[]> => {
+  const res = await graphqlClient.query<{ getUserMedia: MediaWithTags[] }, { userUuid: string, maxFiles: number }>({
+    query: QUERY_USER_MEDIA,
+    variables: {
+      userUuid,
+      maxFiles
+    },
+    fetchPolicy: 'no-cache'
+  })
+  return res.data.getUserMedia
+}
+
+/**
+ * Get climb by id
+ * @param id climb id as string in uuid v4 format
+ */
+export const getClimbById = async (id: string): Promise<ClimbType> => {
+  const res = await graphqlClient.query<{ climb: ClimbType }, { id: string }>({
+    query: QUERY_CLIMB_BY_ID,
+    variables: {
+      id
+    },
+    fetchPolicy: 'no-cache'
+  })
+  return res.data.climb
 }

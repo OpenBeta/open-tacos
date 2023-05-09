@@ -1,10 +1,9 @@
 import React, { ReactElement } from 'react'
 
 import { LightBulbIcon } from '@heroicons/react/24/outline'
-import { Dictionary } from 'underscore'
 import ContentLoader from 'react-content-loader'
 
-import { MediaType, HybridMediaTag } from '../../../js/types'
+import { MediaWithTags } from '../../../js/types'
 import TagList from '../TagList'
 import NextPreviousControl from './NextPreviousControl'
 import ResponsiveImage from './ResponsiveImage'
@@ -17,8 +16,7 @@ interface SlideViewerProps {
   isOpen: boolean
   initialIndex: number
   onClose?: () => void
-  imageList: MediaType[]
-  tagsByMediaId: Dictionary<HybridMediaTag[]>
+  imageList: MediaWithTags[]
   userinfo: JSX.Element
   auth: WithPermission
   baseUrl: string
@@ -33,7 +31,6 @@ export default function SlideViewer ({
   onClose,
   initialIndex,
   imageList,
-  tagsByMediaId,
   userinfo,
   auth,
   baseUrl,
@@ -41,15 +38,13 @@ export default function SlideViewer ({
 }: SlideViewerProps): JSX.Element {
   const currentImage = imageList[initialIndex]
 
-  const tagList = tagsByMediaId?.[currentImage?.mediaId] ?? []
-
   return (
     <DesktopModal
       isOpen={isOpen}
       onClose={onClose}
       mediaContainer={initialIndex >= 0
         ? <ResponsiveImage
-            mediaUrl={imageList[initialIndex].filename}
+            mediaUrl={imageList[initialIndex].mediaUrl}
             isHero
           />
         : null}
@@ -60,12 +55,11 @@ export default function SlideViewer ({
           content={
             <InfoContainer
               currentImage={currentImage}
-              tagList={tagList}
               auth={auth}
               onClose={onClose}
             />
           }
-          footer={<><AddTagCta tagCount={tagList.length} auth={auth} /></>}
+          footer={<><AddTagCta tagCount={currentImage.entityTags.length} auth={auth} /></>}
         />
       }
       controlContainer={
@@ -81,21 +75,20 @@ export default function SlideViewer ({
 
 interface SingleViewerProps {
   loaded: boolean
-  media: MediaType | null
-  tagList: HybridMediaTag[]
+  media: MediaWithTags | null
   userinfo: JSX.Element
   auth: WithPermission
   keyboardTip?: boolean
   onClose?: () => void
 }
 
-export const SingleViewer = ({ loaded, media, tagList, userinfo, auth, keyboardTip = true, onClose }: SingleViewerProps): JSX.Element => {
+export const SingleViewer = ({ loaded, media, userinfo, auth, keyboardTip = true, onClose }: SingleViewerProps): JSX.Element => {
   return (
     <>
       <div className='block relative overflow-hidden min-w-[350px] min-h-[300px]'>
-        {loaded && media?.filename != null
+        {loaded && media?.mediaUrl != null
           ? (<img
-              src={DefaultLoader({ src: media.filename, width: 1200 })}
+              src={DefaultLoader({ src: media.mediaUrl, width: 1200 })}
               width={1200}
               sizes='100vw'
               className='bg-gray-100 w-auto h-[100%] max-h-[700px]'
@@ -108,7 +101,6 @@ export const SingleViewer = ({ loaded, media, tagList, userinfo, auth, keyboardT
         content={
           <InfoContainer
             currentImage={media}
-            tagList={tagList}
             auth={auth}
             keyboardTip={keyboardTip}
             onClose={onClose}
@@ -173,33 +165,33 @@ const RhsContainer = ({ loaded, userinfo, content, footer = null }: RhsContainer
 }
 
 interface InfoContainerProps {
-  currentImage: MediaType | null
-  tagList: HybridMediaTag[]
+  currentImage: MediaWithTags | null
   auth: WithPermission
   keyboardTip?: boolean
   onClose?: () => void
 }
 
-const InfoContainer = ({ currentImage, tagList, auth, keyboardTip = true, onClose }: InfoContainerProps): ReactElement | null => {
+const InfoContainer = ({ currentImage, auth, keyboardTip = true, onClose }: InfoContainerProps): ReactElement | null => {
   if (currentImage == null) return null
 
+  const { entityTags } = currentImage
+  const tagCount = entityTags.length
   return (
     <>
       <div className='my-8'>
         <div className='text-primary text-sm'>
-          Climbs: {(tagList?.length ?? 0) === 0 && <span className='text-tertiary'>none</span>}
+          Tags: {tagCount === 0 && <span className='text-tertiary'>none</span>}
         </div>
-        {tagList?.length > 0 &&
+        {tagCount > 0 &&
           <TagList
-            list={tagList}
-            imageInfo={currentImage}
+            mediaWithTags={currentImage}
             {...auth}
             showDelete
             className='my-2'
           />}
       </div>
 
-      {tagList?.length === 0 &&
+      {tagCount === 0 &&
         <div className='my-8 text-secondary flex items-center space-x-1'>
           <LightBulbIcon className='w-6 h-6 stroke-1 stroke-ob-primary' />
           <span className='mt-1 text-xs'>Your tags help others learn more about the crag</span>

@@ -1,15 +1,15 @@
 import { shuffle } from 'underscore'
-import { SIRV_CONFIG } from '../../sirv/SirvClient'
-import { AreaType, MediaBaseTag } from '../../types'
+
+import { CLIENT_CONFIG } from '../../configs/clientConfig'
+import { AreaType, MediaWithTags } from '../../types'
 import { SeoHookType } from './index'
 import { sanitizeName } from '../../utils'
 
 interface AreaSeoProps {
   area: AreaType
-  imageList: MediaBaseTag[]
 }
 
-export const useAreaSeo = ({ area, imageList = [] }: AreaSeoProps): SeoHookType => {
+export const useAreaSeo = ({ area }: AreaSeoProps): SeoHookType => {
   const { areaName, aggregate, pathTokens } = area
   const { byDiscipline } = aggregate
 
@@ -33,6 +33,7 @@ export const useAreaSeo = ({ area, imageList = [] }: AreaSeoProps): SeoHookType 
   const total = sportCount + tradCount + boulderingCount + aidCount
   const pageTitle = `${wall}${sanitizeName(areaName)} Area${total > 1 ? ` • ${total} climbs` : ''}`
 
+  const imageList = area.media
   const pageImages = imageList.length > 0 ? getRandomPreviewImages(imageList) : []
 
   return { pageTitle, pageDescription, pageImages }
@@ -41,7 +42,7 @@ export const useAreaSeo = ({ area, imageList = [] }: AreaSeoProps): SeoHookType 
 /**
  * Return some most recent photos
  */
-export const getRandomPreviewImages = (list: MediaBaseTag[]): string[] => {
+export const getRandomPreviewImages = (list: MediaWithTags[]): string[] => {
   const shortList = shuffle(list.slice(0, 10)) // shuffle the first 10
-  return shortList.slice(0, 4).map(image => (`${SIRV_CONFIG.baseUrl}${image.mediaUrl}?w=1200&ch=630&cy=center&format=jpg&q=85`))
+  return shortList.slice(0, 4).map(image => (`${CLIENT_CONFIG.CDN_BASE_URL}/${image.mediaUrl}?w=1200&ch=630&cy=center&format=jpg&q=85`))
 }

@@ -2,9 +2,7 @@ import { useState } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 
-import { QUERY_AREA_BY_ID } from '../../js/graphql/gql/areaById'
-import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
-import { graphqlClient } from '../../js/graphql/Client'
+import { AreaType, ChangesetType } from '../../js/types'
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import BreadCrumbs from '../../components/ui/BreadCrumbs'
@@ -13,17 +11,17 @@ import SidePanel from '../../components/area/panel/sidePanel'
 import { getSlug } from '../../js/utils'
 import { getNavBarOffset } from '../../components/Header'
 import PhotoMontage from '../../components/media/PhotoMontage'
-import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useAreaSeo } from '../../js/hooks/seo'
 import AreaEditTrigger from '../../components/edit/AreaEditTrigger'
-import { getImageDimensionsHack } from '../../js/utils/hacks'
 
 interface AreaPageProps {
   area: AreaType
   history: ChangesetType[]
-  mediaListWithUsernames: MediaBaseTag[]
 }
 
+/**
+ * Need to decide what to do with this page '/areas/<area id>' url since all the logic has been moved to 'crag/<area_id>'
+ */
 const Area: NextPage<AreaPageProps> = (props) => {
   const router = useRouter()
   return (
@@ -48,7 +46,7 @@ const Area: NextPage<AreaPageProps> = (props) => {
 
 export default Area
 
-const Body = ({ area, mediaListWithUsernames: enhancedMediaList, history }: AreaPageProps): JSX.Element => {
+const Body = ({ area, history }: AreaPageProps): JSX.Element => {
   const [focused, setFocused] = useState<null | string>(null)
   const [selected, setSelected] = useState<null | string>(null)
   const navbarOffset = getNavBarOffset()
@@ -83,7 +81,7 @@ const Body = ({ area, mediaListWithUsernames: enhancedMediaList, history }: Area
           <div className='pt-4'>
             <BreadCrumbs ancestors={ancestors} pathTokens={pathTokens} />
             <div className='mt-4' />
-            <PhotoMontage isHero photoList={enhancedMediaList} />
+            <PhotoMontage isHero photoList={area.media} />
           </div>
           <div className='mt-4 md:flex md:justify-end'>
             <AreaEditTrigger {...area} history={history} />
@@ -136,43 +134,20 @@ export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async
     }
   }
 
-  const rs = await graphqlClient.query<{ area: AreaType, getAreaHistory: ChangesetType[] }>({
-    query: QUERY_AREA_BY_ID,
-    variables: {
-      uuid: params.id
-    },
-    fetchPolicy: 'no-cache'
-  })
-
-  if (rs.data.area.metadata?.leaf || rs.data.area.children.length === 0) {
-    return {
-      redirect: {
-        destination: `/crag/${params.id}`,
-        permanent: false
-      }
-    }
-  }
-
-  const mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.area.media)
-
-  const mediaListWithDimensions = await getImageDimensionsHack(mediaListWithUsernames)
-
-  // Pass Area & edit history data to the page via props
+  // redirect to the crag page for the time being
   return {
-    props: {
-      area: rs.data.area,
-      history: rs.data.getAreaHistory,
-      mediaListWithUsernames: mediaListWithDimensions
-    },
-    revalidate: 10
+    redirect: {
+      destination: `/crag/${params.id}`,
+      permanent: false
+    }
   }
 }
 
 /**
  * Generate dynamic meta tags for page
  */
-export const PageMeta = ({ area, mediaListWithUsernames }: AreaPageProps): JSX.Element => {
-  const { pageImages, pageTitle, pageDescription } = useAreaSeo({ area, imageList: mediaListWithUsernames })
+export const PageMeta = ({ area }: AreaPageProps): JSX.Element => {
+  const { pageImages, pageTitle, pageDescription } = useAreaSeo({ area })
   return (
     <SeoTags
       title={pageTitle}

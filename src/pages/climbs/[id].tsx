@@ -13,12 +13,11 @@ import ArrowVertical from '../../assets/icons/arrow-vertical.svg'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, ClimbDisciplineRecord, ClimbType, MediaBaseTag, RulesType } from '../../js/types'
+import { AreaType, ClimbDisciplineRecord, ClimbType, RulesType } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
 import PhotoMontage, { Skeleton as PhotoMontageSkeleton } from '../../components/media/PhotoMontage'
-import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
 import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import TickButton from '../../components/users/TickButton'
 import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
@@ -27,13 +26,13 @@ import { AREA_NAME_FORM_VALIDATION_RULES } from '../../components/edit/EditAreaF
 import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 import { StickyHeader } from '../../components/crag/StickyHeader'
 import { ClientSideFormSaveAction, Skeleton as ContentSkeleton } from '../../components/crag/cragSummary'
-import { getImageDimensionsHack } from '../../js/utils/hacks'
 import { ArticleLastUpdate } from '../../components/edit/ArticleLastUpdate'
 import { TradSportGradeInput, BoulderingGradeInput } from '../../components/edit/form/GradeTextInput'
 import Grade from '../../js/grades/Grade'
 import { removeTypenameFromDisciplines } from '../../js/utils'
 import { TotalLengthInput } from '../../components/edit/form/TotalLengthInput'
 import { LegacyFAInput } from '../../components/edit/form/LegacyFAInput'
+import { getClimbById } from '../../js/graphql/api'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -57,7 +56,6 @@ export const CLIMB_PROTECTON_FORM_VALIDATION_RULES: RulesType = {
 }
 interface ClimbPageProps {
   climb: ClimbType
-  mediaListWithUsernames: MediaBaseTag[]
   leftClimb: ClimbType | null
   rightClimb: ClimbType | null
   showSkeleton?: boolean
@@ -104,9 +102,9 @@ export interface ClimbEditFormProps {
   length?: number
 }
 
-const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
+const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
   const {
-    id, name, fa: legacyFA, length, yds, grades, type, content, safety, metadata, ancestors, pathTokens, createdAt, createdBy, updatedAt, updatedBy,
+    id, name, fa: legacyFA, length, yds, grades, type, content, safety, metadata, ancestors, pathTokens, authorMetadata,
     parent
   } = climb
   const { climbId } = metadata
@@ -223,7 +221,7 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
         <EditModeToggle onChange={setEditMode} />
       </Portal.Root>
 
-      <PhotoMontage photoList={mediaListWithUsernames} />
+      <PhotoMontage photoList={climb.media} isHero />
 
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(submitHandler)} className='mt-6 first:mt-0'>
@@ -279,9 +277,9 @@ const Body = ({ climb, mediaListWithUsernames, leftClimb, rightClimb }: ClimbPag
                     </div>)}
                 </div>
 
-                {(createdAt != null || updatedAt != null) &&
+                {(authorMetadata.createdAt != null || authorMetadata.updatedAt != null) &&
                   <div className='mt-8  border-t border-b'>
-                    <ArticleLastUpdate createdAt={createdAt} createdBy={createdBy} updatedAt={updatedAt} updatedBy={updatedBy} />
+                    <ArticleLastUpdate {...authorMetadata} />
                   </div>}
 
                 {!editMode &&
@@ -365,78 +363,10 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
       notFound: true
     }
   }
-  const query = gql`query ClimbByUUID($uuid: ID) {
-    climb(uuid: $uuid) {
-      id
-      uuid
-      name
-      fa
-      length
-      yds
-      grades {
-        font
-        french
-        vscale
-        yds
-      }
-      safety
-      type {
-        sport
-        bouldering
-        alpine
-        tr
-        trad
-        mixed
-        aid
-      }
-      media {
-        mediaUrl
-        mediaUuid
-        destination
-        destType
-      }
-      content {
-        description
-        location
-        protection
-      }
-      pathTokens
-      ancestors
-      metadata {
-        climbId
-      }
-      parent {
-        gradeContext
-        metadata {
-          isBoulder
-        }
-      }
-      createdAt
-      createdBy
-      updatedAt
-      updatedBy
-    }
-  }`
 
-  const rs = await graphqlClient.query<{climb: ClimbType}>({
-    query,
-    variables: {
-      uuid: params.id
-    },
-    fetchPolicy: 'no-cache'
-  })
+  const climb = await getClimbById(params.id)
 
-  if (rs.data == null || rs.data.climb == null) {
-    return {
-      notFound: true,
-      revalidate: 10
-    }
-  }
-
-  const mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.climb.media)
-  const mediaListWithDimensions = await getImageDimensionsHack(mediaListWithUsernames)
-
-  const sortedClimbsInArea = await fetchSortedClimbsInArea(rs.data.climb.ancestors[rs.data.climb.ancestors.length - 1])
+  const sortedClimbsInArea = await fetchSortedClimbsInArea(climb.ancestors[climb.ancestors.length - 1])
   let leftClimb: ClimbType | null = null
   let rightClimb: ClimbType | null = null
 
@@ -450,9 +380,8 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
   // Pass climb data to the page via props
   return {
     props: {
-      key: rs.data.climb.id,
-      climb: rs.data.climb,
-      mediaListWithUsernames: mediaListWithDimensions,
+      key: climb.id,
+      climb,
       leftClimb,
       rightClimb
     },
@@ -507,8 +436,8 @@ const trimLegacyFA = (s: string): string => {
 /**
  * Generate dynamic meta tags for page
  */
-const PageMeta = ({ climb, mediaListWithUsernames }: ClimbPageProps): JSX.Element => {
-  const { pageImages, pageTitle, pageDescription } = useClimbSeo({ climb, imageList: mediaListWithUsernames })
+const PageMeta = ({ climb }: ClimbPageProps): JSX.Element => {
+  const { pageImages, pageTitle, pageDescription } = useClimbSeo({ climb })
   return (
     <SeoTags
       title={pageTitle}

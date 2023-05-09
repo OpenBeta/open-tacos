@@ -5,10 +5,8 @@ import { shuffle } from 'underscore'
 
 import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
-import { AreaType, MediaBaseTag, ChangesetType } from '../../js/types'
-import { enhanceMediaListWithUsernames } from '../../js/usernameUtil'
+import { AreaType, ChangesetType } from '../../js/types'
 import { PageMeta } from '../areas/[id]'
-import { getImageDimensionsHack } from '../../js/utils/hacks'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { UploadCTACragBanner } from '../../components/media/UploadCTA'
 import CragSummary, { Skeleton as AreaContentSkeleton } from '../../components/crag/cragSummary'
@@ -17,7 +15,6 @@ import { QUERY_AREA_BY_ID } from '../../js/graphql/gql/areaById'
 interface CragProps {
   area: AreaType
   history: ChangesetType[]
-  mediaListWithUsernames: MediaBaseTag[]
 }
 
 const CragPage: NextPage<CragProps> = (props) => {
@@ -33,9 +30,10 @@ const CragPage: NextPage<CragProps> = (props) => {
 }
 export default CragPage
 
-const Body = ({ area, mediaListWithUsernames: photoList, history }: CragProps): JSX.Element => {
+const Body = ({ area, history }: CragProps): JSX.Element => {
   const level = area?.ancestors.length ?? 0
   const { isFallback: showSkeleton } = useRouter()
+  const photoList = area?.media ?? []
   return (
     <>
       <article className='article'>
@@ -45,6 +43,7 @@ const Body = ({ area, mediaListWithUsernames: photoList, history }: CragProps): 
           {showSkeleton
             ? <AreaContentSkeleton />
             : <CragSummary
+                key={area.uuid}
                 area={area}
                 history={history}
               />}
@@ -79,7 +78,7 @@ export async function getStaticPaths (): Promise<any> {
 }
 
 export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async ({ params }) => {
-  if (params == null || params.id == null) {
+  if (params?.id == null) {
     return {
       notFound: true
     }
@@ -93,20 +92,16 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
     fetchPolicy: 'no-cache'
   })
 
-  if (rs.data == null || rs.data.area == null) {
+  if (rs?.data == null || rs?.data?.area == null) {
     return {
       notFound: true
     }
   }
 
-  const mediaListWithUsernames = await enhanceMediaListWithUsernames(rs.data.area.media)
-  const mediaListWithDimensions = await getImageDimensionsHack(mediaListWithUsernames)
-
   return {
     props: {
       area: rs.data.area,
-      history: rs.data.getAreaHistory,
-      mediaListWithUsernames: mediaListWithDimensions
+      history: rs.data.getAreaHistory
     },
     revalidate: 30
   }

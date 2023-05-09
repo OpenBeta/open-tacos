@@ -9,6 +9,10 @@ module.exports = {
         protocol: 'https',
         hostname: 'openbeta-dev.sirv.com',
         pathname: '*'
+      },
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com'
       }
     ]
   },

@@ -3,14 +3,14 @@ import Image from 'next/image'
 import clx from 'classnames'
 
 import PhotoFooter from './PhotoFooter'
-import { MediaBaseTag } from '../../js/types'
+import { MediaWithTags } from '../../js/types'
 import useResponsive from '../../js/hooks/useResponsive'
 import { DefaultLoader, MobileLoader } from '../../js/sirv/util'
 import PhotoGalleryModal from './PhotoGalleryModal'
 import { userMediaStore } from '../../js/stores/media'
 
 export interface PhotoMontageProps {
-  photoList: MediaBaseTag[]
+  photoList: MediaWithTags[]
   /** set to `true` if gallery is placed above the fold */
   isHero?: boolean
   showSkeleton?: boolean
@@ -46,12 +46,12 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
   if (!showSkeleton && (shuffledList == null || shuffledList?.length === 0)) { return null }
 
   if (isMobile) {
-    const { uid, mediaUrl, destType, destination } = shuffledList[0]
+    const firstMedia = shuffledList[0]
     return (
       <div className='block relative w-full h-60 fadeinEffect'>
         {showPhotoGalleryModal ? photoGalleryModal : undefined}
         <Image
-          src={mediaUrl}
+          src={firstMedia.mediaUrl}
           layout='fill'
           sizes='100vw'
           objectFit='cover'
@@ -60,7 +60,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
           priority={isHero}
           onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)}
         />
-        <PhotoFooter username={uid} destType={destType} destination={destination} hover />
+        <PhotoFooter mediaWithTags={firstMedia} hover />
       </div>
     )
   }
@@ -73,10 +73,11 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
         onMouseLeave={() => setHover(false)}
       >
         {showPhotoGalleryModal ? photoGalleryModal : undefined}
-        {shuffledList.slice(0, 2).map(({ mediaUrl, mediaUuid, uid, destination, destType }) => {
+        {shuffledList.slice(0, 2).map((media) => {
+          const { mediaUrl } = media
           return (
             <div
-              key={mediaUuid}
+              key={mediaUrl}
               className={
                 clx(
                   'block relative hover:cursor-pointer',
@@ -84,7 +85,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
               }
             >
               <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
-              <PhotoFooter username={uid} destType={destType} destination={destination} hover={hover} />
+              <PhotoFooter mediaWithTags={media} hover={hover} />
             </div>
           )
         })}
@@ -103,16 +104,17 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
       {showPhotoGalleryModal ? photoGalleryModal : undefined}
       <div className='block relative col-start-1 col-span-2 row-span-2 col-end-3'>
         <ResponsiveImage mediaUrl={first.mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
-        <PhotoFooter username={first.uid} destType={first.destType} destination={first.destination} hover={hover} />
+        <PhotoFooter mediaWithTags={first} hover={hover} />
       </div>
-      {theRest.map(({ mediaUrl, mediaUuid, uid, destination, destType }, i) => {
+      {theRest.map((media, i) => {
+        const { mediaUrl } = media
         return (
           <div
-            key={`${mediaUuid}_${i}`}
+            key={mediaUrl}
             className='block relative'
           >
             <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
-            <PhotoFooter username={uid} destType={destType} destination={destination} hover={hover} />
+            <PhotoFooter mediaWithTags={media} hover={hover} />
           </div>
         )
       })}
