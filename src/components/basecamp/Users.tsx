@@ -54,10 +54,9 @@ const UserTable = (): JSX.Element => {
       <Paginate currentPage={currentPage} totalPages={totalPages} setPage={setPage} />
       <div className='mt-8 w-full grid grid-cols-9 gap-4 justify-items-start items-center text-sm'>
         <div className='' />
-        <div className='col-span-2' />
-        <div className='col-span-2' />
-
-        <div className='' />
+        <div className='col-span-2 w-full bg-pink-200'>Email</div>
+        <div className='col-span-2 w-full bg-pink-200'>Nickname</div>
+        <div className='w-full bg-pink-200'>Uuid</div>
         <div className='w-full bg-pink-200'>Last Login</div>
         <div className='w-full bg-pink-200'>Counts</div>
         <div className='w-full bg-yellow-200'>Created</div>

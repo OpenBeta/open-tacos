@@ -44,6 +44,9 @@ export const graphqlClient = new ApolloClient({
       AreaMetadata: {
         keyFields: ['areaId']
       },
+      Organization: {
+        keyFields: ['orgId']
+      },
       Climb: {
         keyFields: ['id']
       },

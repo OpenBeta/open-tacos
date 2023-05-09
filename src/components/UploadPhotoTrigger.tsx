@@ -87,7 +87,7 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
 
   return (
     <div
-      className={clx(className, uploading ? 'pointer-events-none' : '')} {...getRootProps()} onClick={(e) => {
+      className={clx('pointer-events-none cursor-not-allowed', className, uploading ? 'pointer-events-none' : '')} {...getRootProps()} onClick={(e) => {
         if (status === 'authenticated' && !uploading) {
           openFileDialog()
         } else {

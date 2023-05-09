@@ -34,6 +34,7 @@ export default function useDeleteTagBackend (): ReturnType {
     await actions.media.removeTag(data.removeTag)
   }
 
+  // eslint-disable-next-line
   const [removeTag] = useMutation<GQLRemoveTagType, RemoveTagMutationProps>(
     MUTATION_REMOVE_MEDIA_TAG, {
       client: graphqlClient,
@@ -42,11 +43,11 @@ export default function useDeleteTagBackend (): ReturnType {
   )
 
   const onDelete = async (tagId: string): Promise<void> => {
-    await removeTag({
-      variables: {
-        tagId
-      }
-    })
+    // await removeTag({
+    //   variables: {
+    //     tagId
+    //   }
+    // })
   }
 
   return { onDelete }

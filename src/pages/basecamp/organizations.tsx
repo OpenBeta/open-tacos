@@ -6,16 +6,16 @@ import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import { LinkButton } from '../../components/ui/Button'
 
-interface UserHomeProps {
+interface OrganizationHomeProps {
   users: any[]
 }
 
-const Users: NextPage<UserHomeProps> = () => {
+const Organizations: NextPage<OrganizationHomeProps> = () => {
   return (
     <>
       <SeoTags
         description='Share your climbing adventure photos and contribute to the Wiki.'
-        title='User Management'
+        title='Organization Management'
       />
 
       <Layout
@@ -26,19 +26,19 @@ const Users: NextPage<UserHomeProps> = () => {
           <div className='flex flex-row w-full'>
             <LinkButton
               href='/basecamp/users'
-              className='btn btn-sm'
-              buttonProps={{ disabled: true }}
+              className='btn btn-sm btn-outline'
             >
               Users
             </LinkButton>
             <LinkButton
               href='/basecamp/organizations'
-              className='btn btn-sm ml-4'
+              className='btn btn-sm btn-outline ml-4'
+              buttonProps={{ disabled: true }}
             >
               Organizations
             </LinkButton>
           </div>
-          <DynamicUsers />
+          <DynamicOrganizations />
         </div>
       </Layout>
     </>
@@ -46,8 +46,8 @@ const Users: NextPage<UserHomeProps> = () => {
   )
 }
 
-export default Users
+export default Organizations
 
-const DynamicUsers = dynamic(async () => await import('../../components/basecamp/Users'), {
+const DynamicOrganizations = dynamic(async () => await import('../../components/basecamp/Organizations'), {
   ssr: false
 })

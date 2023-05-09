@@ -34,6 +34,7 @@ export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, i
         <div className='mt-0.5 whitespace-nowrap truncate text-sm'>{name}</div>
         {isAuthorized && showDelete &&
           <button
+            disabled
             onClick={(e) => {
               onDelete(tag.targetId)
               e.preventDefault()

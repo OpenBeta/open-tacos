@@ -187,6 +187,14 @@ p {
     @apply bg-gray-200;
   }
 
+  .bg-light{
+    background-color: #F8F8F8;
+  }
+
+  .bg-on-hover{
+    background-color: #EEEEEE;
+  }
+
   .btn-nav-secondary {
     @apply bg-ob-tertiary text-black hover:scale-110 duration-300 !important;
   }

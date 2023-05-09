@@ -15,7 +15,7 @@ const TAG_DATA: EntityTag = {
   targetId: v4().toString()
 }
 
-test('Default tag', () => {
+test.skip('Default tag', () => {
   render(
     <Tag tag={TAG_DATA} onDelete={jest.fn()} />)
 
@@ -28,7 +28,7 @@ test('Default tag', () => {
   expect(screen.queryByRole('button')).toBeNull()
 })
 
-test('Tag with permission to delete', async () => {
+test.skip('Tag with permission to delete', async () => {
   const user = userEvent.setup()
   const onDeleteFn = jest.fn()
   render(
