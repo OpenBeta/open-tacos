@@ -6,10 +6,10 @@ import useSWR from 'swr'
 import axios from 'axios'
 import { UserPage } from 'auth0'
 
-import { userHomeFromUuid } from '../../js/sirv/SirvClient'
 import { IUserMetadata } from '../../js/types/User'
 import { usersToCsv, saveAsCSVFile } from '../../js/utils/csv'
 import Bar from '../ui/Bar'
+import { CLIENT_CONFIG } from '../../js/configs/clientConfig'
 
 export default function Users (): JSX.Element {
   const session = useSession()
@@ -159,3 +159,5 @@ const UserRowEmail = ({ index, user, onClick }: UserRowEmailProps): JSX.Element 
     </>
   )
 }
+
+const userHomeFromUuid = (uuid: string): string => `${CLIENT_CONFIG.CDN_BASE_URL}/u/${uuid}`

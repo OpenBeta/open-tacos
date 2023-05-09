@@ -1,7 +1,8 @@
 import { MouseEventHandler, useEffect, useState } from 'react'
-import { Transition } from '@headlessui/react'
 import Image from 'next/image'
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
+import clx from 'classnames'
+
 import { DefaultLoader, MobileLoader } from '../../../js/sirv/util'
 
 const keyStr =
@@ -22,25 +23,21 @@ const DefaultPlaceholder = rgbDataURL(226, 232, 240)
 interface ResponsiveImageProps {
   mediaUrl: string
   isHero: boolean
+  isSquare?: boolean
   loader?: null | ((props: any) => string)
 }
 
 /**
  * NextJS image wrapper with loading indicator
  */
-export default function ResponsiveImage ({ mediaUrl, isHero = true, loader = null }: ResponsiveImageProps): JSX.Element {
+export default function ResponsiveImage ({ mediaUrl, isHero = true, isSquare = false, loader = null }: ResponsiveImageProps): JSX.Element {
   const [isLoading, setLoading] = useState<boolean>(true)
   useEffect(() => {
     setLoading(true)
   }, [mediaUrl])
   return (
-    <Transition
-      show
-      enter='transition duration-500 ease-out'
-      enterFrom='transform opacity-50'
-      enterTo='transform opacity-100'
-      as='div'
-      className='block relative w-full h-full aspect-square'
+    <div
+      className={clx('block relative w-full h-full overflow-hidden', isSquare ? 'aspect-square' : '')}
     >
       <Image
         src={mediaUrl}
@@ -48,7 +45,7 @@ export default function ResponsiveImage ({ mediaUrl, isHero = true, loader = nul
         quality={90}
         layout='fill'
         sizes='100vw'
-        objectFit='contain'
+        objectFit={isSquare ? 'cover' : 'contain'}
         priority={isHero}
         onLoadingComplete={() => setLoading(false)}
       />
@@ -58,7 +55,7 @@ export default function ResponsiveImage ({ mediaUrl, isHero = true, loader = nul
             <EllipsisHorizontalIcon className='text-gray-200 w-16 h-16 animate-pulse' />
           </div>}
       </div>
-    </Transition>
+    </div>
   )
 }
 

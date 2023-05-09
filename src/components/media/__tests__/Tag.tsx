@@ -1,35 +1,29 @@
+import { v4 } from 'uuid'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import Tag from '../Tag'
+import { EntityTag } from '../../../js/types'
 
-const TAG_DATA = [
-  {
-    mediaUuid: '123',
-    mediaUrl: 'https://example.com/1.jpg',
-    mediaType: 0,
-    destType: 0,
-    destination: '1',
-    uid: '2',
-    climb: {
-      id: '1',
-      name: 'Man\'s best friend'
-    }
-  }
-]
+const TAG_DATA: EntityTag = {
+  id: v4(),
+  type: 0,
+  climbName: 'Big roof',
+  areaName: 'The Hanging Garden',
+  ancestors: [v4().toString(), v4().toString()].join(','),
+  targetId: v4().toString()
+}
 
 test.skip('Default tag', () => {
   render(
-    <Tag
-      tag={TAG_DATA[0]}
-      onDelete={jest.fn()}
-    />)
+    <Tag tag={TAG_DATA} onDelete={jest.fn()} />)
 
   const aTag = screen.getByRole('link')
   expect(aTag).not.toBeNull()
-  expect(aTag).toHaveTextContent(TAG_DATA[0].climb.name)
-  expect(aTag.getAttribute('href')).toEqual('/climbs/' + TAG_DATA[0].destination)
+  // @ts-expect-error
+  expect(aTag).toHaveTextContent(TAG_DATA.climbName)
+  expect(aTag.getAttribute('href')).toEqual('/climbs/' + TAG_DATA.targetId)
 
   expect(screen.queryByRole('button')).toBeNull()
 })
@@ -39,7 +33,7 @@ test.skip('Tag with permission to delete', async () => {
   const onDeleteFn = jest.fn()
   render(
     <Tag
-      tag={TAG_DATA[0]}
+      tag={TAG_DATA}
       onDelete={onDeleteFn}
       isAuthorized
       showDelete

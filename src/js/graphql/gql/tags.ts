@@ -5,9 +5,13 @@ import { TagTargetType } from '../../types'
 export const FRAGMENT_CLIMB_TAG = gql`
  fragment ClimbTagFields on ClimbTag {
     id
+    username
     mediaUuid
     mediaUrl
     destType
+    width
+    height
+    uploadTime
     climb {
       id
       name
@@ -17,9 +21,13 @@ export const FRAGMENT_CLIMB_TAG = gql`
 export const FRAGMENT_AREA_TAG = gql`
  fragment AreaTagFields on AreaTag {
     id
+    username
     mediaUuid
     mediaUrl
     destType
+    width
+    height
+    uploadTime
     area {
         uuid
         areaName
@@ -27,6 +35,23 @@ export const FRAGMENT_AREA_TAG = gql`
             areaId
             leaf
         }
+    }
+  }`
+
+export const FRAGMENT_MEDIA_WITH_TAGS = gql`
+ fragment MediaWithTagsFields on MediaWithTags {
+    id
+    username
+    mediaUrl
+    width
+    height
+    uploadTime
+    entityTags {
+      targetId
+      climbName
+      areaName
+      ancestors
+      type
     }
   }`
 
@@ -78,16 +103,14 @@ export const QUERY_TAGS_BY_MEDIA_ID = gql`
   }
 `
 
-export const QUERY_RECENT_MEDIA = gql`
-  query ($userLimit: Int) {
-    getRecentTags(userLimit: $userLimit) {
-      authorUuid
-      tagList {
-        mediaUuid
-        destType
-        mediaUrl
-        mediaType
-        destination
+export const QUERY_MEDIA_FOR_FEED = gql`
+  ${FRAGMENT_MEDIA_WITH_TAGS}
+  query ($maxUsers: Int, $maxFiles: Int) {
+    getMediaForFeed(input: { maxUsers: $maxUsers, maxFiles: $maxFiles }) {
+      username
+      userUuid
+      mediaWithTags {
+        ... MediaWithTagsFields
       }
     }
   }

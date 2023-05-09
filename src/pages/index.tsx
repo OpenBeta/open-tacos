@@ -4,31 +4,26 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import * as Tabs from '@radix-ui/react-tabs'
 import { gql } from '@apollo/client'
-import { groupBy, Dictionary } from 'underscore'
 import { TagIcon, LightBulbIcon, MapPinIcon, PencilIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 
 import Layout from '../components/layout'
 import SeoTags from '../components/SeoTags'
 import { graphqlClient } from '../js/graphql/Client'
-import { getRecentMedia, getTagsByMediaId } from '../js/graphql/api'
-
-import { HybridMediaTag, IndexResponseType, MediaType } from '../js/types'
+import { getMediaForFeed } from '../js/graphql/api'
+import { IndexResponseType, MediaWithTags } from '../js/types'
 import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import RecentTaggedMedia from '../components/home/RecentMedia'
-import { enhanceMediaListWithUsernames } from '../js/usernameUtil'
-import { getImagesByFilenames } from '../js/sirv/SirvClient'
 
 const allowedViews = ['explore', 'newTags', 'map', 'edit', 'pulse']
 
 interface HomePageType {
   exploreData: IndexResponseType
-  tagsByMedia: Dictionary<HybridMediaTag[]>
-  mediaList: MediaType[]
+  recentMediaWithTags: MediaWithTags[]
 }
 
-const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) => {
+const Home: NextPage<HomePageType> = ({ exploreData, recentMediaWithTags }) => {
   const router = useRouter()
   const [activeTab, setTab] = useState<string>('')
   const { areas } = exploreData
@@ -127,7 +122,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
               <DynamicDenseAreas areas={areas} />
             </Tabs.Content>
             <Tabs.Content value='newTags' className='w-full'>
-              <RecentTaggedMedia tags={tagsByMedia} mediaList={mediaList} />
+              <RecentTaggedMedia recentMediaWithTags={recentMediaWithTags ?? []} />
             </Tabs.Content>
             <Tabs.Content value='map' className='z-0 h-full'>
               <DynamicMap />
@@ -140,7 +135,9 @@ const Home: NextPage<HomePageType> = ({ exploreData, tagsByMedia, mediaList }) =
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const query = gql`query UsaAreas( $filter: Filter) {
+//  ${FRAGMENT_MEDIA_WITH_TAGS}
+  const query = gql`
+  query UsaAreas( $filter: Filter) {
     areas(filter: $filter, sort: { totalClimbs: -1 }) {
       id
       uuid
@@ -178,10 +175,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         lng
         areaId
       }
-      media {
-        mediaUrl
-        mediaUuid
-      }
+      # media {
+      #   ... MediaWithTagsFields
+      # }
     }
   }`
 
@@ -202,29 +198,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   })
 
-  /**
-   * Inefficient queries to get recent tagged media.
-   * See https://github.com/OpenBeta/open-tacos/issues/659
-   */
-  const recentMediaList = await getRecentMedia()
+  const recentTagsByUsers = await getMediaForFeed(10, 3)
 
-  const recentTags = recentMediaList?.flatMap(entry => entry.tagList.slice(0, 10)) ?? []
+  const recentTags = recentTagsByUsers.flatMap(entry => entry.mediaWithTags)
 
-  const recentMediaIDList = recentTags.map(entry => entry.mediaUuid)
-
-  // Get tag objects with climb & area name
-  const tags = await getTagsByMediaId(recentMediaIDList)
-
-  const tagsWithUsernames = await enhanceMediaListWithUsernames(tags)
-
-  const tagsByMedia = groupBy(tagsWithUsernames as HybridMediaTag[], 'mediaUrl')
-
-  const list = await getImagesByFilenames(Object.keys(tagsByMedia).slice(0, 30))
   return {
     props: {
       exploreData: rs.data,
-      tagsByMedia,
-      mediaList: list.mediaList
+      recentMediaWithTags: recentTags
     },
     revalidate: 60
   }

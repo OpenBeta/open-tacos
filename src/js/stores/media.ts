@@ -3,7 +3,7 @@ import { v5 as uuidv5 } from 'uuid'
 import { Dictionary } from 'underscore'
 import produce from 'immer'
 
-import type { MediaType, HybridMediaTag, MediaBaseTag } from '../../js/types'
+import type { MediaType, HybridMediaTag, MediaWithTags } from '../../js/types'
 import { DeleteTagResult } from '../hooks/useDeleteTagBackend'
 
 interface UserMediaStateProps {
@@ -19,7 +19,7 @@ interface UserMediaStateProps {
   tagMap: Dictionary<HybridMediaTag[]>
   initialized: boolean
   photoUploadErrorMessage: string | null
-  photoList: MediaBaseTag[]
+  photoList: MediaWithTags[]
 }
 
 const INITIAL_STATE: UserMediaStateProps = {
@@ -153,7 +153,7 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
      * @param photoList
      * @returns
      */
-    setPhotoList: async (photoList: MediaBaseTag[] | []) => {
+    setPhotoList: async (photoList: MediaWithTags[] | []) => {
       set.photoList(photoList)
     }
   }))

@@ -1,32 +1,27 @@
+import { v4 } from 'uuid'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { MediaTagWithClimb, MediaType } from '../../../js/types'
+import { MediaWithTags } from '../../../js/types'
+import { TagListProps } from '../TagList'
 
-const TAG_DATA: MediaTagWithClimb[] = [
-  {
-    mediaUuid: '123',
-    mediaUrl: 'https://example.com/1.jpg',
-    mediaType: 0,
-    destType: 0,
-    destination: '1',
-    uid: '2',
-    climb: {
-      id: '1',
-      name: 'Man\'s best friend'
-    }
-  }
-]
-
-const IMAGE_DATA: MediaType = {
-  ownerId: '1',
-  mediaId: 'A1',
-  filename: 'woof.jpg',
-  ctime: new Date(),
-  mtime: new Date(),
-  contentType: 'image/jpg',
-  meta: {}
+const TAG_DATA: MediaWithTags = {
+  id: v4(),
+  mediaUrl: 'https://example.com/1.jpg',
+  width: 1200,
+  height: 960,
+  format: 'jpeg',
+  size: 30000,
+  uploadTime: new Date(),
+  entityTags: [{
+    id: v4(),
+    type: 0,
+    climbName: 'Big roof',
+    areaName: 'The Hanging Garden',
+    ancestors: [v4().toString(), v4().toString()].join(','),
+    targetId: v4().toString()
+  }]
 }
 
 jest.mock('../../../js/graphql/Client')
@@ -45,7 +40,7 @@ jest.mock('../../../js/hooks/useDeleteTagBackend', () => ({
   default: () => ({ onDelete })
 }))
 
-let PopupTagList
+let PopupTagList: React.FC<TagListProps>
 
 describe('MobilePopupTagMenu', () => {
   beforeAll(async () => {
@@ -58,11 +53,12 @@ describe('MobilePopupTagMenu', () => {
     const user = userEvent.setup()
     render(
       <PopupTagList
-        list={TAG_DATA}
-        imageInfo={IMAGE_DATA}
+        mediaWithTags={TAG_DATA}
+        isAuthorized // Make sure we check that AddTag component is also rendered.
       />
     )
 
+    // isAuthorized = true, check to see if AddTag is rendered
     expect(AddTagMock).toHaveBeenCalledTimes(1)
 
     await user.click(screen.getByRole('button'))

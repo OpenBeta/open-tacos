@@ -38,12 +38,9 @@ test('RadioGroup can change state', async () => {
   await user.click(screen.getByRole('button', { name: 'OK' }))
 
   expect(submitFn).toBeCalledWith({ testRadioGroup: '1' }, expect.anything())
-  screen.debug()
 
   // Test reset
   await user.click(screen.getByRole('button', { name: 'Reset' }))
-
-  screen.debug()
 
   expect(submitFn).toBeCalledWith(
     { testRadioGroup: '2' },

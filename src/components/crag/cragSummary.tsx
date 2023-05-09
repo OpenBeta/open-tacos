@@ -75,7 +75,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
     pathTokens,
     children: childAreas,
     gradeContext,
-    createdAt, createdBy, updatedAt, updatedBy
+    authorMetadata
   } = area
 
   const { lat: initLat, lng: initLng } = areaMeta
@@ -446,12 +446,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
                             </span>
                           </span>
                         </a>
-                        <ArticleLastUpdate
-                          updatedAt={updatedAt}
-                          updatedBy={updatedBy}
-                          createdAt={createdAt}
-                          createdBy={createdBy}
-                        />
+                        <ArticleLastUpdate {...authorMetadata} />
                       </div>
                     )
                   )}

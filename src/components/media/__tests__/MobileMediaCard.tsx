@@ -1,31 +1,26 @@
+import { v4 } from 'uuid'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 
-import { MediaTagWithClimb, MediaType } from '../../../js/types'
+import { MediaWithTags } from '../../../js/types'
+import { MobileMediaCardProps } from '../MobileMediaCard'
 
-const TAG_DATA: MediaTagWithClimb[] = [
-  {
-    mediaUuid: '123',
-    mediaUrl: 'https://example.com/1.jpg',
-    mediaType: 0,
-    destType: 0,
-    destination: '1',
-    uid: '2',
-    climb: {
-      id: '1',
-      name: 'Man\'s best friend'
-    }
-  }
-]
-
-const IMAGE_DATA: MediaType = {
-  ownerId: '1',
-  mediaId: 'A1',
-  filename: 'woof.jpg',
-  ctime: new Date(),
-  mtime: new Date(),
-  contentType: 'image/jpg',
-  meta: {}
+const TAG_DATA: MediaWithTags = {
+  id: v4(),
+  mediaUrl: 'https://example.com/1.jpg',
+  width: 1200,
+  height: 960,
+  format: 'jpeg',
+  size: 30000,
+  uploadTime: new Date(),
+  entityTags: [{
+    id: v4(),
+    type: 0,
+    climbName: 'Big roof',
+    areaName: 'The Hanging Garden',
+    ancestors: [v4().toString(), v4().toString()].join(','),
+    targetId: v4().toString()
+  }]
 }
 
 jest.mock('../../../js/graphql/Client')
@@ -44,7 +39,7 @@ jest.mock('../../../js/hooks/useDeleteTagBackend', () => ({
   default: () => ({ onDelete })
 }))
 
-let MobileMediaCard
+let MobileMediaCard: React.FC<MobileMediaCardProps>
 
 describe('MobileMediaCard', () => {
   beforeAll(async () => {
@@ -56,8 +51,8 @@ describe('MobileMediaCard', () => {
   test('Tag with permission to delete', async () => {
     render(
       <MobileMediaCard
-        tagList={TAG_DATA}
-        imageInfo={IMAGE_DATA}
+        mediaWithTags={TAG_DATA}
+        isAuthorized
       />
     )
 
@@ -65,7 +60,7 @@ describe('MobileMediaCard', () => {
     expect(screen.getByRole('img')).toBeInTheDocument()
 
     // verify list of tags
-    expect(screen.getByRole('link', { name: TAG_DATA[0].climb.name })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: TAG_DATA.entityTags[0].climbName })).toBeInTheDocument()
 
     // verify tag popup menu
     expect(screen.getByRole('button', { name: 'tag menu' })).toBeInTheDocument()

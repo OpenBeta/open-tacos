@@ -21,7 +21,7 @@ interface ChangsetRowProps {
 }
 
 const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
-  const { createdAt, operation, changes } = changeset
+  const { createdAt, editedByUser, operation, changes } = changeset
 
   const op = operationLabelMap[operation]
   if (op == null) console.log('#op', operation, changes)
@@ -34,9 +34,11 @@ const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
           <div className='text-xs text-base-300'>
             {formatDistanceToNow(createdAt, { addSuffix: true })}
           </div>
-          <div className='w-8 h-8'>
-            <UserCircleIcon className='w-6 h-6' />
-          </div>
+          <Link className='w-8 h-8' href={`/u/${editedByUser}`}>
+            <a>
+              <UserCircleIcon className='w-6 h-6' />
+            </a>
+          </Link>
         </div>
         <div className='mt-4 ml-6'>
           {changes.map(change => (

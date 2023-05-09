@@ -48,7 +48,7 @@ export type ClimbDisciplineRecord = Record<ClimbDiscipline, boolean>
 
 export type GradeValuesType = { [Key in GradeScalesTypes]?: string}
 
-export type Climb = EditMetadataType & {
+export interface Climb {
   id: string
   name: string
   fa: string
@@ -65,8 +65,9 @@ export type Climb = EditMetadataType & {
   }
   ancestors: string[]
   pathTokens: string[]
-  media: MediaBaseTag[]
+  media: MediaWithTags[]
   parent: AreaType
+  authorMetadata: AuthorMetadata
 }
 
 export type ClimbType = Climb
@@ -106,11 +107,10 @@ export interface AggregateType {
   byGrade: CountByGroupType[]
   byDiscipline: CountByDisciplineType
   byGradeBand: CountByGradeBandType
-
 }
 
 export type OrganizationType =
-  EditMetadataType & {
+  AuthorMetadata & {
     orgId: string
     orgType: OrgType
     displayName: string
@@ -135,14 +135,14 @@ export interface OrganizationEditableFieldsType extends OrganizationContentType 
   excludedAreaIds?: string[]
 }
 
-export interface EditMetadataType {
-  updatedAt?: number
-  updatedBy?: string
-  createdAt?: number
-  createdBy?: string
+export interface AuthorMetadata {
+  updatedAt?: Date
+  updatedByUser?: string
+  createdAt?: Date
+  createdByUser?: string
 }
 
-export type AreaType = EditMetadataType & {
+export interface AreaType {
   id: string
   uuid: string
   areaName: string
@@ -158,8 +158,9 @@ export type AreaType = EditMetadataType & {
   }
   children: AreaType[]
   climbs: Climb[]
-  media: MediaBaseTag[]
+  media: MediaWithTags[]
   gradeContext: GradeContextType
+  authorMetadata: AuthorMetadata
 }
 
 export interface AreaUpdatableFieldsType {
@@ -240,9 +241,32 @@ export interface MarkerStateType {
   lnglat: number[]
 }
 
-/// /////////////////////////////////////////////
-// Media tags
+export interface EntityTag {
+  id: string
+  targetId: string
+  type: number
+  ancestors: string
+  climbName?: string
+  areaName: string
+}
+/**
+ * Media with climb & area tags
+ */
+export interface MediaWithTags {
+  id: string
+  username?: string
+  mediaUrl: string
+  width: number
+  height: number
+  format: string
+  size: number
+  uploadTime: Date
+  entityTags: EntityTag[]
+}
 
+/**
+ * @deprecated see MediaWithTags
+ */
 export interface MediaBaseTag {
   id: string
   mediaUuid: string
@@ -250,9 +274,13 @@ export interface MediaBaseTag {
   mediaType: number
   destType: number
   destination: string | null
-  uid: string | null
-  mediaInfo?: MediaType
+  username: string | null
+  width: number
+  height: number
+  uploadTime: Date
 }
+
+export type TagSource = Pick<MediaBaseTag, 'mediaUrl' | 'mediaUuid'>
 
 export interface MediaTagWithClimb extends MediaBaseTag {
   climb: Pick<Climb, 'id' | 'name'>
@@ -264,9 +292,10 @@ export interface MediaTagWithArea extends MediaBaseTag {
 
 export type HybridMediaTag = MediaTagWithArea | MediaTagWithClimb
 
-export interface MediaByAuthor {
-  authorUuid: string
-  tagList: MediaBaseTag[]
+export interface MediaByUsers {
+  username: string
+  userUuid: string
+  mediaWithTags: MediaWithTags[]
 }
 export interface WithUid {
   uid: string
@@ -287,13 +316,13 @@ export enum TagTargetType {
   area = 1
 }
 
-export interface XViewStateType extends ViewState{
+export interface XViewStateType extends ViewState {
   width: number
   height: number
   bbox: BBox
 }
 
-export interface TickType{
+export interface TickType {
   _id: string
   userId: string
   name: string
@@ -332,7 +361,7 @@ export interface ChangeType {
 export interface ChangesetType {
   id: string
   createdAt: number
-  editedBy: string
+  editedByUser: string
   operation: string
   changes: ChangeType[]
 }
@@ -378,16 +407,19 @@ export interface FinancialBackerAccountType {
   }
 }
 
-export type CountrySummaryType = Pick<AreaType, 'areaName' | 'uuid' | 'totalClimbs' | 'updatedAt' | 'metadata'> & { metadata: Pick<AreaMetadataType, 'lat' | 'lng' | 'areaId'> }
+export type CountrySummaryType = Pick<AreaType, 'areaName' | 'uuid' | 'totalClimbs' | 'authorMetadata' | 'metadata'> & { metadata: Pick<AreaMetadataType, 'lat' | 'lng' | 'areaId'> }
 
 export interface TagsByUserType {
-  username: string | null
+  userUuid: string
+  username?: string
   total: number
 }
 
 export interface TagsLeaderboardType {
-  grandTotal: number
-  list: TagsByUserType[]
+  allTime: {
+    totalMediaWithTags: number
+    byUsers: TagsByUserType[]
+  }
 }
 
 /**
