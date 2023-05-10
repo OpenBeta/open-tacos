@@ -57,8 +57,6 @@ const UserTable = (): JSX.Element => {
   const [modalOpen, setModalOpen] = useState(false)
   const [focussedUser, setFocussedUser] = useState<User | null>(null)
 
-  const { isLoading, data: userPage, error, mutate } = useSWR<UserPage>(`/api/basecamp/users?page=${currentPage}&email=${emailFilter}&type=auth0`, fetcher)
-  if (isLoading) return <div className='my-8>'>Loading...</div>
   // React-hook-form declaration
   const form = useForm<HtmlFormProps>({
     mode: 'onBlur',
@@ -68,6 +66,9 @@ const UserTable = (): JSX.Element => {
   })
   const { handleSubmit } = form
   const submitHandler = ({ email }): void => { setEmailFilter(email) }
+
+  const { isLoading, data: userPage, error, mutate } = useSWR<UserPage>(`/api/basecamp/users?page=${currentPage}&email=${emailFilter}&type=auth0`, fetcher)
+  if (isLoading) return <div className='my-8>'>Loading...</div>
 
   const totalPages = Math.ceil((userPage?.total ?? 0) / (userPage?.limit ?? 0))
 
