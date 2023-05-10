@@ -35,7 +35,7 @@ const OrganizationTable = (): JSX.Element => {
   const [modalOpen, setModalOpen] = useState(false)
   const [focussedOrg, setfocussedOrg] = useState<OrganizationType | null>(null)
 
-  const { data, error } = useQuery(
+  const { loading, data, error } = useQuery(
     QUERY_ORGANIZATIONS,
     {
       variables: {
@@ -45,6 +45,7 @@ const OrganizationTable = (): JSX.Element => {
       client: graphqlClient
     }
   )
+  if (loading) return <div className='my-8'>Loading...</div>
   if (error != null) toast.error(`Unexpected error ${error.message}`)
   const orgs = data?.organizations
 
