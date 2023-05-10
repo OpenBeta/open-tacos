@@ -1,7 +1,17 @@
+export enum UserRole { // These need to match https://manage.auth0.com/dashboard/us/dev-fmjy7n5n/roles.
+  EDITOR = 'editor',
+  ORG_ADMIN = 'org_admin',
+  USER_ADMIN = 'user_admin',
+}
+
+// Read-only to the user; potentially writable by admins in Basecamp.
 export interface IReadOnlyUserMetadata {
   uuid: string
-  roles: string[]
   loginsCount: number
+  /* Denotes the organizations that users that have the 'org_admin' role
+   * are administering. Those without the role will have this as undefined.
+   */
+  orgAdminOrgIds?: string[]
 }
 
 export interface IWritableUserMetadata {
@@ -28,7 +38,18 @@ export interface IWritableUserMetadata {
   }
 }
 
-export type IUserMetadata = IWritableUserMetadata & IReadOnlyUserMetadata
+/**
+ * `user_metadata` as seen in the Auth0 datastore,
+ * before we add fields during post-login actions.
+ */
+export type IUserMetadataOriginal = IWritableUserMetadata & IReadOnlyUserMetadata
+
+/* `roles` are added by a post-login action and are not in
+ * the user's `user_metadata` object in Auth0.
+ */
+export type IUserMetadata = IUserMetadataOriginal & {
+  roles: UserRole[]
+}
 
 export interface IUserProfile extends IUserMetadata {
   email?: string

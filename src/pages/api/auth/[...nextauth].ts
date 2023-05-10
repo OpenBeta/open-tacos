@@ -2,7 +2,7 @@ import NextAuth from 'next-auth'
 import Auth0Provider from 'next-auth/providers/auth0'
 
 import { AUTH_CONFIG_SERVER } from '../../../Config'
-import { IUserMetadata } from '../../../js/types/User'
+import { IUserMetadata, UserRole } from '../../../js/types/User'
 
 const CustomClaimsNS = 'https://tacos.openbeta.io/'
 const CustomClaimUserMetadata = CustomClaimsNS + 'user_metadata'
@@ -51,7 +51,8 @@ export default NextAuth({
       if (profile?.[CustomClaimUserMetadata] != null) {
         // null guard needed because profile object is only available once
         token.userMetadata = (profile?.[CustomClaimUserMetadata] as IUserMetadata)
-        token.userMetadata.roles = profile?.[CustomClaimRoles] as string[] ?? []
+        const customClaimRoles = profile?.[CustomClaimRoles] as string[] ?? []
+        token.userMetadata.roles = customClaimRoles.map((r: string) => UserRole[r])
       }
 
       return token

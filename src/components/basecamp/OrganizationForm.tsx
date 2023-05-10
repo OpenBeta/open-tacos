@@ -13,19 +13,13 @@ import {
   UpdateOrganizationProps
 } from '../../js/graphql/gql/organization'
 import { toast } from 'react-toastify'
-import { validate as uuidValidate } from 'uuid'
+import { MUUID_VALIDATION, conjoinedStringToArray } from './utils'
 
 const DISPLAY_NAME_FORM_VALIDATION_RULES: RulesType = {
   required: 'A display name is required.',
   minLength: {
     value: 2,
     message: 'Minimum 2 characters.'
-  }
-}
-
-const MUUID_VALIDATION = {
-  validate: (value: string) => {
-    return conjoinedStringToArray(value).every(uuidValidate) || 'Expected comma-separated MUUID hex strings eg. 49017dad-7baf-5fde-8078-f3a4b1230bbb, 88352d11-eb85-5fde-8078-889bb1230b11...'
   }
 }
 
@@ -251,12 +245,4 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
       </div>
     </div>
   )
-}
-
-/**
- * Convert comma-separated string to array.
- * Notably, '' and ',' return [].
- */
-function conjoinedStringToArray (conjoined: string): string[] {
-  return conjoined.split(',').map(s => s.trim()).filter(s => s !== '')
 }

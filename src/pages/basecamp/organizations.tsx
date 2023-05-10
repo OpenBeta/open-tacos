@@ -22,7 +22,7 @@ const Organizations: NextPage<OrganizationHomeProps> = () => {
         contentContainerClass='content-default with-standard-y-margin'
         showFilterBar={false}
       >
-        <div className='max-w-screen-2xl mx-auto flex flex-col items-center 2xl:px-8'>
+        <div className='max-w-screen-2xl mx-auto px-4 flex flex-col items-center 2xl:px-8'>
           <div className='flex flex-row w-full'>
             <LinkButton
               href='/basecamp/users'

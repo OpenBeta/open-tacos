@@ -1,7 +1,7 @@
 import { ManagementClient as Auth0MgmtClient } from 'auth0'
-import type { User, UserPage } from 'auth0'
+import type { User, UserPage, Role } from 'auth0'
 import { AUTH_CONFIG_SERVER } from '../../Config'
-import { IWritableUserMetadata, IUserProfile } from '../types/User'
+import { IWritableUserMetadata, IUserProfile, IUserMetadataOriginal } from '../types/User'
 
 if (AUTH_CONFIG_SERVER == null) throw new Error('AUTH_CONFIG_SERVER not defined')
 
@@ -11,23 +11,29 @@ export const auth0ManagementClient = new Auth0MgmtClient({
   domain: issuer.replace('https://', ''),
   clientId: mgmtClientId,
   clientSecret: mgmtClientSecret,
-  scope: 'read:users update:users create:users'
+  scope: 'read:users update:users create:users read:roles'
 })
 
 interface GetAllUserParams {
   page: number
   connectionType: string
+  email?: string
   legacy?: boolean
 }
 
 export const getAllUsersMetadata = async ({
   page = 1,
   connectionType = 'auth0',
+  email = '',
   legacy = false
 }: GetAllUserParams): Promise<UserPage | null> => {
   let q = 'user_metadata.uuid=*'
   if (legacy) {
     q = ''
+  }
+
+  if (email !== '') {
+    q = q + ` AND email=*${email}*`
   }
 
   if (['email', 'auth0'].includes(connectionType)) {
@@ -115,4 +121,50 @@ export const extractUpdatableMetadataFromProfile = ({ name, nick, bio, website, 
  */
 export const sendEmailVerification = async (userId: string): Promise<void> => {
   await auth0ManagementClient.sendEmailVerification({ user_id: userId, client_id: clientId })
+}
+
+/**
+ * Retrieves roles the user is assigned. Returns at most 50 roles.
+ * @param userId Auth0 internal user id. Ex: auth0|234879238023482995
+ */
+export const getUserRoles = async (userId: string): Promise<Role[]> => {
+  return await auth0ManagementClient.getUserRoles({ id: userId, page: 0, per_page: 50 })
+}
+
+/**
+ * Sets roles for the user, making multiple calls to Auth0 since there is no consolidated set call.
+ * @param userId Auth0 internal user id. Ex: auth0|234879238023482995
+ * @param roles Array of role names (Ex: 'editor'), not Auth0 role IDs (Ex: 'rol_ds239fjdsfsd')
+ */
+export const setUserRoles = async (userId: string, roles: string[]): Promise<void> => {
+  const allRoles = await auth0ManagementClient.getRoles()
+
+  const roleIdsToRemove = allRoles.reduce<string[]>((res, roleObj) => {
+    if (roleObj.name != null && roleObj.id != null && !roles.includes(roleObj.name)) {
+      res.push(roleObj.id)
+    }
+    return res
+  }, [])
+  // Removes roles that the user doesn't even have, but that's ok.
+  if (roleIdsToRemove.length > 0) await auth0ManagementClient.removeRolesFromUser({ id: userId }, { roles: roleIdsToRemove })
+
+  const roleIdsToAssign = allRoles.reduce<string[]>((res, roleObj) => {
+    if (roleObj.name != null && roleObj.id != null && roles.includes(roleObj.name)) {
+      res.push(roleObj.id)
+    }
+    return res
+  }, [])
+  if (roleIdsToAssign.length > 0) await auth0ManagementClient.assignRolestoUser({ id: userId }, { roles: roleIdsToAssign })
+}
+
+/**
+ * For admins to update user metadata, including read-only portions.
+ * Different from updateUserProfile in CurrentUserClientEasily
+ * which is for users to update their own data.
+ * Extendable to update other fields in future.
+ * @param userId Auth0 internal user id. Ex: auth0|234879238023482995
+ * @param userMetadata Fields to be updated
+ */
+export const updateUser = async (userId: string, userMetadata: Partial<IUserMetadataOriginal>): Promise<User> => {
+  return await auth0ManagementClient.updateUser({ id: userId }, { user_metadata: userMetadata })
 }
