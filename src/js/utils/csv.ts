@@ -27,12 +27,14 @@ export const orgsToCsv = (orgs: undefined | OrganizationType[]): string => {
  */
 const processOrg = (org: OrganizationType): string => {
   return orgFields.map(field => {
-    let value = org?.[field] ?? ''
-    if ((field === 'createdAt' || field === 'updatedAt') && org[field] != null) {
-      value = format(org[field] as Date, 'P')
+    let value = org[field] ?? ''
+    if (['createdAt', 'updatedAt'].includes(field)) {
+      const dateField = org[field]
+      if (dateField != null) value = format(org[field], 'P')
     }
-    if (['website', 'donationLink', 'instagramLink', 'email', 'description'].includes(field)) {
-      value = org.content?.[field] ?? ''
+    if (['website', 'donationLink', 'instagramLink', 'facebookLink', 'hardwareReportLink', 'email', 'description'].includes(field)) {
+      const contentField = org.content?.[field]
+      if (contentField != null) value = contentField
     }
     return JSON.stringify(value, replacer) // calling JSON.stringify() to get value quoted
   }).join(SEPARATOR)

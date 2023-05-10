@@ -41,7 +41,8 @@ const fetcher = async (url: string): Promise<any> => (await axios.get(url)).data
 const UserTable = (): JSX.Element => {
   const [currentPage, setPage] = useState(0)
 
-  const { data: userPage, error } = useSWR<UserPage>(`/api/basecamp/users?page=${currentPage}&type=auth0`, fetcher)
+  const { isLoading, data: userPage, error } = useSWR<UserPage>(`/api/basecamp/users?page=${currentPage}&type=auth0`, fetcher)
+  if (isLoading) return <div className='my-8>'>Loading...</div>
   const totalPages = Math.ceil((userPage?.total ?? 0) / (userPage?.limit ?? 0))
 
   return (
