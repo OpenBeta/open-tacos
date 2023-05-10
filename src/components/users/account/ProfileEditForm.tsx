@@ -4,11 +4,11 @@ import * as Yup from 'yup'
 
 import { getUserProfile, updateUserProfile } from '../../../js/auth/CurrentUserClient'
 import TextField from '../../ui/TextField'
-import Snackbar from '../../ui/Snackbar'
 import { IWritableUserMetadata } from '../../../js/types/User'
 import { doesUsernameExist } from '../../../js/userApi/user'
 import { checkUsername, checkWebsiteUrl } from '../../../js/utils'
 import { revalidateUserHomePage } from '../../../js/stores/media'
+import { toast } from 'react-toastify'
 
 const UserProfileSchema = Yup.object().shape({
   nick: Yup.string()
@@ -46,7 +46,6 @@ const UserProfileSchema = Yup.object().shape({
  */
 export default function ProfileEditForm (): ReactElement {
   const [loadingName, setLoadingUser] = useState(false)
-  const [justSubmitted, setJustSubmitted] = useState(false)
   const [isChanged, setChanged] = useState(false)
   const [profile, setProfile] = useState<IWritableUserMetadata>({
     name: '',
@@ -71,13 +70,14 @@ export default function ProfileEditForm (): ReactElement {
     if (profile != null) {
       // Update the profile object in the state
       setProfile(profile)
-      // Set the flag that indicates the user just submitted a change
-      setJustSubmitted(true)
+      // Set the flag that indicates the user just submitted a change and render toast
+      toast.success('Profile Updated', { position: 'bottom-center' })
       // Also trigger a page rebuild
       void revalidateUserHomePage(profile.nick)
     } else {
       // profile did not update for some reason
       // TODO: display that profile did not update
+      toast.error('Update Failed')
       console.error('Profile object was supposed to not be null!')
     }
   }, [])
@@ -142,13 +142,6 @@ export default function ProfileEditForm (): ReactElement {
           <TextField name='name' label='Display Name' isChanged />
           <TextField name='bio' label='Bio' multiline rows={3} spellcheck isChanged />
           <TextField name='website' label='Website (optional)' isChanged />
-          <div className='flex justify-center pt-6'>
-            <Snackbar
-              open={justSubmitted}
-              message='Profile updated!'
-              onClose={() => setJustSubmitted(false)}
-            />
-          </div>
 
           <div className='flex justify-end pt-4'>
             <button
