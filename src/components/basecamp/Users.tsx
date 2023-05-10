@@ -6,10 +6,20 @@ import useSWR from 'swr'
 import axios from 'axios'
 import { UserPage } from 'auth0'
 
-import { IUserMetadata } from '../../js/types/User'
+import { MagnifyingGlassIcon, PencilSquareIcon } from '@heroicons/react/20/solid'
+import { IUserMetadata, UserRole } from '../../js/types/User'
 import { usersToCsv, saveAsCSVFile } from '../../js/utils/csv'
-import Bar from '../ui/Bar'
 import { CLIENT_CONFIG } from '../../js/configs/clientConfig'
+import { Input } from '../ui/form'
+import { useForm, FormProvider } from 'react-hook-form'
+import type { User } from 'auth0'
+import CreateUpdateModal from './CreateUpdateModal'
+import UserForm from './UserForm'
+import { RulesType } from '../../js/types'
+
+const MIN_LENGTH_VALIDATION: RulesType = {
+  minLength: 3
+}
 
 export default function Users (): JSX.Element {
   const session = useSession()
@@ -22,7 +32,7 @@ export default function Users (): JSX.Element {
     }
   }, [session])
 
-  const isAuthorized = session.status === 'authenticated' && session?.data?.user.metadata?.roles?.includes('user_admin')
+  const isAuthorized = session.status === 'authenticated' && session?.data?.user.metadata?.roles?.includes(UserRole.USER_ADMIN)
 
   return (
     <>
@@ -37,59 +47,134 @@ export default function Users (): JSX.Element {
 const LinkProfile = ({ nick }: {nick: string}): JSX.Element => <Link href={`/u/${nick}`}><a className='link-primary'>{nick}</a></Link>
 
 const fetcher = async (url: string): Promise<any> => (await axios.get(url)).data
+interface HtmlFormProps {
+  email: string
+}
 
 const UserTable = (): JSX.Element => {
   const [currentPage, setPage] = useState(0)
+  const [emailFilter, setEmailFilter] = useState('')
+  const [modalOpen, setModalOpen] = useState(false)
+  const [focussedUser, setFocussedUser] = useState<User | null>(null)
 
-  const { isLoading, data: userPage, error } = useSWR<UserPage>(`/api/basecamp/users?page=${currentPage}&type=auth0`, fetcher)
+  const { isLoading, data: userPage, error, mutate } = useSWR<UserPage>(`/api/basecamp/users?page=${currentPage}&email=${emailFilter}&type=auth0`, fetcher)
   if (isLoading) return <div className='my-8>'>Loading...</div>
+  // React-hook-form declaration
+  const form = useForm<HtmlFormProps>({
+    mode: 'onBlur',
+    defaultValues: {
+      email: ''
+    }
+  })
+  const { handleSubmit } = form
+  const submitHandler = ({ email }): void => { setEmailFilter(email) }
+
   const totalPages = Math.ceil((userPage?.total ?? 0) / (userPage?.limit ?? 0))
 
   return (
-    <div className='my-8'>
-      <h2 className='border-b border-t border-primary'>Users: {userPage?.total}</h2>
-      <Bar layoutClass={Bar.JUSTIFY_RIGHT} paddingX={Bar.PX_DEFAULT_LG} className='w-full'><button onClick={() => saveAsCSVFile(usersToCsv(userPage?.users), `openbeta_user_p${currentPage}.csv`)}>Download</button>
-      </Bar>
+    <div className='my-4'>
+      {(focussedUser != null) &&
+        <CreateUpdateModal
+          isOpen={modalOpen}
+          setOpen={setModalOpen}
+          contentContainer={
+            <UserForm
+              user={focussedUser}
+              onClose={() => {
+                void mutate() // Likely that modal changed the data, so have SWR refetch it.
+                setModalOpen(false)
+              }}
+            />
+          }
+        />}
+      <div className=''>
+        <div className='flex items-center justify-between'>
+          <h2 className=''>Users</h2>
+          <FormProvider {...form}>
+            <form onSubmit={handleSubmit(submitHandler)} className='flex items-center'>
+              <Input
+                name='email'
+                placeholder='Search by email'
+                className='input input-bordered input-sm'
+                registerOptions={MIN_LENGTH_VALIDATION}
+              />
+              <button
+                className='btn btn-round btn-sm ml-2'
+                type='submit'
+              ><MagnifyingGlassIcon className='w-4 h-4' />
+              </button>
+            </form>
+          </FormProvider>
+        </div>
+        <div className='flex items-center'>
+          <div className='w-full'>{`${userPage?.total ?? 0} account${(userPage?.total ?? 0) === 1 ? '' : 's'}`}</div>
+          {totalPages > 1 && <Paginate currentPage={currentPage} totalPages={totalPages} setPage={setPage} />}
+          <button
+            className='btn btn-xs btn-link my-2 ml-8'
+            onClick={() => saveAsCSVFile(usersToCsv(userPage?.users), `openbeta_user_p${currentPage}.csv`)}
+          >
+            Download CSV
+          </button>
+        </div>
+      </div>
       {error == null && userPage == null && <div>loading...</div>}
       {error != null && <div>{error}</div>}
-      <Paginate currentPage={currentPage} totalPages={totalPages} setPage={setPage} />
-      <div className='mt-8 w-full grid grid-cols-9 gap-4 justify-items-start items-center text-sm'>
-        <div className='' />
-        <div className='col-span-2 w-full bg-pink-200'>Email</div>
-        <div className='col-span-2 w-full bg-pink-200'>Nickname</div>
-        <div className='w-full bg-pink-200'>Uuid</div>
-        <div className='w-full bg-pink-200'>Last Login</div>
-        <div className='w-full bg-pink-200'>Counts</div>
-        <div className='w-full bg-yellow-200'>Created</div>
-        {userPage?.users?.map((user, index: number) => <UserRow key={user.user_id} index={index} user={user} />)}
-      </div>
+      <table className='table-auto text-left text-sm'>
+        <thead>
+          <tr className=''>
+            <th className='px-4 py-1'>Idx</th>
+            <th className='px-4 py-1'>Email</th>
+            <th className='px-4 py-1'>Nickname</th>
+            <th className='px-4 py-1'>Uuid</th>
+            <th className='px-4 py-1'>Last Login</th>
+            <th className='px-4 py-1'>Counts</th>
+            <th className='px-4 py-1'>Created</th>
+            <th className='px-4 py-1'>Action</th>
+          </tr>
+        </thead>
+        <tbody className=''>
+          {userPage?.users?.map((user, index: number) => <UserRow key={user.user_id} index={index} user={user} setFocussedUser={setFocussedUser} setModalOpen={setModalOpen} />)}
+        </tbody>
+      </table>
     </div>
   )
 }
 interface UserRowProps {
   index: number
   user: any
+  setFocussedUser: (arg0: User) => void
+  setModalOpen: (arg0: boolean) => void
 }
 
-const UserRow = ({ index, user }: UserRowProps): JSX.Element => {
+const UserRow = ({ index, user, setFocussedUser, setModalOpen }: UserRowProps): JSX.Element => {
   // eslint-disable-next-line
   const { user_metadata, last_login, created_at, logins_count, user_id: userId } = user
   const { nick, uuid } = user_metadata as IUserMetadata ?? { nick: null, uuid: null }
 
   return (
-    <>
-      <div>
+    <tr className='hover:bg-slate-100'>
+      <td className='px-4 py-1 text-right'>
         {index + 1}
-      </div>
-      <div className='col-span-2'>{user.email}</div>
-      <div className='col-span-2'>{nick == null ? 'n/a' : <LinkProfile nick={nick} />}</div>
-      <div className=''>
+      </td>
+      <td className='px-4 py-1 break-all'>{user.email}</td>
+      <td className='px-4 py-1 break-all'>{nick == null ? 'n/a' : <LinkProfile nick={nick} />}</td>
+      <td className='px-4 py-1'>
         {uuid == null ? <span>n/a</span> : <a className='link-primary' href={userHomeFromUuid(uuid)}>{uuid.substring(uuid.length - 5)}</a>}
-      </div>
-      <div>{last_login != null ? formatDistanceToNow(parseISO(last_login)) : ''}</div>
-      <div>{logins_count}</div>
-      <div>{formatDistanceToNow(parseISO(created_at))}</div>
-    </>
+      </td>
+      <td className='px-4 py-1'>{last_login != null ? formatDistanceToNow(parseISO(last_login)) : ''}</td>
+      <td className='px-4 py-1'>{logins_count}</td>
+      <td className='px-4 py-1'>{formatDistanceToNow(parseISO(created_at))}</td>
+      <td className='px-4 py-1'>
+        <button
+          className='btn btn-link btn-xs hover:bg-slate-300'
+          onClick={() => {
+            setFocussedUser(user)
+            setModalOpen(true)
+          }}
+        ><PencilSquareIcon className='w-4 h-4' />
+        </button>
+      </td>
+    </tr>
   )
 }
 
@@ -138,7 +223,9 @@ const Paginate = ({ totalPages, currentPage, setPage }: PaginateProps): JSX.Elem
   )
 }
 
-interface UserRowEmailProps extends UserRowProps {
+interface UserRowEmailProps {
+  index: number
+  user: any
   onClick: (userId: string) => void
 }
 

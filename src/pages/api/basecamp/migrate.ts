@@ -4,13 +4,14 @@ import withAuth from '../withAuth'
 import { CreateUserData } from 'auth0'
 import { customAlphabet } from 'nanoid'
 import { nolookalikesSafe } from 'nanoid-dictionary'
+import { UserRole } from '../../../js/types'
 
 import { auth0ManagementClient } from '../../../js/auth/ManagementClient'
 
 const handler: NextApiHandler<any> = async (req, res) => {
   try {
     const session = await getSession({ req })
-    if (session?.user.metadata?.roles?.includes('user_admin') ?? false) {
+    if (session?.user.metadata?.roles?.includes(UserRole.USER_ADMIN) ?? false) {
       const userId = req.query?.id as string
       if (userId == null) throw new Error('Invalid user id')
 

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { formatDistanceToNow } from 'date-fns'
 import { useSession, signIn } from 'next-auth/react'
-import { OrganizationType } from '../../js/types'
+import { OrganizationType, UserRole } from '../../js/types'
 import { orgsToCsv, saveAsCSVFile } from '../../js/utils/csv'
 import CreateUpdateModal from './CreateUpdateModal'
 import OrganizationForm from './OrganizationForm'
 import { graphqlClient } from '../../js/graphql/Client'
 import { QUERY_ORGANIZATIONS } from '../../js/graphql/gql/organization'
 import { toast } from 'react-toastify'
+import { PencilSquareIcon, PlusIcon } from '@heroicons/react/20/solid'
 
 export default function Organizations (): JSX.Element {
   const session = useSession()
@@ -21,7 +22,7 @@ export default function Organizations (): JSX.Element {
     }
   }, [session])
 
-  const isAuthorized = session.status === 'authenticated' && session?.data?.user.metadata?.roles?.includes('user_admin')
+  const isAuthorized = session.status === 'authenticated' && session?.data?.user.metadata?.roles?.includes(UserRole.USER_ADMIN)
 
   return (
     <>
@@ -31,11 +32,15 @@ export default function Organizations (): JSX.Element {
   )
 }
 
+interface QueryOrganizationsDataType {
+  organizations: OrganizationType[]
+}
+
 const OrganizationTable = (): JSX.Element => {
   const [modalOpen, setModalOpen] = useState(false)
   const [focussedOrg, setfocussedOrg] = useState<OrganizationType | null>(null)
 
-  const { loading, data, error } = useQuery(
+  const { loading, data, error } = useQuery<QueryOrganizationsDataType>(
     QUERY_ORGANIZATIONS,
     {
       variables: {
@@ -61,47 +66,59 @@ const OrganizationTable = (): JSX.Element => {
           />
         }
       />
-      <div className='flex flex-row justify-between items-center border-b border-t border-primary'>
-        <h2>Organizations: {orgs?.length}</h2>
-        <div>
+      <div className=''>
+        <div className='flex items-center justify-between'>
+          <h2 className=''>Organizations</h2>
           <button
-            className='btn btn-sm btn-outline my-2'
-            onClick={() => saveAsCSVFile(orgsToCsv(orgs), 'openbeta_organizations.csv')}
-          >
-            Download
-          </button>
-          <button
-            className='btn btn-sm btn-secondary my-2 ml-2'
+            className='btn btn-sm btn-primary my-2 ml-2'
             onClick={() => {
               setfocussedOrg(null)
               setModalOpen(true)
             }}
           >
-            + Create
+            <PlusIcon className='w-4 h-4' />
+            <span className='ml-2'>Create</span>
+          </button>
+        </div>
+        <div className='flex items-center'>
+          <div className='w-full'>
+            {`${orgs?.length ?? 0} account${orgs?.length === 1 ? '' : 's'}`}
+          </div>
+          <button
+            className='btn btn-xs btn-link my-2 ml-8'
+            onClick={() => saveAsCSVFile(orgsToCsv(orgs), 'openbeta_organizations.csv')}
+          >
+            Download
           </button>
         </div>
       </div>
-      <div className='mt-8 w-full grid grid-cols-8 gap-4 justify-items-start items-center text-sm'>
-        <div className='' />
-        <div className='col-span-1 w-full bg-pink-200'>Display Name</div>
-        <div className='col-span-1 w-full bg-pink-200'>OrgId</div>
-        <div className='col-span-1 w-full bg-pink-200'>Org Type</div>
-        <div className='col-span-1 w-full bg-pink-200'>Email</div>
-        <div className='col-span-1 w-full bg-yellow-200'>Created</div>
-        <div className='col-span-1 w-full bg-yellow-200'>Updated</div>
-        <div className='w-full' />
-        {orgs?.map((org, index: number) =>
-          <OrgRow
-            key={org.orgId}
-            index={index}
-            org={org}
-            updateOrg={() => {
-              setfocussedOrg(org)
-              setModalOpen(true)
-            }}
-          />
-        )}
-      </div>
+      <table className='table-auto text-left text-sm'>
+        <thead>
+          <tr className=''>
+            <th className='px-4 py-1'>Idx</th>
+            <th className='px-4 py-1'>Display Name</th>
+            <th className='px-4 py-1'>OrgId</th>
+            <th className='px-4 py-1'>Org Type</th>
+            <th className='px-4 py-1'>Email</th>
+            <th className='px-4 py-1'>Created</th>
+            <th className='px-4 py-1'>Updated</th>
+            <th className='px-4 py-1'>Action</th>
+          </tr>
+        </thead>
+        <tbody className=''>
+          {orgs?.map((org, index: number) =>
+            <OrgRow
+              key={org.orgId}
+              index={index}
+              org={org}
+              updateOrg={() => {
+                setfocussedOrg(org)
+                setModalOpen(true)
+              }}
+            />
+          )}
+        </tbody>
+      </table>
     </div>
   )
 }
@@ -118,24 +135,23 @@ const OrgRow = ({ index, org, updateOrg }: OrgRowProps): JSX.Element => {
   const { email } = content ?? {}
 
   return (
-    <>
-      <div>
+    <tr className='hover:bg-slate-100'>
+      <td className='px-4 py-1 text-right'>
         {index + 1}
-      </div>
-      <div className='col-span-1 w-full'>{displayName}</div>
-      <div className='col-span-1 w-full'>{orgId}</div>
-      <div className='col-span-1 w-full break-words'>{orgType}</div>
-      <div className='col-span-1 w-full break-words'>{email}</div>
-      <div className='col-span-1 w-full'>{createdAt !== undefined ? formatDistanceToNow(createdAt) : null}</div>
-      <div className='col-span-1 w-full'>{updatedAt !== undefined ? formatDistanceToNow(updatedAt) : null}</div>
-      <div>
+      </td>
+      <td className='px-4 py-1'>{displayName}</td>
+      <td className='px-4 py-1 break-all'>{orgId}</td>
+      <td className='px-4 py-1 break-all'>{orgType}</td>
+      <td className='px-4 py-1 break-all'>{email}</td>
+      <td className='px-4 py-1'>{createdAt !== undefined ? formatDistanceToNow(createdAt) : null}</td>
+      <td className='px-4 py-1'>{updatedAt !== undefined ? formatDistanceToNow(updatedAt) : null}</td>
+      <td className='px-4 py-1'>
         <button
-          className='btn btn-sm btn-outline'
+          className='btn btn-link btn-xs hover:bg-slate-300'
           onClick={updateOrg}
-        >
-          Update
+        ><PencilSquareIcon className='w-4 h-4' />
         </button>
-      </div>
-    </>
+      </td>
+    </tr>
   )
 }

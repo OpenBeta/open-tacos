@@ -2,7 +2,7 @@ import { RegisterOptions, useFormContext, UseFormReturn } from 'react-hook-form'
 import clx from 'classnames'
 
 interface InputProps {
-  label: string
+  label?: string
   labelAlt?: string | JSX.Element
   unitLabel?: string
   name: string
@@ -50,7 +50,7 @@ export default function Input ({ label, labelAlt, unitLabel, name, registerOptio
   return (
     <div className='form-control'>
       <label className='label' htmlFor={name}>
-        <span className='label-text font-semibold'>{label}</span>
+        {label != null && <span className='label-text font-semibold'>{label}</span>}
         {labelAlt != null && <span className='label-text-alt'>{labelAlt}</span>}
       </label>
       {unitLabel == null
