@@ -70,14 +70,13 @@ export default function ProfileEditForm (): ReactElement {
     if (profile != null) {
       // Update the profile object in the state
       setProfile(profile)
-      // Removed old state for Snackbar
-      // Added Profile Updated toast
+      // Displays "Profile Updated" toast bottom-right upon successful profile update
       toast.success('Profile Updated')
       // Also trigger a page rebuild
       void revalidateUserHomePage(profile.nick)
     } else {
       // profile did not update for some reason
-      // now displays an Update Failed toast
+      // Displays "Update Failed" toast when profile = null
       toast.error('Update Failed')
       console.error('Profile object was supposed to not be null!')
     }
