@@ -137,6 +137,22 @@ export const QUERY_RECENT_CHANGE_HISTORY = gql`
   }
 `
 
+export const FRAGMENT_ORGANIZATION = gql`
+  fragment OrganizationFields on Organization {
+    orgId
+    orgType
+    displayName
+    content {
+      website
+      description
+      donationLink
+      facebookLink
+      instagramLink
+      hardwareReportLink
+    }
+  }
+`
+
 export interface AddAreaProps {
   name: string
   parentUuid?: string
