@@ -184,6 +184,18 @@ const operationLabelMap = {
   updateClimb: {
     badge: <OpBadge label='Update Climb' clz='badge-info' />,
     icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} />
+  },
+  addOrganization: {
+    badge: <OpBadge label='Add Organization' clz='badge-warning' />,
+    icon: <ActionIcon icon={<PlusIcon className='w-6 h-6 stroke-base-300 stroke-2' />} clz='bg-success' />
+  },
+  updateOrganization: {
+    badge: <OpBadge label='Update Organization' clz='badge-warning' />,
+    icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} />
+  },
+  deleteOrganization: {
+    badge: <OpBadge label='Delete Organization' clz='badge-warning' />,
+    icon: <ActionIcon icon={<MinusIcon className='w-6 h-6 stroke-base-300' />} clz='bg-error' />
   }
 }
 
