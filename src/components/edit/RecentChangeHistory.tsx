@@ -54,7 +54,7 @@ const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
 }
 
 const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element | null => {
-  if (fullDocument.__typeName !== DocumentTypeName.Climb) {
+  if (fullDocument.__typename !== DocumentTypeName.Climb) {
     return null
   }
   const { name, id } = fullDocument as ClimbType
@@ -79,7 +79,7 @@ const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: Change
 }
 
 const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element | null => {
-  if (fullDocument.__typeName !== DocumentTypeName.Area) {
+  if (fullDocument.__typename !== DocumentTypeName.Area) {
     return null
   }
   const { areaName, uuid } = fullDocument as AreaType
@@ -105,7 +105,7 @@ const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeT
 }
 
 const OrganizationChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element | null => {
-  if (fullDocument.__typeName !== DocumentTypeName.Organization) {
+  if (fullDocument.__typename !== DocumentTypeName.Organization) {
     return null
   }
   const { displayName } = fullDocument as OrganizationType

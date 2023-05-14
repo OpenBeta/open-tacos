@@ -349,7 +349,7 @@ export enum DocumentTypeName {
 }
 
 export interface WithDocumentTypeName {
-  __typeName: DocumentTypeName
+  __typename: DocumentTypeName
 }
 
 export interface ChangeType {
