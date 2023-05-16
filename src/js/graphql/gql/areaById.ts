@@ -47,11 +47,12 @@ export const QUERY_AREA_BY_ID = gql`
       }
       pathTokens  
       ancestors
-      organizations{
+      organizations {
         orgId
+        orgType
         associatedAreaIds
         displayName
-        content{
+        content {
           description
           donationLink
           email
