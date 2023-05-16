@@ -1,6 +1,5 @@
 // import * as HoverCard from '@radix-ui/react-hover-card'
-import { ClimbType } from '../../js/types'
-import { LCO_LIST } from './data'
+import { OrganizationType } from '../../js/types'
 import Tooltip from '../../components/ui/Tooltip'
 import { InformationCircleIcon } from '@heroicons/react/20/solid'
 import { UsersIcon } from '@heroicons/react/24/outline'
@@ -12,38 +11,45 @@ export interface LCOProfileType {
   areaIdList: string[]
   /** Official name */
   name: string
+  description: string
+  email?: string
+  facebook?: string
   /** IG Url */
-  instagram: string
+  instagram?: string
   /** Official website */
-  website: string
+  website?: string
   /** Bad hardware report form url */
   report?: string
   /** Donation url */
   donation?: string
 }
 
-const findLCOs = (
-  lcoList: LCOProfileType[],
-  currentPageAncestors: string[]
-): LCOProfileType[] => {
-  return lcoList.reduce<LCOProfileType[]>((acc, curr) => {
-    if (isMyCrag(currentPageAncestors, curr.areaIdList)) {
-      acc.push(curr)
-    }
-    return acc
-  }, [])
+interface PageBannerProps{orgs: OrganizationType[]}
+const getLcoList = (orgs): LCOProfileType[] => {
+  const lcoList: LCOProfileType[] = []
+
+  orgs.forEach(org => {
+    lcoList.push({
+      id: org.orgId,
+      areaIdList: org.associatedAreaIds ?? [],
+      name: org.displayName,
+      description: org.content?.description ?? '',
+      email: org.content?.email,
+      website: org.content?.website,
+      facebook: org.content?.facebookLink,
+      instagram: org.content?.instagramLink,
+      report: org.content?.hardwareReportLink,
+      donation: org.content?.donationLink
+    })
+  })
+  return lcoList
 }
-
-const isMyCrag = (ancestors: string[], myCrags: string[]): boolean =>
-  ancestors.some((path) => myCrags.some((myCragId) => myCragId === path))
-
-type PageBannerProps = Pick<ClimbType, 'ancestors'>
-
 /**
  * Display LCO banner if there is one.  An area may have multiple LCOs.
  */
-export const PageBanner: React.FC<PageBannerProps> = ({ ancestors }) => {
-  const orgs = findLCOs(LCO_LIST, ancestors)
+export const PageBanner: React.FC<PageBannerProps> = ({ orgs }) => {
+  const lcoList = getLcoList(orgs)
+
   return (
     <div className='grid pt-6 pb-4 lg:pb-16 lg:pt-16'>
       <div className='col-span-full flex justify-start items-center pb-6'>
@@ -60,14 +66,14 @@ export const PageBanner: React.FC<PageBannerProps> = ({ ancestors }) => {
         </Tooltip>
       </div>
       <div>
-        {orgs.length === 0
+        {lcoList.length === 0
           ? (
             <p className='italic text-base-content/60'>
               No organizationa found for this area
             </p>
             )
           : (
-              orgs.map((orgProfile) => (
+              lcoList.map((orgProfile) => (
                 <IndividualBanner key={orgProfile.id} profile={orgProfile} />
               ))
             )}
