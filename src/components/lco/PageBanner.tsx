@@ -25,11 +25,10 @@ export interface LCOProfileType {
 }
 
 interface PageBannerProps{orgs: OrganizationType[]}
-const getLcoList = (orgs): LCOProfileType[] => {
-  const lcoList: LCOProfileType[] = []
 
-  orgs.forEach(org => {
-    lcoList.push({
+const getLcoList = (orgs): LCOProfileType[] => {
+  return orgs.filter(org => org.orgType === 'LOCAL_CLIMBING_ORGANIZATION')
+    .map(org => ({
       id: org.orgId,
       areaIdList: org.associatedAreaIds ?? [],
       name: org.displayName,
@@ -40,9 +39,7 @@ const getLcoList = (orgs): LCOProfileType[] => {
       instagram: org.content?.instagramLink,
       report: org.content?.hardwareReportLink,
       donation: org.content?.donationLink
-    })
-  })
-  return lcoList
+    }))
 }
 /**
  * Display LCO banner if there is one.  An area may have multiple LCOs.
