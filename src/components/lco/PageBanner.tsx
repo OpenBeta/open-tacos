@@ -217,7 +217,7 @@ const LcoCard: React.FC<ContentProps> = ({ profile }) => {
           </div>
           <div className='card-actions '>
             <a
-              className='btn btn-primary opacity-80 btn-solid bg-red-500 border-0'
+              className='btn btn-primary btn-solid'
               href={report}
               target='_blank'
               rel='noreferrer'
