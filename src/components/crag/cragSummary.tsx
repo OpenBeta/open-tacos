@@ -72,6 +72,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
     metadata: areaMeta,
     climbs,
     ancestors,
+    organizations,
     pathTokens,
     children: childAreas,
     gradeContext,
@@ -484,7 +485,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
                 placeholder='Area description'
                 rules={AREA_DESCRIPTION_FORM_VALIDATION_RULES}
               />
-              {!editMode && <LCOBanner ancestors={ancestors} />}
+              {!editMode && <LCOBanner orgs={organizations} />}
             </div>
           </div>
 

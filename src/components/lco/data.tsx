@@ -1,10 +1,8 @@
-import { LCOProfileType } from './PageBanner'
-
 /**
  * A hand-coded list of LCOs.
  * Use https://www.uuidgenerator.net to generate a new `id`
  */
-export const LCO_LIST: LCOProfileType[] = [
+export const LCO_LIST = [
   {
     id: 'a791edd2-6a19-4f12-b69d-cbd499fed81f',
     areaIdList: [

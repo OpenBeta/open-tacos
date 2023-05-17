@@ -151,6 +151,7 @@ export interface AreaType {
   pathTokens: string[]
   metadata: AreaMetadataType
   ancestors: string[]
+  organizations: OrganizationType[]
   aggregate: AggregateType
   totalClimbs: number
   density: number

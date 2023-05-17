@@ -47,6 +47,21 @@ export const QUERY_AREA_BY_ID = gql`
       }
       pathTokens  
       ancestors
+      organizations {
+        orgId
+        orgType
+        associatedAreaIds
+        displayName
+        content {
+          description
+          donationLink
+          email
+          facebookLink
+          hardwareReportLink
+          instagramLink
+          website
+        }
+      }
       climbs {
         id
         name
