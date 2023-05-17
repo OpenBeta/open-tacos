@@ -4,13 +4,13 @@ import { AreaSummaryType } from '../crag/cragSummary'
 import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTriggerButtonSm, DeleteAreaTriggerButtonSm } from './Triggers'
 import { AreaEntityIcon } from '../EntityIcons'
 import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 import { useSession } from 'next-auth/react'
 
 export type AreaCRUDProps = Pick<AreaType, 'uuid' | 'areaName'> & {
-  childAreas: any
+  childAreas: AreaType[]
   editMode: boolean
   onChange: () => void
 }
@@ -24,14 +24,14 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
   const session = useSession()
   const areaCount = childAreas.length
 
-  const [childAreasState, setChildAreasState] = useState<Array<AreaType>>(childAreas)
+  const [childAreasState, setChildAreasState] = useState<AreaType[]>(childAreas)
 
   const { updateAreasSortingOrderCmd } = useUpdateAreasCmd({
     areaId: parentUuid,
-    accessToken: session?.data?.accessToken as string ?? '',
+    accessToken: session?.data?.accessToken as string ?? ''
   })
 
-  function reorder<T>(list: Array<T>, startIndex: number, endIndex: number): Array<T> {
+  function reorder<T> (list: T[], startIndex: number, endIndex: number): T[] {
     const result = Array.from(list)
     const [removed] = result.splice(startIndex, 1)
     result.splice(endIndex, 0, removed)
@@ -53,7 +53,7 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
       result.destination.index
     )
 
-    updateAreasSortingOrderCmd(reorderedChildAreas.map((area, idx) => ({ areaId: area.uuid, leftRightIndex: idx })))
+    void updateAreasSortingOrderCmd(reorderedChildAreas.map((area, idx) => ({ areaId: area.uuid, leftRightIndex: idx })))
     setChildAreasState(reorderedChildAreas)
   }
 
@@ -108,7 +108,6 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
                         {...provided.dragHandleProps}
                       >
                         <AreaItem
-                          ref={provided.innerRef}
                           {...provided.draggableProps}
                           key={i.uuid}
                           index={idx}

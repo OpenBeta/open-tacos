@@ -15,7 +15,7 @@ type UpdateOneAreaCmdType = (input: UpdateOneAreaInputType) => Promise<void>
 type AddOneAreCmdType = ({ name, parentUuid }: AddAreaProps) => Promise<void>
 type DeleteOneAreaCmdType = ({ uuid }: DeleteOneAreaInputType) => Promise<void>
 type GetAreaByIdCmdType = ({ skip }: { skip?: boolean }) => QueryResult<{ area: AreaType}>
-type UpdateAreasSortingOrderCmdType = (input: Array<AreaSortingInput>) => Promise<void>
+type UpdateAreasSortingOrderCmdType = (input: AreaSortingInput[]) => Promise<void>
 
 interface CallbackProps {
   onUpdateCompleted?: (data: any) => void
@@ -91,7 +91,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     })
   }
 
-  const [updateAreasSortingOrder] = useMutation<{ updateAreaSortingOrder: any }, { input: Array<AreaSortingInput> }>(
+  const [updateAreasSortingOrder] = useMutation<{ updateAreaSortingOrder: any }, { input: AreaSortingInput[] }>(
     MUTATION_UPDATE_AREAS_SORTING_ORDER, {
       client: graphqlClient,
       onCompleted: async (data) => {
@@ -104,7 +104,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     }
   )
 
-  const updateAreasSortingOrderCmd: UpdateAreasSortingOrderCmdType = async (input: Array<AreaSortingInput>) => {
+  const updateAreasSortingOrderCmd: UpdateAreasSortingOrderCmdType = async (input: AreaSortingInput[]) => {
     console.log('updateAreasSortingOrderCmd input', input)
     await updateAreasSortingOrder({
       variables: { input },
