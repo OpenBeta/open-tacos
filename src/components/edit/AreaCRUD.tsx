@@ -6,6 +6,8 @@ import { AreaEntityIcon } from '../EntityIcons'
 import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
 import React, { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
+import { useSession } from 'next-auth/react'
 
 export type AreaCRUDProps = Pick<AreaType, 'uuid' | 'areaName'> & {
   childAreas: any
@@ -19,17 +21,17 @@ export type AreaCRUDProps = Pick<AreaType, 'uuid' | 'areaName'> & {
  */
 
 export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, editMode, onChange }: AreaCRUDProps): JSX.Element => {
+  const session = useSession()
   const areaCount = childAreas.length
 
-  const [state, setState] = useState<any | undefined>()
+  const [childAreasState, setChildAreasState] = useState<Array<AreaType>>(childAreas)
 
-  useEffect(() => {
-    if (childAreas !== undefined) {
-      setState({ areas: childAreas })
-    }
-  }, [childAreas])
+  const { updateAreasSortingOrderCmd } = useUpdateAreasCmd({
+    areaId: parentUuid,
+    accessToken: session?.data?.accessToken as string ?? '',
+  })
 
-  const reorder = (list, startIndex, endIndex): object => {
+  function reorder<T>(list: Array<T>, startIndex: number, endIndex: number): Array<T> {
     const result = Array.from(list)
     const [removed] = result.splice(startIndex, 1)
     result.splice(endIndex, 0, removed)
@@ -45,13 +47,14 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
       return
     }
 
-    const areas = reorder(
-      state?.areas,
+    const reorderedChildAreas = reorder(
+      childAreasState,
       result.source.index,
       result.destination.index
     )
 
-    setState({ areas })
+    updateAreasSortingOrderCmd(reorderedChildAreas.map((area, idx) => ({ areaId: area.uuid, leftRightIndex: idx })))
+    setChildAreasState(reorderedChildAreas)
   }
 
   return (
@@ -76,7 +79,7 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
           {editMode && <AddAreaTrigger parentName={parentName} parentUuid={parentUuid} onSuccess={onChange} />}
         </div>)}
 
-      {state !== undefined && (
+      {childAreasState.length > 0 && (
         <DragDropContext
           onDragEnd={onDragEnd}
         >
@@ -88,7 +91,7 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
                 className={`two-column-table ${editMode ? '' : 'xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2'
                   }  fr-2`}
               >
-                {state?.areas?.map((i, idx) => (
+                {childAreasState.map((i, idx) => (
                   <Draggable
                     isDragDisabled={!editMode}
                     draggableId={i.uuid}

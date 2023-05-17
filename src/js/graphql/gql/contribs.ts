@@ -30,6 +30,17 @@ mutation ($uuid: String!) {
     }
 }`
 
+export const MUTATION_UPDATE_AREAS_SORTING_ORDER = gql`
+mutation ($input: [AreaSortingInput]) {
+    updateAreasSortingOrder(input: $input)
+}
+`
+
+export interface AreaSortingInput {
+  areaId: string
+  leftRightIndex: number
+}
+
 export interface DeleteOneAreaInputType {
   uuid: string
 }
