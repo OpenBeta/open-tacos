@@ -132,7 +132,7 @@ const LcoCard: React.FC<ContentProps> = ({ profile }) => {
         >
           <p className='text-sm'>{website}</p>
         </a>
-        <p>
+        <p className='whitespace-pre-line'>
           {description}
         </p>
         <div className='border-t border-b divide-y'>
