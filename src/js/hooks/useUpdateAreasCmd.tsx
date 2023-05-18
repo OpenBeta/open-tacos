@@ -95,7 +95,6 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     MUTATION_UPDATE_AREAS_SORTING_ORDER, {
       client: graphqlClient,
       onCompleted: async (data) => {
-        console.log('updateAReasSortingOrderCmd', data)
         await refreshPage(`/api/revalidate?s=${areaId}`)
       },
       onError: (error) => {
@@ -105,7 +104,6 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   )
 
   const updateAreasSortingOrderCmd: UpdateAreasSortingOrderCmdType = async (input: AreaSortingInput[]) => {
-    console.log('updateAreasSortingOrderCmd input', input)
     await updateAreasSortingOrder({
       variables: { input },
       context: {

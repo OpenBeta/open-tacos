@@ -5,9 +5,24 @@ import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTrigg
 import { AreaEntityIcon } from '../EntityIcons'
 import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
 import React, { useState } from 'react'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 import { useSession } from 'next-auth/react'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragOverlay
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy
+} from '@dnd-kit/sortable'
+import { SortableItem } from './SortableItem'
 
 export type AreaCRUDProps = Pick<AreaType, 'uuid' | 'areaName'> & {
   childAreas: AreaType[]
@@ -23,38 +38,42 @@ export type AreaCRUDProps = Pick<AreaType, 'uuid' | 'areaName'> & {
 export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, editMode, onChange }: AreaCRUDProps): JSX.Element => {
   const session = useSession()
   const areaCount = childAreas.length
+  // Prepare {uuid: <AreaType>} mapping to avoid passing entire areas around.
+  const areaStore = new Map(childAreas.map(a => [a.uuid, a]))
 
-  const [childAreasState, setChildAreasState] = useState<AreaType[]>(childAreas)
+  const [areasSortedState, setAreasSortedState] = useState<string[]>(Array.from(areaStore.keys()))
+  const [draggedArea, setDraggedArea] = useState<string | null>(null)
 
   const { updateAreasSortingOrderCmd } = useUpdateAreasCmd({
     areaId: parentUuid,
     accessToken: session?.data?.accessToken as string ?? ''
   })
 
-  function reorder<T> (list: T[], startIndex: number, endIndex: number): T[] {
-    const result = Array.from(list)
-    const [removed] = result.splice(startIndex, 1)
-    result.splice(endIndex, 0, removed)
-    return result
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates
+    })
+  )
+
+  function handleDragEnd (event): void {
+    const { active, over } = event
+    setDraggedArea(null)
+
+    if (active.id !== over.id) {
+      const oldIndex = areasSortedState.indexOf(active.id)
+      const newIndex = areasSortedState.indexOf(over.id)
+      const reorderedChildAreas = arrayMove(areasSortedState, oldIndex, newIndex)
+      void updateAreasSortingOrderCmd(reorderedChildAreas.map((uuid, idx) => ({ areaId: uuid, leftRightIndex: idx })))
+      setAreasSortedState(reorderedChildAreas)
+    }
   }
 
-  function onDragEnd (result): void {
-    /* if (!result.destination) {
-      return
-    } */
-
-    if (result.destination.index === result.source.index) {
-      return
+  function handleDragStart (event): void {
+    const { active } = event
+    if (active.id != null) {
+      setDraggedArea(active.id)
     }
-
-    const reorderedChildAreas = reorder(
-      childAreasState,
-      result.source.index,
-      result.destination.index
-    )
-
-    void updateAreasSortingOrderCmd(reorderedChildAreas.map((area, idx) => ({ areaId: area.uuid, leftRightIndex: idx })))
-    setChildAreasState(reorderedChildAreas)
   }
 
   return (
@@ -71,7 +90,7 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
         <span className='text-base-300 text-sm'>{areaCount > 0 && `Total: ${areaCount}`}</span>
       </div>
 
-      <hr className='mt-4 mb-8 border-1 border-base-content' />
+      <hr className='mt-4 border-1 border-base-content' />
 
       {areaCount === 0 && (
         <div>
@@ -79,54 +98,55 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
           {editMode && <AddAreaTrigger parentName={parentName} parentUuid={parentUuid} onSuccess={onChange} />}
         </div>)}
 
-      {childAreasState.length > 0 && (
-        <DragDropContext
-          onDragEnd={onDragEnd}
+      {areaCount > 0 && (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          onDragStart={handleDragStart}
         >
-          <Droppable droppableId='cragTable'>
-            {(provided, snapshot) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className={`two-column-table ${editMode ? '' : 'xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2'
-                  }  fr-2`}
-              >
-                {childAreasState.map((i, idx) => (
-                  <Draggable
-                    isDragDisabled={!editMode}
-                    draggableId={i.uuid}
+          <div
+            className={`two-column-table ${editMode ? '' : 'xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2'
+              }  fr-2`}
+          >
+            <SortableContext
+              items={areasSortedState}
+              strategy={rectSortingStrategy}
+            >
+              {areasSortedState.map((uuid, idx) => (
+                <SortableItem id={uuid} key={uuid} disabled={!editMode}>
+                  <AreaItem
                     index={idx}
-                    key={i.uuid}
-                  >
-                    {(provided, snapshot) => (
-                      <div
-                        className={
-                          `${snapshot.isDragging ? 'bg-purple-100' : 'bg-white'}`
-}
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <AreaItem
-                          {...provided.draggableProps}
-                          key={i.uuid}
-                          index={idx}
-                          borderBottom={idx === Math.ceil(areaCount / 2) - 1}
-                          parentUuid={parentUuid}
-                          {...i}
-                          editMode={editMode}
-                          onChange={onChange}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+                    borderBottom={[Math.ceil(areaCount / 2) - 1, areaCount - 1].includes(idx)}
+                    parentUuid={parentUuid}
+                    {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+                    ...areaStore.get(uuid)!}
+                    editMode={editMode}
+                    onChange={onChange}
+                  />
+                </SortableItem>
+              ))}
+            </SortableContext>
+          </div>
+          <DragOverlay>
+            {draggedArea != null
+              ? (
+                <div className='bg-purple-100'>
+                  <AreaItem
+                    index={areasSortedState.indexOf(draggedArea)}
+                    borderBottom
+                    parentUuid={parentUuid}
+                    {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+                    ...areaStore.get(draggedArea)!}
+                    editMode={editMode}
+                    onChange={onChange}
+                  />
+                </div>
+                )
+              : null}
+          </DragOverlay>
+        </DndContext>
       )}
-
       {areaCount > 0 && editMode && (
         <div className='mt-8 md:text-right'>
           <AddAreaTrigger parentName={parentName} parentUuid={parentUuid} onSuccess={onChange}>
@@ -156,9 +176,9 @@ export const AreaItem = ({ index, borderBottom, areaName, uuid, parentUuid, onCh
   const { totalClimbs, metadata: { leaf, isBoulder } } = props
   const isLeaf = leaf || isBoulder
   return (
-    <div className={clx('area-row')}>
+    <div className={clx('area-row', borderBottom ? 'border-b' : '')}>
       <a href={`/crag/${uuid}`} className='area-entity-box'>
-        {index + 1}
+        {index != null && index + 1}
       </a>
       <a href={`/crag/${uuid}`} className='flex flex-col items-start items-stretch grow gap-y-1'>
         <div className='font-semibold uppercase thick-link'>
