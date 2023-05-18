@@ -12,7 +12,7 @@ export interface LCOProfileType {
   areaIdList: string[]
   /** Official name */
   name: string
-  description: string
+  description?: string
   email?: string
   facebook?: string
   /** IG Url */
@@ -33,7 +33,7 @@ const getLcoList = (orgs): LCOProfileType[] => {
       id: org.orgId,
       areaIdList: org.associatedAreaIds ?? [],
       name: org.displayName,
-      description: org.content?.description ?? '',
+      description: org.content?.description,
       email: org.content?.email,
       website: org.content?.website,
       facebook: org.content?.facebookLink,
@@ -124,18 +124,22 @@ const LcoCard: React.FC<ContentProps> = ({ profile }) => {
       <div className='gap-10 md:col-span-5'>
         <p className='text-base-content/60 font-semibold'>Local Climbing Organization</p>
         <h2 className='card-title my-2 uppercase'>{name}</h2>
-        <a
-          className='underline pb-5'
-          href={website}
-          target='_blank'
-          rel='noreferrer'
-        >
-          <p className='text-sm'>{website}</p>
-        </a>
-        <p className='whitespace-pre-line'>
-          {description}
-        </p>
-        <div className='border-t border-b divide-y'>
+        {website != null && (
+          <a
+            className='underline pb-5'
+            href={website}
+            target='_blank'
+            rel='noreferrer'
+          >
+            <p className='text-sm'>{website}</p>
+          </a>
+        )}
+        {description != null && (
+          <p className='whitespace-pre-line'>
+            {description}
+          </p>
+        )}
+        <div className={email == null && instagram == null && facebook == null ? ('hidden') : ('border-t border-b divide-y')}>
           <div className='flex felx-row flex-wrap justify-between pt-4 md:pt-6'>
             {email != null && (
               <a
