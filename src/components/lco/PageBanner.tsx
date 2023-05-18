@@ -2,7 +2,8 @@
 import { OrganizationType } from '../../js/types'
 import Tooltip from '../../components/ui/Tooltip'
 import { InformationCircleIcon } from '@heroicons/react/20/solid'
-import { UsersIcon } from '@heroicons/react/24/outline'
+import { UsersIcon, ArrowUpRightIcon } from '@heroicons/react/24/outline'
+import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
 
 export interface LCOProfileType {
   /** Org unique id  */
@@ -11,7 +12,7 @@ export interface LCOProfileType {
   areaIdList: string[]
   /** Official name */
   name: string
-  description: string
+  description?: string
   email?: string
   facebook?: string
   /** IG Url */
@@ -32,7 +33,7 @@ const getLcoList = (orgs): LCOProfileType[] => {
       id: org.orgId,
       areaIdList: org.associatedAreaIds ?? [],
       name: org.displayName,
-      description: org.content?.description ?? '',
+      description: org.content?.description,
       email: org.content?.email,
       website: org.content?.website,
       facebook: org.content?.facebookLink,
@@ -71,7 +72,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({ orgs }) => {
             )
           : (
               lcoList.map((orgProfile) => (
-                <IndividualBanner key={orgProfile.id} profile={orgProfile} />
+                <LcoCardTrigger key={orgProfile.id} profile={orgProfile} />
               ))
             )}
       </div>
@@ -79,8 +80,19 @@ export const PageBanner: React.FC<PageBannerProps> = ({ orgs }) => {
   )
 }
 
+const LcoCardTrigger = ({ profile }): JSX.Element => {
+  return (
+    <MobileDialog modal>
+      <IndividualBanner profile={profile} />
+      <DialogContent>
+        <LcoCard profile={profile} />
+      </DialogContent>
+    </MobileDialog>
+  )
+}
+
 const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
-  <>
+  <DialogTrigger asChild className='flex flex-row items-center gap-4'>
     <div className='sm:inline-block mr-6 mb-6'>
       <div className='flex items-center bg-light hover:bg-on-hover pl-5 pr-7 rounded-2xl'>
         <UsersIcon className='h-10 w-10' />
@@ -92,56 +104,104 @@ const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
         </div>
       </div>
     </div>
-  </>
+  </DialogTrigger>
 )
 
 interface ContentProps {
   profile: LCOProfileType
 }
 
-// Previous implementation using hover card
-// const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
-//  <HoverCard.Root openDelay={300}>
-//    <HoverCard.Trigger>
-//      <ContentTrigger profile={profile} />
-//    </HoverCard.Trigger>
-//    <HoverCard.Portal>
-//      <HoverCard.Content sideOffset={10} side='top' className='z-40'>
-//        <Card profile={profile} />
-//      </HoverCard.Content>
-//    </HoverCard.Portal>
-//  </HoverCard.Root>
-// )
+const LcoCard: React.FC<ContentProps> = ({ profile }) => {
+  const { name, description, email, website, facebook, instagram, report, donation } = profile
+  return (
 
-// const ContentTrigger: React.FC<ContentProps> = ({ profile }) => {
-//  const { name, website } = profile
-//  return (
-//    <a
-//      className='block uppercase hover:underline font-medium'
-//      href={website}
-//      target='_blank'
-//      rel='noreferrer'
-//    >
-//      {name}
-//    </a>
-//  )
-// }
+    <div className='grid md:grid-cols-6 px-11 pt-11 pb-16 gap-2 md:gap-4 bg-white rounded-lg'>
 
-// const Card: React.FC<ContentProps> = ({ profile }) => {
-//  const { name, website, instagram, report, donation } = profile
-//  return (
-//    <div className='card w-96 bg-secondary shadow-xl z-50 overflow-clip border-base-200'>
-//      <div className='p-8 pt-10'>
-//        <h2 className='card-title my-2 uppercase'>{name}</h2>
-//        <div className='flex gap-4'>
-//          <a className='badge badge-outline opacity-60' href={website} target='_blank' rel='noreferrer'>website</a>
-//          <a className='badge badge-outline opacity-60' href={instagram} target='_blank' rel='noreferrer'>instagram</a>
-//          {donation != null && <a className='badge opacity-60 px-4' href={donation} target='_blank' rel='noreferrer'>Donate</a>}
-//        </div>
-//      </div>
-//      <div className='card-actions bg-base-100 flex justify-end p-4'>
-//        <a className='btn btn-primary btn-sm opacity-80' href={report} target='_blank' rel='noreferrer'>Report bad bolts</a>
-//      </div>
-//    </div>
-//  )
-// }
+      <div className='md:col-span-1'>
+        <UsersIcon className='h-12 w-12 rounded-lg border-slate-100 border' />
+      </div>
+
+      <div className='gap-10 md:col-span-5'>
+        <p className='text-base-content/60 font-semibold'>Local Climbing Organization</p>
+        <h2 className='card-title my-2 uppercase'>{name}</h2>
+        {website != null && (
+          <a
+            className='underline pb-5'
+            href={website}
+            target='_blank'
+            rel='noreferrer'
+          >
+            <p className='text-sm'>{website}</p>
+          </a>
+        )}
+        {description != null && (
+          <p className='whitespace-pre-line'>
+            {description}
+          </p>
+        )}
+        <div className={email == null && instagram == null && facebook == null ? ('hidden') : ('border-t border-b divide-y')}>
+          <div className='flex felx-row flex-wrap justify-between pt-4 md:pt-6'>
+            {email != null && (
+              <a
+                className='underline pb-4'
+                href={`mailto:${email}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                contact info
+              </a>
+            )}
+            {instagram != null && (
+              <a
+                className='underline pb-4'
+                href={instagram}
+                target='_blank'
+                rel='noreferrer'
+              >
+                instagram
+              </a>
+            )}
+            {facebook != null && (
+              <a
+                className='underline pb-4'
+                href={facebook}
+                target='_blank'
+                rel='noreferrer'
+              >
+                facebook
+              </a>
+            )}
+          </div>
+        </div>
+        <div className='space-y-4 py-6'>
+          <div>
+            {donation != null && (
+              <a
+                className='btn btn-primary btn-outline'
+                href={donation}
+                target='_blank'
+                rel='noreferrer'
+              >
+                Make a Donation <ArrowUpRightIcon className='ml-2 w-4 h-4' />
+              </a>
+            )}
+          </div>
+          {report != null && (
+            <div className='card-actions '>
+              <a
+                className='btn btn-primary btn-solid'
+                href={report}
+                target='_blank'
+                rel='noreferrer'
+              >
+                Report Hardware Replacement{' '}
+                <ArrowUpRightIcon className='ml-2 w-4 h-4' />
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+
+  )
+}
