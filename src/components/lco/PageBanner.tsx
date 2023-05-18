@@ -72,7 +72,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({ orgs }) => {
             )
           : (
               lcoList.map((orgProfile) => (
-                <IndividualBanner key={orgProfile.id} profile={orgProfile} />
+                <LcoCardTrigger key={orgProfile.id} profile={orgProfile} />
               ))
             )}
       </div>
@@ -112,7 +112,7 @@ interface ContentProps {
 }
 
 const LcoCard: React.FC<ContentProps> = ({ profile }) => {
-  const { name, website, instagram, report, donation } = profile
+  const { name, description, email, website, facebook, instagram, report, donation } = profile
   return (
 
     <div className='grid md:grid-cols-6 px-11 pt-11 pb-16 gap-2 md:gap-4 bg-white rounded-lg'>
@@ -133,45 +133,40 @@ const LcoCard: React.FC<ContentProps> = ({ profile }) => {
           <p className='text-sm'>{website}</p>
         </a>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure
-          reiciendis, illo alias blanditiis corporis temporibus a. Sit animi
-          accusamus laborum minima voluptatibus perspiciatis quos vitae,
-          temporibus, ea quam fugit eos.
+          {description}
         </p>
         <div className='border-t border-b divide-y'>
           <div className='flex felx-row flex-wrap justify-between pt-4 md:pt-6'>
-            <a
-              className='underline pb-4'
-              href={instagram}
-              target='_blank'
-              rel='noreferrer'
-            >
-              contact info
-            </a>
-            <a
-              className='underline pb-4'
-              href={instagram}
-              target='_blank'
-              rel='noreferrer'
-            >
-              instagram
-            </a>
-            <a
-              className='underline pb-4'
-              href={instagram}
-              target='_blank'
-              rel='noreferrer'
-            >
-              twitter
-            </a>
-            <a
-              className='underline pb-4'
-              href={instagram}
-              target='_blank'
-              rel='noreferrer'
-            >
-              facebook
-            </a>
+            {email != null && (
+              <a
+                className='underline pb-4'
+                href={`mailto:${email}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                contact info
+              </a>
+            )}
+            {instagram != null && (
+              <a
+                className='underline pb-4'
+                href={instagram}
+                target='_blank'
+                rel='noreferrer'
+              >
+                instagram
+              </a>
+            )}
+            {facebook != null && (
+              <a
+                className='underline pb-4'
+                href={facebook}
+                target='_blank'
+                rel='noreferrer'
+              >
+                facebook
+              </a>
+            )}
           </div>
         </div>
         <div className='space-y-4 py-6'>
@@ -187,17 +182,19 @@ const LcoCard: React.FC<ContentProps> = ({ profile }) => {
               </a>
             )}
           </div>
-          <div className='card-actions '>
-            <a
-              className='btn btn-primary btn-solid'
-              href={report}
-              target='_blank'
-              rel='noreferrer'
-            >
-              Report Hardware Replacement{' '}
-              <ArrowUpRightIcon className='ml-2 w-4 h-4' />
-            </a>
-          </div>
+          {report != null && (
+            <div className='card-actions '>
+              <a
+                className='btn btn-primary btn-solid'
+                href={report}
+                target='_blank'
+                rel='noreferrer'
+              >
+                Report Hardware Replacement{' '}
+                <ArrowUpRightIcon className='ml-2 w-4 h-4' />
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>
