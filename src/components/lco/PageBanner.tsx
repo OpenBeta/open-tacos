@@ -67,7 +67,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({ orgs }) => {
         {lcoList.length === 0
           ? (
             <p className='italic text-base-content/60'>
-              No organizationa found for this area
+              No organizations found for this area
             </p>
             )
           : (
