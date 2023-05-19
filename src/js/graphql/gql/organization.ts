@@ -56,3 +56,33 @@ export interface AddOrganizationProps extends OrganizationEditableFieldsType {
 export interface UpdateOrganizationProps extends OrganizationEditableFieldsType {
   orgId: string
 }
+
+export interface OrgInput {
+  filter?: OrgFilter
+  sort?: OrgSort
+  limit?: number
+}
+
+interface OrgSort {
+  displayName?: number
+  updatedAt?: number
+}
+
+interface OrgFilter {
+  displayName?: DisplayNameFilter
+  associatedAreaIds?: AssociatedAreaIdsFilter
+  excludedAreaIds?: ExcludedAreaIdsFilter
+}
+
+interface DisplayNameFilter {
+  match: string
+  exactMatch: boolean
+}
+
+interface AssociatedAreaIdsFilter {
+  includes: string[]
+}
+
+interface ExcludedAreaIdsFilter {
+  excludes: string[]
+}

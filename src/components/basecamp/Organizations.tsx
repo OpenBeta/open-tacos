@@ -2,14 +2,20 @@ import React, { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { formatDistanceToNow } from 'date-fns'
 import { useSession, signIn } from 'next-auth/react'
-import { OrganizationType, UserRole } from '../../js/types'
+import { OrganizationType, UserRole, RulesType } from '../../js/types'
 import { orgsToCsv, saveAsCSVFile } from '../../js/utils/csv'
 import CreateUpdateModal from './CreateUpdateModal'
 import OrganizationForm from './OrganizationForm'
 import { graphqlClient } from '../../js/graphql/Client'
-import { QUERY_ORGANIZATIONS } from '../../js/graphql/gql/organization'
+import { OrgInput, QUERY_ORGANIZATIONS } from '../../js/graphql/gql/organization'
+import { Input } from '../ui/form'
 import { toast } from 'react-toastify'
-import { PencilSquareIcon, PlusIcon } from '@heroicons/react/20/solid'
+import { MagnifyingGlassIcon, PencilSquareIcon, PlusIcon } from '@heroicons/react/20/solid'
+import { useForm, FormProvider } from 'react-hook-form'
+
+const MIN_LENGTH_VALIDATION: RulesType = {
+  minLength: 3
+}
 
 export default function Organizations (): JSX.Element {
   const session = useSession()
@@ -36,20 +42,42 @@ interface QueryOrganizationsDataType {
   organizations: OrganizationType[]
 }
 
+interface HtmlFormProps {
+  displayName: string
+}
+
 const OrganizationTable = (): JSX.Element => {
   const [modalOpen, setModalOpen] = useState(false)
+  const [displayName, setDisplayNameFilter] = useState('')
   const [focussedOrg, setfocussedOrg] = useState<OrganizationType | null>(null)
 
+  // Display name filter
+  const form = useForm<HtmlFormProps>({
+    mode: 'onBlur',
+    defaultValues: {
+      displayName: ''
+    }
+  })
+
+  const { handleSubmit } = form
+  const submitHandler = ({ displayName }): void => { setDisplayNameFilter(displayName) }
+
+  // Fetch data
+  const input: OrgInput = {
+    sort: { updatedAt: -1 },
+    limit: 20
+  }
+  if (displayName !== '') {
+    input.filter = { displayName: { match: displayName, exactMatch: false } }
+  }
   const { loading, data, error } = useQuery<QueryOrganizationsDataType>(
     QUERY_ORGANIZATIONS,
     {
-      variables: {
-        sort: { updatedAt: -1 },
-        limit: 20
-      },
+      variables: input,
       client: graphqlClient
     }
   )
+
   if (loading) return <div className='my-8'>Loading...</div>
   if (error != null) toast.error(`Unexpected error ${error.message}`)
   const orgs = data?.organizations
@@ -69,16 +97,33 @@ const OrganizationTable = (): JSX.Element => {
       <div className=''>
         <div className='flex items-center justify-between'>
           <h2 className=''>Organizations</h2>
-          <button
-            className='btn btn-sm btn-primary my-2 ml-2'
-            onClick={() => {
-              setfocussedOrg(null)
-              setModalOpen(true)
-            }}
-          >
-            <PlusIcon className='w-4 h-4' />
-            <span className='ml-2'>Create</span>
-          </button>
+          <div className='flex items-center'>
+            <button
+              className='btn btn-sm btn-primary my-2 ml-2'
+              onClick={() => {
+                setfocussedOrg(null)
+                setModalOpen(true)
+              }}
+            >
+              <PlusIcon className='w-4 h-4' />
+              <span className='ml-2'>Create</span>
+            </button>
+            <FormProvider {...form}>
+              <form onSubmit={handleSubmit(submitHandler)} className='flex items-center ml-4'>
+                <Input
+                  name='displayName'
+                  placeholder='Search by display name'
+                  className='input input-bordered input-sm w-48'
+                  registerOptions={MIN_LENGTH_VALIDATION}
+                />
+                <button
+                  className='btn btn-round btn-sm ml-2'
+                  type='submit'
+                ><MagnifyingGlassIcon className='w-4 h-4' />
+                </button>
+              </form>
+            </FormProvider>
+          </div>
         </div>
         <div className='flex items-center'>
           <div className='w-full'>
