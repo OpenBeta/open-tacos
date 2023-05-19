@@ -222,6 +222,7 @@ Thanks goes to these wonderful people:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sjdex"><img src="https://avatars.githubusercontent.com/u/110608231?v=4?s=100" width="100px;" alt="Shubham Jadhav"/><br /><sub><b>Shubham Jadhav</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=sjdex" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://ohitsjoe.co"><img src="https://avatars.githubusercontent.com/u/3201556?v=4?s=100" width="100px;" alt="Joe Oliver"/><br /><sub><b>Joe Oliver</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=saferthanhouses" title="Code">💻</a> <a href="#ideas-saferthanhouses" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/hawkishpolicy"><img src="https://avatars.githubusercontent.com/u/123108455?v=4?s=100" width="100px;" alt="Thomas Johnson"/><br /><sub><b>Thomas Johnson</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=hawkishpolicy" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/giri-madhan"><img src="https://avatars.githubusercontent.com/u/87971509?v=4?s=100" width="100px;" alt="Giri Madhan"/><br /><sub><b>Giri Madhan</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=giri-madhan" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
