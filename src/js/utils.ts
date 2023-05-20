@@ -1,7 +1,7 @@
 import { ClimbTypeToColor } from './constants'
 import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
 
-import { ClimbType, ClimbDisciplineRecord, ClimbDiscipline } from './types'
+import { AreaType, ClimbType, ClimbDisciplineRecord, ClimbDiscipline } from './types'
 
 /**
  * Given a path or parent id and the type of the page generate the GitHub URL
@@ -243,13 +243,17 @@ export const getMapHref = ({ lat, lng }: { lat: number, lng: number}): string =>
 }
 
 /**
- * Sort climb list by its left to right index
- * @param climbs  array of climbs
+ * Sort list by its left to right index.
+ * @param locales array of climbs or areas
  * @returns sorted array
  */
-export const sortClimbsByLeftRightIndex = (climbs: ClimbType[]): ClimbType[] => climbs.slice().sort(compareFn)
+export function sortByLeftRightIndex<T extends AreaType | ClimbType> (locales: T[]): T[] {
+  return locales.slice().sort(compareFn)
+}
 
-const compareFn = (a: ClimbType, b: ClimbType): number => (a.metadata.leftRightIndex - b.metadata.leftRightIndex)
+function compareFn<T extends AreaType | ClimbType> (a: T, b: T): number {
+  return (a.metadata.leftRightIndex - b.metadata.leftRightIndex)
+}
 
 /**
  * Remove non-true and __typename fields from climb disciplines object.  See https://github.com/apollographql/apollo-client/issues/1913
