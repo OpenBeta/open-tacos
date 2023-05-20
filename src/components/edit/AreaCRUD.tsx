@@ -1,12 +1,4 @@
 import clx from 'classnames'
-import { AreaType } from '../../js/types'
-import { AreaSummaryType } from '../crag/cragSummary'
-import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTriggerButtonSm, DeleteAreaTriggerButtonSm } from './Triggers'
-import { AreaEntityIcon } from '../EntityIcons'
-import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
-import React, { useState } from 'react'
-import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
-import { useSession } from 'next-auth/react'
 import {
   DndContext,
   closestCenter,
@@ -22,7 +14,16 @@ import {
   sortableKeyboardCoordinates,
   rectSortingStrategy
 } from '@dnd-kit/sortable'
+import { useSession } from 'next-auth/react'
+import React, { useState } from 'react'
+
 import { SortableItem } from './SortableItem'
+import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTriggerButtonSm, DeleteAreaTriggerButtonSm } from './Triggers'
+import { AreaSummaryType } from '../crag/cragSummary'
+import { AreaEntityIcon } from '../EntityIcons'
+import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
+import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
+import { AreaType } from '../../js/types'
 
 export type AreaCRUDProps = Pick<AreaType, 'uuid' | 'areaName'> & {
   childAreas: AreaType[]
@@ -178,7 +179,7 @@ export const AreaItem = ({ index, borderBottom, areaName, uuid, parentUuid, onCh
   return (
     <div className={clx('area-row', borderBottom ? 'border-b' : '')}>
       <a href={`/crag/${uuid}`} className='area-entity-box'>
-        {index != null && index + 1}
+        {index + 1}
       </a>
       <a href={`/crag/${uuid}`} className='flex flex-col items-start items-stretch grow gap-y-1'>
         <div className='font-semibold uppercase thick-link'>
