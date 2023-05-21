@@ -64,6 +64,8 @@ export default NextAuth({
         throw new Error('Missing user uuid and nickname from Auth provider')
       }
 
+      console.log('#### uuid', token?.userMetadata?.uuid)
+
       session.user.metadata = token.userMetadata
       session.accessToken = token.accessToken
       session.id = token.id

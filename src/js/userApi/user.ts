@@ -1,21 +1,26 @@
-import axios from 'axios'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
+import { graphqlClient } from '../graphql/Client'
+import { QUERY_DOES_USERNAME_EXIST } from '../graphql/gql/users'
 
-const client = axios.create()
-
-const _checkUsername = async (nick: string): Promise<boolean> => {
+const _doesUsernameExist = async (username: string): Promise<boolean> => {
   try {
-    const res = await client.get<{found: boolean}>('/api/user/exists?nick=' + nick)
-    if (res.status === 200) {
-      return res.data.found
-    }
-    return true
+    const res = await graphqlClient.query<{ usernameExists: boolean }, { username: string }>({
+      query: QUERY_DOES_USERNAME_EXIST,
+      variables: {
+        username
+      },
+      fetchPolicy: 'no-cache'
+    })
+    return res.data.usernameExists
   } catch (e) {
     return true
   }
 }
 
+/**
+ * Check to see if a username already exists in the database
+ */
 export const doesUsernameExist = AwesomeDebouncePromise(
-  _checkUsername,
+  _doesUsernameExist,
   350
 )
