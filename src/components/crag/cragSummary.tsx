@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 
 import { AreaUpdatableFieldsType, AreaType, ClimbDisciplineRecord, ClimbDiscipline, ChangesetType } from '../../js/types'
 import { IndividualClimbChangeInput, UpdateOneAreaInputType } from '../../js/graphql/gql/contribs'
-import { getMapHref, sortClimbsByLeftRightIndex, removeTypenameFromDisciplines } from '../../js/utils'
+import { getMapHref, sortByLeftRightIndex, removeTypenameFromDisciplines } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
 import { AreaDesignationRadioGroupProps, areaDesignationToDb, areaDesignationToForm } from '../edit/form/AreaDesignationRadioGroup'
 import { ClimbListPreview, findDeletedCandidates } from './ClimbListPreview'
@@ -117,7 +117,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
    * Initially set to the childAreas prop coming from Next build, the cache
    * may be updated by the users in the AreaCRUD component.
    */
-  const [childAreasCache, setChildAreasCache] = useState(childAreas)
+  const [childAreasCache, setChildAreasCache] = useState(sortByLeftRightIndex(childAreas))
 
   /**
    * Hold the form base states aka default values.  Since we use Next SSG,
@@ -130,7 +130,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
     description: initDescription,
     latlng: `${initLat.toString()},${initLng.toString()}`,
     areaType: areaDesignationToForm(areaMeta),
-    climbList: sortClimbsByLeftRightIndex(climbs).map(
+    climbList: sortByLeftRightIndex(climbs).map(
       ({
         id,
         name,
@@ -304,7 +304,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
    */
   useEffect(() => {
     if (data?.area != null) {
-      setChildAreasCache(data.area.children)
+      setChildAreasCache(sortByLeftRightIndex(data.area.children))
       const { uuid, areaName, metadata, content, climbs } = data.area
       const { lat, lng } = metadata
       setCache((current) => ({
@@ -314,7 +314,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
         description: content.description,
         areaType: areaDesignationToForm(metadata),
         latlng: `${lat.toString()},${lng.toString()}`,
-        climbList: sortClimbsByLeftRightIndex(climbs).map(
+        climbList: sortByLeftRightIndex(climbs).map(
           ({
             id,
             name,
