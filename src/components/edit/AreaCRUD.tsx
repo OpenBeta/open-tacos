@@ -1,12 +1,32 @@
 import clx from 'classnames'
-import { AreaType } from '../../js/types'
-import { AreaSummaryType } from '../crag/cragSummary'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragOverlay
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy
+} from '@dnd-kit/sortable'
+import { useSession } from 'next-auth/react'
+import React, { useState } from 'react'
+
+import { SortableItem } from './SortableItem'
 import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTriggerButtonSm, DeleteAreaTriggerButtonSm } from './Triggers'
+import { AreaSummaryType } from '../crag/cragSummary'
 import { AreaEntityIcon } from '../EntityIcons'
 import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
+import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
+import { AreaType } from '../../js/types'
 
-export type AreaCRUDProps = Pick<AreaType, 'uuid'|'areaName'> & {
-  childAreas: AreaSummaryType[]
+export type AreaCRUDProps = Pick<AreaType, 'uuid' | 'areaName'> & {
+  childAreas: AreaType[]
   editMode: boolean
   onChange: () => void
 }
@@ -15,8 +35,48 @@ export type AreaCRUDProps = Pick<AreaType, 'uuid'|'areaName'> & {
  * Responsible for rendering child areas table (Read) and Create/Update/Delete operations.
  * @param onChange notify parent of any changes
  */
+
 export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, editMode, onChange }: AreaCRUDProps): JSX.Element => {
+  const session = useSession()
   const areaCount = childAreas.length
+  // Prepare {uuid: <AreaType>} mapping to avoid passing entire areas around.
+  const areaStore = new Map(childAreas.map(a => [a.uuid, a]))
+
+  const [areasSortedState, setAreasSortedState] = useState<string[]>(Array.from(areaStore.keys()))
+  const [draggedArea, setDraggedArea] = useState<string | null>(null)
+
+  const { updateAreasSortingOrderCmd } = useUpdateAreasCmd({
+    areaId: parentUuid,
+    accessToken: session?.data?.accessToken as string ?? ''
+  })
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates
+    })
+  )
+
+  function handleDragEnd (event): void {
+    const { active, over } = event
+    setDraggedArea(null)
+
+    if (active.id !== over.id) {
+      const oldIndex = areasSortedState.indexOf(active.id)
+      const newIndex = areasSortedState.indexOf(over.id)
+      const reorderedChildAreas = arrayMove(areasSortedState, oldIndex, newIndex)
+      void updateAreasSortingOrderCmd(reorderedChildAreas.map((uuid, idx) => ({ areaId: uuid, leftRightIndex: idx })))
+      setAreasSortedState(reorderedChildAreas)
+    }
+  }
+
+  function handleDragStart (event): void {
+    const { active } = event
+    if (active.id != null) {
+      setDraggedArea(active.id)
+    }
+  }
+
   return (
     <>
       <div className='flex items-center justify-between'>
@@ -27,10 +87,11 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
               <AddAreaTriggerButtonSm />
             </AddAreaTrigger>)}
         </div>
+        {/* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */}
         <span className='text-base-300 text-sm'>{areaCount > 0 && `Total: ${areaCount}`}</span>
       </div>
 
-      <hr className='mt-4 mb-8 border-1 border-base-content' />
+      <hr className='mt-4 border-1 border-base-content' />
 
       {areaCount === 0 && (
         <div>
@@ -38,22 +99,55 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
           {editMode && <AddAreaTrigger parentName={parentName} parentUuid={parentUuid} onSuccess={onChange} />}
         </div>)}
 
-      {/* Build 2 column table on large screens */}
-      <div className='two-column-table'>
-        {childAreas.map((props, index) => (
-          <AreaItem
-            key={props.uuid}
-            index={index}
-            borderBottom={index === Math.ceil(areaCount / 2) - 1}
-            parentUuid={parentUuid}
-            {...props}
-            editMode={editMode}
-            onChange={onChange}
-          />))}
-
-        {/* A hack to add bottom border */}
-        {areaCount > 1 && <div className='border-t' />}
-      </div>
+      {areaCount > 0 && (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          onDragStart={handleDragStart}
+        >
+          <div
+            className={`two-column-table ${editMode ? '' : 'xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2'
+              }  fr-2`}
+          >
+            <SortableContext
+              items={areasSortedState}
+              strategy={rectSortingStrategy}
+            >
+              {areasSortedState.map((uuid, idx) => (
+                <SortableItem id={uuid} key={uuid} disabled={!editMode}>
+                  <AreaItem
+                    index={idx}
+                    borderBottom={[Math.ceil(areaCount / 2) - 1, areaCount - 1].includes(idx)}
+                    parentUuid={parentUuid}
+                    {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+                    ...areaStore.get(uuid)!}
+                    editMode={editMode}
+                    onChange={onChange}
+                  />
+                </SortableItem>
+              ))}
+            </SortableContext>
+          </div>
+          <DragOverlay>
+            {draggedArea != null
+              ? (
+                <div className='bg-purple-100'>
+                  <AreaItem
+                    index={areasSortedState.indexOf(draggedArea)}
+                    borderBottom
+                    parentUuid={parentUuid}
+                    {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+                    ...areaStore.get(draggedArea)!}
+                    editMode={editMode}
+                    onChange={onChange}
+                  />
+                </div>
+                )
+              : null}
+          </DragOverlay>
+        </DndContext>
+      )}
       {areaCount > 0 && editMode && (
         <div className='mt-8 md:text-right'>
           <AddAreaTrigger parentName={parentName} parentUuid={parentUuid} onSuccess={onChange}>

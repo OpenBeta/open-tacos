@@ -432,11 +432,11 @@ table td.dtable-my-range {
 
 /** 2-column layout for Area and Climb list */
 .two-column-table {
-  @apply mt-16 lg:gap-x-24 lg:columns-2;
+  @apply lg:gap-x-24 lg:columns-2;
 }
 
 .area-row {
-  @apply py-4 flex flex-row flex-nowrap gap-4 items-start border-t break-inside-avoid-column break-inside-avoid;
+  @apply py-4 flex flex-row flex-nowrap gap-4 px-4 items-start border-t break-inside-avoid-column break-inside-avoid;
 }
 
 .area-entity-box {

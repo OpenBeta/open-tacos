@@ -5,7 +5,8 @@ import { graphqlClient } from '../graphql/Client'
 import {
   MUTATION_UPDATE_AREA, MUTATION_ADD_AREA,
   UpdateOneAreaInputType, UpdateAreaApiReturnType, AddAreaReturnType, AddAreaProps,
-  DeleteOneAreaInputType, DeleteOneAreaReturnType, MUTATION_REMOVE_AREA
+  DeleteOneAreaInputType, DeleteOneAreaReturnType,
+  MUTATION_REMOVE_AREA, MUTATION_UPDATE_AREAS_SORTING_ORDER, AreaSortingInput
 } from '../graphql/gql/contribs'
 import { QUERY_AREA_FOR_EDIT } from '../../js/graphql/gql/areaById'
 import { AreaType } from '../../js/types'
@@ -14,6 +15,7 @@ type UpdateOneAreaCmdType = (input: UpdateOneAreaInputType) => Promise<void>
 type AddOneAreCmdType = ({ name, parentUuid }: AddAreaProps) => Promise<void>
 type DeleteOneAreaCmdType = ({ uuid }: DeleteOneAreaInputType) => Promise<void>
 type GetAreaByIdCmdType = ({ skip }: { skip?: boolean }) => QueryResult<{ area: AreaType}>
+type UpdateAreasSortingOrderCmdType = (input: AreaSortingInput[]) => Promise<void>
 
 interface CallbackProps {
   onUpdateCompleted?: (data: any) => void
@@ -29,11 +31,12 @@ type Props = CallbackProps & {
   accessToken: string
 }
 
-interface UpdateClimbsHookReturn {
+interface UpdateAreasHookReturn {
   getAreaByIdCmd: GetAreaByIdCmdType
   updateOneAreaCmd: UpdateOneAreaCmdType
   addOneAreaCmd: AddOneAreCmdType
   deleteOneAreaCmd: DeleteOneAreaCmdType
+  updateAreasSortingOrderCmd: UpdateAreasSortingOrderCmdType
 }
 
 /**
@@ -43,7 +46,7 @@ interface UpdateClimbsHookReturn {
  * @param onUpdateCompleted Optional success callback
  * @param onError Optiona error callback
  */
-export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props }: Props): UpdateClimbsHookReturn {
+export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props }: Props): UpdateAreasHookReturn {
   const { onUpdateCompleted, onUpdateError, onAddCompleted, onAddError, onDeleteCompleted, onDeleteError } = props
 
   const getAreaByIdCmd: GetAreaByIdCmdType = ({ skip = false }) => {
@@ -80,6 +83,29 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
         ...input,
         uuid: areaId
       },
+      context: {
+        headers: {
+          authorization: `Bearer ${accessToken}`
+        }
+      }
+    })
+  }
+
+  const [updateAreasSortingOrder] = useMutation<{ updateAreaSortingOrder: any }, { input: AreaSortingInput[] }>(
+    MUTATION_UPDATE_AREAS_SORTING_ORDER, {
+      client: graphqlClient,
+      onCompleted: async (data) => {
+        await refreshPage(`/api/revalidate?s=${areaId}`)
+      },
+      onError: (error) => {
+        toast.error(`Unexpected error: ${error.message}`)
+      }
+    }
+  )
+
+  const updateAreasSortingOrderCmd: UpdateAreasSortingOrderCmdType = async (input: AreaSortingInput[]) => {
+    await updateAreasSortingOrder({
+      variables: { input },
       context: {
         headers: {
           authorization: `Bearer ${accessToken}`
@@ -155,7 +181,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     })
   }
 
-  return { updateOneAreaCmd, addOneAreaCmd, deleteOneAreaCmd, getAreaByIdCmd }
+  return { updateOneAreaCmd, addOneAreaCmd, deleteOneAreaCmd, getAreaByIdCmd, updateAreasSortingOrderCmd }
 }
 
 export const refreshPage = async (url: string): Promise<void> => {
