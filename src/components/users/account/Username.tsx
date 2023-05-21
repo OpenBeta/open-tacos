@@ -8,7 +8,7 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 const specialWords = /openbeta|0penbeta|admin|adm1n|null|undefined/i
 const validUsername = /^[a-zA-Z0-9]+([_\\.-]?[a-zA-Z0-9])*$/i
 const whitespace = /[\s]+/g
-const endWithSeparators = /[_\\.-]+$/i
+const endsWithSeparators = /[_\\.-]+$/i
 const beginsWithSeparators = /^[_\\.-]+/i
 const muiltipleSeparators = /[_\\.-]{2,}/i
 
@@ -26,13 +26,13 @@ export const USERNAME_VALIDATION_RULES: RulesType = {
     formatCheck: (v: string): string | undefined => {
       if (v.length === 0) return undefined
       if (whitespace.test(v)) {
-        return 'Cannot have space'
+        return 'Use only letters and numbers'
       }
-      if (endWithSeparators.test(v)) {
-        return 'Must end with letters or numbers'
+      if (endsWithSeparators.test(v)) {
+        return 'Must end with a letter or number'
       }
       if (beginsWithSeparators.test(v)) {
-        return 'Must start with letters or numbers'
+        return 'Must start with a letter or number'
       }
       if (muiltipleSeparators.test(v)) {
         return 'Use only 1 consecutive separator'
