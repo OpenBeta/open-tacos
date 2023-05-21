@@ -89,7 +89,7 @@ export default function Input ({ label, labelAlt, unitLabel, unitLabelPlacement 
           </label>
           )}
 
-      <label className='label' id={`${name}-helper`} htmlFor={name}>
+      <label className='label h-12' id={`${name}-helper`} htmlFor={name}>
         {error?.message != null &&
            (<span className='label-text-alt text-error'>{error?.message as string}</span>)}
         {(error == null) && helper}

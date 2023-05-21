@@ -13,7 +13,7 @@ const edit: INextPageWithAuth = () => {
       <div className='h-screen lg:flex lg:justify-center'>
         <div className='hidden lg:block bg-accent/80 w-full' />
         <div className='w-full px-4 lg:px-6 flex items-center'>
-          <div className='h-24'><Username /></div>
+          <Username />
         </div>
       </div>
     </>
