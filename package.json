@@ -49,7 +49,6 @@
     "raw-body": "^2.5.1",
     "rc-slider": "^10.0.0-alpha.5",
     "react": "^18.0.0",
-    "react-beautiful-dnd": "^13.1.0",
     "react-content-loader": "^6.2.0",
     "react-dom": "^18.0.0",
     "react-dropzone": "^14.2.1",
