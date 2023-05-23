@@ -1,11 +1,12 @@
 import Link from 'next/link'
-import { useController, useWatch } from 'react-hook-form'
+import { useController, useFormContext, useWatch } from 'react-hook-form'
 import { indexBy, Dictionary } from 'underscore'
 import clx from 'classnames'
 
 import { EditableClimbType, SummaryHTMLFormProps } from './cragSummary'
 import { ClimbDisciplineRecord } from '../../js/types'
 import { disciplineTypeToDisplay } from '../../js/grades/util'
+import { DraggableTable } from '../edit/DraggableTable'
 
 type EditableClimbTypeWithFieldId = EditableClimbType & { id: string }
 interface Props {
@@ -13,38 +14,52 @@ interface Props {
 }
 
 /**
- * Rendering the climb table.  The list is coming from react-hook-form context.
+ * List of climbs that is drag-and-droppable. The data comes from react-hook-form context.
  */
 export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
   const { formState: { defaultValues, dirtyFields } } = useController<SummaryHTMLFormProps>({ name: 'climbList' })
+  const { setValue } = useFormContext()
 
   const watchList: EditableClimbType[] = useWatch({ name: 'climbList' })
   const defaultList = (defaultValues?.climbList ?? []) as EditableClimbType[]
   const dirtyFieldsClimbList = dirtyFields?.climbList
   const toBeDeleted = findDeletedCandidates(defaultList, watchList)
 
+  const onDragEnd = (reOrderedClimbs: string[]): void => {
+    void setValue('climbList', reOrderedClimbs.map(climbId => watchList.find(climb => climb.id === climbId)))
+  }
+
   const lastItemOfFirstColumn = Math.ceil(watchList.length / 2) - 1
   return (
     <div className='mt-16 min-h-[8rem]'>
       <h3>Climbs&nbsp;<span className='text-base-300'>({watchList.length})</span></h3>
-      <hr className='mt-1 mb-8 border-1 border-base-content' />
+      <hr className='mt-1 border-1 border-base-content' />
 
-      <section className='two-column-table'>
-        {watchList.map((entry, index: number) => {
-          const rowDirty = (dirtyFieldsClimbList?.[index]?.name ?? false) || (dirtyFieldsClimbList?.[index]?.gradeStr ?? false)
-          return (
-            <Row
-              key={entry.id} {...entry}
-              index={index}
-              showBorderBottom={index === lastItemOfFirstColumn || index === watchList.length - 1}
-              dirty={rowDirty}
-              editMode={editable}
-              dirtyFlags={dirtyFieldsClimbList?.[index] as ClimbEntryDirtyType}
-            />
-          )
-        })}
-        {watchList.length === 0 && <div className='text-base-300 italic'>None</div>}
-      </section>
+      {watchList.length > 0 && (
+        <DraggableTable
+          editMode={editable}
+          rowIds={watchList.map(climb => climb.id)}
+          onDragEnd={onDragEnd}
+          renderRow={(climbId: string, idx: number) => {
+            const rowDirty = (dirtyFieldsClimbList?.[idx]?.name ?? false) || (dirtyFieldsClimbList?.[idx]?.gradeStr ?? false)
+            return (
+              <Row
+                key={climbId}
+                {...watchList[idx]}
+                index={idx}
+                showBorderBottom={idx === lastItemOfFirstColumn || idx === watchList.length - 1}
+                dirty={rowDirty}
+                editMode={editable}
+                dirtyFlags={dirtyFieldsClimbList?.[idx] as ClimbEntryDirtyType}
+              />
+            )
+          }}
+        />
+      )}
+
+      {watchList.length === 0 && (
+        <div className='text-base-300 italic'>None</div>
+      )}
 
       {editable && toBeDeleted?.length > 0 && (
         <>

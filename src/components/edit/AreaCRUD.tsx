@@ -1,29 +1,14 @@
 import clx from 'classnames'
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragOverlay
-} from '@dnd-kit/core'
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  rectSortingStrategy
-} from '@dnd-kit/sortable'
 import { useSession } from 'next-auth/react'
-import React, { useState } from 'react'
+import React from 'react'
 
-import { SortableItem } from './SortableItem'
 import { DeleteAreaTrigger, AddAreaTrigger, AddAreaTriggerButtonMd, AddAreaTriggerButtonSm, DeleteAreaTriggerButtonSm } from './Triggers'
 import { AreaSummaryType } from '../crag/cragSummary'
 import { AreaEntityIcon } from '../EntityIcons'
 import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 import { AreaType } from '../../js/types'
+import { DraggableTable } from './DraggableTable'
 
 export type AreaCRUDProps = Pick<AreaType, 'uuid' | 'areaName'> & {
   childAreas: AreaType[]
@@ -42,39 +27,13 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
   // Prepare {uuid: <AreaType>} mapping to avoid passing entire areas around.
   const areaStore = new Map(childAreas.map(a => [a.uuid, a]))
 
-  const [areasSortedState, setAreasSortedState] = useState<string[]>(Array.from(areaStore.keys()))
-  const [draggedArea, setDraggedArea] = useState<string | null>(null)
-
   const { updateAreasSortingOrderCmd } = useUpdateAreasCmd({
     areaId: parentUuid,
     accessToken: session?.data?.accessToken as string ?? ''
   })
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
-    })
-  )
-
-  function handleDragEnd (event): void {
-    const { active, over } = event
-    setDraggedArea(null)
-
-    if (active.id !== over.id) {
-      const oldIndex = areasSortedState.indexOf(active.id)
-      const newIndex = areasSortedState.indexOf(over.id)
-      const reorderedChildAreas = arrayMove(areasSortedState, oldIndex, newIndex)
-      void updateAreasSortingOrderCmd(reorderedChildAreas.map((uuid, idx) => ({ areaId: uuid, leftRightIndex: idx })))
-      setAreasSortedState(reorderedChildAreas)
-    }
-  }
-
-  function handleDragStart (event): void {
-    const { active } = event
-    if (active.id != null) {
-      setDraggedArea(active.id)
-    }
+  function onDragEnd (reorderedChildAreas: string[]): void {
+    void updateAreasSortingOrderCmd(reorderedChildAreas.map((uuid, idx) => ({ areaId: uuid, leftRightIndex: idx })))
   }
 
   return (
@@ -100,53 +59,24 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
         </div>)}
 
       {areaCount > 0 && (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-          onDragStart={handleDragStart}
-        >
-          <div
-            className={`two-column-table ${editMode ? '' : 'xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2'
-              }  fr-2`}
-          >
-            <SortableContext
-              items={areasSortedState}
-              strategy={rectSortingStrategy}
-            >
-              {areasSortedState.map((uuid, idx) => (
-                <SortableItem id={uuid} key={uuid} disabled={!editMode}>
-                  <AreaItem
-                    index={idx}
-                    borderBottom={[Math.ceil(areaCount / 2) - 1, areaCount - 1].includes(idx)}
-                    parentUuid={parentUuid}
-                    {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-                    ...areaStore.get(uuid)!}
-                    editMode={editMode}
-                    onChange={onChange}
-                  />
-                </SortableItem>
-              ))}
-            </SortableContext>
-          </div>
-          <DragOverlay>
-            {draggedArea != null
-              ? (
-                <div className='bg-purple-100'>
-                  <AreaItem
-                    index={areasSortedState.indexOf(draggedArea)}
-                    borderBottom
-                    parentUuid={parentUuid}
-                    {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-                    ...areaStore.get(draggedArea)!}
-                    editMode={editMode}
-                    onChange={onChange}
-                  />
-                </div>
-                )
-              : null}
-          </DragOverlay>
-        </DndContext>
+        <DraggableTable
+          rowIds={Array.from(areaStore.keys())}
+          editMode={editMode}
+          onDragEnd={onDragEnd}
+          renderRow={(areaId: string, idx: number) => {
+            return (
+              <AreaItem
+                index={idx}
+                borderBottom={[Math.ceil(areaCount / 2) - 1, areaCount - 1].includes(idx)}
+                parentUuid={parentUuid}
+                {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+              ...areaStore.get(areaId)!}
+                editMode={editMode}
+                onChange={onChange}
+              />
+            )
+          }}
+        />
       )}
       {areaCount > 0 && editMode && (
         <div className='mt-8 md:text-right'>

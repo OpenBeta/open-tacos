@@ -130,7 +130,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
     description: initDescription,
     latlng: `${initLat.toString()},${initLng.toString()}`,
     areaType: areaDesignationToForm(areaMeta),
-    climbList: sortByLeftRightIndex(climbs).map(
+    climbList: climbs.map(
       ({
         id,
         name,
