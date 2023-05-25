@@ -8,7 +8,7 @@ interface Props{
   ticks: TickType[]
   setTicks: Function
   tickId: string
-  dateClimbed: string
+  dateClimbed: number
   notes: string
   style: string
 }
@@ -33,7 +33,7 @@ export default function TickCard ({ tickId, ticks, setTicks, dateClimbed, notes,
   return (
     <div className='flex flex-row justify-between px-3 py-3 mb-3 border-2 rounded-lg border-slate-100' id={tickId}>
       <div className='flex flex-col'>
-        <p className='text-md text-left text-gray-500'>{dateClimbed}</p>
+        <p className='text-md text-left text-gray-500'>{new Date(dateClimbed).toLocaleDateString()}</p>
         <p className='text-sm text-gray-500 mb-0'>{notes}</p>
       </div>
       <div className='flex flex-row'>
