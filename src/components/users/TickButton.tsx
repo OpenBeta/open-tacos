@@ -66,7 +66,6 @@ export default function TickButton ({ climbId, areaId, name, grade }: Props): JS
       {!isTicked &&
         <button
           type='button'
-          disabled // Temporarily disable while we deploy and migrate https://github.com/OpenBeta/openbeta-graphql/pull/301
           onClick={() => setOpen(true)}
           className='btn btn-primary btn-sm'
         >
