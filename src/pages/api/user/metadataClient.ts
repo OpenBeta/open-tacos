@@ -31,7 +31,7 @@ export interface Tick {
   userId: string | undefined
   style: string
   attemptType: string
-  dateClimbed: string
+  dateClimbed: Date
   grade: string
   source: string
 }
