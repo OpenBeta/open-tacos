@@ -23,7 +23,7 @@ const TickSchema = Yup.object().shape({
     .required('Please choose an ascent style'),
   attemptType: Yup.string()
     .required('Please choose an ascent type'),
-  dateClimbed: Yup.string()
+  dateClimbed: Yup.date()
     .required('Please include a date'),
   grade: Yup.string()
     .required('Something went wrong fetching the climbs grade, please try again')
@@ -61,7 +61,7 @@ interface Props{
 export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, climbId, name, grade }: Props): JSX.Element {
   const [style, setStyle] = useState(styles[1])
   const [attemptType, setAttemptType] = useState(attemptTypes[1])
-  const [dateClimbed, setDateClimbed] = useState<string>(new Date().toISOString().slice(0, 10)) // default is today for dateClimbed
+  const [dateClimbed, setDateClimbed] = useState<Date>(new Date()) // default is today for dateClimbed
   const [notes, setNotes] = useState<string>('')
   const [errors, setErrors] = useState<string[]>()
   const session = useSession()
@@ -76,7 +76,7 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
    *
    */
   function resetInputs (): void {
-    setDateClimbed(new Date().toISOString().slice(0, 10))
+    setDateClimbed(new Date())
     setAttemptType(attemptTypes[1])
     setNotes('')
     setStyle(styles[1])
@@ -163,8 +163,8 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
                     <input
                       type='date'
                       name='date'
-                      value={dateClimbed}
-                      onChange={(e) => setDateClimbed(e.target.value)}
+                      value={dateClimbed.toLocaleDateString()}
+                      onChange={(e) => setDateClimbed(new Date(e.target.value))}
                       id='date'
                       className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
                     />
