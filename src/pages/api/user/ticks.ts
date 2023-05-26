@@ -65,7 +65,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
             userId: meta.uuid,
             style: tick.Style === '' ? 'N/A' : tick.Style,
             attemptType: tick.Style === '' ? 'N/A' : tick.Style,
-            dateClimbed: tick.Date,
+            dateClimbed: new Date(tick.Date), // Assumes date is based on user's present timezone.
             grade: tick.Rating,
             source: 'MP'
           }
