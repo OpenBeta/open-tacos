@@ -6,7 +6,6 @@ import { getSetTypes } from '../ui/RouteTypeChips'
 import ButtonGroup from '../../components/ui/ButtonGroup'
 import { Button } from '../../components/ui/Button'
 import { summarize } from '../ui/Description'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 // import { APIFavouriteCollections } from '../../pages/api/user/fav'
 
 interface CragTableProps {
@@ -99,16 +98,6 @@ const climbSortByOptions: CragSortType[] = [
   { value: 'grade', text: 'Grade' }
 ]
 
-const reorderFromDrag = (
-  climbs: Climb[],
-  startIndex: number,
-  endIndex: number
-): Climb[] => {
-  const [removed] = climbs.splice(startIndex, 1)
-  climbs.splice(endIndex, 0, removed)
-  return climbs
-}
-
 export default function CragTable (props: CragTableProps): JSX.Element {
   // Index for one of climbSortByOptions
   const [selectedClimbSort, setSelectedClimbSort] = useState<number>(0)
@@ -199,51 +188,13 @@ export default function CragTable (props: CragTableProps): JSX.Element {
           </div>
         )}
       </div>
-
-      <DragDropContext
-        onDragEnd={(result) =>
-          setSortedRoutes(
-            reorderFromDrag(
-              sortedRoutes,
-              result.source.index,
-              result.destination?.index ?? 0
-            )
-          )}
-      >
-        <Droppable droppableId='cragTable'>
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className={`grid grid-cols-1 lg:gap-3 ${
-                isEditing ? '' : 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2'
-              }  fr-2`}
-            >
-              {sortedRoutes.map((i, idx) => (
-                <Draggable
-                  isDragDisabled={!isEditing}
-                  draggableId={i.id}
-                  index={idx}
-                  key={i.id}
-                >
-                  {(provided, snapshot) => (
-                    <div
-                      className={`m-1 ${
-                        snapshot.isDragging ? 'bg-purple-100' : 'bg-white'
-                      }`}
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <ClimbItem favs={favs} hideSummary={isEditing} key={i.id} climb={i} />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <div className='grid grid-cols-1 lg:gap-3 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 fr-2'>
+        {sortedRoutes.map((i, idx) => (
+          <div className='m-1 bg-white' key={i.id}>
+            <ClimbItem favs={favs} hideSummary={isEditing} key={i.id} climb={i} />
+          </div>
+        ))}
+      </div>
     </>
   )
 }
