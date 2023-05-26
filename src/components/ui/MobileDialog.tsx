@@ -27,7 +27,7 @@ export const DialogContent = React.forwardRef<any, Props>(
           {children}
           {/* Use absolute positioning to place the close button on the upper left corner */}
           <DialogPrimitive.Close aria-label='Close' asChild className='dialog-close-button'>
-            <button className='btn btn-circle btn-ghost md:hidden'>
+            <button className='btn btn-circle btn-ghost'>
               <XMarkIcon className='w-8 h-8' />
             </button>
           </DialogPrimitive.Close>
