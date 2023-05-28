@@ -7,12 +7,11 @@ const edit: INextPageWithAuth = () => {
   return (
     <>
       <Head>
-        <title>Profile</title>
+        <title>Update username</title>
       </Head>
-
       <div className='h-screen lg:flex lg:justify-center'>
         <div className='hidden lg:block bg-accent/80 w-full' />
-        <div className='w-full px-4 lg:px-6 flex items-center'>
+        <div className='w-full p-4 lg:p-6 flex items-center'>
           <Username />
         </div>
       </div>
