@@ -52,7 +52,7 @@ export default NextAuth({
         // null guard needed because profile object is only available once
         token.userMetadata = (profile?.[CustomClaimUserMetadata] as IUserMetadata)
         const customClaimRoles = profile?.[CustomClaimRoles] as string[] ?? []
-        token.userMetadata.roles = customClaimRoles.map((r: string) => UserRole[r])
+        token.userMetadata.roles = customClaimRoles.map((r: string) => UserRole[r.toUpperCase()])
       }
 
       return token
