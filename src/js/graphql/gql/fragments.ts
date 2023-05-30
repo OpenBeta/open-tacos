@@ -160,7 +160,6 @@ export const QUERY_ALL_COUNTRIES = gql`
       areaName
       uuid
       totalClimbs
-      updatedAt
       metadata {
         lat
         lng
