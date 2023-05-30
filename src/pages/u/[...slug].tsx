@@ -4,14 +4,14 @@ import dynamic from 'next/dynamic'
 
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
-import { getUserMedia } from '../../js/graphql/api'
+// import { getUserMedia } from '../../js/graphql/api'
 import { IUserProfile, MediaWithTags } from '../../js/types'
 import PublicProfile from '../../components/users/PublicProfile'
-import { getUserProfileByNick } from '../../js/auth/ManagementClient'
 import usePermissions from '../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../js/hooks/seo'
 // import useMediaDataStore from '../../js/hooks/useMediaDS'
 import type { UserGalleryProps } from '../../components/media/UserGallery'
+// import useUserProfileCmd from '../../js/hooks/useUserProfileCmd'
 
 interface UserHomeProps {
   uid: string
@@ -114,33 +114,28 @@ export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> =
     }
   }
 
-  try {
-    const userProfile = await getUserProfileByNick(uid)
+  // const { getUsernameById } = useUserProfileCmd({ accessToken: '' })
 
-    if (userProfile?.uuid == null) {
-      throw new Error('Bad user profile data')
-    }
+  // await getUsernameById({ userUuid:})
+  //   if (userProfile?.uuid == null) {
+  //     throw new Error('Bad user profile data')
+  //   }
 
-    const { uuid } = userProfile
+  //   const { uuid } = userProfile
 
-    const list = await getUserMedia(uuid, 500)
+  //   const list = await getUserMedia(uuid, 500)
 
-    const data = {
-      uid,
-      postId,
-      serverMediaList: list,
-      userProfile
-    }
-    return {
-      props: data,
-      revalidate: 10
-    }
-  } catch (e) {
-    console.log('Error in getStaticProps()', e)
-    return {
-      notFound: true
-    }
-  }
+  //   const data = {
+  //     uid,
+  //     postId,
+  //     serverMediaList: list,
+  //     userProfile
+  //   }
+  //   return {
+  //     props: data,
+  //     revalidate: 10
+  //   }
+  throw new Error('Sorry, user profile is temporarily unavailable.')
 }
 
 const DynamicComponent = dynamic<UserGalleryProps>(
