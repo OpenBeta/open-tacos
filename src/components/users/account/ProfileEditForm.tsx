@@ -1,6 +1,7 @@
 import { ReactElement, useCallback, useState, useLayoutEffect } from 'react'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
+import { useRouter } from 'next/router'
 
 import { getUserProfile, updateUserProfile } from '../../../js/auth/CurrentUserClient'
 import TextField from '../../ui/TextField'
@@ -45,6 +46,7 @@ const UserProfileSchema = Yup.object().shape({
  * attributes present on the user's profile.
  */
 export default function ProfileEditForm (): ReactElement {
+  const router = useRouter()
   const [loadingName, setLoadingUser] = useState(false)
   const [isChanged, setChanged] = useState(false)
   const [profile, setProfile] = useState<IWritableUserMetadata>({
@@ -73,6 +75,8 @@ export default function ProfileEditForm (): ReactElement {
       toast.success('Profile Updated')
       // Also trigger a page rebuild
       void revalidateUserHomePage(profile.nick)
+      //route to profile
+      router.push('/api/user/me')
     } else {
       // profile did not update for some reason
       toast.error('Update Failed')
