@@ -526,6 +526,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "dww3000",
+      "name": "DavidW",
+      "avatar_url": "https://avatars.githubusercontent.com/u/127548981?v=4",
+      "profile": "https://github.com/dww3000",
+      "contributions": [
+        "projectManagement",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
