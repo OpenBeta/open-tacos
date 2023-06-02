@@ -232,6 +232,9 @@ Thanks goes to these wonderful people:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/giri-madhan"><img src="https://avatars.githubusercontent.com/u/87971509?v=4?s=100" width="100px;" alt="Giri Madhan"/><br /><sub><b>Giri Madhan</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=giri-madhan" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/josh610"><img src="https://avatars.githubusercontent.com/u/72105948?v=4?s=100" width="100px;" alt="Josh Zimmerman"/><br /><sub><b>Josh Zimmerman</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=josh610" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/dww3000"><img src="https://avatars.githubusercontent.com/u/127548981?v=4?s=100" width="100px;" alt="DavidW"/><br /><sub><b>DavidW</b></sub></a><br /><a href="#projectManagement-dww3000" title="Project Management">📆</a> <a href="#ideas-dww3000" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
   </tbody>
 </table>
 
