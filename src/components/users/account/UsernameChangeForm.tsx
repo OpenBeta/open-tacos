@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
+import { QuestionMarkCircleIcon, ArrowLeftCircleIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
 import { formatDistanceToNowStrict } from 'date-fns'
 
@@ -69,6 +69,9 @@ export const UsernameChangeForm: React.FC = () => {
   const [isNewUser, setNewUser] = useState(false)
   const [initials, setInitials] = useState<any>()
 
+  const userUuid = session.data?.user.metadata.uuid
+  const email = session.data?.user.email
+
   const form = useForm<FormProps>({
     mode: 'onChange',
     defaultValues: { username: initials?.username },
@@ -78,12 +81,15 @@ export const UsernameChangeForm: React.FC = () => {
   const { handleSubmit, reset, watch, setError, clearErrors, formState: { isValid, isDirty, isValidating, isSubmitting } } = form
 
   const submitHandler = async ({ username }: FormProps): Promise<void> => {
-    if (initials?.userUuid == null) {
+    if (userUuid == null) {
       return
     }
-
     try {
-      await updateUsername({ userUuid: initials.userUuid, username })
+      await updateUsername({
+        userUuid,
+        username,
+        ...isNewUser && email != null && { email } // email is required for new users
+      })
       void router.push('/')
       toast.info('Username updated')
     } catch (e) {
@@ -140,11 +146,16 @@ export const UsernameChangeForm: React.FC = () => {
         ? (<h1>Create a username</h1>)
         : (
           <>
-            <Link href='/'><a className='underline'>Home</a></Link>
+            <Link href={`/u/${username}`}>
+              <a className='link flex gap-2 items-center'><ArrowLeftCircleIcon className='w-5 h-5' />Back to profile</a>
+            </Link>
             <h1 className='mt-8 lg:mt-32'>Change username</h1>
           </>)}
       <FormProvider {...form}>
-        <form onSubmit={handleSubmit(submitHandler)} className='mt-10 flex flex-col gap-y-6'>
+        <form
+          onSubmit={handleSubmit(submitHandler)}
+          className='mt-10 flex flex-col gap-y-6'
+        >
           {initials != null && <CurrentUsername {...initials} />}
           <Input
             name='username'
@@ -161,7 +172,7 @@ export const UsernameChangeForm: React.FC = () => {
 
           <button
             type='submit'
-            disabled={!isValid || isSubmitting || !isDirty}
+            disabled={!isValid || isSubmitting || !isDirty || userUuid == null}
             className='mt-10 btn btn-primary btn-solid btn-block md:btn-wide'
           >Save
           </button>

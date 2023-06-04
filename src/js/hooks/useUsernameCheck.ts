@@ -20,5 +20,5 @@ export default function useUsernameCheck (): void {
         }
       })
     }
-  }, [router.asPath])
+  }, [status])
 }

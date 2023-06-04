@@ -1,10 +1,6 @@
 import { Button, ButtonVariant } from '../ui/BaseButton'
 
 import forOwnerOnly from '../../js/auth/forOwnerOnly'
-import { WithOwnerProfile } from '../../js/types/User'
-
-interface EditProfileButtonProps extends WithOwnerProfile {
-}
 
 function EditProfileButton (): JSX.Element {
   return (
@@ -12,4 +8,4 @@ function EditProfileButton (): JSX.Element {
   )
 }
 
-export default forOwnerOnly<EditProfileButtonProps>(EditProfileButton)
+export default forOwnerOnly(EditProfileButton)

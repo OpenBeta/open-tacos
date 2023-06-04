@@ -5,33 +5,36 @@ import clx from 'classnames'
 
 import UserMedia from './UserMedia'
 import MobileMediaCard from './MobileMediaCard'
-import { MediaWithTags, IUserProfile } from '../../js/types'
+import { MediaWithTags } from '../../js/types'
 import UploadCTA from './UploadCTA'
 import { actions } from '../../js/stores'
 import SlideViewer from './slideshow/SlideViewer'
 import { TinyProfile } from '../users/PublicProfile'
-import { WithPermission } from '../../js/types/User'
+import { WithPermission, UserPublicPage } from '../../js/types/User'
 import { useResponsive } from '../../js/hooks'
 import TagList from './TagList'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 export interface UserGalleryProps {
   uid: string
-  userProfile: IUserProfile
-  initialImageList: MediaWithTags[]
-  auth: WithPermission
+  userPublicPage: UserPublicPage
   postId: string | null
 }
 
+const auth: WithPermission = {
+  isAuthenticated: false,
+  isAuthorized: false
+}
 /**
  * Image gallery on user profile.
  * Simplifying component Todos:
  *  - remove bulk taging mode
  *  - simplify back button logic with Next Layout in v13
  */
-export default function UserGallery ({ uid, postId: initialPostId, auth, userProfile, initialImageList }: UserGalleryProps): JSX.Element | null {
+export default function UserGallery ({ uid, postId: initialPostId, userPublicPage }: UserGalleryProps): JSX.Element | null {
   const router = useRouter()
-  const imageList = initialImageList
+  const userProfile = userPublicPage?.profile
+  const imageList = userPublicPage?.mediaList
 
   const [selectedMediaId, setSlideNumber] = useState<number>(-1)
 
@@ -75,7 +78,7 @@ export default function UserGallery ({ uid, postId: initialPostId, auth, userPro
   }, [initialPostId, imageList, router])
 
   const onUploadHandler = async (imageUrl: string): Promise<void> => {
-    await actions.media.addImage(uid, userProfile.uuid, imageUrl, true)
+    await actions.media.addImage(uid, userProfile.userUuid, imageUrl, true)
   }
 
   const imageOnClickHandler = useCallback(async (props: any): Promise<void> => {

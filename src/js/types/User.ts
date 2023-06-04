@@ -1,3 +1,5 @@
+import { MediaWithTags } from '../types'
+
 export enum UserRole { // These need to match https://manage.auth0.com/dashboard/us/dev-fmjy7n5n/roles.
   EDITOR = 'editor',
   ORG_ADMIN = 'org_admin',
@@ -64,4 +66,17 @@ export interface WithOwnerProfile {
 export interface WithPermission {
   isAuthorized: boolean
   isAuthenticated: boolean
+}
+
+export interface UserPublicProfile {
+  userUuid: string
+  username: string
+  displayName?: string
+  website?: string
+  bio?: string
+  avatar?: string
+}
+export interface UserPublicPage {
+  profile: UserPublicProfile
+  mediaList: MediaWithTags[]
 }
