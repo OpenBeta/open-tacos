@@ -13,6 +13,9 @@ export default function useUsernameCheck (): void {
 
   useEffect(() => {
     const uuid = data?.user.metadata.uuid
+    if (router.asPath.startsWith('/auth/')) {
+      return
+    }
     if (status === 'authenticated' && uuid != null) {
       void getUsernameById({ userUuid: uuid }).then(usernameInfo => {
         if (usernameInfo === null) {

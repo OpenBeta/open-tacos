@@ -46,7 +46,7 @@ export const QUERY_GET_USER_PUBLIC_PAGE = gql`
   }
 `
 
-export const MUTATION_UPDATE_USERNAME = gql`
-  mutation ($username: String!, $userUuid: ID!, $email: String) {
-    updateUserProfile(input: { userUuid: $userUuid, username: $username, email: $email })
+export const MUTATION_UPDATE_PROFILE = gql`
+  mutation ($username: String!, $userUuid: ID!, $email: String, $avatar: String) {
+    updateUserProfile(input: { userUuid: $userUuid, username: $username, email: $email, avatar: $avatar })
   }`

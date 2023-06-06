@@ -71,6 +71,7 @@ export const UsernameChangeForm: React.FC = () => {
 
   const userUuid = session.data?.user.metadata.uuid
   const email = session.data?.user.email
+  const avatar = session.data?.user.image
 
   const form = useForm<FormProps>({
     mode: 'onChange',
@@ -78,7 +79,7 @@ export const UsernameChangeForm: React.FC = () => {
     delayError: 500
   })
 
-  const { handleSubmit, reset, watch, setError, clearErrors, formState: { isValid, isDirty, isValidating, isSubmitting } } = form
+  const { handleSubmit, reset, watch, setError, clearErrors, formState: { isValid, isDirty, isValidating, isSubmitting, isSubmitSuccessful } } = form
 
   const submitHandler = async ({ username }: FormProps): Promise<void> => {
     if (userUuid == null) {
@@ -88,9 +89,10 @@ export const UsernameChangeForm: React.FC = () => {
       await updateUsername({
         userUuid,
         username,
-        ...isNewUser && email != null && { email } // email is required for new users
+        ...isNewUser && email != null && { email }, // email is required for new users
+        ...isNewUser && avatar != null && { avatar } // get Auth0 avatar for new users
       })
-      void router.push('/')
+      void router.push(`/u/${username}`)
       toast.info('Username updated')
     } catch (e) {
       reset()
@@ -140,6 +142,7 @@ export const UsernameChangeForm: React.FC = () => {
     }
   }, [session.data?.user])
 
+  const shouldDisableSumit = !isValid || isSubmitting || !isDirty || userUuid == null || isSubmitSuccessful
   return (
     <div className='w-full lg:max-w-md'>
       {isNewUser
@@ -172,7 +175,7 @@ export const UsernameChangeForm: React.FC = () => {
 
           <button
             type='submit'
-            disabled={!isValid || isSubmitting || !isDirty || userUuid == null}
+            disabled={shouldDisableSumit}
             className='mt-10 btn btn-primary btn-solid btn-block md:btn-wide'
           >Save
           </button>

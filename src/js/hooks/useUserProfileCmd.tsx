@@ -2,7 +2,7 @@ import { toast } from 'react-toastify'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
 import { graphqlClient } from '../graphql/Client'
-import { MUTATION_UPDATE_USERNAME, QUERY_GET_USERNAME_BY_UUID, QUERY_DOES_USERNAME_EXIST, QUERY_GET_USER_PUBLIC_PAGE } from '../graphql/gql/users'
+import { MUTATION_UPDATE_PROFILE, QUERY_GET_USERNAME_BY_UUID, QUERY_DOES_USERNAME_EXIST, QUERY_GET_USER_PUBLIC_PAGE } from '../graphql/gql/users'
 import { Username } from '../types'
 
 interface GetUsernameByIdInput {
@@ -12,6 +12,7 @@ interface UpdateUsernameInput {
   userUuid: string
   username: string
   email?: string
+  avatar?: string
 }
 
 type GetUsernameById = (input: GetUsernameByIdInput) => Promise<Username | null>
@@ -52,7 +53,7 @@ export default function useUserProfileCmd ({ accessToken = '' }: UseUserProfileC
 
   const updateUsername = async (input: UpdateUsernameInput): Promise<boolean> => {
     const res = await graphqlClient.query<{ updateUserProfile: boolean }, UpdateUsernameInput>({
-      query: MUTATION_UPDATE_USERNAME,
+      query: MUTATION_UPDATE_PROFILE,
       variables: {
         ...input
       },
