@@ -5,6 +5,7 @@ html {
   @apply font-sans text-base text-base-content;
 }
 
+/** Hide outline surrounding a link when using Daisy 'link' class **/
 a:active, a:focus {
   outline: 0 !important;
   border: none;
