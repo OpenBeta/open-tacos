@@ -1,4 +1,4 @@
-name: CI
+name: Lighthouse
 on: [push]
 jobs:
   lhci:
@@ -8,7 +8,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.5.0
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: 'Checkout Project'
         uses: 'actions/checkout@v2'
@@ -21,7 +21,7 @@ jobs:
       - name: Build OpenBeta project
         run: yarn build
 
-      - run: npm install -g @lhci/cli@0.8.x
+      - run: npm install -g @lhci/cli@0.12.x
       - name: Run Lighthouse CI
         run: lhci autorun
         env:
