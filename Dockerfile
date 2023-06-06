@@ -1,5 +1,5 @@
 
-FROM node:16-bullseye-slim as builder
+FROM node:18-bullseye-slim as builder
 
 ENV PATH /app/node_modules/.bin:$PATH
 
