@@ -2,8 +2,8 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import { v4 as uuidv4 } from 'uuid'
 
-import { IUserProfile } from '../../../js/types'
 import type PublicProfileType from '../PublicProfile'
+import { UserPublicProfile } from '../../../js/types/User'
 
 const mockedUseSession = jest.fn()
 
@@ -23,15 +23,21 @@ jest.mock('../ImportFromMtnProj', () => {
 
 jest.requireMock('next-auth/react')
 
-const userProfile: IUserProfile = {
-  authProviderId: '123',
-  uuid: uuidv4(),
-  name: 'cat blue',
-  nick: 'cool_nick_2022',
-  avatar: 'something',
+const userProfile: Required<UserPublicProfile> = {
+  userUuid: uuidv4().toString(),
+  displayName: 'cat blue',
+  username: 'cool_nick_2022',
+  avatar: 'https://example.com/myavatar.jpg',
   bio: 'totem eatsum',
-  roles: [],
-  loginsCount: 2
+  website: 'https://example.com'
+}
+
+const mockAuth0UserMetadata = {
+  user: {
+    metadata: {
+      uuid: userProfile.userUuid
+    }
+  }
 }
 
 let PublicProfile: typeof PublicProfileType
@@ -41,22 +47,27 @@ beforeAll(async () => {
   PublicProfile = module.default
 })
 
-test('PublicProfile when the user has logged in', async () => {
+test('Profile detail when the user is logged in.', async () => {
   mockedUseSession
     .mockClear()
-    .mockReturnValue({ status: 'authenticated' })
+    .mockReturnValue({
+      status: 'authenticated',
+      data: mockAuth0UserMetadata
+    })
 
   render(<PublicProfile userProfile={userProfile} />)
 
   expect(mockedUseSession).toBeCalled()
-  expect(screen.queryByRole('button')).toBeDefined()
 
-  expect(screen.queryByText(userProfile.name)).not.toBeNull()
-  expect(screen.queryByText(userProfile.nick)).not.toBeNull()
+  expect(screen.getByRole('link', { name: /edit/i })).toHaveAttribute('href', '/account/changeUsername')
+
+  expect(screen.queryByText(userProfile.displayName)).not.toBeNull()
+  expect(screen.queryByText(userProfile.username)).not.toBeNull()
   expect(screen.queryByText(userProfile.bio)).not.toBeNull()
+  expect(screen.getByRole('link', { name: /example\.com/ })).toHaveAttribute('href', userProfile.website)
 })
 
-test('EditProfileButton null when the user hasn\'t logged in', async () => {
+test('Username edit link is not present when the user is logged out.', async () => {
   mockedUseSession
     .mockClear()
     .mockReturnValue({ status: '' })
@@ -64,9 +75,6 @@ test('EditProfileButton null when the user hasn\'t logged in', async () => {
   render(<PublicProfile userProfile={userProfile} />)
 
   expect(mockedUseSession).toBeCalled()
-  expect(screen.queryByRole('button')).toBeNull()
-
-  expect(screen.queryByText(userProfile.name)).not.toBeNull()
-  expect(screen.queryByText(userProfile.nick)).not.toBeNull()
-  expect(screen.queryByText(userProfile.bio)).not.toBeNull()
+  expect(screen.queryByRole('link', { name: /edit/i })).toBeNull()
+  expect(screen.queryByText(userProfile.username)).not.toBeNull()
 })

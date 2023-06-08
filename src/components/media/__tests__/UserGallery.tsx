@@ -3,8 +3,8 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import type UserGalleryType from '../UserGallery'
-import { IUserProfile } from '../../../js/types'
 import { mediaList } from './data'
+import { UserPublicPage } from '../../../js/types/User'
 
 jest.mock('next/router')
 
@@ -26,15 +26,15 @@ const { pushFn, replaceFn } = jest.requireMock('next/router')
 const useResponsiveMock = jest.spyOn(useResponsive, 'default')
 useResponsiveMock.mockReturnValue({ isDesktop: false, isMobile: true, isTablet: true })
 
-const userProfile: IUserProfile = {
-  authProviderId: '123',
-  uuid: '12233455667',
-  name: 'cat blue',
-  nick: 'cool_nick_2022',
-  avatar: 'something',
-  bio: 'totem eatsum',
-  roles: [],
-  loginsCount: 2
+const userProfile: UserPublicPage = {
+  profile: {
+    userUuid: 'de7a092e-5c3c-445d-a863-b5fbe145e016',
+    displayName: 'cat blue',
+    username: 'cool_nick_2022',
+    avatar: 'https://example.com/avatar.jpg',
+    bio: 'totem eatsum'
+  },
+  mediaList
 }
 
 let UserGallery: typeof UserGalleryType
@@ -55,11 +55,9 @@ describe('Image gallery', () => {
 
     render(
       <UserGallery
-        auth={{ isAuthenticated: false, isAuthorized: false }}
         uid={username}
         postId={null}
-        userProfile={userProfile}
-        initialImageList={mediaList}
+        userPublicPage={userProfile}
       />)
 
     const images = screen.getAllByRole('img')

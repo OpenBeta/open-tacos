@@ -30,7 +30,6 @@ export default NextAuth({
   debug: false,
   events: {},
   pages: {
-    // signIn: '/auth/signin'
     verifyRequest: '/auth/verify-request'
   },
   theme: {

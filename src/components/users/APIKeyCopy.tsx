@@ -1,10 +1,12 @@
 import { KeyIcon } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
 
-import { WithOwnerProfile } from '../../js/types/User'
-import forOwnerOnly from '../../js/auth/forOwnerOnly'
+import forOwnerOnly, { ForOwnerOnlyProps } from '../../js/auth/forOwnerOnly'
 
-const APIKey = (props: WithOwnerProfile): JSX.Element | null => {
+/**
+ * A visual button for copying the user's API key to the clipboard.
+ */
+const APIKeyCopy: React.FC<ForOwnerOnlyProps> = () => {
   const { data } = useSession({ required: true })
 
   const apiKey: string | undefined = (data?.accessToken as string) ?? undefined
@@ -23,4 +25,4 @@ const APIKey = (props: WithOwnerProfile): JSX.Element | null => {
   )
 }
 
-export default forOwnerOnly<WithOwnerProfile>(APIKey)
+export default forOwnerOnly<ForOwnerOnlyProps>(APIKeyCopy)

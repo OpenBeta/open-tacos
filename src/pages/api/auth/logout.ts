@@ -9,9 +9,13 @@ const auth0Domain = process.env.AUTH0_DOMAIN ?? ''
 const auth0ClientId = process.env.AUTH0_CLIENT_ID ?? ''
 
 const handler: NextApiHandler = (req, res): void => {
-  const returnTo = new URL(req.headers.referer ?? '').origin
-
-  res.redirect(`${auth0Domain}/v2/logout?returnTo=${encodeURIComponent(returnTo)}&client_id=${auth0ClientId}`)
+  const clientIdParam = `client_id=${auth0ClientId}`
+  if (req.headers.referer == null) {
+    res.redirect(`${auth0Domain}/v2/logout?${clientIdParam}`)
+  } else {
+    const returnTo = new URL(req.headers.referer).origin
+    res.redirect(`${auth0Domain}/v2/logout?returnTo=${encodeURIComponent(returnTo)}&${clientIdParam}`)
+  }
 }
 
 export default handler

@@ -2,26 +2,27 @@ import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import ContentLoader from 'react-content-loader'
 
-import { IUserProfile } from '../../js/types/User'
-import EditProfileButton from './EditProfileButton'
+import { UserPublicProfile } from '../../js/types/User'
+// import EditProfileButton from './EditProfileButton'
 import ImportFromMtnProj from './ImportFromMtnProj'
-import APIKey from './APIKey'
+import APIKeyCopy from './APIKeyCopy'
 import usePermissions from '../../js/hooks/auth/usePermissions'
+import forOwnerOnly from '../../js/auth/forOwnerOnly'
 
 interface PublicProfileProps {
-  userProfile: IUserProfile
+  userProfile: UserPublicProfile
   onClick?: () => void
 }
 
 export default function PublicProfile ({ userProfile: initialUserProfile }: PublicProfileProps): JSX.Element {
-  const [userProfile, setUserProfile] = useState<IUserProfile | null>(initialUserProfile)
-  const { isAuthorized } = usePermissions({ ownerProfileOnPage: initialUserProfile })
+  const [userProfile, setUserProfile] = useState<UserPublicProfile | null>(initialUserProfile)
+  const { isAuthorized } = usePermissions({ currentUserUuid: userProfile?.userUuid })
 
   useEffect(() => {
     setUserProfile(initialUserProfile)
   }, [initialUserProfile])
 
-  const { name, nick, avatar, bio, website } = userProfile ?? {}
+  const { displayName, username, bio, website, avatar } = userProfile ?? {}
   let websiteWithScheme: string | null = null
   if (website != null) {
     websiteWithScheme = website.startsWith('http') ? website : `//${website}`
@@ -34,17 +35,17 @@ export default function PublicProfile ({ userProfile: initialUserProfile }: Publ
           : <img className='grayscale  object-scale-down w-24 h-24 rounded-full' src={avatar} />}
       </div>
       <div className='md:col-span-2 text-medium text-primary '>
-        {nick == null && <TextPlaceholder uniqueKey={123} />}
+        {username == null && <TextPlaceholder uniqueKey={123} />}
 
         <div className='flex flex-row items-center gap-x-2'>
           <div className='text-2xl font-bold mr-4'>
-            {nick}
+            {username}
           </div>
-          <EditProfileButton ownerProfile={initialUserProfile} />
-          {userProfile != null && isAuthorized && <ImportFromMtnProj isButton />}
-          {userProfile != null && <APIKey ownerProfile={initialUserProfile} />}
+          {/* <EditProfileButton ownerProfile={initialUserProfile} /> */}
+          {userProfile != null && <ChangeUsernameLink userUuid={userProfile?.userUuid} />}
+
         </div>
-        <div className='mt-6 text-lg font-semibold'>{name}</div>
+        <div className='mt-6 text-lg font-semibold'>{displayName}</div>
         <div className=''>{bio}</div>
         {websiteWithScheme != null &&
           <div className=''>
@@ -57,14 +58,15 @@ export default function PublicProfile ({ userProfile: initialUserProfile }: Publ
               {prettifyUrl(websiteWithScheme)}
             </a>
           </div>}
-        <div className='mt-2'>{nick != null
-          ? (
-            <Link href={`/u2/${nick}`}>
+        <div className='mt-2 flex items-center gap-2'>
+          {username != null &&
+            <Link href={`/u2/${username}`}>
               <a className='text-xs'>
                 <div className='btn btn-info btn-xs'> View ticks</div>
               </a>
-            </Link>)
-          : null}
+            </Link>}
+          {userProfile != null && isAuthorized && <ImportFromMtnProj isButton />}
+          {userProfile != null && <APIKeyCopy userUuid={userProfile.userUuid} />}
         </div>
       </div>
     </section>
@@ -99,8 +101,6 @@ const TextPlaceholder = (props): JSX.Element => (
   </ContentLoader>
 )
 
-// export const PublicProfilePlaceHolder = (): JSX.Element => (<div className='mx-auto max-w-screen-sm px-4 md:px-0 md:grid md:grid-cols-3' />)
-
 /**
  * Remove leading http(s):// and trailing /
  */
@@ -116,17 +116,17 @@ export const TinyProfile = ({ userProfile, onClick }: PublicProfileProps): JSX.E
       onClick()
     }
   }, [])
-  const { nick, avatar } = userProfile
+  const { username, avatar } = userProfile
   return (
 
-    <Link as={`/u/${nick}`} href='/u/[uid]'>
+    <Link as={`/u/${username}`} href='/u/[uid]'>
       <a onClick={onClickHandler}>
         <section className='flex items-center space-x-2.5'>
           <div className='grayscale'>
             <img className='rounded-full' src={avatar} width={32} height={32} />
           </div>
           <div className={ProfileATagStyle}>
-            {nick}
+            {username}
           </div>
         </section>
       </a>
@@ -148,3 +148,6 @@ export const ProfileATag = ({ uid, className = ProfileATagStyle }: ProfileATagPr
   </Link>)
 
 const ProfileATagStyle = 'text-primary font-bold hover:underline'
+
+const ChangeUsernameLink = forOwnerOnly(() =>
+  <Link href='/account/changeUsername'><a className='text-sm link'>Edit</a></Link>)
