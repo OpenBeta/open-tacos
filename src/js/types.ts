@@ -428,3 +428,9 @@ export interface TagsLeaderboardType {
  * Validation rules for react-hook-form
  */
 export type RulesType = Pick<RegisterOptions, 'minLength' | 'maxLength' | 'min' | 'max' | 'required' | 'validate' | 'valueAsNumber'>
+
+export interface Username {
+  userUuid: string
+  username: string
+  lastUpdated: Date
+}

@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.min.css'
 import '../styles/global.css'
 import '../../public/fonts/fonts.css'
 import useResponsive from '../js/hooks/useResponsive'
-// import MainCta from '../components/broadcast/MainCta'
+import useUsernameCheck from '../js/hooks/useUsernameCheck'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
@@ -36,9 +36,12 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
                 </Auth>
                 )
               : (
-                <Component {...pageProps} />
+                <>
+                  <Component {...pageProps} />
+                </>
                 )
           }
+        <NewUserCheck />
       </SessionProvider>
       <ToastContainer
         position={isMobile ? 'top-right' : 'bottom-right'}
@@ -60,6 +63,7 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
 
 function Auth ({ children }): ReactElement {
   const { status } = useSession()
+  console.log('##auth page', status)
   useEffect(() => {
     if (status === 'unauthenticated') {
       void signIn('auth0')
@@ -71,4 +75,13 @@ function Auth ({ children }): ReactElement {
   }
 
   return children
+}
+
+/**
+ * A wrapper component so that we can call the username check hook
+ * inside SessionProvider.
+ */
+const NewUserCheck: React.FC = () => {
+  useUsernameCheck()
+  return null
 }

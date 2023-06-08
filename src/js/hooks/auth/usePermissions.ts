@@ -1,18 +1,24 @@
 import { useSession } from 'next-auth/react'
-import { IUserProfile, WithPermission } from '../../types/User'
+import { WithPermission } from '../../types/User'
 
 interface PermissionsProps {
-  ownerProfileOnPage: IUserProfile
+  // ownerProfileOnPage: UserPublicProfile
+  currentUserUuid?: string
 }
 
 /**
  * A React hook that checks whether the currently authenticated user is authorized
  * to perform an action on a page or component owned by another user.
- * @param ownerProfileOnPage The page or component owner
+ * @param currentUserUuid userUuid to check
  */
-export default function usePermissions ({ ownerProfileOnPage }: PermissionsProps): WithPermission {
+export default function usePermissions ({ currentUserUuid }: PermissionsProps): WithPermission {
   const { status, data } = useSession()
-  const isAuthorized = status === 'authenticated' && data != null && data.id === ownerProfileOnPage?.authProviderId
+
+  const isAuthorized = status === 'authenticated' &&
+    data != null &&
+    data.user.metadata.uuid === currentUserUuid &&
+    currentUserUuid != null
+
   return {
     isAuthorized,
     isAuthenticated: status === 'authenticated'

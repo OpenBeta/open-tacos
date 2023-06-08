@@ -4,35 +4,28 @@ import dynamic from 'next/dynamic'
 
 import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
-import { getUserMedia } from '../../js/graphql/api'
-import { IUserProfile, MediaWithTags } from '../../js/types'
 import PublicProfile from '../../components/users/PublicProfile'
-import { getUserProfileByNick } from '../../js/auth/ManagementClient'
-import usePermissions from '../../js/hooks/auth/usePermissions'
 import { useUserProfileSeo } from '../../js/hooks/seo'
-// import useMediaDataStore from '../../js/hooks/useMediaDS'
 import type { UserGalleryProps } from '../../components/media/UserGallery'
+import useUserProfileCmd from '../../js/hooks/useUserProfileCmd'
+import { UserPublicPage } from '../../js/types/User'
+import usePermissions from '../../js/hooks/auth/usePermissions'
 
 interface UserHomeProps {
   uid: string
   postId: string | null
-  serverMediaList: MediaWithTags[]
-  userProfile: IUserProfile
+  userPublicPage: UserPublicPage
 }
 
-const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMediaList, userProfile }) => {
+const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, userPublicPage }) => {
   const router = useRouter()
 
-  const auth = usePermissions({ ownerProfileOnPage: userProfile })
-
-  const { isAuthorized } = auth
-
-  // const { mediaList } = useMediaDataStore({ isAuthorized, uid, serverMediaList })
+  const { isAuthorized } = usePermissions({ currentUserUuid: userPublicPage?.profile?.userUuid })
 
   const { author, pageTitle, pageImages } = useUserProfileSeo({
     username: uid,
-    fullName: userProfile?.name,
-    imageList: serverMediaList
+    fullName: userPublicPage?.profile?.displayName,
+    imageList: userPublicPage?.mediaList ?? []
   })
 
   const { isFallback } = router
@@ -52,13 +45,13 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
       >
         <div className='max-w-screen-2xl mx-auto flex flex-col items-center 2xl:px-8'>
 
-          <PublicProfile userProfile={userProfile} />
+          <PublicProfile userProfile={userPublicPage?.profile} />
 
           {isAuthorized && (
             <div className='flex justify-center mt-8 text-secondary text-sm whitespace-normal px-4 lg:px-0'>
               <div className='border rounded-md px-6 py-2 shadow'>
                 <ul className='list-disc'>
-                  <li>Please upload 3 photos to complete your profile {serverMediaList?.length >= 3 && <span>&#10004;</span>}</li>
+                  <li>Please upload 3 photos to complete your profile {userPublicPage.mediaList?.length >= 3 && <span>&#10004;</span>}</li>
                   <li>Upload only your own photos</li>
                   <li>Keep it <b>Safe For Work</b> and climbing-related</li>
                 </ul>
@@ -68,11 +61,9 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, serverMedia
           <hr className='mt-8' />
 
           <DynamicComponent
-            auth={auth}
             uid={uid}
             postId={postId}
-            userProfile={userProfile}
-            initialImageList={serverMediaList}
+            userPublicPage={userPublicPage}
           />
 
           {!isAuthorized && !isFallback && (
@@ -115,31 +106,24 @@ export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> =
   }
 
   try {
-    const userProfile = await getUserProfileByNick(uid)
-
-    if (userProfile?.uuid == null) {
-      throw new Error('Bad user profile data')
-    }
-
-    const { uuid } = userProfile
-
-    const list = await getUserMedia(uuid, 500)
+    const { getUserPublicPage } = useUserProfileCmd({ accessToken: '' })
+    const page = await getUserPublicPage(uid)
 
     const data = {
       uid,
       postId,
-      serverMediaList: list,
-      userProfile
+      userPublicPage: page
     }
+
     return {
       props: data,
       revalidate: 10
     }
   } catch (e) {
-    console.log('Error in getStaticProps()', e)
-    return {
-      notFound: true
+    if (/not found/i.test((e as Error).message)) {
+      return { notFound: true }
     }
+    throw e
   }
 }
 
