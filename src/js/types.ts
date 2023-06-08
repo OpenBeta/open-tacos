@@ -332,7 +332,7 @@ export interface TickType {
   climbId: string
   style: string
   attemptType: string
-  dateClimbed: string
+  dateClimbed: Date
   grade: string
   source: string
 }
