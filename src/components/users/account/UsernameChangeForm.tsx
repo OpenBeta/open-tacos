@@ -10,7 +10,6 @@ import { Input } from '../../ui/form'
 import { RulesType, Username } from '../../../js/types'
 import useUserProfileCmd from '../../../js/hooks/useUserProfileCmd'
 import Tooltip from '../../ui/Tooltip'
-import Link from 'next/link'
 
 const specialWords = /openbeta|0penbeta|admin|adm1n|null|undefined/i
 const validUsername = /^[a-zA-Z0-9]+([_\\.-]?[a-zA-Z0-9])*$/i
@@ -92,8 +91,8 @@ export const UsernameChangeForm: React.FC = () => {
         ...isNewUser && email != null && { email }, // email is required for new users
         ...isNewUser && avatar != null && { avatar } // get Auth0 avatar for new users
       })
-      void router.push(`/u/${username}`)
       toast.info('Username updated')
+      await router.push(`/u/${username}`)
     } catch (e) {
       reset()
       toast.error(e.message)
@@ -126,7 +125,9 @@ export const UsernameChangeForm: React.FC = () => {
 
   useEffect(() => {
     const uuid = session.data?.user.metadata.uuid ?? null
-    if (uuid != null) {
+    // Auth0 session data is refreshed every time we switch browser tabs.
+    // Perform additional checks to prevent excessive API calls.
+    if (uuid != null && uuid !== initials?.userUuid) {
       void getUsernameById({ userUuid: uuid }).then(value => {
         if (value == null) {
           setNewUser(true)
@@ -149,9 +150,7 @@ export const UsernameChangeForm: React.FC = () => {
         ? (<h1>Create a username</h1>)
         : (
           <>
-            <Link href={`/u/${username}`}>
-              <a className='link flex gap-2 items-center'><ArrowLeftCircleIcon className='w-5 h-5' />Back to profile</a>
-            </Link>
+            <a className='link flex gap-2 items-center' href={`/u/${username}`}><ArrowLeftCircleIcon className='w-5 h-5' />Back to profile</a>
             <h1 className='mt-8 lg:mt-32'>Change username</h1>
           </>)}
       <FormProvider {...form}>
