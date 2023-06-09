@@ -24,7 +24,8 @@ const TickSchema = Yup.object().shape({
   attemptType: Yup.string()
     .required('Please choose an ascent type'),
   dateClimbed: Yup.date()
-    .required('Please include a date'),
+    .required('Please include a date')
+    .max(new Date(), 'Please include a date in the past'),
   grade: Yup.string()
     .required('Something went wrong fetching the climbs grade, please try again')
 })
@@ -61,7 +62,7 @@ interface Props{
 export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, climbId, name, grade }: Props): JSX.Element {
   const [style, setStyle] = useState(styles[1])
   const [attemptType, setAttemptType] = useState(attemptTypes[1])
-  const [dateClimbed, setDateClimbed] = useState<Date>(new Date()) // default is today for dateClimbed
+  const [dateClimbed, setDateClimbed] = useState<string>(new Date().toLocaleDateString('fr-CA')) // Default is today, use fr-CA to get YYYY-MM-DD format.
   const [notes, setNotes] = useState<string>('')
   const [errors, setErrors] = useState<string[]>()
   const session = useSession()
@@ -76,7 +77,7 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
    *
    */
   function resetInputs (): void {
-    setDateClimbed(new Date())
+    setDateClimbed(new Date().toLocaleDateString('fr-CA'))
     setAttemptType(attemptTypes[1])
     setNotes('')
     setStyle(styles[1])
@@ -91,7 +92,7 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
       userId: session.data?.user.metadata.uuid,
       style: style.name,
       attemptType: attemptType.name,
-      dateClimbed: dateClimbed,
+      dateClimbed: new Date(Date.parse(`${dateClimbed}T00:00:00`)), // Date.parse without timezone converts dateClimbed into local timezone.
       grade: grade,
       source: 'OB' // source manually set as Open Beta
     }
@@ -118,9 +119,16 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
         }
       })
       .catch((error) => {
-        const err = error.graphQLErrors[0]
-        if (err.extensions.exception.code === 11000 || err.extensions.exception.code === 11001) {
-          setErrors(['Error, duplicate tick found'])
+        const gqlErrs = error.graphQLErrors ?? []
+        if (gqlErrs.length > 0) {
+          switch (gqlErrs[0].extensions.exception.code) {
+            case 11000:
+            case 11001:
+              setErrors(['Error, duplicate tick found'])
+              break
+            default:
+              setErrors([error.message])
+          }
         } else {
           setErrors([error.message])
         }
@@ -163,10 +171,10 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
                     <input
                       type='date'
                       name='date'
-                      value={dateClimbed.toLocaleDateString()}
-                      onChange={(e) => setDateClimbed(new Date(e.target.value))}
+                      value={dateClimbed}
+                      onChange={(e) => setDateClimbed(e.target.value)}
                       id='date'
-                      className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
+                      className='py-2 px-3 border border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
                     />
                   </div>
                   <ComboBox options={styles} value={style} onChange={setStyle} label='Style' />
@@ -182,7 +190,7 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
                         id='comment'
-                        className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
+                        className='py-2 px-3 border border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
                       />
                     </div>
                   </div>
