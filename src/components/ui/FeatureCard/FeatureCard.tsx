@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { shuffle } from 'underscore'
 
-import { AggregateType, AreaType, CountByDisciplineType, DisciplineStatsType } from '../../../js/types'
+import { AggregateType, AreaType, CountByDisciplineType, DisciplineStatsType, MediaWithTags } from '../../../js/types'
 import { sanitizeName } from '../../../js/utils'
 import { FeatureImage } from './FeatureImage'
 import { CLIENT_CONFIG } from '../../../js/configs/clientConfig'
@@ -52,7 +52,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
     >
       <Link href={`/crag/${metadata.areaId}`} passHref>
         <a className='m-4 lg:m-0'>
-          <FeatureImage image={image} />
+          <FeatureImage image={imageUrl} />
           <div className='mx-0 lg:mx-2 my-2.5'>
             <h3 className='whitespace-normal  font-semibold text-base truncate'>
               {sanitizeName(areaName)}
