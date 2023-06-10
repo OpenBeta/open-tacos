@@ -24,7 +24,26 @@ function extractId (mpUrl: string): string | Number {
   }
 }
 
-async function getMPTicks (uid: string): Promise<any[]> {
+interface MPTick {
+  mp_id: string // We extract this from the URL -- not supplied in MP's CSV.
+  Date: string
+  Route: string
+  Rating: string
+  Notes: string
+  URL: string
+  Pitches: string
+  Location: string
+  'Avg Stars': string
+  'Your Stars': string
+  Style: string
+  'Lead Style': string
+  'Route Type': string
+  'Your Rating': string
+  Length: string
+  'Rating Code': string
+}
+
+async function getMPTicks (uid: string): Promise<MPTick[]> {
   const mpClient: AxiosInstance = axios.create({
     baseURL: 'https://www.mountainproject.com/user'
   })
@@ -60,12 +79,12 @@ const handler: NextApiHandler<any> = async (req, res) => {
         ret.forEach((tick) => {
           const newTick: Tick = {
             name: tick.Route,
-            notes: tick.notes,
+            notes: tick.Notes,
             climbId: tick.mp_id,
             userId: meta.uuid,
             style: tick.Style === '' ? 'N/A' : tick.Style,
             attemptType: tick.Style === '' ? 'N/A' : tick.Style,
-            dateClimbed: new Date(tick.Date), // Assumes date is based on user's present timezone.
+            dateClimbed: new Date(Date.parse(`${tick.Date}T00:00:00`)), // Date.parse without timezone specified converts date to user's present timezone.
             grade: tick.Rating,
             source: 'MP'
           }
