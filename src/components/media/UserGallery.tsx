@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { basename } from 'path'
 import clx from 'classnames'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 import UserMedia from './UserMedia'
 import MobileMediaCard from './MobileMediaCard'
@@ -10,10 +11,10 @@ import UploadCTA from './UploadCTA'
 import { actions } from '../../js/stores'
 import SlideViewer from './slideshow/SlideViewer'
 import { TinyProfile } from '../users/PublicProfile'
-import { WithPermission, UserPublicPage } from '../../js/types/User'
+import { UserPublicPage } from '../../js/types/User'
 import { useResponsive } from '../../js/hooks'
 import TagList from './TagList'
-import InfiniteScroll from 'react-infinite-scroll-component'
+import usePermissions from '../../js/hooks/auth/usePermissions'
 
 export interface UserGalleryProps {
   uid: string
@@ -21,10 +22,6 @@ export interface UserGalleryProps {
   postId: string | null
 }
 
-const auth: WithPermission = {
-  isAuthenticated: false,
-  isAuthorized: false
-}
 /**
  * Image gallery on user profile.
  * Simplifying component Todos:
@@ -40,7 +37,8 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
 
   const { isMobile } = useResponsive()
 
-  const { isAuthorized } = auth
+  const authz = usePermissions({ currentUserUuid: userProfile?.userUuid })
+  const { isAuthorized } = authz
 
   const baseUrl = `/u/${uid}`
 
@@ -152,7 +150,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
                   key={key}
                   mediaWithTags={mediaWithTags}
                   showTagActions
-                  {...auth}
+                  {...authz}
                 />
               )
             }
@@ -178,7 +176,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
                   <TagList
                     key={key}
                     mediaWithTags={mediaWithTags}
-                    {...auth}
+                    {...authz}
                     showDelete
                   />
                 </div>
@@ -199,7 +197,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
             userProfile={userProfile} onClick={slideViewerCloseHandler}
                     />}
           onClose={slideViewerCloseHandler}
-          auth={auth}
+          auth={authz}
           baseUrl={baseUrl}
           onNavigate={navigateHandler}
         />}

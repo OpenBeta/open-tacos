@@ -1,14 +1,17 @@
+import { useSession } from 'next-auth/react'
 import { useMutation } from '@apollo/client'
-
-import { MUTATION_REMOVE_MEDIA_TAG } from '../graphql/gql/tags'
+import { toast } from 'react-toastify'
+import { MUTATION_REMOVE_ENTITY_TAG } from '../graphql/gql/tags'
 import { graphqlClient } from '../graphql/Client'
-import { actions } from '../../js/stores'
 
 interface ReturnType {
-  onDelete: (tagId: string) => Promise<void>
+  onDelete: onDeleteCallback
 }
 
+export type onDeleteCallback = (props: RemoveTagMutationProps) => Promise<void>
+
 interface RemoveTagMutationProps {
+  mediaId: string
   tagId: string
 }
 
@@ -20,7 +23,7 @@ export interface DeleteTagResult {
 }
 
 export interface GQLRemoveTagType {
-  removeTag: DeleteTagResult
+  removeTag: boolean
 }
 
 /**
@@ -29,25 +32,33 @@ export interface GQLRemoveTagType {
  * @returns see type declaration
  */
 export default function useDeleteTagBackend (): ReturnType {
+  const session = useSession({ required: true })
   const onCompletedHandler = async (data: GQLRemoveTagType): Promise<void> => {
-    if (data?.removeTag == null) return
-    await actions.media.removeTag(data.removeTag)
+    if (!data.removeTag) return
+    toast.success('Tag removed')
+    // await actions.media.removeTag(data.removeTag)
   }
 
   // eslint-disable-next-line
   const [removeTag] = useMutation<GQLRemoveTagType, RemoveTagMutationProps>(
-    MUTATION_REMOVE_MEDIA_TAG, {
+    MUTATION_REMOVE_ENTITY_TAG, {
       client: graphqlClient,
       onCompleted: onCompletedHandler
     }
   )
 
-  const onDelete = async (tagId: string): Promise<void> => {
-    // await removeTag({
-    //   variables: {
-    //     tagId
-    //   }
-    // })
+  const onDelete: onDeleteCallback = async ({ mediaId, tagId }) => {
+    await removeTag({
+      variables: {
+        mediaId,
+        tagId
+      },
+      context: {
+        headers: {
+          authorization: `Bearer ${session.data?.accessToken ?? ''}`
+        }
+      }
+    })
   }
 
   return { onDelete }

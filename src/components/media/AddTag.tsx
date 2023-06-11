@@ -30,10 +30,9 @@ export default function AddTag ({ mediaWithTags, onCancel, label, openSearch = f
             : (props as TypesenseAreaType).id
 
           await tagPhotoCmd({
-            mediaUuid: mediaWithTags.mediaUrl,
-            mediaUrl: mediaWithTags.mediaUrl,
-            destinationId: linkedEntityId,
-            destType: props.type === EntityType.climb ? TagTargetType.climb : TagTargetType.area
+            mediaId: mediaWithTags.id,
+            entityId: linkedEntityId,
+            entityType: props.type === EntityType.climb ? TagTargetType.climb : TagTargetType.area
           })
         } catch (e) {
           // TODO: Add friendly error message

@@ -38,7 +38,19 @@ export const FRAGMENT_AREA_TAG = gql`
     }
   }`
 
+export const FRAGMENT_ENTITY_TAG = gql`
+  fragment EntityTagFields on EntityTag {
+    id
+    targetId
+    climbName
+    areaName
+    ancestors
+    type
+  }
+`
+
 export const FRAGMENT_MEDIA_WITH_TAGS = gql`
+  ${FRAGMENT_ENTITY_TAG}
  fragment MediaWithTagsFields on MediaWithTags {
     id
     username
@@ -47,49 +59,41 @@ export const FRAGMENT_MEDIA_WITH_TAGS = gql`
     height
     uploadTime
     entityTags {
-      targetId
-      climbName
-      areaName
-      ancestors
-      type
+      ... EntityTagFields
     }
   }`
 
 export interface SetTagType {
-  mediaUuid: string
-  mediaUrl: string
-  destinationId: string
-  destType: TagTargetType
+  mediaId: string
+  entityId: string
+  entityType: TagTargetType
 }
 /**
  * Create a media <--> climb (or area) association
+ * {mediaId: "645aa64261c73112fc19b4fd", entityId: "a5364f01-4d10-5e35-98eb-e58f2c613ce4", entityType: 0
  */
-export const MUTATION_ADD_CLIMB_TAG_TO_MEDIA = gql`
-  ${FRAGMENT_CLIMB_TAG}
-  ${FRAGMENT_AREA_TAG}
-  mutation tagPhotoWithClimb($mediaUuid: ID!, $mediaUrl: String!, $destinationId: ID!, $destType: Int!) {
-    setTag(
+export const MUTATION_ADD_ENTITY_TAG = gql`
+  ${FRAGMENT_ENTITY_TAG}
+  mutation addEntityTag($mediaId: ID!, $entityId: ID!, $entityType: Int!) {
+    addEntityTag(
       input: {
-        mediaUuid: $mediaUuid,
-        mediaUrl: $mediaUrl,
-        mediaType: 0,
-        destinationId: $destinationId,
-        destType: $destType
+        mediaId: $mediaId,
+        entityId: $entityId,
+        entityType: $entityType
       }
     ) {
-        ... ClimbTagFields
-        ... AreaTagFields
+        ... EntityTagFields
     }
   }`
 
-export const MUTATION_REMOVE_MEDIA_TAG = gql`
-  mutation removeTag($tagId: ID!) {
-    removeTag(tagId: $tagId) {
-      id
-      mediaUuid
-      destinationId
-      destType
-    }
+export const MUTATION_REMOVE_ENTITY_TAG = gql`
+  mutation removeEntityTag($mediaId: ID!, $tagId: ID!) {
+    removeEntityTag(
+      input: {
+        mediaId: $mediaId,
+        tagId: $tagId
+      }
+    )
   }`
 
 export const QUERY_TAGS_BY_MEDIA_ID = gql`
