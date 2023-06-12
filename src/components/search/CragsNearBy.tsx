@@ -13,7 +13,7 @@ const GET_CRAGS_NEAR = gql`query CragsNear($placeId: String, $lng: Float, $lat: 
     }
   }`
 
-const CragsNearBy = ({ center, placeId }: {center: [number, number], placeId: string}): JSX.Element| null => {
+const CragsNearBy = ({ center, placeId }: { center: [number, number], placeId: string }): JSX.Element | null => {
   const { loading, data } = useQuery(GET_CRAGS_NEAR, {
     client: graphqlClient,
     variables: {
@@ -39,12 +39,12 @@ const CragsNearBy = ({ center, placeId }: {center: [number, number], placeId: st
 
 export default CragsNearBy
 
-export const CragDensity = ({ crags }: {crags: any[]}): JSX.Element => {
+export const CragDensity = ({ crags }: { crags: any[] }): JSX.Element => {
   return (
     <div className='mt-4 w-full'>
       <div className='flex items-end space-x-2 w-full'>
         {crags.map(
-          ({ _id, count }: {_id: string, count: number}) => {
+          ({ _id, count }: { _id: string, count: number }) => {
             return (
               <div key={_id} className='flex-1'>
                 <div className='text-xl text-center'>{count}</div>

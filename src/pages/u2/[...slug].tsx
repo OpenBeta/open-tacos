@@ -52,7 +52,7 @@ export async function getStaticPaths (): Promise<any> {
   }
 }
 
-export const getStaticProps: GetStaticProps<TicksIndexPageProps, {slug: string[]}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<TicksIndexPageProps, { slug: string[] }> = async ({ params }) => {
   const uid = params?.slug?.[0] ?? null
   // const viewId = params?.slug?.[1] ?? 'ticks'
 

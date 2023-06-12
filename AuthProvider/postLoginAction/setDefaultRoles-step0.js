@@ -30,7 +30,7 @@ exports.onExecutePostLogin = async ({ secrets, user, authorization, stats }, api
     clientSecret: secrets.clientSecret,
     scope: 'update:roles'
   })
-  
+
   const params = { id: user.user_id }
   const data = { roles: [EDITOR_ROLE_ID] }
 

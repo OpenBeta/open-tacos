@@ -3,7 +3,7 @@ import { graphqlClient } from './Client'
 
 export const getChangeHistoryServerSide = async (): Promise<any> => {
   try {
-    const rs = await graphqlClient.query<{getChangeHistory: any[]}>({
+    const rs = await graphqlClient.query<{ getChangeHistory: any[] }>({
       query: QUERY_RECENT_CHANGE_HISTORY,
       fetchPolicy: 'no-cache'
     })

@@ -25,7 +25,7 @@ export interface LCOProfileType {
   donation?: string
 }
 
-interface PageBannerProps{orgs: OrganizationType[]}
+interface PageBannerProps {orgs: OrganizationType[]}
 
 const getLcoList = (orgs): LCOProfileType[] => {
   return orgs.filter(org => org.orgType === 'LOCAL_CLIMBING_ORGANIZATION')

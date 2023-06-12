@@ -104,7 +104,7 @@ export default function BaseMap ({
       onMove={onMoveHandler}
       onLoad={onMapLoad}
       interactive
-      style={{ height: height }}
+      style={{ height }}
       ref={mapRef}
     >
       {children}

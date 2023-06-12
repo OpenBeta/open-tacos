@@ -14,7 +14,7 @@ import { AreaType } from '../../js/types'
 type UpdateOneAreaCmdType = (input: UpdateOneAreaInputType) => Promise<void>
 type AddOneAreCmdType = ({ name, parentUuid }: AddAreaProps) => Promise<void>
 type DeleteOneAreaCmdType = ({ uuid }: DeleteOneAreaInputType) => Promise<void>
-type GetAreaByIdCmdType = ({ skip }: { skip?: boolean }) => QueryResult<{ area: AreaType}>
+type GetAreaByIdCmdType = ({ skip }: { skip?: boolean }) => QueryResult<{ area: AreaType }>
 type UpdateAreasSortingOrderCmdType = (input: AreaSortingInput[]) => Promise<void>
 
 interface CallbackProps {
@@ -50,7 +50,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   const { onUpdateCompleted, onUpdateError, onAddCompleted, onAddError, onDeleteCompleted, onDeleteError } = props
 
   const getAreaByIdCmd: GetAreaByIdCmdType = ({ skip = false }) => {
-    return useQuery<{area: AreaType}, {uuid: string}>(
+    return useQuery<{ area: AreaType }, { uuid: string }>(
       QUERY_AREA_FOR_EDIT, {
         client: graphqlClient,
         variables: {
@@ -140,7 +140,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     await addArea({
       variables: {
         name,
-        parentUuid: parentUuid
+        parentUuid
       },
       context: {
         headers: {

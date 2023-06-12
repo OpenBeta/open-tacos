@@ -3,7 +3,7 @@ import { ListItemEntity } from './listItem'
 import { BarChart, Bar, Cell, XAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { CategoricalChartState } from 'recharts/types/chart/generateCategoricalChart'
 
-const CustomTooltip = (data: {label: string, payload: any[] }): JSX.Element => {
+const CustomTooltip = (data: { label: string, payload: any[] }): JSX.Element => {
   let tags: Array<[string, number]> = []
 
   if (data?.payload?.length > 0) {

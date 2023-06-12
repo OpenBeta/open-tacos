@@ -29,7 +29,7 @@ export interface IWritableUserMetadata {
      * the actual space, so do whatever needs to be done to avoid ID duplicates.
      * The key of each collection is its name.
      */
-    climbCollections?: {[key: string]: string[]}
+    climbCollections?: { [key: string]: string[] }
     /**
      * Areas are seperated into their own collection rather than mixing them in with
      * the climbs. Partially because they are different entities altogether, and partly

@@ -136,7 +136,6 @@ const Home: NextPage<HomePageType> = ({ exploreData, recentMediaWithTags }) => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
- 
   const query = gql`
   ${FRAGMENT_MEDIA_WITH_TAGS}
   query UsaAreas( $filter: Filter) {

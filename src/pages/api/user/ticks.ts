@@ -69,7 +69,6 @@ const handler: NextApiHandler<any> = async (req, res) => {
     const meta = await metadataClient.getUserMetadata()
     if (req.method === 'GET') {
       res.end()
-      return
     } else if (req.method === 'POST') {
       // fetch data from mountain project here
       const uid: string = JSON.parse(req.body)
@@ -97,7 +96,6 @@ const handler: NextApiHandler<any> = async (req, res) => {
         // return the new ticks object
         res.json({ ticks: tickCollection })
         res.end()
-        return
       }
     } else if (req.method === 'PUT') {
       meta.ticksImported = true

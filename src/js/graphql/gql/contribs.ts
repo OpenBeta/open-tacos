@@ -154,21 +154,21 @@ export interface AddAreaProps {
   countryCode?: string
 }
 
-export type AddAreaReturnType = Pick<AreaType, 'areaName'|'uuid'>
+export type AddAreaReturnType = Pick<AreaType, 'areaName' | 'uuid'>
 
 export interface RemoveAreaProps {
   uuid: string
 }
 
-export type RemoveAreaReturnType = Pick<AreaType, 'areaName'|'uuid'>
+export type RemoveAreaReturnType = Pick<AreaType, 'areaName' | 'uuid'>
 
 export interface UpdateAreaProps extends AreaUpdatableFieldsType {
   uuid: string
 }
 
-export type UpdateOneAreaInputType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng' |'isLeaf' | 'isBoulder'>> & { uuid: string }>
+export type UpdateOneAreaInputType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng' | 'isLeaf' | 'isBoulder'>> & { uuid: string }>
 
-export type UpdateAreaApiReturnType = Pick<AreaType, 'areaName'|'uuid'>
+export type UpdateAreaApiReturnType = Pick<AreaType, 'areaName' | 'uuid'>
 
 export interface DeleteManyClimbsInputType {
   parentId: string

@@ -111,7 +111,7 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
 
   const gradesObj = new Grade(parent.gradeContext, grades, type, parent.metadata.isBoulder)
 
-  const [editTogglePlaceholderRef, setEditTogglePlaceholderRef] = useState<HTMLElement|null>()
+  const [editTogglePlaceholderRef, setEditTogglePlaceholderRef] = useState<HTMLElement | null>()
 
   const [editMode, setEditMode] = useState(false)
   const [resetSignal, setResetSignal] = useState(0)
@@ -410,7 +410,7 @@ const fetchSortedClimbsInArea = async (uuid: string): Promise<ClimbType[]> => {
   const rs = await graphqlClient.query<{ area: AreaType }>({
     query,
     variables: {
-      uuid: uuid
+      uuid
     }
   })
 
