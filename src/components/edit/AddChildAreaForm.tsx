@@ -89,7 +89,7 @@ const Step1 = (props: ChildAreaBaseProps): JSX.Element => {
   // Form declaration
   const form = useForm<NewAreaFormProps>({
     mode: 'onSubmit',
-    defaultValues: { newAreaName: '', shortCode: '', parentName: parentName }
+    defaultValues: { newAreaName: '', shortCode: '', parentName }
   })
 
   const { handleSubmit, formState: { isSubmitting }, setFocus } = form

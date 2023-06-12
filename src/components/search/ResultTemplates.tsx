@@ -32,7 +32,7 @@ export const SearchByNameTemplate = ({ groupKey, hits, router }: SearchByNameTem
   )
 }
 
-const ClimbTypesHeader = ({ typeKeys }: {typeKeys: string[]}): JSX.Element =>
+const ClimbTypesHeader = ({ typeKeys }: { typeKeys: string[] }): JSX.Element =>
   (
     <div className='border-b border-gray-700 my-2.5'>
       <div className='flex space-x-2'>{typeKeys.map(item =>

@@ -74,7 +74,7 @@ export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Elemen
     }
 
     fetch('/api/user/fav', {
-      method: method,
+      method,
       body: JSON.stringify({ climbId, areaId, collection: favCollection })
     })
       .then(() => setIsFav(!isFav))

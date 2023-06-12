@@ -29,7 +29,7 @@ export const prettifyLabel = (range: RadiusRange): string => {
 export const sliderRangeToStore = (rangeIndices: number[]): RadiusRange => ({
   rangeMeters: [RADIUS_DEF[rangeIndices[0]].value,
     RADIUS_DEF[rangeIndices[1]].value],
-  rangeIndices: rangeIndices
+  rangeIndices
 })
 
 export const radiusRangeToString = (range: RadiusRange): { min: string, max: string } => ({
@@ -37,7 +37,7 @@ export const radiusRangeToString = (range: RadiusRange): { min: string, max: str
   max: RADIUS_DEF[range.rangeIndices[1]].label
 })
 
-type RadiusDefType = Record<number, {label: string, value: number, miles: number}>
+type RadiusDefType = Record<number, { label: string, value: number, miles: number }>
 
 export const RADIUS_DEF: RadiusDefType = {
   0: {

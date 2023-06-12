@@ -19,7 +19,7 @@ export default function CragsMap (): JSX.Element {
   const [viewstate, height, setViewState] = useAutoSizing({ geojson, elementId: mapElementId })
 
   // track current mouseover marker
-  const [hoverMarker, setHoverMarker] = useState<null|number[]>(null)
+  const [hoverMarker, setHoverMarker] = useState<null | number[]>(null)
 
   const onHoverHandler = useCallback((event) => {
     const { features } = event

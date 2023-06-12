@@ -77,7 +77,7 @@ export async function getStaticPaths (): Promise<any> {
   }
 }
 
-export const getStaticProps: GetStaticProps<UserSinglePostViewProps, {slug: string[]}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<UserSinglePostViewProps, { slug: string[] }> = async ({ params }) => {
   const uid = params?.slug?.[0] ?? null
   // const postId = params?.slug?.[1] ?? null
 

@@ -23,8 +23,8 @@ interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
 export const Autocomplete2 = ({ label, open = false, onCancel, detached = true, queryParams, classNames, resultContainer, ...otherProps }: AutocompleteProps): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
   const panelRootRef = useRef<any>(null)
-  const rootRef = useRef<HTMLElement|null>(null)
-  const [search, setSearch] = useState<AutocompleteApi<any>|null>(null)
+  const rootRef = useRef<HTMLElement | null>(null)
+  const [search, setSearch] = useState<AutocompleteApi<any> | null>(null)
 
   useEffect(() => {
     if (containerRef.current == null) {

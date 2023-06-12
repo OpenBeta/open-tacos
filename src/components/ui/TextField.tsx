@@ -16,7 +16,7 @@ interface TextFieldProps {
   /** Used to prompt user to change username */
   isChanged?: boolean
   /** return an error message or undefined for valid input */
-  validate?: (value: any) => Promise<undefined|string>
+  validate?: (value: any) => Promise<undefined | string>
 }
 
 interface FieldType {

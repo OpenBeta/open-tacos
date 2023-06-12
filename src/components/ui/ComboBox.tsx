@@ -6,7 +6,7 @@ function classNames (...classes): string {
   return classes.filter(Boolean).join(' ')
 }
 
-export interface ValueObj{
+export interface ValueObj {
   id: number
   name: string
   disabled?: boolean

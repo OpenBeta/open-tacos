@@ -87,7 +87,7 @@ export const DeleteAreaTriggerButtonSm = ({ disabled }: TriggerButtonProps): JSX
 
 )
 
-export type AddAreaTriggerProps = Omit<AddAreaFormProps, 'onError'> & { children?: JSX.Element}
+export type AddAreaTriggerProps = Omit<AddAreaFormProps, 'onError'> & { children?: JSX.Element }
 
 /**
  * A high level component that triggers the Add Area dialog.  See  {@link DeleteAreaTrigger} for a customization example.

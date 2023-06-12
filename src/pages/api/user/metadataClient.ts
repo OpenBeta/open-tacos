@@ -50,7 +50,7 @@ export interface Auth0UserMetadata {
      * the actual space, so do whatever needs to be done to avoid ID duplicates.
      * The key of each collection is its name.
      */
-    climbCollections?: {[key: string]: string[]}
+    climbCollections?: { [key: string]: string[] }
     /**
      * Areas are seperated into their own collection rather than mixing them in with
      * the climbs. Partially because they are different entities altogether, and partly
@@ -68,10 +68,10 @@ interface MetadataClient {
 
 const createMetadataClient = async (
   req: NextApiRequest
-): Promise<MetadataClient|null> => {
+): Promise<MetadataClient | null> => {
   const session = await getSession({ req })
   if (session == null) return null
-  const { id, accessToken } = session as unknown as {id: string, accessToken: string}
+  const { id, accessToken } = session as unknown as { id: string, accessToken: string }
 
   if (accessToken == null) {
     return null

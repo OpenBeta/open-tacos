@@ -88,7 +88,7 @@ const makeFASource = (rs: MultisearchReturnType): AutocompleteSource<TypesenseDo
 /**
  * Typesense result item => OpenBeta entity URL
  */
-const entityToUrl = ({ item }: {item: TypesenseAreaType | TypesenseDocumentType}): string | undefined => {
+const entityToUrl = ({ item }: { item: TypesenseAreaType | TypesenseDocumentType }): string | undefined => {
   const { type } = item
   switch (type) {
     case EntityType.area:

@@ -15,8 +15,8 @@ interface ReifiedFavouriteCollections {
 }
 
 export interface APIFavouriteCollections {
-  climbCollections: {[key: string]: string[] | undefined }
-  areaCollections: {[key: string]: string[] | undefined}
+  climbCollections: { [key: string]: string[] | undefined }
+  areaCollections: { [key: string]: string[] | undefined }
 }
 
 /** Body params we expect to recieve */

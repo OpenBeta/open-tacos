@@ -48,7 +48,7 @@ interface TokenParamsType {
 const _validateTokenParams = ({ clientId, clientSecret }: TokenParamsType): boolean =>
   clientId != null && clientSecret != null
 
-export const getToken = async (isAdmin: boolean = false): Promise<string|undefined> => {
+export const getToken = async (isAdmin: boolean = false): Promise<string | undefined> => {
   const params: TokenParamsType = isAdmin
     ? {
         clientId: SIRV_CONFIG.clientAdminId,
@@ -73,7 +73,7 @@ export const getToken = async (isAdmin: boolean = false): Promise<string|undefin
   throw new Error('Sirv API.getToken() error' + res.statusText)
 }
 
-export const getAdminToken = async (): Promise<string|undefined> => await getToken(true)
+export const getAdminToken = async (): Promise<string | undefined> => await getToken(true)
 
 const getAdminTokenIfNotExist = async (token?: string): Promise<string> => {
   if (token != null) return token
@@ -145,7 +145,7 @@ export const getUserImages = async (uuid: string, size: number = 200, token?: st
   throw new Error('Sirv API.getUserImages() error' + res.statusText)
 }
 
-export const getImagesByFilenames = async (fileList: string[], token?: string): Promise <{ mediaList: MediaType[], idList: string[]}> => {
+export const getImagesByFilenames = async (fileList: string[], token?: string): Promise <{ mediaList: MediaType[], idList: string[] }> => {
   if (fileList.length === 0) {
     return {
       mediaList: [],
@@ -193,7 +193,7 @@ export const getImagesByFilenames = async (fileList: string[], token?: string): 
     })
 
     return {
-      mediaList: mediaList,
+      mediaList,
       idList: mediaIdList
     }
   }
