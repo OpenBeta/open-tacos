@@ -151,13 +151,15 @@ export const getTicksByUserAndClimb = async (climbId: string, userId: string): P
   return []
 }
 
-export const getTicksByUser = async (userId: string): Promise<TickType[]> => {
+export interface TickUserSelectors {
+  userId?: string
+  username?: string
+}
+export const getTicksByUser = async (selectors: TickUserSelectors): Promise<TickType[]> => {
   try {
     const res = await graphqlClient.query<{ userTicks: TickType[] }>({
       query: QUERY_TICKS_BY_USER,
-      variables: {
-        userId
-      },
+      variables: selectors,
       fetchPolicy: 'no-cache'
     })
 
