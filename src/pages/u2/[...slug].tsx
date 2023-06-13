@@ -39,7 +39,7 @@ const Tick = (tick: TickType): JSX.Element => {
           <a className='hover:underline'>{name}</a>
         </Link>
       </div>
-      <div className='text-base-300'>{dateClimbed.toLocaleDateString()}</div>
+      <div className='text-base-300'>{new Date(dateClimbed).toLocaleDateString()}</div>
     </div>
   )
 }
