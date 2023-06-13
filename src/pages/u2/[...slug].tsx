@@ -1,12 +1,11 @@
 import { NextPage, GetStaticProps } from 'next'
 import React from 'react'
 import Link from 'next/link'
-import { getUserProfileByNick } from '../../js/auth/ManagementClient'
 import { getTicksByUser } from '../../js/graphql/api'
 import { TickType } from '../../js/types'
 
 interface TicksIndexPageProps {
-  uid: string
+  username: string
   ticks: TickType[]
 }
 
@@ -17,10 +16,10 @@ interface TicksIndexPageProps {
  * Ex: `/u/<userid>/ticks` or `/u/<userid>/ticks/progress` etc.
  * - Incrementally adopt nested layout https://nextjs.org/blog/layouts-rfc
  */
-const Index: NextPage<TicksIndexPageProps> = ({ uid, ticks }) => {
+const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
   return (
     <section className='max-w-lg mx-auto w-full px-4 py-8'>
-      <h1>{uid}</h1>
+      <h1>{username}</h1>
       <div>
         {ticks?.map(Tick)}
         {ticks?.length === 0 && <div>No ticks</div>}
@@ -40,7 +39,7 @@ const Tick = (tick: TickType): JSX.Element => {
           <a className='hover:underline'>{name}</a>
         </Link>
       </div>
-      <div className='text-base-300'>{dateClimbed.toLocaleDateString()}</div>
+      <div className='text-base-300'>{new Date(dateClimbed).toLocaleDateString()}</div>
     </div>
   )
 }
@@ -53,24 +52,17 @@ export async function getStaticPaths (): Promise<any> {
 }
 
 export const getStaticProps: GetStaticProps<TicksIndexPageProps, {slug: string[]}> = async ({ params }) => {
-  const uid = params?.slug?.[0] ?? null
+  const username = params?.slug?.[0] ?? null
   // const viewId = params?.slug?.[1] ?? 'ticks'
 
-  if (uid == null) {
+  if (username == null) {
     return { notFound: true }
   }
 
   try {
-    const userProfile = await getUserProfileByNick(uid)
-
-    if (userProfile?.uuid == null) {
-      throw new Error('Bad user profile data')
-    }
-
-    const { uuid } = userProfile
-    const ticks = await getTicksByUser(uuid)
+    const ticks = await getTicksByUser({ username })
     return {
-      props: { uid, ticks },
+      props: { username, ticks },
       revalidate: 10
     }
   } catch (e) {
