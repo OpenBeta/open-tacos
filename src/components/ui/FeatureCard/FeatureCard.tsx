@@ -9,10 +9,13 @@ import { CLIENT_CONFIG } from '../../../js/configs/clientConfig'
 
 function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
   const { areaName, pathTokens, aggregate, metadata, totalClimbs, media } = area
-  let imageUrl
+  // console.log(area);
+  
+  let imageUrl 
   if (media != null && media.length > 0) {
     imageUrl = `${CLIENT_CONFIG.CDN_BASE_URL}/${shuffle(media)[0].mediaUrl}?format=webp&h=300&q=90`
   }
+  
 
   const image = {
     url: imageUrl,
