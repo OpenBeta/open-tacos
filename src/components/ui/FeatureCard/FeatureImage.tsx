@@ -22,8 +22,6 @@ export function FeatureImage ({ image }: { image: OpenverseImage }): JSX.Element
             <div><PhotoIcon className='stroke-1 stroke-gray-400 w-12 h-12' /></div>
           </div>
           )
-          
-          
         : <Image
             src={image.url}
             alt=''

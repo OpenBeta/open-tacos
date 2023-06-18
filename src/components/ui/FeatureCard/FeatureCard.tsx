@@ -7,15 +7,12 @@ import { sanitizeName } from '../../../js/utils'
 import { FeatureImage } from './FeatureImage'
 import { CLIENT_CONFIG } from '../../../js/configs/clientConfig'
 
-function FeatureCard ({ area }: { area: AreaType }): JSX.Element {
+function FeatureCard ({ area }: { area: AreaType }): JSX.Element | null {
   const { areaName, pathTokens, aggregate, metadata, totalClimbs, media } = area
-  // console.log(area);
-  
-  let imageUrl 
-  if (media != null && media.length > 0) {
-    imageUrl = `${CLIENT_CONFIG.CDN_BASE_URL}/${shuffle(media)[0].mediaUrl}?format=webp&h=300&q=90`
-  }
-  
+
+  if (media == null || media.length === 0) return null
+
+  const imageUrl = `${CLIENT_CONFIG.CDN_BASE_URL}${shuffle(media)[0].mediaUrl}?format=webp&h=300&q=90`
 
   const image = {
     url: imageUrl,
