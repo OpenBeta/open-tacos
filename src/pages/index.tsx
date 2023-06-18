@@ -15,6 +15,7 @@ import { IndexResponseType, MediaWithTags } from '../js/types'
 import { ExploreProps } from '../components/home/DenseAreas'
 import TabsTrigger from '../components/ui/TabsTrigger'
 import RecentTaggedMedia from '../components/home/RecentMedia'
+import { FRAGMENT_MEDIA_WITH_TAGS } from '../js/graphql/gql/tags'
 
 const allowedViews = ['explore', 'newTags', 'map', 'edit', 'pulse']
 
@@ -135,8 +136,8 @@ const Home: NextPage<HomePageType> = ({ exploreData, recentMediaWithTags }) => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-//  ${FRAGMENT_MEDIA_WITH_TAGS}
   const query = gql`
+  ${FRAGMENT_MEDIA_WITH_TAGS}
   query UsaAreas( $filter: Filter) {
     areas(filter: $filter, sort: { totalClimbs: -1 }) {
       id
@@ -175,9 +176,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         lng
         areaId
       }
-      # media {
-      #   ... MediaWithTagsFields
-      # }
+       media {
+         ... MediaWithTagsFields
+       }
     }
   }`
 
