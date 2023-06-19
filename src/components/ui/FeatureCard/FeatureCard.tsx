@@ -22,6 +22,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element | null {
     attribution: ''
   }
 
+
   /**
    * Turn count-by-discipline to tiny tags.
    * Only consider crags with more 5 climbs for a given discipline.
@@ -36,6 +37,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element | null {
           Object.keys(aggregate.byDiscipline).map((key: string) => {
             if ((aggByDiscipline?.[key] as DisciplineStatsType)?.total > 5) {
               return <span key={key} className='rounded bg-gray-600 text-white px-2 py-0.5 mr-2 mb-2'>{key}</span>
+              
             }
             return null
           })
