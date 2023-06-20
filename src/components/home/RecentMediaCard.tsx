@@ -41,6 +41,7 @@ export const RecentImageCard = ({
               width={MOBILE_IMAGE_MAX_WIDITH}
               height={MOBILE_IMAGE_MAX_WIDITH / imageRatio}
               sizes='100vw'
+              objectFit='cover'
               onLoad={() => setLoaded(true)}
             />
             <div
