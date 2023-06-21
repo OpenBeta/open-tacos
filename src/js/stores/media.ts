@@ -3,7 +3,7 @@ import { v5 as uuidv5 } from 'uuid'
 import { Dictionary } from 'underscore'
 import produce from 'immer'
 
-import type { MediaType, HybridMediaTag, MediaWithTags } from '../../js/types'
+import type { MediaType, HybridMediaTag, MediaWithTags, EntityTag } from '../../js/types'
 import { DeleteTagResult } from '../hooks/useDeleteTagBackend'
 
 interface UserMediaStateProps {
@@ -97,10 +97,9 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
     /**
       * Add a new tag to local store
       */
-    addTag: async (data: any) => {
-      const { setTag } = data
-      if (setTag == null) return
-      const { mediaUuid } = setTag
+    addTag: async (tag: EntityTag) => {
+      if (tag == null) return
+      const { mediaUuid } = tag
 
       const newState = produce<Dictionary<HybridMediaTag[]>>(get.tagMap(), draft => {
         const currentTagList = draft?.[mediaUuid] ?? []
