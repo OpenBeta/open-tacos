@@ -58,7 +58,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element | null {
               {sanitizeName(areaName)}
             </h3>
             <div className='font-semibold text-xs text-secondary'>{totalClimbs} Climbs</div>
-            <div className='my-1 text-xs flex flex-row space-x-2 flex-wrap'>{formatClimbingTypes(aggregate)}</div>
+            <div className='my-1 text-xs flex gap-2 flex-wrap'>{formatClimbingTypes(aggregate)}</div>
             <div className='text-secondary text-xs text-tietiary'>{pathTokens.slice(1).join(' / ')}</div>
             {attribution !== '' && <div className='text-xs tertiary'>Image By: {attribution}</div>}
           </div>
