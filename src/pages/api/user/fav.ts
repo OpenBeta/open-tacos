@@ -50,7 +50,7 @@ function backToJSONSafe (collections: ReifiedFavouriteCollections): APIFavourite
  */
 const handler: NextApiHandler<any> = async (req, res) => {
   try {
-    const metadataClient = await createMetadataClient(req)
+    const metadataClient = await createMetadataClient(req, res)
     if (metadataClient == null) throw new Error('Can\'t create ManagementAPI client')
 
     /**

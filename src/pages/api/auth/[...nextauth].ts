@@ -1,4 +1,5 @@
 import NextAuth from 'next-auth'
+import type { NextAuthOptions } from 'next-auth'
 import Auth0Provider from 'next-auth/providers/auth0'
 
 import { AUTH_CONFIG_SERVER } from '../../../Config'
@@ -15,7 +16,7 @@ if (process.env.NODE_ENV === 'production' && clientSecret.length === 0) {
   throw new Error('AUTH0_CLIENT_SECRET is required in production')
 }
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     Auth0Provider({
       clientId,
@@ -69,4 +70,6 @@ export default NextAuth({
       return session
     }
   }
-})
+}
+
+export default NextAuth(authOptions)

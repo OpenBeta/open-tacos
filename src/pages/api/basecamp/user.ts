@@ -1,9 +1,11 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from 'next-auth/react'
+import { getServerSession } from 'next-auth'
+
 import withAuth from '../withAuth'
 import { updateUser } from '../../../js/auth/ManagementClient'
 import { UserRole } from '../../../js/types'
 import { IUserMetadataOriginal } from '../../../js/types/User'
+import { authOptions } from '../auth/[...nextauth]'
 
 const handler: NextApiHandler<any> = async (req, res) => {
   try {
@@ -29,7 +31,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
  * @returns
  */
 async function handlePostRequest (req: NextApiRequest, res: NextApiResponse): Promise<void> {
-  const session = await getSession({ req })
+  const session = await getServerSession(req, res, authOptions)
   if (session?.user.metadata?.roles?.includes(UserRole.USER_ADMIN) ?? false) {
     res.setHeader('Cache-Control', 'no-store')
     const userId = req.query?.userId

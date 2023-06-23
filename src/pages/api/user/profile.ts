@@ -8,7 +8,7 @@ import { checkUsername, checkWebsiteUrl } from '../../../js/utils'
 type Handler = NextApiHandler<Auth0UserMetadata | { message: string }>
 
 const getProfile: Handler = async (req, res) => {
-  const metadataClient = await createMetadataClient(req)
+  const metadataClient = await createMetadataClient(req, res)
   if (metadataClient == null) {
     return res.status(401).end()
   }
@@ -24,7 +24,7 @@ const getProfile: Handler = async (req, res) => {
 }
 
 const updateMyProfile: Handler = async (req, res) => {
-  const metadataClient = await createMetadataClient(req)
+  const metadataClient = await createMetadataClient(req, res)
   if (metadataClient == null) {
     return res.status(401).end()
   }
