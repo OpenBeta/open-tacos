@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 
 import { graphqlClient } from '../graphql/Client'
 import { MUTATION_ADD_ENTITY_TAG, SetTagType } from '../graphql/gql/tags'
-import { actions } from '../stores'
+// import { actions } from '../stores'
 import { EntityTag } from '../types'
 
 export interface UsePhotTagReturn {

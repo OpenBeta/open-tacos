@@ -119,3 +119,22 @@ export const QUERY_MEDIA_FOR_FEED = gql`
     }
   }
 `
+
+export const QUERY_USER_MEDIA = gql`
+  ${FRAGMENT_MEDIA_WITH_TAGS}
+  query UserMedia($userUuid: ID!) {
+    getUserMediaPagination(
+      input: {userUuid: $userUuid}
+    ) {
+      userUuid
+      mediaConnection {
+        edges {
+          cursor
+          node {
+            ... MediaWithTagsFields
+          }
+        }
+      }
+    }
+  }
+`

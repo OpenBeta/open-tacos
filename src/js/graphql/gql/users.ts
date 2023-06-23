@@ -39,8 +39,19 @@ export const QUERY_GET_USER_PUBLIC_PAGE = gql`
         website
         avatar
       }
-      mediaList {
-        ... MediaWithTagsFields
+      media {
+        userUuid
+        mediaConnection {
+          edges {
+            cursor
+            node {
+              ... MediaWithTagsFields
+            }
+          }
+          pageInfo {
+            hasNextPage
+          }
+        }
       }
     }
   }

@@ -58,6 +58,9 @@ export const graphqlClient = new ApolloClient({
       },
       History: {
         keyFields: ['id']
+      },
+      UserMedia: {
+        keyFields: ['userUuid']
       }
     }
   }),

@@ -15,6 +15,8 @@ import { UserPublicPage } from '../../js/types/User'
 import { useResponsive } from '../../js/hooks'
 import TagList from './TagList'
 import usePermissions from '../../js/hooks/auth/usePermissions'
+import { relayMediaConnectionToMediaArray } from '../../js/utils'
+import useMediaCmd from '../../js/hooks/useMediaCmd'
 
 export interface UserGalleryProps {
   uid: string
@@ -31,7 +33,7 @@ export interface UserGalleryProps {
 export default function UserGallery ({ uid, postId: initialPostId, userPublicPage }: UserGalleryProps): JSX.Element | null {
   const router = useRouter()
   const userProfile = userPublicPage?.profile
-  const imageList = userPublicPage?.mediaList
+  const imageList = relayMediaConnectionToMediaArray(userPublicPage?.media.mediaConnection.edges ?? [])
 
   const [selectedMediaId, setSlideNumber] = useState<number>(-1)
 
@@ -103,27 +105,37 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
   }
 
   const [hasMore, setHasMore] = useState(true)
-  const [imageListToShow, setImageListToShow] = useState<MediaWithTags[]>([])
+  /**
+   * Use fetchMore
+   */
+  const [imageListToShow, setImageListToShow] = useState<MediaWithTags[]>(imageList)
 
   // to load more images when user scrolls to the 'scrollThreshold' value of the page
-  const fetchMoreData = (): void => {
-    // all images are loaded
-    if (imageListToShow?.length >= imageList?.length) {
-      setHasMore(false)
-      return
-    }
+  const fetchMoreData = async (): Promise<void> => {
+    const foo = await fetchMore({
+      variables: {
+        userUuid: userPublicPage?.profile.userUuid
+      }
+    })
+    console.log('#fetchmore() ', foo)
 
-    // delay fetching images by 1 second to simulate network request
-    setTimeout(() => {
-      // concatenate furhter images to imageListToShow
-      setImageListToShow(imageListToShow.concat(imageList?.slice(imageListToShow?.length, imageListToShow?.length + 9)))
-    }, 500)
+    // all images are loaded
+    // if (imageListToShow?.length >= imageList?.length) {
+    //   setHasMore(false)
+
+    // }
+
+    // // delay fetching images by 1 second to simulate network request
+    // setTimeout(() => {
+    //   // concatenate furhter images to imageListToShow
+    //   setImageListToShow(imageListToShow.concat(imageList?.slice(imageListToShow?.length, imageListToShow?.length + 9)))
+    // }, 500)
   }
 
-  useEffect(() => {
-    // set initial images to be shown
-    setImageListToShow(imageList?.slice(0, 10))
-  }, [imageList])
+  // useEffect(() => {
+  //   // set initial images to be shown
+  //   setImageListToShow(imageList?.slice(0, 10))
+  // }, [imageList])
 
   // When logged-in user has fewer than 3 photos,
   // create empty slots for the call-to-action upload component.
@@ -131,12 +143,18 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
     ? [...Array(3 - imageList?.length).keys()]
     : []
 
+  const { data, fetchMore } = useMediaCmd({ media: userPublicPage?.media })
+
+  console.log('#usergallery ', data)
+
+  // console.log('## iamgelist', imageList, imageListToShow)
+
   return (
     <>
       <InfiniteScroll
         dataLength={imageListToShow?.length}
         next={fetchMoreData}
-        hasMore={hasMore}
+        hasMore
         loader={null}
       >
         <div className='flex flex-col gap-x-6 gap-y-10 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>

@@ -1,4 +1,4 @@
-import { MediaWithTags } from '../types'
+import { MediaWithTags, UserMedia } from '../types'
 
 export enum UserRole { // These need to match https://manage.auth0.com/dashboard/us/dev-fmjy7n5n/roles.
   EDITOR = 'editor',
@@ -78,5 +78,5 @@ export interface UserPublicProfile {
 }
 export interface UserPublicPage {
   profile: UserPublicProfile
-  mediaList: MediaWithTags[]
+  media: UserMedia
 }

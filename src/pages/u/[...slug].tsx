@@ -10,6 +10,7 @@ import type { UserGalleryProps } from '../../components/media/UserGallery'
 import useUserProfileCmd from '../../js/hooks/useUserProfileCmd'
 import { UserPublicPage } from '../../js/types/User'
 import usePermissions from '../../js/hooks/auth/usePermissions'
+import { relayMediaConnectionToMediaArray } from '../../js/utils'
 
 interface UserHomeProps {
   uid: string
@@ -22,10 +23,12 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, userPublicP
 
   const { isAuthorized } = usePermissions({ currentUserUuid: userPublicPage?.profile?.userUuid })
 
+  const mediaList = relayMediaConnectionToMediaArray(userPublicPage?.media.mediaConnection.edges ?? [])
+
   const { author, pageTitle, pageImages } = useUserProfileSeo({
     username: uid,
     fullName: userPublicPage?.profile?.displayName,
-    imageList: userPublicPage?.mediaList ?? []
+    imageList: mediaList
   })
 
   const { isFallback } = router
@@ -51,7 +54,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, userPublicP
             <div className='flex justify-center mt-8 text-secondary text-sm whitespace-normal px-4 lg:px-0'>
               <div className='border rounded-md px-6 py-2 shadow'>
                 <ul className='list-disc'>
-                  <li>Please upload 3 photos to complete your profile {userPublicPage.mediaList?.length >= 3 && <span>&#10004;</span>}</li>
+                  <li>Please upload 3 photos to complete your profile {mediaList?.length >= 3 && <span>&#10004;</span>}</li>
                   <li>Upload only your own photos</li>
                   <li>Keep it <b>Safe For Work</b> and climbing-related</li>
                 </ul>
@@ -109,6 +112,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> =
     const { getUserPublicPage } = useUserProfileCmd({ accessToken: '' })
     const page = await getUserPublicPage(uid)
 
+    console.log('## page data', page)
     const data = {
       uid,
       postId,
