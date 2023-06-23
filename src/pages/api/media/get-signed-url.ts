@@ -1,11 +1,12 @@
 import { NextApiHandler } from 'next'
-import { getSession } from 'next-auth/react'
 import { customAlphabet } from 'nanoid'
 import { nolookalikesSafe } from 'nanoid-dictionary'
 import { extname } from 'path'
+import { getServerSession } from 'next-auth'
 
 import withAuth from '../withAuth'
 import { s3Client, SIRV_CONFIG } from '../../../js/sirv/SirvClient'
+import { authOptions } from '../auth/[...nextauth]'
 
 export interface MediaPreSignedProps {
   url: string
@@ -25,7 +26,7 @@ const handler: NextApiHandler<MediaPreSignedProps> = async (req, res) => {
       if (Array.isArray(filename)) {
         throw new Error('Expect only 1 filename param')
       }
-      const session = await getSession({ req })
+      const session = await getServerSession(req, res, authOptions)
       if (session?.user?.metadata?.uuid == null) {
         throw new Error('Missing user metadata')
       }

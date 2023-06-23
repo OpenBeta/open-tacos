@@ -1,12 +1,12 @@
 import { NextApiHandler } from 'next'
-import { getSession } from 'next-auth/react'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '../auth/[...nextauth]'
 
 import withAuth from '../withAuth'
 import useUserProfileCmd from '../../../js/hooks/useUserProfileCmd'
 
 const handler: NextApiHandler<any> = async (req, res) => {
-  const session = await getSession({ req })
-
+  const session = await getServerSession(req, res, authOptions)
   const uuid = session?.user.metadata.uuid
 
   if (uuid == null) {

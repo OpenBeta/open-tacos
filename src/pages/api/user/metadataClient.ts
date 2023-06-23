@@ -1,8 +1,9 @@
-import { NextApiRequest } from 'next'
-import { getSession } from 'next-auth/react'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { getServerSession } from 'next-auth'
 
 import { reshapeAuth0UserToProfile, extractUpdatableMetadataFromProfile, auth0ManagementClient } from '../../../js/auth/ManagementClient'
 import { IUserProfile } from '../../../js/types/User'
+import { authOptions } from '../auth/[...nextauth]'
 
 const allowedFields = ['name', 'nick', 'bio', 'website', 'ticksImported', 'collections'] as const
 type AllowedField = typeof allowedFields[number]
@@ -67,9 +68,10 @@ interface MetadataClient {
 }
 
 const createMetadataClient = async (
-  req: NextApiRequest
+  req: NextApiRequest,
+  res: NextApiResponse
 ): Promise<MetadataClient|null> => {
-  const session = await getSession({ req })
+  const session = await getServerSession(req, res, authOptions)
   if (session == null) return null
   const { id, accessToken } = session as unknown as {id: string, accessToken: string}
 

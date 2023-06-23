@@ -1,12 +1,14 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from 'next-auth/react'
+import { getServerSession } from 'next-auth'
+
 import withAuth from '../withAuth'
 import { getUserRoles, setUserRoles } from '../../../js/auth/ManagementClient'
 import { UserRole } from '../../../js/types'
+import { authOptions } from '../auth/[...nextauth]'
 
 const handler: NextApiHandler<any> = async (req, res) => {
   try {
-    const session = await getSession({ req })
+    const session = await getServerSession(req, res, authOptions)
     if (session?.user.metadata?.roles?.includes(UserRole.USER_ADMIN) ?? false) {
       res.setHeader('Cache-Control', 'no-store')
       const userId = req.query?.userId
