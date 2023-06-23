@@ -6,9 +6,9 @@
             "type": "node-terminal",
             "request": "launch",
             "command": "npm run dev",
-            "env": {
-                "NEXT_PUBLIC_API_SERVER": "http://localhost:4000"
-            },
+            // "env": {
+            //     "NEXT_PUBLIC_API_SERVER": "http://localhost:4000"
+            // },
         },
         {
             "name": "Next.js: debug client-side",
