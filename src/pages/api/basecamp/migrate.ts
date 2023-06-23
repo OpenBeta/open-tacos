@@ -1,4 +1,6 @@
 import { NextApiHandler } from 'next'
+import { getServerSession } from 'next-auth'
+
 import withAuth from '../withAuth'
 import { CreateUserData } from 'auth0'
 import { customAlphabet } from 'nanoid'
@@ -6,7 +8,6 @@ import { nolookalikesSafe } from 'nanoid-dictionary'
 import { UserRole } from '../../../js/types'
 
 import { auth0ManagementClient } from '../../../js/auth/ManagementClient'
-import { getServerSession } from 'next-auth'
 import { authOptions } from '../auth/[...nextauth]'
 
 /**
