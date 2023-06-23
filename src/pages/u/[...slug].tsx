@@ -125,6 +125,7 @@ export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> =
     const { getUserPublicPage } = useUserProfileCmd({ accessToken: '' })
     const page = await getUserPublicPage(uid)
 
+    console.log('## page data', page)
     const data = {
       uid,
       postId,

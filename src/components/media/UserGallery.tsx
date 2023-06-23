@@ -151,6 +151,12 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
     ? [...Array(3 - mediaConnection.edges.length).keys()]
     : []
 
+  const { data, fetchMore } = useMediaCmd({ media: userPublicPage?.media })
+
+  console.log('#usergallery ', data)
+
+  // console.log('## iamgelist', imageList, imageListToShow)
+
   return (
     <>
       <InfiniteScroll
