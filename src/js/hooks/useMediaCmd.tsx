@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useQuery } from '@apollo/client'
+import { useLazyQuery, useQuery } from '@apollo/client'
 import { toast } from 'react-toastify'
 
 import { graphqlClient } from '../graphql/Client'
@@ -26,19 +26,18 @@ export default function useMediaCmd ({ media }: P): any {
     }
   }, [media])
 
-  const { loading, error, data, fetchMore } = useQuery<UserMedia, P>(
+  const [fetchMore, { loading, error, data }] = useLazyQuery<UserMedia, { userUuid: string }>(
     QUERY_USER_MEDIA, {
-      // variables: {
-      //   userUuid
-      // },
+      variables: {
+        userUuid: media.userUuid
+      },
       client: graphqlClient,
-      fetchPolicy: 'cache-only',
+
       errorPolicy: 'none',
-      // skip: true,
-      onError: error => toast.error(error.message),
-      onCompleted: async () => {
-        toast.success('Tag added.')
-      }
+      onError: error => toast.error(error.message)
+      // onCompleted: async () => {
+      //   toast.success('fetchMore()')
+      // }
     }
   )
 
@@ -52,15 +51,15 @@ export default function useMediaCmd ({ media }: P): any {
     //   })
     // }
 
-    graphqlClient.writeQuery({
-      query: QUERY_USER_MEDIA,
-      data: {
-        getUserMediaPagination: {
-          ...media
-          // ___typename: 'UserMedia'
-        }
-      }
-    })
+    // graphqlClient.writeQuery({
+    //   query: QUERY_USER_MEDIA,
+    //   data: {
+    //     getUserMediaPagination: {
+    //       ...media
+    //       // ___typename: 'UserMedia'
+    //     }
+    //   }
+    // })
   }
   return { data, fetchMore }
 

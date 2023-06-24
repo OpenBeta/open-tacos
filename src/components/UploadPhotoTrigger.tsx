@@ -8,7 +8,7 @@ import usePhotoUploader from '../js/hooks/usePhotoUploader'
 import { userMediaStore, revalidateUserHomePage } from '../js/stores/media'
 import useReturnToProfile from '../js/hooks/useReturnToProfile'
 import usePhotoTag from '../js/hooks/usePhotoTagCmd'
-import { mediaUrlHash } from '../js/sirv/SirvClient'
+// import { mediaUrlHash } from '../js/sirv/SirvClient'
 import { BlockingAlert } from './ui/micro/AlertDialogue'
 
 interface UploadPhotoTriggerProps {
@@ -53,12 +53,12 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
     // let's see if we're viewing the climb or area page
     if (id != null && isValidUuid(id) && (destType === 0 || destType === 1)) {
       // yes! let's tag it
-      await tagPhotoCmd({
-        mediaUrl: url,
-        mediaUuid: mediaUrlHash(url),
-        destinationId: id,
-        destType
-      })
+      // await tagPhotoCmd({
+      //   mediaUrl: url,
+      //   mediaUuid: mediaUrlHash(url),
+      //   destinationId: id,
+      //   destType
+      // })
 
       if (onUploaded != null) onUploaded()
 

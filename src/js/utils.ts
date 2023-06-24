@@ -1,7 +1,7 @@
 import { ClimbTypeToColor } from './constants'
 import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
 
-import { AreaType, ClimbType, ClimbDisciplineRecord, ClimbDiscipline, MediaEdge, MediaWithTags } from './types'
+import { AreaType, ClimbType, ClimbDisciplineRecord, ClimbDiscipline, MediaEdge, MediaWithTags, MediaConnection } from './types'
 
 /**
  * Given a path or parent id and the type of the page generate the GitHub URL
@@ -270,6 +270,7 @@ export const removeTypenameFromDisciplines = (discplines: ClimbDisciplineRecord)
  * @param edges
  * @returns Media with atgs array
  */
-export const relayMediaConnectionToMediaArray = (edges: MediaEdge[]): MediaWithTags[] => {
-  return edges.map(entry => entry.node)
+export const relayMediaConnectionToMediaArray = (mediaConnection: MediaConnection): MediaWithTags[] => {
+  if (mediaConnection == null) return []
+  return mediaConnection.edges.map(entry => entry.node)
 }

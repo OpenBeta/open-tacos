@@ -35,6 +35,17 @@ export const graphqlClient = new ApolloClient({
   cache: new InMemoryCache({
     addTypename: true,
     typePolicies: {
+      // Query: {
+      //   fields: {
+      //     getUserMediaPagination: {
+      //       keyArgs: ['userUuid']
+      //       // merge: (existing = [], incoming, { args }) => {
+      //       //   console.log('#cach merge ', args, incoming)
+      //       //   // return [...existing, ...incoming]
+      //       // }
+      //     }
+      //   }
+      // },
       CragsNear: {
         keyFields: ['placeId', '_id']
       },
@@ -58,10 +69,21 @@ export const graphqlClient = new ApolloClient({
       },
       History: {
         keyFields: ['id']
-      },
-      UserMedia: {
-        keyFields: ['userUuid']
       }
+      // UserMedia: {
+      //   keyFields: ['userUuid']
+      // },
+      // MediaEdge: {
+      //   keyFields: ['cursor']
+      // }
+      // MediaConnection: {
+      //   merge: (existing = { edges: [] }, incoming, { args }) => {
+      //     console.log('#cach merge ', args, incoming)
+      //     const temp = [...existing.edges, ...incoming.edges]
+
+      //     return { ...existing, edges: temp }
+      //   }
+      // }
     }
   }),
   ssrMode: false // We relies on NextJS for SSR data management

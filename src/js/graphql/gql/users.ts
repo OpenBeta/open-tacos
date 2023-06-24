@@ -52,7 +52,7 @@ export const QUERY_GET_USER_PUBLIC_PAGE = gql`
             hasNextPage
           }
         }
-      }
+    }
     }
   }
 `

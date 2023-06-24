@@ -23,7 +23,7 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, userPublicP
 
   const { isAuthorized } = usePermissions({ currentUserUuid: userPublicPage?.profile?.userUuid })
 
-  const mediaList = relayMediaConnectionToMediaArray(userPublicPage?.media.mediaConnection.edges ?? [])
+  const mediaList = relayMediaConnectionToMediaArray(userPublicPage?.media?.mediaConnection)
 
   const { author, pageTitle, pageImages } = useUserProfileSeo({
     username: uid,
@@ -33,6 +33,9 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, userPublicP
 
   const { isFallback } = router
 
+  if (isFallback) {
+    return <div>Loading...</div>
+  }
   return (
     <>
       <SeoTags

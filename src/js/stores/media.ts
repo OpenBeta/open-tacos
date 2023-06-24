@@ -98,21 +98,21 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       * Add a new tag to local store
       */
     addTag: async (tag: EntityTag) => {
-      if (tag == null) return
-      const { mediaUuid } = tag
+      // if (tag == null) return
+      // const { mediaUuid } = tag
 
-      const newState = produce<Dictionary<HybridMediaTag[]>>(get.tagMap(), draft => {
-        const currentTagList = draft?.[mediaUuid] ?? []
-        if (currentTagList.length === 0) {
-          draft[mediaUuid] = [setTag]
-        } else {
-          draft[mediaUuid].push(setTag)
-        }
-        return draft
-      })
+      // const newState = produce<Dictionary<HybridMediaTag[]>>(get.tagMap(), draft => {
+      //   const currentTagList = draft?.[mediaUuid] ?? []
+      //   if (currentTagList.length === 0) {
+      //     draft[mediaUuid] = [setTag]
+      //   } else {
+      //     draft[mediaUuid].push(setTag)
+      //   }
+      //   return draft
+      // })
 
-      set.tagMap(newState)
-      await revalidateUserHomePage(get.uid())
+      // set.tagMap(newState)
+      // await revalidateUserHomePage(get.uid())
     },
     /**
      * Remove a tag from local store

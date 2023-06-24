@@ -122,9 +122,9 @@ export const QUERY_MEDIA_FOR_FEED = gql`
 
 export const QUERY_USER_MEDIA = gql`
   ${FRAGMENT_MEDIA_WITH_TAGS}
-  query UserMedia($userUuid: ID!) {
+  query UserMedia($userUuid: ID!, $first: Int, $after: ID) {
     getUserMediaPagination(
-      input: {userUuid: $userUuid}
+      input: { userUuid: $userUuid, first: $first, after: $after }
     ) {
       userUuid
       mediaConnection {
