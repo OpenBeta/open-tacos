@@ -85,10 +85,10 @@ const Row = ({ rowHeader, beginner, intermediate, advanced, expert, total, myRan
   return (
     <tr className='text-tertiary text-xs my-2'>
       <th scope='row' className='py-0.5 pr-2 text-right'>{rowHeader}</th>
-      <td className={`${highlighted ? 'dtable-highlight' : ''} ${highlighted && isInMyRange(0, myRange) ? 'dtable-my-range' : ''}`} style={{ color: 'white' }} >{beginner}</td>
-      <td className={`${highlighted ? 'dtable-highlight' : ''} ${highlighted && isInMyRange(1, myRange) ? 'dtable-my-range' : ''}`} style={{ color: 'white' }} >{intermediate}</td>
-      <td className={`${highlighted ? 'dtable-highlight' : ''} ${highlighted && isInMyRange(2, myRange) ? 'dtable-my-range' : ''}`}>{advanced}</td>
-      <td className={`${highlighted ? 'dtable-highlight' : ''} ${highlighted && isInMyRange(3, myRange) ? 'dtable-my-range' : ''}`}>{expert}</td>
+      <td className={`${highlighted ? 'text-base-content' : ''} ${highlighted && isInMyRange(0, myRange) ? 'dtable-my-range' : ''}`}>{beginner}</td>
+      <td className={`${highlighted ? 'text-base-content' : ''} ${highlighted && isInMyRange(1, myRange) ? 'dtable-my-range' : ''}`} >{intermediate}</td>
+      <td className={`${highlighted ? 'text-base-content' : ''} ${highlighted && isInMyRange(2, myRange) ? 'dtable-my-range' : ''}`}>{advanced}</td>
+      <td className={`${highlighted ? 'text-base-content' : ''} ${highlighted && isInMyRange(3, myRange) ? 'dtable-my-range' : ''}`}>{expert}</td>
     </tr>
   )
 }
