@@ -85,6 +85,7 @@ const Row = ({ rowHeader, beginner, intermediate, advanced, expert, total, myRan
   return (
     <tr className='text-tertiary text-xs my-2'>
       <th scope='row' className='py-0.5 pr-2 text-right'>{rowHeader}</th>
+      /*Add text-base-color to range text */
       <td className={`${highlighted ? 'text-base-content' : ''} ${highlighted && isInMyRange(0, myRange) ? 'dtable-my-range' : ''}`}>{beginner}</td>
       <td className={`${highlighted ? 'text-base-content' : ''} ${highlighted && isInMyRange(1, myRange) ? 'dtable-my-range' : ''}`}>{intermediate}</td>
       <td className={`${highlighted ? 'text-base-content' : ''} ${highlighted && isInMyRange(2, myRange) ? 'dtable-my-range' : ''}`}>{advanced}</td>
