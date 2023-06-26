@@ -93,6 +93,7 @@ const Row = ({ rowHeader, beginner, intermediate, advanced, expert, total, myRan
   )
 }
 
+
 const shouldHighlight = (key: string, trad: boolean, sport: boolean, bouldering: boolean, tr: boolean): boolean => {
   if (trad && key === 'trad') {
     return true
