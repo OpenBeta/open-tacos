@@ -87,8 +87,8 @@ const Row = ({ rowHeader, beginner, intermediate, advanced, expert, total, myRan
       <th scope='row' className='py-0.5 pr-2 text-right'>{rowHeader}</th>
       <td className={`${highlighted ? 'text-base-content rounded-tl rounded-bl' : ''} ${highlighted && isInMyRange(0, myRange) ? 'dtable-my-range' : ''}`}>{beginner}</td>
       <td className={`${highlighted ? 'text-base-content' : ''} ${highlighted && isInMyRange(1, myRange) ? 'dtable-my-range' : ''}`}>{intermediate}</td>
-      <td className={`${highlighted ? 'text-base-content bg-gray-200' : ''} ${highlighted && isInMyRange(2, myRange) ? 'dtable-my-range' : ''}`}>{advanced}</td>
-      <td className={`${highlighted ? 'text-base-content rounded-tr rounded-br bg-gray-200' : ''} ${highlighted && isInMyRange(3, myRange) ? 'dtable-my-range' : ''}`}>{expert}</td>
+      <td className={`${highlighted ? 'text-base-content' : ''} ${highlighted && isInMyRange(2, myRange) ? 'dtable-my-range' : ''}`}>{advanced}</td>
+      <td className={`${highlighted ? 'text-base-content rounded-tr rounded-br' : ''} ${highlighted && isInMyRange(3, myRange) ? 'dtable-my-range' : ''}`}>{expert}</td>
     </tr>
   )
 }
