@@ -63,7 +63,7 @@ export const FRAGMENT_MEDIA_WITH_TAGS = gql`
     }
   }`
 
-export interface SetTagType {
+export interface AddEntityTagProps {
   mediaId: string
   entityId: string
   entityType: TagTargetType
@@ -96,13 +96,14 @@ export const MUTATION_REMOVE_ENTITY_TAG = gql`
     )
   }`
 
-export const QUERY_TAGS_BY_MEDIA_ID = gql`
-  ${FRAGMENT_CLIMB_TAG}
-  ${FRAGMENT_AREA_TAG}
-  query getTagsByMediaIdList($uuidList: [ID!]) {
-    getTagsByMediaIdList(uuidList: $uuidList) {
-      ... ClimbTagFields
-      ... AreaTagFields
+/**
+ * Query one media by id
+ */
+export const QUERY_MEDIA_BY_ID = gql`
+  ${FRAGMENT_MEDIA_WITH_TAGS}
+  query media($id: ID!) {
+    media(input: { id: $id }) {
+      ... MediaWithTagsFields
     }
   }
 `

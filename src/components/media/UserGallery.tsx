@@ -124,7 +124,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
     ? [...Array(3 - imageList?.length).keys()]
     : []
 
-  const { fetchMore } = useMediaCmd({ media: userPublicPage?.media })
+  const { fetchMore } = useMediaCmd()
 
   return (
     <>

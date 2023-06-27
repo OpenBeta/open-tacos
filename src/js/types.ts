@@ -436,7 +436,6 @@ export interface Username {
 }
 
 export interface UserMedia {
-  // username: string
   userUuid: string
   mediaConnection: MediaConnection
 }

@@ -4,12 +4,12 @@ import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
 
 import clx from 'classnames'
 import { EntityTag, TagTargetType } from '../../js/types'
-import { onDeleteCallback } from '../../js/hooks/useDeleteTagBackend'
+import { OnDeleteCallback } from './TagList'
 
 interface PhotoTagProps {
   mediaId: string
   tag: EntityTag
-  onDelete: onDeleteCallback
+  onDelete: OnDeleteCallback
   isAuthorized?: boolean
   showDelete?: boolean
   size?: 'md' | 'lg'

@@ -69,6 +69,16 @@ export const graphqlClient = new ApolloClient({
       },
       History: {
         keyFields: ['id']
+      },
+      MediaWithTags: {
+        keyFields: ['id'],
+        fields: {
+          entityTags: {
+            merge: (existing = [], incoming) => {
+              return incoming
+            }
+          }
+        }
       }
       // UserMedia: {
       //   keyFields: ['userUuid']

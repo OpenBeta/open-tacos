@@ -24,7 +24,6 @@ const TAG_DATA: MediaWithTags = {
 }
 
 jest.mock('../../../js/graphql/Client')
-jest.mock('../../../js/hooks/useDeleteTagBackend')
 
 const AddTagMock = jest.fn((props) => <div>mocked</div>)
 jest.mock('../AddTag', () => ({
@@ -32,11 +31,9 @@ jest.mock('../AddTag', () => ({
   default: AddTagMock
 }))
 
-const onDelete = jest.fn()
-
-jest.mock('../../../js/hooks/useDeleteTagBackend', () => ({
+jest.mock('../../../js/hooks/useMediaCmd', () => ({
   __esModule: true,
-  default: () => ({ onDelete })
+  default: () => jest.fn()
 }))
 
 let MobileMediaCard: React.FC<MobileMediaCardProps>

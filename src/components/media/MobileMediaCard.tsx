@@ -1,3 +1,4 @@
+import { useState } from 'react'
 
 import Card from '../ui/Card/Card'
 import TagList, { MobilePopupTagList } from './TagList'
@@ -15,8 +16,12 @@ export interface MobileMediaCardProps {
   isAuthenticated?: boolean
 }
 
-export default function MobileMediaCard ({ header, showTagActions = false, isAuthorized = false, isAuthenticated = false, mediaWithTags }: MobileMediaCardProps): JSX.Element {
-  const { mediaUrl, entityTags, uploadTime } = mediaWithTags
+/**
+ * Media card for mobile view
+ */
+export default function MobileMediaCard ({ header, isAuthorized = false, isAuthenticated = false, mediaWithTags }: MobileMediaCardProps): JSX.Element {
+  const [localMediaWithTags, setMedia] = useState(mediaWithTags)
+  const { mediaUrl, entityTags, uploadTime } = localMediaWithTags
   const tagCount = entityTags.length
   return (
     <Card
@@ -32,7 +37,11 @@ export default function MobileMediaCard ({ header, showTagActions = false, isAut
       imageActions={
         <section className='flex items-center justify-between'>
           <div>&nbsp;</div>
-          <MobilePopupTagList mediaWithTags={mediaWithTags} isAuthorized={isAuthorized} />
+          <MobilePopupTagList
+            mediaWithTags={localMediaWithTags}
+            isAuthorized={isAuthorized}
+            onChange={setMedia}
+          />
         </section>
       }
       body={
@@ -41,8 +50,10 @@ export default function MobileMediaCard ({ header, showTagActions = false, isAut
             {tagCount > 0 &&
             (
               <TagList
-                mediaWithTags={mediaWithTags}
-                showActions={showTagActions}
+                mediaWithTags={localMediaWithTags}
+                // we have a popup for adding/removing tags
+                // don't show add tag button on mobile
+                showActions={false}
                 isAuthorized={isAuthorized}
                 isAuthenticated={isAuthenticated}
               />
@@ -56,44 +67,3 @@ export default function MobileMediaCard ({ header, showTagActions = false, isAut
     />
   )
 }
-
-// interface RecentImageCardProps {
-//   header?: JSX.Element
-//   imageInfo: MediaType
-//   tagList: HybridMediaTag[]
-// }
-
-// export const RecentImageCard = ({ header, imageInfo, tagList }: RecentImageCardProps): JSX.Element => {
-//   return (
-//     <Card
-//       header={<div />}
-//       image={
-//         <img
-//           src={MobileLoader({
-//             src: imageInfo.filename,
-//             width: MOBILE_IMAGE_MAX_WIDITH
-//           })}
-//           width={MOBILE_IMAGE_MAX_WIDITH}
-//           sizes='100vw'
-//         />
-// }
-//       body={
-//         <>
-//           <section className='flex flex-col gap-y-4'>
-//             <TagList
-//               list={tagList}
-//               showActions={false}
-//               isAuthorized={false}
-//               isAuthenticated={false}
-//               imageInfo={imageInfo}
-//             />
-//             <div className='uppercase text-xs text-base-200'>
-//               {getUploadDateSummary(imageInfo.ctime)}
-//             </div>
-
-//           </section>
-//         </>
-// }
-//     />
-//   )
-// }

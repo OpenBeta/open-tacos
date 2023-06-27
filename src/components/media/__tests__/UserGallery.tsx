@@ -3,13 +3,13 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import type UserGalleryType from '../UserGallery'
-import { mediaList } from './data'
+import { userMedia } from './data'
 import { UserPublicPage } from '../../../js/types/User'
 
 jest.mock('next/router')
 
 jest.mock('../../../js/hooks/useResponsive')
-jest.mock('../../../js/sirv/SirvClient')
+jest.mock('../../../js/hooks/auth/usePermissions')
 jest.mock('../../../js/graphql/api')
 jest.mock('../../../js/graphql/Client')
 
@@ -18,13 +18,23 @@ jest.mock('../UploadCTA', () => ({
   default: jest.fn()
 }))
 
+const fetchMore = jest.fn()
+
+jest.mock('../../../js/hooks/useMediaCmd', () => ({
+  __esModule: true,
+  default: () => ({ fetchMore })
+}))
+
 const useResponsive = jest.requireMock('../../../js/hooks/useResponsive')
+const usePermissions = jest.requireMock('../../../js/hooks/auth/usePermissions')
 
 // eslint-disable-next-line
 const { pushFn, replaceFn } = jest.requireMock('next/router')
 
 const useResponsiveMock = jest.spyOn(useResponsive, 'default')
 useResponsiveMock.mockReturnValue({ isDesktop: false, isMobile: true, isTablet: true })
+
+const usePermissionsHook = jest.spyOn(usePermissions, 'default')
 
 const userProfile: UserPublicPage = {
   profile: {
@@ -34,7 +44,7 @@ const userProfile: UserPublicPage = {
     avatar: 'https://example.com/avatar.jpg',
     bio: 'totem eatsum'
   },
-  mediaList
+  media: userMedia
 }
 
 let UserGallery: typeof UserGalleryType
@@ -52,7 +62,7 @@ describe('Image gallery', () => {
     const username = 'coolusername'
 
     useResponsiveMock.mockReturnValue({ isDesktop: true, isMobile: false, isTablet: false })
-
+    usePermissionsHook.mockReturnValue({ isAuthorized: true, isAuthenticated: true })
     render(
       <UserGallery
         uid={username}
@@ -61,7 +71,7 @@ describe('Image gallery', () => {
       />)
 
     const images = screen.getAllByRole('img')
-    expect(images.length).toBe(mediaList.length)
+    expect(images.length).toBe(userMedia.mediaConnection.edges.length)
 
     await user.click(images[0]) // click on the first image
 
