@@ -69,9 +69,7 @@ export const graphqlClient = new ApolloClient({
       },
       History: {
         keyFields: ['id']
-<<<<<<< HEAD
       },
-<<<<<<< HEAD
       MediaWithTags: {
         keyFields: ['id'],
         fields: {
@@ -81,12 +79,6 @@ export const graphqlClient = new ApolloClient({
             }
           }
         }
-=======
-      UserMedia: {
-        keyFields: ['userUuid']
->>>>>>> f92f94c (wip)
-=======
->>>>>>> 2628063 (wire api with infinity scroll)
       }
       // UserMedia: {
       //   keyFields: ['userUuid']

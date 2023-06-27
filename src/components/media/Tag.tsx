@@ -4,20 +4,12 @@ import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
 
 import clx from 'classnames'
 import { EntityTag, TagTargetType } from '../../js/types'
-<<<<<<< HEAD
 import { OnDeleteCallback } from './TagList'
-=======
-import { onDeleteCallback } from '../../js/hooks/useDeleteTagBackend'
->>>>>>> de4bccd (refactor: restore tagging feature)
 
 interface PhotoTagProps {
   mediaId: string
   tag: EntityTag
-<<<<<<< HEAD
   onDelete: OnDeleteCallback
-=======
-  onDelete: onDeleteCallback
->>>>>>> de4bccd (refactor: restore tagging feature)
   isAuthorized?: boolean
   showDelete?: boolean
   size?: 'md' | 'lg'
@@ -47,11 +39,6 @@ export default function Tag ({ mediaId, tag, onDelete, size = 'md', showDelete =
             onClick={async (e) => {
               e.preventDefault()
               await onDelete({ mediaId: mediaId, tagId: tag.id })
-<<<<<<< HEAD
-=======
-              // e.stopPropagation()
-              // e.preventDefault()
->>>>>>> de4bccd (refactor: restore tagging feature)
             }}
             title='Delete tag'
           >
