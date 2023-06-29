@@ -1,4 +1,4 @@
-import { NextPage, GetStaticProps } from 'next'
+import { NextPage, GetStaticProps, GetStaticPaths } from 'next'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 
@@ -86,9 +86,18 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, userPublicP
 }
 export default UserHomePage
 
-export async function getStaticPaths (): Promise<any> {
+export const getStaticPaths: GetStaticPaths = () => {
+  let profiles: any
+  const csvStr = process.env.PREBUILD_PROFILES
+  if (csvStr != null && csvStr.trim().length > 2) {
+    const userList = csvStr.split(',')
+    profiles = userList.map(username => ({
+      params: { slug: [username.trim()] }
+    }))
+  }
+
   return {
-    paths: [],
+    paths: profiles ?? [],
     fallback: true
   }
 }
