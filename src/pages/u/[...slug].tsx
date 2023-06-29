@@ -33,9 +33,6 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, userPublicP
 
   const { isFallback } = router
 
-  if (isFallback) {
-    return <div>Loading...</div>
-  }
   return (
     <>
       {!isFallback &&
