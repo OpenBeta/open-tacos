@@ -33,51 +33,52 @@ const UserHomePage: NextPage<UserHomeProps> = ({ uid, postId = null, userPublicP
 
   const { isFallback } = router
 
-  if (isFallback) {
-    return <div>Loading...</div>
-  }
   return (
     <>
-      <SeoTags
-        description='Share your climbing adventure photos and contribute to the Wiki.'
-        title={pageTitle}
-        images={pageImages}
-        author={author}
-      />
+      {!isFallback &&
+        <SeoTags
+          description='Share your climbing adventure photos and contribute to the Wiki.'
+          title={pageTitle}
+          images={pageImages}
+          author={author}
+        />}
 
       <Layout
         contentContainerClass='content-default with-standard-y-margin'
         showFilterBar={false}
       >
-        <div className='max-w-screen-2xl mx-auto flex flex-col items-center 2xl:px-8'>
+        {isFallback
+          ? (<div>Loading ...</div>)
+          : (
+            <div className='max-w-screen-2xl mx-auto flex flex-col items-center 2xl:px-8'>
 
-          <PublicProfile userProfile={userPublicPage?.profile} />
+              <PublicProfile userProfile={userPublicPage?.profile} />
 
-          {isAuthorized && (
-            <div className='flex justify-center mt-8 text-secondary text-sm whitespace-normal px-4 lg:px-0'>
-              <div className='border rounded-md px-6 py-2 shadow'>
-                <ul className='list-disc'>
-                  <li>Please upload 3 photos to complete your profile {mediaList?.length >= 3 && <span>&#10004;</span>}</li>
-                  <li>Upload only your own photos</li>
-                  <li>Keep it <b>Safe For Work</b> and climbing-related</li>
-                </ul>
-              </div>
+              {isAuthorized && (
+                <div className='flex justify-center mt-8 text-secondary text-sm whitespace-normal px-4 lg:px-0'>
+                  <div className='border rounded-md px-6 py-2 shadow'>
+                    <ul className='list-disc'>
+                      <li>Please upload 3 photos to complete your profile {mediaList?.length >= 3 && <span>&#10004;</span>}</li>
+                      <li>Upload only your own photos</li>
+                      <li>Keep it <b>Safe For Work</b> and climbing-related</li>
+                    </ul>
+                  </div>
+                </div>)}
+
+              <hr className='mt-8' />
+
+              <DynamicComponent
+                uid={uid}
+                postId={postId}
+                userPublicPage={userPublicPage}
+              />
+
+              {!isAuthorized && (
+                <div className='mt-4 w-full mx-auto text-xs text-base-content text-center'>
+                  All photos are copyrighted by their respective owners.  All Rights Reserved.
+                </div>
+              )}
             </div>)}
-
-          <hr className='mt-8' />
-
-          <DynamicComponent
-            uid={uid}
-            postId={postId}
-            userPublicPage={userPublicPage}
-          />
-
-          {!isAuthorized && !isFallback && (
-            <div className='mt-4 w-full mx-auto text-xs text-secondary text-center'>
-              All photos are copyrighted by their respective owners.  All Rights Reserved.
-            </div>
-          )}
-        </div>
       </Layout>
     </>
 

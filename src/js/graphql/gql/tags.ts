@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { TagTargetType } from '../../types'
+import { EntityTag, TagTargetType, UserMedia } from '../../types'
 
 // Reusable fragments
 export const FRAGMENT_CLIMB_TAG = gql`
@@ -68,6 +68,14 @@ export interface AddEntityTagProps {
   entityId: string
   entityType: TagTargetType
 }
+
+/**
+ * Return type for Add entity mutation
+ */
+export interface AddEntityTagMutationReturn {
+  addEntityTag: EntityTag
+}
+
 /**
  * Create a media <--> climb (or area) association
  * {mediaId: "645aa64261c73112fc19b4fd", entityId: "a5364f01-4d10-5e35-98eb-e58f2c613ce4", entityType: 0
@@ -85,6 +93,13 @@ export const MUTATION_ADD_ENTITY_TAG = gql`
         ... EntityTagFields
     }
   }`
+
+/**
+ * Return type for remove entity tag mutation
+ */
+export interface RemoveEntityTagMutationReturn {
+  removeEntityTag: boolean
+}
 
 export const MUTATION_REMOVE_ENTITY_TAG = gql`
   mutation removeEntityTag($mediaId: ID!, $tagId: ID!) {
@@ -121,6 +136,10 @@ export const QUERY_MEDIA_FOR_FEED = gql`
   }
 `
 
+export interface GetMediaForwardQueryReturn {
+  getUserMediaPagination: UserMedia
+}
+
 export const QUERY_USER_MEDIA = gql`
   ${FRAGMENT_MEDIA_WITH_TAGS}
   query UserMedia($userUuid: ID!, $first: Int, $after: ID) {
@@ -134,6 +153,9 @@ export const QUERY_USER_MEDIA = gql`
           node {
             ... MediaWithTagsFields
           }
+        }
+        pageInfo {
+          hasNextPage
         }
       }
     }

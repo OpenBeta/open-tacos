@@ -1,7 +1,7 @@
 import { ClimbTypeToColor } from './constants'
 import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
 
-import { AreaType, ClimbType, ClimbDisciplineRecord, ClimbDiscipline, MediaEdge, MediaWithTags, MediaConnection } from './types'
+import { AreaType, ClimbType, ClimbDisciplineRecord, ClimbDiscipline, MediaWithTags, MediaConnection } from './types'
 
 /**
  * Given a path or parent id and the type of the page generate the GitHub URL
