@@ -39,8 +39,6 @@ export default function Tag ({ mediaId, tag, onDelete, size = 'md', showDelete =
             onClick={async (e) => {
               e.preventDefault()
               await onDelete({ mediaId: mediaId, tagId: tag.id })
-              // e.stopPropagation()
-              // e.preventDefault()
             }}
             title='Delete tag'
           >

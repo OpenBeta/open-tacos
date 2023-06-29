@@ -27,12 +27,6 @@ export default function AddTag ({ mediaWithTags, onCancel, onAdd, label, openSea
         const linkedEntityId = props.type === EntityType.climb
           ? (props as TypesenseDocumentType).climbUUID
           : (props as TypesenseAreaType).id
-
-        // const [newTag, updatedMediaObject] = await addEntityTagCmd({
-        //   mediaId: mediaWithTags.id,
-        //   entityId: linkedEntityId,
-        //   entityType: props.type === EntityType.climb ? TagTargetType.climb : TagTargetType.area
-        // })
         void onAdd({
           mediaId: mediaWithTags.id,
           entityId: linkedEntityId,

@@ -29,6 +29,13 @@ interface TagsProps {
  */
 export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthenticated = false, showDelete = false, showActions = true, className = '' }: TagsProps): JSX.Element | null {
   const { addEntityTagCmd, removeEntityTagCmd } = useMediaCmd()
+  /**
+   * Why maintaining media object in a local state?
+   * Normally, this component receives tag data via props. However, when the media owner
+   * adds/removes tags, after the backend is updated, we also update the media object
+   * in Apollo cache and keep the updated state here.  This way we only need to deal
+   * with a single media instead a large list.
+   */
   const [localMediaWithTags, setMedia] = useState(mediaWithTags)
 
   useEffect(() => {
@@ -95,8 +102,6 @@ export interface TagListProps {
  * Mobile tag list wrapped in a popup menu
  */
 export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAuthorized = false, onChange }) => {
-  // const [localMediaWithTags, setMedia] = useState(mediaWithTags)
-
   const { addEntityTagCmd, removeEntityTagCmd } = useMediaCmd()
   const [openSearch, setOpenSearch] = useState(false)
 
