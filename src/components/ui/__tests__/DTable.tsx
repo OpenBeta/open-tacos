@@ -78,7 +78,7 @@ describe('DTable', () => {
     expect(boulderingRow.childNodes[1]).not.toHaveClass('dtable-highlight')
 
     const sportRow = screen.getByRole('row', { name: /sport/i })
-    expect(sportRow.childNodes[1]).toHaveClass('dtable-highlight')
+    expect(sportRow.childNodes[1]).toHaveClass('text-base-content rounded-tl rounded-bl text-sm bg-gray-200')
   })
 
   test('DTable highlights my disciplines and updates when user unchecks and rechecks a discipline', () => {
@@ -89,10 +89,10 @@ describe('DTable', () => {
     expect(boulderingRow.childNodes[1]).not.toHaveClass('dtable-highlight')
 
     const sportRow = screen.getByRole('row', { name: /sport/i })
-    expect(sportRow.childNodes[1]).toHaveClass('dtable-highlight');
+    expect(sportRow.childNodes[1]).toHaveClass('text-base-content rounded-tl rounded-bl text-sm bg-gray-200');
 
     (mockedStore.cragFiltersStore.get.boulder as jest.Mock).mockReturnValue(true) // user rechecks 'bouldering'
     rerender(<DTable byDisciplineAgg={byDisciplineAggBoulderSport} />)
-    expect(boulderingRow.childNodes[1]).toHaveClass('dtable-highlight')
+    expect(boulderingRow.childNodes[1]).toHaveClass('text-base-content rounded-tl rounded-bl text-sm bg-gray-200')
   })
 })
