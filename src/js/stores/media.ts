@@ -1,22 +1,12 @@
 import { createStore } from '@udecode/zustood'
 import { v5 as uuidv5 } from 'uuid'
-import { Dictionary } from 'underscore'
 import produce from 'immer'
 
-import type { MediaType, HybridMediaTag, MediaWithTags } from '../../js/types'
-import { DeleteTagResult } from '../hooks/useDeleteTagBackend'
+import type { MediaType, MediaWithTags } from '../../js/types'
 
 interface UserMediaStateProps {
   uid: string | null
   imageList: MediaType[]
-  /**
-   * A map of \<mediaUuid\>: \<array of tags\>
-   *
-   * Why use array of tags where JS `Set` would have been a better choice
-   * for handling dups?
-   * Because we use `underscore.groupBy()` to process server-side tags.
-   */
-  tagMap: Dictionary<HybridMediaTag[]>
   initialized: boolean
   photoUploadErrorMessage: string | null
   photoList: MediaWithTags[]
@@ -25,7 +15,6 @@ interface UserMediaStateProps {
 const INITIAL_STATE: UserMediaStateProps = {
   uid: null,
   imageList: [],
-  tagMap: {},
   initialized: false,
   photoUploadErrorMessage: null,
   photoList: []
@@ -91,51 +80,6 @@ export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS
       })
 
       set.imageList(updatedList)
-      await revalidateUserHomePage(get.uid())
-    }
-  })).extendActions((set, get, api) => ({
-    /**
-      * Add a new tag to local store
-      */
-    addTag: async (data: any) => {
-      const { setTag } = data
-      if (setTag == null) return
-      const { mediaUuid } = setTag
-
-      const newState = produce<Dictionary<HybridMediaTag[]>>(get.tagMap(), draft => {
-        const currentTagList = draft?.[mediaUuid] ?? []
-        if (currentTagList.length === 0) {
-          draft[mediaUuid] = [setTag]
-        } else {
-          draft[mediaUuid].push(setTag)
-        }
-        return draft
-      })
-
-      set.tagMap(newState)
-      await revalidateUserHomePage(get.uid())
-    },
-    /**
-     * Remove a tag from local store
-     */
-    removeTag: async ({ id, mediaUuid }: DeleteTagResult) => {
-      // Let's see if the media exists in local store?
-      if ((get.tagMap()?.[mediaUuid] ?? null) == null) {
-        // Media doesn't exist. Do nothing.
-        return
-      }
-
-      // find the tag by id and remove it
-      const newState = produce<Dictionary<HybridMediaTag[]>>(get.tagMap(), draft => {
-        const idx = draft[mediaUuid].findIndex((tag: HybridMediaTag) => tag.id === id)
-        if (idx > -1) {
-          draft[mediaUuid].splice(idx, 1)
-        }
-        return draft
-      })
-
-      set.tagMap(newState)
-      // rebuild user home page
       await revalidateUserHomePage(get.uid())
     }
   })).extendActions((set, get, api) => ({

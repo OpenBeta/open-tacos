@@ -25,7 +25,6 @@ const TAG_DATA: MediaWithTags = {
 }
 
 jest.mock('../../../js/graphql/Client')
-jest.mock('../../../js/hooks/useDeleteTagBackend')
 
 const AddTagMock = jest.fn((props) => <div>mocked</div>)
 jest.mock('../AddTag', () => ({
@@ -33,11 +32,11 @@ jest.mock('../AddTag', () => ({
   default: AddTagMock
 }))
 
-const onDelete = jest.fn()
+const addEntityTagCmd = jest.fn()
 
-jest.mock('../../../js/hooks/useDeleteTagBackend', () => ({
+jest.mock('../../../js/hooks/useMediaCmd', () => ({
   __esModule: true,
-  default: () => ({ onDelete })
+  default: () => ({ addEntityTagCmd })
 }))
 
 let PopupTagList: React.FC<TagListProps>
@@ -51,10 +50,12 @@ describe('MobilePopupTagMenu', () => {
 
   test('Tag with permission to delete', async () => {
     const user = userEvent.setup()
+    const callback = jest.fn()
     render(
       <PopupTagList
         mediaWithTags={TAG_DATA}
         isAuthorized // Make sure we check that AddTag component is also rendered.
+        onChange={callback}
       />
     )
 

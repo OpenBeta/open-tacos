@@ -63,7 +63,6 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
 
 function Auth ({ children }): ReactElement {
   const { status } = useSession()
-  console.log('##auth page', status)
   useEffect(() => {
     if (status === 'unauthenticated') {
       void signIn('auth0')
