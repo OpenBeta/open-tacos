@@ -1,9 +1,16 @@
-[
-  {
-    "first_name": "yun",
-    "last_name": "ji",
-    "github_id": "actuallyyun",
-    "home_coordinates": "41.26613040056221, 0.905152180850496",
-    "favorite_crag_uuid": "8fe4fa78-fda9-5742-b807-00b2c31d7bcd"
-  }
-]
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Yun",
+        "favoriteCrag": "8fe4fa78-fda9-5742-b807-00b2c31d7bcd"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.905152180850496, 41.26613040056221]
+      }
+    }
+  ]
+}
