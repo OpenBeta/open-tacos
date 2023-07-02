@@ -13,13 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install GitHub CLI
-        run: |
-          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
-          sudo apt-add-repository https://cli.github.com/packages
-          sudo apt update
-          sudo apt install gh
-
       - name: Check for first-time contributor
         id: check
         run: |
@@ -39,26 +32,20 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Congratulate first-time PR contributor
-        if: github.event_name == 'pull_request' && steps.check.outputs.first_time_contributor == 'true' && github.event.action == 'opened'
+      - name: Actions for Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: "Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9"
         with:
-          args: 'Congratulations to the first-time contributor for their pull request! 🎉'
-
-      - name: Congratulate first-time contributor on successful merge
-        if: github.event_name == 'pull_request' && steps.check.outputs.first_time_contributor == 'true' && github.event.action == 'closed'
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        uses: "Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9"
-        with:
-          args: 'Congratulations to the first-time contributor for their successful merge! 🎉'
-
-      - name: Notify about new commit
-        if: github.event_name == 'push'
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        uses: "Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9"
-        with:
-          args: 'A new commit has been pushed to the feature branch.'
+          args: >-
+            ${{
+              (
+                github.event_name == 'pull_request' &&
+                steps.check.outputs.first_time_contributor == 'true' &&
+                (github.event.action == 'opened' ? 'Congratulations to the first-time contributor for their pull request! 🎉' : 'Congratulations to the first-time contributor for their successful merge! 🎉')
+              ) || (
+                github.event_name == 'push' && 'A new commit has been pushed to the feature branch.'
+              ) || (
+                github.event_name == 'release' && 'A new release has been published!'
+              ) || 'There is some activity in the repository!'
+            }}
