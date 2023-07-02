@@ -2,7 +2,7 @@ name: Discord Notification
 on: 
   push:
     branches: 
-      - main
+      - discord_opentacos
   pull_request:
     types: [opened, closed]
 
