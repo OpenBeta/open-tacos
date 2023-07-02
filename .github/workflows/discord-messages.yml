@@ -39,7 +39,23 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: PR Opened / Closed Actions for Discord
+      - name: PR Actions for Discord
+        if: github.event_name == 'pull_request'
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: "Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9"
+        with:
+          args: 'A pull request has been made!'
+
+      - name: PR Merged Actions for Discord
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: "Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9"
+        with:
+          args: 'A pull request has been merged!'
+
+      - name: First-time Contributor PR Actions for Discord
         if: github.event_name == 'pull_request' && steps.check.outputs.first_time_contributor == 'true'
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
@@ -47,7 +63,7 @@ jobs:
         with:
           args: 'Congratulations to the first-time contributor for their pull request! 🎉'
 
-      - name: PR Merged Actions for Discord
+      - name: First-time Contributor PR Merged Actions for Discord
         if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && steps.check.outputs.first_time_contributor == 'true'
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
@@ -68,3 +84,5 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: "Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9"
+        with:
+          args: 'A new release has been published!'
