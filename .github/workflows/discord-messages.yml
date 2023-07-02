@@ -1,13 +1,22 @@
 name: notify-discord
 
+# on:
+#   push:
+#     branches: [discord_opentacos]
+#   pull_request:
+#     types: [opened, closed]
+#     branches: [discord_opentacos]
+#   release:
+#     types: [published]
+
+
 on:
   push:
-    branches: [discord_opentacos]
+    branches: [discord-opentacos]
   pull_request:
-    types: [opened, closed]
     branches: [discord_opentacos]
-  release:
-    types: [published]
+  # issues:
+  #   types: [opened]
 
 jobs:
   notify:
