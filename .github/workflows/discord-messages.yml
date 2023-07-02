@@ -1,4 +1,4 @@
-name: Discord Notification
+name: notify-discord
 on:
   push:
     branches: [discord-opentacos]
@@ -30,7 +30,7 @@ jobs:
 
       - name: Set Push Message
         id: push_msg
-        run: echo "::set-output name=message::A new commit has been pushed to the main branch."
+        run: echo "::set-output name=message::A new commit has been made."
         if: github.event_name == 'push'
 
       - name: Actions for Discord
