@@ -14,7 +14,7 @@ export default function PhotoUploader ({ className, onUploaded, children }: Phot
   return (
     // Fiddling with syntax here seems to make dropzone clicking work.
     // (tested both FF and Chrome on Ubuntu)
-    <div {...getRootProps({ className: `pointer-events-none cursor-not-allowed dropzone ${className}` })}>
+    <div {...getRootProps({ className: `dropzone ${className}` })}>
       {uploading && <Progress />}
       <input {...getInputProps()} />
       {children}

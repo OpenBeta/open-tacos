@@ -49,9 +49,12 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
     }
 
     try {
+      console.log('#uploading file')
       const url = await uploadPhoto(filename, imageData)
       void onUploaded(url)
+      toast.success('Photo uploaded ✓')
     } catch (e) {
+      toast.error('Uploading error.  Please try again.')
       console.log('#upload error', e)
       await userMediaStore.set.setPhotoUploadErrorMessage('Failed to upload: Exceeded retry limit.')
     }
@@ -75,7 +78,6 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
     }
 
     setUploading(false)
-    toast.info('Photos uploaded ✓')
   }
 
   const { getRootProps, getInputProps, open } = useDropzone({
