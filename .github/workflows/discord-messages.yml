@@ -1,10 +1,11 @@
 name: Discord Notification
-on: 
+on:
   push:
-    branches: 
-      - discord_opentacos
+    branches: [discord-opentacos]
   pull_request:
-    types: [opened, closed]
+    branches: [discord-opentacos]
+  # issues:
+  #   types: [opened]
 
 jobs:
   notify:
