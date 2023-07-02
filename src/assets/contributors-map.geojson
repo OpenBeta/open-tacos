@@ -1,0 +1,35 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Yun",
+        "githubId": "actuallyyun",
+        "favoriteCrag": "8fe4fa78-fda9-5742-b807-00b2c31d7bcd"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.905152180850496,
+          41.26613040056221
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Viet",
+        "githubId": "vnugent",
+        "favoriteCrag": "efcc68af-ad61-5df6-b21a-b754b65e97d9"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.892151,
+          39.659768
+        ]
+      }
+    }
+  ]
+}
