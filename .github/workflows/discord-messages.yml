@@ -1,10 +1,10 @@
-name: notify-discord
-
-on:
+name: Discord Notification
+on: 
   push:
-    branches: [discord-opentacos]
+    branches: 
+      - main
   pull_request:
-    branches: [discord-opentacos]
+    types: [opened, closed]
 
 jobs:
   notify:
@@ -13,24 +13,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Check for first-time contributor
+      - name: Check if first-time contributor
         id: check
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]
-          then
-            AUTHOR_USERNAME=$(jq -r ".pull_request.user.login" "$GITHUB_EVENT_PATH")
-            REPO_FULL_NAME=$(jq -r ".repository.full_name" "$GITHUB_EVENT_PATH")
+        run: echo "::set-output name=first_time_contributor::$(if [ $(git log --pretty=format:"%ae" | sort -u | grep -c ${{ github.event.pull_request.user.login }}) -eq 1 ]; then echo 'true'; else echo 'false'; fi)"
 
-            PR_COUNT=$(gh api -q "query ($name: String!, $owner: String!, $author: String!) { repository(name: $name, owner: $owner) { pullRequests(first: 100, states: MERGED, author: {username: $author}) { totalCount } } }" --jq '.data.repository.pullRequests.totalCount' --variables "{ \"name\": \"${REPO_FULL_NAME#*/}\", \"owner\": \"${REPO_FULL_NAME%/*}\", \"author\": \"$AUTHOR_USERNAME\" }")
+      - name: Set PR Message
+        id: pr_msg
+        run: echo "::set-output name=message::Congratulations to the first-time contributor for their pull request! 🎉"
+        if: github.event_name == 'pull_request' && github.event.action == 'opened' && steps.check.outputs.first_time_contributor == 'true'
 
-            if [[ PR_COUNT -eq 0 ]]; then
-              echo "::set-output name=first_time_contributor::true"
-            else
-              echo "::set-output name=first_time_contributor::false"
-            fi
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set Merge Message
+        id: merge_msg
+        run: echo "::set-output name=message::Congratulations to the first-time contributor for their successful merge! 🎉"
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && steps.check.outputs.first_time_contributor == 'true' && github.event.pull_request.merged == 'true'
+
+      - name: Set Push Message
+        id: push_msg
+        run: echo "::set-output name=message::A new commit has been pushed to the main branch."
+        if: github.event_name == 'push'
 
       - name: Actions for Discord
         env:
@@ -38,14 +38,4 @@ jobs:
         uses: "Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9"
         with:
           args: >-
-            ${{
-              (
-                github.event_name == 'pull_request' &&
-                steps.check.outputs.first_time_contributor == 'true' &&
-                (github.event.action == 'opened' ? 'Congratulations to the first-time contributor for their pull request! 🎉' : 'Congratulations to the first-time contributor for their successful merge! 🎉')
-              ) || (
-                github.event_name == 'push' && 'A new commit has been pushed to the feature branch.'
-              ) || (
-                github.event_name == 'release' && 'A new release has been published!'
-              ) || 'There is some activity in the repository!'
-            }}
+            ${{ steps.pr_msg.outputs.message || steps.merge_msg.outputs.message || steps.push_msg.outputs.message || 'There is some activity in the repository!' }}
