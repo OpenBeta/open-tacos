@@ -2,18 +2,60 @@ name: notify-discord
 
 on:
   push:
-    branches: [discord-opentacos]
+    branches: [discord_opentacos]
   pull_request:
-    branches: [master]
-  # issues:
-  #   types: [opened]
+    types: [opened, closed]
+    branches: [discord_opentacos]
+  release:
+    types: [published]
 
 jobs:
   notify:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt update
+          sudo apt install gh
+
+      - name: Check for first-time contributor
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]
+          then
+            AUTHOR_USERNAME=$(jq -r ".pull_request.user.login" "$GITHUB_EVENT_PATH")
+            REPO_FULL_NAME=$(jq -r ".repository.full_name" "$GITHUB_EVENT_PATH")
+
+            PR_COUNT=$(gh api -q "query ($name: String!, $owner: String!, $author: String!) { repository(name: $name, owner: $owner) { pullRequests(first: 100, states: MERGED, author: {username: $author}) { totalCount } } }" --jq '.data.repository.pullRequests.totalCount' --variables "{ \"name\": \"${REPO_FULL_NAME#*/}\", \"owner\": \"${REPO_FULL_NAME%/*}\", \"author\": \"$AUTHOR_USERNAME\" }")
+
+            if [[ PR_COUNT -eq 0 ]]; then
+              echo "::set-output name=first_time_contributor::true"
+            else
+              echo "::set-output name=first_time_contributor::false"
+            fi
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Actions for Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: "Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9"
+        with:
+          args: >-
+            ${{
+              (
+                github.event_name == 'pull_request' &&
+                steps.check.outputs.first_time_contributor == 'true' &&
+                (github.event.action == 'opened' ? 'Congratulations to the first-time contributor for their pull request! 🎉' : 'Congratulations to the first-time contributor for their successful merge! 🎉')
+              ) || (
+                github.event_name == 'push' && 'A new commit has been pushed to the feature branch.'
+              ) || (
+                github.event_name == 'release' && 'A new release has been published!'
+              ) || 'There is some activity in the repository!'
+            }}
