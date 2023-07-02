@@ -434,3 +434,20 @@ export interface Username {
   username: string
   lastUpdated: Date
 }
+
+export interface UserMedia {
+  userUuid: string
+  mediaConnection: MediaConnection
+}
+
+export interface MediaConnection {
+  edges: MediaEdge[]
+  pageInfo: {
+    hasNextPage: boolean
+    endCursor: string
+  }
+}
+export interface MediaEdge {
+  node: MediaWithTags
+  cursor: string
+}

@@ -1,7 +1,7 @@
 import { ClimbTypeToColor } from './constants'
 import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
 
-import { AreaType, ClimbType, ClimbDisciplineRecord, ClimbDiscipline } from './types'
+import { AreaType, ClimbType, ClimbDisciplineRecord, ClimbDiscipline, MediaWithTags, MediaConnection } from './types'
 
 /**
  * Given a path or parent id and the type of the page generate the GitHub URL
@@ -263,4 +263,14 @@ function compareFn<T extends AreaType | ClimbType> (a: T, b: T): number {
 export const removeTypenameFromDisciplines = (discplines: ClimbDisciplineRecord): Partial<ClimbDisciplineRecord> => {
   const omitTypename = (key: string, value: boolean): boolean | undefined => (key === '__typename' || !value ? undefined : value)
   return JSON.parse(JSON.stringify(discplines), omitTypename)
+}
+
+/**
+ * Convert Relay edges to media array
+ * @param edges
+ * @returns Media with atgs array
+ */
+export const relayMediaConnectionToMediaArray = (mediaConnection: MediaConnection): MediaWithTags[] => {
+  if (mediaConnection == null) return []
+  return mediaConnection.edges.map(entry => entry.node)
 }

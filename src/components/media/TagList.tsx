@@ -1,4 +1,4 @@
-import { useState, MouseEventHandler } from 'react'
+import { useState, Dispatch, SetStateAction, MouseEventHandler, useEffect } from 'react'
 import classNames from 'classnames'
 import { TagIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { DropdownMenuItem as PrimitiveDropdownMenuItem } from '@radix-ui/react-dropdown-menu'
@@ -6,9 +6,14 @@ import { signIn } from 'next-auth/react'
 
 import AddTag from './AddTag'
 import { DropdownMenu, DropdownContent, DropdownTrigger, DropdownItem, DropdownSeparator } from '../ui/DropdownMenu'
-import useDeleteTagBackend from '../../js/hooks/useDeleteTagBackend'
 import { EntityTag, MediaWithTags } from '../../js/types'
 import Tag from './Tag'
+import useMediaCmd, { RemoveEntityTagProps } from '../../js/hooks/useMediaCmd'
+import { AddEntityTagProps } from '../../js/graphql/gql/tags'
+
+export type OnAddCallback = (args: AddEntityTagProps) => Promise<void>
+
+export type OnDeleteCallback = (args: RemoveEntityTagProps) => Promise<void>
 
 interface TagsProps {
   mediaWithTags: MediaWithTags
@@ -23,12 +28,39 @@ interface TagsProps {
  * A horizontal tag list.  The last item is a CTA.
  */
 export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthenticated = false, showDelete = false, showActions = true, className = '' }: TagsProps): JSX.Element | null {
-  const { onDelete } = useDeleteTagBackend()
-  if (mediaWithTags == null) {
+  const { addEntityTagCmd, removeEntityTagCmd } = useMediaCmd()
+  /**
+   * Why maintaining media object in a local state?
+   * Normally, this component receives tag data via props. However, when the media owner
+   * adds/removes tags, after the backend is updated, we also update the media object
+   * in Apollo cache and keep the updated state here.  This way we only need to deal
+   * with a single media instead a large list.
+   */
+  const [localMediaWithTags, setMedia] = useState(mediaWithTags)
+
+  useEffect(() => {
+    setMedia(mediaWithTags)
+  }, [mediaWithTags])
+
+  if (localMediaWithTags == null) {
     return null
   }
 
-  const { entityTags } = mediaWithTags
+  const onAddHandler: OnAddCallback = async (args) => {
+    const [, updatedMediaObject] = await addEntityTagCmd(args)
+    if (updatedMediaObject != null) {
+      setMedia(updatedMediaObject)
+    }
+  }
+
+  const onDeleteHandler: OnDeleteCallback = async (args) => {
+    const [, updatedMediaObject] = await removeEntityTagCmd(args)
+    if (updatedMediaObject != null) {
+      setMedia(updatedMediaObject)
+    }
+  }
+
+  const { entityTags, id } = localMediaWithTags
 
   return (
     <div className={
@@ -41,15 +73,17 @@ export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthen
       {entityTags.map((tag: EntityTag) =>
         <Tag
           key={`${tag.targetId}`}
+          mediaId={id}
           tag={tag}
-          onDelete={onDelete}
+          onDelete={onDeleteHandler}
           isAuthorized={isAuthorized}
           showDelete={showDelete}
         />)}
       {showActions && isAuthorized &&
         <AddTag
-          mediaWithTags={mediaWithTags}
+          mediaWithTags={localMediaWithTags}
           label={<AddTagBadge />}
+          onAdd={onAddHandler}
         />}
       {showActions && !isAuthenticated &&
         <AddTagBadge onClick={() => { void signIn('auth0') }} />}
@@ -61,15 +95,30 @@ export interface TagListProps {
   mediaWithTags: MediaWithTags
   isAuthorized?: boolean
   children?: JSX.Element
+  onChange: Dispatch<SetStateAction<MediaWithTags>>
 }
 
 /**
- * Mobile-first tag list wrapped in a popup menu
+ * Mobile tag list wrapped in a popup menu
  */
-export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAuthorized = false }) => {
-  const { onDelete } = useDeleteTagBackend()
+export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAuthorized = false, onChange }) => {
+  const { addEntityTagCmd, removeEntityTagCmd } = useMediaCmd()
   const [openSearch, setOpenSearch] = useState(false)
-  const { entityTags } = mediaWithTags
+
+  const onAddHandler: OnAddCallback = async (args) => {
+    const [, updatedMediaObject] = await addEntityTagCmd(args)
+    if (updatedMediaObject != null) {
+      onChange(updatedMediaObject)
+    }
+  }
+
+  const onDeleteHandler: OnDeleteCallback = async (args) => {
+    const [, updatedMediaObject] = await removeEntityTagCmd(args)
+    if (updatedMediaObject != null) {
+      onChange(updatedMediaObject)
+    }
+  }
+  const { id, entityTags } = mediaWithTags
   return (
     <div aria-label='tag popup'>
       <DropdownMenu>
@@ -81,9 +130,10 @@ export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAu
             {entityTags.map(tag => (
               <PrimitiveDropdownMenuItem key={`${tag.id}`} className='px-2 py-3'>
                 <Tag
+                  mediaId={id}
                   tag={tag}
                   isAuthorized={isAuthorized}
-                  onDelete={onDelete}
+                  onDelete={onDeleteHandler}
                   showDelete
                   size='lg'
                 />
@@ -111,6 +161,7 @@ export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAu
         onCancel={() => setOpenSearch(false)}
         openSearch={openSearch}
         mediaWithTags={mediaWithTags}
+        onAdd={onAddHandler}
         label={<div className='hidden' />}
       />
     </div>
