@@ -4,8 +4,6 @@ on:
     branches: [discord-opentacos]
   pull_request:
     branches: [discord-opentacos]
-  # issues:
-  #   types: [opened]
 
 jobs:
   notify:
@@ -20,17 +18,17 @@ jobs:
 
       - name: Set PR Message
         id: pr_msg
-        run: echo "::set-output name=message::Congratulations to the first-time contributor for their pull request! 🎉"
+        run: echo "::set-output name=message::Congratulations to the first-time contributor ${{ github.event.pull_request.user.login }} for their pull request! 🎉"
         if: github.event_name == 'pull_request' && github.event.action == 'opened' && steps.check.outputs.first_time_contributor == 'true'
 
       - name: Set Merge Message
         id: merge_msg
-        run: echo "::set-output name=message::Congratulations to the first-time contributor for their successful merge! 🎉"
+        run: echo "::set-output name=message::Congratulations to the first-time contributor ${{ github.event.pull_request.user.login }} for their successful merge! 🎉"
         if: github.event_name == 'pull_request' && github.event.action == 'closed' && steps.check.outputs.first_time_contributor == 'true' && github.event.pull_request.merged == 'true'
 
       - name: Set Push Message
         id: push_msg
-        run: echo "::set-output name=message::A new commit has been made."
+        run: echo "::set-output name=message::${{ github.actor }} has pushed a new commit to ${{ github.ref }}."
         if: github.event_name == 'push'
 
       - name: Actions for Discord
@@ -40,3 +38,9 @@ jobs:
         with:
           args: >-
             ${{ steps.pr_msg.outputs.message || steps.merge_msg.outputs.message || steps.push_msg.outputs.message || 'There is some activity in the repository!' }}
+
+      - name: Error Alert
+        if: failure()
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+        with:
+          args: An error occurred while running the workflow.
