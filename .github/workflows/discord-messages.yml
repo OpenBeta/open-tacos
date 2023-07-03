@@ -19,12 +19,12 @@ jobs:
       - name: Set PR Message
         id: pr_msg
         run: echo "::set-output name=message::🎉 **Congratulations** to the first-time contributor *${{ github.event.pull_request.user.login }}* for their pull request!"
-        if: github.event_name == 'pull_request' && github.event.action == 'opened' && steps.check.outputs.first_time_contributor == 'true'
+        if: github.event_name == 'pull_request_target' && github.event.action == 'opened' && steps.check.outputs.first_time_contributor == 'true'
 
       - name: Set Merge Message
         id: merge_msg
         run: echo "::set-output name=message::🎉 **Congratulations** to the first-time contributor *${{ github.event.pull_request.user.login }}* for their successful merge!"
-        if: github.event_name == 'pull_request' && github.event.action == 'closed' && steps.check.outputs.first_time_contributor == 'true' && github.event.pull_request.merged == 'true'
+        if: github.event_name == 'pull_request_target' && github.event.action == 'closed' && steps.check.outputs.first_time_contributor == 'true' && github.event.pull_request.merged == 'true'
 
       - name: Set Push Message
         id: push_msg
