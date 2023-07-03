@@ -2,7 +2,7 @@ name: notify-discord
 on:
   push:
     branches: [discord-opentacos]
-  pull_request:
+  pull_request_target:
     branches: [discord-opentacos]
 
 jobs:
