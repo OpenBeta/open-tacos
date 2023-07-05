@@ -409,12 +409,19 @@ input:checked + label {
 
 /* DTable (grade distribution table */
 table td {
+    @apply my-2 text-base-content !important;
+  }
+  
+  table td.dtable-highlight {
+    @apply text-sm  bg-gray-200;
+  }
+/* table td {
   @apply my-2 !important;
 }
 
 table td.dtable-highlight {
   @apply text-sm text-secondary bg-gray-200;
-}
+} */
 
 table td.dtable-highlight:nth-of-type(1) {
   @apply rounded-tl rounded-bl !important;
