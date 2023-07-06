@@ -415,13 +415,6 @@ table td {
   table td.dtable-highlight {
     @apply text-sm  bg-gray-200;
   }
-/* table td {
-  @apply my-2 !important;
-}
-
-table td.dtable-highlight {
-  @apply text-sm text-secondary bg-gray-200;
-} */
 
 table td.dtable-highlight:nth-of-type(1) {
   @apply rounded-tl rounded-bl !important;
