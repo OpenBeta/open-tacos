@@ -6,11 +6,14 @@ import { useRouter } from 'next/router'
 import { graphqlClient } from '../graphql/Client'
 import { AddEntityTagProps, QUERY_USER_MEDIA, QUERY_MEDIA_BY_ID, MUTATION_ADD_ENTITY_TAG, MUTATION_REMOVE_ENTITY_TAG, GetMediaForwardQueryReturn, AddEntityTagMutationReturn, RemoveEntityTagMutationReturn } from '../graphql/gql/tags'
 import { MediaWithTags, EntityTag, MediaConnection } from '../types'
+import { AddNewMediaObjectsArgs, AddMediaObjectsReturn, MUTATION_ADD_MEDIA_OBJECTS, NewMediaObjectInput } from '../graphql/gql/media'
+import { useUserGalleryStore } from '../../js/stores/userGallery'
 
 export interface UseMediaCmdReturn {
   addEntityTagCmd: AddEntityTagCmd
   removeEntityTagCmd: RemoveEntityTagCmd
-  getMediaById: (id: string) => Promise<MediaWithTags | null>
+  getMediaById: GetMediaByIdCmd
+  addMediaObjectsCmd: AddMediaObjectsCmd
   fetchMoreMediaForward: FetchMoreMediaForwardCmd
 }
 
@@ -25,10 +28,10 @@ export interface RemoveEntityTagProps {
 }
 
 type FetchMoreMediaForwardCmd = (args: FetchMoreMediaForwardProps) => Promise<MediaConnection | null>
-
 type AddEntityTagCmd = (props: AddEntityTagProps) => Promise<[EntityTag | null, MediaWithTags | null]>
 type RemoveEntityTagCmd = (args: RemoveEntityTagProps) => Promise<[boolean, MediaWithTags | null]>
-
+type GetMediaByIdCmd = (id: string) => Promise<MediaWithTags | null>
+type AddMediaObjectsCmd = (mediaList: NewMediaObjectInput[]) => Promise<MediaWithTags[] | null>
 /**
  * A React hook for handling media tagging operations.
  *
@@ -40,6 +43,8 @@ type RemoveEntityTagCmd = (args: RemoveEntityTagProps) => Promise<[boolean, Medi
 export default function useMediaCmd (): UseMediaCmdReturn {
   const session = useSession()
   const router = useRouter()
+
+  const addNewMediaToUserGallery = useUserGalleryStore(set => set.addToFront)
 
   const [fetchMoreMediaGQL] = useLazyQuery<GetMediaForwardQueryReturn, FetchMoreMediaForwardProps>(
     QUERY_USER_MEDIA, {
@@ -75,10 +80,61 @@ export default function useMediaCmd (): UseMediaCmdReturn {
    * @param id media object Id
    * @returns MediaWithTags object.  `null` if not found.
    */
-  const getMediaById = async (id: string): Promise<MediaWithTags | null> => {
+  const getMediaById: GetMediaByIdCmd = async (id) => {
     try {
       const res = await getMediaByIdGGL({ variables: { id } })
       return res.data?.media ?? null
+    } catch {
+      return null
+    }
+  }
+
+  const [addMediaObjects] = useMutation<AddMediaObjectsReturn, AddNewMediaObjectsArgs>(
+    MUTATION_ADD_MEDIA_OBJECTS, {
+      client: graphqlClient,
+      errorPolicy: 'none',
+      onError: error => toast.error(error.message),
+      onCompleted: (data) => {
+        toast.success('Uploading completed! 🎉')
+
+        /**
+         * Now update the data store to trigger UserGallery re-rendering.
+         */
+        data.addMediaObjects.forEach(media => {
+          addNewMediaToUserGallery({
+            edges: [
+              {
+                node: media,
+                /**
+                 * We don't care about setting cursor because newer images are added to the front
+                 * of the list.
+                 */
+                cursor: ''
+              }
+            ],
+            pageInfo: {
+              hasNextPage: true,
+              endCursor: '' // not supported
+            }
+          })
+        })
+      }
+    }
+  )
+
+  const addMediaObjectsCmd: AddMediaObjectsCmd = async (mediaList) => {
+    try {
+      const res = await addMediaObjects({
+        variables: {
+          mediaList
+        },
+        context: {
+          headers: {
+            authorization: `Bearer ${session.data?.accessToken ?? ''}`
+          }
+        }
+      })
+      return res.data?.addMediaObjects ?? null
     } catch {
       return null
     }
@@ -154,5 +210,5 @@ export default function useMediaCmd (): UseMediaCmdReturn {
     }
   }
 
-  return { fetchMoreMediaForward, getMediaById, addEntityTagCmd, removeEntityTagCmd }
+  return { fetchMoreMediaForward, getMediaById, addMediaObjectsCmd, addEntityTagCmd, removeEntityTagCmd }
 }

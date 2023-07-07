@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import { useDropzone, DropzoneInputProps, FileRejection } from 'react-dropzone'
 import { toast } from 'react-toastify'
+import { useSession } from 'next-auth/react'
 
 import { userMediaStore } from '../stores/media'
 import { uploadPhoto } from '../userApi/media'
-
-interface UploaderProps {
-  /** Called after a succesful upload */
-  onUploaded: (url: string) => Promise<void>
-}
+import useMediaCmd from '../hooks/useMediaCmd'
+import { MediaFormat } from '../types'
 
 interface PhotoUploaderReturnType {
   uploading: boolean
@@ -34,34 +32,50 @@ async function readFile (file: File): Promise<ProgressEvent<FileReader>> {
  * Essential logic for handling file data and uploading it to the provider
  * is all encapsulated here, as well as some other api shorthand.
  * */
-export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoUploaderReturnType {
+export default function usePhotoUploader (): PhotoUploaderReturnType {
+  const { data: sessionData } = useSession({ required: true })
+  const { addMediaObjectsCmd } = useMediaCmd()
   const [uploading, setUploading] = useState<boolean>(false)
 
   /** When a file is loaded by the browser (as in, loaded from the local filesystem,
    * not loaded from a webserver) we can begin to upload the bytedata to the provider */
-  const onload = async (event: ProgressEvent<FileReader>, filename: string): Promise<void> => {
+  const onload = async (event: ProgressEvent<FileReader>, file: File): Promise<void> => {
     if (event.target === null || event.target.result === null) return // guard this
 
     // Do whatever you want with the file contents
-    let imageData = event.target.result
-    if (typeof imageData === 'string') {
-      imageData = Buffer.from(imageData)
-    }
+    const imageData = event.target.result as ArrayBuffer
 
-    try {
-      console.log('#uploading file')
-      const url = await uploadPhoto(filename, imageData)
-      void onUploaded(url)
-      toast.success('Photo uploaded ✓')
-    } catch (e) {
-      toast.error('Uploading error.  Please try again.')
-      console.log('#upload error', e)
-      await userMediaStore.set.setPhotoUploadErrorMessage('Failed to upload: Exceeded retry limit.')
+    const blob = new Blob([imageData], { type: 'image/jpeg' })
+
+    const image = new Image()
+    image.src = URL.createObjectURL(blob)
+
+    image.onload = async () => {
+      const { name, type, size } = file
+      const { width, height } = image
+      const userUuid = sessionData?.user.metadata.uuid
+      if (userUuid == null) {
+        throw new Error('Login required.')
+      }
+      try {
+        const url = await uploadPhoto(name, imageData)
+        await addMediaObjectsCmd([{
+          userUuid,
+          mediaUrl: url,
+          format: mineTypeToEnum(type),
+          width,
+          height,
+          size
+        }])
+      } catch (e) {
+        toast.error('Uploading error.  Please try again.')
+        console.log('#upload error', e)
+        await userMediaStore.set.setPhotoUploadErrorMessage('Failed to upload: Exceeded retry limit.')
+      }
     }
   }
 
   const onDrop = async (files: File[], rejections: FileRejection[]): Promise<void> => {
-    console.log('#number of files', files.length)
     if (rejections.length > 0) { console.warn('Rejected files: ', rejections) }
 
     // Do something with the files
@@ -74,7 +88,8 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
         return
       }
 
-      await onload(await readFile(file), file.name)
+      console.log('# file type', file)
+      await onload(await readFile(file), file)
     }
 
     setUploading(false)
@@ -93,4 +108,14 @@ export default function usePhotoUploader ({ onUploaded }: UploaderProps): PhotoU
   })
 
   return { uploading, getInputProps, getRootProps, openFileDialog: open }
+}
+
+export const mineTypeToEnum = (mineType: string): MediaFormat => {
+  switch (mineType) {
+    case 'image/jpeg': return MediaFormat.jpg
+    case 'image/png': return MediaFormat.png
+    case 'image/webp': return MediaFormat.webp
+    case 'image/avif': return MediaFormat.avif
+  }
+  throw new Error('Unsupported media type' + mineType)
 }

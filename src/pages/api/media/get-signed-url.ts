@@ -45,6 +45,9 @@ const handler: NextApiHandler<MediaPreSignedProps> = async (req, res) => {
         throw new Error('Missing user metadata')
       }
       const { uuid } = session.user.metadata
+      /**
+       * Important: no starting / when working with buckets
+       */
       const fullFilename = `u/${uuid}/${safeFilename(filename)}`
 
       const options: GetSignedUrlConfig = {
@@ -59,9 +62,8 @@ const handler: NextApiHandler<MediaPreSignedProps> = async (req, res) => {
         .file(fullFilename)
         .getSignedUrl(options)
 
-      console.log('##', url)
       if (url != null) {
-        return res.status(200).json({ url, fullFilename })
+        return res.status(200).json({ url, fullFilename: '/' + fullFilename })
       } else {
         throw new Error('Error generating upload url')
       }

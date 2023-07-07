@@ -4,12 +4,11 @@ import usePhotoUploader from '../../js/hooks/usePhotoUploader'
 interface PhotoUploaderProps {
   className: string
   children: JSX.Element | JSX.Element []
-  onUploaded: (url: string) => Promise<void>
 }
 
 /** A drop-zone for uploading photos, with click-to-open a file explorer operation */
-export default function PhotoUploader ({ className, onUploaded, children }: PhotoUploaderProps): JSX.Element {
-  const { uploading, getRootProps, getInputProps } = usePhotoUploader({ onUploaded })
+export default function PhotoUploader ({ className, children }: PhotoUploaderProps): JSX.Element {
+  const { uploading, getRootProps, getInputProps } = usePhotoUploader()
 
   return (
     // Fiddling with syntax here seems to make dropzone clicking work.

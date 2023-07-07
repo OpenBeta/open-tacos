@@ -1,5 +1,4 @@
 import { NextApiHandler } from 'next'
-import { remove } from '../../../js/sirv/SirvClient'
 import withAuth from '../withAuth'
 
 // We need to disable the default body parser
@@ -22,8 +21,9 @@ const handler: NextApiHandler<any> = async (req, res) => {
         throw new Error('Expect only 1 filename param')
       }
 
-      const photoUrl = await remove(filename)
-      return res.status(200).send(photoUrl)
+      // const photoUrl = await remove(filename)
+      // return res.status(200).send(photoUrl)
+      return res.status(200)
     } catch (e) {
       console.log('#Removing image from media server failed', e)
       return res.status(500).end()
