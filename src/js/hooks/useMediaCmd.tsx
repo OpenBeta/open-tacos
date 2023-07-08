@@ -6,14 +6,16 @@ import { useRouter } from 'next/router'
 import { graphqlClient } from '../graphql/Client'
 import { AddEntityTagProps, QUERY_USER_MEDIA, QUERY_MEDIA_BY_ID, MUTATION_ADD_ENTITY_TAG, MUTATION_REMOVE_ENTITY_TAG, GetMediaForwardQueryReturn, AddEntityTagMutationReturn, RemoveEntityTagMutationReturn } from '../graphql/gql/tags'
 import { MediaWithTags, EntityTag, MediaConnection } from '../types'
-import { AddNewMediaObjectsArgs, AddMediaObjectsReturn, MUTATION_ADD_MEDIA_OBJECTS, NewMediaObjectInput } from '../graphql/gql/media'
-import { useUserGalleryStore } from '../../js/stores/userGallery'
+import { AddNewMediaObjectsArgs, AddMediaObjectsReturn, MUTATION_ADD_MEDIA_OBJECTS, NewMediaObjectInput, DeleteOneMediaObjectArgs, DeleteOneMediaObjectReturn, MUTATION_DELETE_ONE_MEDIA_OBJECT } from '../graphql/gql/media'
+import { useUserGalleryStore } from '../stores/useUserGalleryStore'
+import { deleteMediaFromStorage } from '../userApi/media'
 
 export interface UseMediaCmdReturn {
   addEntityTagCmd: AddEntityTagCmd
   removeEntityTagCmd: RemoveEntityTagCmd
   getMediaById: GetMediaByIdCmd
   addMediaObjectsCmd: AddMediaObjectsCmd
+  deleteOneMediaObjectCmd: DeleteOneMediaObjectCmd
   fetchMoreMediaForward: FetchMoreMediaForwardCmd
 }
 
@@ -32,6 +34,8 @@ type AddEntityTagCmd = (props: AddEntityTagProps) => Promise<[EntityTag | null, 
 type RemoveEntityTagCmd = (args: RemoveEntityTagProps) => Promise<[boolean, MediaWithTags | null]>
 type GetMediaByIdCmd = (id: string) => Promise<MediaWithTags | null>
 type AddMediaObjectsCmd = (mediaList: NewMediaObjectInput[]) => Promise<MediaWithTags[] | null>
+type DeleteOneMediaObjectCmd = (mediaId: string, mediaUrl: string) => Promise<boolean>
+
 /**
  * A React hook for handling media tagging operations.
  *
@@ -44,7 +48,15 @@ export default function useMediaCmd (): UseMediaCmdReturn {
   const session = useSession()
   const router = useRouter()
 
+  const apolloClientContext = {
+    headers: {
+      authorization: `Bearer ${session.data?.accessToken ?? ''}`
+    }
+  }
+
   const addNewMediaToUserGallery = useUserGalleryStore(set => set.addToFront)
+  const updateOneMediaUserGallery = useUserGalleryStore(set => set.updateOne)
+  const deleteMediaFromUserGallery = useUserGalleryStore(set => set.delete)
 
   const [fetchMoreMediaGQL] = useLazyQuery<GetMediaForwardQueryReturn, FetchMoreMediaForwardProps>(
     QUERY_USER_MEDIA, {
@@ -95,8 +107,6 @@ export default function useMediaCmd (): UseMediaCmdReturn {
       errorPolicy: 'none',
       onError: error => toast.error(error.message),
       onCompleted: (data) => {
-        toast.success('Uploading completed! 🎉')
-
         /**
          * Now update the data store to trigger UserGallery re-rendering.
          */
@@ -123,20 +133,44 @@ export default function useMediaCmd (): UseMediaCmdReturn {
   )
 
   const addMediaObjectsCmd: AddMediaObjectsCmd = async (mediaList) => {
+    const res = await addMediaObjects({
+      variables: {
+        mediaList
+      },
+      context: apolloClientContext
+    })
+    return res.data?.addMediaObjects ?? null
+  }
+
+  const [deleteOneMediaObject] = useMutation<DeleteOneMediaObjectReturn, DeleteOneMediaObjectArgs>(
+    MUTATION_DELETE_ONE_MEDIA_OBJECT, {
+      client: graphqlClient,
+      errorPolicy: 'none',
+      onError: console.error
+    })
+
+  /**
+     * Delete media object from the backend and media storage
+     * @param mediaId
+     * @param mediaUrl
+     */
+  const deleteOneMediaObjectCmd: DeleteOneMediaObjectCmd = async (mediaId, mediaUrl) => {
     try {
-      const res = await addMediaObjects({
+      const res = await deleteOneMediaObject({
         variables: {
-          mediaList
+          mediaId
         },
-        context: {
-          headers: {
-            authorization: `Bearer ${session.data?.accessToken ?? ''}`
-          }
-        }
+        context: apolloClientContext
       })
-      return res.data?.addMediaObjects ?? null
+      if (res.errors != null) {
+        throw new Error('Unexpected API error.')
+      }
+      await deleteMediaFromStorage(mediaUrl)
+      deleteMediaFromUserGallery(mediaId)
+      return true
     } catch {
-      return null
+      toast.error('Cannot delete media. Please try again.')
+      return false
     }
   }
 
@@ -159,16 +193,15 @@ export default function useMediaCmd (): UseMediaCmdReturn {
       const { mediaId } = args
       const res = await addEntityTagGQL({
         variables: args,
-        context: {
-          headers: {
-            authorization: `Bearer ${session.data?.accessToken ?? ''}`
-          }
-        }
+        context: apolloClientContext
       })
 
       // refetch the media object to update local cache
       const mediaRes = await getMediaById(mediaId)
 
+      if (mediaRes != null) {
+        updateOneMediaUserGallery(mediaRes)
+      }
       return [res.data?.addEntityTag ?? null, mediaRes]
     } catch {
       return [null, null]
@@ -195,20 +228,31 @@ export default function useMediaCmd (): UseMediaCmdReturn {
           mediaId,
           tagId
         },
-        context: {
-          headers: {
-            authorization: `Bearer ${session.data?.accessToken ?? ''}`
-          }
-        }
+        context: apolloClientContext
       })
 
+      if (res.errors != null) {
+        throw new Error('Unexpected API error.')
+      }
       // refetch the media object to update local cache
       const mediaRes = await getMediaById(mediaId)
+
+      if (mediaRes != null) {
+        updateOneMediaUserGallery(mediaRes)
+      }
+
       return [res.data?.removeEntityTag ?? false, mediaRes]
     } catch {
       return [false, null]
     }
   }
 
-  return { fetchMoreMediaForward, getMediaById, addMediaObjectsCmd, addEntityTagCmd, removeEntityTagCmd }
+  return {
+    fetchMoreMediaForward,
+    getMediaById,
+    addMediaObjectsCmd,
+    deleteOneMediaObjectCmd,
+    addEntityTagCmd,
+    removeEntityTagCmd
+  }
 }

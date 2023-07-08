@@ -1,15 +1,14 @@
-import { useState } from 'react'
 import { useDropzone, DropzoneInputProps, FileRejection } from 'react-dropzone'
 import { toast } from 'react-toastify'
 import { useSession } from 'next-auth/react'
 
-import { userMediaStore } from '../stores/media'
-import { uploadPhoto } from '../userApi/media'
+import { uploadPhoto, deleteMediaFromStorage } from '../userApi/media'
 import useMediaCmd from '../hooks/useMediaCmd'
 import { MediaFormat } from '../types'
+import { useUserGalleryStore } from '../stores/useUserGalleryStore'
 
 interface PhotoUploaderReturnType {
-  uploading: boolean
+  // uploading: boolean
   getInputProps: <T extends DropzoneInputProps>(props?: T) => T
   getRootProps: <T extends DropzoneInputProps>(props?: T) => T
   openFileDialog: () => void
@@ -31,68 +30,70 @@ async function readFile (file: File): Promise<ProgressEvent<FileReader>> {
  * Hook providing logic for handling all things photo-upload.
  * Essential logic for handling file data and uploading it to the provider
  * is all encapsulated here, as well as some other api shorthand.
+ * { onUploaded }: UsePhotoUploaderProps
  * */
 export default function usePhotoUploader (): PhotoUploaderReturnType {
+  const setUploading = useUserGalleryStore(store => store.setUploading)
+  const isUploading = useUserGalleryStore(store => store.uploading)
   const { data: sessionData } = useSession({ required: true })
   const { addMediaObjectsCmd } = useMediaCmd()
-  const [uploading, setUploading] = useState<boolean>(false)
 
   /** When a file is loaded by the browser (as in, loaded from the local filesystem,
    * not loaded from a webserver) we can begin to upload the bytedata to the provider */
   const onload = async (event: ProgressEvent<FileReader>, file: File): Promise<void> => {
     if (event.target === null || event.target.result === null) return // guard this
 
-    // Do whatever you want with the file contents
+    const userUuid = sessionData?.user.metadata.uuid
+    if (userUuid == null) {
+      // this shouldn't happen
+      throw new Error('Login required.')
+    }
+
     const imageData = event.target.result as ArrayBuffer
 
-    const blob = new Blob([imageData], { type: 'image/jpeg' })
+    const { width, height } = await getImageDimensions(imageData)
 
-    const image = new Image()
-    image.src = URL.createObjectURL(blob)
+    const { name, type, size } = file
 
-    image.onload = async () => {
-      const { name, type, size } = file
-      const { width, height } = image
-      const userUuid = sessionData?.user.metadata.uuid
-      if (userUuid == null) {
-        throw new Error('Login required.')
+    try {
+      const url = await uploadPhoto(name, imageData)
+
+      const res = await addMediaObjectsCmd([{
+        userUuid,
+        mediaUrl: url,
+        format: mineTypeToEnum(type),
+        width,
+        height,
+        size
+      }])
+
+      // if upload is successful but we can't update the database,
+      // then delete the upload
+      if (res == null) {
+        await deleteMediaFromStorage(url)
       }
-      try {
-        const url = await uploadPhoto(name, imageData)
-        await addMediaObjectsCmd([{
-          userUuid,
-          mediaUrl: url,
-          format: mineTypeToEnum(type),
-          width,
-          height,
-          size
-        }])
-      } catch (e) {
-        toast.error('Uploading error.  Please try again.')
-        console.log('#upload error', e)
-        await userMediaStore.set.setPhotoUploadErrorMessage('Failed to upload: Exceeded retry limit.')
-      }
+    } catch (e) {
+      toast.error('Uploading error.  Please try again.')
+      console.error('Meida upload error.', e)
     }
   }
 
   const onDrop = async (files: File[], rejections: FileRejection[]): Promise<void> => {
     if (rejections.length > 0) { console.warn('Rejected files: ', rejections) }
 
-    // Do something with the files
     setUploading(true)
-
-    for (const file of files) {
+    await Promise.allSettled(files.map(async file => {
       if (file.size > 11534336) {
-        await userMediaStore.set.setPhotoUploadErrorMessage('¡Ay, caramba! your photo is too large (max=11MB).')
-        setUploading(false)
-        return
+        toast.warn('¡Ay, caramba! one of your photos is too cruxy (please reduce the size to 11MB or under)')
+        return true
       }
-
-      console.log('# file type', file)
-      await onload(await readFile(file), file)
-    }
+      const content = await readFile(file)
+      await onload(content, file)
+      return true
+    }))
 
     setUploading(false)
+    toast.success('Uploading completed! 🎉')
   }
 
   const { getRootProps, getInputProps, open } = useDropzone({
@@ -104,10 +105,10 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
     maxFiles: 40,
     accept: { 'image/*': [] },
     useFsAccessApi: false,
-    noClick: uploading
+    noClick: isUploading
   })
 
-  return { uploading, getInputProps, getRootProps, openFileDialog: open }
+  return { getInputProps, getRootProps, openFileDialog: open }
 }
 
 export const mineTypeToEnum = (mineType: string): MediaFormat => {
@@ -118,4 +119,27 @@ export const mineTypeToEnum = (mineType: string): MediaFormat => {
     case 'image/avif': return MediaFormat.avif
   }
   throw new Error('Unsupported media type' + mineType)
+}
+
+interface Dimensions {
+  width: number
+  height: number
+}
+
+/**
+ * Get image width x height from image upload data.
+ * https://stackoverflow.com/questions/46399223/async-await-in-image-loading
+ */
+const getImageDimensions = async (imageData: ArrayBuffer): Promise<Dimensions> => {
+  return await new Promise((resolve, reject) => {
+    const blob = new Blob([imageData], { type: 'image/jpeg' })
+
+    const image = new Image()
+    image.src = URL.createObjectURL(blob)
+    image.onload = () => resolve({
+      height: image.naturalHeight,
+      width: image.naturalWidth
+    })
+    image.onerror = reject
+  })
 }

@@ -8,7 +8,7 @@ import usePhotoUploader from '../js/hooks/usePhotoUploader'
 import { userMediaStore, revalidateUserHomePage } from '../js/stores/media'
 import useReturnToProfile from '../js/hooks/useReturnToProfile'
 import { BlockingAlert } from './ui/micro/AlertDialogue'
-
+import { useUserGalleryStore } from '../js/stores/useUserGalleryStore'
 interface UploadPhotoTriggerProps {
   children: JSX.Element | JSX.Element []
   className?: string
@@ -80,7 +80,8 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
     }
   }
 
-  const { uploading, getRootProps, getInputProps, openFileDialog } = usePhotoUploader({ onUploaded: onUploadedHannder })
+  const { getRootProps, getInputProps, openFileDialog } = usePhotoUploader()
+  const uploading = useUserGalleryStore(store => store.uploading)
 
   return (
     <div

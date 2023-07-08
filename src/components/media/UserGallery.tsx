@@ -14,7 +14,7 @@ import { useResponsive } from '../../js/hooks'
 import TagList from './TagList'
 import usePermissions from '../../js/hooks/auth/usePermissions'
 import useMediaCmd from '../../js/hooks/useMediaCmd'
-import { useUserGalleryStore } from '../../js/stores/userGallery'
+import { useUserGalleryStore } from '../../js/stores/useUserGalleryStore'
 
 export interface UserGalleryProps {
   uid: string

@@ -1,6 +1,8 @@
 import { NextApiHandler } from 'next'
 import withAuth from '../withAuth'
 
+import { deleteMediaFromBucket } from '../../../js/media/storageClient'
+
 // We need to disable the default body parser
 export const config = {
   api: {
@@ -21,11 +23,14 @@ const handler: NextApiHandler<any> = async (req, res) => {
         throw new Error('Expect only 1 filename param')
       }
 
-      // const photoUrl = await remove(filename)
-      // return res.status(200).send(photoUrl)
-      return res.status(200)
+      let filenameWithoutSlash = filename
+      if (filename.startsWith('/')) {
+        filenameWithoutSlash = filename.substring(1, filename.length)
+      }
+      await deleteMediaFromBucket(filenameWithoutSlash)
+      return res.status(200).end()
     } catch (e) {
-      console.log('#Removing image from media server failed', e)
+      console.log('Removing file from media server failed', e)
       return res.status(500).end()
     }
   }

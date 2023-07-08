@@ -3,20 +3,9 @@ import { customAlphabet } from 'nanoid'
 import { nolookalikesSafe } from 'nanoid-dictionary'
 import { extname } from 'path'
 import { getServerSession } from 'next-auth'
-import { GetSignedUrlConfig, Storage } from '@google-cloud/storage'
 import withAuth from '../withAuth'
 import { authOptions } from '../auth/[...nextauth]'
-
-/**
- * GCloud storage client.  Todo: move this to its own module.
- */
-const storage = new Storage({
-  credentials: {
-    type: 'service_account',
-    private_key: process.env.GC_BUCKET_PRIVATE_KEY ?? '',
-    client_email: process.env.GC_BUCKET_CLIENT_EMAIL ?? ''
-  }
-})
+import { getSignedUrlForUpload } from '../../../js/media/storageClient'
 
 export interface MediaPreSignedProps {
   url: string
@@ -24,7 +13,7 @@ export interface MediaPreSignedProps {
 }
 
 /**
- * Generate a pre-signed url for uploading photos to Google storage.
+ * Local API getting a signed url for uploading media to Google storage.
  *
  * Usage: `/api/media/get-signed-url?filename=image001.jpg`
  *
@@ -50,23 +39,9 @@ const handler: NextApiHandler<MediaPreSignedProps> = async (req, res) => {
        */
       const fullFilename = `u/${uuid}/${safeFilename(filename)}`
 
-      const options: GetSignedUrlConfig = {
-        version: 'v4',
-        action: 'write',
-        expires: Date.now() + 15 * 60 * 1000 // 15 minutes
-      }
+      const url = await getSignedUrlForUpload(fullFilename)
 
-      // Get a signed URL for uploading the file
-      const [url] = await storage
-        .bucket(process.env.GC_BUCKET_NAME ?? '')
-        .file(fullFilename)
-        .getSignedUrl(options)
-
-      if (url != null) {
-        return res.status(200).json({ url, fullFilename: '/' + fullFilename })
-      } else {
-        throw new Error('Error generating upload url')
-      }
+      return res.status(200).json({ url, fullFilename: '/' + fullFilename })
     } catch (e) {
       console.log('Uploading to media server failed', e)
       return res.status(500).end()

@@ -24,3 +24,18 @@ ${FRAGMENT_MEDIA_WITH_TAGS}
         ... MediaWithTagsFields
     }
   }`
+
+export interface DeleteOneMediaObjectArgs {
+  mediaId: string
+}
+
+export interface DeleteOneMediaObjectReturn {
+  deleteMediaObject: boolean
+}
+
+export const MUTATION_DELETE_ONE_MEDIA_OBJECT = gql`
+  mutation deleteMediaObject($mediaId: ID!) {
+    deleteMediaObject(
+      input: { mediaId: $mediaId}
+    )
+  }`
