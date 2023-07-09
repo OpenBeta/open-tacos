@@ -7,8 +7,8 @@ import clx from 'classnames'
 import usePhotoUploader from '../js/hooks/usePhotoUploader'
 import { userMediaStore, revalidateUserHomePage } from '../js/stores/media'
 import useReturnToProfile from '../js/hooks/useReturnToProfile'
-import { BlockingAlert } from './ui/micro/AlertDialogue'
 import { useUserGalleryStore } from '../js/stores/useUserGalleryStore'
+
 interface UploadPhotoTriggerProps {
   children: JSX.Element | JSX.Element []
   className?: string
@@ -95,11 +95,6 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
     >
       <input {...getInputProps()} />
       {children}
-      {uploading &&
-        <BlockingAlert
-          title='Uploading'
-          description={<progress className='progress w-56' />}
-        />}
     </div>
   )
 }

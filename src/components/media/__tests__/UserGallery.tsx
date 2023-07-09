@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event'
 import type UserGalleryType from '../UserGallery'
 import { userMedia } from './data'
 import { UserPublicPage } from '../../../js/types/User'
+import { UseMediaCmdReturn } from '../../../js/hooks/useMediaCmd'
 
 jest.mock('next/router')
 
@@ -18,11 +19,13 @@ jest.mock('../UploadCTA', () => ({
   default: jest.fn()
 }))
 
-const fetchMore = jest.fn()
+const fetchMoreMediaForward = jest.fn()
+
+fetchMoreMediaForward.mockResolvedValueOnce(userMedia.mediaConnection)
 
 jest.mock('../../../js/hooks/useMediaCmd', () => ({
   __esModule: true,
-  default: () => ({ fetchMore })
+  default: (): Partial<UseMediaCmdReturn> => ({ fetchMoreMediaForward })
 }))
 
 const useResponsive = jest.requireMock('../../../js/hooks/useResponsive')
@@ -70,7 +73,7 @@ describe('Image gallery', () => {
         userPublicPage={userProfile}
       />)
 
-    const images = screen.getAllByRole('img')
+    const images = await screen.findAllByRole('img')
     expect(images.length).toBe(userMedia.mediaConnection.edges.length)
 
     await user.click(images[0]) // click on the first image

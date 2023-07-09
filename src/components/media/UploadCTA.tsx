@@ -4,7 +4,7 @@ import { CameraIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import clx from 'classnames'
 
 import UploadPhotoTrigger from '../UploadPhotoTrigger'
-import PhotoUploader from './PhotoUploader'
+import BaseUploader from './PhotoUploader'
 import Link from 'next/link'
 
 /**
@@ -21,7 +21,7 @@ import Link from 'next/link'
  */
 export default function UploadCTA (): JSX.Element {
   return (
-    <PhotoUploader
+    <BaseUploader
       className='relative aspect-video mt-8 md:mt-0 lg:aspect-auto
       lg:w-[300px] lg:h-[300px] rounded-box
       border-2 border-base-content/80 border-dashed flex items-center justify-center cursor-pointer
@@ -31,7 +31,7 @@ export default function UploadCTA (): JSX.Element {
         <CameraIcon className='w-24 h-24 text-base-content/80' />
         <span className='text-base-content text-sm'>Click to upload</span>
       </div>
-    </PhotoUploader>
+    </BaseUploader>
   )
 }
 

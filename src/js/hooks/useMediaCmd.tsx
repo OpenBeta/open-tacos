@@ -22,7 +22,7 @@ export interface UseMediaCmdReturn {
 interface FetchMoreMediaForwardProps {
   userUuid: string
   first?: number
-  after: string
+  after?: string
 }
 export interface RemoveEntityTagProps {
   mediaId: string

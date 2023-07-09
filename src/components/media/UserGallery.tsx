@@ -36,9 +36,6 @@ export interface UserGalleryProps {
  * 1. Component will start with the most recent 6 (see A.1 above)
  * 2. When the user scrolls down, fetch the next 6 (cache hit)
  *
- * C. Image upload and delete are currently disabled.  We'll need to update Apollo cache
- * like how do with tags.
- *
  * Simplifying component Todos:
  *  - simplify back button logic with Next Layout in v13
  *
@@ -82,7 +79,15 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
    * Initialize image data store
    */
   useEffect(() => {
-    resetData(userPublicPage.media.mediaConnection)
+    if (isAuthorized) {
+      void fetchMoreMediaForward({
+        userUuid: userPublicPage.profile.userUuid
+      }).then(nextMediaConnection => {
+        if (nextMediaConnection != null) resetData(nextMediaConnection)
+      })
+    } else {
+      resetData(userPublicPage.media.mediaConnection)
+    }
   }, [userPublicPage.media.mediaConnection])
 
   const imageList = mediaConnection.edges.map(edge => edge.node)
@@ -132,7 +137,10 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
 
   // to load more images when user scrolls to the 'scrollThreshold' value of the page
   const fetchMoreData = async (): Promise<void> => {
-    const lastCursor = mediaConnection.edges[mediaConnection.edges.length - 1].cursor
+    let lastCursor: string | undefined
+    if (mediaConnection.edges.length > 0) {
+      lastCursor = mediaConnection.edges[mediaConnection.edges.length - 1].cursor
+    }
     const nextMediaConnection = await fetchMoreMediaForward({
       userUuid: userPublicPage?.profile.userUuid,
       after: lastCursor
