@@ -1,12 +1,11 @@
-import { NextRouter, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { useDropzone, DropzoneInputProps, FileRejection } from 'react-dropzone'
 import { toast } from 'react-toastify'
 import { useSession } from 'next-auth/react'
-import { validate as isValidUuid } from 'uuid'
 
 import { uploadPhoto, deleteMediaFromStorage } from '../userApi/media'
 import useMediaCmd from './useMediaCmd'
-import { EntityTag, MediaFormat } from '../types'
+import { MediaFormat } from '../types'
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
 
 interface PhotoUploaderReturnType {
@@ -152,51 +151,4 @@ const getImageDimensions = async (imageData: ArrayBuffer): Promise<Dimensions> =
     })
     image.onerror = reject
   })
-}
-
-type NewEntityTag = Omit<EntityTag, 'id'>
-
-/**
- *  If photo is uploaded while on a climb or crag page,
- *  obtain entity data to be added to the photo.
- *  To-do:  Need to keep climb/crag props so that they can easily be accessed
- *  from this hook
- */
-const getEntityFromPageContext = async (router: NextRouter): Promise<NewEntityTag | null> => {
-  const [id, destType, pageToInvalidate, destPageUrl] = pagePathToEntityType(router)
-
-  const entityTag: NewEntityTag | null = null
-  // let's see if we're viewing the climb or area page
-  if (id != null && isValidUuid(id) && (destType === 0 || destType === 1)) {
-    // Todo: get climb data needed for tagging from global store
-    // Tell Next to regenerate the page being tagged
-    try {
-      await fetch(pageToInvalidate)
-    } catch (e) { console.log(e) }
-  }
-  return entityTag
-}
-
-/**
- * Convert current page path to a destination type for tagging.  Expect `path` to be in /areas|crag|climb/[id].
- * @param path `path` property as return from `Next.router()`
- */
-const pagePathToEntityType = (router: NextRouter): [string, number, string, string] | [null, null, null, null] => {
-  const nulls: [null, null, null, null] = [null, null, null, null]
-  const { asPath, query } = router
-  const tokens = asPath.split('/')
-
-  if (query == null || query.id == null || tokens.length < 3) return nulls
-
-  const id = query.id as string
-  switch (tokens[1]) {
-    case 'climbs':
-      return [id, 0, `/api/revalidate?c=${id}`, `/climbs/${id}`]
-    case 'areas':
-      return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
-    case 'crag':
-      return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
-    default:
-      return nulls
-  }
 }
