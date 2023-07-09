@@ -3,18 +3,21 @@ import { customAlphabet } from 'nanoid'
 import { nolookalikesSafe } from 'nanoid-dictionary'
 import { extname } from 'path'
 import { getServerSession } from 'next-auth'
-
 import withAuth from '../withAuth'
-import { s3Client, SIRV_CONFIG } from '../../../js/sirv/SirvClient'
 import { authOptions } from '../auth/[...nextauth]'
+import { getSignedUrlForUpload } from '../../../js/media/storageClient'
 
 export interface MediaPreSignedProps {
   url: string
   fullFilename: string
 }
+
 /**
- * Generate a pre-signed url for uploading photos to Sirv
- * @returns
+ * Local API getting a signed url for uploading media to Google storage.
+ *
+ * Usage: `/api/media/get-signed-url?filename=image001.jpg`
+ *
+ * See https://cloud.google.com/storage/docs/access-control/signed-urls
  */
 const handler: NextApiHandler<MediaPreSignedProps> = async (req, res) => {
   if (req.method === 'GET') {
@@ -31,18 +34,14 @@ const handler: NextApiHandler<MediaPreSignedProps> = async (req, res) => {
         throw new Error('Missing user metadata')
       }
       const { uuid } = session.user.metadata
-      const fullFilename = `/u/${uuid}/${safeFilename(filename)}`
+      /**
+       * Important: no starting / when working with buckets
+       */
+      const fullFilename = `u/${uuid}/${safeFilename(filename)}`
 
-      const params = {
-        Bucket: SIRV_CONFIG.s3Bucket, Key: fullFilename, Expires: 60
-      }
+      const url = await getSignedUrlForUpload(fullFilename)
 
-      const url = s3Client.getSignedUrl('putObject', params)
-      if (url != null) {
-        return res.status(200).json({ url, fullFilename })
-      } else {
-        throw new Error('Error generating upload url')
-      }
+      return res.status(200).json({ url, fullFilename: '/' + fullFilename })
     } catch (e) {
       console.log('Uploading to media server failed', e)
       return res.status(500).end()
