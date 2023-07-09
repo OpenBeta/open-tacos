@@ -1,5 +1,5 @@
 import { v4 } from 'uuid'
-import { MediaWithTags, UserMedia } from '../../../js/types'
+import { MediaFormat, MediaWithTags, UserMedia } from '../../../js/types'
 
 export const mediaList: MediaWithTags[] = [
   {
@@ -7,7 +7,7 @@ export const mediaList: MediaWithTags[] = [
     mediaUrl: '/img1.jpg',
     width: 1200,
     height: 960,
-    format: 'jpeg',
+    format: MediaFormat.jpg,
     size: 30000,
     uploadTime: new Date(),
     entityTags: []
@@ -16,7 +16,7 @@ export const mediaList: MediaWithTags[] = [
     id: v4(),
     width: 1200,
     height: 960,
-    format: 'jpeg',
+    format: MediaFormat.jpg,
     size: 30000,
     uploadTime: new Date(),
     entityTags: [],
@@ -26,7 +26,7 @@ export const mediaList: MediaWithTags[] = [
     id: v4(),
     width: 1200,
     height: 960,
-    format: 'jpeg',
+    format: MediaFormat.jpg,
     size: 30000,
     uploadTime: new Date(),
     entityTags: [],
@@ -36,7 +36,7 @@ export const mediaList: MediaWithTags[] = [
     id: v4(),
     width: 1200,
     height: 960,
-    format: 'jpeg',
+    format: MediaFormat.jpg,
     size: 30000,
     uploadTime: new Date(),
     entityTags: [],
@@ -46,7 +46,7 @@ export const mediaList: MediaWithTags[] = [
     id: v4(),
     width: 1200,
     height: 960,
-    format: 'jpeg',
+    format: MediaFormat.jpg,
     size: 30000,
     uploadTime: new Date(),
     entityTags: [],
@@ -56,7 +56,7 @@ export const mediaList: MediaWithTags[] = [
     id: v4(),
     width: 1200,
     height: 960,
-    format: 'jpeg',
+    format: MediaFormat.jpg,
     size: 30000,
     uploadTime: new Date(),
     entityTags: [],

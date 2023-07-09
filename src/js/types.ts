@@ -251,6 +251,14 @@ export interface EntityTag {
   climbName?: string
   areaName: string
 }
+
+export enum MediaFormat {
+  jpg = 'jpeg',
+  png = 'png',
+  webp = 'webp',
+  avif = 'avif',
+}
+
 /**
  * Media with climb & area tags
  */
@@ -260,7 +268,7 @@ export interface MediaWithTags {
   mediaUrl: string
   width: number
   height: number
-  format: string
+  format: MediaFormat
   size: number
   uploadTime: Date
   entityTags: EntityTag[]

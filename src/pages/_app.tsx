@@ -12,6 +12,8 @@ import '../styles/global.css'
 import '../../public/fonts/fonts.css'
 import useResponsive from '../js/hooks/useResponsive'
 import useUsernameCheck from '../js/hooks/useUsernameCheck'
+import { useUserGalleryStore } from '../js/stores/useUserGalleryStore'
+import { BlockingAlert } from '../components/ui/micro/AlertDialogue'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
@@ -24,6 +26,7 @@ interface AppPropsWithAuth extends AppProps<{ session: any }> {
 
 export default function MyApp ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithAuth): JSX.Element {
   const { isMobile } = useResponsive()
+  const uploading = useUserGalleryStore(store => store.uploading)
 
   return (
     <>
@@ -55,6 +58,11 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
         pauseOnHover
         theme='light'
       />
+      {uploading &&
+        <BlockingAlert
+          title='Uploading'
+          description={<progress className='progress w-56' />}
+        />}
       {/* main call-to-action popup */}
       {/* <MainCta /> */}
     </>

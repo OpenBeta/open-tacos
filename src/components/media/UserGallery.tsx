@@ -6,9 +6,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 
 import UserMedia from './UserMedia'
 import MobileMediaCard from './MobileMediaCard'
-import { MediaConnection } from '../../js/types'
 import UploadCTA from './UploadCTA'
-import { actions } from '../../js/stores'
 import SlideViewer from './slideshow/SlideViewer'
 import { TinyProfile } from '../users/PublicProfile'
 import { UserPublicPage } from '../../js/types/User'
@@ -16,6 +14,7 @@ import { useResponsive } from '../../js/hooks'
 import TagList from './TagList'
 import usePermissions from '../../js/hooks/auth/usePermissions'
 import useMediaCmd from '../../js/hooks/useMediaCmd'
+import { useUserGalleryStore } from '../../js/stores/useUserGalleryStore'
 
 export interface UserGalleryProps {
   uid: string
@@ -36,9 +35,6 @@ export interface UserGalleryProps {
  * B. When the user navigates away then revisits page:
  * 1. Component will start with the most recent 6 (see A.1 above)
  * 2. When the user scrolls down, fetch the next 6 (cache hit)
- *
- * C. Image upload and delete are currently disabled.  We'll need to update Apollo cache
- * like how do with tags.
  *
  * Simplifying component Todos:
  *  - simplify back button logic with Next Layout in v13
@@ -75,7 +71,24 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
     return true
   })
 
-  const [mediaConnection, setMediaConnection] = useState<MediaConnection>(userPublicPage.media.mediaConnection)
+  const mediaConnection = useUserGalleryStore((state) => state.mediaConnection)
+  const resetData = useUserGalleryStore((state) => state.reset)
+  const appendMore = useUserGalleryStore((state) => state.append)
+
+  /**
+   * Initialize image data store
+   */
+  useEffect(() => {
+    if (isAuthorized) {
+      void fetchMoreMediaForward({
+        userUuid: userPublicPage.profile.userUuid
+      }).then(nextMediaConnection => {
+        if (nextMediaConnection != null) resetData(nextMediaConnection)
+      })
+    } else {
+      resetData(userPublicPage.media.mediaConnection)
+    }
+  }, [userPublicPage.media.mediaConnection])
 
   const imageList = mediaConnection.edges.map(edge => edge.node)
 
@@ -98,10 +111,6 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
       }
     }
   }, [initialPostId, imageList, router])
-
-  const onUploadHandler = async (imageUrl: string): Promise<void> => {
-    await actions.media.addImage(uid, userProfile.userUuid, imageUrl, true)
-  }
 
   const imageOnClickHandler = useCallback(async (props: any): Promise<void> => {
     if (isMobile) return
@@ -128,7 +137,10 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
 
   // to load more images when user scrolls to the 'scrollThreshold' value of the page
   const fetchMoreData = async (): Promise<void> => {
-    const lastCursor = mediaConnection.edges[mediaConnection.edges.length - 1].cursor
+    let lastCursor: string | undefined
+    if (mediaConnection.edges.length > 0) {
+      lastCursor = mediaConnection.edges[mediaConnection.edges.length - 1].cursor
+    }
     const nextMediaConnection = await fetchMoreMediaForward({
       userUuid: userPublicPage?.profile.userUuid,
       after: lastCursor
@@ -138,11 +150,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
       return
     }
 
-    setMediaConnection(curr => ({
-      edges: curr.edges.concat(nextMediaConnection.edges),
-      pageInfo: nextMediaConnection.pageInfo
-    })
-    )
+    appendMore(nextMediaConnection)
   }
 
   // When logged-in user has fewer than 3 photos,
@@ -160,8 +168,8 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
         loader={null}
       >
         <div className='flex flex-col gap-x-6 gap-y-10 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>
-          {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
-          {mediaConnection.edges.map((edge, index) => {
+          {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} />}
+          {mediaConnection.edges.map((edge, index: number) => {
             const mediaWithTags = edge.node
             const { mediaUrl, entityTags } = mediaWithTags
             const key = `${mediaUrl}${index}`
@@ -205,7 +213,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
             )
           })}
           {placeholders.map(index =>
-            <UploadCTA key={index} onUploadFinish={onUploadHandler} />)}
+            <UploadCTA key={index} />)}
         </div>
       </InfiniteScroll>
 

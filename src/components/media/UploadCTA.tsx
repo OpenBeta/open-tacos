@@ -4,12 +4,8 @@ import { CameraIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import clx from 'classnames'
 
 import UploadPhotoTrigger from '../UploadPhotoTrigger'
-import PhotoUploader from './PhotoUploader'
+import BaseUploader from './PhotoUploader'
 import Link from 'next/link'
-
-interface UploadCTAProps {
-  onUploadFinish: (url: string) => Promise<void>
-}
 
 /**
  * A photo upload Call-to-action button
@@ -23,20 +19,19 @@ interface UploadCTAProps {
  * If a user selects / drags multiple, they should be all be uploaded (weather sequentially
  * or asynchronously).
  */
-export default function UploadCTA ({ onUploadFinish }: UploadCTAProps): JSX.Element {
+export default function UploadCTA (): JSX.Element {
   return (
-    <PhotoUploader
-      onUploaded={onUploadFinish}
+    <BaseUploader
       className='relative aspect-video mt-8 md:mt-0 lg:aspect-auto
-      lg:w-[300px] lg:h-[300px] rounded-lg bg-neutral-200 border-neutral-300
-      border-2 border-dashed flex items-center justify-center cursor-pointer
-      hover:brightness-75 overflow-hidden'
+      lg:w-[300px] lg:h-[300px] rounded-box
+      border-2 border-base-content/80 border-dashed flex items-center justify-center cursor-pointer
+       overflow-hidden'
     >
       <div className='flex flex-col items-center'>
-        <CameraIcon className='stroke-gray-400 stroke-1 w-24 h-24' />
-        <span className='text-secondary text-sm'>Click to upload</span>
+        <CameraIcon className='w-24 h-24 text-base-content/80' />
+        <span className='text-base-content text-sm'>Click to upload</span>
       </div>
-    </PhotoUploader>
+    </BaseUploader>
   )
 }
 

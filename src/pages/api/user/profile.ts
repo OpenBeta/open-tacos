@@ -2,7 +2,6 @@ import { NextApiHandler } from 'next'
 
 import withAuth from '../withAuth'
 import createMetadataClient, { Auth0UserMetadata } from './metadataClient'
-import { addUserIdFile } from '../../../js/sirv/SirvClient'
 import { checkUsername, checkWebsiteUrl } from '../../../js/utils'
 
 type Handler = NextApiHandler<Auth0UserMetadata | { message: string }>
@@ -50,8 +49,6 @@ const updateMyProfile: Handler = async (req, res) => {
 
     req.body.nick = (req.body.nick as string).toLowerCase()
     req.body.website = website
-
-    await addUserIdFile(`/u/${req.body.uuid as string}/uid.json`, req.body?.nick)
 
     const metadata = await metadataClient.updateUserMetadata(req.body)
     res.json(metadata)

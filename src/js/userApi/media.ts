@@ -28,7 +28,7 @@ export const uploadPhoto = async (filename: string, rawData: ArrayBuffer): Promi
   throw new Error('Missing upload data')
 }
 
-export const removePhoto = async (filename: string): Promise<string> => {
+export const deleteMediaFromStorage = async (filename: string): Promise<void> => {
   const res = await client.post(
     '/api/media/remove?filename=' + encodeURIComponent(filename),
     {
@@ -38,7 +38,7 @@ export const removePhoto = async (filename: string): Promise<string> => {
     }
   )
   if (res.status === 200) {
-    return res.data
+    return
   }
-  throw new Error('Delete failed')
+  throw new Error('Local delete media api failed')
 }
