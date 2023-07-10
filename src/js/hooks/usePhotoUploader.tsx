@@ -37,7 +37,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
 
   const setUploading = useUserGalleryStore(store => store.setUploading)
   const isUploading = useUserGalleryStore(store => store.uploading)
-  const { data: sessionData } = useSession({ required: true })
+  const { data: sessionData } = useSession()
   const { addMediaObjectsCmd } = useMediaCmd()
 
   /** When a file is loaded by the browser (as in, loaded from the local filesystem,
@@ -76,7 +76,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
       }
     } catch (e) {
       toast.error('Uploading error.  Please try again.')
-      console.error('Meida upload error.', e)
+      console.error('Media upload error.', e)
     }
   }
 
