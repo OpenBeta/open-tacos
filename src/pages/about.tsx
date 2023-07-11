@@ -5,13 +5,9 @@ import Cairn from '../assets/icons/stones.png'
 import Seed from '../assets/icons/seed.png'
 import Watering from '../assets/icons/watering-can.png'
 import SeoTags from '../components/SeoTags'
-import BaseMap from '../components/maps/BaseMap'
-
-import useAutoSizing from '../js/hooks/finder/useMapAutoSizing'
+import { ContributorMap } from '../components/about/ContributorMap'
 
 const About = (): JSX.Element => {
-  const [viewstate, height, setViewState] = useAutoSizing({ geojson: null, elementId: null })
-
   return (
     <Layout contentContainerClass='content-default' showFilterBar={false}>
       <SeoTags title='About' />
@@ -57,14 +53,8 @@ const About = (): JSX.Element => {
           <p className='mt-8 italic text-xl text-slate-700 text-base'>OpenBeta is a 501(c)(3) nonprofit collective.  Donations are tax-deductible to the extent allowed by law.</p>
         </div>
       </div>
-      <BaseMap
-        height={height}
-        viewstate={viewstate}
-        onViewStateChange={setViewState}
-        light
-        children={null}
-        interactiveLayerIds={[]}
-      />
+
+      <ContributorMap />
 
       <div className='text-center text-black py-24 bg-ob-primary px-4'>
         <h2 className='mb-2 text-black'>Learn more</h2>
