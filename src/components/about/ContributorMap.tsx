@@ -4,6 +4,8 @@ import contributorsData from '../../assets/contributors-map.json'
 import useAutoSizing from '../../js/hooks/finder/useMapAutoSizing'
 import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
 import { MapPinIcon, UsersIcon } from '@heroicons/react/24/outline'
+import { XViewStateType } from '../../js/types'
+import { useEffect } from 'react'
 
 export interface ContributorType{
   firstName?: string
@@ -35,7 +37,6 @@ const ContributorCardTrigger: React.FC<MapProps> = ({ contributor }) => {
 
 const ContributorCard: React.FC<MapProps> = ({ contributor }) => {
   const { firstName, githubId, favoriteCrag } = contributor
-  console.log({ favoriteCrag })
   return (
 
     <div className='grid md:grid-cols-6 px-11 pt-11 pb-16 gap-2 md:gap-4 bg-white rounded-lg'>
@@ -72,7 +73,22 @@ export function ContributorMap (): JSX.Element {
 
   const contributors: ContributorDataType[] = contributorsData.features
 
-  const [viewstate, height, setViewState] = useAutoSizing({ geojson: null, elementId: mapElementId })
+  const initialViewState: XViewStateType = {
+    width: 300,
+    height: 1024,
+    padding: { top: 20, bottom: 20, left: 20, right: 20 },
+    bearing: 0,
+    zoom: 1,
+    pitch: 0,
+    latitude: 36.079693291728546,
+    longitude: -115.5,
+    bbox: [0, 0, 0, 0]
+  }
+  const [viewState, height, setViewState] = useAutoSizing({ geojson: null, elementId: mapElementId })
+
+  useEffect(() => {
+    setViewState(initialViewState)
+  }, [])
 
   return (
     <>
@@ -83,7 +99,7 @@ export function ContributorMap (): JSX.Element {
       >
         <BaseMap
           height={height}
-          viewstate={viewstate}
+          viewstate={viewState}
           onViewStateChange={setViewState}
           light
           interactiveLayerIds={[]}
