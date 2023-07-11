@@ -5,6 +5,7 @@ import clx from 'classnames'
 interface Props {
   title?: string | ReactNode
   fullScreen?: boolean
+  small?: boolean
   children: ReactNode | ReactNode[]
   onInteractOutside?: (event: any) => void
 }
@@ -14,12 +15,12 @@ interface Props {
  * @param fullScreen Optional flag to expand the dialog to max screen width & height
  */
 export const DialogContent = React.forwardRef<any, Props>(
-  ({ title, children, fullScreen = false, ...props }, forwardedRef) =>
+  ({ title, children, small = false, fullScreen = false, ...props }, forwardedRef) =>
     (
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className='z-40 fixed inset-0 bg-black/60' />
         <DialogPrimitive.Content
-          className={clx(fullScreen ? 'dialog-wide' : 'dialog-default')} {...props} ref={forwardedRef}
+          className={clx(fullScreen ? 'dialog-wide' : 'dialog-default', small ? 'dialog-small' : '')} {...props} ref={forwardedRef}
         >
           <DialogPrimitive.Title className='dialog-title'>
             {title}
