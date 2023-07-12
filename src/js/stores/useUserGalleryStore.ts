@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
+import { produce } from 'immer'
 
 import { MediaConnection, MediaWithTags } from '../types'
 
@@ -36,7 +37,7 @@ const OPTIONS = {
 /**
  * Data store for UserGallery.
  */
-export const useUserGalleryStore = create<UserGalleryStore>()(devtools(set => ({
+export const useUserGalleryStore = create<UserGalleryStore>()(devtools((set, get) => ({
   ...DEFAUL_STATES,
 
   setUploading: (uploadingState) => set((state) => ({
@@ -74,17 +75,12 @@ export const useUserGalleryStore = create<UserGalleryStore>()(devtools(set => ({
     if (foundIndex < 0) {
       return state
     }
-
-    currentList.splice(foundIndex, 1, {
-      node: media,
-      cursor: ''
+    const newState = produce(state.mediaConnection, draft => {
+      draft.edges[foundIndex].node = media
     })
 
     return ({
-      mediaConnection: {
-        edges: currentList,
-        pageInfo: state.mediaConnection.pageInfo
-      }
+      mediaConnection: newState
     })
   }, false, 'updateOne'),
 
@@ -99,13 +95,12 @@ export const useUserGalleryStore = create<UserGalleryStore>()(devtools(set => ({
     // not found, do nothing
     if (foundIndex < 0) return state
 
-    currentList.splice(foundIndex, 1)
+    const newState = produce(state.mediaConnection, draft => {
+      draft.edges.splice(foundIndex, 1)
+    })
 
     return ({
-      mediaConnection: {
-        edges: currentList,
-        pageInfo: state.mediaConnection.pageInfo
-      }
+      mediaConnection: newState
     })
   }, false, 'delete'),
 

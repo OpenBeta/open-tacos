@@ -41,7 +41,7 @@
     "fuse.js": "^6.6.2",
     "graphql": "^16.2.0",
     "i18n-iso-countries": "^7.5.0",
-    "immer": "^9.0.12",
+    "immer": "^10.0.2",
     "lexical": "^0.7.5",
     "mapbox-gl": "^2.7.0",
     "nanoid": "^4.0.0",

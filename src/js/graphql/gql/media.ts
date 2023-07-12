@@ -2,9 +2,10 @@ import { gql } from '@apollo/client'
 import { MediaWithTags } from '../../types'
 import { AddEntityTagProps, FRAGMENT_MEDIA_WITH_TAGS } from './tags'
 
+export type NewEmbeddedEntityTag = Omit<AddEntityTagProps, 'mediaId'>
 export type NewMediaObjectInput = Pick<MediaWithTags, 'mediaUrl' | 'width' | 'height' | 'format' | 'size'> & {
   userUuid: string
-  entityTags?: Array<Omit<AddEntityTagProps, 'mediaId'>>
+  entityTag?: NewEmbeddedEntityTag
 }
 
 export interface AddNewMediaObjectsArgs {

@@ -94,6 +94,11 @@ export const MUTATION_ADD_ENTITY_TAG = gql`
     }
   }`
 
+export interface RemoveEntityTagMutationProps {
+  mediaId: string
+  tagId: string
+}
+
 /**
  * Return type for remove entity tag mutation
  */

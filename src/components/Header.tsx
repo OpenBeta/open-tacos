@@ -33,7 +33,6 @@ export default function Header (props: HeaderProps): JSX.Element {
       <AppAlert
         message={
           <>
-            <div className='text-sm'>• July 2023: Photo upload is working again.  Known issue: you can only tag photos from your profile page.</div>
             <div className='text-sm'>
               • January 2023: Use this special&nbsp;
               <Link href='/crag/18c5dd5c-8186-50b6-8a60-ae2948c548d1'>
