@@ -85,7 +85,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
         await deleteMediaFromStorage(url)
       } else {
         if (postUpdateFn != null) {
-          void postUpdateFn()
+          await postUpdateFn()
         }
       }
     } catch (e) {
@@ -176,7 +176,7 @@ const getImageDimensions = async (imageData: ArrayBuffer): Promise<Dimensions> =
  *  If photo is uploaded while on a climb or crag page,
  *  obtain entity data to be added to the photo.
  */
-const getEntityFromPageContext = async (router: NextRouter): Promise<[NewEmbeddedEntityTag | null, null | (() => void)]> => {
+const getEntityFromPageContext = async (router: NextRouter): Promise<[NewEmbeddedEntityTag | null, null | (() => Promise<void>)]> => {
   const [id, destType, pageToInvalidate, pageToReload] = pagePathToEntityType(router)
 
   const postUpdate = async (): Promise<void> => {
