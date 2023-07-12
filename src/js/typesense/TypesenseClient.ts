@@ -68,7 +68,7 @@ export async function multiSearch (query: string): Promise<MultisearchReturnType
     searches: [
       {
         q: query,
-        query_by: 'climbName, climbDesc',
+        query_by: 'climbName, areaNames',
         collection: 'climbs',
         exclude_fields: 'climbDesc',
         page: 1,
