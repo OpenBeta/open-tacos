@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import Card from '../ui/Card/Card'
 import TagList, { MobilePopupTagList } from './TagList'
 import { MobileLoader } from '../../js/sirv/util'
@@ -20,15 +18,7 @@ export interface MobileMediaCardProps {
  * Media card for mobile view
  */
 export default function MobileMediaCard ({ header, isAuthorized = false, isAuthenticated = false, mediaWithTags }: MobileMediaCardProps): JSX.Element {
-  /**
-   * Why maintaining media object in a local state?
-   * Normally, this component receives tag data via props. However, when the media owner
-   * adds/removes tags, after the backend is updated, we also update the media object
-   * in Apollo cache and keep the updated state here.  This way we only need to deal
-   * with a single media instead a large list.
-   */
-  const [localMediaWithTags, setMedia] = useState(mediaWithTags)
-  const { mediaUrl, entityTags, uploadTime } = localMediaWithTags
+  const { mediaUrl, entityTags, uploadTime } = mediaWithTags
   const tagCount = entityTags.length
   return (
     <Card
@@ -45,9 +35,9 @@ export default function MobileMediaCard ({ header, isAuthorized = false, isAuthe
         <section className='flex items-center justify-between'>
           <div>&nbsp;</div>
           <MobilePopupTagList
-            mediaWithTags={localMediaWithTags}
+            mediaWithTags={mediaWithTags}
             isAuthorized={isAuthorized}
-            onChange={setMedia}
+            // onChange={setMedia}
           />
         </section>
       }
@@ -57,7 +47,7 @@ export default function MobileMediaCard ({ header, isAuthorized = false, isAuthe
             {tagCount > 0 &&
             (
               <TagList
-                mediaWithTags={localMediaWithTags}
+                mediaWithTags={mediaWithTags}
                 // we have a popup for adding/removing tags
                 // don't show add tag button on mobile
                 showActions={false}

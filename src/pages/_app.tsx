@@ -49,7 +49,7 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
       </SessionProvider>
       <ToastContainer
         position={isMobile ? 'top-right' : 'bottom-right'}
-        autoClose={false}
+        autoClose={6000}
         hideProgressBar
         newestOnTop
         closeOnClick

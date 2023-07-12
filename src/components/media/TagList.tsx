@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction, MouseEventHandler } from 'react'
+import { useState, MouseEventHandler } from 'react'
 import classNames from 'classnames'
 import { TagIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { DropdownMenuItem as PrimitiveDropdownMenuItem } from '@radix-ui/react-dropdown-menu'
@@ -77,28 +77,21 @@ export interface TagListProps {
   mediaWithTags: MediaWithTags
   isAuthorized?: boolean
   children?: JSX.Element
-  onChange: Dispatch<SetStateAction<MediaWithTags>>
 }
 
 /**
  * Mobile tag list wrapped in a popup menu
  */
-export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAuthorized = false, onChange }) => {
+export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAuthorized = false }) => {
   const { addEntityTagCmd, removeEntityTagCmd } = useMediaCmd()
   const [openSearch, setOpenSearch] = useState(false)
 
   const onAddHandler: OnAddCallback = async (args) => {
-    const [, updatedMediaObject] = await addEntityTagCmd(args)
-    if (updatedMediaObject != null) {
-      onChange(updatedMediaObject)
-    }
+    await addEntityTagCmd(args)
   }
 
   const onDeleteHandler: OnDeleteCallback = async (args) => {
-    const [, updatedMediaObject] = await removeEntityTagCmd(args)
-    if (updatedMediaObject != null) {
-      onChange(updatedMediaObject)
-    }
+    await removeEntityTagCmd(args)
   }
   const { id, entityTags } = mediaWithTags
   return (

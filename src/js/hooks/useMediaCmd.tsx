@@ -105,7 +105,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
     MUTATION_ADD_MEDIA_OBJECTS, {
       client: graphqlClient,
       errorPolicy: 'none',
-      onError: error => toast.error(error.message),
+      onError: console.error,
       onCompleted: async (data) => {
         /**
          * Now update the data store to trigger UserGallery re-rendering.

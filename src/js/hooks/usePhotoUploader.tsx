@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useRouter, NextRouter } from 'next/router'
 import { useDropzone, DropzoneInputProps, FileRejection } from 'react-dropzone'
 import { toast } from 'react-toastify'
@@ -42,6 +43,11 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
   const { data: sessionData } = useSession()
   const { addMediaObjectsCmd } = useMediaCmd()
 
+  // const [hasErrors, setHasErrors] = useState(false)
+
+  const ref = useRef({
+    hasErrors: false
+  })
   /** When a file is loaded by the browser (as in, loaded from the local filesystem,
    * not loaded from a webserver) we can begin to upload the bytedata to the provider */
   const onload = async (event: ProgressEvent<FileReader>, file: File): Promise<void> => {
@@ -75,6 +81,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
       // if upload is successful but we can't update the database,
       // then delete the upload
       if (res == null) {
+        ref.current.hasErrors = true
         await deleteMediaFromStorage(url)
       } else {
         if (postUpdateFn != null) {
@@ -82,8 +89,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
         }
       }
     } catch (e) {
-      toast.error('Uploading error.  Please try again.')
-      console.error('Media upload error.', e)
+      ref.current.hasErrors = true
     }
   }
 
@@ -91,7 +97,8 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
     if (rejections.length > 0) { console.warn('Rejected files: ', rejections) }
 
     setUploading(true)
-    await Promise.allSettled(files.map(async file => {
+    ref.current.hasErrors = false
+    await Promise.all(files.map(async file => {
       if (file.size > 11534336) {
         toast.warn('¡Ay, caramba! one of your photos is too cruxy (please reduce the size to 11MB or under)')
         return true
@@ -103,13 +110,18 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
 
     setUploading(false)
 
-    let msg: string | JSX.Element
-    if (router.asPath.startsWith('/u')) {
-      msg = 'Uploading completed! 🎉'
+    if (ref.current.hasErrors) {
+      toast.error('Error uploading photos.  Please try again.')
     } else {
-      msg = <>Uploading completed! 🎉&nbsp;&nbsp;Go to <a className='link font-bold' href='/api/user/me'>Profile.</a></>
+      let msg: string | JSX.Element
+      if (router.asPath.startsWith('/?')) {
+        msg = <>Uploading completed! 🎉&nbsp;&nbsp;View <a className='link font-semibold' href='/api/user/me'>gallery.</a></>
+      } else {
+        msg = 'Uploading completed! 🎉'
+      }
+      toast.success(msg)
+      ref.current.hasErrors = false
     }
-    toast.success(msg)
   }
 
   const { getRootProps, getInputProps, open } = useDropzone({
@@ -168,7 +180,7 @@ const getEntityFromPageContext = async (router: NextRouter): Promise<[NewEmbedde
   const [id, destType, pageToInvalidate, pageToReload] = pagePathToEntityType(router)
 
   const postUpdate = async (): Promise<void> => {
-    // Tell Next to regenerate the page being tagged
+    // Request Next.js to re-generate the page being tagged
     try {
       if (pageToInvalidate != null) await fetch(pageToInvalidate)
       if (pageToReload != null) await router.replace(pageToReload)
