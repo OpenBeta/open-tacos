@@ -14,6 +14,7 @@ import useResponsive from '../js/hooks/useResponsive'
 import useUsernameCheck from '../js/hooks/useUsernameCheck'
 import { useUserGalleryStore } from '../js/stores/useUserGalleryStore'
 import { BlockingAlert } from '../components/ui/micro/AlertDialogue'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
@@ -48,7 +49,7 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
       </SessionProvider>
       <ToastContainer
         position={isMobile ? 'top-right' : 'bottom-right'}
-        autoClose={8000}
+        autoClose={false}
         hideProgressBar
         newestOnTop
         closeOnClick
@@ -57,6 +58,7 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
         draggable={false}
         pauseOnHover
         theme='light'
+        closeButton={ToastCloseButton}
       />
       {uploading &&
         <BlockingAlert
@@ -92,3 +94,12 @@ const NewUserCheck: React.FC = () => {
   useUsernameCheck()
   return null
 }
+
+const ToastCloseButton: React.FC<any> = ({ closeToast }) => (
+  <button className='self-center btn btn-square btn-outline' onClick={closeToast}>
+    <XMarkIcon
+      className='w-8 h-8'
+      onClick={closeToast}
+    />
+  </button>
+)

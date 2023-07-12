@@ -4,9 +4,9 @@ import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
 
 import { graphqlClient } from '../graphql/Client'
-import { AddEntityTagProps, QUERY_USER_MEDIA, QUERY_MEDIA_BY_ID, MUTATION_ADD_ENTITY_TAG, MUTATION_REMOVE_ENTITY_TAG, GetMediaForwardQueryReturn, AddEntityTagMutationReturn, RemoveEntityTagMutationReturn } from '../graphql/gql/tags'
-import { MediaWithTags, EntityTag, MediaConnection } from '../types'
-import { AddNewMediaObjectsArgs, AddMediaObjectsReturn, MUTATION_ADD_MEDIA_OBJECTS, NewMediaObjectInput, DeleteOneMediaObjectArgs, DeleteOneMediaObjectReturn, MUTATION_DELETE_ONE_MEDIA_OBJECT } from '../graphql/gql/media'
+import { AddEntityTagProps, QUERY_USER_MEDIA, QUERY_MEDIA_BY_ID, MUTATION_ADD_ENTITY_TAG, MUTATION_REMOVE_ENTITY_TAG, GetMediaForwardQueryReturn, AddEntityTagMutationReturn, RemoveEntityTagMutationReturn, RemoveEntityTagMutationProps } from '../graphql/gql/tags'
+import { MediaWithTags, EntityTag, MediaConnection, TagTargetType } from '../types'
+import { AddNewMediaObjectsArgs, AddMediaObjectsReturn, MUTATION_ADD_MEDIA_OBJECTS, NewMediaObjectInput, DeleteOneMediaObjectArgs, DeleteOneMediaObjectReturn, MUTATION_DELETE_ONE_MEDIA_OBJECT, NewEmbeddedEntityTag } from '../graphql/gql/media'
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
 import { deleteMediaFromStorage } from '../userApi/media'
 
@@ -24,9 +24,9 @@ interface FetchMoreMediaForwardProps {
   first?: number
   after?: string
 }
-export interface RemoveEntityTagProps {
-  mediaId: string
-  tagId: string
+export interface RemoveEntityTagProps extends RemoveEntityTagMutationProps{
+  entityId: string
+  entityType: TagTargetType
 }
 
 type FetchMoreMediaForwardCmd = (args: FetchMoreMediaForwardProps) => Promise<MediaConnection | null>
@@ -106,28 +106,30 @@ export default function useMediaCmd (): UseMediaCmdReturn {
       client: graphqlClient,
       errorPolicy: 'none',
       onError: error => toast.error(error.message),
-      onCompleted: (data) => {
+      onCompleted: async (data) => {
         /**
          * Now update the data store to trigger UserGallery re-rendering.
          */
-        data.addMediaObjects.forEach(media => {
-          addNewMediaToUserGallery({
-            edges: [
-              {
-                node: media,
-                /**
+        await Promise.all(
+          data.addMediaObjects.map(async media => {
+            await getMediaById(media.id)
+            addNewMediaToUserGallery({
+              edges: [
+                {
+                  node: media,
+                  /**
                  * We don't care about setting cursor because newer images are added to the front
                  * of the list.
                  */
-                cursor: ''
+                  cursor: ''
+                }
+              ],
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: '' // not supported
               }
-            ],
-            pageInfo: {
-              hasNextPage: true,
-              endCursor: '' // not supported
-            }
-          })
-        })
+            })
+          }))
       }
     }
   )
@@ -167,6 +169,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
       }
       await deleteMediaFromStorage(mediaUrl)
       deleteMediaFromUserGallery(mediaId)
+      toast.success('Photo deleted.')
       return true
     } catch {
       toast.error('Cannot delete media. Please try again.')
@@ -190,7 +193,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
    */
   const addEntityTagCmd: AddEntityTagCmd = async (args: AddEntityTagProps) => {
     try {
-      const { mediaId } = args
+      const { mediaId, entityId, entityType } = args
       const res = await addEntityTagGQL({
         variables: args,
         context: apolloClientContext
@@ -201,6 +204,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
 
       if (mediaRes != null) {
         updateOneMediaUserGallery(mediaRes)
+        await invalidatePageWithEntity({ entityId, entityType })
       }
       return [res.data?.addEntityTag ?? null, mediaRes]
     } catch {
@@ -208,7 +212,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
     }
   }
 
-  const [removeEntityTagGQL] = useMutation<RemoveEntityTagMutationReturn, RemoveEntityTagProps>(
+  const [removeEntityTagGQL] = useMutation<RemoveEntityTagMutationReturn, RemoveEntityTagMutationProps>(
     MUTATION_REMOVE_ENTITY_TAG, {
       client: graphqlClient,
       onCompleted: () => toast.success('Tag removed.'),
@@ -221,7 +225,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
   /**
    * Remove an entity tag from a media
    */
-  const removeEntityTagCmd: RemoveEntityTagCmd = async ({ mediaId, tagId }) => {
+  const removeEntityTagCmd: RemoveEntityTagCmd = async ({ mediaId, tagId, entityId, entityType }) => {
     try {
       const res = await removeEntityTagGQL({
         variables: {
@@ -239,6 +243,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
 
       if (mediaRes != null) {
         updateOneMediaUserGallery(mediaRes)
+        await invalidatePageWithEntity({ entityId, entityType })
       }
 
       return [res.data?.removeEntityTag ?? false, mediaRes]
@@ -254,5 +259,27 @@ export default function useMediaCmd (): UseMediaCmdReturn {
     deleteOneMediaObjectCmd,
     addEntityTagCmd,
     removeEntityTagCmd
+  }
+}
+
+/**
+ * Request Nextjs to re-generate props for target page when adding or removing a tag.
+ */
+const invalidatePageWithEntity = async ({ entityId, entityType }: NewEmbeddedEntityTag): Promise<void> => {
+  let url: string
+  switch (entityType) {
+    case TagTargetType.climb:
+      url = `/api/revalidate?c=${entityId}`
+      break
+    case TagTargetType.area:
+      url = `/api/revalidate?s=${entityId}`
+      break
+  }
+  if (url != null) {
+    try {
+      await fetch(url)
+    } catch (e) {
+      console.log(e)
+    }
   }
 }

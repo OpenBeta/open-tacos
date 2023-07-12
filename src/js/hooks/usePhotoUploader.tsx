@@ -1,11 +1,13 @@
-import { useRouter } from 'next/router'
+import { useRouter, NextRouter } from 'next/router'
 import { useDropzone, DropzoneInputProps, FileRejection } from 'react-dropzone'
 import { toast } from 'react-toastify'
 import { useSession } from 'next-auth/react'
+import { validate as isValidUuid } from 'uuid'
 
 import { uploadPhoto, deleteMediaFromStorage } from '../userApi/media'
 import useMediaCmd from './useMediaCmd'
 import { MediaFormat } from '../types'
+import { NewEmbeddedEntityTag } from '../graphql/gql/media'
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
 
 interface PhotoUploaderReturnType {
@@ -54,8 +56,8 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
     const imageData = event.target.result as ArrayBuffer
 
     const { width, height } = await getImageDimensions(imageData)
-
     const { name, type, size } = file
+    const [entityTag, postUpdateFn] = await getEntityFromPageContext(router)
 
     try {
       const url = await uploadPhoto(name, imageData)
@@ -66,13 +68,18 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
         format: mineTypeToEnum(type),
         width,
         height,
-        size
+        size,
+        ...entityTag != null && { entityTag }
       }])
 
       // if upload is successful but we can't update the database,
       // then delete the upload
       if (res == null) {
         await deleteMediaFromStorage(url)
+      } else {
+        if (postUpdateFn != null) {
+          void postUpdateFn()
+        }
       }
     } catch (e) {
       toast.error('Uploading error.  Please try again.')
@@ -151,4 +158,52 @@ const getImageDimensions = async (imageData: ArrayBuffer): Promise<Dimensions> =
     })
     image.onerror = reject
   })
+}
+
+/**
+ *  If photo is uploaded while on a climb or crag page,
+ *  obtain entity data to be added to the photo.
+ */
+const getEntityFromPageContext = async (router: NextRouter): Promise<[NewEmbeddedEntityTag | null, null | (() => void)]> => {
+  const [id, destType, pageToInvalidate, pageToReload] = pagePathToEntityType(router)
+
+  const postUpdate = async (): Promise<void> => {
+    // Tell Next to regenerate the page being tagged
+    try {
+      if (pageToInvalidate != null) await fetch(pageToInvalidate)
+      if (pageToReload != null) await router.replace(pageToReload)
+    } catch (e) { console.log(e) }
+  }
+  // let's see if we're viewing the climb or area page
+  if (id != null && isValidUuid(id) && (destType === 0 || destType === 1)) {
+    return [{
+      entityId: id,
+      entityType: destType
+    }, postUpdate]
+  }
+  return [null, null]
+}
+
+/**
+ * Convert current page path to a destination type for tagging.  Expect `path` to be in /areas|crag|climb/[id].
+ * @param path `path` property as return from `Next.router()`
+ */
+const pagePathToEntityType = (router: NextRouter): [string, number, string, string] | [null, null, null, null] => {
+  const nulls: [null, null, null, null] = [null, null, null, null]
+  const { asPath, query } = router
+  const tokens = asPath.split('/')
+
+  if (query == null || query.id == null || tokens.length < 3) return nulls
+
+  const id = query.id as string
+  switch (tokens[1]) {
+    case 'climbs':
+      return [id, 0, `/api/revalidate?c=${id}`, `/climbs/${id}`]
+    case 'areas':
+      return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
+    case 'crag':
+      return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
+    default:
+      return nulls
+  }
 }

@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction, MouseEventHandler, useEffect } from 'react'
+import { useState, Dispatch, SetStateAction, MouseEventHandler } from 'react'
 import classNames from 'classnames'
 import { TagIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { DropdownMenuItem as PrimitiveDropdownMenuItem } from '@radix-ui/react-dropdown-menu'
@@ -29,38 +29,20 @@ interface TagsProps {
  */
 export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthenticated = false, showDelete = false, showActions = true, className = '' }: TagsProps): JSX.Element | null {
   const { addEntityTagCmd, removeEntityTagCmd } = useMediaCmd()
-  /**
-   * Why maintaining media object in a local state?
-   * Normally, this component receives tag data via props. However, when the media owner
-   * adds/removes tags, after the backend is updated, we also update the media object
-   * in Apollo cache and keep the updated state here.  This way we only need to deal
-   * with a single media instead a large list.
-   */
-  const [localMediaWithTags, setMedia] = useState(mediaWithTags)
 
-  useEffect(() => {
-    setMedia(mediaWithTags)
-  }, [mediaWithTags])
-
-  if (localMediaWithTags == null) {
+  if (mediaWithTags == null) {
     return null
   }
 
   const onAddHandler: OnAddCallback = async (args) => {
-    const [, updatedMediaObject] = await addEntityTagCmd(args)
-    if (updatedMediaObject != null) {
-      setMedia(updatedMediaObject)
-    }
+    await addEntityTagCmd(args)
   }
 
   const onDeleteHandler: OnDeleteCallback = async (args) => {
-    const [, updatedMediaObject] = await removeEntityTagCmd(args)
-    if (updatedMediaObject != null) {
-      setMedia(updatedMediaObject)
-    }
+    await removeEntityTagCmd(args)
   }
 
-  const { entityTags, id } = localMediaWithTags
+  const { entityTags, id } = mediaWithTags
 
   return (
     <div className={
@@ -81,7 +63,7 @@ export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthen
         />)}
       {showActions && isAuthorized &&
         <AddTag
-          mediaWithTags={localMediaWithTags}
+          mediaWithTags={mediaWithTags}
           label={<AddTagBadge />}
           onAdd={onAddHandler}
         />}
