@@ -1,6 +1,4 @@
 import { createStore } from '@udecode/zustood'
-import { v5 as uuidv5 } from 'uuid'
-import produce from 'immer'
 
 import type { MediaType, MediaWithTags } from '../../js/types'
 
@@ -24,65 +22,6 @@ const STORE_OPTS = {}
 
 export const userMediaStore = createStore('userMedia')(INITIAL_STATE, STORE_OPTS)
   .extendActions((set, get, api) => ({
-    /**
-     *
-     * @param uid
-     * @param uuid
-     * @param imageUrl
-     * @param revalidateSSR
-     * @returns
-     */
-    addImage: async (uid, uuid: string, imageUrl: string, revalidateSSR: boolean) => {
-      const newMediaUuid = uuidv5(imageUrl, uuidv5.URL)
-      const currentList = get.imageList()
-      // Image already exists (same URL), don't add to current list
-      const existed = currentList.findIndex(({ mediaId }) => mediaId === newMediaUuid)
-      if (existed >= 0) { return currentList }
-
-      const newEntry = {
-        ownerId: uuid,
-        mediaId: newMediaUuid,
-        filename: imageUrl,
-        ctime: new Date(),
-        mtime: new Date(),
-        contentType: 'image/jpeg',
-        meta: {}
-      }
-
-      const shouldAppend = currentList.length < 3
-
-      let newList: MediaType[] = []
-
-      if (shouldAppend) {
-        newList = produce(currentList, draft => {
-          draft.push(newEntry)
-          console.log(newEntry)
-        })
-      } else {
-        newList = produce(currentList, draft => {
-          draft.unshift(newEntry)
-        })
-      }
-
-      set.imageList(newList)
-
-      if (revalidateSSR) {
-        await revalidateUserHomePage(uid)
-      }
-    },
-    removeImage: async (mediaId: string) => {
-      const currentList = await get.imageList()
-      let updatedList: MediaType[] = []
-
-      updatedList = produce(currentList, draft => {
-        const imageToRemove = draft.findIndex(image => image.mediaId === mediaId)
-        if (imageToRemove !== -1) draft.splice(imageToRemove, 1)
-      })
-
-      set.imageList(updatedList)
-      await revalidateUserHomePage(get.uid())
-    }
-  })).extendActions((set, get, api) => ({
     /**
      *
      * @param errorMessage
