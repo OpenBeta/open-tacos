@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { DefaultContext, useLazyQuery, useMutation } from '@apollo/client'
 import { toast } from 'react-toastify'
@@ -31,8 +30,8 @@ export interface RemoveEntityTagProps extends RemoveEntityTagMutationProps{
 }
 
 type FetchMoreMediaForwardCmd = (args: FetchMoreMediaForwardProps) => Promise<MediaConnection | null>
-type AddEntityTagCmd = (props: AddEntityTagProps) => Promise<[EntityTag | null, MediaWithTags | null]>
-type RemoveEntityTagCmd = (args: RemoveEntityTagProps) => Promise<[boolean, MediaWithTags | null]>
+type AddEntityTagCmd = (props: AddEntityTagProps, jwtToken?: string) => Promise<[EntityTag | null, MediaWithTags | null]>
+type RemoveEntityTagCmd = (args: RemoveEntityTagProps, jwtToken?: string) => Promise<[boolean, MediaWithTags | null]>
 type GetMediaByIdCmd = (id: string) => Promise<MediaWithTags | null>
 type AddMediaObjectsCmd = (mediaList: NewMediaObjectInput[]) => Promise<MediaWithTags[] | null>
 type DeleteOneMediaObjectCmd = (mediaId: string, mediaUrl: string) => Promise<boolean>
@@ -48,22 +47,6 @@ type DeleteOneMediaObjectCmd = (mediaId: string, mediaUrl: string) => Promise<bo
 export default function useMediaCmd (): UseMediaCmdReturn {
   const session = useSession()
   const router = useRouter()
-  const cacheAccessToken = useRef<string>()
-
-  cacheAccessToken.current = session.data?.accessToken
-
-  console.log('#### useMediaCmd', session, cacheAccessToken.current)
-
-  const apolloClientContext = (): DefaultContext => {
-    if (cacheAccessToken.current == null) {
-      throw new Error('Auth token should be defined')
-    }
-    return ({
-      headers: {
-        authorization: `Bearer ${cacheAccessToken.current}`
-      }
-    })
-  }
 
   const addNewMediaToUserGallery = useUserGalleryStore(set => set.addToFront)
   const updateOneMediaUserGallery = useUserGalleryStore(set => set.updateOne)
@@ -150,7 +133,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
       variables: {
         mediaList
       },
-      context: apolloClientContext()
+      context: apolloClientContext(session.data?.accessToken)
     })
     return res.data?.addMediaObjects ?? null
   }
@@ -173,7 +156,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
         variables: {
           mediaId
         },
-        context: apolloClientContext()
+        context: apolloClientContext(session.data?.accessToken)
       })
       if (res.errors != null) {
         throw new Error('Unexpected API error.')
@@ -202,12 +185,12 @@ export default function useMediaCmd (): UseMediaCmdReturn {
   /**
    * Add an entity tag (climb or area) to a media
    */
-  const addEntityTagCmd: AddEntityTagCmd = async (args: AddEntityTagProps) => {
+  const addEntityTagCmd: AddEntityTagCmd = async (args: AddEntityTagProps, jwtToken) => {
     try {
       const { mediaId, entityId, entityType } = args
       const res = await addEntityTagGQL({
         variables: args,
-        context: apolloClientContext
+        context: apolloClientContext(jwtToken)
       })
 
       // refetch the media object to update local cache
@@ -236,14 +219,14 @@ export default function useMediaCmd (): UseMediaCmdReturn {
   /**
    * Remove an entity tag from a media
    */
-  const removeEntityTagCmd: RemoveEntityTagCmd = async ({ mediaId, tagId, entityId, entityType }) => {
+  const removeEntityTagCmd: RemoveEntityTagCmd = async ({ mediaId, tagId, entityId, entityType }, jwtToken) => {
     try {
       const res = await removeEntityTagGQL({
         variables: {
           mediaId,
           tagId
         },
-        context: apolloClientContext
+        context: apolloClientContext(jwtToken)
       })
 
       if (res.errors != null) {
@@ -293,4 +276,15 @@ const invalidatePageWithEntity = async ({ entityId, entityType }: NewEmbeddedEnt
       console.log(e)
     }
   }
+}
+
+const apolloClientContext = (jwtToken?: string): DefaultContext => {
+  if (jwtToken == null) {
+    throw new Error('Auth token should be defined')
+  }
+  return ({
+    headers: {
+      authorization: `Bearer ${jwtToken}`
+    }
+  })
 }
