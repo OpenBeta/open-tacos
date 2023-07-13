@@ -51,6 +51,13 @@ function Footer (): JSX.Element {
             >
               OpenBeta vs others
             </a>
+            <a
+              className='no-underline hover:underline'
+              href='https://openbeta.io/blog'
+              rel='noopener noreferrer'
+            >
+              blog
+            </a>
           </div>
           <div className='flex flex-row items-center gap-x-4'>
             <a href='https://github.com/OpenBeta'>

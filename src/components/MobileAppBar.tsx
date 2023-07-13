@@ -87,6 +87,7 @@ const More = (): JSX.Element => {
               />
             : <Button size='lg' onClick={async () => await signIn()} label='Login' />}
           <Button size='lg' href='/about' label='About' />
+          <Button size='lg' href='https://openbeta.io/blog' label='Blog' />
           <Button
             size='lg'
             href='https://discord.gg/ptpnWWNkJx'
