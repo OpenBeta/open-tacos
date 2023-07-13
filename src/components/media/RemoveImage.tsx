@@ -1,8 +1,9 @@
+import { useSession } from 'next-auth/react'
+
 import { MediaWithTags } from '../../js/types'
 import AlertDialogue from '../ui/micro/AlertDialogue'
 import { DefaultLoader } from '../../js/sirv/util'
 import useMediaCmd from '../../js/hooks/useMediaCmd'
-import { useSession } from 'next-auth/react'
 
 interface RemoveImageProps {
   imageInfo: MediaWithTags
