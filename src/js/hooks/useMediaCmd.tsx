@@ -1,5 +1,4 @@
-import { useSession } from 'next-auth/react'
-import { useLazyQuery, useMutation } from '@apollo/client'
+import { DefaultContext, useLazyQuery, useMutation } from '@apollo/client'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
 
@@ -30,11 +29,11 @@ export interface RemoveEntityTagProps extends RemoveEntityTagMutationProps{
 }
 
 type FetchMoreMediaForwardCmd = (args: FetchMoreMediaForwardProps) => Promise<MediaConnection | null>
-type AddEntityTagCmd = (props: AddEntityTagProps) => Promise<[EntityTag | null, MediaWithTags | null]>
-type RemoveEntityTagCmd = (args: RemoveEntityTagProps) => Promise<[boolean, MediaWithTags | null]>
+type AddEntityTagCmd = (props: AddEntityTagProps, jwtToken?: string) => Promise<[EntityTag | null, MediaWithTags | null]>
+type RemoveEntityTagCmd = (args: RemoveEntityTagProps, jwtToken?: string) => Promise<[boolean, MediaWithTags | null]>
 type GetMediaByIdCmd = (id: string) => Promise<MediaWithTags | null>
-type AddMediaObjectsCmd = (mediaList: NewMediaObjectInput[]) => Promise<MediaWithTags[] | null>
-type DeleteOneMediaObjectCmd = (mediaId: string, mediaUrl: string) => Promise<boolean>
+type AddMediaObjectsCmd = (mediaList: NewMediaObjectInput[], jwtToken?: string) => Promise<MediaWithTags[] | null>
+type DeleteOneMediaObjectCmd = (mediaId: string, mediaUrl: string, jwtToken?: string) => Promise<boolean>
 
 /**
  * A React hook for handling media tagging operations.
@@ -45,14 +44,7 @@ type DeleteOneMediaObjectCmd = (mediaId: string, mediaUrl: string) => Promise<bo
  * Apollo cache: https://www.apollographql.com/docs/react/caching/overview
  */
 export default function useMediaCmd (): UseMediaCmdReturn {
-  const session = useSession()
   const router = useRouter()
-
-  const apolloClientContext = {
-    headers: {
-      authorization: `Bearer ${session.data?.accessToken ?? ''}`
-    }
-  }
 
   const addNewMediaToUserGallery = useUserGalleryStore(set => set.addToFront)
   const updateOneMediaUserGallery = useUserGalleryStore(set => set.updateOne)
@@ -134,12 +126,12 @@ export default function useMediaCmd (): UseMediaCmdReturn {
     }
   )
 
-  const addMediaObjectsCmd: AddMediaObjectsCmd = async (mediaList) => {
+  const addMediaObjectsCmd: AddMediaObjectsCmd = async (mediaList, jwtToken) => {
     const res = await addMediaObjects({
       variables: {
         mediaList
       },
-      context: apolloClientContext
+      context: apolloClientContext(jwtToken)
     })
     return res.data?.addMediaObjects ?? null
   }
@@ -152,17 +144,17 @@ export default function useMediaCmd (): UseMediaCmdReturn {
     })
 
   /**
-     * Delete media object from the backend and media storage
-     * @param mediaId
-     * @param mediaUrl
-     */
-  const deleteOneMediaObjectCmd: DeleteOneMediaObjectCmd = async (mediaId, mediaUrl) => {
+    * Delete media object from the backend and media storage
+    * @param mediaId
+    * @param mediaUrl
+    */
+  const deleteOneMediaObjectCmd: DeleteOneMediaObjectCmd = async (mediaId, mediaUrl, jwtToken) => {
     try {
       const res = await deleteOneMediaObject({
         variables: {
           mediaId
         },
-        context: apolloClientContext
+        context: apolloClientContext(jwtToken)
       })
       if (res.errors != null) {
         throw new Error('Unexpected API error.')
@@ -191,12 +183,12 @@ export default function useMediaCmd (): UseMediaCmdReturn {
   /**
    * Add an entity tag (climb or area) to a media
    */
-  const addEntityTagCmd: AddEntityTagCmd = async (args: AddEntityTagProps) => {
+  const addEntityTagCmd: AddEntityTagCmd = async (args: AddEntityTagProps, jwtToken) => {
     try {
       const { mediaId, entityId, entityType } = args
       const res = await addEntityTagGQL({
         variables: args,
-        context: apolloClientContext
+        context: apolloClientContext(jwtToken)
       })
 
       // refetch the media object to update local cache
@@ -225,14 +217,14 @@ export default function useMediaCmd (): UseMediaCmdReturn {
   /**
    * Remove an entity tag from a media
    */
-  const removeEntityTagCmd: RemoveEntityTagCmd = async ({ mediaId, tagId, entityId, entityType }) => {
+  const removeEntityTagCmd: RemoveEntityTagCmd = async ({ mediaId, tagId, entityId, entityType }, jwtToken) => {
     try {
       const res = await removeEntityTagGQL({
         variables: {
           mediaId,
           tagId
         },
-        context: apolloClientContext
+        context: apolloClientContext(jwtToken)
       })
 
       if (res.errors != null) {
@@ -282,4 +274,15 @@ const invalidatePageWithEntity = async ({ entityId, entityType }: NewEmbeddedEnt
       console.log(e)
     }
   }
+}
+
+const apolloClientContext = (jwtToken?: string): DefaultContext => {
+  if (jwtToken == null) {
+    throw new Error('Auth token should be defined')
+  }
+  return ({
+    headers: {
+      authorization: `Bearer ${jwtToken}`
+    }
+  })
 }

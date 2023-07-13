@@ -2,7 +2,7 @@ import { useState, MouseEventHandler } from 'react'
 import classNames from 'classnames'
 import { TagIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { DropdownMenuItem as PrimitiveDropdownMenuItem } from '@radix-ui/react-dropdown-menu'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 import AddTag from './AddTag'
 import { DropdownMenu, DropdownContent, DropdownTrigger, DropdownItem, DropdownSeparator } from '../ui/DropdownMenu'
@@ -29,17 +29,18 @@ interface TagsProps {
  */
 export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthenticated = false, showDelete = false, showActions = true, className = '' }: TagsProps): JSX.Element | null {
   const { addEntityTagCmd, removeEntityTagCmd } = useMediaCmd()
+  const session = useSession()
 
   if (mediaWithTags == null) {
     return null
   }
 
   const onAddHandler: OnAddCallback = async (args) => {
-    await addEntityTagCmd(args)
+    await addEntityTagCmd(args, session.data?.accessToken)
   }
 
   const onDeleteHandler: OnDeleteCallback = async (args) => {
-    await removeEntityTagCmd(args)
+    await removeEntityTagCmd(args, session.data?.accessToken)
   }
 
   const { entityTags, id } = mediaWithTags
@@ -83,15 +84,16 @@ export interface TagListProps {
  * Mobile tag list wrapped in a popup menu
  */
 export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAuthorized = false }) => {
+  const session = useSession()
   const { addEntityTagCmd, removeEntityTagCmd } = useMediaCmd()
   const [openSearch, setOpenSearch] = useState(false)
 
   const onAddHandler: OnAddCallback = async (args) => {
-    await addEntityTagCmd(args)
+    await addEntityTagCmd(args, session.data?.accessToken)
   }
 
   const onDeleteHandler: OnDeleteCallback = async (args) => {
-    await removeEntityTagCmd(args)
+    await removeEntityTagCmd(args, session.data?.accessToken)
   }
   const { id, entityTags } = mediaWithTags
   return (
