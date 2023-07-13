@@ -10,7 +10,6 @@ import 'react-toastify/dist/ReactToastify.min.css'
 
 import '../styles/global.css'
 import '../../public/fonts/fonts.css'
-import useResponsive from '../js/hooks/useResponsive'
 import useUsernameCheck from '../js/hooks/useUsernameCheck'
 import { useUserGalleryStore } from '../js/stores/useUserGalleryStore'
 import { BlockingAlert } from '../components/ui/micro/AlertDialogue'
@@ -26,9 +25,7 @@ interface AppPropsWithAuth extends AppProps<{ session: any }> {
 }
 
 export default function MyApp ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithAuth): JSX.Element {
-  const { isMobile } = useResponsive()
   const uploading = useUserGalleryStore(store => store.uploading)
-
   return (
     <>
       <SessionProvider session={session}>
@@ -48,7 +45,7 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
         <NewUserCheck />
       </SessionProvider>
       <ToastContainer
-        position={isMobile ? 'top-right' : 'bottom-right'}
+        position='bottom-right'
         autoClose={6000}
         hideProgressBar
         newestOnTop

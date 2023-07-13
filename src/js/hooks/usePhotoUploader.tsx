@@ -76,7 +76,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
         height,
         size,
         ...entityTag != null && { entityTag }
-      }])
+      }], sessionData?.accessToken)
 
       // if upload is successful but we can't update the database,
       // then delete the upload
