@@ -40,7 +40,7 @@ export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthen
   }
 
   const onDeleteHandler: OnDeleteCallback = async (args) => {
-    await removeEntityTagCmd(args, , session.data?.accessToken)
+    await removeEntityTagCmd(args, session.data?.accessToken)
   }
 
   const { entityTags, id } = mediaWithTags

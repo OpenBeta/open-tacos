@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { MediaWithTags } from '../../../js/types'
+import { MediaFormat, MediaWithTags } from '../../../js/types'
 import { TagListProps } from '../TagList'
 
 const TAG_DATA: MediaWithTags = {
@@ -11,7 +11,7 @@ const TAG_DATA: MediaWithTags = {
   mediaUrl: 'https://example.com/1.jpg',
   width: 1200,
   height: 960,
-  format: 'jpeg',
+  format: MediaFormat.jpg,
   size: 30000,
   uploadTime: new Date(),
   entityTags: [{
@@ -50,12 +50,11 @@ describe('MobilePopupTagMenu', () => {
 
   test('Tag with permission to delete', async () => {
     const user = userEvent.setup()
-    const callback = jest.fn()
+    // const callback = jest.fn()
     render(
       <PopupTagList
         mediaWithTags={TAG_DATA}
         isAuthorized // Make sure we check that AddTag component is also rendered.
-        onChange={callback}
       />
     )
 
