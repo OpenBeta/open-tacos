@@ -2,19 +2,21 @@ import { MediaWithTags } from '../../js/types'
 import AlertDialogue from '../ui/micro/AlertDialogue'
 import { DefaultLoader } from '../../js/sirv/util'
 import useMediaCmd from '../../js/hooks/useMediaCmd'
+import { useSession } from 'next-auth/react'
 
 interface RemoveImageProps {
   imageInfo: MediaWithTags
 }
 
 export default function RemoveImage ({ imageInfo }: RemoveImageProps): JSX.Element | null {
+  const session = useSession()
   const { deleteOneMediaObjectCmd } = useMediaCmd()
 
   const { entityTags } = imageInfo
   if (entityTags.length > 0) return null
 
   const remove = async (): Promise<void> => {
-    await deleteOneMediaObjectCmd(imageInfo.id, imageInfo.mediaUrl)
+    await deleteOneMediaObjectCmd(imageInfo.id, imageInfo.mediaUrl, session.data?.accessToken)
   }
 
   return (

@@ -26,9 +26,7 @@ interface AppPropsWithAuth extends AppProps<{ session: any }> {
 }
 
 export default function MyApp ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithAuth): JSX.Element {
-  const { isMobile } = useResponsive()
   const uploading = useUserGalleryStore(store => store.uploading)
-
   return (
     <>
       <SessionProvider session={session}>
@@ -48,7 +46,7 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
         <NewUserCheck />
       </SessionProvider>
       <ToastContainer
-        position={isMobile ? 'top-right' : 'bottom-right'}
+        position='bottom-right'
         autoClose={6000}
         hideProgressBar
         newestOnTop

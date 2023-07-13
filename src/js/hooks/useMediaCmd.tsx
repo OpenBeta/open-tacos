@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react'
 import { DefaultContext, useLazyQuery, useMutation } from '@apollo/client'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
@@ -33,8 +32,8 @@ type FetchMoreMediaForwardCmd = (args: FetchMoreMediaForwardProps) => Promise<Me
 type AddEntityTagCmd = (props: AddEntityTagProps, jwtToken?: string) => Promise<[EntityTag | null, MediaWithTags | null]>
 type RemoveEntityTagCmd = (args: RemoveEntityTagProps, jwtToken?: string) => Promise<[boolean, MediaWithTags | null]>
 type GetMediaByIdCmd = (id: string) => Promise<MediaWithTags | null>
-type AddMediaObjectsCmd = (mediaList: NewMediaObjectInput[]) => Promise<MediaWithTags[] | null>
-type DeleteOneMediaObjectCmd = (mediaId: string, mediaUrl: string) => Promise<boolean>
+type AddMediaObjectsCmd = (mediaList: NewMediaObjectInput[], jwtToken?: string) => Promise<MediaWithTags[] | null>
+type DeleteOneMediaObjectCmd = (mediaId: string, mediaUrl: string, jwtToken?: string) => Promise<boolean>
 
 /**
  * A React hook for handling media tagging operations.
@@ -45,7 +44,6 @@ type DeleteOneMediaObjectCmd = (mediaId: string, mediaUrl: string) => Promise<bo
  * Apollo cache: https://www.apollographql.com/docs/react/caching/overview
  */
 export default function useMediaCmd (): UseMediaCmdReturn {
-  const session = useSession()
   const router = useRouter()
 
   const addNewMediaToUserGallery = useUserGalleryStore(set => set.addToFront)
@@ -128,12 +126,12 @@ export default function useMediaCmd (): UseMediaCmdReturn {
     }
   )
 
-  const addMediaObjectsCmd: AddMediaObjectsCmd = async (mediaList) => {
+  const addMediaObjectsCmd: AddMediaObjectsCmd = async (mediaList, jwtToken) => {
     const res = await addMediaObjects({
       variables: {
         mediaList
       },
-      context: apolloClientContext(session.data?.accessToken)
+      context: apolloClientContext(jwtToken)
     })
     return res.data?.addMediaObjects ?? null
   }
@@ -146,17 +144,17 @@ export default function useMediaCmd (): UseMediaCmdReturn {
     })
 
   /**
-     * Delete media object from the backend and media storage
-     * @param mediaId
-     * @param mediaUrl
-     */
-  const deleteOneMediaObjectCmd: DeleteOneMediaObjectCmd = async (mediaId, mediaUrl) => {
+    * Delete media object from the backend and media storage
+    * @param mediaId
+    * @param mediaUrl
+    */
+  const deleteOneMediaObjectCmd: DeleteOneMediaObjectCmd = async (mediaId, mediaUrl, jwtToken) => {
     try {
       const res = await deleteOneMediaObject({
         variables: {
           mediaId
         },
-        context: apolloClientContext(session.data?.accessToken)
+        context: apolloClientContext(jwtToken)
       })
       if (res.errors != null) {
         throw new Error('Unexpected API error.')
