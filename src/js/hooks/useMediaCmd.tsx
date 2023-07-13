@@ -1,5 +1,6 @@
+import { useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import { useLazyQuery, useMutation } from '@apollo/client'
+import { DefaultContext, useLazyQuery, useMutation } from '@apollo/client'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
 
@@ -47,11 +48,21 @@ type DeleteOneMediaObjectCmd = (mediaId: string, mediaUrl: string) => Promise<bo
 export default function useMediaCmd (): UseMediaCmdReturn {
   const session = useSession()
   const router = useRouter()
+  const cacheAccessToken = useRef<string>()
 
-  const apolloClientContext = {
-    headers: {
-      authorization: `Bearer ${session.data?.accessToken ?? ''}`
+  cacheAccessToken.current = session.data?.accessToken
+
+  console.log('#### useMediaCmd', session, cacheAccessToken.current)
+
+  const apolloClientContext = (): DefaultContext => {
+    if (cacheAccessToken.current == null) {
+      throw new Error('Auth token should be defined')
     }
+    return ({
+      headers: {
+        authorization: `Bearer ${cacheAccessToken.current}`
+      }
+    })
   }
 
   const addNewMediaToUserGallery = useUserGalleryStore(set => set.addToFront)
@@ -139,7 +150,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
       variables: {
         mediaList
       },
-      context: apolloClientContext
+      context: apolloClientContext()
     })
     return res.data?.addMediaObjects ?? null
   }
@@ -162,7 +173,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
         variables: {
           mediaId
         },
-        context: apolloClientContext
+        context: apolloClientContext()
       })
       if (res.errors != null) {
         throw new Error('Unexpected API error.')
