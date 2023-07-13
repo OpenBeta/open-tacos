@@ -10,7 +10,6 @@ import 'react-toastify/dist/ReactToastify.min.css'
 
 import '../styles/global.css'
 import '../../public/fonts/fonts.css'
-import useResponsive from '../js/hooks/useResponsive'
 import useUsernameCheck from '../js/hooks/useUsernameCheck'
 import { useUserGalleryStore } from '../js/stores/useUserGalleryStore'
 import { BlockingAlert } from '../components/ui/micro/AlertDialogue'
