@@ -8,6 +8,7 @@ import ImportFromMtnProj from './ImportFromMtnProj'
 import APIKeyCopy from './APIKeyCopy'
 import usePermissions from '../../js/hooks/auth/usePermissions'
 import forOwnerOnly from '../../js/auth/forOwnerOnly'
+import { Button } from '../ui/Button'
 
 interface PublicProfileProps {
   userProfile: UserPublicProfile
@@ -37,13 +38,11 @@ export default function PublicProfile ({ userProfile: initialUserProfile }: Publ
       <div className='md:col-span-2 text-medium text-primary '>
         {username == null && <TextPlaceholder uniqueKey={123} />}
 
-        <div className='flex flex-row items-center gap-x-2'>
-          <div className='text-2xl font-bold mr-4'>
+        <div className='flex flex-row items-center gap-x-2 max-w-xs'>
+          <div className='md:text-2xl font-bold mr-4 truncate'>
             {username}
           </div>
           {/* <EditProfileButton ownerProfile={initialUserProfile} /> */}
-          {userProfile != null && <ChangeUsernameLink userUuid={userProfile?.userUuid} />}
-
         </div>
         <div className='mt-6 text-lg font-semibold'>{displayName}</div>
         <div className=''>{bio}</div>
@@ -66,6 +65,7 @@ export default function PublicProfile ({ userProfile: initialUserProfile }: Publ
               </a>
             </Link>}
           {userProfile != null && isAuthorized && <ImportFromMtnProj isButton />}
+          {userProfile != null && <ChangeUsernameLink userUuid={userProfile?.userUuid} />}
           {userProfile != null && <APIKeyCopy userUuid={userProfile.userUuid} />}
         </div>
       </div>
@@ -150,4 +150,9 @@ export const ProfileATag = ({ uid, className = ProfileATagStyle }: ProfileATagPr
 const ProfileATagStyle = 'text-primary font-bold hover:underline'
 
 const ChangeUsernameLink = forOwnerOnly(() =>
-  <Link href='/account/changeUsername'><a className='text-sm link'>Edit</a></Link>)
+  <Link href='/account/changeUsername'>
+    <a className='text-sm inline-flex space-x-2 items-center whitespace-nowrap cursor-pointer 
+      disabled:cursor-auto disabled:opacity-50 border rounded-md border-gray-800 text-black drop-shadow-sm hover:ring-1 px-2 py-0.5'>
+      Edit
+    </a>
+  </Link>)
