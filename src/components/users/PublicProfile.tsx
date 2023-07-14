@@ -8,7 +8,6 @@ import ImportFromMtnProj from './ImportFromMtnProj'
 import APIKeyCopy from './APIKeyCopy'
 import usePermissions from '../../js/hooks/auth/usePermissions'
 import forOwnerOnly from '../../js/auth/forOwnerOnly'
-import { Button } from '../ui/Button'
 
 interface PublicProfileProps {
   userProfile: UserPublicProfile
@@ -151,8 +150,6 @@ const ProfileATagStyle = 'text-primary font-bold hover:underline'
 
 const ChangeUsernameLink = forOwnerOnly(() =>
   <Link href='/account/changeUsername'>
-    <a className='text-sm inline-flex space-x-2 items-center whitespace-nowrap cursor-pointer 
-      disabled:cursor-auto disabled:opacity-50 border rounded-md border-gray-800 text-black drop-shadow-sm hover:ring-1 px-2 py-0.5'>
-      Edit
+    <a className='text-sm inline-flex space-x-2 items-center whitespace-nowrap cursor-pointer disabled:cursor-auto disabled:opacity-50 border rounded-md border-gray-800 text-black drop-shadow-sm hover:ring-1 px-2 py-0.5'>Edit
     </a>
   </Link>)
