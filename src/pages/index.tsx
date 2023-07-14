@@ -199,7 +199,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   })
 
-  const recentTagsByUsers = await getMediaForFeed(10, 3)
+  const recentTagsByUsers = await getMediaForFeed(20, 3)
 
   const recentTags = recentTagsByUsers.flatMap(entry => entry.mediaWithTags)
 
