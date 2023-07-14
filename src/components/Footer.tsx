@@ -56,7 +56,7 @@ function Footer (): JSX.Element {
               href='https://openbeta.io/blog'
               rel='noopener noreferrer'
             >
-              blog
+              Blog
             </a>
           </div>
           <div className='flex flex-row items-center gap-x-4'>
