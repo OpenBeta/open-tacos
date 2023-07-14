@@ -2,18 +2,19 @@ import React, { useCallback, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { basename } from 'path'
 import clx from 'classnames'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 import UserMedia from './UserMedia'
 import MobileMediaCard from './MobileMediaCard'
-import { MediaWithTags } from '../../js/types'
 import UploadCTA from './UploadCTA'
-import { actions } from '../../js/stores'
 import SlideViewer from './slideshow/SlideViewer'
 import { TinyProfile } from '../users/PublicProfile'
-import { WithPermission, UserPublicPage } from '../../js/types/User'
+import { UserPublicPage } from '../../js/types/User'
 import { useResponsive } from '../../js/hooks'
 import TagList from './TagList'
-import InfiniteScroll from 'react-infinite-scroll-component'
+import usePermissions from '../../js/hooks/auth/usePermissions'
+import useMediaCmd from '../../js/hooks/useMediaCmd'
+import { useUserGalleryStore } from '../../js/stores/useUserGalleryStore'
 
 export interface UserGalleryProps {
   uid: string
@@ -21,26 +22,39 @@ export interface UserGalleryProps {
   postId: string | null
 }
 
-const auth: WithPermission = {
-  isAuthenticated: false,
-  isAuthorized: false
-}
 /**
- * Image gallery on user profile.
+ * Image gallery with infinite scroll on user profile.
+ *
+ * A. Data fetching strategy:
+ * 1.  Component receives most recent 6 images from server-side function getStaticProps()
+ *     (not cached in Apollo cache, but cached by Next.js page props)
+ * 2.  When the user scrolls down, fetch the next 6 (cache these media objects)
+ * 3.  Repeat (2) if the user keeps scrolling down
+ * 4.  If the user scrolls up and then down again, repeat (2) but now we have a cache hit.
+ *
+ * B. When the user navigates away then revisits page:
+ * 1. Component will start with the most recent 6 (see A.1 above)
+ * 2. When the user scrolls down, fetch the next 6 (cache hit)
+ *
  * Simplifying component Todos:
- *  - remove bulk taging mode
  *  - simplify back button logic with Next Layout in v13
+ *
+ * See also:
+ * - GQL pagination: https://graphql.org/learn/pagination/
+ * - Apollo queries & caching: https://www.apollographql.com/docs/react/data/queries
  */
 export default function UserGallery ({ uid, postId: initialPostId, userPublicPage }: UserGalleryProps): JSX.Element | null {
   const router = useRouter()
-  const userProfile = userPublicPage?.profile
-  const imageList = userPublicPage?.mediaList
+  const userProfile = userPublicPage.profile
+
+  const { fetchMoreMediaForward } = useMediaCmd()
 
   const [selectedMediaId, setSlideNumber] = useState<number>(-1)
 
   const { isMobile } = useResponsive()
 
-  const { isAuthorized } = auth
+  const authz = usePermissions({ currentUserUuid: userProfile.userUuid })
+  const { isAuthorized } = authz
 
   const baseUrl = `/u/${uid}`
 
@@ -56,6 +70,27 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
 
     return true
   })
+
+  const mediaConnection = useUserGalleryStore((state) => state.mediaConnection)
+  const resetData = useUserGalleryStore((state) => state.reset)
+  const appendMore = useUserGalleryStore((state) => state.append)
+
+  /**
+   * Initialize image data store
+   */
+  useEffect(() => {
+    if (isAuthorized) {
+      void fetchMoreMediaForward({
+        userUuid: userPublicPage.profile.userUuid
+      }).then(nextMediaConnection => {
+        if (nextMediaConnection != null) resetData(nextMediaConnection)
+      })
+    } else {
+      resetData(userPublicPage.media.mediaConnection)
+    }
+  }, [userPublicPage.media.mediaConnection])
+
+  const imageList = mediaConnection.edges.map(edge => edge.node)
 
   useEffect(() => {
     if (initialPostId != null) {
@@ -76,10 +111,6 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
       }
     }
   }, [initialPostId, imageList, router])
-
-  const onUploadHandler = async (imageUrl: string): Promise<void> => {
-    await actions.media.addImage(uid, userProfile.userUuid, imageUrl, true)
-  }
 
   const imageOnClickHandler = useCallback(async (props: any): Promise<void> => {
     if (isMobile) return
@@ -104,46 +135,42 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
     setSlideNumber(newIndex)
   }
 
-  const [hasMore, setHasMore] = useState(true)
-  const [imageListToShow, setImageListToShow] = useState<MediaWithTags[]>([])
-
   // to load more images when user scrolls to the 'scrollThreshold' value of the page
-  const fetchMoreData = (): void => {
-    // all images are loaded
-    if (imageListToShow?.length >= imageList?.length) {
-      setHasMore(false)
+  const fetchMoreData = async (): Promise<void> => {
+    let lastCursor: string | undefined
+    if (mediaConnection.edges.length > 0) {
+      lastCursor = mediaConnection.edges[mediaConnection.edges.length - 1].cursor
+    }
+    const nextMediaConnection = await fetchMoreMediaForward({
+      userUuid: userPublicPage?.profile.userUuid,
+      after: lastCursor
+    })
+
+    if (nextMediaConnection == null) {
       return
     }
 
-    // delay fetching images by 1 second to simulate network request
-    setTimeout(() => {
-      // concatenate furhter images to imageListToShow
-      setImageListToShow(imageListToShow.concat(imageList?.slice(imageListToShow?.length, imageListToShow?.length + 9)))
-    }, 500)
+    appendMore(nextMediaConnection)
   }
-
-  useEffect(() => {
-    // set initial images to be shown
-    setImageListToShow(imageList?.slice(0, 10))
-  }, [imageList])
 
   // When logged-in user has fewer than 3 photos,
   // create empty slots for the call-to-action upload component.
-  const placeholders = imageList?.length < 3 && isAuthorized
-    ? [...Array(3 - imageList?.length).keys()]
+  const placeholders = mediaConnection.edges.length < 3 && isAuthorized
+    ? [...Array(3 - mediaConnection.edges.length).keys()]
     : []
 
   return (
     <>
       <InfiniteScroll
-        dataLength={imageListToShow?.length}
+        dataLength={mediaConnection.edges.length}
         next={fetchMoreData}
-        hasMore={hasMore}
+        hasMore={mediaConnection.pageInfo.hasNextPage}
         loader={null}
       >
         <div className='flex flex-col gap-x-6 gap-y-10 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4'>
-          {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} onUploadFinish={onUploadHandler} />}
-          {imageListToShow?.map((mediaWithTags, index) => {
+          {imageList?.length >= 3 && isAuthorized && <UploadCTA key={-1} />}
+          {mediaConnection.edges.map((edge, index: number) => {
+            const mediaWithTags = edge.node
             const { mediaUrl, entityTags } = mediaWithTags
             const key = `${mediaUrl}${index}`
             if (isMobile) {
@@ -152,7 +179,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
                   key={key}
                   mediaWithTags={mediaWithTags}
                   showTagActions
-                  {...auth}
+                  {...authz}
                 />
               )
             }
@@ -178,7 +205,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
                   <TagList
                     key={key}
                     mediaWithTags={mediaWithTags}
-                    {...auth}
+                    {...authz}
                     showDelete
                   />
                 </div>
@@ -186,7 +213,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
             )
           })}
           {placeholders.map(index =>
-            <UploadCTA key={index} onUploadFinish={onUploadHandler} />)}
+            <UploadCTA key={index} />)}
         </div>
       </InfiniteScroll>
 
@@ -199,7 +226,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
             userProfile={userProfile} onClick={slideViewerCloseHandler}
                     />}
           onClose={slideViewerCloseHandler}
-          auth={auth}
+          auth={authz}
           baseUrl={baseUrl}
           onNavigate={navigateHandler}
         />}

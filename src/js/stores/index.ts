@@ -1,5 +1,5 @@
 import { mapValuesKey, createStore } from '@udecode/zustood'
-import produce from 'immer'
+import { produce } from 'immer'
 import { featureCollection, Feature, Point } from '@turf/helpers'
 
 import { RadiusRange, CountByGradeBandType, AreaType, ClimbDisciplineRecord, AggregateType } from '../types'

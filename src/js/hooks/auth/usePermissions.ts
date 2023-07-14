@@ -2,7 +2,6 @@ import { useSession } from 'next-auth/react'
 import { WithPermission } from '../../types/User'
 
 interface PermissionsProps {
-  // ownerProfileOnPage: UserPublicProfile
   currentUserUuid?: string
 }
 

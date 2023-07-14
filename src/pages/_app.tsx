@@ -10,8 +10,10 @@ import 'react-toastify/dist/ReactToastify.min.css'
 
 import '../styles/global.css'
 import '../../public/fonts/fonts.css'
-import useResponsive from '../js/hooks/useResponsive'
 import useUsernameCheck from '../js/hooks/useUsernameCheck'
+import { useUserGalleryStore } from '../js/stores/useUserGalleryStore'
+import { BlockingAlert } from '../components/ui/micro/AlertDialogue'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
@@ -23,8 +25,7 @@ interface AppPropsWithAuth extends AppProps<{ session: any }> {
 }
 
 export default function MyApp ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithAuth): JSX.Element {
-  const { isMobile } = useResponsive()
-
+  const uploading = useUserGalleryStore(store => store.uploading)
   return (
     <>
       <SessionProvider session={session}>
@@ -44,8 +45,8 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
         <NewUserCheck />
       </SessionProvider>
       <ToastContainer
-        position={isMobile ? 'top-right' : 'bottom-right'}
-        autoClose={8000}
+        position='bottom-right'
+        autoClose={6000}
         hideProgressBar
         newestOnTop
         closeOnClick
@@ -54,7 +55,13 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
         draggable={false}
         pauseOnHover
         theme='light'
+        closeButton={ToastCloseButton}
       />
+      {uploading &&
+        <BlockingAlert
+          title='Uploading'
+          description={<progress className='progress w-56' />}
+        />}
       {/* main call-to-action popup */}
       {/* <MainCta /> */}
     </>
@@ -63,7 +70,6 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
 
 function Auth ({ children }): ReactElement {
   const { status } = useSession()
-  console.log('##auth page', status)
   useEffect(() => {
     if (status === 'unauthenticated') {
       void signIn('auth0')
@@ -85,3 +91,12 @@ const NewUserCheck: React.FC = () => {
   useUsernameCheck()
   return null
 }
+
+const ToastCloseButton: React.FC<any> = ({ closeToast }) => (
+  <button className='self-center btn btn-square btn-outline' onClick={closeToast}>
+    <XMarkIcon
+      className='w-8 h-8'
+      onClick={closeToast}
+    />
+  </button>
+)

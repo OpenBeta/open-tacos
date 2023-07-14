@@ -4,16 +4,18 @@ import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
 
 import clx from 'classnames'
 import { EntityTag, TagTargetType } from '../../js/types'
+import { OnDeleteCallback } from './TagList'
 
 interface PhotoTagProps {
+  mediaId: string
   tag: EntityTag
-  onDelete: (tagId: string) => void
+  onDelete: OnDeleteCallback
   isAuthorized?: boolean
   showDelete?: boolean
   size?: 'md' | 'lg'
 }
 
-export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, isAuthorized = false }: PhotoTagProps): JSX.Element | null {
+export default function Tag ({ mediaId, tag, onDelete, size = 'md', showDelete = false, isAuthorized = false }: PhotoTagProps): JSX.Element | null {
   const [url, name] = resolver(tag)
   if (url == null || name == null) return null
   const isArea = tag.type === TagTargetType.area
@@ -34,10 +36,9 @@ export default function Tag ({ tag, onDelete, size = 'md', showDelete = false, i
         <div className='mt-0.5 whitespace-nowrap truncate text-sm'>{name}</div>
         {isAuthorized && showDelete &&
           <button
-            disabled
-            onClick={(e) => {
-              onDelete(tag.targetId)
+            onClick={async (e) => {
               e.preventDefault()
+              await onDelete({ mediaId: mediaId, tagId: tag.id, entityId: tag.targetId, entityType: tag.type })
             }}
             title='Delete tag'
           >
