@@ -46,6 +46,7 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
 
             <DropdownItem text='About' onSelect={async () => await router.push('/about')} />
             <DropdownItem text='Documentation' onSelect={async () => await router.push('https://docs.openbeta.io')} />
+            <DropdownItem text='Blog' onSelect={async () => await router.push('https://openbeta.io/blog')} />
 
             <DropdownSeparator />
 
