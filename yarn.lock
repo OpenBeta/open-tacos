@@ -1882,10 +1882,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@openbeta/sandbag@^0.0.33":
-  version "0.0.33"
-  resolved "https://registry.yarnpkg.com/@openbeta/sandbag/-/sandbag-0.0.33.tgz#bb771d94c5a3fc2c9d9e7fcad7e85e6809b89d0e"
-  integrity sha512-YACAVdBU2bn0A7XIilw22yieS/QrAHqmIpiDWHJr/lAw4M3hEDq956SEfw/H0pwukTLy8A6z9K/o4uD84t4OiA==
+"@openbeta/sandbag@^0.0.45":
+  version "0.0.45"
+  resolved "https://registry.yarnpkg.com/@openbeta/sandbag/-/sandbag-0.0.45.tgz#b6230ddf63f265b91d0a0359a2f87c5359dded74"
+  integrity sha512-8s2YFeUBU3lK2EzQIZSsf/apEIaxhtHJNfWWDmtjIE7/wlgqm84BSX72wur1FGrqcI9o3P1dkZmevHnu0ItGZQ==
 
 "@panva/hkdf@^1.0.2":
   version "1.1.1"
