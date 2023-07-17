@@ -1,8 +1,11 @@
-import { NextPage, GetStaticProps } from 'next'
 import React from 'react'
+
+import { NextPage, GetStaticProps } from 'next'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { getTicksByUser } from '../../js/graphql/api'
 import { TickType } from '../../js/types'
+import { OverviewChartProps } from '../../components/logbook/OverviewChart'
 
 interface TicksIndexPageProps {
   username: string
@@ -18,13 +21,18 @@ interface TicksIndexPageProps {
  */
 const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
   return (
-    <section className='max-w-lg mx-auto w-full px-4 py-8'>
-      <h1>{username}</h1>
-      <div>
-        {ticks?.map(Tick)}
-        {ticks?.length === 0 && <div>No ticks</div>}
-      </div>
-    </section>
+    <>
+      <section className='w-full'>
+        <DynamicOverviewChart tickList={ticks} />
+      </section>
+      <section className='max-w-lg mx-auto w-full px-4 py-8'>
+        <h3>{username}</h3>
+        <div>
+          {ticks?.map(Tick)}
+          {ticks?.length === 0 && <div>No ticks</div>}
+        </div>
+      </section>
+    </>
   )
 }
 
@@ -69,3 +77,9 @@ export const getStaticProps: GetStaticProps<TicksIndexPageProps, {slug: string[]
     return { notFound: true }
   }
 }
+
+const DynamicOverviewChart = dynamic<OverviewChartProps>(
+  async () =>
+    await import('../../components/logbook/OverviewChart').then(
+      module => module.default), { ssr: false }
+)

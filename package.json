@@ -64,7 +64,7 @@
     "react-swipeable": "^7.0.0",
     "react-toastify": "^9.1.1",
     "react-use": "^17.4.0",
-    "recharts": "^2.1.9",
+    "recharts": "^2.7.2",
     "swr": "^2.1.5",
     "tailwindcss-radix": "^2.5.0",
     "typesense": "^1.2.1",
