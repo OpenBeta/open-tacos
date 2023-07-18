@@ -20,7 +20,6 @@ import RouteTypeChips from '../../components/ui/RouteTypeChips'
 import PhotoMontage, { Skeleton as PhotoMontageSkeleton } from '../../components/media/PhotoMontage'
 import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import TickButton from '../../components/users/TickButton'
-import { ImportFromMtnProj } from '../../components/users/ImportFromMtnProj'
 import EditModeToggle from '../../components/editor/EditModeToggle'
 import { AREA_NAME_FORM_VALIDATION_RULES } from '../../components/edit/EditAreaForm'
 import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
@@ -287,10 +286,6 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
                     <TickButton climbId={climbId} name={name} grade={yds} />
                   </div>}
 
-              </div>
-
-              <div className='pl-1'>
-                <ImportFromMtnProj isButton={false} />
               </div>
             </div>
 
