@@ -34,7 +34,7 @@ const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
         <h2>{username}</h2>
         <div className='py-4 flex items-center gap-6'>
           <ImportFromMtnProj isButton username={username} />
-          <a className='btn btn-sm btn-outline' href={`/u/${username}`}>Classic Profile</a>
+          <a className='btn btn-xs md:btn-sm btn-outline' href={`/u/${username}`}>Classic Profile</a>
         </div>
 
         <h3 className='py-4'>Log book</h3>
