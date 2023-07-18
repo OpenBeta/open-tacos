@@ -3,11 +3,13 @@ import { useRouter } from 'next/router'
 import { Transition } from '@headlessui/react'
 import { FolderArrowDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useMutation } from '@apollo/client'
-import { useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
+import clx from 'classnames'
+
 import { graphqlClient } from '../../js/graphql/Client'
-import { Button, ButtonVariant } from '../ui/BaseButton'
 import { MUTATION_IMPORT_TICKS } from '../../js/graphql/gql/fragments'
+import { INPUT_DEFAULT_CSS } from '../ui/form/TextArea'
 
 interface Props {
   isButton: boolean
@@ -55,8 +57,12 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
 
   // this function is for when the component is rendered as a button and sends the user straight to the input form
   function straightToInput (): void {
-    setShowInput(true)
-    setShow(true)
+    if (session.status !== 'authenticated') {
+      void signIn('auth0')
+    } else {
+      setShowInput(true)
+      setShow(true)
+    }
   }
 
   async function getTicks (): Promise<void> {
@@ -113,7 +119,7 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
   // if the isButton prop is passed to this component as true, the component will be rendered as a button, otherwise it will be a modal
   return (
     <>
-      {isButton && <Button onClick={straightToInput} label='Import Ticks' variant={ButtonVariant.OUTLINED_DEFAULT} size='sm' />}
+      {isButton && <button onClick={straightToInput} className='btn btn-xs md:btn-sm btn-primary'>Import Ticks</button>}
       <div
         aria-live='assertive'
         className='fixed inset-0 z-10 flex items-end px-4 py-6 mt-24 pointer-events-none sm:p-6 sm:items-start'
@@ -137,7 +143,7 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
                   </div>
                   <div className='ml-3 w-0 flex-1 pt-0.5'>
                     {(errors != null) && errors.length > 0 && errors.map((err, i) => <p className='mt-2 text-ob-primary' key={i}>{err}</p>)}
-                    <p className='text-sm font-medium text-gray-900'>{showInput ? 'Input your mountain project profile link' : 'Import your ticks from Mtn Project'}</p>
+                    <p className='text-sm font-medium text-gray-900'>{showInput ? 'Input your Mountain Project profile link' : 'Import your ticks from Mountain Project'}</p>
                     {!showInput &&
                       <p className='mt-1 text-sm text-gray-500'>
                         Don't lose your progress, bring it over to Open Beta.
@@ -151,7 +157,7 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
                             id='website'
                             value={mpUID}
                             onChange={(e) => setMPUID(e.target.value)}
-                            className='focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
+                            className={clx(INPUT_DEFAULT_CSS, 'w-full')}
                             placeholder='https://www.mountainproject.com/user/123456789/username'
                           />
                         </div>
@@ -171,9 +177,7 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
                         <button
                           type='button'
                           onClick={getTicks}
-                          className='text-center p-2 border-2 rounded-xl border-ob-primary transition
-                          text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
-                          hover:text-white w-46 font-bold'
+                          className='btn btn-primary'
                         >
                           Get my ticks!
                         </button>}

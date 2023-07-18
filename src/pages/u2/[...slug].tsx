@@ -32,7 +32,11 @@ const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
       </section>
       <section className='max-w-lg mx-auto w-full px-4 py-8'>
         <h2>{username}</h2>
-        <ImportFromMtnProj isButton username={username} />
+        <div className='py-4 flex items-center gap-6'>
+          <ImportFromMtnProj isButton username={username} />
+          <a className='btn btn-xs md:btn-sm btn-outline' href={`/u/${username}`}>Classic Profile</a>
+        </div>
+
         <h3 className='py-4'>Log book</h3>
         <div>
           {ticks?.map(Tick)}
@@ -68,7 +72,6 @@ export async function getStaticPaths (): Promise<any> {
 
 export const getStaticProps: GetStaticProps<TicksIndexPageProps, {slug: string[]}> = async ({ params }) => {
   const username = params?.slug?.[0] ?? null
-  // const viewId = params?.slug?.[1] ?? 'ticks'
 
   if (username == null) {
     return { notFound: true }

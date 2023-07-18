@@ -38,7 +38,13 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
           <DropdownContent>
             <DropdownItem
               icon={<UserCircleIcon className='w-4 h-4' />}
-              text='Profile'
+              text={<><span className='font-medium'>Profile </span><sup className='badge badge-sm badge-info'>Beta</sup></>}
+              onSelect={async () => await router.push('/api/user/me?preview=1')}
+            />
+
+            <DropdownItem
+              icon={<UserCircleIcon className='w-4 h-4' />}
+              text='Classic Profile'
               onSelect={async () => await router.push('/api/user/me')}
             />
 
