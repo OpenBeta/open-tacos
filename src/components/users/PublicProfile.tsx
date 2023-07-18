@@ -63,7 +63,7 @@ export default function PublicProfile ({ userProfile: initialUserProfile }: Publ
                 <div className='btn btn-info btn-xs'> View ticks</div>
               </a>
             </Link>}
-          {userProfile != null && isAuthorized && <ImportFromMtnProj isButton />}
+          {username != null && isAuthorized && <ImportFromMtnProj isButton username={username} />}
           {userProfile != null && <ChangeUsernameLink userUuid={userProfile?.userUuid} />}
           {userProfile != null && <APIKeyCopy userUuid={userProfile.userUuid} />}
         </div>

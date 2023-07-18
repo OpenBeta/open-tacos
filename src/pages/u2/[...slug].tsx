@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { getTicksByUser } from '../../js/graphql/api'
 import { TickType } from '../../js/types'
 import { OverviewChartProps } from '../../components/logbook/OverviewChart'
+import ImportFromMtnProj from '../../components/users/ImportFromMtnProj'
+import Layout from '../../components/layout'
 
 interface TicksIndexPageProps {
   username: string
@@ -21,18 +23,23 @@ interface TicksIndexPageProps {
  */
 const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
   return (
-    <>
-      <section className='w-full'>
+    <Layout
+      contentContainerClass='content-default with-standard-y-margin'
+      showFilterBar={false}
+    >
+      <section className='w-full pt-6'>
         <DynamicOverviewChart tickList={ticks} />
       </section>
       <section className='max-w-lg mx-auto w-full px-4 py-8'>
-        <h3>{username}</h3>
+        <h2>{username}</h2>
+        <ImportFromMtnProj isButton username={username} />
+        <h3 className='py-4'>Log book</h3>
         <div>
           {ticks?.map(Tick)}
           {ticks?.length === 0 && <div>No ticks</div>}
         </div>
       </section>
-    </>
+    </Layout>
   )
 }
 

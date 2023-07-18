@@ -65,6 +65,7 @@
     "react-toastify": "^9.1.1",
     "react-use": "^17.4.0",
     "recharts": "^2.7.2",
+    "simple-statistics": "^7.8.3",
     "swr": "^2.1.5",
     "tailwindcss-radix": "^2.5.0",
     "typesense": "^1.2.1",
