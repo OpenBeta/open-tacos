@@ -28,7 +28,7 @@ export function DropdownContent ({ align = 'center', children }: DropdownMenuPro
 
 interface DropdownItemProps {
   icon?: JSX.Element
-  text: string
+  text: string | React.ReactNode
   className?: string
   onSelect?: (event: Event) => void
   disabled?: boolean
