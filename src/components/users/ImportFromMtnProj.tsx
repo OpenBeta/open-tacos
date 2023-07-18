@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { Transition } from '@headlessui/react'
 import { FolderArrowDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useMutation } from '@apollo/client'
@@ -10,6 +11,7 @@ import { MUTATION_IMPORT_TICKS } from '../../js/graphql/gql/fragments'
 
 interface Props {
   isButton: boolean
+  username: string
 }
 // regex pattern to validate mountain project input
 const pattern = /^https:\/\/www.mountainproject.com\/user\/\d{9}\/[a-zA-Z-]*/
@@ -22,7 +24,8 @@ const pattern = /^https:\/\/www.mountainproject.com\/user\/\d{9}\/[a-zA-Z-]*/
  * if the isButton prop is false, the component will be rendered as a modal
  * @returns JSX element
  */
-export function ImportFromMtnProj ({ isButton }: Props): JSX.Element {
+export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
+  const router = useRouter()
   const [mpUID, setMPUID] = useState('')
   const session = useSession()
   const [show, setShow] = useState<boolean>(false)
@@ -75,6 +78,7 @@ export function ImportFromMtnProj ({ isButton }: Props): JSX.Element {
 
         const ticksCount: number = ticks?.length ?? 0
         toast.info(`${ticksCount} ticks have been imported!`)
+        await router.replace(`/u2/${username}`)
       } else {
         setErrors(['Sorry, something went wrong. Please try again later'])
       }

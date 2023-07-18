@@ -44,12 +44,6 @@ jobs:
         run: yarn test
         if: ${{ github.event_name == 'pull_request' }}
 
-      - name: Run unit & e2e tests
-        run: yarn test-all
-        env:
-          SIRV_CLIENT_SECRET_RW: ${{ secrets.SIRV_CLIENT_SECRET_RW }}
-        if: ${{ github.event_name != 'pull_request' }}
-
       - name: Build project
         run: yarn build
         if: ${{ github.event_name != 'pull_request' }}

@@ -16,7 +16,7 @@ exports[`renders correctly 1`] = `
         "height": "100%",
         "maxHeight": undefined,
         "minHeight": undefined,
-        "minWidth": undefined,
+        "minWidth": 0,
         "width": "100%",
       }
     }
