@@ -1,43 +1,6 @@
-import { GradeScales, getScale } from '@openbeta/sandbag'
+import { gradeContextToGradeScales, getScale } from '@openbeta/sandbag'
 import { RulesType, GradeContextType, GradeValuesType, ClimbDisciplineRecord } from '../types'
 import { EditableClimbType } from '../../components/crag/cragSummary'
-
-const gradeContextToGradeScales = {
-  US: {
-    trad: GradeScales.YDS,
-    sport: GradeScales.YDS,
-    bouldering: GradeScales.VSCALE,
-    tr: GradeScales.YDS,
-    alpine: GradeScales.YDS,
-    mixed: GradeScales.YDS,
-    aid: GradeScales.YDS,
-    snow: GradeScales.YDS, // is this the same as alpine?
-    ice: GradeScales.YDS // is this the same as alpine?
-  },
-  FR: {
-    trad: GradeScales.FRENCH,
-    sport: GradeScales.FRENCH,
-    bouldering: GradeScales.FONT,
-    tr: GradeScales.FRENCH,
-    alpine: GradeScales.FRENCH,
-    mixed: GradeScales.FRENCH,
-    aid: GradeScales.FRENCH,
-    snow: GradeScales.FRENCH, // is this the same as alpine?
-    ice: GradeScales.FRENCH // is this the same as alpine?
-  },
-  AU: {
-    trad: GradeScales.EWBANK,
-    sport: GradeScales.EWBANK,
-    bouldering: GradeScales.VSCALE,
-    tr: GradeScales.EWBANK,
-    deepwatersolo: GradeScales.EWBANK,
-    alpine: GradeScales.YDS,
-    mixed: GradeScales.YDS,
-    aid: GradeScales.AID,
-    snow: GradeScales.YDS, // is this the same as alpine?
-    ice: GradeScales.WI
-  }
-}
 
 export default class Grade {
   context: GradeContextType
