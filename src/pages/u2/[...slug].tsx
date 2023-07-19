@@ -5,9 +5,9 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { getTicksByUser } from '../../js/graphql/api'
 import { TickType } from '../../js/types'
-import { OverviewChartProps } from '../../components/logbook/OverviewChart'
 import ImportFromMtnProj from '../../components/users/ImportFromMtnProj'
 import Layout from '../../components/layout'
+import { ChartsSectionProps } from '../../components/logbook/ChartsSection'
 
 interface TicksIndexPageProps {
   username: string
@@ -27,9 +27,8 @@ const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
       contentContainerClass='content-default with-standard-y-margin'
       showFilterBar={false}
     >
-      <section className='w-full pt-6'>
-        <DynamicOverviewChart tickList={ticks} />
-      </section>
+      <ChartsSection tickList={ticks} />
+
       <section className='max-w-lg mx-auto w-full px-4 py-8'>
         <h2>{username}</h2>
         <div className='py-4 flex items-center gap-6'>
@@ -88,8 +87,8 @@ export const getStaticProps: GetStaticProps<TicksIndexPageProps, {slug: string[]
   }
 }
 
-const DynamicOverviewChart = dynamic<OverviewChartProps>(
+const ChartsSection = dynamic<ChartsSectionProps>(
   async () =>
-    await import('../../components/logbook/OverviewChart').then(
+    await import('../../components/logbook/ChartsSection').then(
       module => module.default), { ssr: false }
 )
