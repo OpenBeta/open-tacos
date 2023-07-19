@@ -36,7 +36,7 @@ The project is currently in MVP stage.<br>
 
 ## Screenshot
 
-### Climg page
+### Climb page
 <img alt="OpenBeta screenshot" src="./openbeta-v0.7-screenshot.png"/>
 
 ### Personal performance history
