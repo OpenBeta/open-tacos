@@ -132,6 +132,10 @@ a:active, a:focus {
     @apply  top-0 left-0 h-screen md:dialog-center fixed z-50 w-screen max-w-screen-md bg-base-100 lg:drop-shadow-lg overflow-y-auto h-fit max-h-screen lg:max-h-[95vh];
   }
 
+  .dialog-small {
+    @apply  top-0 left-0 md:dialog-center fixed z-50 w-full  md:h-auto max-w-screen-sm bg-base-100 lg:drop-shadow-lg overflow-y-auto;
+  }
+
   .dialog-wide {
     @apply top-0 left-0 fixed z-50 w-full h-full w-screen h-screen bg-base-100 overflow-y-auto overscroll-contain;
   }
