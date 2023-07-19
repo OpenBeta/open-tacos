@@ -4,10 +4,10 @@ import {
 } from 'recharts'
 import { groupBy } from 'underscore'
 import { lastDayOfMonth, format } from 'date-fns'
-import { getScale } from '@openbeta/sandbag'
 import { linearRegression, linearRegressionLine, minSorted, maxSorted, medianSorted } from 'simple-statistics'
 
 import { TickType } from '../../js/types'
+import { ydsScale, vScale } from './DifficultyPyramid'
 
 export interface OverviewChartProps {
   tickList: TickType[]
@@ -17,13 +17,7 @@ export interface OverviewChartProps {
  * Proof of concept chart showing climbs aggregated by a time interval
  */
 const OverviewChart: React.FC<OverviewChartProps> = ({ tickList }) => {
-  /**
-   * Assume grades are YDS or Vscale for now since we don't store
-   * grade context with ticks, nor do we have a way to get score
-   *  without knowing the grade system
-   */
-  const ydsScale = getScale('yds')
-  const vScale = getScale('vscale')
+  if (tickList == null || tickList.length < 1) return null
 
   const agg = groupBy(tickList, getYearMonthFromDate)
 
@@ -72,6 +66,9 @@ const OverviewChart: React.FC<OverviewChartProps> = ({ tickList }) => {
 
   return (
     <div className='w-full'>
+      <h3 className='ml-16 py-4'>
+        Climb History
+      </h3>
       <ResponsiveContainer height={350}>
         <ComposedChart
           data={chartData2}
