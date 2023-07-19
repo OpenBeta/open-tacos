@@ -4,7 +4,7 @@
   </a>
 </p>
 <h1 align="center">
-  OpenBeta v0.7
+  OpenBeta v0.9
 </h1>
 <p align="center">
   <strong>
@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  We're building the first <i>free</i> and <i>open source</i> rock climbing catalog.
+  We're building a <i>free</i> and <i>open source</i> rock climbing catalog.
 </p
 
 <p align="center">
@@ -36,7 +36,11 @@ The project is currently in MVP stage.<br>
 
 ## Screenshot
 
+### Climb page
 <img alt="OpenBeta screenshot" src="./openbeta-v0.7-screenshot.png"/>
+
+### Personal performance history
+<img alt="OpenBeta screenshot" src="./climb-history-chart.png"/>
 
 ## Tech stack
 
@@ -45,7 +49,7 @@ The project is currently in MVP stage.<br>
 2. Frontend (this repo): React.js, Next.js, TailwindCSS.
 
 ### High level architecture
-![Architecture overview](./ob-arch-v0.7.png)
+![Architecture overview](./ob-arch-v0.9.png)
 
 
 ## Live instances
@@ -142,7 +146,7 @@ See our general [How to contribute guide](https://docs.openbeta.io/how-to-contri
 ## Support Us
 
 - Give this repo a star
-- Please consider [making a donation today](https://opencollective.com/openbeta) to help us pay our infrastructure expenses (> $100/month).
+- Please consider [making a donation today](https://opencollective.com/openbeta) to help us pay for our infrastructure expenses ($150/month).
 
 ## Contributors
 
