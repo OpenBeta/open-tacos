@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { useRouter } from 'next/router'
 import { NextPage, GetStaticProps } from 'next'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
@@ -22,26 +22,33 @@ interface TicksIndexPageProps {
  * - Incrementally adopt nested layout https://nextjs.org/blog/layouts-rfc
  */
 const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
+  const { isFallback } = useRouter()
+
   return (
     <Layout
       contentContainerClass='content-default with-standard-y-margin'
       showFilterBar={false}
     >
-      <ChartsSection tickList={ticks} />
+      {isFallback
+        ? <div className='h-screen'>Loading...</div>
+        : (
+          <>
+            <ChartsSection tickList={ticks} />
 
-      <section className='max-w-lg mx-auto w-full px-4 py-8'>
-        <h2>{username}</h2>
-        <div className='py-4 flex items-center gap-6'>
-          <ImportFromMtnProj isButton username={username} />
-          <a className='btn btn-xs md:btn-sm btn-outline' href={`/u/${username}`}>Classic Profile</a>
-        </div>
+            <section className='max-w-lg mx-auto w-full px-4 py-8'>
+              <h2>{username}</h2>
+              <div className='py-4 flex items-center gap-6'>
+                <ImportFromMtnProj isButton username={username} />
+                <a className='btn btn-xs md:btn-sm btn-outline' href={`/u/${username}`}>Classic Profile</a>
+              </div>
 
-        <h3 className='py-4'>Log book</h3>
-        <div>
-          {ticks?.map(Tick)}
-          {ticks?.length === 0 && <div>No ticks</div>}
-        </div>
-      </section>
+              <h3 className='py-4'>Log book</h3>
+              <div>
+                {ticks?.map(Tick)}
+                {ticks?.length === 0 && <div>No ticks</div>}
+              </div>
+            </section>
+          </>)}
     </Layout>
   )
 }
