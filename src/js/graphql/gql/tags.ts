@@ -1,43 +1,6 @@
 import { gql } from '@apollo/client'
 import { EntityTag, TagTargetType, UserMedia } from '../../types'
 
-// Reusable fragments
-export const FRAGMENT_CLIMB_TAG = gql`
- fragment ClimbTagFields on ClimbTag {
-    id
-    username
-    mediaUuid
-    mediaUrl
-    destType
-    width
-    height
-    uploadTime
-    climb {
-      id
-      name
-    }
-  }`
-
-export const FRAGMENT_AREA_TAG = gql`
- fragment AreaTagFields on AreaTag {
-    id
-    username
-    mediaUuid
-    mediaUrl
-    destType
-    width
-    height
-    uploadTime
-    area {
-        uuid
-        areaName
-        metadata {
-            areaId
-            leaf
-        }
-    }
-  }`
-
 export const FRAGMENT_ENTITY_TAG = gql`
   fragment EntityTagFields on EntityTag {
     id
