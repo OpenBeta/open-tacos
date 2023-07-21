@@ -57,23 +57,17 @@ const DifficultyPyramid: React.FC<DifficultyPyramidProps> = ({ tickList }) => {
             orientation='bottom'
             dataKey='xBottom'
             tick={{ fontSize: '10' }}
-            tickFormatter={(value) => {
-              if (value == null) return ''
-              const yds = ydsScale?.getGrade(parseInt(value)) ?? ''
-              const vscale = vScale?.getGrade(parseInt(value)) ?? ''
-              return `${yds}/${vscale}`
-            }}
+            tickFormatter={tickFormatScoreToYdsVscale}
           />
 
           <YAxis
-            // tickCount={8}
             tickFormatter={(value) => {
               const actual = parseInt(value) - yOffset
               return `${actual > 0 ? actual : ''}`
             }}
           />
 
-          <Area type='basis' stroke='none' dataKey='hackRange' fillOpacity={1} fill='rgb(6 182 212)' />
+          <Area type='step' stroke='none' dataKey='hackRange' fillOpacity={1} fill='rgb(6 182 212)' />
         </AreaChart>
       </ResponsiveContainer>
     </div>
@@ -88,4 +82,11 @@ const getScoreUSAForRouteAndBoulder = (grade: string): number => {
     score = vScale?.getScore(grade)[0] as number ?? -1
   }
   return score
+}
+
+export const tickFormatScoreToYdsVscale = (value: string): string => {
+  if (value == null) return ''
+  const yds = ydsScale?.getGrade(parseInt(value)) ?? ''
+  const vscale = vScale?.getGrade(parseInt(value)) ?? ''
+  return `${yds}/${vscale}`
 }

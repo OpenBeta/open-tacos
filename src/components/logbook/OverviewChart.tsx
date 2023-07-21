@@ -7,7 +7,7 @@ import { lastDayOfMonth, format } from 'date-fns'
 import { linearRegression, linearRegressionLine, minSorted, maxSorted, medianSorted } from 'simple-statistics'
 
 import { TickType } from '../../js/types'
-import { ydsScale, vScale } from './DifficultyPyramid'
+import { ydsScale, vScale, tickFormatScoreToYdsVscale } from './DifficultyPyramid'
 
 export interface OverviewChartProps {
   tickList: TickType[]
@@ -23,7 +23,7 @@ const OverviewChart: React.FC<OverviewChartProps> = ({ tickList }) => {
 
   const xyRegressionData: number[][] = []
 
-  const chartData: ChartDataPayloadProps[] = Object.entries(agg).reverse().map(value => {
+  const chartData: ChartDataPayloadProps[] = Object.entries(agg).map(value => {
     const x = parseInt(value[0])
     const gradeScores = value[1].reduce<number[]>((acc, curr) => {
       let score = ydsScale?.getScore(curr.grade)?.[0] as number ?? -1
@@ -73,12 +73,11 @@ const OverviewChart: React.FC<OverviewChartProps> = ({ tickList }) => {
         <ComposedChart
           data={chartData2}
           syncId='overviewChart'
+          margin={{ left: 0, right: 0 }}
         >
           <CartesianGrid stroke='#f5f5f5' />
           <YAxis
-            yAxisId='score' stroke='rgb(15 23 42)' tickFormatter={(value) => {
-              return parseInt(value) <= 0 ? ' ' : value
-            }}
+            yAxisId='score' stroke='rgb(15 23 42)' tick={{ fontSize: '10' }} tickFormatter={tickFormatScoreToYdsVscale}
           />
 
           <Line
@@ -162,8 +161,8 @@ const CustomizeMedianDot: React.FC<LineProps & { payload?: ChartDataPayloadProps
         strokeLinecap='round'
       />
       <line
-        x1={cx as number - 5} y1={cy} x2={cx as number + 5} y2={cy}
-        stroke='rgb(190 24 93)'
+        x1={cx as number - 6} y1={cy} x2={cx as number + 6} y2={cy}
+        stroke='rgb(15 23 42)'
         strokeWidth={2}
       />
     </>
@@ -175,9 +174,9 @@ const CustomTooltip: React.FC<any> = ({ active, payload, label }) => {
     return (
       <div className='bg-info p-4 rounded-btn'>
         <div>Total climbs: <span className='font-semibold'>{payload[4].value}</span></div>
-        <div>Median: {payload[0].value}</div>
-        <div>Low: {payload[1].value}</div>
-        <div>High: {payload[2].value}</div>
+        <div>Median: {tickFormatScoreToYdsVscale(payload[0].value)}</div>
+        <div>Low: {tickFormatScoreToYdsVscale(payload[1].value)}</div>
+        <div>High: {tickFormatScoreToYdsVscale(payload[2].value)}</div>
       </div>
     )
   }
