@@ -3,7 +3,21 @@ import { gql } from '@apollo/client'
 import { FRAGMENT_MEDIA_WITH_TAGS } from './tags'
 import { FRAGMENT_AUTHOR_METADATA } from './contribs'
 
+/**
+ * A reusable fragment for climb disciplines
+ */
+export const FRAGMENT_CLIMB_DISCIPLINES = gql`
+ fragment ClimbDisciplineFields on GradeType {
+    ewbank
+    font
+    french
+    vscale
+    yds
+    uiaa
+  }`
+
 export const QUERY_CLIMB_BY_ID = gql`
+  ${FRAGMENT_CLIMB_DISCIPLINES}
   ${FRAGMENT_MEDIA_WITH_TAGS}
   ${FRAGMENT_AUTHOR_METADATA}
   query ClimbByUUID($id: ID) {
@@ -15,10 +29,7 @@ export const QUERY_CLIMB_BY_ID = gql`
       length
       yds
       grades {
-        font
-        french
-        vscale
-        yds
+        ...ClimbDisciplineFields
       }
       safety
       type {
