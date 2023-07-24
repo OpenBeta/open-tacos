@@ -119,18 +119,17 @@ export const QUERY_AREA_BY_ID = gql`
  * Why having 2 nearly identical queries?
  * TODO:  Combine this one and the main one above
  */
-export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
-  ${FRAGMENT_CLIMB_DISCIPLINES}
+export const QUERY_AREA_FOR_EDIT = gql`
+${FRAGMENT_CLIMB_DISCIPLINES}
+${FRAGMENT_MEDIA_WITH_TAGS}
+query AreaByID($uuid: ID) {
   area(uuid: $uuid) {
     id
     uuid
     areaName
     gradeContext
     media {
-      username
-      mediaUrl
-      destination
-      destType
+      ... MediaWithTagsFields
     }
     metadata {
       areaId
