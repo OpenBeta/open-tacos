@@ -9,6 +9,7 @@ import { AddAreaReturnType } from '../../js/graphql/gql/contribs'
 import { SuccessAlert, AlertAction, ErrorAlert } from './alerts/Alerts'
 import Input from '../ui/form/Input'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
+import { AreaDesignationRadioGroup, areaDesignationToDb, AreaTypeFormProp } from './form/AreaDesignationRadioGroup'
 
 export interface AddAreaFormProps {
   parentUuid: string
@@ -70,6 +71,7 @@ export interface ChildAreaBaseProps {
 interface NewAreaFormProps extends ChildAreaBaseProps {
   newAreaName: string
   shortCode: string
+  areaType: AreaTypeFormProp
 }
 
 /**
@@ -92,10 +94,11 @@ const Step1 = (props: ChildAreaBaseProps): JSX.Element => {
     defaultValues: { newAreaName: '', shortCode: '', parentName: parentName }
   })
 
-  const { handleSubmit, formState: { isSubmitting }, setFocus } = form
+  const { handleSubmit, formState: { isSubmitting, isSubmitSuccessful }, setFocus } = form
 
-  const submitHandler = async ({ newAreaName }: NewAreaFormProps): Promise<void> => {
-    await addOneAreaCmd({ name: newAreaName, parentUuid })
+  const submitHandler = async ({ newAreaName, areaType }: NewAreaFormProps): Promise<void> => {
+    const { isBoulder, isLeaf } = areaDesignationToDb(areaType)
+    await addOneAreaCmd({ name: newAreaName, parentUuid, isBoulder, isLeaf })
   }
 
   useEffect(() => {
@@ -128,10 +131,14 @@ const Step1 = (props: ChildAreaBaseProps): JSX.Element => {
             }
           }}
         />
+
+        <AreaDesignationRadioGroup disabled={false} />
+
         <button
+          disabled={isSubmitSuccessful || isSubmitting}
           className={
-            clx('mt-4 btn btn-primary w-full',
-              isSubmitting ? 'loading btn-disabled' : ''
+            clx('mt-12 btn btn-primary w-full',
+              isSubmitting ? 'btn-disabled' : ''
             )
           }
           type='submit'

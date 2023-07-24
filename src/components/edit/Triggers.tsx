@@ -78,7 +78,8 @@ export const DeleteAreaTriggerButtonSm = ({ disabled }: TriggerButtonProps): JSX
       </Tooltip>)
     : (
       <DialogTrigger
-        className='btn btn-ghost btn-circle btn-primary'
+        data-no-dnd='true'
+        className='z-50 btn btn-ghost btn-circle btn-accent'
         disabled={disabled}
         type='button'
       >
@@ -130,13 +131,13 @@ const AddAreaTriggerButtonCTA = (): JSX.Element => (
 )
 
 export const AddAreaTriggerButtonMd = (): JSX.Element => (
-  <DialogTrigger className='btn btn-sm w-full md:btn-wide btn-solid btn-secondary border-dashed border-2 gap-2'>
-    <PlusIcon className='stroke-2 w-5 h-5' /> New Area
+  <DialogTrigger data-no-dnd='true' className='btn btn-sm w-full md:btn-wide btn-solid btn-secondary border-dashed border-2 gap-2'>
+    <PlusIcon className='stroke-2 w-5 h-5' data-no-dnd='true' /> New Area
   </DialogTrigger>
 )
 
 export const AddAreaTriggerButtonSm = (): JSX.Element => (
-  <DialogTrigger className='btn btn-square btn-secondary btn-sm btn-ghost border-dashed border-2'>
-    <PlusCircleIcon className='w-6 h-6 text-secondary' />
+  <DialogTrigger className='btn btn-square btn-sm btn-ghost'>
+    <PlusCircleIcon className='w-6 h-6 text-base-content/80' />
   </DialogTrigger>
 )
