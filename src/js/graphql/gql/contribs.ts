@@ -15,8 +15,8 @@ mutation ($isoCode: String!) {
 }`
 
 export const MUTATION_ADD_AREA = gql`
-mutation ($name: String!, $parentUuid: ID, $countryCode: String) {
-    addArea(input: { name: $name, parentUuid: $parentUuid, countryCode: $countryCode } ) {
+mutation ($name: String!, $parentUuid: ID, $countryCode: String, $isBoulder: Boolean, $isLeaf: Boolean) {
+    addArea(input: { name: $name, parentUuid: $parentUuid, countryCode: $countryCode, isBoulder: $isBoulder, isLeaf: $isLeaf } ) {
       areaName
       uuid
     }
@@ -152,6 +152,8 @@ export interface AddAreaProps {
   name: string
   parentUuid?: string
   countryCode?: string
+  isBoulder?: boolean
+  isLeaf?: boolean
 }
 
 export type AddAreaReturnType = Pick<AreaType, 'areaName'|'uuid'>

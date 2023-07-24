@@ -119,6 +119,10 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
    */
   const [childAreasCache, setChildAreasCache] = useState(sortByLeftRightIndex(childAreas))
 
+  useEffect(() => {
+    setChildAreasCache(sortByLeftRightIndex(childAreas))
+  }, [childAreas])
+
   /**
    * Hold the form base states aka default values.  Since we use Next SSG,
    * this component props become stale the moment a user submits a change.

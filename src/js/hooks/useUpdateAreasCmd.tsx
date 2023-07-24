@@ -118,14 +118,13 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     MUTATION_ADD_AREA, {
       client: graphqlClient,
       onCompleted: async (data) => {
+        if (onAddCompleted != null) {
+          onAddCompleted(data)
+        }
         toast.info('Area added 🔥')
 
         await refreshPage(`/api/revalidate?s=${data.addArea.uuid}`) // build new area page
         await refreshPage(`/api/revalidate?s=${areaId}`) // rebuild parent page
-
-        if (onAddCompleted != null) {
-          onAddCompleted(data)
-        }
       },
       onError: (error) => {
         toast.error(`Unexpected error: ${error.message}`)
@@ -136,11 +135,13 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     }
   )
 
-  const addOneAreaCmd: AddOneAreCmdType = async ({ name, parentUuid }: AddAreaProps) => {
+  const addOneAreaCmd: AddOneAreCmdType = async ({ name, parentUuid, isBoulder, isLeaf }: AddAreaProps) => {
     await addArea({
       variables: {
         name,
-        parentUuid: parentUuid
+        parentUuid: parentUuid,
+        ...isBoulder != null && { isBoulder },
+        ...isLeaf != null && { isLeaf }
       },
       context: {
         headers: {
