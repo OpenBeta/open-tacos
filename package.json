@@ -13,6 +13,7 @@
     "@google-cloud/storage": "^6.11.0",
     "@headlessui/react": "^1.6.4",
     "@heroicons/react": "2.0.13",
+    "@hookform/resolvers": "^3.1.1",
     "@lexical/react": "^0.7.5",
     "@math.gl/web-mercator": "3.6.2",
     "@openbeta/sandbag": "^0.0.45",
@@ -37,7 +38,6 @@
     "daisyui": "^2.24.0",
     "date-fns": "^2.28.0",
     "file-saver": "^2.0.5",
-    "formik": "^2.2.9",
     "fuse.js": "^6.6.2",
     "graphql": "^16.2.0",
     "i18n-iso-countries": "^7.5.0",
@@ -71,7 +71,7 @@
     "typesense": "^1.2.1",
     "underscore": "^1.13.3",
     "uuid": "9.0.0",
-    "yup": "^0.32.9",
+    "zod": "^3.21.4",
     "zustand": "^4.3.9"
   },
   "keywords": [

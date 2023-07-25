@@ -2,8 +2,9 @@ import { toast } from 'react-toastify'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
 import { graphqlClient } from '../graphql/Client'
-import { MUTATION_UPDATE_PROFILE, QUERY_GET_USERNAME_BY_UUID, QUERY_DOES_USERNAME_EXIST, QUERY_GET_USER_PUBLIC_PAGE } from '../graphql/gql/users'
+import { MUTATION_UPDATE_PROFILE, QUERY_GET_USERNAME_BY_UUID, QUERY_DOES_USERNAME_EXIST, QUERY_GET_USER_PUBLIC_PAGE, GetUserPublicProfileByUuidReturn, QUERY_GET_USER_PUBLIC_PROFILE_BY_UUID } from '../graphql/gql/users'
 import { Username } from '../types'
+import { UserPublicProfile } from '../types/User'
 
 interface GetUsernameByIdInput {
   userUuid: string
@@ -23,11 +24,14 @@ type DoesUsernameExist = (username: string) => Promise<boolean | 'error'>
 
 type GetUserPublicPage = (username: string) => Promise<any | null>
 
+type GetUserPublicProfileByUuid = (userUuid: string) => Promise<UserPublicProfile | null>
+
 interface ReturnType {
   getUsernameById: GetUsernameById
   updateUsername: UpdateUsername
   doesUsernameExist: DoesUsernameExist
   getUserPublicPage: GetUserPublicPage
+  getUserPublicProfileByUuid: GetUserPublicProfileByUuid
 }
 
 interface UseUserProfileCmdProps {
@@ -101,5 +105,16 @@ export default function useUserProfileCmd ({ accessToken = '' }: UseUserProfileC
     return res.data.getUserPublicPage
   }
 
-  return { getUsernameById, updateUsername, doesUsernameExist, getUserPublicPage }
+  const getUserPublicProfileByUuid = async (userUuid: string): Promise<any | null> => {
+    const res = await graphqlClient.query<GetUserPublicProfileByUuidReturn, { userUuid: string }>({
+      query: QUERY_GET_USER_PUBLIC_PROFILE_BY_UUID,
+      variables: {
+        userUuid
+      },
+      fetchPolicy: 'no-cache'
+    })
+    return res.data.getUserPublicProfileByUuid
+  }
+
+  return { getUsernameById, updateUsername, doesUsernameExist, getUserPublicPage, getUserPublicProfileByUuid }
 }
