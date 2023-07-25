@@ -27,7 +27,7 @@ export interface LCOProfileType {
 
 interface PageBannerProps{orgs: OrganizationType[]}
 
-const getLcoList = (orgs): LCOProfileType[] => {
+const getLcoList = (orgs: OrganizationType[]): LCOProfileType[] => {
   return orgs.filter(org => org.orgType === 'LOCAL_CLIMBING_ORGANIZATION')
     .map(org => ({
       id: org.orgId,
@@ -80,7 +80,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({ orgs }) => {
   )
 }
 
-const LcoCardTrigger = ({ profile }): JSX.Element => {
+const LcoCardTrigger: React.FC<{ profile: LCOProfileType}> = ({ profile }): JSX.Element => {
   return (
     <MobileDialog modal>
       <IndividualBanner profile={profile} />

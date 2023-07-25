@@ -36,8 +36,8 @@ export default function AddAreaForm ({ parentName, parentUuid, onSuccess }: AddA
     }
   }, [session])
 
-  const onAddSuccessHandler = (data): void => {
-    setNewArea(data.addArea)
+  const onAddSuccessHandler = (data: AddAreaReturnType): void => {
+    setNewArea(data)
     setStep('confirm')
     if (onSuccess != null) onSuccess()
   }
@@ -65,7 +65,7 @@ export interface ChildAreaBaseProps {
   parentUuid: string
   parentName: string
   formRef?: any
-  onSuccess: (data) => void
+  onSuccess: (data: AddAreaReturnType) => void
 }
 
 interface NewAreaFormProps extends ChildAreaBaseProps {

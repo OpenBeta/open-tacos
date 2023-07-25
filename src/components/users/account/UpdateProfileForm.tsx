@@ -1,29 +1,28 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession, signIn } from 'next-auth/react'
-import { useRouter } from 'next/router'
-import { QuestionMarkCircleIcon, ArrowLeftCircleIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { Input, TextArea } from '../../ui/form'
 import useUserProfileCmd from '../../../js/hooks/useUserProfileCmd'
-import Tooltip from '../../ui/Tooltip'
-import { UserPublicProfile } from '../../../js/types/User'
 
 const validationSchema = z
   .object({
     displayName: z
       .string()
-      .max(30, { message: 'You can\'t enter more than 30 characters.' }),
+      .max(30, { message: 'You can\'t enter more than 30 characters.' })
+      .optional().or(z.literal('')),
     bio: z
       .string()
       .max(80, { message: 'You can\'t enter more than 100 characters.' })
-      .refine((text) => (text?.split(/\r\n|\r|\n/)?.length ?? 0) <= 3, { message: 'You can\'t enter more than 3 lines' }),
+      .refine((text) => (text?.split(/\r\n|\r|\n/)?.length ?? 0) <= 3, { message: 'You can\'t enter more than 3 lines' })
+      .optional().or(z.literal('')),
     website: z
       .string()
       .url('Please provide a valid web address.')
+      .optional().or(z.literal(''))
   })
 
 type ValidationSchema = z.infer<typeof validationSchema>
@@ -33,53 +32,43 @@ type ValidationSchema = z.infer<typeof validationSchema>
  */
 export const UpdateProfileForm: React.FC = () => {
   const session = useSession()
-  const [publicProfile, setPublicProfile] = useState<UserPublicProfile>()
 
-  const { getUserPublicProfileByUuid } = useUserProfileCmd({ accessToken: session?.data?.accessToken as string })
+  const form = useForm<ValidationSchema>({
+    mode: 'onChange',
+    resolver: zodResolver(validationSchema)
+  })
+  const { handleSubmit, reset, formState: { isValid, isDirty, isSubmitting } } = form
+
+  const { getUserPublicProfileByUuid, updatePublicProfileCmd } = useUserProfileCmd({ accessToken: session?.data?.accessToken as string })
+
+  const userUuid = session.data?.user.metadata.uuid
 
   useEffect(() => {
-    const userUuid = session.data?.user.metadata.uuid
-    console.log('#user uid', userUuid)
     if (userUuid != null) {
       const doAsync = async (): Promise<void> => {
         const profile = await getUserPublicProfileByUuid(userUuid)
-        console.log('# profile', profile)
         if (profile != null) {
-          setPublicProfile(profile)
+          const { displayName, bio, website } = profile
+          reset({ displayName, bio, website })
         }
       }
       void doAsync()
     }
   }, [session])
 
-  const form = useForm<ValidationSchema>({
-    mode: 'onChange',
-    defaultValues: {
-      displayName: publicProfile?.displayName,
-      bio: publicProfile?.bio,
-      website: publicProfile?.website
-    },
-    resolver: zodResolver(validationSchema)
-  })
-
-  const { handleSubmit, reset, formState: { isValid, isDirty, isSubmitting, isSubmitSuccessful } } = form
-
-  const submitHandler = async ({ displayName, bio }: ValidationSchema): Promise<void> => {
+  const submitHandler = async ({ displayName, bio, website }: ValidationSchema): Promise<void> => {
     if (userUuid == null) {
+      // this shouldn't happend
+      console.error('Unexpected error.  Submit button should have been disabled.')
       return
     }
-    try {
-      // await updateUsername({
-      //   userUuid,
-      //   username,
-      //   ...isNewUser && email != null && { email }, // email is required for new users
-      //   ...isNewUser && avatar != null && { avatar } // get Auth0 avatar for new users
-      // })
+
+    const successful = await updatePublicProfileCmd({ userUuid, displayName, bio, website })
+    if (successful) {
+      reset({ displayName, bio, website })
       toast.info('Username updated')
-      // await router.push(`/u/${username}`)
-    } catch (e) {
-      reset()
-      toast.error(e.message)
+    } else {
+      toast.error('Unexpected error.  Please try again.')
     }
   }
 
@@ -89,12 +78,21 @@ export const UpdateProfileForm: React.FC = () => {
     }
   })
 
-  const shouldDisableSumit = !isValid || isSubmitting || !isDirty || userUuid == null || isSubmitSuccessful
+  useEffect(() => {
+    const event = (e: Event): void => {
+      if (isDirty) {
+        e.preventDefault()
+      }
+    }
+    window.addEventListener('beforeunload', event)
+    return () => window.removeEventListener('beforeunload', event)
+  }, [isDirty])
+
+  const shouldDisableSumit = !isValid || isSubmitting || !isDirty || userUuid == null
   return (
     <div className='w-full lg:max-w-md'>
 
-      <a className='link flex gap-2 items-center' href='/api/me'><ArrowLeftCircleIcon className='w-5 h-5' />Back to profile</a>
-      <h1 className='mt-8 lg:mt-12'>Update Profile</h1>
+      <h2 className=''>Edit Profile</h2>
 
       <FormProvider {...form}>
         <form
@@ -106,7 +104,7 @@ export const UpdateProfileForm: React.FC = () => {
             label='Display name'
             spellCheck={false}
             placeholder='Mary Jane'
-            helper='This could be your first name or a nickname.'
+            helper='This could be your first name or a nickname. Spaces are allowed.'
           />
 
           <TextArea
@@ -115,7 +113,6 @@ export const UpdateProfileForm: React.FC = () => {
             spellCheck
             placeholder='Something about you'
             helper='Let people know more about you.'
-            // registerOptions={USERNAME_VALIDATION_RULES}
           />
 
           <Input
@@ -124,7 +121,6 @@ export const UpdateProfileForm: React.FC = () => {
             spellCheck={false}
             placeholder='https://example.com'
             helper='Your website.'
-            // registerOptions={USERNAME_VALIDATION_RULES}
           />
 
           <button
@@ -138,36 +134,3 @@ export const UpdateProfileForm: React.FC = () => {
     </div>
   )
 }
-
-// const UserProfileSchema = Yup.object().shape({
-//   name: Yup.string()
-//     .max(50, 'Maximum 50 characters.'),
-//   bio: Yup.string()
-//     .notRequired()
-//     .max(150, 'Maximum 150 characters')
-//     .test('less-than-3-lines', 'Maximum 2 lines', (text) => (text?.split(/\r\n|\r|\n/)?.length ?? 0) <= 2),
-//   website: Yup.string()
-//     .nullable()
-//     .notRequired()
-//     .max(150, 'Maximum 150 characters')
-//     .when('website', {
-//       is: val => val?.length > 0,
-//       then: rule => {
-//         if (rule != null) {
-//           return Yup.string().test('special-rules', 'Invalid URL', (x) => checkWebsiteUrl(x) !== null)
-//         } else {
-//           return Yup.string().notRequired()
-//         }
-//       }
-//     })
-// }, [['website', 'website']])
-
-interface SimpleTooltipProps {
-  message: string
-}
-
-const SimpleTooltip: React.FC<SimpleTooltipProps> = ({ message }) => (
-  <Tooltip content={message}>
-    <QuestionMarkCircleIcon className='text-info w-5 h-5' />
-  </Tooltip>
-)

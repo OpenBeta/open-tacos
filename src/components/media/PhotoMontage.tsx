@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from 'react'
+import { useState, useEffect, memo, MouseEventHandler } from 'react'
 import Image from 'next/image'
 import clx from 'classnames'
 
@@ -123,11 +123,16 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
   )
 }
 
+interface ResponsiveImageProps {
+  mediaUrl: string
+  isHero?: boolean
+  onClick: MouseEventHandler
+}
 /**
  * See https://nextjs.org/docs/api-reference/next/image
  * Set priority={true} if the photo montage is above the fold
  */
-const ResponsiveImage = ({ mediaUrl, isHero = true, onClick }): JSX.Element => (
+const ResponsiveImage: React.FC<ResponsiveImageProps> = ({ mediaUrl, isHero = true, onClick }) => (
   <Image
     src={mediaUrl}
     loader={DefaultLoader}

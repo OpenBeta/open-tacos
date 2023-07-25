@@ -119,7 +119,7 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
   // if the isButton prop is passed to this component as true, the component will be rendered as a button, otherwise it will be a modal
   return (
     <>
-      {isButton && <button onClick={straightToInput} className='btn btn-xs md:btn-sm btn-primary'>Import Ticks</button>}
+      {isButton && <button onClick={straightToInput} className='btn btn-xs md:btn-sm btn-primary'>Import ticks</button>}
       <div
         aria-live='assertive'
         className='fixed inset-0 z-10 flex items-end px-4 py-6 mt-24 pointer-events-none sm:p-6 sm:items-start'

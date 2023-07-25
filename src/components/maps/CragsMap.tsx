@@ -8,6 +8,7 @@ import HeatmapLayer from './HeatmapLayer'
 import InteractiveMarker
   from './InteractiveMarker'
 import useAutoSizing from '../../js/hooks/finder/useMapAutoSizing'
+import { MapLayerEventType, MapLayerMouseEvent } from 'mapbox-gl'
 
 const mapElementId = 'my-area-map'
 /**
@@ -21,14 +22,17 @@ export default function CragsMap (): JSX.Element {
   // track current mouseover marker
   const [hoverMarker, setHoverMarker] = useState<null|number[]>(null)
 
-  const onHoverHandler = useCallback((event) => {
+  const onHoverHandler = useCallback((event: MapLayerMouseEvent) => {
     const { features } = event
+    if (features == null || features.length === 0) return
     const f = features[0]
+    // @ts-expect-error
     setHoverMarker([f.properties.lng, f.properties.lat])
   }, [])
 
-  const onClickHandler = useCallback((event) => {
+  const onClickHandler = useCallback((event: MapLayerMouseEvent) => {
     const { features } = event
+    // @ts-expect-error
     const { id, lng, lat } = features[0].properties
     actions.filters.setActiveMarker(id, [lng, lat])
   }, [])

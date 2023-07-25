@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { QuestionMarkCircleIcon, ArrowLeftCircleIcon } from '@heroicons/react/24/outline'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
 import { formatDistanceToNowStrict } from 'date-fns'
 
@@ -147,11 +147,10 @@ export const UsernameChangeForm: React.FC = () => {
   return (
     <div className='w-full lg:max-w-md'>
       {isNewUser
-        ? (<h1>Create a username</h1>)
+        ? (<h2>Create a username</h2>)
         : (
           <>
-            <a className='link flex gap-2 items-center' href={`/u/${username}`}><ArrowLeftCircleIcon className='w-5 h-5' />Back to profile</a>
-            <h1 className='mt-8 lg:mt-32'>Change username</h1>
+            <h2>Change username</h2>
           </>)}
       <FormProvider {...form}>
         <form

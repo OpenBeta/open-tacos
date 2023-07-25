@@ -16,9 +16,13 @@ interface UpdateUsernameInput {
   avatar?: string
 }
 
+type UpdateUserPublicProfileInput = { userUuid: string } & Pick<UserPublicProfile, 'displayName' | 'bio' | 'website'>
+
 type GetUsernameById = (input: GetUsernameByIdInput) => Promise<Username | null>
 
 type UpdateUsername = (input: UpdateUsernameInput) => Promise<boolean>
+
+type UpdatePublicProfileCmd = (input: UpdateUserPublicProfileInput) => Promise<boolean>
 
 type DoesUsernameExist = (username: string) => Promise<boolean | 'error'>
 
@@ -32,6 +36,7 @@ interface ReturnType {
   doesUsernameExist: DoesUsernameExist
   getUserPublicPage: GetUserPublicPage
   getUserPublicProfileByUuid: GetUserPublicProfileByUuid
+  updatePublicProfileCmd: UpdatePublicProfileCmd
 }
 
 interface UseUserProfileCmdProps {
@@ -56,8 +61,8 @@ export default function useUserProfileCmd ({ accessToken = '' }: UseUserProfileC
   }
 
   const updateUsername = async (input: UpdateUsernameInput): Promise<boolean> => {
-    const res = await graphqlClient.query<{ updateUserProfile: boolean }, UpdateUsernameInput>({
-      query: MUTATION_UPDATE_PROFILE,
+    const res = await graphqlClient.mutate<{ updateUserProfile?: boolean }, UpdateUsernameInput>({
+      mutation: MUTATION_UPDATE_PROFILE,
       variables: {
         ...input
       },
@@ -68,7 +73,7 @@ export default function useUserProfileCmd ({ accessToken = '' }: UseUserProfileC
       },
       fetchPolicy: 'no-cache'
     })
-    return res.data.updateUserProfile
+    return res.data?.updateUserProfile ?? false
   }
 
   const _doesUsernameExistFn = async (username: string): Promise<boolean | 'error'> => {
@@ -116,5 +121,42 @@ export default function useUserProfileCmd ({ accessToken = '' }: UseUserProfileC
     return res.data.getUserPublicProfileByUuid
   }
 
-  return { getUsernameById, updateUsername, doesUsernameExist, getUserPublicPage, getUserPublicProfileByUuid }
+  const updatePublicProfileCmd: UpdatePublicProfileCmd = async ({ userUuid, displayName, bio, website }: UpdateUserPublicProfileInput) => {
+    const trimmedInput: UpdateUserPublicProfileInput = {
+      userUuid,
+      ...displayName != null && { displayName },
+      ...bio != null && { bio },
+      ...website != null && { website }
+    }
+    try {
+      const res = await graphqlClient.mutate<{ updateUserProfile?: boolean }, UpdateUserPublicProfileInput>({
+        mutation: MUTATION_UPDATE_PROFILE,
+        variables: {
+          ...trimmedInput
+        },
+        context: {
+          headers: {
+            authorization: `Bearer ${accessToken}`
+          }
+        },
+        fetchPolicy: 'no-cache'
+      })
+      return res.data?.updateUserProfile ?? false
+    } catch (e: any) {
+      console.error(e)
+      return false
+    }
+  }
+  // const updatePublicProfile = async (userUuid: string): Promise<any | null> => {
+  //   const res = await graphqlClient.mutate<GetUserPublicProfileByUuidReturn, { userUuid: string }>({
+  //     query: QUERY_GET_USER_PUBLIC_PROFILE_BY_UUID,
+  //     variables: {
+  //       userUuid
+  //     },
+  //     fetchPolicy: 'no-cache'
+  //   })
+  //   return res.data.getUserPublicProfileByUuid
+  // }
+
+  return { getUsernameById, updateUsername, doesUsernameExist, getUserPublicPage, getUserPublicProfileByUuid, updatePublicProfileCmd }
 }

@@ -6,6 +6,7 @@ interface IconProps {
 }
 
 const Icon = ({ width = 20, height = 20, type, className }: IconProps): JSX.Element => {
+  // @ts-expect-error
   const path = icons[type]
   return (
     <svg className={className} xmlns='http://www.w3.org/2000/svg' width={width} height={height} viewBox='0 0 24 24' stroke='currentColor' fill='inherit'>

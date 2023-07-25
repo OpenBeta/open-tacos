@@ -20,7 +20,7 @@ type UpdateAreasSortingOrderCmdType = (input: AreaSortingInput[]) => Promise<voi
 interface CallbackProps {
   onUpdateCompleted?: (data: any) => void
   onUpdateError?: (error: any) => void
-  onAddCompleted?: (data: any) => void
+  onAddCompleted?: (data: AddAreaReturnType) => void
   onAddError?: (error: any) => void
   onDeleteCompleted?: (data: any) => void
   onDeleteError?: (error: any) => void
@@ -119,7 +119,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
       client: graphqlClient,
       onCompleted: async (data) => {
         if (onAddCompleted != null) {
-          onAddCompleted(data)
+          onAddCompleted(data.addArea)
         }
         toast.info('Area added 🔥')
 
