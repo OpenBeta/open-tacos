@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import Link from 'next/link'
 import Layout from '../components/layout'
