@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react'
-import { Map, MapLayerMouseEvent, MapRef } from 'react-map-gl'
+import { Map, MapLayerMouseEvent, MapRef, ViewStateChangeEvent } from 'react-map-gl'
+
 import { BBoxType, XViewStateType } from '../../js/types'
 
 export const DEFAULT_INITIAL_VIEWSTATE: XViewStateType = {
@@ -54,7 +55,7 @@ export default function BaseMap ({
     }
   }, [height, mapRef])
 
-  const onMapLoad = React.useCallback((vs) => {
+  const onMapLoad = React.useCallback(() => {
     if (mapRef.current !== null) {
       const map = mapRef.current
 
@@ -77,18 +78,18 @@ export default function BaseMap ({
     }
   }, [viewstate])
 
-  const onMoveHandler = (event): void => {
+  const onMoveHandler = (event: ViewStateChangeEvent): void => {
     // console.log(event)
     const { viewState } = event
     const bounds = mapRef.current?.getBounds() ?? null
 
-    let bbox = [0, 0, 0, 0]
+    let bbox: BBoxType = [0, 0, 0, 0]
     if (bounds != null) {
       const sw = bounds.getSouthWest()
       const ne = bounds.getNorthEast()
       bbox = [sw.lng, sw.lat, ne.lng, ne.lat]
     }
-    onViewStateChange({ ...viewState, bbox })
+    onViewStateChange({ ...viewState, height: 0, width: 0, bbox })
   }
 
   return (

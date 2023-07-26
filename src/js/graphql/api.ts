@@ -35,6 +35,7 @@ export const getCragDetailsNear = async (
     })
 
     const { cragsNear } = rs.data
+    // @ts-expect-error
     const groups = cragsNear.map(entry => entry.crags).flat()
     return { data: groups, placeId }
   } catch (e) {
@@ -105,7 +106,11 @@ export const getMediaForFeed = async (maxUsers: number, maxFiles: number): Promi
   return []
 }
 
-export const getCragsWithin = async ({ bbox, zoom }): Promise<any> => {
+interface GetCragsWithinProps {
+  bbox: number[]
+  zoom: number
+}
+export const getCragsWithin = async ({ bbox, zoom }: GetCragsWithinProps): Promise<AreaType[]> => {
   try {
     const rs = await graphqlClient.query<{cragsWithin: AreaType[]}>({
       query: QUERY_CRAGS_WITHIN,

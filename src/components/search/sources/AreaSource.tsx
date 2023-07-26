@@ -3,7 +3,7 @@ import { AutocompleteSource } from '@algolia/autocomplete-js'
 import { areaSearchByName } from '../../../js/typesense/TypesenseClient'
 import { QueryProps } from '../AreaSearchAutoComplete'
 
-export const searchAreas = async (searchQuery: QueryProps, onSelect): Promise<AutocompleteSource<any>> => {
+export const searchAreas = async (searchQuery: QueryProps, onSelect: any): Promise<AutocompleteSource<any>> => {
   return {
     sourceId: 'areaSearch',
 

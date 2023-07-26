@@ -1,16 +1,16 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
 
-import { UsernameChangeForm } from '../../components/users/account/UsernameChangeForm'
+import { UpdateProfileForm } from '../../components/users/account/UpdateProfileForm'
 import { AccountLayout } from '../../components/users/account/AccountLayout'
 
 const changeUsername: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Change username</title>
+        <title>Edit profile</title>
       </Head>
-      <AccountLayout form={<UsernameChangeForm />} />
+      <AccountLayout form={<UpdateProfileForm />} />
     </>
   )
 }

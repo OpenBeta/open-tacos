@@ -49,6 +49,7 @@ export const BaseMultiSelect: React.FC<BaseMultiSelectProps> = ({
       }) => {
         // Map value (array of strings) to their corresponding valueObjs.
         if (value == null) return <div>Loading ... </div>
+        // @ts-expect-error
         const valueObj = value.map(v => valueObjOptions.find(voo => voo.name === v))
         if (valueObj == null) throw new Error('value does not match any of the options supplied')
 

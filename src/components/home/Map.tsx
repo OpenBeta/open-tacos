@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { featureCollection } from '@turf/helpers'
+import { featureCollection, Feature, Point } from '@turf/helpers'
 import NProgress from 'nprogress'
 import { debounce } from 'underscore'
 
@@ -9,12 +9,13 @@ import HeatmapLayer from '../maps/HeatmapLayer'
 import { MarkerLayer2 } from '../maps/MarkerLayer'
 import { geojsonifyCrag } from '../../js/stores/util'
 import { getCragsWithinNicely } from '../../js/graphql/api'
+import { XViewStateType } from '../../js/types'
 
 const mapElementId = 'global-map'
 export default function Map (): JSX.Element {
   const [viewstate, height, setViewState] = useAutoSizing({ geojson: null, elementId: mapElementId })
 
-  const [geojson, setData] = useState([])
+  const [geojson, setData] = useState<Array<Feature<Point>>>([])
 
   const lastUpdatePosition = useRef({ longitude: 0, latitude: 0, zoom: 0 })
 
@@ -62,7 +63,7 @@ const progressStart = debounce(NProgress.start, 500)
 
 const progressStop = debounce(NProgress.done, 500)
 
-function checkIfShouldFetchData (viewstate, lastUpdatePosition): boolean {
+function checkIfShouldFetchData (viewstate: XViewStateType, lastUpdatePosition: any): boolean {
   return (Math.abs(viewstate.latitude - lastUpdatePosition.current.latitude) >= 0.1 ||
     Math.abs(viewstate.longitude - lastUpdatePosition.current.longitude) > 0.2 ||
     Math.abs(viewstate.zoom - lastUpdatePosition.current.zoom) > 1)

@@ -3,7 +3,7 @@ import clx from 'classnames'
 
 interface InputProps {
   label: string
-  labelAlt?: string
+  labelAlt?: string | React.ReactNode
   name: string
   placeholder?: string
   registerOptions?: RegisterOptions
@@ -14,9 +14,10 @@ interface InputProps {
   disabled?: boolean
   readOnly?: boolean
   rows?: number
+  spellCheck?: boolean
 }
 
-export default function TextArea ({ label, labelAlt, name, rows = 5, registerOptions, placeholder = '', className = '', classDefault = INPUT_DEFAULT_CSS, helper, formContext, disabled = false, readOnly = false }: InputProps): JSX.Element {
+export default function TextArea ({ label, labelAlt, name, rows = 5, registerOptions, placeholder = '', className = '', classDefault = INPUT_DEFAULT_CSS, helper, formContext, disabled = false, readOnly = false, spellCheck = false }: InputProps): JSX.Element {
   const context = formContext == null ? useFormContext() : formContext
   const { register, formState: { errors } } = context
   const inputProps = register(name, registerOptions)
@@ -37,11 +38,12 @@ export default function TextArea ({ label, labelAlt, name, rows = 5, registerOpt
         disabled={disabled}
         readOnly={readOnly}
         rows={rows}
+        spellCheck={spellCheck}
       />
       <label className='label' id={`${name}-helper`} htmlFor={name}>
         {error?.message != null &&
            (<span className='label-text-alt text-error'>{error?.message as string}</span>)}
-        {(error == null) && helper}
+        {(error == null) && <span className='label-text-alt label-helper'>{helper}</span>}
       </label>
     </div>
   )

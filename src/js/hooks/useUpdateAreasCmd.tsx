@@ -1,4 +1,4 @@
-import { useMutation, useQuery, QueryResult } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { toast } from 'react-toastify'
 
 import { graphqlClient } from '../graphql/Client'
@@ -14,13 +14,13 @@ import { AreaType } from '../../js/types'
 type UpdateOneAreaCmdType = (input: UpdateOneAreaInputType) => Promise<void>
 type AddOneAreCmdType = ({ name, parentUuid }: AddAreaProps) => Promise<void>
 type DeleteOneAreaCmdType = ({ uuid }: DeleteOneAreaInputType) => Promise<void>
-type GetAreaByIdCmdType = ({ skip }: { skip?: boolean }) => QueryResult<{ area: AreaType}>
+type GetAreaByIdCmdType = ({ skip }: { skip?: boolean }) => any
 type UpdateAreasSortingOrderCmdType = (input: AreaSortingInput[]) => Promise<void>
 
 interface CallbackProps {
   onUpdateCompleted?: (data: any) => void
   onUpdateError?: (error: any) => void
-  onAddCompleted?: (data: any) => void
+  onAddCompleted?: (data: AddAreaReturnType) => void
   onAddError?: (error: any) => void
   onDeleteCompleted?: (data: any) => void
   onDeleteError?: (error: any) => void
@@ -119,7 +119,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
       client: graphqlClient,
       onCompleted: async (data) => {
         if (onAddCompleted != null) {
-          onAddCompleted(data)
+          onAddCompleted(data.addArea)
         }
         toast.info('Area added 🔥')
 

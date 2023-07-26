@@ -2,7 +2,7 @@ import { CheckBadgeIcon, ExclamationCircleIcon } from '@heroicons/react/24/outli
 import { ReactNode } from 'react'
 import { LeanAlert, AlertAction } from '../../ui/micro/AlertDialogue'
 
-export const SuccessAlert = ({ description, children }): JSX.Element => {
+export const SuccessAlert: React.FC<any> = ({ description, children }) => {
   return (
     <LeanAlert
       closeOnEsc={false}

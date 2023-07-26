@@ -77,8 +77,10 @@ const DifficultyPyramid: React.FC<DifficultyPyramidProps> = ({ tickList }) => {
 export default DifficultyPyramid
 
 const getScoreUSAForRouteAndBoulder = (grade: string): number => {
+  // @ts-expect-error
   let score = ydsScale?.getScore(grade)[0] as number ?? -1
   if (score < 0) {
+    // @ts-expect-error
     score = vScale?.getScore(grade)[0] as number ?? -1
   }
   return score

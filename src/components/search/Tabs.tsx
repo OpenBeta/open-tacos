@@ -18,7 +18,7 @@ const Tabs = ({ labels, panelCompList }: TabsProps): JSX.Element => {
   )
 }
 
-const TabLabel = ({ label }): JSX.Element => (
+const TabLabel: React.FC<{ label: string }> = ({ label }) => (
   <Tab className='text-lg text-white underline-offset-8'>
     {({ selected }) => (
       <div

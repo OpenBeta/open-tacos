@@ -96,13 +96,17 @@ const createMetadataClient = async (
     // and names. prevents a user from injecting arbitrary data into the store
     // by changing a valid field into an object. (Like submitting an object for
     // their bio)
-    Object.keys(metadata).forEach((field: AllowedField) => {
+    Object.keys(metadata).forEach((field) => {
       // Check the field is allowed
-      if (!allowedFields.includes(field)) {
+      if (!allowedFields.includes(field as AllowedField)) {
         throw new Error(`Invalid field ${field}`)
       }
       // Check the field is above board
-      if (!dataTypeCheck[field](metadata[field])) {
+
+      // @ts-expect-error
+      const meta = metadata[field]
+      // @ts-expect-error
+      if (dataTypeCheck[field](meta) == null) {
         throw new Error(`Invalid data type for field ${field}`)
       }
     })
@@ -125,6 +129,7 @@ const createMetadataClient = async (
 
   return {
     getUserMetadata,
+    // @ts-expect-error issue https://github.com/OpenBeta/open-tacos/issues/936
     updateUserMetadata
   }
 }

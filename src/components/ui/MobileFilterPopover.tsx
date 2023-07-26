@@ -4,7 +4,7 @@ import MobilePage from './MobilePage'
 /**
  * Mobile popover component for grades, radius, disciplines selector
  */
-export default function MobileFilterPopover ({ mobileLabel, btnLabel, title, onApply, children }): JSX.Element {
+const MobileFilterPopover: React.FC<any> = ({ mobileLabel, btnLabel, title, onApply, children }) => {
   const [isOpen, setIsOpen] = useState(false)
   const onCloseHandler = (): void => {
     setIsOpen(false)
@@ -35,7 +35,7 @@ export default function MobileFilterPopover ({ mobileLabel, btnLabel, title, onA
   )
 }
 
-const ContentPanel = ({ children }): JSX.Element => {
+export const MobileContentPanel: React.FC<any> = ({ children }) => {
   return (
     <>
       {children}
@@ -43,4 +43,4 @@ const ContentPanel = ({ children }): JSX.Element => {
   )
 }
 
-MobileFilterPopover.ContentPanel = ContentPanel
+export default MobileFilterPopover

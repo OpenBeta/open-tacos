@@ -12,7 +12,7 @@ interface Props {
   grade?: string
 }
 
-function IsTicked ({ loading, onClick }): JSX.Element {
+const IsTicked: React.FC<any> = ({ loading, onClick }) => {
   return (
     <button
       type='button'

@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+// @ts-expect-error
 import NProgress from 'nprogress/nprogress'
 
 import useCragFinder from '../js/hooks/finder/useCragFinder'

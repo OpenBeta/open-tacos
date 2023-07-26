@@ -9,7 +9,12 @@ interface DisiplineDistributionProps {
 export default function DisciplineDistribution (props: DisiplineDistributionProps): JSX.Element {
   const data: Array<{value: number, label: string}> = Object.keys(props.data)
     .filter(i => i !== '__typename')
-    .map(key => { return { value: props.data[key]?.total, label: key } })
+    .map(key => {
+      return {
+        // @ts-expect-error
+        value: props.data[key]?.total, label: key
+      }
+    })
 
   return (
     <ResponsiveContainer>

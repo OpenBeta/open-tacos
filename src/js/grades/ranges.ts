@@ -37,14 +37,17 @@ export const genSliderMarks = (DEFS: SliderMarksType, climbType: string): any =>
   // Warning: not a deep clone. we simply copy over keys
   const defs = Object.assign({}, DEFS)
   for (const key of Object.keys(defs)) {
+    // @ts-expect-error
     defs[key] = { ...DEFS[key] } // a hack to copy values
     if (climbType === 'freeRange') {
       if (!['0', '3', '6', '7', '9', '11', '13'].includes(key)) {
+        // @ts-expect-error
         if (defs?.[key] !== undefined) { defs[key].label = '' }
       }
       defs[0].label = '3rd'
     } else if (climbType === 'boulderRange') {
       if (!['0', '2', '4', '6', '8', '10', '12', '14', '16', '18'].includes(key)) {
+        // @ts-expect-error
         if (defs?.[key] !== undefined) { defs[key].label = '' }
       }
       defs[0].label = 'V-Easy'

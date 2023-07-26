@@ -30,7 +30,7 @@ export const calculatePagination = (
   }
 }
 
-export const geojsonifyCrag = (crag, isInMyRange): Feature<Point> => {
+export const geojsonifyCrag = (crag: AreaType, isInMyRange: boolean): Feature<Point> => {
   const { areaName, metadata, totalClimbs, density } = crag
   const { areaId } = metadata
   const props = {

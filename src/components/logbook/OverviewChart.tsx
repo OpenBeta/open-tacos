@@ -26,9 +26,11 @@ const OverviewChart: React.FC<OverviewChartProps> = ({ tickList }) => {
   const chartData: ChartDataPayloadProps[] = Object.entries(agg).map(value => {
     const x = parseInt(value[0])
     const gradeScores = value[1].reduce<number[]>((acc, curr) => {
+      // @ts-expect-error
       let score = ydsScale?.getScore(curr.grade)?.[0] as number ?? -1
 
       if (score < 0) {
+        // @ts-expect-error
         score = vScale?.getScore(curr.grade)[0] as number ?? -1
       }
       if (score > 0) {

@@ -71,11 +71,13 @@ export default class Grade {
 
   toStringBouldering (): string | undefined {
     const key: string = this.gradescales.bouldering
+    // @ts-expect-error
     return this.values?.[key] ?? undefined
   }
 
   toStringTradSportAid (): string | undefined {
     const key = this.gradescales.sport
+    // @ts-expect-error
     return this.values?.[key] ?? undefined
   }
 

@@ -42,8 +42,10 @@ export default function CsvEditor ({ initialClimbs, name, editable = false, rese
   }
 
   // A more reliable way to check for errors when using react-hook-form field array
-  const thereAreErrors = fields.some(
-    (entry: EditableClimbType) => Object.values(entry.errors ?? {}).filter(v => v != null).length > 0)
+  const thereAreErrors = fields.some((entry) => {
+    // @ts-expect-error
+    return Object.values(entry.errors ?? {}).filter(v => v != null).length > 0
+  })
 
   return (
     <LexicalComposer initialConfig={editorConfigCsv(initialClimbs)}>
