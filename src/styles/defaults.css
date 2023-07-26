@@ -409,12 +409,12 @@ input:checked + label {
 
 /* DTable (grade distribution table */
 table td {
-  @apply my-2 !important;
-}
-
-table td.dtable-highlight {
-  @apply text-sm text-secondary bg-gray-200;
-}
+    @apply my-2 text-base-content !important;
+  }
+  
+  table td.dtable-highlight {
+    @apply text-sm  bg-gray-200;
+  }
 
 table td.dtable-highlight:nth-of-type(1) {
   @apply rounded-tl rounded-bl !important;
@@ -480,4 +480,16 @@ a:focus {
 
 .card-body {
   @apply sm:px-0 border-0 !important;
+}
+
+.label-helper {
+  @apply text-opacity-70;
+}
+
+.Toastify__toast {
+  @apply p-4 rounded-btn;
+}
+
+.Toastify__toast-container {
+  @apply w-full max-w-md;
 }

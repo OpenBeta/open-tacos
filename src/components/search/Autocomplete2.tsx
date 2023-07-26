@@ -1,4 +1,4 @@
-import React, { createElement, Fragment, useEffect, useRef, useState } from 'react'
+import React, { createElement, Fragment, ReactNode, useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import { autocomplete, AutocompleteOptions, AutocompleteApi } from '@algolia/autocomplete-js'
@@ -14,7 +14,7 @@ interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
   open?: boolean
   onCancel?: () => void
   detached?: boolean
-  resultContainer?: (children, sections) => React.ReactNode
+  resultContainer?: (children: ReactNode[]) => ReactNode
 }
 /**
  * Autocomplete widget based on Algolia Autocomplete.
@@ -51,7 +51,7 @@ export const Autocomplete2 = ({ label, open = false, onCancel, detached = true, 
         }
 
         if (resultContainer != null) {
-          panelRootRef.current.render(resultContainer(sections, children))
+          panelRootRef.current.render(resultContainer(sections))
         } else {
           panelRootRef.current.render(children)
         }

@@ -19,6 +19,7 @@ export const DialogContent = React.forwardRef<any, Props>(
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className='z-40 fixed inset-0 bg-black/60' />
         <DialogPrimitive.Content
+          data-no-dnd='true'
           className={clx(fullScreen ? 'dialog-wide' : 'dialog-default')} {...props} ref={forwardedRef}
         >
           <DialogPrimitive.Title className='dialog-title'>

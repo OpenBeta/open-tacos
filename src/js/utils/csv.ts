@@ -27,12 +27,16 @@ export const orgsToCsv = (orgs: undefined | OrganizationType[]): string => {
  */
 const processOrg = (org: OrganizationType): string => {
   return orgFields.map(field => {
+    // @ts-expect-error
     let value = org[field] ?? ''
     if (['createdAt', 'updatedAt'].includes(field)) {
+      // @ts-expect-error
       const dateField = org[field]
+      // @ts-expect-error
       if (dateField != null) value = format(org[field], 'P')
     }
     if (['website', 'donationLink', 'instagramLink', 'facebookLink', 'hardwareReportLink', 'email', 'description'].includes(field)) {
+      // @ts-expect-error
       const contentField = org.content?.[field]
       if (contentField != null) value = contentField
     }
@@ -50,6 +54,7 @@ export const usersToCsv = (users: undefined | any[]): string => {
   return users?.map(processUser).join('\r\n')
 }
 
+// @ts-expect-error
 const replacer = (key, value): string => value == null ? '' : value // specify how you want to handle null values here
 
 /**

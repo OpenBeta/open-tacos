@@ -2,8 +2,10 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_AUTHOR_METADATA, FRAGMENT_CHANGE_HISTORY } from './contribs'
 import { FRAGMENT_MEDIA_WITH_TAGS } from './tags'
+import { FRAGMENT_CLIMB_DISCIPLINES } from './climbById'
 
 export const QUERY_AREA_BY_ID = gql`
+  ${FRAGMENT_CLIMB_DISCIPLINES}
   ${FRAGMENT_CHANGE_HISTORY}
   ${FRAGMENT_MEDIA_WITH_TAGS}
   ${FRAGMENT_AUTHOR_METADATA}
@@ -67,10 +69,7 @@ export const QUERY_AREA_BY_ID = gql`
         name
         fa
         grades {
-          font
-          french
-          vscale
-          yds
+          ...ClimbDisciplineFields
         }
         safety
         type {
@@ -120,17 +119,17 @@ export const QUERY_AREA_BY_ID = gql`
  * Why having 2 nearly identical queries?
  * TODO:  Combine this one and the main one above
  */
-export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
+export const QUERY_AREA_FOR_EDIT = gql`
+${FRAGMENT_CLIMB_DISCIPLINES}
+${FRAGMENT_MEDIA_WITH_TAGS}
+query AreaByID($uuid: ID) {
   area(uuid: $uuid) {
     id
     uuid
     areaName
     gradeContext
     media {
-      username
-      mediaUrl
-      destination
-      destType
+      ... MediaWithTagsFields
     }
     metadata {
       areaId
@@ -148,10 +147,7 @@ export const QUERY_AREA_FOR_EDIT = gql`query AreaByID($uuid: ID) {
       name
       fa
       grades {
-        font
-        french
-        vscale
-        yds
+        ...ClimbDisciplineFields
       }
       safety
       type {

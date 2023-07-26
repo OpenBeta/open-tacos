@@ -146,7 +146,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
     // Commit the changes to the user's metadata
     await metadataClient.updateUserMetadata(meta)
     res.status(200).end()
-  } catch (e) {
+  } catch (e: any) {
     // Could not add this climb to the user's favourites.
     // Almost certainly a programmer error.
     res.status(500).json({ error: e.message })

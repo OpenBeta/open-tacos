@@ -1,15 +1,9 @@
 import { useRef } from 'react'
 import { useSession, signIn } from 'next-auth/react'
-import { useRouter, NextRouter } from 'next/router'
-import { validate as isValidUuid } from 'uuid'
 import clx from 'classnames'
 
 import usePhotoUploader from '../js/hooks/usePhotoUploader'
-import { userMediaStore, revalidateUserHomePage } from '../js/stores/media'
-import useReturnToProfile from '../js/hooks/useReturnToProfile'
-import usePhotoTag from '../js/hooks/usePhotoTagCmd'
-import { mediaUrlHash } from '../js/sirv/SirvClient'
-import { BlockingAlert } from './ui/micro/AlertDialogue'
+import { useUserGalleryStore } from '../js/stores/useUserGalleryStore'
 
 interface UploadPhotoTriggerProps {
   children: JSX.Element | JSX.Element []
@@ -24,7 +18,6 @@ interface UploadPhotoTriggerProps {
  */
 export default function UploadPhotoTrigger ({ className = '', onUploaded, children }: UploadPhotoTriggerProps): JSX.Element | null {
   const { data, status } = useSession()
-  const router = useRouter()
 
   /**
    * Why useRef?
@@ -35,59 +28,12 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
   const sessionRef = useRef<any>()
   sessionRef.current = data?.user
 
-  const { tagPhotoCmd } = usePhotoTag()
-  const { toMyProfile } = useReturnToProfile()
-
-  const onUploadedHannder = async (url: string): Promise<void> => {
-    const session = sessionRef.current
-
-    if (session.metadata == null) {
-      console.log('## Error: user metadata not found')
-      return
-    }
-
-    const { nick, uuid } = session.metadata
-
-    const [id, destType, pageToInvalidate, destPageUrl] = pagePathToEntityType(router)
-
-    // let's see if we're viewing the climb or area page
-    if (id != null && isValidUuid(id) && (destType === 0 || destType === 1)) {
-      // yes! let's tag it
-      await tagPhotoCmd({
-        mediaUrl: url,
-        mediaUuid: mediaUrlHash(url),
-        destinationId: id,
-        destType
-      })
-
-      if (onUploaded != null) onUploaded()
-
-      // Tell Next to regenerate the page being tagged
-      try {
-        await fetch(pageToInvalidate)
-      } catch (e) { console.log(e) }
-
-      // Regenerate user profile page as well
-      if (nick != null) {
-        void revalidateUserHomePage(nick)
-      }
-
-      // Very important call to force destination page to update its props
-      // without doing a hard refresh
-      void router.replace(destPageUrl)
-    } else {
-      if (uuid != null && nick != null) {
-        await toMyProfile()
-        await userMediaStore.set.addImage(nick, uuid, url, true)
-      }
-    }
-  }
-
-  const { uploading, getRootProps, getInputProps, openFileDialog } = usePhotoUploader({ onUploaded: onUploadedHannder })
+  const { getRootProps, getInputProps, openFileDialog } = usePhotoUploader()
+  const uploading = useUserGalleryStore(store => store.uploading)
 
   return (
     <div
-      className={clx('pointer-events-none cursor-not-allowed', className, uploading ? 'pointer-events-none' : '')} {...getRootProps()} onClick={(e) => {
+      className={clx(className, uploading ? 'pointer-events-none' : '')} {...getRootProps()} onClick={(e) => {
         if (status === 'authenticated' && !uploading) {
           openFileDialog()
         } else {
@@ -97,35 +43,6 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
     >
       <input {...getInputProps()} />
       {children}
-      {uploading &&
-        <BlockingAlert
-          title='Uploading'
-          description={<progress className='progress w-56' />}
-        />}
     </div>
   )
-}
-
-/**
- * Convert current page path to a destination type for tagging.  Expect `path` to be in /areas|crag|climb/[id].
- * @param path `path` property as return from `Next.router()`
- */
-const pagePathToEntityType = (router: NextRouter): [string, number, string, string] | [null, null, null, null] => {
-  const nulls: [null, null, null, null] = [null, null, null, null]
-  const { asPath, query } = router
-  const tokens = asPath.split('/')
-
-  if (query == null || query.id == null || tokens.length < 3) return nulls
-
-  const id = query.id as string
-  switch (tokens[1]) {
-    case 'climbs':
-      return [id, 0, `/api/revalidate?c=${id}`, `/climbs/${id}`]
-    case 'areas':
-      return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
-    case 'crag':
-      return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
-    default:
-      return nulls
-  }
 }

@@ -1,4 +1,4 @@
-import { useMutation, useQuery, QueryResult } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { toast } from 'react-toastify'
 
 import { graphqlClient } from '../graphql/Client'
@@ -14,13 +14,13 @@ import { AreaType } from '../../js/types'
 type UpdateOneAreaCmdType = (input: UpdateOneAreaInputType) => Promise<void>
 type AddOneAreCmdType = ({ name, parentUuid }: AddAreaProps) => Promise<void>
 type DeleteOneAreaCmdType = ({ uuid }: DeleteOneAreaInputType) => Promise<void>
-type GetAreaByIdCmdType = ({ skip }: { skip?: boolean }) => QueryResult<{ area: AreaType}>
+type GetAreaByIdCmdType = ({ skip }: { skip?: boolean }) => any
 type UpdateAreasSortingOrderCmdType = (input: AreaSortingInput[]) => Promise<void>
 
 interface CallbackProps {
   onUpdateCompleted?: (data: any) => void
   onUpdateError?: (error: any) => void
-  onAddCompleted?: (data: any) => void
+  onAddCompleted?: (data: AddAreaReturnType) => void
   onAddError?: (error: any) => void
   onDeleteCompleted?: (data: any) => void
   onDeleteError?: (error: any) => void
@@ -118,14 +118,13 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     MUTATION_ADD_AREA, {
       client: graphqlClient,
       onCompleted: async (data) => {
+        if (onAddCompleted != null) {
+          onAddCompleted(data.addArea)
+        }
         toast.info('Area added 🔥')
 
         await refreshPage(`/api/revalidate?s=${data.addArea.uuid}`) // build new area page
         await refreshPage(`/api/revalidate?s=${areaId}`) // rebuild parent page
-
-        if (onAddCompleted != null) {
-          onAddCompleted(data)
-        }
       },
       onError: (error) => {
         toast.error(`Unexpected error: ${error.message}`)
@@ -136,11 +135,13 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     }
   )
 
-  const addOneAreaCmd: AddOneAreCmdType = async ({ name, parentUuid }: AddAreaProps) => {
+  const addOneAreaCmd: AddOneAreCmdType = async ({ name, parentUuid, isBoulder, isLeaf }: AddAreaProps) => {
     await addArea({
       variables: {
         name,
-        parentUuid: parentUuid
+        parentUuid: parentUuid,
+        ...isBoulder != null && { isBoulder },
+        ...isLeaf != null && { isLeaf }
       },
       context: {
         headers: {

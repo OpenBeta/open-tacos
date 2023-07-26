@@ -8,16 +8,24 @@ interface RadioGroupProps {
   values: string[]
   labelTips?: string[]
   disabled?: boolean
+  requiredErrorMessage: string
 }
 
 /**
- * A radio button group
+ * A radio button group.  An option must be selected.
  */
-export default function RadioGroup ({ groupLabel, groupLabelAlt, name, labels, values, labelTips = [], disabled = false }: RadioGroupProps): JSX.Element | null {
+export default function RadioGroup ({ groupLabel, groupLabelAlt, name, labels, values, labelTips = [], requiredErrorMessage, disabled = false }: RadioGroupProps): JSX.Element | null {
   if (labels.length !== values.length) return null // Mismatched labels and values
 
-  const { field } = useController({ name })
+  const { field, formState: { errors } } = useController({
+    name,
+    rules: {
+      required: requiredErrorMessage
+    }
+  })
   const { value } = field
+
+  const error = errors?.[name]
 
   return (
     <div className='form-control'>
@@ -46,7 +54,10 @@ export default function RadioGroup ({ groupLabel, groupLabelAlt, name, labels, v
           </label>
         ))}
       </div>
-      {/* <label className='label label-text-alt'>{labelTips[selectedIndex]}</label> */}
+      <label className='label h-12' id={`${name}-helper`} htmlFor={name}>
+        {error?.message != null &&
+           (<span className='label-text-alt text-error'>{error?.message as string}</span>)}
+      </label>
     </div>
   )
 }

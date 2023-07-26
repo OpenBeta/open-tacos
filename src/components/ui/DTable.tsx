@@ -37,6 +37,7 @@ const DTable = ({ byDisciplineAgg }: DTableProps): JSX.Element => {
       <tbody className='text-center text-secondary [border-spacing:0.25rem]'>
         {
           DISCIPLINES.map(d => {
+            // @ts-expect-error
             if (byDisciplineAgg[d] === null) {
               return null
             }
@@ -55,7 +56,9 @@ const DTable = ({ byDisciplineAgg }: DTableProps): JSX.Element => {
               <Row
                 key={d}
                 rowHeader={d}
+                // @ts-expect-error
                 total={byDisciplineAgg?.[d]?.total}
+                // @ts-expect-error
                 {...byDisciplineAgg[d]?.bands}
                 myRange={[myLowBand, myHighBand]}
                 highlighted={shouldHighlight(d, trad(), sport(), boulder(), tr())}

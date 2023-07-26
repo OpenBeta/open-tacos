@@ -1,5 +1,5 @@
-import LeanPopover from './LeanPopver'
-import MobileFilterPopover from './MobileFilterPopover'
+import LeanPopover, { ContentPanel } from './LeanPopver'
+import MobileFilterPopover, { MobileContentPanel } from './MobileFilterPopover'
 interface FilterPopoverProps {
   label: string
   shortHeader: string
@@ -19,10 +19,10 @@ export default function FilterPopover ({ label, mobileLabel, header, shortHeader
   if (isMobile) {
     return (
       <MobileFilterPopover mobileLabel={mobileLabel} btnLabel={label} title={shortHeader} onApply={onApply}>
-        <MobileFilterPopover.ContentPanel>
+        <MobileContentPanel>
           {minMax}
           {children}
-        </MobileFilterPopover.ContentPanel>
+        </MobileContentPanel>
       </MobileFilterPopover>
     )
   }
@@ -31,14 +31,14 @@ export default function FilterPopover ({ label, mobileLabel, header, shortHeader
       btnClz='border-2 rounded-2xl whitespace-nowrap py-1 px-4 border-primary-contrast lg:text-primary-contrast flex flex-row space-x-1.5 items-center'
       btnLabel={label}
     >
-      <LeanPopover.ContentPanel
+      <ContentPanel
         className='relative mt-2 p-6 bg-white rounded-md lg:drop-shadow-md lg:min-w-[400px] w-full'
         onApply={onApply}
       >
         <header className='mb-8'>{header}</header>
         <div className=''>{children}</div>
         {minMax}
-      </LeanPopover.ContentPanel>
+      </ContentPanel>
     </LeanPopover>
   )
 }

@@ -14,13 +14,16 @@ const handler: NextApiHandler<any> = async (req, res) => {
     return
   }
 
+  const isPreview = req.query?.preview != null
+
   try {
     const { getUsernameById } = useUserProfileCmd({ accessToken: uuid })
     const usernameInfo = await getUsernameById({ userUuid: uuid })
     if (usernameInfo?.username == null) {
       res.writeHead(307, { Location: '/' }).end()
     } else {
-      res.writeHead(307, { Location: `/u/${usernameInfo.username}` }).end()
+      const Location = isPreview ? `/u2/${usernameInfo.username}` : `/u/${usernameInfo.username}`
+      res.writeHead(307, { Location }).end()
     }
   } catch (e) {
     res.writeHead(307, { Location: '/' }).end()

@@ -1,31 +1,23 @@
 import { useSession } from 'next-auth/react'
-import { actions } from '../../js/stores'
-import { removePhoto } from '../../js/userApi/media'
+
 import { MediaWithTags } from '../../js/types'
 import AlertDialogue from '../ui/micro/AlertDialogue'
 import { DefaultLoader } from '../../js/sirv/util'
+import useMediaCmd from '../../js/hooks/useMediaCmd'
 
 interface RemoveImageProps {
   imageInfo: MediaWithTags
 }
 
 export default function RemoveImage ({ imageInfo }: RemoveImageProps): JSX.Element | null {
-  const { data } = useSession()
+  const session = useSession()
+  const { deleteOneMediaObjectCmd } = useMediaCmd()
 
   const { entityTags } = imageInfo
   if (entityTags.length > 0) return null
 
   const remove = async (): Promise<void> => {
-    if (data?.user?.metadata == null) {
-      console.warn('## Error: user metadata not found')
-      return
-    }
-
-    const filename: string = imageInfo.mediaUrl
-    const isRemoved = await removePhoto(filename)
-    if (isRemoved != null) {
-      await actions.media.removeImage(imageInfo.mediaUrl)
-    }
+    await deleteOneMediaObjectCmd(imageInfo.id, imageInfo.mediaUrl, session.data?.accessToken)
   }
 
   return (

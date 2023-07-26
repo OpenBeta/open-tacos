@@ -1,6 +1,6 @@
 import { COLOR_PALETTE_1 } from '../../colors'
 
-export function getSingleAreaIcon (d): string {
+export function getSingleAreaIcon (): string {
   return (
     `<svg width='42' height='42' xmlns='http://www.w3.org/2000/svg'>
       <circle cx="20" cy="20" r="20" fill='black'/>

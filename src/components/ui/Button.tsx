@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 
-export function Button ({ label, onClick, className }): any {
+export const Button: React.FC<any> = ({ label, onClick, className }) => {
   return (
     <button
       className={`${className as string} btn whitespace-nowrap 

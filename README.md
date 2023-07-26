@@ -4,7 +4,7 @@
   </a>
 </p>
 <h1 align="center">
-  OpenBeta v0.7
+  OpenBeta v0.9
 </h1>
 <p align="center">
   <strong>
@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  We're building the first <i>free</i> and <i>open source</i> rock climbing catalog.
+  We're building a <i>free</i> and <i>open source</i> rock climbing catalog.
 </p
 
 <p align="center">
@@ -36,7 +36,11 @@ The project is currently in MVP stage.<br>
 
 ## Screenshot
 
+### Climb page
 <img alt="OpenBeta screenshot" src="./openbeta-v0.7-screenshot.png"/>
+
+### Personal performance history
+<img alt="OpenBeta screenshot" src="./climb-history-chart.png"/>
 
 ## Tech stack
 
@@ -45,7 +49,7 @@ The project is currently in MVP stage.<br>
 2. Frontend (this repo): React.js, Next.js, TailwindCSS.
 
 ### High level architecture
-![Architecture overview](./ob-arch-v0.7.png)
+![Architecture overview](./ob-arch-v0.9.png)
 
 
 ## Live instances
@@ -142,7 +146,7 @@ See our general [How to contribute guide](https://docs.openbeta.io/how-to-contri
 ## Support Us
 
 - Give this repo a star
-- Please consider [making a donation today](https://opencollective.com/openbeta) to help us pay our infrastructure expenses (> $100/month).
+- Please consider [making a donation today](https://opencollective.com/openbeta) to help us pay for our infrastructure expenses ($150/month).
 
 ## Contributors
 
@@ -228,6 +232,8 @@ Thanks goes to these wonderful people:
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/dww3000"><img src="https://avatars.githubusercontent.com/u/127548981?v=4?s=100" width="100px;" alt="DavidW"/><br /><sub><b>DavidW</b></sub></a><br /><a href="#projectManagement-dww3000" title="Project Management">📆</a> <a href="#ideas-dww3000" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Ali7040"><img src="https://avatars.githubusercontent.com/u/81979505?v=4?s=100" width="100px;" alt="Ali Haider"/><br /><sub><b>Ali Haider</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=Ali7040" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/shyamtawli"><img src="https://avatars.githubusercontent.com/u/104145978?v=4?s=100" width="100px;" alt="Shyam Tawli"/><br /><sub><b>Shyam Tawli</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=shyamtawli" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/SidV2"><img src="https://avatars.githubusercontent.com/u/17374208?v=4?s=100" width="100px;" alt="SidV2"/><br /><sub><b>SidV2</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=SidV2" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

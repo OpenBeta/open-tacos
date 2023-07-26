@@ -3,7 +3,7 @@ import { BOULDER_DEFS, genSliderMarks } from '../../js/grades/ranges'
 
 export { BOULDER_DEFS }
 
-const BoulderRangeSlider = ({ onChange, defaultValue }): JSX.Element => {
+const BoulderRangeSlider: React.FC<any> = ({ onChange, defaultValue }) => {
   return (
     <RangeSlider
       count={1}

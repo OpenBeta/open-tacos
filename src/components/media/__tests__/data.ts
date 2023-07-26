@@ -1,5 +1,5 @@
 import { v4 } from 'uuid'
-import { MediaWithTags } from '../../../js/types'
+import { MediaFormat, MediaWithTags, UserMedia } from '../../../js/types'
 
 export const mediaList: MediaWithTags[] = [
   {
@@ -7,7 +7,7 @@ export const mediaList: MediaWithTags[] = [
     mediaUrl: '/img1.jpg',
     width: 1200,
     height: 960,
-    format: 'jpeg',
+    format: MediaFormat.jpg,
     size: 30000,
     uploadTime: new Date(),
     entityTags: []
@@ -16,7 +16,7 @@ export const mediaList: MediaWithTags[] = [
     id: v4(),
     width: 1200,
     height: 960,
-    format: 'jpeg',
+    format: MediaFormat.jpg,
     size: 30000,
     uploadTime: new Date(),
     entityTags: [],
@@ -26,7 +26,7 @@ export const mediaList: MediaWithTags[] = [
     id: v4(),
     width: 1200,
     height: 960,
-    format: 'jpeg',
+    format: MediaFormat.jpg,
     size: 30000,
     uploadTime: new Date(),
     entityTags: [],
@@ -36,7 +36,7 @@ export const mediaList: MediaWithTags[] = [
     id: v4(),
     width: 1200,
     height: 960,
-    format: 'jpeg',
+    format: MediaFormat.jpg,
     size: 30000,
     uploadTime: new Date(),
     entityTags: [],
@@ -46,7 +46,7 @@ export const mediaList: MediaWithTags[] = [
     id: v4(),
     width: 1200,
     height: 960,
-    format: 'jpeg',
+    format: MediaFormat.jpg,
     size: 30000,
     uploadTime: new Date(),
     entityTags: [],
@@ -56,12 +56,27 @@ export const mediaList: MediaWithTags[] = [
     id: v4(),
     width: 1200,
     height: 960,
-    format: 'jpeg',
+    format: MediaFormat.jpg,
     size: 30000,
     uploadTime: new Date(),
     entityTags: [],
     mediaUrl: '/img6.jpg'
   }
 ]
+
+export const userMedia: UserMedia = {
+  userUuid: '539eec72-c209-4de9-ad50-66c548fc2ace',
+  mediaConnection: {
+    edges: mediaList.map((entry, index) => ({
+      node: entry,
+      cursor: `${entry.uploadTime.getDate()}_${index}}`
+    })),
+    pageInfo: {
+      hasNextPage: true,
+      endCursor: '1234'
+    }
+  }
+
+}
 
 it.skip('Test data', () => {})

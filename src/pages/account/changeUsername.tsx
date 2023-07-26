@@ -2,6 +2,7 @@ import { NextPage } from 'next'
 import Head from 'next/head'
 
 import { UsernameChangeForm } from '../../components/users/account/UsernameChangeForm'
+import { AccountLayout } from '../../components/users/account/AccountLayout'
 
 const changeUsername: NextPage = () => {
   return (
@@ -9,12 +10,7 @@ const changeUsername: NextPage = () => {
       <Head>
         <title>Change username</title>
       </Head>
-      <div className='h-screen lg:flex lg:justify-center'>
-        <div className='hidden lg:block bg-accent/80 w-full' />
-        <div className='w-full p-4 lg:p-6 flex flex-col justify-center'>
-          <UsernameChangeForm />
-        </div>
-      </div>
+      <AccountLayout form={<UsernameChangeForm />} />
     </>
   )
 }

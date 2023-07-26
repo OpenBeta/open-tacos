@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { MediaWithTags } from '../../../js/types'
+import { MediaFormat, MediaWithTags } from '../../../js/types'
 import { TagListProps } from '../TagList'
 
 const TAG_DATA: MediaWithTags = {
@@ -11,7 +11,7 @@ const TAG_DATA: MediaWithTags = {
   mediaUrl: 'https://example.com/1.jpg',
   width: 1200,
   height: 960,
-  format: 'jpeg',
+  format: MediaFormat.jpg,
   size: 30000,
   uploadTime: new Date(),
   entityTags: [{
@@ -25,7 +25,6 @@ const TAG_DATA: MediaWithTags = {
 }
 
 jest.mock('../../../js/graphql/Client')
-jest.mock('../../../js/hooks/useDeleteTagBackend')
 
 const AddTagMock = jest.fn((props) => <div>mocked</div>)
 jest.mock('../AddTag', () => ({
@@ -33,11 +32,11 @@ jest.mock('../AddTag', () => ({
   default: AddTagMock
 }))
 
-const onDelete = jest.fn()
+const addEntityTagCmd = jest.fn()
 
-jest.mock('../../../js/hooks/useDeleteTagBackend', () => ({
+jest.mock('../../../js/hooks/useMediaCmd', () => ({
   __esModule: true,
-  default: () => ({ onDelete })
+  default: () => ({ addEntityTagCmd })
 }))
 
 let PopupTagList: React.FC<TagListProps>
@@ -51,6 +50,7 @@ describe('MobilePopupTagMenu', () => {
 
   test('Tag with permission to delete', async () => {
     const user = userEvent.setup()
+    // const callback = jest.fn()
     render(
       <PopupTagList
         mediaWithTags={TAG_DATA}

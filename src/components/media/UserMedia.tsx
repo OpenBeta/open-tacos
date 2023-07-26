@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { MouseEventHandler, useCallback } from 'react'
 import ContentLoader from 'react-content-loader'
 import { basename } from 'path'
 import Link from 'next/link'
@@ -28,7 +28,7 @@ export default function UserMedia ({
   isAuthorized = false
 }: UserMediaProps): JSX.Element {
   const { mediaUrl, entityTags } = mediaWithTags
-  const onClickHandler = useCallback((event) => {
+  const onClickHandler: MouseEventHandler = useCallback((event) => {
     if (onClick != null) {
       // we want to show URL in browser status bar and let the user open link in a new tab,
       // but we don't want the default behavoir of <a href...>
@@ -68,7 +68,7 @@ export default function UserMedia ({
   )
 }
 
-export const ImagePlaceholder = (props): JSX.Element => (
+export const ImagePlaceholder: React.FC<{ uniqueKey?: string }> = (props) => (
   <ContentLoader
     uniqueKey={props.uniqueKey}
     height={300}

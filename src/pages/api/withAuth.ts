@@ -9,8 +9,6 @@ import { authOptions } from './auth/[...nextauth]'
 const withAuth = (handler: NextApiHandler): NextApiHandler => {
   return async (req, res) => {
     const session = await getServerSession(req, res, authOptions)
-
-    console.log('#withAuth', session)
     if (session != null) {
       await handler(req, res)
     } else {

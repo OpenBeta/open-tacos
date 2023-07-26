@@ -4,7 +4,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline'
 /**
  * Barebone popover component for grades, radius, disciplines selector
  */
-const LeanPopover = ({ btnClz, btnLabel, children }): JSX.Element => {
+const LeanPopover: React.FC<any> = ({ btnClz, btnLabel, children }) => {
   return (
     <Popover className=''>
       {({ open }) => (
@@ -21,7 +21,7 @@ const LeanPopover = ({ btnClz, btnLabel, children }): JSX.Element => {
   )
 }
 
-const ContentPanel = ({ className, onApply, btnApplyLabel = 'Apply', children }): JSX.Element => {
+export const ContentPanel: React.FC<any> = ({ className, onApply, btnApplyLabel = 'Apply', children }) => {
   return (
     <div className={className}>
       {children}
@@ -40,7 +40,5 @@ const ContentPanel = ({ className, onApply, btnApplyLabel = 'Apply', children })
     </div>
   )
 }
-
-LeanPopover.ContentPanel = ContentPanel
 
 export default LeanPopover

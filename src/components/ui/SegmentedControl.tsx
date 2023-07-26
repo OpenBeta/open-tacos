@@ -26,7 +26,7 @@ const Segment = ({ children }: SegmentProps): JSX.Element => {
 
 SegmentedControl.Segment = Segment
 
-const Label = ({ label }): JSX.Element => (
+const Label: React.FC<any> = ({ label }) => (
   <Tab className='p-0.5'>
     {({ selected }) => (
       <div

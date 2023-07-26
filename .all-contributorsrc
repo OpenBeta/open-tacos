@@ -545,6 +545,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "shyamtawli",
+      "name": "Shyam Tawli",
+      "avatar_url": "https://avatars.githubusercontent.com/u/104145978?v=4",
+      "profile": "https://github.com/shyamtawli",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "SidV2",
+      "name": "SidV2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17374208?v=4",
+      "profile": "https://github.com/SidV2",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

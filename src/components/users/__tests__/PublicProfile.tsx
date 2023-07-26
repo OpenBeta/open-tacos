@@ -59,7 +59,7 @@ test('Profile detail when the user is logged in.', async () => {
 
   expect(mockedUseSession).toBeCalled()
 
-  expect(screen.getByRole('link', { name: /edit/i })).toHaveAttribute('href', '/account/changeUsername')
+  expect(screen.getByRole('link', { name: /edit/i })).toHaveAttribute('href', '/account/editProfile')
 
   expect(screen.queryByText(userProfile.displayName)).not.toBeNull()
   expect(screen.queryByText(userProfile.username)).not.toBeNull()

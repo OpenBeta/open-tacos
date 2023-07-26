@@ -46,7 +46,7 @@ export const BaseInput: React.FC<BaseInputProps> = ({ label, name, placeholder =
 /**
  * A reusable react-hook-form input field
  */
-export default function Input ({ label, labelAlt, unitLabel, unitLabelPlacement = 'right', name, registerOptions, placeholder = '', className = '', classDefault = INPUT_DEFAULT_CSS, affixClassname = AFFIX_DEFAULT_CSS, helper, disabled = false, readOnly = false, type, spellCheck = true }: InputProps): JSX.Element {
+export default function Input ({ label, labelAlt, unitLabel, unitLabelPlacement = 'right', name, registerOptions, placeholder = '', className = '', classDefault = INPUT_DEFAULT_CSS, affixClassname = AFFIX_DEFAULT_CSS, helper, disabled = false, readOnly = false, type = 'text', spellCheck = true }: InputProps): JSX.Element {
   const formContext = useFormContext()
   const { formState: { errors } } = formContext
 
@@ -89,10 +89,10 @@ export default function Input ({ label, labelAlt, unitLabel, unitLabelPlacement 
           </label>
           )}
 
-      <label className='label h-12' id={`${name}-helper`} htmlFor={name}>
+      <label className='label' id={`${name}-helper`} htmlFor={name}>
         {error?.message != null &&
            (<span className='label-text-alt text-error'>{error?.message as string}</span>)}
-        {(error == null) && helper}
+        {(error == null) && <span className='label-text-alt label-helper'>{helper}</span>}
       </label>
     </div>
   )

@@ -1,8 +1,13 @@
-import { NextPage, GetStaticProps } from 'next'
 import React from 'react'
+import { useRouter } from 'next/router'
+import { NextPage, GetStaticProps } from 'next'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { getTicksByUser } from '../../js/graphql/api'
 import { TickType } from '../../js/types'
+import ImportFromMtnProj from '../../components/users/ImportFromMtnProj'
+import Layout from '../../components/layout'
+import { ChartsSectionProps } from '../../components/logbook/ChartsSection'
 
 interface TicksIndexPageProps {
   username: string
@@ -17,14 +22,34 @@ interface TicksIndexPageProps {
  * - Incrementally adopt nested layout https://nextjs.org/blog/layouts-rfc
  */
 const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
+  const { isFallback } = useRouter()
+
   return (
-    <section className='max-w-lg mx-auto w-full px-4 py-8'>
-      <h1>{username}</h1>
-      <div>
-        {ticks?.map(Tick)}
-        {ticks?.length === 0 && <div>No ticks</div>}
-      </div>
-    </section>
+    <Layout
+      contentContainerClass='content-default with-standard-y-margin'
+      showFilterBar={false}
+    >
+      {isFallback
+        ? <div className='h-screen'>Loading...</div>
+        : (
+          <>
+            <ChartsSection tickList={ticks} />
+
+            <section className='max-w-lg mx-auto w-full px-4 py-8'>
+              <h2>{username}</h2>
+              <div className='py-4 flex items-center gap-6'>
+                <ImportFromMtnProj isButton username={username} />
+                <a className='btn btn-xs md:btn-sm btn-outline' href={`/u/${username}`}>Classic Profile</a>
+              </div>
+
+              <h3 className='py-4'>Log book</h3>
+              <div>
+                {ticks?.map(Tick)}
+                {ticks?.length === 0 && <div>No ticks</div>}
+              </div>
+            </section>
+          </>)}
+    </Layout>
   )
 }
 
@@ -53,7 +78,6 @@ export async function getStaticPaths (): Promise<any> {
 
 export const getStaticProps: GetStaticProps<TicksIndexPageProps, {slug: string[]}> = async ({ params }) => {
   const username = params?.slug?.[0] ?? null
-  // const viewId = params?.slug?.[1] ?? 'ticks'
 
   if (username == null) {
     return { notFound: true }
@@ -69,3 +93,9 @@ export const getStaticProps: GetStaticProps<TicksIndexPageProps, {slug: string[]
     return { notFound: true }
   }
 }
+
+const ChartsSection = dynamic<ChartsSectionProps>(
+  async () =>
+    await import('../../components/logbook/ChartsSection').then(
+      module => module.default), { ssr: false }
+)

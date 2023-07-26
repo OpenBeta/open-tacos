@@ -49,7 +49,9 @@ export const CragDensity = ({ crags }: {crags: any[]}): JSX.Element => {
               <div key={_id} className='flex-1'>
                 <div className='text-xl text-center'>{count}</div>
                 <div className='text-center text-xs text-secondary'>
-                  {LABELS[_id].label}
+                  {/* @ts-expect-error */
+                   LABELS[_id].label
+                  }
                 </div>
               </div>
             )

@@ -14,6 +14,7 @@ import { PlainTextResetPlugin } from './plugins/PlainTextResetPlugin'
 import { PlainTextModePlugin } from './plugins/PlainTextEditModePlugin'
 import { Placeholder } from './InplaceEditor'
 import { RulesType } from '../../js/types'
+import { EditorState, LexicalEditor } from 'lexical'
 
 interface EditorProps {
   initialValue?: string
@@ -33,8 +34,8 @@ export default function InplaceTextInput ({ initialValue = '', name, editable = 
   const { field, fieldState: { error } } = useController({ name, rules })
   const { onBlur } = field
 
-  const onChangeHandler = (arg0, arg1): void => {
-    onChange(arg0, arg1, field)
+  const onChangeHandler = (editorState: EditorState, editor: LexicalEditor): void => {
+    onChange(editorState, editor, field)
   }
 
   return (

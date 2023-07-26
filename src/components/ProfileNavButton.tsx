@@ -38,7 +38,13 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
           <DropdownContent>
             <DropdownItem
               icon={<UserCircleIcon className='w-4 h-4' />}
-              text='Profile'
+              text={<><span className='font-medium'>Profile </span><sup className='badge badge-sm badge-info'>Beta</sup></>}
+              onSelect={async () => await router.push('/api/user/me?preview=1')}
+            />
+
+            <DropdownItem
+              icon={<UserCircleIcon className='w-4 h-4' />}
+              text='Classic Profile'
               onSelect={async () => await router.push('/api/user/me')}
             />
 
@@ -46,6 +52,7 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
 
             <DropdownItem text='About' onSelect={async () => await router.push('/about')} />
             <DropdownItem text='Documentation' onSelect={async () => await router.push('https://docs.openbeta.io')} />
+            <DropdownItem text='Blog' onSelect={async () => await router.push('https://openbeta.io/blog')} />
 
             <DropdownSeparator />
 

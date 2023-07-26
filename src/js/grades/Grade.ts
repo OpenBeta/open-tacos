@@ -24,6 +24,18 @@ const gradeContextToGradeScales = {
     aid: GradeScales.FRENCH,
     snow: GradeScales.FRENCH, // is this the same as alpine?
     ice: GradeScales.FRENCH // is this the same as alpine?
+  },
+  AU: {
+    trad: GradeScales.EWBANK,
+    sport: GradeScales.EWBANK,
+    bouldering: GradeScales.VSCALE,
+    tr: GradeScales.EWBANK,
+    deepwatersolo: GradeScales.EWBANK,
+    alpine: GradeScales.YDS,
+    mixed: GradeScales.YDS,
+    aid: GradeScales.AID,
+    snow: GradeScales.YDS, // is this the same as alpine?
+    ice: GradeScales.WI
   }
 }
 
@@ -59,11 +71,13 @@ export default class Grade {
 
   toStringBouldering (): string | undefined {
     const key: string = this.gradescales.bouldering
+    // @ts-expect-error
     return this.values?.[key] ?? undefined
   }
 
   toStringTradSportAid (): string | undefined {
     const key = this.gradescales.sport
+    // @ts-expect-error
     return this.values?.[key] ?? undefined
   }
 
@@ -79,7 +93,7 @@ export default class Grade {
     const isValidGrade = (userInput: string): string | undefined => {
       if (userInput == null || userInput === '') return undefined
       const score = getScale(this.gradescales.bouldering)?.getScore(userInput) ?? -1
-      return score >= 0 || Array.isArray(score) ? undefined : 'Invalid grade'
+      return Array.isArray(score) || score >= 0 ? undefined : 'Invalid grade'
     }
     return {
       validate: {
@@ -92,7 +106,7 @@ export default class Grade {
     const isValidGrade = (userInput: string): string | undefined => {
       if (userInput == null || userInput === '') return undefined // possible to have unknown grade (Ex: route under development)
       const score = getScale(this.gradescales[discipline])?.getScore(userInput) ?? -1
-      return score >= 0 || Array.isArray(score) ? undefined : 'Invalid grade'
+      return Array.isArray(score) || score >= 0 ? undefined : 'Invalid grade'
     }
     return {
       validate: {
@@ -125,7 +139,7 @@ export class GradeHelper {
       if (userInput == null || userInput === '') return 'Missing grade'
       const _d = discipline == null && this.isBoulder ? 'bouldering' : 'trad'
       const score = getScale(this.gradeScales[_d])?.getScore(userInput) ?? -1
-      return score >= 0 || Array.isArray(score) ? undefined : 'Invalid grade'
+      return Array.isArray(score) || score >= 0 ? undefined : 'Invalid grade'
     }
     return {
       validate: {

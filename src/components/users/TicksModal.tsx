@@ -1,8 +1,9 @@
 import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import TickCard from './TickCard'
+import { TickType } from '../../js/types'
 
-export default function TicksModal ({ open, setOpen, setTicks, setOpenForm, climbName, ticks }): JSX.Element {
+const TicksModal: React.FC<any> = ({ open, setOpen, setTicks, setOpenForm, climbName, ticks }) => {
   const cancelButtonRef = useRef(null)
 
   function openFormCloseModal (): void {
@@ -42,7 +43,7 @@ export default function TicksModal ({ open, setOpen, setTicks, setOpenForm, clim
                       Ticks for {climbName}
                     </Dialog.Title>
                     <div className='mt-2 max-h-96 overflow-auto'>
-                      {ticks?.map((tick, idx) => {
+                      {ticks?.map((tick: TickType, idx: number) => {
                         return <TickCard key={idx} tickId={tick._id} setTicks={setTicks} ticks={ticks} dateClimbed={tick.dateClimbed} notes={tick.notes} style={tick.style} />
                       })}
                     </div>
@@ -75,3 +76,5 @@ export default function TicksModal ({ open, setOpen, setTicks, setOpenForm, clim
     </Transition.Root>
   )
 }
+
+export default TicksModal
