@@ -60,7 +60,7 @@ const OrganizationTable = (): JSX.Element => {
   })
 
   const { handleSubmit } = form
-  const submitHandler = ({ displayName }): void => { setDisplayNameFilter(displayName) }
+  const submitHandler = ({ displayName }: HtmlFormProps): void => { setDisplayNameFilter(displayName) }
 
   // Fetch data
   const input: OrgInput = {

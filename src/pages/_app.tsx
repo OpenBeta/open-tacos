@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from 'react'
+import { useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import Router from 'next/router'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -68,7 +68,7 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
   )
 }
 
-function Auth ({ children }): ReactElement {
+const Auth: React.FC<any> = ({ children }) => {
   const { status } = useSession()
   useEffect(() => {
     if (status === 'unauthenticated') {

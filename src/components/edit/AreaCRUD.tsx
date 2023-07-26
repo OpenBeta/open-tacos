@@ -6,8 +6,9 @@ import {
   KeyboardSensor,
   useSensor,
   useSensors,
-  DragOverlay
-  ,
+  DragOverlay,
+  DragStartEvent,
+  DragEndEvent,
   MouseSensor as LibMouseSensor
 } from '@dnd-kit/core'
 import {
@@ -63,23 +64,23 @@ export const AreaCRUD = ({ uuid: parentUuid, areaName: parentName, childAreas, e
     })
   )
 
-  function handleDragEnd (event): void {
+  function handleDragEnd (event: DragEndEvent): void {
     const { active, over } = event
     setDraggedArea(null)
 
-    if (active.id !== over.id) {
-      const oldIndex = areasSortedState.indexOf(active.id)
-      const newIndex = areasSortedState.indexOf(over.id)
+    if (active.id != null && over?.id != null && active.id !== over.id) {
+      const oldIndex = areasSortedState.indexOf(active.id as string)
+      const newIndex = areasSortedState.indexOf(over.id as string)
       const reorderedChildAreas = arrayMove(areasSortedState, oldIndex, newIndex)
       void updateAreasSortingOrderCmd(reorderedChildAreas.map((uuid, idx) => ({ areaId: uuid, leftRightIndex: idx })))
       setAreasSortedState(reorderedChildAreas)
     }
   }
 
-  function handleDragStart (event): void {
+  function handleDragStart (event: DragStartEvent): void {
     const { active } = event
     if (active.id != null) {
-      setDraggedArea(active.id)
+      setDraggedArea(active.id as string)
     }
   }
 

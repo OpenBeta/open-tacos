@@ -23,6 +23,7 @@ interface ChangsetRowProps {
 const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
   const { createdAt, editedByUser, operation, changes } = changeset
 
+  // @ts-expect-error
   const op = operationLabelMap[operation]
   if (op == null) console.log('#op', operation, changes)
   return (
@@ -58,10 +59,11 @@ const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: Change
     return null
   }
   const { name, id } = fullDocument as ClimbType
-
+  // @ts-expect-error
+  const icon = dbOpIcon[dbOp]
   return (
     <div className='py-2 ml-2 flex gap-x-2'>
-      <div className='flex gap-2'><span>{dbOpIcon[dbOp]}</span><span className='badge badge-sm badge-info'>Climb</span></div>
+      <div className='flex gap-2'><span>{icon}</span><span className='badge badge-sm badge-info'>Climb</span></div>
 
       <div className=''>
         <div className=''>
@@ -86,9 +88,11 @@ const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeT
 
   const url = `/crag/${uuid}`
 
+  // @ts-expect-error
+  const icon = dbOpIcon[dbOp]
   return (
     <div className='ml-2 flex gap-x-2'>
-      <div className='flex gap-2'>{dbOpIcon[dbOp]} <span className='badge badge-sm badge-warning'>Area</span></div>
+      <div className='flex gap-2'>{icon} <span className='badge badge-sm badge-warning'>Area</span></div>
 
       <div className=''>
         <div className=''>
@@ -109,10 +113,11 @@ const OrganizationChange = ({ changeId, fullDocument, updateDescription, dbOp }:
     return null
   }
   const { displayName } = fullDocument as OrganizationType
-
+  // @ts-expect-error
+  const icon = dbOpIcon[dbOp]
   return (
     <div className='ml-2 flex gap-x-2'>
-      <div className='flex gap-2'>{dbOpIcon[dbOp]} <span className='badge badge-sm badge-warning'>Organization</span></div>
+      <div className='flex gap-2'>{icon} <span className='badge badge-sm badge-warning'>Organization</span></div>
 
       <div className=''>
         <div className=''>
@@ -149,7 +154,12 @@ const ActionIcon = ({ icon, clz }: ActionIconProps): JSX.Element => (
   <div className={`bg-opacity-60 rounded-full border border-base-300 p-2 ${clz ?? ''}`}>{icon}</div>
 )
 
-const OpBadge = ({ label, clz = 'badge-outline' }): JSX.Element => <span className={`badge ${clz}`}>{label}</span>
+interface OpBadgeProps {
+  label: string
+  clz?: string
+}
+
+const OpBadge = ({ label, clz = 'badge-outline' }: OpBadgeProps): JSX.Element => <span className={`badge ${clz}`}>{label}</span>
 
 const operationLabelMap = {
   addArea: {

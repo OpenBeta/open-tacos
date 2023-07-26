@@ -482,6 +482,10 @@ a:focus {
   @apply sm:px-0 border-0 !important;
 }
 
+.label-helper {
+  @apply text-opacity-70;
+}
+
 .Toastify__toast {
   @apply p-4 rounded-btn;
 }

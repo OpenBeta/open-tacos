@@ -1,10 +1,13 @@
-import { Button, ButtonVariant } from '../ui/BaseButton'
+import Link from 'next/link'
 
 import forOwnerOnly from '../../js/auth/forOwnerOnly'
 
 function EditProfileButton (): JSX.Element {
   return (
-    <Button href='/account/edit' label='Edit' variant={ButtonVariant.OUTLINED_DEFAULT} size='sm' />
+    <Link href='/account/editProfile'>
+      <a className='btn btn-xs md:btn-sm btn-outline'>Edit profile
+      </a>
+    </Link>
   )
 }
 

@@ -68,6 +68,7 @@ export const xsearchTypesense = async (query: string, onSelect?: OnSelectType, f
     sources.push(makeFASource(rs))
   }
 
+  // @ts-expect-error
   return sources
 }
 
