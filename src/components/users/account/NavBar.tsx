@@ -22,7 +22,7 @@ export const NavBar: React.FC = () => {
       <div className='lg:ml-4 mt-12 flex flex-col gap-2 max-w-xs'>
         <div className='font-semibold text-base-content/70 text-sm'>ACCOUNT SETTINGS</div>
         {Links.map(({ path, label }) => {
-          return (<a key={path} href={path} className={clx('px-4 py-2 rounded-l-lg', router.asPath === path ? 'bg-base-100' : 'hover:bg-base-100/40')}>{label}</a>)
+          return (<a key={path} href={path} className={clx('px-4 py-2 rounded-r-lg lg:rounded-r-none rounded-l-lg', router.asPath === path ? 'bg-base-100' : 'hover:bg-base-100/40')}>{label}</a>)
         })}
       </div>
     </div>
