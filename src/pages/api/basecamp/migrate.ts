@@ -46,7 +46,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
     } else {
       res.status(401).json({ message: 'Migration failed: user not authorized', errorCode: 3 })
     }
-  } catch (e) {
+  } catch (e: any) {
     res.status(503).json({ message: `Unexpected error: ${e.message as string}`, errorCode: 2 })
   }
 }

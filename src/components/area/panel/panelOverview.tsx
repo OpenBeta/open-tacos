@@ -3,7 +3,7 @@ import { ListItemEntity } from './listItem'
 import { BarChart, Bar, Cell, XAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { CategoricalChartState } from 'recharts/types/chart/generateCategoricalChart'
 
-const CustomTooltip = (data: {label: string, payload: any[] }): JSX.Element => {
+const CustomTooltip: React.FC<any> = (data: {label: string, payload: any[] }) => {
   let tags: Array<[string, number]> = []
 
   if (data?.payload?.length > 0) {
@@ -89,7 +89,7 @@ export default function PanelOverview (props: PanelOverviewProps): JSX.Element {
           onClick={handleClick}
           onMouseMove={handleHover}
         >
-          <Tooltip content={CustomTooltip} isAnimationActive={false} />
+          <Tooltip content={<CustomTooltip />} isAnimationActive={false} />
           <XAxis hide dataKey='name' />
           <Bar
             dataKey='total'

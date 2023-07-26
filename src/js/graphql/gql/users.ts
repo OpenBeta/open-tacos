@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client'
 import { FRAGMENT_MEDIA_WITH_TAGS } from './tags'
+import { UserPublicProfile } from '../../types/User'
 
 // TODO: also get user profile
 // change query to get user public page
@@ -57,7 +58,31 @@ export const QUERY_GET_USER_PUBLIC_PAGE = gql`
   }
 `
 
+export interface GetUserPublicProfileByUuidReturn {
+  getUserPublicProfileByUuid: UserPublicProfile
+}
+
+export const QUERY_GET_USER_PUBLIC_PROFILE_BY_UUID = gql`
+  query ($userUuid: ID!) {
+    getUserPublicProfileByUuid(input: { userUuid: $userUuid }) {
+      bio
+      displayName
+      userUuid
+      username
+      website
+      avatar
+    }
+  }
+`
+
 export const MUTATION_UPDATE_PROFILE = gql`
-  mutation ($username: String!, $userUuid: ID!, $email: String, $avatar: String) {
-    updateUserProfile(input: { userUuid: $userUuid, username: $username, email: $email, avatar: $avatar })
+  mutation ($username: String, $userUuid: ID!, $email: String, $avatar: String, $displayName: String, $bio: String, $website: String) {
+    updateUserProfile(input: {
+      userUuid: $userUuid, 
+      username: $username, 
+      email: $email, 
+      avatar: $avatar,
+      displayName: $displayName,
+      bio: $bio,
+      website: $website })
   }`

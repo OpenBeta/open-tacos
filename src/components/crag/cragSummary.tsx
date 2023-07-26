@@ -28,6 +28,7 @@ import { PageBanner as LCOBanner } from '../lco/PageBanner'
 import { DialogContent, DialogTrigger, MobileDialog } from '../ui/MobileDialog'
 import RecentChangeHistory from '../edit/RecentChangeHistory'
 import { isEmpty } from 'underscore'
+
 export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName' | 'climbs' | 'children' | 'totalClimbs'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 
 export interface EditableClimbType {
@@ -118,6 +119,10 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
    * may be updated by the users in the AreaCRUD component.
    */
   const [childAreasCache, setChildAreasCache] = useState(sortByLeftRightIndex(childAreas))
+
+  useEffect(() => {
+    setChildAreasCache(sortByLeftRightIndex(childAreas))
+  }, [childAreas])
 
   /**
    * Hold the form base states aka default values.  Since we use Next SSG,
@@ -305,7 +310,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
   useEffect(() => {
     if (data?.area != null) {
       setChildAreasCache(sortByLeftRightIndex(data.area.children))
-      const { uuid, areaName, metadata, content, climbs } = data.area
+      const { uuid, areaName, metadata, content, climbs } = data.area as AreaType
       const { lat, lng } = metadata
       setCache((current) => ({
         ...current,

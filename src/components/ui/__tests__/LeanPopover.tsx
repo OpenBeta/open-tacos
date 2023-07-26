@@ -1,7 +1,7 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { fireEvent, render, screen } from '@testing-library/react'
-import LeanPopover from '../LeanPopver'
+import LeanPopover, { ContentPanel } from '../LeanPopver'
 
 test('LeanPopover responds to clicks', () => {
   const handleClick = jest.fn()
@@ -11,14 +11,14 @@ test('LeanPopover responds to clicks', () => {
       btnLabel='Foo'
       btnClz='my-btn-clz'
     >
-      <LeanPopover.ContentPanel
+      <ContentPanel
         className='my-panel-clz'
         btnApplyLabel='Ok'
         onApply={handleClick}
       >
         <header>my header</header>
         <div>my content</div>
-      </LeanPopover.ContentPanel>
+      </ContentPanel>
     </LeanPopover>)
 
   expect(screen.queryByRole('banner')).toBeNull()

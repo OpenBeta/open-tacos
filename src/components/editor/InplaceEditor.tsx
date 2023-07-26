@@ -15,6 +15,7 @@ import onChange from './onChange'
 import { MarkdownPreviewPlugin } from './plugins/MarkdownPreviewPlugin'
 import { PlainTextResetPlugin } from './plugins/PlainTextResetPlugin'
 import { RulesType } from '../../js/types'
+import { EditorState, LexicalEditor } from 'lexical'
 
 interface EditorProps {
   initialValue?: string
@@ -31,7 +32,7 @@ interface EditorProps {
 export default function Editor ({ initialValue = '', name, editable = false, reset, placeholder = 'Enter some text', rules }: EditorProps): JSX.Element {
   const { field, fieldState: { error } } = useController({ name, rules })
 
-  const onChangeHandler = (arg0, arg1): void => {
+  const onChangeHandler = (arg0: EditorState, arg1: LexicalEditor): void => {
     onChange(arg0, arg1, field)
   }
   return (
@@ -79,6 +80,6 @@ export default function Editor ({ initialValue = '', name, editable = false, res
   )
 }
 
-export function Placeholder ({ text }): JSX.Element {
+export const Placeholder: React.FC<{ text: string }> = ({ text }) => {
   return <div className='editor-placeholder'>{text}</div>
 }

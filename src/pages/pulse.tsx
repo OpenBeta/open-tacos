@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactNode } from 'react'
 import { NextPage, GetStaticProps } from 'next'
 import Link from 'next/link'
 import Layout from '../components/layout'
@@ -96,7 +96,7 @@ interface FinancialReportProps {
   donationSummary: FinancialReportType
 }
 
-const FinancialReport = ({ donationSummary }: FinancialReportProps): ReactElement => {
+const FinancialReport: React.FC<FinancialReportProps> = ({ donationSummary }) => {
   const { totalRaised, donors } = donationSummary
 
   return (
@@ -113,7 +113,7 @@ const FinancialReport = ({ donationSummary }: FinancialReportProps): ReactElemen
   )
 }
 
-const Box = ({ className, children }): ReactElement => {
+const Box: React.FC<{ className: string, children: ReactNode }> = ({ className, children }) => {
   return (
     <section className={clz('break-inside-avoid-column break-inside-avoid relative block max-w-md  border-4 p-4 mb-4 border-black rounded-box', className)}>
       {children}

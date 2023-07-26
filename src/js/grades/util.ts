@@ -49,8 +49,10 @@ export const codesToDisciplines = (codesStr: string): [Partial<ClimbDisciplineRe
   let hasError = false
   const tokens = codesStr.split(' ')
   const ret = tokens.reduce<Partial<ClimbDisciplineRecord>>((acc, token) => {
+    // @ts-expect-error
     const key = safeCodeMap[token.toUpperCase()]
     if (key != null) {
+      // @ts-expect-error
       acc[key] = true
     } else {
       hasError = true

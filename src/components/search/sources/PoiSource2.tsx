@@ -15,7 +15,7 @@ export interface PoiDoc extends BaseItem {
  * Call Mapbox Geocoder to find cities, landmarks, and point-of-interests.
  * See also https://www.algolia.com/doc/ui-libraries/autocomplete/core-concepts/sources/
  */
-export const searchPoi = async (onSelect): Promise<AutocompleteSource<any>> => {
+export const searchPoi = async (onSelect: any): Promise<AutocompleteSource<any>> => {
   return {
     sourceId: 'poiSearch',
 

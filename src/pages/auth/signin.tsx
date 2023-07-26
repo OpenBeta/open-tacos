@@ -1,17 +1,11 @@
 import React, { useEffect } from 'react'
 import {
-  ClientSafeProvider,
-  getProviders,
   signIn,
   useSession
 } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { GetServerSideProps } from 'next'
-interface SignInPageProps {
-  providers: ClientSafeProvider[]
-}
 
-function SignInPage ({ providers }: SignInPageProps): JSX.Element {
+function SignInPage (): JSX.Element {
   const session = useSession()
   const router = useRouter()
   useEffect(() => {
@@ -27,12 +21,6 @@ function SignInPage ({ providers }: SignInPageProps): JSX.Element {
   }, [session])
 
   return <div>Loading...</div>
-}
-
-export async function getServerSideProps (
-  context: GetServerSideProps
-): Promise<{ props: { providers } }> {
-  return { props: { providers: await getProviders() } }
 }
 
 export default SignInPage

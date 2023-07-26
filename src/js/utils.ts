@@ -48,6 +48,7 @@ export const computeClimbingPercentsAndColors = (climbs: ClimbType[]): PercentAn
     return (count / totalClimbs) * 100
   })
   const colors = Object.keys(typeToCount).map((key) => {
+    // @ts-expect-error
     return ClimbTypeToColor[key]
   })
   return {
@@ -100,22 +101,6 @@ export const computeClimbingPercentsAndColors = (climbs: ClimbType[]): PercentAn
 export const sanitizeName = (s: string): string =>
   s.replace(/^(\(.{1,3}\) *)|((\d?[1-9]|[1-9]0)[:])|[a-zA-Z]{1,2}\./, '')
 
-/**
- * Simplify climb 'type' dictionary to contain only 'true' key-value pair.
- * @example {sport: true, boulder: false, trad: false} => {sport: true}
- * @param  type Climb type key-value dictionary
- */
-export const simplifyClimbTypeJson = (type?: ClimbDisciplineRecord): {[key: string]: boolean} => {
-  if (type === undefined) return {}
-  for (const key in type) {
-    if (type[key] === false) {
-      /* eslint-disable @typescript-eslint/no-dynamic-delete */
-      delete type[key]
-    }
-  }
-  return type
-}
-
 export const getSlug = (areaID: string, isLeaf: boolean, childAreasCount: number = -1): string => {
   const type = isLeaf || childAreasCount === 0 ? 'crag' : 'areas'
   return `/${type}/${areaID}`
@@ -124,6 +109,7 @@ export const getSlug = (areaID: string, isLeaf: boolean, childAreasCount: number
 function debouncePromise (fn: Function, time: number): any {
   let timerId: ReturnType<typeof setTimeout>
 
+  // @ts-expect-error
   return async function debounced (...args) {
     clearTimeout(timerId)
 
@@ -143,6 +129,7 @@ export const debounced = debouncePromise(async (items: object[]): Promise<object
 export const disciplineArrayToObj = (types: ClimbDiscipline[]): Partial<ClimbDisciplineRecord> => {
   // use Array.reduce() because ts-jest doesn't support for..of
   const z: Partial<ClimbDisciplineRecord> = types.reduce((acc, curr) => {
+    // @ts-expect-error
     acc[curr] = true
     return acc
   }, {})

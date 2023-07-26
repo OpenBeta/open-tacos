@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next'
 import { graphqlClient } from '../js/graphql/Client'
 import { gql } from '@apollo/client'
 import { IndexResponseType } from '../js/types'
@@ -49,11 +50,11 @@ const query = gql`query UsaAreas( $filter: Filter) {
     }
   }`
 
-export const getServerSideProps = async ({ res }): Promise<object> => {
-  const baseUrl: string = {
-    development: 'http://localhost:3000',
-    production: 'https://openbeta.io'
-  }[process.env.NODE_ENV]
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+  let baseUrl = 'http://localhost:3000'
+  if (process.env.NODE_ENV === 'production') {
+    baseUrl = 'https://openbeta.io'
+  }
 
   const staticPages: string[] = [
     '/about',

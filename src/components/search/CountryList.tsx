@@ -1,5 +1,6 @@
 import { render as reactRender } from 'react-dom'
 import Fuse from 'fuse.js'
+import { AutocompleteSource } from '@algolia/autocomplete-js'
 
 import { Autocomplete } from './Autocomplete'
 
@@ -56,7 +57,7 @@ const CUSTOM_CLASSES = {
   root: 'climb-tag-search'
 }
 
-function getSources (query, onSelect): any {
+const getSources = (query: string, onSelect: any): Array<AutocompleteSource<any>> => {
   const obj = countries.getNames('en', { select: 'official' })
   const fuse = new Fuse(Object.values(obj), { threshold: 0.2 })
   return [
