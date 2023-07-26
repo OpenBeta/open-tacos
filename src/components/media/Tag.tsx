@@ -5,6 +5,7 @@ import NetworkSquareIcon from '../../assets/icons/network-square-icon.svg'
 import clx from 'classnames'
 import { EntityTag, TagTargetType } from '../../js/types'
 import { OnDeleteCallback } from './TagList'
+import { MouseEventHandler } from 'react'
 
 interface PhotoTagProps {
   mediaId: string
@@ -52,7 +53,7 @@ export default function Tag ({ mediaId, tag, onDelete, size = 'md', showDelete =
   )
 }
 
-const stopPropagation = (event): void => event.stopPropagation()
+const stopPropagation: MouseEventHandler = (event) => event.stopPropagation()
 
 /**
  * Extract entity url and name from a tag

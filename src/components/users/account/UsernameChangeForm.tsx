@@ -94,8 +94,9 @@ export const UsernameChangeForm: React.FC = () => {
       toast.info('Username updated')
       await router.push(`/u/${username}`)
     } catch (e) {
+      console.error(e)
       reset()
-      toast.error(e.message)
+      toast.error('Unexpected error.  Please try again.')
     }
   }
 

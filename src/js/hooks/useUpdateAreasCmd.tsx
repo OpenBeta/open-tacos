@@ -1,4 +1,4 @@
-import { useMutation, useQuery, QueryResult } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { toast } from 'react-toastify'
 
 import { graphqlClient } from '../graphql/Client'
@@ -14,7 +14,7 @@ import { AreaType } from '../../js/types'
 type UpdateOneAreaCmdType = (input: UpdateOneAreaInputType) => Promise<void>
 type AddOneAreCmdType = ({ name, parentUuid }: AddAreaProps) => Promise<void>
 type DeleteOneAreaCmdType = ({ uuid }: DeleteOneAreaInputType) => Promise<void>
-type GetAreaByIdCmdType = ({ skip }: { skip?: boolean }) => QueryResult<{ area: AreaType}>
+type GetAreaByIdCmdType = ({ skip }: { skip?: boolean }) => any
 type UpdateAreasSortingOrderCmdType = (input: AreaSortingInput[]) => Promise<void>
 
 interface CallbackProps {

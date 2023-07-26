@@ -49,6 +49,7 @@ export const BaseButton = React.forwardRef<HTMLInputElement, BaseButtonProps>(({
         'inline-flex space-x-2 items-center whitespace-nowrap',
         'cursor-pointer disabled:cursor-auto disabled:opacity-50',
         variant,
+        // @ts-expect-error
         SIZE[sz]
       )}
       disabled={disable}

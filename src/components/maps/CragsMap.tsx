@@ -8,7 +8,7 @@ import HeatmapLayer from './HeatmapLayer'
 import InteractiveMarker
   from './InteractiveMarker'
 import useAutoSizing from '../../js/hooks/finder/useMapAutoSizing'
-import { MapLayerEventType, MapLayerMouseEvent } from 'mapbox-gl'
+import { MapLayerMouseEvent } from 'mapbox-gl'
 
 const mapElementId = 'my-area-map'
 /**

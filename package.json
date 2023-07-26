@@ -71,6 +71,7 @@
     "typesense": "^1.2.1",
     "underscore": "^1.13.3",
     "uuid": "9.0.0",
+    "yup": "^1.2.0",
     "zod": "^3.21.4",
     "zustand": "^4.3.9"
   },
@@ -100,6 +101,7 @@
     "@testing-library/user-event": "^14.1.2",
     "@types/auth0": "^2.34.19",
     "@types/file-saver": "^2.0.5",
+    "@types/nanoid-dictionary": "^4.2.0",
     "@types/nprogress": "^0.2.0",
     "@types/react": "^18.0.9",
     "@types/react-beautiful-dnd": "^13.1.0",

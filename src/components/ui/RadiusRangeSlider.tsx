@@ -4,7 +4,7 @@ import { RadiusRange } from '../../js/types'
 /**
  * Range slider for radius filter
  */
-export const RadiusRangeSlider = ({ onChange, defaultValue }): JSX.Element => {
+export const RadiusRangeSlider: React.FC<any> = ({ onChange, defaultValue }) => {
   return (
     <RangeSlider
       step={null}

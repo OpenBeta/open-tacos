@@ -180,4 +180,4 @@ export const AlertAction = AlertDialogPrimitive.Action
 /**
  * An alert with no close button.  Use this to temporarily block the screen during important operation such as photo uploading.
  */
-export const BlockingAlert = ({ title, description }): JSX.Element => <LeanAlert title={title} description={description}><div /></LeanAlert>
+export const BlockingAlert: React.FC<any> = ({ title, description }) => <LeanAlert title={title} description={description}><div /></LeanAlert>

@@ -31,7 +31,8 @@ export const authOptions: NextAuthOptions = {
   debug: false,
   events: {},
   pages: {
-    verifyRequest: '/auth/verify-request'
+    verifyRequest: '/auth/verify-request',
+    signIn: '/auth/signin'
   },
   theme: {
     colorScheme: 'light',
@@ -48,11 +49,16 @@ export const authOptions: NextAuthOptions = {
       if (profile?.sub != null) {
         token.id = profile.sub
       }
+      // @ts-expect-error
       if (profile?.[CustomClaimUserMetadata] != null) {
         // null guard needed because profile object is only available once
+        // @ts-expect-error
         token.userMetadata = (profile?.[CustomClaimUserMetadata] as IUserMetadata)
+        // @ts-expect-error
         const customClaimRoles = profile?.[CustomClaimRoles] as string[] ?? []
-        token.userMetadata.roles = customClaimRoles.map((r: string) => UserRole[r.toUpperCase()])
+        token.userMetadata.roles = customClaimRoles.map((r: string) => {
+          return UserRole[r.toUpperCase() as keyof typeof UserRole]
+        })
       }
 
       return token

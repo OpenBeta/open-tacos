@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState, Dispatch, SetStateAction } from 'react'
-
+import { FeatureCollection } from '@turf/helpers'
 import { bboxFromGeoJson, bbox2Viewport } from '../../../js/GeoHelpers'
 import { DEFAULT_INITIAL_VIEWSTATE } from '../../../components/maps/BaseMap'
 import { store } from '../../stores'
@@ -13,10 +13,15 @@ type useAutoSizingReturn = readonly [
   Dispatch<SetStateAction<XViewStateType>>,
 ]
 
+interface UseAutoSizingProps {
+  geojson: FeatureCollection | null
+  elementId: string
+}
+
 /**
  * React hook for auto detecting and calculating div height
  */
-export default function useAutoSizing ({ geojson, elementId }): useAutoSizingReturn {
+export default function useAutoSizing ({ geojson, elementId }: UseAutoSizingProps): useAutoSizingReturn {
   const navbarOffset = getNavBarOffset()
   const [[width, height], setWH] = useState([DEFAULT_INITIAL_VIEWSTATE.width, DEFAULT_INITIAL_VIEWSTATE.height])
   const [viewState, setViewState] = useState<XViewStateType>(DEFAULT_INITIAL_VIEWSTATE)

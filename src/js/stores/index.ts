@@ -154,7 +154,9 @@ export const cragFiltersStore = createStore('filters')(INITIAL_STATE, {
       const [min, max] = get.freeBandRange()
 
       for (let i: number = min; i <= max; i++) {
+        // @ts-expect-error
         if (gradeBands[BAND_BY_INDEX[i]] > 0) {
+          // @ts-expect-error
           total += parseInt(gradeBands[BAND_BY_INDEX[i]])
         }
       }
@@ -168,7 +170,9 @@ export const cragFiltersStore = createStore('filters')(INITIAL_STATE, {
       const [min, max] = get.freeBandRange()
 
       for (let i: number = min; i <= max; i++) {
+        // @ts-expect-error
         if (gradeBands[BAND_BY_INDEX[i]] > 0) {
+          // @ts-expect-error
           total += parseInt(gradeBands[BAND_BY_INDEX[i]])
         }
       }
@@ -182,7 +186,9 @@ export const cragFiltersStore = createStore('filters')(INITIAL_STATE, {
       const [min, max] = get.boulderBandRange()
 
       for (let i: number = min; i <= max; i++) {
+        // @ts-expect-error
         if (gradeBands[BAND_BY_INDEX[i]] > 0) {
+          // @ts-expect-error
           total += parseInt(gradeBands[BAND_BY_INDEX[i]])
         }
       }
@@ -196,7 +202,9 @@ export const cragFiltersStore = createStore('filters')(INITIAL_STATE, {
       const [min, max] = get.freeBandRange()
 
       for (let i: number = min; i <= max; i++) {
+        // @ts-expect-error
         if (gradeBands[BAND_BY_INDEX[i]] > 0) {
+          // @ts-expect-error
           total += parseInt(gradeBands[BAND_BY_INDEX[i]])
         }
       }
@@ -209,6 +217,7 @@ export const cragFiltersStore = createStore('filters')(INITIAL_STATE, {
       const [min, max] = get.freeBandRange()
 
       for (let i: number = min; i <= max; i++) {
+        // @ts-expect-error
         if (gradeBands[BAND_BY_INDEX[i]] > 0) {
           return true
         }
@@ -227,6 +236,7 @@ export const cragFiltersStore = createStore('filters')(INITIAL_STATE, {
       const [min, max] = get.boulderBandRange()
 
       for (let i: number = min; i <= max; i++) {
+        // @ts-expect-error
         if (gradeBands[BAND_BY_INDEX[i]] > 0) {
           return true
         }
@@ -382,12 +392,12 @@ export const cragFiltersStore = createStore('filters')(INITIAL_STATE, {
       set.updatePagination()
     },
 
-    updateFreeRange: async (newRange) => {
+    updateFreeRange: async (newRange: number[]) => {
       set.freeRange(newRange)
       await set.fetchData()
     },
 
-    updateBoulderRange: async (newRange) => {
+    updateBoulderRange: async (newRange: number[]) => {
       set.boulderRange(newRange)
       await set.fetchData()
     },

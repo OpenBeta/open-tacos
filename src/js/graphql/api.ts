@@ -35,6 +35,7 @@ export const getCragDetailsNear = async (
     })
 
     const { cragsNear } = rs.data
+    // @ts-expect-error
     const groups = cragsNear.map(entry => entry.crags).flat()
     return { data: groups, placeId }
   } catch (e) {

@@ -3,6 +3,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { Autocomplete2 } from './Autocomplete2'
 import { xsearchTypesense, searchPoi } from './sources'
 import { AddNewButton } from './templates/ClimbResultXSearch'
+import { ReactNode } from 'react'
 interface XSearchProps {
   placeholder?: string
 }
@@ -65,7 +66,7 @@ export const XSearchMobile = (): JSX.Element => {
   )
 }
 
-export const ResultContainer = (sections: any[], children): JSX.Element | null => {
+export const ResultContainer = (children: ReactNode[]): ReactNode => {
   const climbsSection = document.getElementById('Climbs')
   const areasSection = document.getElementById('Areas')
   const faSection = document.getElementById('FA')
@@ -103,14 +104,14 @@ export const ResultContainer = (sections: any[], children): JSX.Element | null =
           >Address
           </button>}
       </section>
-      {sections?.length === 0 ?? true
+      {children?.length === 0 ?? true
         ? (
           <section className='alert flex-col'>
             <div className='text-base-300 text-sm'>Can't find what you're looking for?</div>
             <AddNewButton />
           </section>
           )
-        : (<>{sections}</>)}
+        : (<>{children}</>)}
     </div>
   )
 }

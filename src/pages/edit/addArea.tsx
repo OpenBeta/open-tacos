@@ -154,9 +154,9 @@ const Step1b = (): JSX.Element => {
     }
   }
 
-  const handleSelect = useCallback((data): void => {
+  const handleSelect = (data: any): void => {
     wizardActions.addAreaStore.recordStep1b(data.name, data.areaUUID)
-  }, [])
+  }
 
   const handleReset = (): void => {
     resetField('locationRefType')

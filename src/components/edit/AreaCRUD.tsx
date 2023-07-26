@@ -9,8 +9,7 @@ import {
   DragOverlay,
   DragStartEvent,
   DragEndEvent,
-  MouseSensor as LibMouseSensor,
-  UniqueIdentifier
+  MouseSensor as LibMouseSensor
 } from '@dnd-kit/core'
 import {
   arrayMove,

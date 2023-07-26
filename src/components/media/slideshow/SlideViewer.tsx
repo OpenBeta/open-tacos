@@ -93,7 +93,7 @@ export const SingleViewer = ({ loaded, media, userinfo, auth, keyboardTip = true
               sizes='100vw'
               className='bg-gray-100 w-auto h-[100%] max-h-[700px]'
              />)
-          : (<ImagePlaceholder uniqueKey={123} />)}
+          : (<ImagePlaceholder uniqueKey='123' />)}
       </div>
       <RhsContainer
         loaded={loaded}
@@ -111,7 +111,7 @@ export const SingleViewer = ({ loaded, media, userinfo, auth, keyboardTip = true
   )
 }
 
-const ImagePlaceholder = ({ uniqueKey }): JSX.Element => (
+const ImagePlaceholder: React.FC<{ uniqueKey?: string }> = ({ uniqueKey }) => (
   <ContentLoader
     uniqueKey={uniqueKey}
     height={500}
@@ -122,7 +122,7 @@ const ImagePlaceholder = ({ uniqueKey }): JSX.Element => (
     <rect rx={0} ry={0} width='40' height='30' />
   </ContentLoader>)
 
-const CardContentPlaceholder = (props): JSX.Element => (
+const CardContentPlaceholder: React.FC<{ uniqueKey?: string }> = (props) => (
   <ContentLoader
     uniqueKey={props.uniqueKey}
     height={500}
@@ -161,7 +161,7 @@ const RhsContainer = ({ loaded, userinfo, content, footer = null }: RhsContainer
         </div>
       </div>
       )
-    : (<CardContentPlaceholder uniqueKey={1} />)
+    : (<CardContentPlaceholder uniqueKey='1' />)
 }
 
 interface InfoContainerProps {

@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react'
 import { Map, MapLayerMouseEvent, MapRef, ViewStateChangeEvent } from 'react-map-gl'
-import { BBox } from '@turf/helpers'
 
 import { BBoxType, XViewStateType } from '../../js/types'
 

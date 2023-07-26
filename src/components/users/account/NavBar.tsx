@@ -30,5 +30,5 @@ export const NavBar: React.FC = () => {
 }
 
 export const ReturnToPublicProfile: React.FC = () => {
-  return <a className='flex gap-2 items-center btn btn-sm btn-outline' href='/api/user/me'><ArrowLeftIcon className='w-5 h-5' />Go to your public profile</a>
+  return <a className='flex gap-2 items-center btn btn-sm btn-outline no-animation' href='/api/user/me'><ArrowLeftIcon className='w-5 h-5' />Go to your public profile</a>
 }

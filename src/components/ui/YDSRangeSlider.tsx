@@ -3,7 +3,7 @@ import { YDS_DEFS, genSliderMarks } from '../../js/grades/ranges'
 
 export { YDS_DEFS }
 
-const YDSRangeSlider = ({ onChange, defaultValue }): JSX.Element => {
+const YDSRangeSlider: React.FC<any> = ({ onChange, defaultValue }) => {
   return (
     <RangeSlider
       count={1}
