@@ -4,15 +4,15 @@
     {
       "type": "Feature",
       "properties": {
-        "firstName": "Yun",
-        "githubId": "actuallyyun",
-        "favoriteCrag": "8fe4fa78-fda9-5742-b807-00b2c31d7bcd"
+        "firstName": "Bader",
+        "githubId": "baderk",
+        "favoriteCrag": "becfb41f-3278-59c6-a376-2d23d97c220d"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.905152180850496,
-          41.26613040056221
+          36.037803,
+          -115.465404
         ]
       }
     },
