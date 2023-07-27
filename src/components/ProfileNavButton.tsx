@@ -1,9 +1,10 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useSession, signOut } from 'next-auth/react'
-import { UserCircleIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/outline'
+import { UserCircleIcon, ChatBubbleOvalLeftEllipsisIcon, Cog6ToothIcon, ChartBarIcon, GiftIcon } from '@heroicons/react/24/outline'
 
 import { DropdownMenu, DropdownTrigger, DropdownContent, DropdownItem, DropdownSeparator } from './ui/DropdownMenu'
+import GitHubIcon from '../assets/icons/github.inline.svg'
 
 interface ProfileNavButtonProps {
   isMobile?: boolean
@@ -37,17 +38,32 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
 
           <DropdownContent>
             <DropdownItem
-              icon={<UserCircleIcon className='w-4 h-4' />}
-              text={<><span className='font-medium'>Profile </span><sup className='badge badge-sm badge-info'>Beta</sup></>}
+              icon={<ChartBarIcon className='w-4 h-4' />}
+              text={<><span className='font-medium'>Dashboard </span><sup className='badge badge-sm badge-primary'>Beta</sup></>}
               onSelect={async () => await router.push('/api/user/me?preview=1')}
             />
 
             <DropdownItem
               icon={<UserCircleIcon className='w-4 h-4' />}
-              text='Classic Profile'
+              text='Profile'
               onSelect={async () => await router.push('/api/user/me')}
             />
 
+            <DropdownSeparator />
+
+            <DropdownItem
+              icon={<Cog6ToothIcon className='w-4 h-4' />}
+              text='Account settings'
+              onSelect={async () => await router.push('/account/editProfile')}
+            />
+
+            <DropdownItem
+              text='Logout'
+              onSelect={async () => {
+                sessionStorage.setItem('editMode', 'false')
+                await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })
+              }}
+            />
             <DropdownSeparator />
 
             <DropdownItem text='About' onSelect={async () => await router.push('/about')} />
@@ -57,11 +73,17 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
             <DropdownSeparator />
 
             <DropdownItem
-              text='Logout'
-              onSelect={async () => {
-                sessionStorage.setItem('editMode', 'false')
-                await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })
-              }}
+              icon={<GiftIcon className='w-4 h-4' />}
+              text='Get your OpenBeta T-shirts'
+              className='text-accent'
+              onSelect={async () => await router.push('https://opencollective.com/openbeta/contribute/t-shirt-31745')}
+            />
+            <DropdownSeparator />
+
+            <DropdownItem
+              icon={<GitHubIcon className='w-4 h-4' />}
+              text='GitHub'
+              onSelect={async () => await router.push('https://github.com/OpenBeta/open-tacos')}
             />
             <DropdownItem
               icon={<ChatBubbleOvalLeftEllipsisIcon className='w-4 h-4' />}

@@ -76,7 +76,7 @@ export const UpdateProfileForm: React.FC = () => {
     if (session.status === 'unauthenticated') {
       void signIn('auth0') // send users to Auth0 login screen
     }
-  })
+  }, [session])
 
   useEffect(() => {
     const event = (e: Event): void => {
