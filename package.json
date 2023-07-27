@@ -11,7 +11,7 @@
     "@dnd-kit/sortable": "^7.0.2",
     "@dnd-kit/utilities": "^3.2.1",
     "@google-cloud/storage": "^6.11.0",
-    "@headlessui/react": "^1.6.4",
+    "@headlessui/react": "^1.7.15",
     "@heroicons/react": "2.0.13",
     "@hookform/resolvers": "^3.1.1",
     "@lexical/react": "^0.7.5",
