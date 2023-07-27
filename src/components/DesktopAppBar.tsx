@@ -50,7 +50,7 @@ export default function DesktopAppBar ({ showFilterBar = true }: DesktopAppBarPr
 const navListDefault: JSX.Element[] = [
   {
     action: async () => await signIn('auth0', { callbackUrl: '/api/user/me' }),
-    title: 'Become A Contributor',
+    title: 'Login',
     variant: ButtonVariant.SOLID_PRIMARY
   },
   {
@@ -58,8 +58,16 @@ const navListDefault: JSX.Element[] = [
     title: 'About'
   },
   {
+    route: 'https://opencollective.com/openbeta/contribute/t-shirt-31745',
+    title: 'T-shirts'
+  },
+  {
     route: 'https://docs.openbeta.io',
     title: 'Docs'
+  },
+  {
+    route: 'https://github.com/OpenBeta/open-tacos',
+    title: 'GitHub'
   },
   {
     route: 'https://discord.gg/ptpnWWNkJx',

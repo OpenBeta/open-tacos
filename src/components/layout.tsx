@@ -21,6 +21,7 @@ function Layout ({
   return (
     <>
       <div className={rootContainerClass}>
+
         <Header showFilterBar={showFilterBar} />
         {hero}
         <main className={contentContainerClass}>
