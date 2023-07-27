@@ -203,10 +203,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const recentTagsByUsers = await getMediaForFeed(20, 3)
 
   const areaTags = recentTagsByUsers.flatMap(entry => entry.mediaWithTags)
+
   const recentTags = areaTags.filter(tag => {
     return !tag.entityTags.some(entityTag =>
       testAreaIds.has(entityTag.targetId))
   })
+  console.log('test1', entityTags)
 
   return {
     props: {
