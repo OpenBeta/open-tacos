@@ -30,6 +30,21 @@
           39.659768
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Bader",
+        "githubId": "baderk",
+        "favoriteCrag": "becfb41f-3278-59c6-a376-2d23d97c220d"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -115.465404,
+          36.037803
+        ]
+      }
     }
   ]
 }
