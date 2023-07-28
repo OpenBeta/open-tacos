@@ -18,7 +18,6 @@ import RecentTaggedMedia from '../components/home/RecentMedia'
 import { FRAGMENT_MEDIA_WITH_TAGS } from '../js/graphql/gql/tags'
 
 const allowedViews = ['explore', 'newTags', 'map', 'edit', 'pulse']
-const testAreaIds = new Set((process.env.NEXT_PUBLIC_TEST_AREA_IDS ?? '').split(','))
 
 interface HomePageType {
   exploreData: IndexResponseType
@@ -202,14 +201,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const recentTagsByUsers = await getMediaForFeed(20, 3)
 
-  const areaTags = recentTagsByUsers.flatMap(entry => entry.mediaWithTags)
+  const testAreaIds = Array.from(new Set((process.env.NEXT_PUBLIC_TEST_AREA_IDS ?? '').split(',')))
 
-  const recentTags = areaTags.filter(tag => {
-    return !tag.entityTags.some(entityTag =>
-      testAreaIds.has(entityTag.targetId))
+  const mediaWithTags = recentTagsByUsers.flatMap(entry => entry.mediaWithTags)
+
+  const recentTags = mediaWithTags.filter(tag => {
+    return tag.entityTags.some(entityTag => {
+      return testAreaIds.every(testId => {
+        const regex = new RegExp(testId, 'g')
+        return !regex.test(entityTag.ancestors)
+      })
+    })
   })
-  console.log('test1', entityTags)
-
   return {
     props: {
       exploreData: rs.data,
