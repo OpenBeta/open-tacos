@@ -208,7 +208,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     return !tag.entityTags.some(entityTag =>
       testAreaIds.has(entityTag.targetId))
   })
-  console.log('test1', entityTags)
 
   return {
     props: {
