@@ -201,8 +201,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const recentTagsByUsers = await getMediaForFeed(20, 3)
 
-  const recentTags = recentTagsByUsers.flatMap(entry => entry.mediaWithTags)
+  const testAreaIds = Array.from(new Set((process.env.NEXT_PUBLIC_TEST_AREA_IDS ?? '').split(',')))
 
+  const mediaWithTags = recentTagsByUsers.flatMap(entry => entry.mediaWithTags)
+
+  const recentTags = mediaWithTags.filter(tag => {
+    return tag.entityTags.some(entityTag => {
+      return testAreaIds.every(testId => {
+        const regex = new RegExp(testId, 'g')
+        return !regex.test(entityTag.ancestors)
+      })
+    })
+  })
   return {
     props: {
       exploreData: rs.data,
