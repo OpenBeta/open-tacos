@@ -11,6 +11,7 @@ import PhotoMontage from '../../components/media/PhotoMontage'
 import { UploadCTACragBanner } from '../../components/media/UploadCTA'
 import CragSummary, { Skeleton as AreaContentSkeleton } from '../../components/crag/cragSummary'
 import { QUERY_AREA_BY_ID } from '../../js/graphql/gql/areaById'
+import { GraphQLError } from 'graphql/error/GraphQLError'
 
 interface CragProps {
   area: AreaType
@@ -93,6 +94,10 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
       uuid: params.id
     },
     fetchPolicy: 'no-cache'
+  }).catch((e: GraphQLError) => {
+    if (e.message === 'Invaild UUID') {
+      return null
+    }
   })
 
   if (rs?.data == null || rs?.data?.area == null) {
