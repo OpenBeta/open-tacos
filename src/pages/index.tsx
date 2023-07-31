@@ -18,6 +18,7 @@ import RecentTaggedMedia from '../components/home/RecentMedia'
 import { FRAGMENT_MEDIA_WITH_TAGS } from '../js/graphql/gql/tags'
 
 const allowedViews = ['explore', 'newTags', 'map', 'edit', 'pulse']
+const testAreaIds = new Set((process.env.NEXT_PUBLIC_TEST_AREA_IDS ?? '').split(','))
 
 interface HomePageType {
   exploreData: IndexResponseType
