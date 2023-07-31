@@ -32,6 +32,7 @@ import { removeTypenameFromDisciplines } from '../../js/utils'
 import { TotalLengthInput } from '../../components/edit/form/TotalLengthInput'
 import { LegacyFAInput } from '../../components/edit/form/LegacyFAInput'
 import { getClimbById } from '../../js/graphql/api'
+import { GraphQLError } from 'graphql/error/GraphQLError'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -360,6 +361,17 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
   }
 
   const climb = await getClimbById(params.id)
+    .catch((err: GraphQLError) => {
+      if (err.message === 'Invalid UUID.') {
+        return null
+      }
+    })
+
+  if (climb == null) {
+    return {
+      notFound: true
+    }
+  }
 
   const sortedClimbsInArea = await fetchSortedClimbsInArea(climb.ancestors[climb.ancestors.length - 1])
   let leftClimb: ClimbType | null = null
