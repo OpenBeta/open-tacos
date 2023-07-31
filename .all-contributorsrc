@@ -563,6 +563,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "baderk",
+      "name": "Bader Kanawati",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10656279?v=4",
+      "profile": "http://www.bkanawati.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "draykhlin",
+      "name": "draykhlin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38668308?v=4",
+      "profile": "https://github.com/draykhlin",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "sjsikora",
+      "name": "Sam Sikora",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20007305?v=4",
+      "profile": "https://github.com/sjsikora",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
