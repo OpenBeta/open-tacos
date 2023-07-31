@@ -215,6 +215,6 @@ export const getClimbById = async (id: string): Promise<ClimbType> => {
       id
     },
     fetchPolicy: 'no-cache'
-  })
+  }).catch(e => { throw new Error(e) })
   return res.data.climb
 }
