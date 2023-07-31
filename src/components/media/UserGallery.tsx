@@ -190,7 +190,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
                   uid={uid}
                   index={index}
                   mediaWithTags={mediaWithTags}
-                  onClick={imageOnClickHandler}
+                  onClick={(e) => { void imageOnClickHandler(e) }}
                   isAuthorized={isAuthorized}
                 />
                 <div
@@ -228,7 +228,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
           onClose={slideViewerCloseHandler}
           auth={authz}
           baseUrl={baseUrl}
-          onNavigate={navigateHandler}
+          onNavigate={(e) => { void navigateHandler(e) }}
         />}
     </>
   )

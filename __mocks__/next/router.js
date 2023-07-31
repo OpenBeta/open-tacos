@@ -1,3 +1,5 @@
+/// <reference types="jest" />
+import { jest } from '@jest/globals'
 export function useRouter () {
   return {
     route: '/',

@@ -81,7 +81,7 @@ const AddAreaPage: INextPageWithAuth = () => {
   }
 
   return (
-    <MobileDialog defaultOpen onOpenChange={onClose} modal={false}>
+    <MobileDialog defaultOpen onOpenChange={() => { void onClose }} modal={false}>
       <DialogContent
         title='Add an Area'
         onInteractOutside={(event) => {
@@ -92,7 +92,12 @@ const AddAreaPage: INextPageWithAuth = () => {
           <div className='text-xs mt-4'>Area can be a crag, boulder, or a destination containing other smaller areas.</div>
           <ProgressSteps />
           <FormProvider {...form}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                void handleSubmit(onSubmit)
+              }}
+            >
               <div className='mt-8 text-lg text-content-base font-bold'>Location</div>
               <Step1a />
               <Step1b />

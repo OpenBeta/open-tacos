@@ -57,7 +57,7 @@ function VerifyEmailPendingPage (): JSX.Element {
               {error == null &&
                 <button
                   disabled={sending}
-                  className='btn btn-outline' onClick={onClickHandler}
+                  className='btn btn-outline' onClick={() => { void onClickHandler }}
                 >
                   Resend verification email
                 </button>}

@@ -23,7 +23,7 @@ interface FetchMoreMediaForwardProps {
   first?: number
   after?: string
 }
-export interface RemoveEntityTagProps extends RemoveEntityTagMutationProps{
+export interface RemoveEntityTagProps extends RemoveEntityTagMutationProps {
   entityId: string
   entityType: TagTargetType
 }
@@ -73,7 +73,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
     }
   }
 
-  const [getMediaByIdGGL] = useLazyQuery<{media: MediaWithTags}, { id: string }>(QUERY_MEDIA_BY_ID, {
+  const [getMediaByIdGGL] = useLazyQuery<{ media: MediaWithTags }, { id: string }>(QUERY_MEDIA_BY_ID, {
     client: graphqlClient,
     fetchPolicy: 'network-only',
     onError: () => toast.error('Unexpected error.  Please try again.')

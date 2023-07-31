@@ -22,7 +22,7 @@ export default function RemoveImage ({ imageInfo }: RemoveImageProps): JSX.Eleme
 
   return (
     <AlertDialogue
-      onConfirm={remove}
+      onConfirm={() => { void remove }}
       hideTitle
       button={(
         <button>

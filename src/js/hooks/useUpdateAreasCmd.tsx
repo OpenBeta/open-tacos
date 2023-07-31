@@ -50,7 +50,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   const { onUpdateCompleted, onUpdateError, onAddCompleted, onAddError, onDeleteCompleted, onDeleteError } = props
 
   const getAreaByIdCmd: GetAreaByIdCmdType = ({ skip = false }) => {
-    return useQuery<{area: AreaType}, {uuid: string}>(
+    return useQuery<{ area: AreaType }, { uuid: string }>(
       QUERY_AREA_FOR_EDIT, {
         client: graphqlClient,
         variables: {
@@ -65,10 +65,16 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   const [updateAreaApi] = useMutation<{ updateAreaApi: UpdateAreaApiReturnType }, UpdateOneAreaInputType>(
     MUTATION_UPDATE_AREA, {
       client: graphqlClient,
-      onCompleted: async (data) => {
+      onCompleted: (data) => {
         toast.info('Area updated successfully ✔️')
-        await refreshPage(`/api/revalidate?s=${areaId}`)
-        if (onUpdateCompleted != null) onUpdateCompleted(data)
+        refreshPage(`/api/revalidate?s=${areaId}`)
+          .then(() => {
+            if (onUpdateCompleted != null) onUpdateCompleted(data)
+          })
+          .catch((error) => {
+            // handle error
+            console.error(error)
+          })
       },
       onError: (error) => {
         toast.error(`Unexpected error: ${error.message}`)
@@ -94,8 +100,15 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   const [updateAreasSortingOrder] = useMutation<{ updateAreaSortingOrder: any }, { input: AreaSortingInput[] }>(
     MUTATION_UPDATE_AREAS_SORTING_ORDER, {
       client: graphqlClient,
-      onCompleted: async (data) => {
-        await refreshPage(`/api/revalidate?s=${areaId}`)
+      onCompleted: (data) => {
+        refreshPage(`/api/revalidate?s=${areaId}`)
+          .then(() => {
+            // handle successful refresh
+          })
+          .catch((error) => {
+            // handle error
+            console.error(error)
+          })
       },
       onError: (error) => {
         toast.error(`Unexpected error: ${error.message}`)
@@ -117,14 +130,22 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   const [addArea] = useMutation<{ addArea: AddAreaReturnType }, AddAreaProps>(
     MUTATION_ADD_AREA, {
       client: graphqlClient,
-      onCompleted: async (data) => {
+      onCompleted: (data) => {
         if (onAddCompleted != null) {
           onAddCompleted(data.addArea)
         }
         toast.info('Area added 🔥')
-
-        await refreshPage(`/api/revalidate?s=${data.addArea.uuid}`) // build new area page
-        await refreshPage(`/api/revalidate?s=${areaId}`) // rebuild parent page
+        refreshPage(`/api/revalidate?s=${data.addArea.uuid}`) // build new area page
+          .then(async () => {
+            return await refreshPage(`/api/revalidate?s=${areaId}`) // rebuild parent page
+          })
+          .then(() => {
+            // handle successful refresh
+          })
+          .catch((error) => {
+            // handle error
+            console.error(error)
+          })
       },
       onError: (error) => {
         toast.error(`Unexpected error: ${error.message}`)
@@ -139,7 +160,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     await addArea({
       variables: {
         name,
-        parentUuid: parentUuid,
+        parentUuid,
         ...isBoulder != null && { isBoulder },
         ...isLeaf != null && { isLeaf }
       },
@@ -154,12 +175,17 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   const [deleteOneArea] = useMutation<{ deleteOneArea: DeleteOneAreaReturnType }, DeleteOneAreaInputType>(
     MUTATION_REMOVE_AREA, {
       client: graphqlClient,
-      onCompleted: async (data) => {
-        await refreshPage(`/api/revalidate?s=${areaId}`) // rebuild parent area page
-
-        if (onDeleteCompleted != null) {
-          onDeleteCompleted(data)
-        }
+      onCompleted: (data) => {
+        refreshPage(`/api/revalidate?s=${areaId}`) // rebuild parent area page
+          .then(() => {
+            if (onDeleteCompleted != null) {
+              onDeleteCompleted(data)
+            }
+          })
+          .catch((error) => {
+            // handle error
+            console.error(error)
+          })
       },
       onError: (error) => {
         toast.error(`Unexpected error: ${error.message}`)

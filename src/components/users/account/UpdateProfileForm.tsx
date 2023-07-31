@@ -96,7 +96,10 @@ export const UpdateProfileForm: React.FC = () => {
 
       <FormProvider {...form}>
         <form
-          onSubmit={handleSubmit(submitHandler)}
+          onSubmit={(e) => {
+            e.preventDefault()
+            handleSubmit(submitHandler)
+          }}
           className='mt-10 flex flex-col'
         >
           <Input

@@ -14,9 +14,10 @@ const EditButton: React.FC<EditButtonProps> = ({ icon, label, classes, rawPath }
     <button
       className={`btn whitespace-nowrap ${classes ?? 'btn-secondary'} ${iconClass
         }`}
-      onClick={async () => {
+      onClick={(e) => {
+        e.preventDefault()
         // @gibboj was gatsby.navigate(/edit?file=${rawPath}/index.md`)
-        console.log(`/edit?file=${rawPath}/index.md`)
+        void console.log(`/edit?file=${rawPath}/index.md`)
       }}
     >
       <span className='mr-2'>{icon}</span>

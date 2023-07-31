@@ -62,7 +62,6 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
     })
 
   const { handleSubmit, setFocus, formState: { isSubmitting } } = form
-
   const submitHandler = async (): Promise<void> => {
     await deleteOneAreaCmd({ uuid: areaUuid })
   }
@@ -79,7 +78,13 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          void handleSubmit(submitHandler)
+        }}
+        className='dialog-form-default'
+      >
         <div>You're about to delete '<span className='font-semibold'>{areaName}</span>'.  Type <b>DELETE</b> to confirm.</div>
         <Input
           label=''

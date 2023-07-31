@@ -109,7 +109,13 @@ const OrganizationTable = (): JSX.Element => {
               <span className='ml-2'>Create</span>
             </button>
             <FormProvider {...form}>
-              <form onSubmit={handleSubmit(submitHandler)} className='flex items-center ml-4'>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  void handleSubmit(submitHandler)(e)
+                }}
+                className='min-w-[16em]'
+              >
                 <Input
                   name='displayName'
                   placeholder='Search by display name'

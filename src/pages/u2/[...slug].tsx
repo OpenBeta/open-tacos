@@ -76,7 +76,7 @@ export async function getStaticPaths (): Promise<any> {
   }
 }
 
-export const getStaticProps: GetStaticProps<TicksIndexPageProps, {slug: string[]}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<TicksIndexPageProps, { slug: string[] }> = async ({ params }) => {
   const username = params?.slug?.[0] ?? null
 
   if (username == null) {

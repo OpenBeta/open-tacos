@@ -14,7 +14,10 @@ const PhotoUploadError = ({ photoUploadErrorMessage }: PhotoUploadErrorMessagePr
       className='text-center p-2 border-2 rounded-xl border-ob-primary transition
                           text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
                           hover:text-white w-1/6 font-bold'
-      onClick={onClose}
+      onClick={(e) => {
+        e.preventDefault()
+        void onClose
+      }}
     >
       Ok
     </AlertAction>

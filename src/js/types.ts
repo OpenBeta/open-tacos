@@ -47,7 +47,7 @@ export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' 
 
 export type ClimbDisciplineRecord = Record<ClimbDiscipline, boolean>
 
-export type GradeValuesType = { [Key in GradeScalesTypes]?: string}
+export type GradeValuesType = { [Key in GradeScalesTypes]?: string }
 
 export interface Climb {
   id: string
@@ -297,7 +297,7 @@ export interface MediaTagWithClimb extends MediaBaseTag {
 }
 
 export interface MediaTagWithArea extends MediaBaseTag {
-  area: Pick<AreaType, 'uuid' | 'areaName' | 'metadata'> & { metadata: Pick<AreaMetadataType, 'leaf'|'areaId'> }
+  area: Pick<AreaType, 'uuid' | 'areaName' | 'metadata'> & { metadata: Pick<AreaMetadataType, 'leaf' | 'areaId'> }
 }
 
 export type HybridMediaTag = MediaTagWithArea | MediaTagWithClimb

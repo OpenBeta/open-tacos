@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'
 import AlertDialogue from '../ui/micro/AlertDialogue'
 import { TickType } from '../../js/types'
 
-interface Props{
+interface Props {
   ticks: TickType[]
   setTicks: Function
   tickId: string
@@ -39,7 +39,7 @@ export default function TickCard ({ tickId, ticks, setTicks, dateClimbed, notes,
       <div className='flex flex-row'>
         <p className='text-sm text-gray-500 pr-5'>{style}</p>
         <AlertDialogue
-          onConfirm={remove}
+          onConfirm={() => { void remove }}
           hideTitle
           button={(
             <button type='button'>

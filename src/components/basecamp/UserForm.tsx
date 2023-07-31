@@ -101,7 +101,13 @@ export default function UserForm ({ user, onClose }: UserFormProps): JSX.Element
       </div>
       <div className='basis-2/3 grow'>
         <FormProvider {...form}>
-          <form onSubmit={handleSubmit(submitHandler)} className='min-w-[16em]'>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              void handleSubmit(submitHandler)(e)
+            }}
+            className='min-w-[16em]'
+          >
             <MultiSelect
               label='Roles:'
               name='roles'

@@ -44,7 +44,7 @@ export default function Users (): JSX.Element {
   )
 }
 
-const LinkProfile = ({ nick }: {nick: string}): JSX.Element => <Link href={`/u/${nick}`}><a className='link-primary'>{nick}</a></Link>
+const LinkProfile = ({ nick }: { nick: string }): JSX.Element => <Link href={`/u/${nick}`}><a className='link-primary'>{nick}</a></Link>
 
 const fetcher = async (url: string): Promise<any> => (await axios.get(url)).data
 interface HtmlFormProps {
@@ -92,7 +92,13 @@ const UserTable = (): JSX.Element => {
         <div className='flex items-center justify-between'>
           <h2 className=''>Users</h2>
           <FormProvider {...form}>
-            <form onSubmit={handleSubmit(submitHandler)} className='flex items-center'>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                void handleSubmit(submitHandler)(e)
+              }}
+              className='min-w-[16em]'
+            >
               <Input
                 name='email'
                 placeholder='Search by email'
@@ -192,7 +198,7 @@ const PasswordlessUsers = (): JSX.Element => {
       <h2 className='border-b border-t border-primary'>Passwordless users: {userPage?.total}</h2>
       <Paginate currentPage={currentPage} totalPages={totalPages} setPage={setPage} />
       <div className='mt-8 w-full grid grid-cols-4 gap-4 justify-items-start items-center text-sm'>
-        {userPage?.users?.map((user, index: number) => <UserRowEmail key={user.user_id} index={index} user={user} onClick={onClickHandler} />)}
+        {userPage?.users?.map((user, index: number) => <UserRowEmail key={user.user_id} index={index} user={user} onClick={(e) => { void onClickHandler(e) }} />)}
       </div>
 
     </div>

@@ -4,6 +4,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import DisciplineGroup from '../DisciplineGroup'
+import { ClimbDisciplineRecord } from '../../js/types'
 
 const defaultTypes = {
   trad: true,
@@ -11,8 +12,8 @@ const defaultTypes = {
   tr: true,
   bouldering: false // <--- False
 }
-let climbTypes
-const setClimbTypes = (value): void => {
+let climbTypes: Partial<ClimbDisciplineRecord>
+const setClimbTypes = (value: Partial<ClimbDisciplineRecord>): void => {
   climbTypes = value
 }
 

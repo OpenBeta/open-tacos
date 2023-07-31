@@ -129,7 +129,13 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          handleSubmit(submitHandler)
+        }}
+        className='dialog-form-default'
+      >
         <Input
           label='Name:'
           name='areaName'

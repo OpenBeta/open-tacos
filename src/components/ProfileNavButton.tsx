@@ -39,34 +39,59 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
             <DropdownItem
               icon={<UserCircleIcon className='w-4 h-4' />}
               text={<><span className='font-medium'>Profile </span><sup className='badge badge-sm badge-info'>Beta</sup></>}
-              onSelect={async () => await router.push('/api/user/me?preview=1')}
+              onSelect={(e) => {
+                e.preventDefault()
+                void router.push('/api/user/me?preview=1')
+              }}
             />
 
             <DropdownItem
               icon={<UserCircleIcon className='w-4 h-4' />}
               text='Classic Profile'
-              onSelect={async () => await router.push('/api/user/me')}
+              onSelect={(e) => {
+                e.preventDefault()
+                void router.push('/api/user/me')
+              }}
             />
 
             <DropdownSeparator />
 
-            <DropdownItem text='About' onSelect={async () => await router.push('/about')} />
-            <DropdownItem text='Documentation' onSelect={async () => await router.push('https://docs.openbeta.io')} />
-            <DropdownItem text='Blog' onSelect={async () => await router.push('https://openbeta.io/blog')} />
+            <DropdownItem
+              text='About' onSelect={(e) => {
+                e.preventDefault()
+                void router.push('/about')
+              }}
+            />
+            <DropdownItem
+              text='Documentation' onSelect={(e) => {
+                e.preventDefault()
+                void router.push('https://docs.openbeta.io')
+              }}
+            />
+            <DropdownItem
+              text='Blog' onSelect={(e) => {
+                e.preventDefault()
+                void router.push('https://openbeta.io/blog')
+              }}
+            />
 
             <DropdownSeparator />
 
             <DropdownItem
               text='Logout'
-              onSelect={async () => {
+              onSelect={(e) => {
+                e.preventDefault()
                 sessionStorage.setItem('editMode', 'false')
-                await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })
+                void signOut({ callbackUrl: `${window.origin}/api/auth/logout` })
               }}
             />
             <DropdownItem
               icon={<ChatBubbleOvalLeftEllipsisIcon className='w-4 h-4' />}
               text='Discord community'
-              onSelect={async () => await router.push('https://discord.gg/ptpnWWNkJx')}
+              onSelect={(e) => {
+                e.preventDefault()
+                void router.push('https://discord.gg/ptpnWWNkJx')
+              }}
             />
           </DropdownContent>
         </DropdownMenu>

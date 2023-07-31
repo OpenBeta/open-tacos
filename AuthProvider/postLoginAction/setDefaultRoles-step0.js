@@ -1,5 +1,5 @@
 // dev tenant
-const EDITOR_ROLE_ID = 'rol_tSvz1wNjTIn435jY'
+// const EDITOR_ROLE_ID = 'rol_tSvz1wNjTIn435jY'
 // !!!Important!! Uncomment the follow line for prod
 // const EDITOR_ROLE_ID = 'rol_0nr4PxnpiXT7KylG'
 
@@ -22,17 +22,17 @@ exports.onExecutePostLogin = async ({ secrets, user, authorization, stats }, api
     api.redirect.sendUserTo(secrets.verifyRequestUrl, { query: { session_token: token } })
   }
 
-  const ManagementClient = require('auth0').ManagementClient
+  // const ManagementClient = require('auth0').ManagementClient
 
-  const management = new ManagementClient({
-    domain: secrets.domain,
-    clientId: secrets.clientId,
-    clientSecret: secrets.clientSecret,
-    scope: 'update:roles'
-  })
-  
-  const params = { id: user.user_id }
-  const data = { roles: [EDITOR_ROLE_ID] }
+  // const management = new ManagementClient({
+  //   domain: secrets.domain,
+  //   clientId: secrets.clientId,
+  //   clientSecret: secrets.clientSecret,
+  //   scope: 'update:roles'
+  // })
+
+  // const params = { id: user.user_id }
+  // const data = { roles: [EDITOR_ROLE_ID] }
 
   try {
     if (user?.email_verified) {
@@ -41,7 +41,7 @@ exports.onExecutePostLogin = async ({ secrets, user, authorization, stats }, api
 
       const hasEditorRole = authorization?.roles.some(role => role === 'editor') ?? false
       if (!hasEditorRole) {
-        const res = await management.assignRolestoUser(params, data)
+        // const res = await management.assignRolestoUser(params, data)
         currentRoles.push('editor')
       }
       const ns = 'https://tacos.openbeta.io/'

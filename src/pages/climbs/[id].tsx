@@ -110,7 +110,7 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
 
   const gradesObj = new Grade(parent.gradeContext, grades, type, parent.metadata.isBoulder)
 
-  const [editTogglePlaceholderRef, setEditTogglePlaceholderRef] = useState<HTMLElement|null>()
+  const [editTogglePlaceholderRef, setEditTogglePlaceholderRef] = useState<HTMLElement | null>()
 
   const [editMode, setEditMode] = useState(false)
   const [resetSignal, setResetSignal] = useState(0)
@@ -133,10 +133,10 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => {
-      leftClimb !== null && router.push(`/climbs/${leftClimb.id}`)
+      leftClimb !== null && router.push(`/climbs/${leftClimb.id}`).catch((error) => { console.error(error) })
     },
     onSwipedRight: () => {
-      rightClimb !== null && router.push(`/climbs/${rightClimb.id}`)
+      rightClimb !== null && router.push(`/climbs/${rightClimb.id}`).catch((error) => { console.error(error) })
     },
     swipeDuration: 250,
     // touchEventOptions: { passive: true },
@@ -144,10 +144,10 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
   }
   )
   useHotkeys('left', () => {
-    leftClimb !== null && router.push(`/climbs/${leftClimb.id}`)
+    leftClimb !== null && router.push(`/climbs/${leftClimb.id}`).catch((error) => { console.error(error) })
   }, [leftClimb])
   useHotkeys('right', () => {
-    rightClimb !== null && router.push(`/climbs/${rightClimb.id}`)
+    rightClimb !== null && router.push(`/climbs/${rightClimb.id}`).catch((error) => { console.error(error) })
   }, [rightClimb])
 
   const parentId = ancestors[ancestors.length - 1]
@@ -155,8 +155,8 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
   const { updateClimbCmd } = useUpdateClimbsCmd({
     parentId,
     accessToken: session?.data?.accessToken as string,
-    onUpdateCompleted: async () => {
-      await router.replace(router.asPath)
+    onUpdateCompleted: () => {
+      void router.replace(router.asPath)
     }
   })
 
@@ -223,7 +223,13 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
       <PhotoMontage photoList={climb.media} isHero />
 
       <FormProvider {...form}>
-        <form onSubmit={handleSubmit(submitHandler)} className='mt-6 first:mt-0'>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            handleSubmit(submitHandler)
+          }}
+          className='mt-6 first:mt-0'
+        >
 
           <StickyHeader
             isClimbPage
@@ -405,7 +411,7 @@ const fetchSortedClimbsInArea = async (uuid: string): Promise<ClimbType[]> => {
   const rs = await graphqlClient.query<{ area: AreaType }>({
     query,
     variables: {
-      uuid: uuid
+      uuid
     }
   })
 

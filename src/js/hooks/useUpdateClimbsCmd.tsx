@@ -35,25 +35,26 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
     MUTATION_UPDATE_CLIMBS, {
       client: graphqlClient,
 
-      onCompleted: async (returnValue) => {
+      onCompleted: (returnValue) => {
         // Trigger Next to build newly create climb pages
         const { updateClimbs } = returnValue
         const idList = Array.isArray(updateClimbs) ? updateClimbs : []
-        await Promise.all(
-          idList.map(async climbId => {
-            await refreshPage(`/api/revalidate?c=${climbId}`)
-          }))
-
-        // Rebuild the parent area page
-        await refreshPage(`/api/revalidate?s=${parentId}`)
-
-        toast('Climbs updated ✨')
-
-        if (onUpdateCompleted != null) {
-          onUpdateCompleted(returnValue)
-        }
+        Promise.all(
+          idList.map(async (climbId) => {
+            return await refreshPage(`/api/revalidate?c=${climbId}`)
+          })
+        )
+          .then(() => {
+            toast('Climbs updated ✨')
+            if (onUpdateCompleted != null) {
+              onUpdateCompleted(returnValue)
+            }
+          })
+          .catch((error) => {
+            // Handle refreshPage error
+            console.error(error)
+          })
       },
-
       onError: (error) => {
         toast.error(`Climb update error: ${error.message}`)
         if (onUpdateError != null) {
@@ -82,12 +83,18 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
   const [deleteClimbsApi] = useMutation<{ deleteClimbsApi: number }, { input: DeleteManyClimbsInputType }>(
     MUTATION_DELETE_CLIMBS, {
       client: graphqlClient,
-      onCompleted: async (data) => {
-        await refreshPage(`/api/revalidate?s=${parentId}`)
-        toast('Climbs deleted ✔️')
-        if (onDeleteCompleted != null) {
-          onDeleteCompleted(data)
-        }
+      onCompleted: (data) => {
+        refreshPage(`/api/revalidate?s=${parentId}`)
+          .then(() => {
+            toast('Climbs deleted ✔️')
+            if (onDeleteCompleted != null) {
+              onDeleteCompleted(data)
+            }
+          })
+          .catch((error) => {
+            // Handle refreshPage error
+            console.error(error)
+          })
       },
       onError: (error) => {
         toast.error(`Climb delete error: ${error.message}`)

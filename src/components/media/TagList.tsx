@@ -55,7 +55,7 @@ export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthen
     >
       {entityTags.map((tag: EntityTag) =>
         <Tag
-          key={`${tag.targetId}`}
+          key={tag.targetId}
           mediaId={id}
           tag={tag}
           onDelete={onDeleteHandler}
@@ -105,7 +105,7 @@ export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAu
         <DropdownContent align='end'>
           <>
             {entityTags.map(tag => (
-              <PrimitiveDropdownMenuItem key={`${tag.id}`} className='px-2 py-3'>
+              <PrimitiveDropdownMenuItem key={tag.id} className='px-2 py-3'>
                 <Tag
                   mediaId={id}
                   tag={tag}

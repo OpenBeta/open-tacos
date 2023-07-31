@@ -176,7 +176,7 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
                       {showInput &&
                         <button
                           type='button'
-                          onClick={getTicks}
+                          onClick={() => { void getTicks }}
                           className='btn btn-primary'
                         >
                           Get my ticks!
@@ -184,7 +184,7 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
                       {!isButton &&
                         <button
                           type='button'
-                          onClick={dontShowAgain}
+                          onClick={() => { void dontShowAgain }}
                           className='bg-white rounded-md text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                         >
                           {loading ? 'Working...' : "Don't show again"}

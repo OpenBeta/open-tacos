@@ -48,7 +48,7 @@ const attemptTypes = [
   { id: 4, name: 'Pinkpoint' }
 ]
 
-interface Props{
+interface Props {
   open: boolean
   setOpen: Function
   setTicks: Function
@@ -86,14 +86,14 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
   async function submitTick (): Promise<void> {
     // build a tick object to send to the GraphQL backend
     const tick = {
-      name: name,
-      notes: notes,
-      climbId: climbId,
+      name,
+      notes,
+      climbId,
       userId: session.data?.user.metadata.uuid,
       style: style.name,
       attemptType: attemptType.name,
       dateClimbed: new Date(Date.parse(`${dateClimbed}T00:00:00`)), // Date.parse without timezone converts dateClimbed into local timezone.
-      grade: grade,
+      grade,
       source: 'OB' // source manually set as Open Beta
     }
     // validate the tick object using the YUP schema declared above
@@ -201,7 +201,7 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
                     className='text-center p-2 border-2 rounded-xl border-ob-primary transition
                       text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
                       hover:text-white w-64 font-bold'
-                    onClick={submitTick}
+                    onClick={() => { void submitTick }}
                   >
                     Submit Tick
                   </button>

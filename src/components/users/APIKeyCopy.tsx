@@ -16,8 +16,9 @@ const APIKeyCopy: React.FC<ForOwnerOnlyProps> = () => {
     <div className='hidden lg:block tooltip tooltip-bottom tooltip-info' data-tip='Copy API key to clipboard'>
       <button
         className='block'
-        onClick={async () => {
-          await navigator.clipboard.writeText(apiKey)
+        onClick={(e) => {
+          e.preventDefault()
+          void navigator.clipboard.writeText(apiKey)
         }}
       ><KeyIcon className='w-6 h-6' />
       </button>

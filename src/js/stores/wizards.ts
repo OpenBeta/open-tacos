@@ -57,7 +57,7 @@ export const addAreaStore = createStore('addArea')(INITIAL_AREA_STATE, STORE_OPT
         draft.refContext = name
         draft.refContextData = {
           latlng: [lnglat[1], lnglat[0]],
-          countryCode: countryCode
+          countryCode
         }
         draft.steps[0] = true
       })
@@ -111,8 +111,8 @@ export const addAreaStore = createStore('addArea')(INITIAL_AREA_STATE, STORE_OPT
 
 // Global store
 export const rootStore = {
-  addCountryStore: addCountryStore,
-  addAreaStore: addAreaStore
+  addCountryStore,
+  addAreaStore
 }
 
 // Global hook selectors

@@ -150,7 +150,7 @@ const xAxisFormatter = (data: any): any => {
 /**
  * Make median score looks like a candle stick
  */
-const CustomizeMedianDot: React.FC<LineProps & { payload?: ChartDataPayloadProps}> = (props) => {
+const CustomizeMedianDot: React.FC<LineProps & { payload?: ChartDataPayloadProps }> = (props) => {
   const { cx, cy, payload } = props
   if (cx == null || cy == null || payload == null) return null
   const lengthOffset = payload.total * 1.2
