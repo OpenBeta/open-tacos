@@ -58,7 +58,6 @@ const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: Change
   if (fullDocument.__typename !== DocumentTypeName.Climb) {
     return null
   }
-  const doc = fullDocument as ClimbType
   // @ts-expect-error
   const icon = dbOpIcon[dbOp]
   return (
@@ -68,11 +67,11 @@ const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: Change
       <div className=''>
         <div className=''>
           {dbOp === 'delete'
-            ? <span>{doc.name}</span>
-            : (<Link href={`/climbs/${doc.id}`}><a className='link link-hover'>{doc.name}</a></Link>)}
+            ? <span>{(fullDocument as ClimbType).name}</span>
+            : (<Link href={`/climbs/${(fullDocument as ClimbType).id}`}><a className='link link-hover'>{(fullDocument as ClimbType).name}</a></Link>)}
         </div>
         <div className='text-xs text-base-300'>
-          <UpdatedFields fields={updateDescription?.updatedFields} doc={doc} />
+          <UpdatedFields fields={updateDescription?.updatedFields} doc={fullDocument as ClimbType} />
         </div>
       </div>
       {/* <div className='row-span-2 col-span-2'>{JSON.stringify(updateDescription?.updatedFields)}</div> */}
