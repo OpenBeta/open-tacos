@@ -97,6 +97,8 @@ export const QUERY_AREA_BY_ID = gql`
           leaf
           isBoulder
           leftRightIndex
+          lat
+          lng
         }
         children {
           uuid
