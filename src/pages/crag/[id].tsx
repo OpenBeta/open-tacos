@@ -56,7 +56,7 @@ const Body = ({ area, history }: CragProps): JSX.Element => {
           <AreaMap
             focused={null}
             selected={area.id}
-            subAreas={[{ ...area }]}
+            subAreas={area.children}
             area={area}
           />
         </div>}
