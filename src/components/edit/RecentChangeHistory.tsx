@@ -4,7 +4,6 @@ import { PlusIcon, UserCircleIcon, MinusIcon, PencilIcon, PencilSquareIcon, Minu
 import { formatDistanceToNow } from 'date-fns'
 
 import { ChangesetType, ChangeType, AreaType, ClimbType, OrganizationType, DocumentTypeName } from '../../js/types'
-import { constant } from 'underscore'
 
 export interface RecentChangeHistoryProps {
   history: ChangesetType[]
@@ -22,7 +21,7 @@ interface ChangsetRowProps {
 }
 
 const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
-  const { id, createdAt, editedByUser, operation, changes } = changeset
+  const { createdAt, editedByUser, operation, changes } = changeset
 
   // @ts-expect-error
   const op = operationLabelMap[operation]
@@ -130,7 +129,7 @@ const OrganizationChange = ({ changeId, fullDocument, updateDescription, dbOp }:
 
 interface UpdatedFieldsProps {
   fields: string[] | undefined
-  doc: ClimbType | AreaType | OrganizationType
+  doc: any
 }
 const UpdatedFields = ({ fields, doc }: UpdatedFieldsProps): JSX.Element | null => {
   if (fields == null) return null
@@ -144,17 +143,17 @@ const UpdatedFields = ({ fields, doc }: UpdatedFieldsProps): JSX.Element | null 
 
       // single access - doc[attr]
       if (field in doc) {
-        // @ts-expect-error
         const value = JSON.stringify(doc[field])
         return (<div key={field}>{field} -&gt; {value}{field.includes('length') ? 'm' : ''}</div>)
       }
 
       // double access - doc[parent][child]
       if (field.includes('.')) {
-        const [parent, child] = field.split('.')
-        // @ts-expect-error
+        var [parent, child] = field.split('.')
+        if (parent === 'content' && doc.__typename === DocumentTypeName.Area) {
+          parent = 'areaContent' // I had to alias this in the query bc of the overlap with ClimbType
+        }
         if (parent in doc && child in doc[parent]) {
-          // @ts-expect-error
           const value = JSON.stringify(doc[parent][child])
           return (<div key={field}>{child} -&gt; {value}</div>)
         }
