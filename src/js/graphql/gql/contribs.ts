@@ -114,15 +114,53 @@ export const FRAGMENT_CHANGE_HISTORY = gql`
         ... on Area {
           areaName
           uuid
+          areaContent: content {
+            description
+          }
           metadata {
             leaf
             areaId
+            isDestination
+            leaf
+            isBoulder
+            lat
+            lng
+            leftRightIndex
           }
+          shortCode
         }
         ... on Climb {
           id
           name
           uuid
+          content {
+            description
+            location
+            protection
+          }
+          grades {
+            vscale
+            yds
+            ewbank
+            french
+            font
+            uiaa
+          }
+          type {
+            aid
+            alpine
+            bouldering
+            deepwatersolo
+            ice
+            mixed
+            snow
+            sport
+            tr
+            trad
+          }
+          boltsCount
+          fa
+          length
         }
         ... on Organization {
           displayName
