@@ -42,7 +42,7 @@ module.exports = {
     styled: true,
     themes: [{
       light: {
-        ...require('daisyui/src/colors/themes')['[data-theme=light]'],
+        ...require('daisyui/src/theming/themes')['[data-theme=light]'],
         primary: '#111827',
         'primary-focus': '#111827',
         secondary: '#b1c077', // OB brand secondary
