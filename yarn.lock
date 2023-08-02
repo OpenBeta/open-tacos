@@ -3684,26 +3684,15 @@ color-name@1.1.3:
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
   integrity sha512-72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==
 
-color-name@^1.0.0, color-name@^1.1.4, color-name@~1.1.4:
+color-name@^1.1.4, color-name@~1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
 
-color-string@^1.9.0:
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/color-string/-/color-string-1.9.1.tgz#4467f9146f036f855b764dfb5bf8582bf342c7a4"
-  integrity sha512-shrVawQFojnZv6xM40anx4CkoDP+fZsw/ZerEMsW/pyzsRbElpsL/DBVW7q3ExxwusdNXI3lXpuhEZkzs8p5Eg==
-  dependencies:
-    color-name "^1.0.0"
-    simple-swizzle "^0.2.2"
-
-color@^4.2:
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/color/-/color-4.2.3.tgz#d781ecb5e57224ee43ea9627560107c0e0c6463a"
-  integrity sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A==
-  dependencies:
-    color-convert "^2.0.1"
-    color-string "^1.9.0"
+colord@^2.9:
+  version "2.9.3"
+  resolved "https://registry.yarnpkg.com/colord/-/colord-2.9.3.tgz#4f8ce919de456f1d5c1c368c307fe20f3e59fb43"
+  integrity sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==
 
 combined-stream@^1.0.8:
   version "1.0.8"
@@ -3814,7 +3803,7 @@ css-select@^4.1.3:
     domutils "^2.8.0"
     nth-check "^2.0.1"
 
-css-selector-tokenizer@^0.8.0:
+css-selector-tokenizer@^0.8:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/css-selector-tokenizer/-/css-selector-tokenizer-0.8.0.tgz#88267ef6238e64f2215ea2764b3e2cf498b845dd"
   integrity sha512-Jd6Ig3/pe62/qe5SBPTN8h8LeUg/pT4lLgtavPf7updwwHpvFzxvOQBHYj2LZDMjUnBzgvIUSjRcf6oT5HzHFg==
@@ -3964,14 +3953,15 @@ d3-timer@^3.0.1:
   resolved "https://registry.yarnpkg.com/d3-timer/-/d3-timer-3.0.1.tgz#6284d2a2708285b1abb7e201eda4380af35e63b0"
   integrity sha512-ndfJ/JxxMd3nw31uyKoY2naivF+r29V+Lc0svZxe1JvvIRmi8hUsrMvdOwgS1o6uBHmiz91geQ0ylPP0aj1VUA==
 
-daisyui@^2.24.0:
-  version "2.38.1"
-  resolved "https://registry.yarnpkg.com/daisyui/-/daisyui-2.38.1.tgz#28a3303a1832f41e9804d76ec769335ac1248372"
-  integrity sha512-fHAVi+bT3H9QCNM7LNEH1EMPT0IwqufuW2RNhTJZorX3TftB1bWW437BVmSt70AZH72Xvp0mVxwVS3ChSKSj0w==
+daisyui@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/daisyui/-/daisyui-3.5.0.tgz#eec347c9f18f76daa932000624eb0e4bf71e64e0"
+  integrity sha512-wSaeXwaYdMv4yURv9wj7kKQQN9Jyumfh/skIpZfCNkCb2jLf/so+iNKSM8l4rDN0TRvB5OccMlAvsf2UAtk2gg==
   dependencies:
-    color "^4.2"
-    css-selector-tokenizer "^0.8.0"
-    postcss-js "^4.0.0"
+    colord "^2.9"
+    css-selector-tokenizer "^0.8"
+    postcss "^8"
+    postcss-js "^4"
     tailwindcss "^3"
 
 data-urls@^3.0.2:
@@ -5310,11 +5300,6 @@ is-arrayish@^0.2.1:
   resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.2.1.tgz#77c99840527aa8ecb1a8ba697b80645a7a926a9d"
   integrity sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg==
 
-is-arrayish@^0.3.1:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.3.2.tgz#4574a2ae56f7ab206896fb431eaeed066fdf8f03"
-  integrity sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==
-
 is-bigint@^1.0.1:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/is-bigint/-/is-bigint-1.0.4.tgz#08147a1875bc2b32005d41ccd8291dffc6691df3"
@@ -6497,6 +6482,11 @@ nanoid@^3.3.4:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
   integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
 
+nanoid@^3.3.6:
+  version "3.3.6"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.6.tgz#443380c856d6e9f9824267d960b4236ad583ea4c"
+  integrity sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==
+
 nanoid@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-4.0.0.tgz#6e144dee117609232c3f415c34b0e550e64999a5"
@@ -6922,6 +6912,13 @@ postcss-import@^14.1.0:
     read-cache "^1.0.0"
     resolve "^1.1.7"
 
+postcss-js@^4:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/postcss-js/-/postcss-js-4.0.1.tgz#61598186f3703bab052f1c4f7d805f3991bee9d2"
+  integrity sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==
+  dependencies:
+    camelcase-css "^2.0.1"
+
 postcss-js@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/postcss-js/-/postcss-js-4.0.0.tgz#31db79889531b80dc7bc9b0ad283e418dce0ac00"
@@ -6968,6 +6965,15 @@ postcss@8.4.14:
   integrity sha512-E398TUmfAYFPBSdzgeieK2Y1+1cpdxJx8yXbK/m57nRhKSmk1GB2tO4lbLBtlkfPQTDKfe4Xqv1ASWPpayPEig==
   dependencies:
     nanoid "^3.3.4"
+    picocolors "^1.0.0"
+    source-map-js "^1.0.2"
+
+postcss@^8:
+  version "8.4.27"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.27.tgz#234d7e4b72e34ba5a92c29636734349e0d9c3057"
+  integrity sha512-gY/ACJtJPSmUFPDCHtX78+01fHa64FaU4zaaWfuh1MhGJISufJAH4cun6k/8fwsHYeK4UQmENQK+tRLCFJE8JQ==
+  dependencies:
+    nanoid "^3.3.6"
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
@@ -7757,13 +7763,6 @@ simple-statistics@^7.8.3:
   version "7.8.3"
   resolved "https://registry.yarnpkg.com/simple-statistics/-/simple-statistics-7.8.3.tgz#62998dd7786ba14fa27b07f4f3cd498466f7961a"
   integrity sha512-JFvMY00t6SBGtwMuJ+nqgsx9ylkMiJ5JlK9bkj8AdvniIe5615wWQYkKHXe84XtSuc40G/tlrPu0A5/NlJvv8A==
-
-simple-swizzle@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/simple-swizzle/-/simple-swizzle-0.2.2.tgz#a4da6b635ffcccca33f70d17cb92592de95e557a"
-  integrity sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==
-  dependencies:
-    is-arrayish "^0.3.1"
 
 sisteransi@^1.0.5:
   version "1.0.5"

@@ -10,6 +10,7 @@ import { ButtonVariant } from './ui/BaseButton'
 import ProfileNavButton from './ProfileNavButton'
 import NewPost from './NewPost'
 import LogoWithText from '../assets/brand/openbeta-logo-with-text.svg'
+import GitHubStars from './GitHubStars'
 
 interface DesktopAppBarProps {
   showFilterBar?: boolean
@@ -54,6 +55,11 @@ const navListDefault: JSX.Element[] = [
     variant: ButtonVariant.SOLID_PRIMARY
   },
   {
+    route: 'https://discord.gg/ptpnWWNkJx',
+    title: 'Discord',
+    variant: ButtonVariant.OUTLINED_SECONDARY
+  },
+  {
     route: '/about',
     title: 'About'
   },
@@ -64,15 +70,6 @@ const navListDefault: JSX.Element[] = [
   {
     route: 'https://docs.openbeta.io',
     title: 'Docs'
-  },
-  {
-    route: 'https://github.com/OpenBeta/open-tacos',
-    title: 'GitHub'
-  },
-  {
-    route: 'https://discord.gg/ptpnWWNkJx',
-    title: 'Discord',
-    variant: ButtonVariant.OUTLINED_SECONDARY
   }
 ].map(
   ({ action, variant, title, route }: NavListItem, index) => (
@@ -83,6 +80,10 @@ const navListDefault: JSX.Element[] = [
       label={title}
       to={route}
     />)
+)
+
+navListDefault.push(
+  <GitHubStars key='gh-button' />
 )
 
 const navListAuthenticated = (
