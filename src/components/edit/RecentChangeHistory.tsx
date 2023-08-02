@@ -4,6 +4,7 @@ import { PlusIcon, UserCircleIcon, MinusIcon, PencilIcon, PencilSquareIcon, Minu
 import { formatDistanceToNow } from 'date-fns'
 
 import { ChangesetType, ChangeType, AreaType, ClimbType, OrganizationType, DocumentTypeName } from '../../js/types'
+import { constant } from 'underscore'
 
 export interface RecentChangeHistoryProps {
   history: ChangesetType[]
@@ -21,7 +22,7 @@ interface ChangsetRowProps {
 }
 
 const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
-  const { createdAt, editedByUser, operation, changes } = changeset
+  const { id, createdAt, editedByUser, operation, changes } = changeset
 
   // @ts-expect-error
   const op = operationLabelMap[operation]
@@ -29,7 +30,7 @@ const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
   return (
     <div className='card card-compact w-full bg-base-100 shadow-xl'>
       <div className='card-body'>
-        <div className='card-actions justify-between items-center align-middle'>
+        <div className='mx-4 card-actions justify-between items-center align-middle'>
           {op?.icon}
           {op?.badge}
           <div className='text-xs text-base-300'>
@@ -58,7 +59,7 @@ const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: Change
   if (fullDocument.__typename !== DocumentTypeName.Climb) {
     return null
   }
-  const { name, id } = fullDocument as ClimbType
+  const doc = fullDocument as ClimbType
   // @ts-expect-error
   const icon = dbOpIcon[dbOp]
   return (
@@ -68,11 +69,11 @@ const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: Change
       <div className=''>
         <div className=''>
           {dbOp === 'delete'
-            ? <span>{name}</span>
-            : (<Link href={`/climbs/${id}`}><a className='link link-hover'>{name}</a></Link>)}
+            ? <span>{doc.name}</span>
+            : (<Link href={`/climbs/${doc.id}`}><a className='link link-hover'>{doc.name}</a></Link>)}
         </div>
         <div className='text-xs text-base-300'>
-          <UpdatedFields fields={updateDescription?.updatedFields} />
+          <UpdatedFields fields={updateDescription?.updatedFields} doc={doc} />
         </div>
       </div>
       {/* <div className='row-span-2 col-span-2'>{JSON.stringify(updateDescription?.updatedFields)}</div> */}
@@ -84,24 +85,21 @@ const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeT
   if (fullDocument.__typename !== DocumentTypeName.Area) {
     return null
   }
-  const { areaName, uuid } = fullDocument as AreaType
-
-  const url = `/crag/${uuid}`
-
+  const url = `/crag/${(fullDocument as AreaType).uuid}`
   // @ts-expect-error
   const icon = dbOpIcon[dbOp]
   return (
-    <div className='ml-2 flex gap-x-2'>
+    <div className='py-2 ml-2 flex gap-x-2'>
       <div className='flex gap-2'>{icon} <span className='badge badge-sm badge-warning'>Area</span></div>
 
       <div className=''>
         <div className=''>
           {dbOp === 'delete'
-            ? <span>{areaName}</span>
-            : (<Link href={url}><a className='link link-hover'>{areaName}</a></Link>)}
+            ? <span>{(fullDocument as AreaType).areaName}</span>
+            : (<Link href={url}><a className='link link-hover'>{(fullDocument as AreaType).areaName}</a></Link>)}
         </div>
         <div className='text-xs text-base-300'>
-          <UpdatedFields fields={updateDescription?.updatedFields} />
+          <UpdatedFields fields={updateDescription?.updatedFields} doc={fullDocument as AreaType} />
         </div>
       </div>
     </div>
@@ -112,19 +110,18 @@ const OrganizationChange = ({ changeId, fullDocument, updateDescription, dbOp }:
   if (fullDocument.__typename !== DocumentTypeName.Organization) {
     return null
   }
-  const { displayName } = fullDocument as OrganizationType
   // @ts-expect-error
   const icon = dbOpIcon[dbOp]
   return (
-    <div className='ml-2 flex gap-x-2'>
+    <div className='py-2 ml-2 flex gap-x-2'>
       <div className='flex gap-2'>{icon} <span className='badge badge-sm badge-warning'>Organization</span></div>
 
       <div className=''>
         <div className=''>
-          <span>{displayName}</span>
+          <span>{(fullDocument as OrganizationType).displayName}</span>
         </div>
         <div className='text-xs text-base-300'>
-          <UpdatedFields fields={updateDescription?.updatedFields} />
+          <UpdatedFields fields={updateDescription?.updatedFields} doc={fullDocument as OrganizationType} />
         </div>
       </div>
     </div>
@@ -133,14 +130,38 @@ const OrganizationChange = ({ changeId, fullDocument, updateDescription, dbOp }:
 
 interface UpdatedFieldsProps {
   fields: string[] | undefined
+  doc: ClimbType | AreaType | OrganizationType
 }
-const UpdatedFields = ({ fields }: UpdatedFieldsProps): JSX.Element | null => {
+const UpdatedFields = ({ fields, doc }: UpdatedFieldsProps): JSX.Element | null => {
   if (fields == null) return null
   return (
     <div>{fields.map(field => {
       if (field.startsWith('_change')) return null
       if (field.startsWith('updatedAt')) return null
-      return (<div key={field}>{field}</div>)
+      if (field.startsWith('updatedBy')) return null
+      if (field.startsWith('_deleting')) return null
+      if (field.includes('children')) return null
+
+      // single access - doc[attr]
+      if (field in doc) {
+        // @ts-expect-error
+        const value = JSON.stringify(doc[field])
+        return (<div key={field}>{field} -&gt; {value}{field.includes('length') ? 'm' : ''}</div>)
+      }
+
+      // double access - doc[parent][child]
+      if (field.includes('.')) {
+        const [parent, child] = field.split('.')
+        // @ts-expect-error
+        if (parent in doc && child in doc[parent]) {
+          // @ts-expect-error
+          const value = JSON.stringify(doc[parent][child])
+          return (<div key={field}>{child} -&gt; {value}</div>)
+        }
+        return (<div key={field}>{child}</div>)
+      }
+
+      return null
     })}
     </div>
   )
