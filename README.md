@@ -238,6 +238,9 @@ Thanks goes to these wonderful people:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/draykhlin"><img src="https://avatars.githubusercontent.com/u/38668308?v=4?s=100" width="100px;" alt="draykhlin"/><br /><sub><b>draykhlin</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=draykhlin" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sjsikora"><img src="https://avatars.githubusercontent.com/u/20007305?v=4?s=100" width="100px;" alt="Sam Sikora"/><br /><sub><b>Sam Sikora</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=sjsikora" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/andrew-jp"><img src="https://avatars.githubusercontent.com/u/74275670?v=4?s=100" width="100px;" alt="Andrew Pritchett"/><br /><sub><b>Andrew Pritchett</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=andrew-jp" title="Code">💻</a> <a href="#ideas-andrew-jp" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
   </tbody>
 </table>
 
