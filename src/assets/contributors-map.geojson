@@ -45,6 +45,21 @@
           36.037803
         ]
       }
-    }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Scott",
+        "githubId": "scooterh4",
+        "favoriteCrag": "4cb01c90-8df7-5158-be07-ba1c83ee3c0c"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.047,
+          -115.1566
+        ]
+      }
+    },
   ]
 }
