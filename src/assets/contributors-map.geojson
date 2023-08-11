@@ -60,6 +60,21 @@
           51.047
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "German",
+        "githubId": "gom1",
+        "favoriteCrag": "58a4c1de-fc5b-5e0c-89ad-ab28ac59e4fe"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -118.2422725993683,
+          34.05295703301907
+        ]
+      }
     }
   ]
 }
