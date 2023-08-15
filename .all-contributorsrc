@@ -600,6 +600,15 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "milbmr",
+      "name": "MiloudB",
+      "avatar_url": "https://avatars.githubusercontent.com/u/94010370?v=4",
+      "profile": "https://github.com/milbmr",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
