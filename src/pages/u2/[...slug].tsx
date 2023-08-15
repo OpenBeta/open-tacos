@@ -33,7 +33,7 @@ const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
         ? <div className='h-screen'>Loading...</div>
         : (
           <>
-            <ChartsSection tickList={ticks} />
+            {ticks?.length !== 0 && <ChartsSection tickList={ticks} />}
 
             <section className='max-w-lg mx-auto w-full px-4 py-8'>
               <h2>{username}</h2>
