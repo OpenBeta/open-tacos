@@ -3,7 +3,7 @@ name: notify-discord
 on:
   push:
     branches:
-      - develop
+      - discord-opentacos-pr
 
 jobs:
   notify:
@@ -11,7 +11,6 @@ jobs:
 
     steps:
       - name: Actions for Discord
-        if: github.event.pull_request.head.repo.fork == false
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
