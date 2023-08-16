@@ -23,4 +23,4 @@ jobs:
         with:
           args: '🚨 An error occurred while running the workflow. test'
 
-          # pushed from fork
+          # pushed from fork with conditional
