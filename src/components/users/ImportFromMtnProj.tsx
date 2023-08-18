@@ -10,6 +10,7 @@ import clx from 'classnames'
 import { graphqlClient } from '../../js/graphql/Client'
 import { MUTATION_IMPORT_TICKS } from '../../js/graphql/gql/fragments'
 import { INPUT_DEFAULT_CSS } from '../ui/form/TextArea'
+import Spinner from '../ui/Spinner'
 
 interface Props {
   isButton: boolean
@@ -67,6 +68,7 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
 
   async function getTicks (): Promise<void> {
     // get the ticks and add it to the database
+    setErrors([])
     if (pattern.test(mpUID)) {
       setLoading(true)
       const res = await fetch('/api/user/ticks', {
@@ -82,11 +84,21 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
           }
         })
 
+        // Add a delay before rerouting to the new page
         const ticksCount: number = ticks?.length ?? 0
-        toast.info(`${ticksCount} ticks have been imported!`)
-        await router.replace(`/u2/${username}`)
+        toast.info(
+          <>
+            {ticksCount} ticks have been imported! 🎉 <br />
+            Redirecting in a few seconds...`
+          </>
+        )
+
+        setTimeout(() => {
+          void router.replace(`/u2/${username}`)
+        }, 2000)
       } else {
         setErrors(['Sorry, something went wrong. Please try again later'])
+        toast.error("We couldn't import your ticks. Please try again later.")
       }
     } else {
       // handle errors
@@ -179,7 +191,7 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
                           onClick={getTicks}
                           className='btn btn-primary'
                         >
-                          Get my ticks!
+                          {loading ? <Spinner /> : 'Get my ticks!'}
                         </button>}
                       {!isButton &&
                         <button
@@ -197,6 +209,7 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
                       className='bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                       onClick={() => {
                         setShow(false)
+                        setErrors([])
                       }}
                     >
                       <span className='sr-only'>Close</span>
