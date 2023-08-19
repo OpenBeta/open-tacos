@@ -1,12 +1,37 @@
-import { useState, useMemo } from 'react'
-import { ResponsiveContainer, BarChart, XAxis, YAxis, ZAxis, Tooltip, Bar, ScatterChart, Scatter } from 'recharts'
+import { useState, useMemo, ReactElement } from 'react'
+import { ResponsiveContainer, XAxis, YAxis, ZAxis, Tooltip, ScatterChart, Scatter } from 'recharts'
 import { groupBy } from 'underscore'
-import { getWeekOfMonth, startOfMonth, format, eachYearOfInterval, eachWeekOfInterval } from 'date-fns'
+import { getWeek, format, eachYearOfInterval, eachWeekOfInterval } from 'date-fns'
 import classNames from 'classnames'
 
 import { ChartsSectionProps } from './ChartsSection'
 import { TickType } from '../../js/types'
+import { ScatterPointItem } from 'recharts/types/cartesian/Scatter'
 
+interface DataProps {
+  x: number
+  y: string
+  z: number
+}
+
+/**
+ * Recharts doesn't export/define all of its types so
+ * we come up this this hack.
+ */
+type ScatterPointProps = Pick<DataProps, 'z'> & ScatterPointItem & {
+  cx: number
+  cy: number
+  xAxis: {
+    bandSize: number
+  }
+  yAxis: {
+    bandSize: number
+  }
+}
+
+/**
+ * Show a year of activities in a grid
+ */
 const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
   if (tickList == null) return null
 
@@ -21,59 +46,57 @@ const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
     return groupBy(tickList, getYearFromTick)
   }, [tickList])
 
-  const currentTicks = aggByYear[currentYear]
+  const ticksForSelectedYear = aggByYear[currentYear]
 
-  // console.log('#', aggByYear[currentYear])
+  const currentTicksAggByWeek = groupBy(ticksForSelectedYear, getWeekNumberFromTick)
 
   const weeks = eachWeekOfInterval({
     start: new Date(currentYear, 0, 1),
     end: new Date(currentYear, 11, 31)
   }, { weekStartsOn: 1 })
 
-  const daysOfWeek = Array.from(DAYS_OF_WEEK.values())
+  const daysOfWeek = Array.from(DAYS_OF_WEEK.keys())
 
-  const data = weeks.reduce((acc, curr) => {
-    const week = daysOfWeek.map(d => (
-      {
+  /**
+   * Main calculation
+   */
+  const data: DataProps[] = weeks.reduce<DataProps[]>((acc, curr) => {
+    const weekNum = getWeek(curr, { weekStartsOn: 1 })
+    const thisWeekTicks = currentTicksAggByWeek[weekNum]
+    const thisWeekAgg = groupBy(thisWeekTicks, getDayOfWeekFromTick)
+    const week: DataProps[] = daysOfWeek.map(d => {
+      const count = thisWeekAgg[d]?.length ?? 0
+      return ({
         x: curr.getTime(),
-        y: d,
-        z: 1
-      }))
+        y: DAYS_OF_WEEK.get(d) ?? '',
+        z: count
+      })
+    })
     return acc.concat(week)
   }, [])
 
-  const CustomShape = (props) => {
-    const { fill, x, y, width, height } = props
-    return <rect x={x} y={y + 4} width={width} height={width} fill='#c0c0c0' />
-  }
-
-  const renderSquare = (props: any) => {
-    const { cx, cy, size, xAxis, yAxis, zAxis } = props
-    const xBandSize = xAxis.bandSize
-    const yBandSize = yAxis.bandSize
-
-    // console.log('##', props)
+  const renderSquare = (props: ScatterPointProps): ReactElement<SVGElement> => {
+    const { cx, cy, xAxis, yAxis, z } = props
     return (
       <rect
         x={cx - xAxis.bandSize / 2 + 2}
         y={cy - yAxis.bandSize / 2 + 2}
         width={xAxis.bandSize - 4}
         height={yAxis.bandSize - 4}
-        fill='#c0c0c0'
-        // fill='red'
-        fillOpacity={0.5}
-        rx='2'
+        fill={intensityFn(z)}
+        fillOpacity={1}
+        rx='3'
       />
     )
   }
 
   return (
-    <div>
-      <div className='w-full'>
+    <div className=''>
+      <div className='max-w-screen-lg mx-auto overflow-x-auto'>
         <h3 className='ml-16 py-4'>
           Activity
         </h3>
-        <div className='mr-16 flex gap-4 justify-end'>
+        <div className='ml-16 flex gap-4 py-6'>
           {years.reverse().map(date => {
             const year = date.getFullYear()
             return (
@@ -87,12 +110,12 @@ const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
           })}
         </div>
         <ResponsiveContainer height={160} width={1000}>
-          <ScatterChart margin={{ left: 0, top: 0, right: 0 }}>
+          <ScatterChart margin={{ left: 0, top: 0 }}>
             <XAxis
               type='category'
               allowDuplicatedCategory={false}
               dataKey='x'
-              tick={{ fontSize: '12' }}
+              tick={{ fontSize: '14' }}
               tickFormatter={tickFormatScoreToYdsVscale}
               axisLine={false}
               tickLine={false}
@@ -104,29 +127,16 @@ const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
               dataKey='y'
               allowDuplicatedCategory={false}
               tick={{ fontSize: '12' }}
-              domain={daysOfWeek}
+              domain={Array.from(DAYS_OF_WEEK.values())}
               axisLine={false}
               tickLine={false}
               reversed
               interval='preserveStartEnd'
             />
 
-            <ZAxis
-              dataKey='z'
-              // type='number'
-              // tickFormatter={tickFormatScoreToYdsVscale}
-              // domain={[1, 2, 3, 4, 5, 6, 7]}
-            />
+            <ZAxis dataKey='z' />
             <Tooltip />
-            <Scatter data={data} fill='#8884d8' shape={renderSquare} />
-
-            {/* <Bar dataKey='0' stackId='a' shape={CustomShape} />
-            <Bar dataKey='1' stackId='a' shape={CustomShape} />
-            <Bar dataKey='2' stackId='a' shape={CustomShape} />
-            <Bar dataKey='3' stackId='a' shape={CustomShape} />
-            <Bar dataKey='4' stackId='a' shape={CustomShape} />
-            <Bar dataKey='5' stackId='a' shape={CustomShape} />
-            <Bar dataKey='6' stackId='a' shape={renderSquare} /> */}
+            <Scatter data={data} shape={renderSquare} />
           </ScatterChart>
         </ResponsiveContainer>
       </div>
@@ -138,6 +148,10 @@ export default ActivityHeat
 
 const getYearFromTick = (tick: TickType): number => new Date(tick.dateClimbed).getFullYear()
 
+const getWeekNumberFromTick = (tick: TickType): number => getWeek(tick.dateClimbed)
+
+const getDayOfWeekFromTick = (tick: TickType): number => (new Date(tick.dateClimbed)).getDay()
+
 const DAYS_OF_WEEK = new Map<number, string>()
 DAYS_OF_WEEK.set(1, 'Mon')
 DAYS_OF_WEEK.set(2, 'Tue')
@@ -147,20 +161,32 @@ DAYS_OF_WEEK.set(5, 'Fri')
 DAYS_OF_WEEK.set(6, 'Sat')
 DAYS_OF_WEEK.set(0, 'Sun')
 
-// export const tickFormatDoW = (value: string): string => {
-//   return DAYS_OF_WEEK?.[value] ?? ''
-// }
-
 export const tickFormatScoreToYdsVscale = (value: string): string => {
   if (value == null) return ''
   const d = new Date(value)
-  const weekIndex = getWeekOfMonth(d)
 
-  const first_week = d.getDate()
-  const the_day = d.getDay()
+  const dayOfMonth = d.getDate()
+  const dayOfWeek = d.getDay()
 
-  if (first_week <= 7 && the_day === 0) return format(d, 'MMM')
-
-  // console.log('#', d, weekIndex)
+  // only show the first week of the month
+  if (dayOfMonth <= 7 && dayOfWeek === 1) return format(d, 'MMM')
   return ''
+}
+
+const INTENSITY_GRADIENTS = [
+  'rgb(241 245 249)',
+  'rgb(251 207 232)',
+  'rgb(249 168 212)',
+  'rgb(244 114 182)',
+  'rgb(236 72 153)',
+  'rgb(219 39 119)',
+  'rgb(190 24 93)',
+  'rgb(157 23 77)'
+]
+
+const intensityFn = (count: number): string => {
+  if (count < 7) {
+    return INTENSITY_GRADIENTS[count]
+  }
+  return INTENSITY_GRADIENTS[INTENSITY_GRADIENTS.length - 1]
 }
