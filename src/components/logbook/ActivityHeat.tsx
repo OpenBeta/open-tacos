@@ -86,8 +86,23 @@ const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
         fill={intensityFn(z)}
         fillOpacity={1}
         rx='3'
+        stroke='rgb(157 23 77)'
+        strokeWidth={z > 0 ? 0.25 : 0}
       />
     )
+  }
+
+  const renderToolTip: React.FC<any> = ({ active, payload }) => {
+    if (active === true && payload != null && payload.length > 0) {
+      const dateStr = format(payload[0].value, 'PPPP')
+      const count = payload?.[2]?.value ?? 0
+      return (
+        <div className='bg-info px-4 py-2 rounded-btn text-sm'>
+          {count > 0 ? count : 'No'} climbs on {dateStr}
+        </div>
+      )
+    }
+    return null
   }
 
   return (
@@ -135,7 +150,7 @@ const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
             />
 
             <ZAxis dataKey='z' />
-            <Tooltip />
+            <Tooltip content={renderToolTip} cursor />
             <Scatter data={data} shape={renderSquare} />
           </ScatterChart>
         </ResponsiveContainer>
@@ -175,7 +190,7 @@ export const tickFormatScoreToYdsVscale = (value: string): string => {
 
 const INTENSITY_GRADIENTS = [
   'rgb(241 245 249)',
-  'rgb(251 207 232)',
+  'rgb(249 168 212)',
   'rgb(249 168 212)',
   'rgb(244 114 182)',
   'rgb(236 72 153)',
