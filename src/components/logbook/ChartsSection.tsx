@@ -1,4 +1,5 @@
 import { TickType } from '../../js/types'
+import ActivityHeat from './ActivityHeat'
 import DifficultyPyramid from './DifficultyPyramid'
 import OverviewChart from './OverviewChart'
 import Stats from './Stats'
@@ -10,6 +11,7 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({ tickList }) => {
   return (
     <section className='flex flex-col gap-6'>
       <Stats tickList={sortedList} />
+      <ActivityHeat tickList={sortedList} />
       <OverviewChart tickList={sortedList} />
       <DifficultyPyramid tickList={tickList} />
     </section>
