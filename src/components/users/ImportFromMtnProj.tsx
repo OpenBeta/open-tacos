@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Transition } from '@headlessui/react'
-import { FolderArrowDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
+import { FolderArrowDownIcon } from '@heroicons/react/24/outline'
 import { useMutation } from '@apollo/client'
 import { signIn, useSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
@@ -11,6 +11,7 @@ import { graphqlClient } from '../../js/graphql/Client'
 import { MUTATION_IMPORT_TICKS } from '../../js/graphql/gql/fragments'
 import { INPUT_DEFAULT_CSS } from '../ui/form/TextArea'
 import Spinner from '../ui/Spinner'
+import { LeanAlert } from '../ui/micro/AlertDialogue'
 
 interface Props {
   isButton: boolean
@@ -132,96 +133,75 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
   return (
     <>
       {isButton && <button onClick={straightToInput} className='btn btn-xs md:btn-sm btn-primary'>Import ticks</button>}
-      <div
-        aria-live='assertive'
-        className='fixed inset-0 z-10 flex items-end px-4 py-6 mt-24 pointer-events-none sm:p-6 sm:items-start'
-      >
-        <div className='w-full flex flex-col items-center space-y-4 sm:items-end'>
-          <Transition.Root
-            show={show}
-            as={Fragment}
-            enter='transform ease-out duration-300 transition'
-            enterFrom='translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2'
-            enterTo='translate-y-0 opacity-100 sm:translate-x-0'
-            leave='transition ease-in duration-100'
-            leaveFrom='opacity-100'
-            leaveTo='opacity-0'
-          >
-            <div className='max-w-xl w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden'>
-              <div className='p-4'>
-                <div className='flex items-start'>
-                  <div className='flex-shrink-0'>
-                    <FolderArrowDownIcon className='h-6 w-6 text-gray-400' aria-hidden='true' />
-                  </div>
-                  <div className='ml-3 w-0 flex-1 pt-0.5'>
-                    {(errors != null) && errors.length > 0 && errors.map((err, i) => <p className='mt-2 text-ob-primary' key={i}>{err}</p>)}
-                    <p className='text-sm font-medium text-gray-900'>{showInput ? 'Input your Mountain Project profile link' : 'Import your ticks from Mountain Project'}</p>
-                    {!showInput &&
-                      <p className='mt-1 text-sm text-gray-500'>
-                        Don't lose your progress, bring it over to Open Beta.
-                      </p>}
-                    {showInput &&
-                      <div>
-                        <div className='mt-1 relative rounded-md shadow-sm'>
-                          <input
-                            type='text'
-                            name='website'
-                            id='website'
-                            value={mpUID}
-                            onChange={(e) => setMPUID(e.target.value)}
-                            className={clx(INPUT_DEFAULT_CSS, 'w-full')}
-                            placeholder='https://www.mountainproject.com/user/123456789/username'
-                          />
-                        </div>
-                      </div>}
-                    <div className='mt-3 flex space-x-7'>
-                      {!showInput &&
-                        <button
-                          type='button'
-                          onClick={() => setShowInput(true)}
-                          className='text-center p-2 border-2 rounded-xl border-ob-primary transition
-                          text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
-                          hover:text-white w-32 font-bold'
-                        >
-                          {loading ? 'Working...' : 'Show me how'}
-                        </button>}
-                      {showInput &&
-                        <button
-                          type='button'
-                          onClick={getTicks}
-                          className='btn btn-primary'
-                        >
-                          {loading ? <Spinner /> : 'Get my ticks!'}
-                        </button>}
-                      {!isButton &&
-                        <button
-                          type='button'
-                          onClick={dontShowAgain}
-                          className='bg-white rounded-md text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                        >
-                          {loading ? 'Working...' : "Don't show again"}
-                        </button>}
-                    </div>
-                  </div>
-                  <div className='ml-4 flex-shrink-0 flex'>
-                    <button
-                      type='button'
-                      className='bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                      onClick={() => {
-                        setShow(false)
-                        setErrors([])
-                      }}
-                    >
-                      <span className='sr-only'>Close</span>
-                      <XMarkIcon className='h-5 w-5' aria-hidden='true' />
-                    </button>
-                  </div>
-                </div>
-              </div>
+
+      {show && (
+        <LeanAlert
+          icon={<FolderArrowDownIcon className='h-6 w-6 text-gray-400' aria-hidden='true' />}
+          title={showInput ? 'Input your Mountain Project profile link' : 'Import your ticks from Mountain Project'}
+          description={!showInput ? "Don't lose your progress, bring it over to Open Beta." : null}
+          closeOnEsc
+          stackChildren
+        >
+          {(errors != null) && errors.length > 0 && errors.map((err, i) => <p className='mt-2 text-ob-primary' key={i}>{err}</p>)}
+
+          {showInput && (
+            <div className='mt-1 relative rounded-md shadow-sm'>
+              <input
+                type='text'
+                name='website'
+                id='website'
+                value={mpUID}
+                onChange={(e) => setMPUID(e.target.value)}
+                className={clx(INPUT_DEFAULT_CSS, 'w-full')}
+                placeholder='https://www.mountainproject.com/user/123456789/username'
+              />
             </div>
-          </Transition.Root>
-        </div>
-      </div>
+          )}
+
+          <div className='mt-3 flex space-x-7 justify-center'>
+            {!showInput && (
+              <button
+                type='button'
+                onClick={() => setShowInput(true)}
+                className='text-center p-2 border-2 rounded-xl border-ob-primary transition
+                text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
+                hover:text-white w-32 font-bold'
+              >
+                {loading ? 'Working...' : 'Show me how'}
+              </button>
+            )}
+
+            {showInput && (
+              <button
+                type='button'
+                onClick={getTicks}
+                className='btn btn-primary'
+              >
+                {loading ? <Spinner /> : 'Get my ticks!'}
+              </button>
+            )}
+
+            {!isButton && (
+              <button
+                type='button'
+                onClick={dontShowAgain}
+                className='bg-white rounded-md text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+              >
+                {loading ? 'Working...' : "Don't show again"}
+              </button>
+            )}
+
+            <AlertDialogPrimitive.Cancel
+              asChild onClick={() => {
+                setShow(false)
+                setErrors([])
+              }}
+            >
+              <button className='Button mauve'>Cancel</button>
+            </AlertDialogPrimitive.Cancel>
+          </div>
+        </LeanAlert>
+      )}
     </>
   )
 }
