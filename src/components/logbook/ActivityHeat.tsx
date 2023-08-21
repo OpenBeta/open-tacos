@@ -1,7 +1,7 @@
 import { useState, useMemo, ReactElement } from 'react'
-import { ResponsiveContainer, XAxis, YAxis, ZAxis, Tooltip, ScatterChart, Scatter } from 'recharts'
+import { XAxis, YAxis, ZAxis, Tooltip, ScatterChart, Scatter } from 'recharts'
 import { groupBy } from 'underscore'
-import { getWeek, format, eachYearOfInterval, eachWeekOfInterval } from 'date-fns'
+import { getWeek, format, eachYearOfInterval, eachWeekOfInterval, addDays } from 'date-fns'
 import classNames from 'classnames'
 
 import { ChartsSectionProps } from './ChartsSection'
@@ -9,9 +9,22 @@ import { TickType } from '../../js/types'
 import { ScatterPointItem } from 'recharts/types/cartesian/Scatter'
 
 interface DataProps {
+  /**
+   * First Monday of the month
+   */
   x: number
+  /**
+   * Day of the week
+   */
   y: string
+  /**
+   * Number of climbs/sends
+   */
   z: number
+  /**
+   * Actual timestamp (x + y)
+   */
+  ts: number
 }
 
 /**
@@ -30,7 +43,7 @@ type ScatterPointProps = Pick<DataProps, 'z'> & ScatterPointItem & {
 }
 
 /**
- * Show a year of activities in a grid
+ * Show a year of activities in a calendar-like grid.
  */
 const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
   if (tickList == null) return null
@@ -64,12 +77,13 @@ const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
     const weekNum = getWeek(curr, { weekStartsOn: 1 })
     const thisWeekTicks = currentTicksAggByWeek[weekNum]
     const thisWeekAgg = groupBy(thisWeekTicks, getDayOfWeekFromTick)
-    const week: DataProps[] = daysOfWeek.map(d => {
+    const week: DataProps[] = daysOfWeek.map((d, index) => {
       const count = thisWeekAgg[d]?.length ?? 0
       return ({
         x: curr.getTime(),
         y: DAYS_OF_WEEK.get(d) ?? '',
-        z: count
+        z: count,
+        ts: addDays(curr, index).getTime()
       })
     })
     return acc.concat(week)
@@ -94,11 +108,12 @@ const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
 
   const renderToolTip: React.FC<any> = ({ active, payload }) => {
     if (active === true && payload != null && payload.length > 0) {
-      const dateStr = format(payload[0].value, 'PPPP')
+      const dateStr = format(payload[0].payload.ts, 'PPPP')
       const count = payload?.[2]?.value ?? 0
+      const unit = count === 1 ? 'climb' : 'climbs'
       return (
         <div className='bg-info px-4 py-2 rounded-btn text-sm'>
-          {count > 0 ? count : 'No'} climbs on {dateStr}
+          {count > 0 ? count : 'No '} {unit} on {dateStr}
         </div>
       )
     }
@@ -106,26 +121,32 @@ const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
   }
 
   return (
-    <div className=''>
-      <div className='max-w-screen-lg mx-auto overflow-x-auto'>
-        <h3 className='ml-16 py-4'>
-          Activity
-        </h3>
-        <div className='ml-16 flex gap-4 py-6'>
-          {years.reverse().map(date => {
-            const year = date.getFullYear()
-            return (
-              <button
-                key={year}
-                className={classNames('btn btn-sm', year === currentYear ? 'btn-solid' : 'btn-ghost')}
-                onClick={() => setYear(year)}
-              >{year}
-              </button>
-            )
-          })}
-        </div>
-        <ResponsiveContainer height={160} width={1000}>
-          <ScatterChart margin={{ left: 0, top: 0 }}>
+    <div className='xl:mx-auto xl:max-w-screen-lg'>
+      <h3 className='ml-4 md:ml-16 py-4'>
+        Activity
+      </h3>
+      <div className='ml-4 md:ml-16 flex flex-wrap gap-x-4 gap-y-2 py-4'>
+        {years.reverse().map(date => {
+          const year = date.getFullYear()
+          const count = aggByYear[year]?.length ?? 0
+          return (
+            <button
+              key={year}
+              className={
+                classNames(
+                  'btn btn-sm', year === currentYear ? 'btn-solid' : 'btn-ghost',
+                  count > 0 ? '' : 'text-base-content/50'
+                )
+              }
+              onClick={() => setYear(year)}
+            >{year}
+            </button>
+          )
+        })}
+      </div>
+      <div className=''>
+        <div className='pr-4 lg:pr-0 py-4 max-w-screen-lg mx-auto overflow-x-auto'>
+          <ScatterChart margin={{ left: 0, top: 0 }} height={160} width={1000}>
             <XAxis
               type='category'
               allowDuplicatedCategory={false}
@@ -153,7 +174,7 @@ const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
             <Tooltip content={renderToolTip} cursor />
             <Scatter data={data} shape={renderSquare} />
           </ScatterChart>
-        </ResponsiveContainer>
+        </div>
       </div>
     </div>
   )
@@ -183,7 +204,8 @@ export const tickFormatScoreToYdsVscale = (value: string): string => {
   const dayOfMonth = d.getDate()
   const dayOfWeek = d.getDay()
 
-  // only show the first week of the month
+  // Only show tick (date) on the first week of the month.
+  // This check determines whether date is the first week.
   if (dayOfMonth <= 7 && dayOfWeek === 1) return format(d, 'MMM')
   return ''
 }
