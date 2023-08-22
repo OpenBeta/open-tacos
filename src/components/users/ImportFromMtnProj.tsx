@@ -42,19 +42,40 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
       errorPolicy: 'none'
     })
 
-  // this function updates the users metadata
+  async function updateUserMetadata (method: 'PUT' | 'POST', body?: string): Promise<Response> {
+    try {
+      const response = await fetch('/api/user/ticks', {
+        method,
+        body,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      return response
+    } catch (error) {
+      console.error('Error updating user metadata:', error)
+      throw new Error('Network error occurred')
+    }
+  }
+
   async function dontShowAgain (): Promise<void> {
     setLoading(true)
-    const res = await fetch('/api/user/ticks', {
-      method: 'PUT',
-      body: ''
-    })
-    if (res.status === 200) {
-      setShow(false)
-    } else {
-      setErrors(['Sorry, something went wrong. Please try again later'])
+
+    try {
+      const response = await updateUserMetadata('PUT')
+
+      if (response.status === 200) {
+        setShow(false)
+      } else {
+        const errorData = await response.json()
+        const errorMessage = errorData.error ?? 'Sorry, something went wrong. Please try again later'
+        setErrors([errorMessage])
+      }
+    } catch (error) {
+      setErrors(['Sorry, something went wrong. Please check your network and try again.'])
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   // this function is for when the component is rendered as a button and sends the user straight to the input form
