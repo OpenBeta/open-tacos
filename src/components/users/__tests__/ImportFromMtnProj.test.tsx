@@ -28,26 +28,15 @@ describe('<ImportFromMtnProj />', () => {
   it('renders without crashing', () => {
     render(
       <MockedProvider mocks={[]} addTypename={false}>
-        <ImportFromMtnProj isButton username='testuser' />
+        <ImportFromMtnProj username='testuser' />
       </MockedProvider>
     )
-  })
-
-  it('renders a button when isButton prop is true', () => {
-    render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <ImportFromMtnProj isButton username='testuser' />
-      </MockedProvider>
-    )
-
-    const button = screen.getByText('Import ticks')
-    expect(button).toBeInTheDocument()
   })
 
   it('renders modal on button click', async () => {
     render(
       <MockedProvider mocks={[]} addTypename={false}>
-        <ImportFromMtnProj isButton username='testuser' />
+        <ImportFromMtnProj username='testuser' />
       </MockedProvider>
     )
 
@@ -65,7 +54,7 @@ describe('<ImportFromMtnProj />', () => {
   })
 
   it('accepts input for the Mountain Project profile link', async () => {
-    render(<ImportFromMtnProj isButton username='testuser' />
+    render(<ImportFromMtnProj username='testuser' />
     )
 
     // Simulate a click to open the modal.

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
 import { FolderArrowDownIcon } from '@heroicons/react/24/outline'
@@ -14,21 +14,18 @@ import Spinner from '../ui/Spinner'
 import { LeanAlert } from '../ui/micro/AlertDialogue'
 
 interface Props {
-  isButton: boolean
   username: string
 }
 // regex pattern to validate mountain project input
-const pattern = /^https:\/\/www.mountainproject.com\/user\/\d{9}\/[a-zA-Z-]*/
+const pattern = /^https:\/\/www.mountaainproject.com\/user\/\d{9}\/[a-zA-Z-]*/
 
 /**
  *
- * @prop isButton -- a true or false value
+ * @prop username -- the openbeta username of the user
  *
- * if the isButton prop is true, the component will be rendered as a button
- * if the isButton prop is false, the component will be rendered as a modal
  * @returns JSX element
  */
-export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
+export function ImportFromMtnProj ({ username }: Props): JSX.Element {
   const router = useRouter()
   const [mpUID, setMPUID] = useState('')
   const session = useSession()
@@ -42,39 +39,34 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
       errorPolicy: 'none'
     })
 
-  async function updateUserMetadata (method: 'PUT' | 'POST', body?: string): Promise<Response> {
+  async function fetchMPData (url: string, method: 'GET' | 'POST' | 'PUT' = 'GET', body?: string): Promise<any> {
     try {
-      const response = await fetch('/api/user/ticks', {
-        method,
-        body,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      return response
-    } catch (error) {
-      console.error('Error updating user metadata:', error)
-      throw new Error('Network error occurred')
-    }
-  }
-
-  async function dontShowAgain (): Promise<void> {
-    setLoading(true)
-
-    try {
-      const response = await updateUserMetadata('PUT')
-
-      if (response.status === 200) {
-        setShow(false)
-      } else {
-        const errorData = await response.json()
-        const errorMessage = errorData.error ?? 'Sorry, something went wrong. Please try again later'
-        setErrors([errorMessage])
+      const headers = {
+        'Content-Type': 'application/json'
       }
+      const config: RequestInit = {
+        method,
+        headers
+      }
+
+      if (body !== null && body !== undefined && body !== '') {
+        config.body = JSON.stringify(body)
+      }
+
+      const response = await fetch(url, config)
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.statusText)
+      }
+
+      return await response.json()
     } catch (error) {
-      setErrors(['Sorry, something went wrong. Please check your network and try again.'])
-    } finally {
-      setLoading(false)
+      if (error instanceof Error) {
+        console.error('Fetch error:', error.message)
+        throw error
+      }
+      throw new Error('An unexpected error occurred')
     }
   }
 
@@ -93,34 +85,38 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
     setErrors([])
     if (pattern.test(mpUID)) {
       setLoading(true)
-      const res = await fetch('/api/user/ticks', {
-        method: 'POST',
-        body: JSON.stringify(mpUID)
-      })
-      if (res.status === 200) {
-        setShow(false)
-        const { ticks } = await res.json()
-        await addTicks({
-          variables: {
-            input: ticks
-          }
-        })
 
-        // Add a delay before rerouting to the new page
-        const ticksCount: number = ticks?.length ?? 0
-        toast.info(
-          <>
-            {ticksCount} ticks have been imported! 🎉 <br />
-            Redirecting in a few seconds...`
-          </>
-        )
+      try {
+        const response = await fetchMPData('/api/user/ticks', 'POST', JSON.stringify(mpUID))
 
-        setTimeout(() => {
-          void router.replace(`/u2/${username}`)
-        }, 2000)
-      } else {
-        setErrors(['Sorry, something went wrong. Please try again later'])
-        toast.error("We couldn't import your ticks. Please try again later.")
+        if (response.ticks[0] !== undefined) {
+          await addTicks({
+            variables: {
+              input: response.ticks
+            }
+          })
+          // Add a delay before rerouting to the new page
+          const ticksCount: number = response.ticks?.length ?? 0
+          toast.info(
+            <>
+              {ticksCount} ticks have been imported! 🎉 <br />
+              Redirecting in a few seconds...`
+            </>
+          )
+
+          setTimeout(() => {
+            void router.replace(`/u2/${username}`)
+          }, 2000)
+          setShow(false)
+        } else {
+          setErrors(['Sorry, no ticks were found for that user. Please check your Mountain Project ID and try again.'])
+          toast.error('Sorry, no ticks were found for that user. Please check your Mountain Project ID and try again.')
+        }
+      } catch (error) {
+        toast.error('Sorry, something went wrong. Please check your network and try again.')
+        setErrors(['Sorry, something went wrong. Please check your network and try again.'])
+      } finally {
+        setLoading(false)
       }
     } else {
       // handle errors
@@ -129,31 +125,9 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
     setLoading(false)
   }
 
-  useEffect(() => {
-    // if we aren't rendering this component as a button
-    // and the user is authenticated we want to show the import your ticks modal
-    // then we check to see if they have a ticks imported flag set
-    // if it is, set show to the opposite of whatever it is
-    // otherwise don't show the modal
-    if (!isButton) {
-      fetch('/api/user/profile')
-        .then(async res => await res.json())
-        .then((profile) => {
-          if (profile?.ticksImported !== null) {
-            setShow(profile.ticksImported !== true)
-          } else if (session.status === 'authenticated') {
-            setShow(true)
-          } else {
-            setShow(false)
-          }
-        }).catch(console.error)
-    }
-  }, [session])
-
-  // if the isButton prop is passed to this component as true, the component will be rendered as a button, otherwise it will be a modal
   return (
     <>
-      {isButton && <button onClick={straightToInput} className='btn btn-xs md:btn-sm btn-primary'>Import ticks</button>}
+      <button onClick={straightToInput} className='btn btn-xs md:btn-sm btn-primary'>Import ticks</button>
 
       {show && (
         <LeanAlert
@@ -199,16 +173,6 @@ export function ImportFromMtnProj ({ isButton, username }: Props): JSX.Element {
                 className='btn btn-primary'
               >
                 {loading ? <Spinner /> : 'Get my ticks!'}
-              </button>
-            )}
-
-            {!isButton && (
-              <button
-                type='button'
-                onClick={dontShowAgain}
-                className='bg-white rounded-md text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-              >
-                {loading ? 'Working...' : "Don't show again"}
               </button>
             )}
 
