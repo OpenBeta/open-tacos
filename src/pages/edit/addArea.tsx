@@ -49,11 +49,6 @@ const AddAreaPage: INextPageWithAuth = () => {
     })
   const { handleSubmit, formState: { isSubmitSuccessful }, reset } = form
 
-  // Go back to previous screen
-  const onClose = useCallback(async () => {
-    await router.replace('/edit')
-  }, [])
-
   // Submit form
   const onSubmit = async (formFields: AddAreaFormProps): Promise<void> => {
     const { newAreaName, placeSearch, locationRefType } = formFields
@@ -81,7 +76,7 @@ const AddAreaPage: INextPageWithAuth = () => {
   }
 
   return (
-    <MobileDialog defaultOpen onOpenChange={onClose} modal={false}>
+    <MobileDialog defaultOpen onOpenChange={() => { void router.replace('/edit') }} modal={false}>
       <DialogContent
         title='Add an Area'
         onInteractOutside={(event) => {
@@ -92,7 +87,7 @@ const AddAreaPage: INextPageWithAuth = () => {
           <div className='text-xs mt-4'>Area can be a crag, boulder, or a destination containing other smaller areas.</div>
           <ProgressSteps />
           <FormProvider {...form}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={() => { void handleSubmit(onSubmit) }}>
               <div className='mt-8 text-lg text-content-base font-bold'>Location</div>
               <Step1a />
               <Step1b />

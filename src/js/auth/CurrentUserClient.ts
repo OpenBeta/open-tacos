@@ -7,7 +7,7 @@ const client = axios.create({
   }
 })
 
-export const getUserProfile = async (): Promise<IUserProfile|null> => {
+export const getUserProfile = async (): Promise<IUserProfile | null> => {
   const res = await client.get<IUserProfile>('/api/user/profile')
   if (res.status === 200) {
     return res.data
@@ -15,7 +15,7 @@ export const getUserProfile = async (): Promise<IUserProfile|null> => {
   return null
 }
 
-export const updateUserProfile = async (profile: IWritableUserMetadata): Promise<IUserProfile|null> => {
+export const updateUserProfile = async (profile: IWritableUserMetadata): Promise<IUserProfile | null> => {
   const res = await client.patch<IUserProfile>(
     '/api/user/profile',
     profile)

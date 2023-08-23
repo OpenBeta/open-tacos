@@ -18,7 +18,7 @@ interface MediumHistogramProps {
   columnLabels?: string[]
 }
 
-function Column ({ val, vert, label }: {val: number, vert: number, label?: string}): JSX.Element {
+function Column ({ val, vert, label }: { val: number, vert: number, label?: string }): JSX.Element {
   const cells = Array(vert).fill(0).map((_, index) => {
     if (index < val) {
       return false

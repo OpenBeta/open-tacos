@@ -127,7 +127,7 @@ export async function getStaticPaths (): Promise<any> {
 
 // This also gets called at build time
 // Query graphql api for area by id
-export const getStaticProps: GetStaticProps<AreaPageProps, {id: string}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<AreaPageProps, { id: string }> = async ({ params }) => {
   if (params == null || params.id == null) {
     return {
       notFound: true

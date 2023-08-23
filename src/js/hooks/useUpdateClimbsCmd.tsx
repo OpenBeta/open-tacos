@@ -35,7 +35,7 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
     MUTATION_UPDATE_CLIMBS, {
       client: graphqlClient,
 
-      onCompleted: async (returnValue) => {
+      onCompleted: (returnValue) => {
         // Trigger Next to build newly create climb pages
         const { updateClimbs } = returnValue
         const idList = Array.isArray(updateClimbs) ? updateClimbs : []
@@ -82,8 +82,8 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
   const [deleteClimbsApi] = useMutation<{ deleteClimbsApi: number }, { input: DeleteManyClimbsInputType }>(
     MUTATION_DELETE_CLIMBS, {
       client: graphqlClient,
-      onCompleted: async (data) => {
-        await refreshPage(`/api/revalidate?s=${parentId}`)
+      onCompleted: (data) => {
+        void refreshPage(`/api/revalidate?s=${parentId}`)
         toast('Climbs deleted ✔️')
         if (onDeleteCompleted != null) {
           onDeleteCompleted(data)

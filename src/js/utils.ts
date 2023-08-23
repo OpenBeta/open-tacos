@@ -26,12 +26,12 @@ interface PercentAndColor {
  * @returns {percents: [], colors:[]}
  */
 export const computeClimbingPercentsAndColors = (climbs: ClimbType[]): PercentAndColor => {
-  const typeToCount: {[key: string]: number} = {}
+  const typeToCount: { [key: string]: number } = {}
   climbs.forEach((climb) => {
     const { type } = climb
 
     Object.entries(type).reduce<Record<string, number>>(
-      (acc: {[key: string]: number}, [key, discipline]: [string, boolean]) => {
+      (acc: { [key: string]: number }, [key, discipline]: [string, boolean]) => {
         if (!discipline) return acc
         if (acc[key] !== undefined) {
           acc[key] = acc[key] + 1
@@ -208,7 +208,7 @@ export const getUploadDateSummary = (dateUploaded: Date): string => {
  * @param dest
  * @returns url for the given destination type (area or climb) and destination uid
  */
-export const urlResolver = (type: number, dest: string|null): string | null => {
+export const urlResolver = (type: number, dest: string | null): string | null => {
   if (dest == null) return null
   switch (type) {
     case 0:
@@ -225,7 +225,7 @@ export const urlResolver = (type: number, dest: string|null): string | null => {
 /**
  * Create a Google Maps link from latitude and longitude
  */
-export const getMapHref = ({ lat, lng }: { lat: number, lng: number}): string => {
+export const getMapHref = ({ lat, lng }: { lat: number, lng: number }): string => {
   return `https://www.google.com/maps/place/${lat},${lng}`
 }
 

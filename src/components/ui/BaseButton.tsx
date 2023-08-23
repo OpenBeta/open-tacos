@@ -6,7 +6,7 @@ interface BaseButtonProps {
   onClick?: any
   label: string | JSX.Element
   variant?: ButtonVariant
-  size?: 'sm'|'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg'
   href?: string
   type?: 'button' | 'reset' | 'submit'
   disabled?: boolean

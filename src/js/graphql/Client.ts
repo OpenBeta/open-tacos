@@ -3,7 +3,7 @@ import { onError } from '@apollo/client/link/error'
 
 const uri: string = process.env.NEXT_PUBLIC_API_SERVER ?? ''
 const httpLinkPro = new HttpLink({
-  uri: uri
+  uri
 })
 const errorLink = onError(({ graphQLErrors, networkError, ...rest }) => {
   console.error('#################### GQL Error  ####################')
@@ -11,9 +11,9 @@ const errorLink = onError(({ graphQLErrors, networkError, ...rest }) => {
   if (graphQLErrors != null) {
     graphQLErrors?.forEach(({ message, locations, path }) => {
       console.error({
-        message: message,
-        locations: locations,
-        path: path
+        message,
+        locations,
+        path
       })
     })
   }

@@ -40,7 +40,7 @@ export interface ListItemProps extends ListItemEntity {
  * use-cases. You'll need to change this to account for overflow rules after the
  * state is expanded.
  */
-function Expandable (props: {expand: boolean, children: any}): JSX.Element {
+function Expandable (props: { expand: boolean, children: any }): JSX.Element {
   const ref = React.useRef<HTMLDivElement>(null)
   const contentHeight = ref.current !== null ? ref.current?.clientHeight : 0
 

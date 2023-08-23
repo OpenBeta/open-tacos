@@ -35,7 +35,7 @@ export function getTotal (aggregatedTypes: Array<[string, number]>): number {
   }, 0)
 }
 
-export function getPieIcon ({ data, text }: {data: PieData, text: string}): string {
+export function getPieIcon ({ data, text }: { data: PieData, text: string }): string {
   const padding = 20
   const radius = 55
   const center = [radius + padding, radius + padding]

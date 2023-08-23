@@ -7,7 +7,7 @@ interface DisiplineDistributionProps {
 }
 
 export default function DisciplineDistribution (props: DisiplineDistributionProps): JSX.Element {
-  const data: Array<{value: number, label: string}> = Object.keys(props.data)
+  const data: Array<{ value: number, label: string }> = Object.keys(props.data)
     .filter(i => i !== '__typename')
     .map(key => {
       return {

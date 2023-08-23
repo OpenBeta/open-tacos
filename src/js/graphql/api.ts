@@ -86,7 +86,7 @@ export const getAreaByUUID = (uuid: string): AreaType | null => {
 
 export const getMediaForFeed = async (maxUsers: number, maxFiles: number): Promise<MediaByUsers[]> => {
   try {
-    const rs = await graphqlClient.query<{getMediaForFeed: MediaByUsers[]}>({
+    const rs = await graphqlClient.query<{ getMediaForFeed: MediaByUsers[] }>({
       query: QUERY_MEDIA_FOR_FEED,
       variables: {
         maxUsers,
@@ -112,7 +112,7 @@ interface GetCragsWithinProps {
 }
 export const getCragsWithin = async ({ bbox, zoom }: GetCragsWithinProps): Promise<AreaType[]> => {
   try {
-    const rs = await graphqlClient.query<{cragsWithin: AreaType[]}>({
+    const rs = await graphqlClient.query<{ cragsWithin: AreaType[] }>({
       query: QUERY_CRAGS_WITHIN,
       variables: {
         filter: {
