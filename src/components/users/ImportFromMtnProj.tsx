@@ -17,7 +17,7 @@ interface Props {
   username: string
 }
 // regex pattern to validate mountain project input
-const pattern = /^https:\/\/www.mountaainproject.com\/user\/\d{9}\/[a-zA-Z-]*/
+const pattern = /^https:\/\/www.mountainproject.com\/user\/\d{9}\/[a-zA-Z-]*/
 
 /**
  *
