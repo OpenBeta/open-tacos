@@ -171,6 +171,7 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
                 type='button'
                 onClick={getTicks}
                 className='btn btn-primary'
+                disabled={loading}
               >
                 {loading ? <Spinner /> : 'Get my ticks!'}
               </button>
