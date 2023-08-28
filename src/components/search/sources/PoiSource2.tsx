@@ -28,8 +28,8 @@ export const searchPoi = async (onSelect: any): Promise<AutocompleteSource<any>>
       return item.place_name
     },
 
-    onSelect: async ({ item, refresh }): Promise<void> => {
-      await refresh()
+    onSelect: ({ item, refresh }) => {
+      void refresh()
       onSelect(item)
     },
 

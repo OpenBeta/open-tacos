@@ -20,7 +20,7 @@ interface SlideViewerProps {
   userinfo: JSX.Element
   auth: WithPermission
   baseUrl: string
-  onNavigate: (newIndex: number) => void
+  onNavigate: (newIndex: number) => Promise<void>
 }
 
 /**

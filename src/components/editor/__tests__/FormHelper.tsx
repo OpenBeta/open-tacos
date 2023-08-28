@@ -1,6 +1,15 @@
-import { FormProvider, useForm } from 'react-hook-form'
+import { ReactNode } from 'react'
+import { FormProvider, useForm, SubmitHandler } from 'react-hook-form'
 
-export function FormHelper ({ initialValue, children, submitHandler }): JSX.Element {
+import { ClimbType } from '../../../js/types'
+
+interface FormHelperProps {
+  initialValue: string
+  submitHandler: SubmitHandler<any>
+  children: ReactNode
+}
+
+export const FormHelper: React.FC<FormHelperProps> = ({ initialValue, children, submitHandler }) => {
   const form = useForm(
     {
       mode: 'onBlur',
@@ -10,7 +19,7 @@ export function FormHelper ({ initialValue, children, submitHandler }): JSX.Elem
   const { handleSubmit, formState: { isValid } } = form
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(submitHandler)}>
+      <form onSubmit={() => { void handleSubmit(submitHandler) }}>
         {children}
         <button type='submit' disabled={!isValid}>Submit</button>
       </form>
@@ -18,7 +27,13 @@ export function FormHelper ({ initialValue, children, submitHandler }): JSX.Elem
   )
 }
 
-export function CSVFormHelper ({ initialClimbs, children, submitHandler }): JSX.Element {
+interface CSVFormHelperProps {
+  initialClimbs: ClimbType[]
+  children: ReactNode
+  submitHandler: () => void
+}
+
+export const CSVFormHelper: React.FC<CSVFormHelperProps> = ({ initialClimbs, children, submitHandler }) => {
   const form = useForm(
     {
       mode: 'onBlur',
@@ -28,7 +43,7 @@ export function CSVFormHelper ({ initialClimbs, children, submitHandler }): JSX.
   const { handleSubmit, formState: { isValid } } = form
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(submitHandler)}>
+      <form onSubmit={() => { void handleSubmit(submitHandler) }}>
         {children}
         <button type='submit' disabled={!isValid}>Submit</button>
       </form>

@@ -38,12 +38,12 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
     }
   }, [session])
 
-  const onSuccessHandler = async (): Promise<void> => {
+  const onSuccessHandler = (): void => {
     if (onSuccess != null) {
       onSuccess()
     }
     if (returnToParentPageAfterDelete) {
-      await router.replace('/crag/' + parentUuid)
+      void router.replace('/crag/' + parentUuid)
       router.reload()
     }
   }
@@ -79,7 +79,7 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
+      <form onSubmit={() => { void handleSubmit(submitHandler) }} className='dialog-form-default'>
         <div>You're about to delete '<span className='font-semibold'>{areaName}</span>'.  Type <b>DELETE</b> to confirm.</div>
         <Input
           label=''

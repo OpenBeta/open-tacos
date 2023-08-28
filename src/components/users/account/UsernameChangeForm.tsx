@@ -155,7 +155,7 @@ export const UsernameChangeForm: React.FC = () => {
           </>)}
       <FormProvider {...form}>
         <form
-          onSubmit={handleSubmit(submitHandler)}
+          onSubmit={() => { void handleSubmit(submitHandler) }}
           className='mt-10 flex flex-col gap-y-6'
         >
           {initials != null && <CurrentUsername {...initials} />}

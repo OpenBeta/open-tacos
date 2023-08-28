@@ -43,14 +43,17 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
           <React.Fragment key={`bread-${index}`}>
             <span className='text-xs mt-0.5'>/</span>
             <span className='text-base-300 mt-0.5'>
-              {(isLastElement && !isClimbPage && <span className='font-semibold'>{sanitizeName(place)}</span>) ||
-            (
-              <Link href={url}>
-                <a className='hover:underline whitespace-nowrap'>
-                  {sanitizeName(place)}
-                </a>
-              </Link>
-            )}
+              {
+                isLastElement && !isClimbPage
+                  ? (<span className='font-semibold'>{sanitizeName(place)}</span>)
+                  : (
+                    <Link href={url}>
+                      <a className='hover:underline whitespace-nowrap'>
+                        {sanitizeName(place)}
+                      </a>
+                    </Link>
+                    )
+              }
             </span>
           </React.Fragment>
         )

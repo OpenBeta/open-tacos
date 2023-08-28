@@ -385,7 +385,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
       )}
 
       <FormProvider {...form}>
-        <form onSubmit={handleSubmit(submitHandler)}>
+        <form onSubmit={() => { void handleSubmit(submitHandler) }}>
           <StickyHeader
             ancestors={ancestors}
             pathTokens={pathTokens}

@@ -107,7 +107,7 @@ const Step1 = (props: ChildAreaBaseProps): JSX.Element => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(submitHandler)}>
+      <form onSubmit={() => { void handleSubmit(submitHandler) }}>
         <Input
           label='Parent:'
           name='parentName'

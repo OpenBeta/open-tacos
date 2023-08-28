@@ -40,13 +40,13 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
             <DropdownItem
               icon={<ChartBarIcon className='w-4 h-4' />}
               text={<><span className='font-medium'>Dashboard </span><sup className='badge badge-sm badge-primary'>Beta</sup></>}
-              onSelect={async () => await router.push('/api/user/me?preview=1')}
+              onSelect={() => { void router.push('/api/user/me?preview=1') }}
             />
 
             <DropdownItem
               icon={<UserCircleIcon className='w-4 h-4' />}
               text='Profile'
-              onSelect={async () => await router.push('/api/user/me')}
+              onSelect={() => { void router.push('/api/user/me') }}
             />
 
             <DropdownSeparator />
@@ -54,21 +54,21 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
             <DropdownItem
               icon={<Cog6ToothIcon className='w-4 h-4' />}
               text='Account settings'
-              onSelect={async () => await router.push('/account/editProfile')}
+              onSelect={() => { void router.push('/account/editProfile') }}
             />
 
             <DropdownItem
               text='Logout'
-              onSelect={async () => {
+              onSelect={() => {
                 sessionStorage.setItem('editMode', 'false')
-                await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })
+                void signOut({ callbackUrl: `${window.origin}/api/auth/logout` })
               }}
             />
             <DropdownSeparator />
 
-            <DropdownItem text='About' onSelect={async () => await router.push('/about')} />
-            <DropdownItem text='Documentation' onSelect={async () => await router.push('https://docs.openbeta.io')} />
-            <DropdownItem text='Blog' onSelect={async () => await router.push('https://openbeta.io/blog')} />
+            <DropdownItem text='About' onSelect={() => { void router.push('/about') }} />
+            <DropdownItem text='Documentation' onSelect={() => { void router.push('https://docs.openbeta.io') }} />
+            <DropdownItem text='Blog' onSelect={() => { void router.push('https://openbeta.io/blog') }} />
 
             <DropdownSeparator />
 
@@ -76,19 +76,19 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
               icon={<GiftIcon className='w-4 h-4' />}
               text='Get your OpenBeta T-shirts'
               className='text-accent'
-              onSelect={async () => await router.push('https://opencollective.com/openbeta/contribute/t-shirt-31745')}
+              onSelect={() => { void router.push('https://opencollective.com/openbeta/contribute/t-shirt-31745') }}
             />
             <DropdownSeparator />
 
             <DropdownItem
               icon={<GitHubIcon className='w-4 h-4' />}
               text='GitHub'
-              onSelect={async () => await router.push('https://github.com/OpenBeta/open-tacos')}
+              onSelect={() => { void router.push('https://github.com/OpenBeta/open-tacos') }}
             />
             <DropdownItem
               icon={<ChatBubbleOvalLeftEllipsisIcon className='w-4 h-4' />}
               text='Discord community'
-              onSelect={async () => await router.push('https://discord.gg/ptpnWWNkJx')}
+              onSelect={() => { void router.push('https://discord.gg/ptpnWWNkJx') }}
             />
           </DropdownContent>
         </DropdownMenu>

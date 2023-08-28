@@ -98,30 +98,29 @@ export default function useMediaCmd (): UseMediaCmdReturn {
       client: graphqlClient,
       errorPolicy: 'none',
       onError: console.error,
-      onCompleted: async (data) => {
+      onCompleted: (data) => {
         /**
          * Now update the data store to trigger UserGallery re-rendering.
          */
-        await Promise.all(
-          data.addMediaObjects.map(async media => {
-            await getMediaById(media.id)
-            addNewMediaToUserGallery({
-              edges: [
-                {
-                  node: media,
-                  /**
+        data.addMediaObjects.forEach(media => {
+          void getMediaById(media.id)
+          addNewMediaToUserGallery({
+            edges: [
+              {
+                node: media,
+                /**
                  * We don't care about setting cursor because newer images are added to the front
                  * of the list.
                  */
-                  cursor: ''
-                }
-              ],
-              pageInfo: {
-                hasNextPage: true,
-                endCursor: '' // not supported
+                cursor: ''
               }
-            })
-          }))
+            ],
+            pageInfo: {
+              hasNextPage: true,
+              endCursor: '' // not supported
+            }
+          })
+        })
       }
     }
   )

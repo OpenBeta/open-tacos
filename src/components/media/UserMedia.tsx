@@ -12,7 +12,7 @@ interface UserMediaProps {
   uid: string
   index: number
   mediaWithTags: MediaWithTags
-  onClick?: (props: any) => void
+  onClick?: (props: any) => Promise<void>
   isAuthorized?: boolean
 }
 
@@ -35,7 +35,7 @@ export default function UserMedia ({
       event.preventDefault()
       event.stopPropagation()
 
-      onClick({ mouseXY: [event.clientX, event.clientY], mediaWithTags, index })
+      void onClick({ mouseXY: [event.clientX, event.clientY], mediaWithTags, index })
     }
   }, [])
 

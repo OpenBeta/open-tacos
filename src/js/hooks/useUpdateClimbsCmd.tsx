@@ -39,13 +39,13 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
         // Trigger Next to build newly create climb pages
         const { updateClimbs } = returnValue
         const idList = Array.isArray(updateClimbs) ? updateClimbs : []
-        await Promise.all(
-          idList.map(async climbId => {
-            await refreshPage(`/api/revalidate?c=${climbId}`)
-          }))
+
+        idList.forEach(climbId => {
+          void refreshPage(`/api/revalidate?c=${climbId}`)
+        })
 
         // Rebuild the parent area page
-        await refreshPage(`/api/revalidate?s=${parentId}`)
+        void refreshPage(`/api/revalidate?s=${parentId}`)
 
         toast('Climbs updated ✨')
 

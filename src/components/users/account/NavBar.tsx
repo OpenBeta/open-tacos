@@ -33,10 +33,10 @@ export const NavBar: React.FC = () => {
 
         <MenuItem
           path='/'
-          label='Logout' onClick={async (event) => {
+          label='Logout' onClick={(event) => {
             event.stopPropagation()
             event.preventDefault()
-            await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })
+            void signOut({ callbackUrl: `${window.origin}/api/auth/logout` })
           }}
         />
       </div>

@@ -37,9 +37,9 @@ export default function Tag ({ mediaId, tag, onDelete, size = 'md', showDelete =
         <div className='mt-0.5 whitespace-nowrap truncate text-sm'>{name}</div>
         {isAuthorized && showDelete &&
           <button
-            onClick={async (e) => {
+            onClick={(e) => {
               e.preventDefault()
-              await onDelete({ mediaId, tagId: tag.id, entityId: tag.targetId, entityType: tag.type })
+              void onDelete({ mediaId, tagId: tag.id, entityId: tag.targetId, entityType: tag.type })
             }}
             title='Delete tag'
           >
