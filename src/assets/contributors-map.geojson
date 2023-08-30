@@ -75,6 +75,21 @@
           34.05295703301907
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Joey",
+        "githubId": "marinojoey",
+        "favoriteCrag": "8af5df63-9dd1-5fb2-9ef1-c3c3860494f5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.324479,
+          39.737812
+        ]
+      }
     }
   ]
 }
