@@ -148,7 +148,7 @@ const UpdatedFields = ({ fields, doc }: UpdatedFieldsProps): JSX.Element | null 
 
       // double access - doc[parent][child]
       if (field.includes('.')) {
-        var [parent, child] = field.split('.')
+        let [parent, child] = field.split('.')
         if (parent === 'content' && doc.__typename === DocumentTypeName.Area) {
           parent = 'areaContent' // I had to alias this in the query bc of the overlap with ClimbType
         }

@@ -51,7 +51,7 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
                 <div className='btn btn-outline btn-xs md:btn-sm'> View ticks</div>
               </a>
             </Link>}
-          {username != null && isAuthorized && <ImportFromMtnProj isButton username={username} />}
+          {username != null && isAuthorized && <ImportFromMtnProj username={username} />}
           {userProfile != null && <EditProfileButton userUuid={userProfile?.userUuid} />}
           {userProfile != null && <APIKeyCopy userUuid={userProfile.userUuid} />}
         </div>

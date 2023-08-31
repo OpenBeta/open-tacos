@@ -142,6 +142,8 @@ interface LeanAlertProps {
   description?: ReactNode
   children?: ReactNode
   className?: string
+  stackChildren?: boolean
+  onEscapeKeyDown?: () => void
 }
 /**
  * A reusable popup alert
@@ -150,12 +152,18 @@ interface LeanAlertProps {
  * @param cancelAction A button of type `AlertDialogPrimitive.Action` that closes the alert on click.  You can register an `onClick()` to perform some action.
  * @param noncancelAction Any kind of React component/button that doesn't close the alert on click.  Use this if you want to perform an action on click and keep the alert open.
  */
-export const LeanAlert = ({ icon = null, title = null, description = null, children = DefaultOkButton, closeOnEsc = true, className = '' }: LeanAlertProps): JSX.Element => {
+export const LeanAlert = ({ icon = null, title = null, description = null, children = DefaultOkButton, closeOnEsc = true, onEscapeKeyDown = () => {}, className = '', stackChildren = false }: LeanAlertProps): JSX.Element => {
   return (
     <AlertDialogPrimitive.Root defaultOpen>
       <AlertDialogPrimitive.Overlay className='fixed inset-0 bg-black/60 z-50' />
       <AlertDialogPrimitive.Content
-        onEscapeKeyDown={e => !closeOnEsc && e.preventDefault()}
+        onEscapeKeyDown={e => {
+          if (!closeOnEsc) {
+            e.preventDefault()
+          } else {
+            onEscapeKeyDown()
+          }
+        }}
         className='z-50 fixed h-screen inset-0 mx-auto flex items-center justify-center px-2 lg:px-0 text-center overflow-y-auto max-w-xs md:max-w-md lg:max-w-lg'
       >
         <div className={`p-4 rounded-box bg-base-100 w-full ${className}`}>
@@ -164,7 +172,7 @@ export const LeanAlert = ({ icon = null, title = null, description = null, child
             {title}
           </AlertDialogPrimitive.Title>
           <AlertDialogPrimitive.Description className='my-8 text-inherit'>{description}</AlertDialogPrimitive.Description>
-          <div className='flex items-center justify-center gap-x-6'>
+          <div className={stackChildren ? 'flex-col items-center justify-center gap-x-6' : 'flex items-center justify-center gap-x-6'}>
             {children}
           </div>
         </div>
