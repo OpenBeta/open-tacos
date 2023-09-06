@@ -90,6 +90,21 @@
           39.737812
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Jason",
+        "githubId": "con-ji",
+        "favoriteCrag": "63a84574-0db2-5bec-975f-1d14f57aabe4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.052724,
+          -118.113606
+        ]
+      }
     }
   ]
 }
