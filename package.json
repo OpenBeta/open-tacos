@@ -108,8 +108,8 @@
     "autoprefixer": "^10.4.1",
     "eslint-plugin-jest": "^27.1.4",
     "husky": "^7.0.4",
-    "jest": "29.0.3",
-    "jest-environment-jsdom": "^29.2.2",
+    "jest": "^29.6.4",
+    "jest-environment-jsdom": "^29.6.4",
     "postcss": "^8.4.16",
     "postcss-import": "^14.1.0",
     "react-test-renderer": "^18.0.0",
@@ -126,7 +126,12 @@
     "url": "https://github.com/OpenBeta/open-tacos/issues"
   },
   "ts-standard": {
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
     "ignore": [
+      "setupTests.ts",
       "build",
       "node_modules/**",
       "**/*.js"
