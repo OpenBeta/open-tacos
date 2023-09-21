@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'
 import AlertDialogue from '../ui/micro/AlertDialogue'
 import { TickType } from '../../js/types'
 
-interface Props{
+interface Props {
   ticks: TickType[]
   setTicks: Function
   tickId: string

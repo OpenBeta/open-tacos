@@ -39,7 +39,7 @@ export default function Tag ({ mediaId, tag, onDelete, size = 'md', showDelete =
           <button
             onClick={async (e) => {
               e.preventDefault()
-              await onDelete({ mediaId: mediaId, tagId: tag.id, entityId: tag.targetId, entityType: tag.type })
+              await onDelete({ mediaId, tagId: tag.id, entityId: tag.targetId, entityType: tag.type })
             }}
             title='Delete tag'
           >

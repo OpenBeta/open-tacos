@@ -24,7 +24,7 @@ export const searchPoi = async (onSelect: any): Promise<AutocompleteSource<any>>
       return transform(rs)
     },
 
-    getItemInputValue: ({ item }: {item: PoiDoc}) => {
+    getItemInputValue: ({ item }: { item: PoiDoc }) => {
       return item.place_name
     },
 
@@ -36,7 +36,7 @@ export const searchPoi = async (onSelect: any): Promise<AutocompleteSource<any>>
     templates: {
       noResults: () => 'No results',
 
-      item: ({ item }: {item: PoiDoc}) => {
+      item: ({ item }: { item: PoiDoc }) => {
         return (
           <div>{item.place_name}</div>
         )

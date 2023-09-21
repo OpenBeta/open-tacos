@@ -44,7 +44,7 @@ export default function Users (): JSX.Element {
   )
 }
 
-const LinkProfile = ({ nick }: {nick: string}): JSX.Element => <Link href={`/u/${nick}`}><a className='link-primary'>{nick}</a></Link>
+const LinkProfile = ({ nick }: { nick: string }): JSX.Element => <Link href={`/u/${nick}`}><a className='link-primary'>{nick}</a></Link>
 
 const fetcher = async (url: string): Promise<any> => (await axios.get(url)).data
 interface HtmlFormProps {

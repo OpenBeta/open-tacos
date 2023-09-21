@@ -50,7 +50,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   const { onUpdateCompleted, onUpdateError, onAddCompleted, onAddError, onDeleteCompleted, onDeleteError } = props
 
   const getAreaByIdCmd: GetAreaByIdCmdType = ({ skip = false }) => {
-    return useQuery<{area: AreaType}, {uuid: string}>(
+    return useQuery<{ area: AreaType }, { uuid: string }>(
       QUERY_AREA_FOR_EDIT, {
         client: graphqlClient,
         variables: {
@@ -139,7 +139,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     await addArea({
       variables: {
         name,
-        parentUuid: parentUuid,
+        parentUuid,
         ...isBoulder != null && { isBoulder },
         ...isLeaf != null && { isLeaf }
       },
