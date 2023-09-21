@@ -129,8 +129,8 @@
   "ts-standard": {
     "project": "./tsconfig.json",
     "ignore": [
-      "build",
-      "node_modules/**"
+      "node_modules/**",
+      "AuthProvider"
     ],
     "plugins": [
       "jest"

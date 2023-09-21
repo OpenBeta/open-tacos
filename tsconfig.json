@@ -21,6 +21,7 @@
     "strictNullChecks": true
   },
   "include": [
+    "setupTests.ts",
     "next-env.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx"

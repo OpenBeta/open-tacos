@@ -1,3 +1,5 @@
+import jest from '@types/jest'
+
 export function useRouter () {
   return {
     route: '/',
