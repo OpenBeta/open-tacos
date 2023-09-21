@@ -79,7 +79,7 @@
   ],
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "lint": "yarn run ts-standard -p ./tsconfig.json",
+    "lint": "yarn run ts-standard",
     "build": "next build",
     "dev": "next dev",
     "dev-local": "NEXT_PUBLIC_API_SERVER=http://localhost:4000 yarn dev",
@@ -127,6 +127,7 @@
     "url": "https://github.com/OpenBeta/open-tacos/issues"
   },
   "ts-standard": {
+    "project": "./tsconfig.json",
     "ignore": [
       "build",
       "node_modules/**"
