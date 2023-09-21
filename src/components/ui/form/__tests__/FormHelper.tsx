@@ -1,4 +1,5 @@
 import { FormProvider, useForm } from 'react-hook-form'
+
 interface FormProps {
   onSubmit: (data: any) => void
   children: JSX.Element | JSX.Element[]
@@ -10,15 +11,9 @@ export const Form = ({ onSubmit, defaultValues, children }: FormProps): JSX.Elem
   const { handleSubmit, reset } = form
   return (
     <FormProvider {...form}>
-      <form onSubmit={(e) => {
-        handleSubmit(onSubmit)
-      }}
-      >
+      <form onSubmit={() => handleSubmit(onSubmit)}>
         {children}
-        <button
-          type='submit'
-        >OK
-        </button>
+        <button type='submit'>OK</button>
         <button
           type='reset' onClick={() =>
             reset()}

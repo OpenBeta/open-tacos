@@ -56,7 +56,6 @@ typings/
 
 # Nextjs
 .next
-next-env.d.ts
 
 # Mac files
 .DS_Store

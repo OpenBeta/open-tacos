@@ -25,6 +25,7 @@
     "@radix-ui/react-portal": "^1.0.1",
     "@radix-ui/react-tabs": "^1.0.1",
     "@radix-ui/react-toggle": "^1.0.1",
+    "@testing-library/dom": "^9.3.3",
     "@turf/bbox": "^6.5.0",
     "@types/underscore": "^1.11.4",
     "@types/uuid": "^8.3.4",
@@ -55,7 +56,7 @@
     "react-content-loader": "^6.2.0",
     "react-dom": "^18.0.0",
     "react-dropzone": "^14.2.1",
-    "react-hook-form": "^7.46.1",
+    "react-hook-form": "^7.34.2",
     "react-hotkeys-hook": "^3.4.7",
     "react-infinite-scroll-component": "^6.1.0",
     "react-map-gl": "^7.0.10",
@@ -98,7 +99,7 @@
     "@tailwindcss/typography": "^0.5.4",
     "@testing-library/jest-dom": "^6.1.3",
     "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.1.2",
+    "@testing-library/user-event": "^14.5.1",
     "@types/auth0": "^2.34.19",
     "@types/file-saver": "^2.0.5",
     "@types/jest": "^29.5.5",
@@ -128,14 +129,10 @@
   },
   "ts-standard": {
     "environment": {
-      "browser": true,
-      "es2021": true
+      "browser": true
     },
     "ignore": [
-      "setupTests.ts",
-      "build",
-      "node_modules/**",
-      "**/*.js"
+      "node_modules/**"
     ],
     "plugins": [
       "jest"
