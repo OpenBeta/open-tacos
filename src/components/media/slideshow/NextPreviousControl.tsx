@@ -5,7 +5,7 @@ import { Button, ButtonVariant } from '../../ui/BaseButton'
 
 interface NavBarProps {
   currentImageIndex: number
-  onChange: (newIndex: number) => Promise<void>
+  onChange: (newIndex: number) => void
   max: number
 }
 
@@ -27,7 +27,7 @@ export default function NextPreviousControl ({ currentImageIndex, onChange, max 
             ariaLabel='previous'
             label={<ChevronLeftIcon className='w-8 h-8' />}
             variant={ButtonVariant.ROUNDED_ICON_SOLID}
-            onClick={async () => await onChange(currentImageIndex - 1)}
+            onClick={() => onChange(currentImageIndex - 1)}
           />
         : <div />}
       {currentImageIndex < max
@@ -35,7 +35,7 @@ export default function NextPreviousControl ({ currentImageIndex, onChange, max 
             ariaLabel='next'
             label={<ChevronRightIcon className='w-8 h-8 ' />}
             variant={ButtonVariant.ROUNDED_ICON_SOLID}
-            onClick={async () => await onChange(currentImageIndex + 1)}
+            onClick={() => onChange(currentImageIndex + 1)}
           />
         : <div />}
     </div>

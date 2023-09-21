@@ -19,9 +19,15 @@ export const FormHelper: React.FC<FormHelperProps> = ({ initialValue, children, 
   const { handleSubmit, formState: { isValid } } = form
   return (
     <FormProvider {...form}>
-      <form onSubmit={() => { void handleSubmit(submitHandler) }}>
+      <form>
         {children}
-        <button type='submit' disabled={!isValid}>Submit</button>
+        <button
+          disabled={!isValid} onClick={() => {
+            console.log('##### submit')
+            void handleSubmit(submitHandler)
+          }}
+        >Submit
+        </button>
       </form>
     </FormProvider>
   )

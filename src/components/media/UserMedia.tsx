@@ -12,7 +12,7 @@ interface UserMediaProps {
   uid: string
   index: number
   mediaWithTags: MediaWithTags
-  onClick?: (props: any) => Promise<void>
+  onClick?: (props: any) => void
   isAuthorized?: boolean
 }
 

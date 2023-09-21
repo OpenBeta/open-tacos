@@ -12,11 +12,11 @@ const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
   testEnvironment: 'jest-environment-jsdom',
 
-  moduleDirectories: ['node_modules', '<rootDir>/'],
+  // moduleDirectories: ['node_modules', '<rootDir>/'],
 
-  moduleNameMapper: {
-    '@/(.*)$': '<rootDir>/src/$1'
-  }
+  // moduleNameMapper: {
+  //   '@/(.*)$': '<rootDir>/src/$1'
+  // }
 }
 
 const projectDir = process.cwd()

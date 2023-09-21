@@ -2,7 +2,7 @@ import React from 'react'
 import { render, fireEvent, waitFor, screen, act } from '@testing-library/react'
 import { MockedProvider } from '@apollo/client/testing'
 import ImportFromMtnProj from '../ImportFromMtnProj'
-import '@testing-library/jest-dom/extend-expect'
+import ''
 
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(() => ({ status: 'authenticated' }))
