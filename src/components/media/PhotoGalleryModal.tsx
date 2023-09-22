@@ -62,6 +62,7 @@ const PhotoGalleryModal = ({
                     key={mediaUrl}
                     mediaWithTags={mediaWithTags}
                     showDelete
+                    showActions={false}
                   />
                 </div>
               </div>
