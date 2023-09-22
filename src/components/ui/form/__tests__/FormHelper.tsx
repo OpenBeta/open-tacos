@@ -11,7 +11,8 @@ export const Form = ({ onSubmit, defaultValues, children }: FormProps): JSX.Elem
   const { handleSubmit, reset } = form
   return (
     <FormProvider {...form}>
-      <form onSubmit={() => handleSubmit(onSubmit)}>
+      {/* eslint-disable-next-line */}
+      <form onSubmit={handleSubmit(onSubmit)}>
         {children}
         <button type='submit'>OK</button>
         <button

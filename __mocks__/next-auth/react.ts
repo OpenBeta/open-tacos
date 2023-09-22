@@ -1,4 +1,4 @@
-export function useSession () {
+export function useSession (): any {
   return {
     status: 'authenticated',
     data: {}

@@ -129,20 +129,15 @@
   "ts-standard": {
     "project": "./tsconfig.json",
     "ignore": [
-      "build",
       "node_modules/**"
     ],
     "plugins": [
       "jest"
     ],
     "environment": {
-      "browser": true
-    },
-    "files": [
-      "src/**/*.js",
-      "src/**/*.ts",
-      "src/**/*.tsx"
-    ]
+      "browser": true,
+      "jest/globals": true
+    }
   },
   "engines": {
     "node": "18"

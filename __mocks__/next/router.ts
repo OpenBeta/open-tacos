@@ -1,8 +1,8 @@
-export function useRouter () {
+export function useRouter (): any {
   return {
     route: '/',
     pathname: '/',
-    query: '',
+    query: {},
     asPath: '/',
     replace: replaceFn,
     push: pushFn,

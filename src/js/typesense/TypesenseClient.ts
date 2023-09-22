@@ -96,9 +96,9 @@ export async function multiSearch (query: string): Promise<MultisearchReturnType
   const rs = await typesenseClient.multiSearch.perform(searchRequests, commonSearchParams)
   // FYI: rs.results contains a lot more useful data
   const x: MultisearchReturnType = {
-    climbs: rs?.results[0].hits?.map(hit => ({ ...hit.document, type: EntityType.climb })) ?? [],
-    areas: rs?.results[1].hits?.map(reshapAreaDoc) ?? [],
-    fa: rs?.results[2].hits?.map(hit => hit.document) ?? []
+    climbs: (rs?.results[0] as any)?.hits?.map((hit: any) => ({ ...hit?.document, type: EntityType.climb })) ?? [],
+    areas: (rs?.results[1] as any)?.hits?.map(reshapAreaDoc) ?? [],
+    fa: (rs?.results[2] as any)?.hits?.map((hit: any) => hit?.document) ?? []
   } as any
 
   return x
@@ -111,11 +111,9 @@ export async function multiSearch (query: string): Promise<MultisearchReturnType
  */
 const reshapAreaDoc = (hit: SearchResponseHit<any>): TypesenseAreaType => {
   let highlightIndices: number[] = []
-  // @ts-expect-error
-  if (hit.highlights?.length > 0) {
+  if ((hit?.highlights?.length ?? 0) > 0) {
     const found = hit.highlights?.find(item => item.field === 'pathTokens')
     if (found != null) {
-      // @ts-expect-error
       highlightIndices = found.indices as number[]
     }
   }

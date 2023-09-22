@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import { FormProvider, useForm, SubmitHandler } from 'react-hook-form'
 
-import { ClimbType } from '../../../js/types'
+import { EditableClimbType } from '../../crag/cragSummary'
 
 interface FormHelperProps {
   initialValue: string
@@ -19,13 +19,12 @@ export const FormHelper: React.FC<FormHelperProps> = ({ initialValue, children, 
   const { handleSubmit, formState: { isValid } } = form
   return (
     <FormProvider {...form}>
-      <form>
+      {/* eslint-disable-next-line */}
+      <form onSubmit={handleSubmit(submitHandler)}>
         {children}
         <button
-          disabled={!isValid} onClick={() => {
-            console.log('##### submit')
-            void handleSubmit(submitHandler)
-          }}
+          type='submit'
+          disabled={!isValid}
         >Submit
         </button>
       </form>
@@ -34,7 +33,7 @@ export const FormHelper: React.FC<FormHelperProps> = ({ initialValue, children, 
 }
 
 interface CSVFormHelperProps {
-  initialClimbs: ClimbType[]
+  initialClimbs: EditableClimbType[]
   children: ReactNode
   submitHandler: () => void
 }
@@ -49,7 +48,8 @@ export const CSVFormHelper: React.FC<CSVFormHelperProps> = ({ initialClimbs, chi
   const { handleSubmit, formState: { isValid } } = form
   return (
     <FormProvider {...form}>
-      <form onSubmit={() => { void handleSubmit(submitHandler) }}>
+      {/* eslint-disable-next-line */}
+      <form onSubmit={handleSubmit(submitHandler)}>
         {children}
         <button type='submit' disabled={!isValid}>Submit</button>
       </form>
