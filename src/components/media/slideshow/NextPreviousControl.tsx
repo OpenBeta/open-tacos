@@ -12,12 +12,12 @@ interface NavBarProps {
 export default function NextPreviousControl ({ currentImageIndex, onChange, max }: NavBarProps): JSX.Element {
   useHotkeys('left', () => {
     if (currentImageIndex > 0) {
-      onChange(currentImageIndex - 1)
+      void onChange(currentImageIndex - 1)
     }
   }, [currentImageIndex])
   useHotkeys('right', () => {
     if (currentImageIndex < max) {
-      onChange(currentImageIndex + 1)
+      void onChange(currentImageIndex + 1)
     }
   }, [currentImageIndex])
   return (

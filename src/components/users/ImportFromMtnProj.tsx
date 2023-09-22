@@ -169,7 +169,7 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
             {showInput && (
               <button
                 type='button'
-                onClick={getTicks}
+                onClick={() => { void getTicks() }}
                 className='btn btn-primary'
                 disabled={loading}
               >

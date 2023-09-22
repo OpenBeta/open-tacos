@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom/extend-expect'
+import ''
 
 test.skip('End-to-end test', async () => {
 })

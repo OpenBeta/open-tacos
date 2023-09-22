@@ -9,7 +9,7 @@ import usePermissions from '../hooks/auth/usePermissions'
  * @param {P} props - The props passed to the function.
  * @returns {JSX.Element | null} - The JSX element returned by the function, or null.
  */
-type Fn<P> = (props: P) => JSX.Element | null
+type Fn<P> = (props: P) => React.ReactNode | JSX.Element | null
 
 export type ForOwnerOnlyProps = Pick<UserPublicProfile, 'userUuid'>
 

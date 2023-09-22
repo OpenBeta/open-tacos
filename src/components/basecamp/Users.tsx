@@ -44,7 +44,7 @@ export default function Users (): JSX.Element {
   )
 }
 
-const LinkProfile = ({ nick }: {nick: string}): JSX.Element => <Link href={`/u/${nick}`}><a className='link-primary'>{nick}</a></Link>
+const LinkProfile = ({ nick }: { nick: string }): JSX.Element => <Link href={`/u/${nick}`}><a className='link-primary'>{nick}</a></Link>
 
 const fetcher = async (url: string): Promise<any> => (await axios.get(url)).data
 interface HtmlFormProps {
@@ -92,7 +92,7 @@ const UserTable = (): JSX.Element => {
         <div className='flex items-center justify-between'>
           <h2 className=''>Users</h2>
           <FormProvider {...form}>
-            <form onSubmit={handleSubmit(submitHandler)} className='flex items-center'>
+            <form onSubmit={() => { void handleSubmit(submitHandler) }} className='flex items-center'>
               <Input
                 name='email'
                 placeholder='Search by email'
@@ -183,8 +183,8 @@ const PasswordlessUsers = (): JSX.Element => {
   const [currentPage, setPage] = useState(0)
   const { data: userPage } = useSWR<UserPage>(`/api/basecamp/users?page=${currentPage}&type=email`, fetcher)
 
-  const onClickHandler = async (userId: string): Promise<void> => {
-    await axios.get(`/api/basecamp/migrate?id=${userId}`)
+  const onClickHandler = (userId: string): void => {
+    void axios.get(`/api/basecamp/migrate?id=${userId}`)
   }
   const totalPages = Math.ceil((userPage?.total ?? 0) / (userPage?.limit ?? 0))
   return (

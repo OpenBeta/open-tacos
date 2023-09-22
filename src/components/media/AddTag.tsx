@@ -23,7 +23,7 @@ export default function AddTag ({ mediaWithTags, onCancel, onAdd, label, openSea
       onCancel={onCancel}
       label={label}
       openSearch={openSearch}
-      onSelect={async (props) => {
+      onSelect={(props) => {
         const linkedEntityId = props.type === EntityType.climb
           ? (props as TypesenseDocumentType).climbUUID
           : (props as TypesenseAreaType).id

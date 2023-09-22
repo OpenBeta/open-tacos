@@ -23,7 +23,7 @@ interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
 export const Autocomplete = ({ queryParams, forceFocus = false, classNames, ...otherProps }: AutocompleteProps): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
   const panelRootRef = useRef<any>(null)
-  const rootRef = useRef<HTMLElement|null>(null)
+  const rootRef = useRef<HTMLElement | null>(null)
   let search: AutocompleteApi<any> | null = null
 
   useEffect(() => {

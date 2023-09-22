@@ -112,9 +112,9 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
     }
   }, [initialPostId, imageList, router])
 
-  const imageOnClickHandler = useCallback(async (props: any): Promise<void> => {
+  const imageOnClickHandler = useCallback((props: any): void => {
     if (isMobile) return
-    await navigateHandler(props.index)
+    void navigateHandler(props.index)
   }, [imageList])
 
   const slideViewerCloseHandler = useCallback(() => {
@@ -122,14 +122,14 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
     setSlideNumber(-1)
   }, [])
 
-  const navigateHandler = async (newIndex: number): Promise<void> => {
+  const navigateHandler = (newIndex: number): void => {
     const currentImage = imageList[newIndex]
     const pathname = `${baseUrl}/${basename(currentImage.mediaUrl)}`
 
     if (selectedMediaId === -1 && newIndex !== selectedMediaId) {
-      await router.push({ pathname, query: { gallery: true } }, pathname, { shallow: true })
+      void router.push({ pathname, query: { gallery: true } }, pathname, { shallow: true })
     } else {
-      await router.replace({ pathname, query: { gallery: true } }, pathname, { shallow: true })
+      void router.replace({ pathname, query: { gallery: true } }, pathname, { shallow: true })
     }
 
     setSlideNumber(newIndex)

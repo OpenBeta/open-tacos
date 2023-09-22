@@ -21,8 +21,8 @@ export const bboxFromGeoJson = (geojson: FeatureCollection | Feature): BBoxType 
 
 export const bbox2Viewport = (bbox: BBoxType, width: number, height: number): any => {
   return fitBounds({
-    width: width,
-    height: height,
+    width,
+    height,
     bounds: [[bbox[0], bbox[1]], [bbox[2], bbox[3]]],
     padding: 100
   })

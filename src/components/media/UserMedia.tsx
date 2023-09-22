@@ -35,7 +35,7 @@ export default function UserMedia ({
       event.preventDefault()
       event.stopPropagation()
 
-      onClick({ mouseXY: [event.clientX, event.clientY], mediaWithTags, index })
+      void onClick({ mouseXY: [event.clientX, event.clientY], mediaWithTags, index })
     }
   }, [])
 

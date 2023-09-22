@@ -67,7 +67,7 @@ export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
   )
 }
 
-type ClimbEntryDirtyType = Record<keyof EditableClimbType, boolean|undefined>
+type ClimbEntryDirtyType = Record<keyof EditableClimbType, boolean | undefined>
 type ClimbEntryProps = EditableClimbTypeWithFieldId & {
   index: number
   defaultDict?: Dictionary<EditableClimbType>

@@ -2,7 +2,7 @@ import { groupBy } from 'underscore'
 import { formatDistanceToNowStrict, format, endOfDay, differenceInCalendarDays } from 'date-fns'
 import { TickType } from '../../js/types'
 
-const Stats: React.FC<{ tickList: TickType[]}> = ({ tickList }) => {
+const Stats: React.FC<{ tickList: TickType[] }> = ({ tickList }) => {
   const sortedList = tickList
   const total = tickList.length
   const totalTime = formatDistanceToNowStrict(sortedList[0].dateClimbed)

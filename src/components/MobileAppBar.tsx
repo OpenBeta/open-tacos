@@ -100,15 +100,15 @@ const More = (): JSX.Element => {
   )
 }
 
-const logoutHandler: MouseEventHandler = async (event) => {
+const logoutHandler: MouseEventHandler = (event) => {
   event.stopPropagation()
   event.preventDefault()
   sessionStorage.setItem('editMode', 'false')
-  await signOut({ callbackUrl: `${window.origin}/api/auth/logout` })
+  void signOut({ callbackUrl: `${window.origin}/api/auth/logout` })
 }
 
-const signInHandler: MouseEventHandler = async (event) => {
+const signInHandler: MouseEventHandler = (event) => {
   event.stopPropagation()
   event.preventDefault()
-  await signIn('auth0')
+  void signIn('auth0')
 }

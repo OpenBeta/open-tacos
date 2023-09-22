@@ -32,7 +32,7 @@ export const SearchByNameTemplate = ({ groupKey, hits, router }: SearchByNameTem
   )
 }
 
-const ClimbTypesHeader = ({ typeKeys }: {typeKeys: string[]}): JSX.Element =>
+const ClimbTypesHeader = ({ typeKeys }: { typeKeys: string[] }): JSX.Element =>
   (
     <div className='border-b border-gray-700 my-2.5'>
       <div className='flex space-x-2'>{typeKeys.map(item =>
@@ -48,7 +48,7 @@ const ClimbTemplate = (props: ClimbTemplateType): JSX.Element => {
   const { climbName, climbUUID, fa, disciplines, grade, safety, router, areaNames } = props
   const url = `/climbs/${climbUUID}`
   return (
-    <div className='py-2' onClick={async () => await router.push(url)}>
+    <div className='py-2' onClick={() => { void router.push(url) }}>
       <RouteCard
         routeName={climbName}
         type={disciplineArrayToObj(disciplines)}

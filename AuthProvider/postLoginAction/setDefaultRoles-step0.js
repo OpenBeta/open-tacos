@@ -30,7 +30,7 @@ exports.onExecutePostLogin = async ({ secrets, user, authorization, stats }, api
     clientSecret: secrets.clientSecret,
     scope: 'update:roles'
   })
-  
+
   const params = { id: user.user_id }
   const data = { roles: [EDITOR_ROLE_ID] }
 
@@ -41,7 +41,7 @@ exports.onExecutePostLogin = async ({ secrets, user, authorization, stats }, api
 
       const hasEditorRole = authorization?.roles.some(role => role === 'editor') ?? false
       if (!hasEditorRole) {
-        const res = await management.assignRolestoUser(params, data)
+        await management.assignRolestoUser(params, data)
         currentRoles.push('editor')
       }
       const ns = 'https://tacos.openbeta.io/'
