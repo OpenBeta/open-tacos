@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "ES6",
     "lib": [
       "dom",
       "dom.iterable",
@@ -21,7 +21,8 @@
     "strictNullChecks": true
   },
   "include": [
-    "next-env.d.ts",
+    "__mocks__/**/*.ts",
+    "additional.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx"
   ],

@@ -93,7 +93,6 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
     const [latStr, lngStr] = latlng.split(',')
 
     const doc = {
-      // @ts-expect-error
       ...dirtyFields?.areaName === true && { areaName: getValues('areaName') ?? '' },
       ...dirtyFields?.shortCode === true && { shortCode: getValues('shortCode') },
       ...dirtyFields?.isDestination === true && { isDestination: getValues('isDestination') },
@@ -129,7 +128,7 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
+      <form onSubmit={() => { void handleSubmit(submitHandler) }} className='dialog-form-default'>
         <Input
           label='Name:'
           name='areaName'

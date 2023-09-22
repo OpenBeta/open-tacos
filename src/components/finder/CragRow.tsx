@@ -7,7 +7,7 @@ import { MiniCrumbs } from '../ui/BreadCrumbs'
 import useResponsive from '../../js/hooks/useResponsive'
 import { cragFiltersStore } from '../../js/stores'
 
-type CragRowProps = Pick<AreaType, 'areaName'|'totalClimbs'|'metadata'|'aggregate'|'pathTokens'>
+type CragRowProps = Pick<AreaType, 'areaName' | 'totalClimbs' | 'metadata' | 'aggregate' | 'pathTokens'>
 
 export default function CragRow ({ areaName, totalClimbs, metadata, aggregate, pathTokens }: CragRowProps): JSX.Element {
   const getClimbsForYou = cragFiltersStore.get.inMyRangeCount(aggregate)

@@ -23,7 +23,7 @@ interface FetchMoreMediaForwardProps {
   first?: number
   after?: string
 }
-export interface RemoveEntityTagProps extends RemoveEntityTagMutationProps{
+export interface RemoveEntityTagProps extends RemoveEntityTagMutationProps {
   entityId: string
   entityType: TagTargetType
 }
@@ -73,7 +73,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
     }
   }
 
-  const [getMediaByIdGGL] = useLazyQuery<{media: MediaWithTags}, { id: string }>(QUERY_MEDIA_BY_ID, {
+  const [getMediaByIdGGL] = useLazyQuery<{ media: MediaWithTags }, { id: string }>(QUERY_MEDIA_BY_ID, {
     client: graphqlClient,
     fetchPolicy: 'network-only',
     onError: () => toast.error('Unexpected error.  Please try again.')
@@ -98,30 +98,29 @@ export default function useMediaCmd (): UseMediaCmdReturn {
       client: graphqlClient,
       errorPolicy: 'none',
       onError: console.error,
-      onCompleted: async (data) => {
+      onCompleted: (data) => {
         /**
          * Now update the data store to trigger UserGallery re-rendering.
          */
-        await Promise.all(
-          data.addMediaObjects.map(async media => {
-            await getMediaById(media.id)
-            addNewMediaToUserGallery({
-              edges: [
-                {
-                  node: media,
-                  /**
+        data.addMediaObjects.forEach(media => {
+          void getMediaById(media.id)
+          addNewMediaToUserGallery({
+            edges: [
+              {
+                node: media,
+                /**
                  * We don't care about setting cursor because newer images are added to the front
                  * of the list.
                  */
-                  cursor: ''
-                }
-              ],
-              pageInfo: {
-                hasNextPage: true,
-                endCursor: '' // not supported
+                cursor: ''
               }
-            })
-          }))
+            ],
+            pageInfo: {
+              hasNextPage: true,
+              endCursor: '' // not supported
+            }
+          })
+        })
       }
     }
   )

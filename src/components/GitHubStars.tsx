@@ -6,7 +6,7 @@ import GithubIcon from '../assets/icons/github.inline.svg'
  * Render GitHub stargazers button
  */
 const GitHubStars: React.FC = () => {
-  const { data } = useSWRImmutable<{ stargazers_count: number}>('https://api.github.com/repos/openbeta/open-tacos', fetcher)
+  const { data } = useSWRImmutable<{ stargazers_count: number }>('https://api.github.com/repos/openbeta/open-tacos', fetcher)
 
   return (
     <a className='no-animation transition-none btn btn-sm btn-info' href='https://github.com/OpenBeta/open-tacos'>

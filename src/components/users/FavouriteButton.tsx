@@ -10,7 +10,7 @@ interface Props {
 function NoLogin (): JSX.Element {
   return (
     <button
-      onClick={async () => await signIn('auth0', { callbackUrl: '/api/user/me' })}
+      onClick={() => { void signIn('auth0', { callbackUrl: '/api/user/me' }) }}
       className='text-center p-2 px-3 border-2 rounded-xl border-ob-primary transition
         text-ob-primary hover:bg-slate-700 hover:ring hover:ring-slate-700 ring-offset-2
         hover:text-white hover:border-slate-700'
@@ -74,7 +74,7 @@ export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Elemen
     }
 
     fetch('/api/user/fav', {
-      method: method,
+      method,
       body: JSON.stringify({ climbId, areaId, collection: favCollection })
     })
       .then(() => setIsFav(!isFav))

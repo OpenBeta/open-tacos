@@ -26,7 +26,7 @@ export const searchPoi = async (query: string): Promise<AutocompleteSource<any>>
     getItems: async ({ query }) => rs,
     templates: {
       noResults: DefaultNoResult,
-      item: ({ item }: {item: PoiDoc}) => {
+      item: ({ item }: { item: PoiDoc }) => {
         return (
           <a href={`/finder?shortName=${item.text}&placeId=${item.id}&center=${item.center.join(',')}`}>
             <ClientOnly>

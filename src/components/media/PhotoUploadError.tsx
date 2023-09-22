@@ -6,7 +6,7 @@ interface PhotoUploadErrorMessageProps {
   photoUploadErrorMessage: string
 }
 
-const onClose = async (): Promise<void> => await userMediaStore.set.setPhotoUploadErrorMessage(null)
+const onClose = (): void => { void userMediaStore.set.setPhotoUploadErrorMessage(null) }
 
 const PhotoUploadError = ({ photoUploadErrorMessage }: PhotoUploadErrorMessageProps): JSX.Element => (
   <ErrorAlert description={photoUploadErrorMessage}>

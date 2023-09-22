@@ -16,8 +16,8 @@ export default function RemoveImage ({ imageInfo }: RemoveImageProps): JSX.Eleme
   const { entityTags } = imageInfo
   if (entityTags.length > 0) return null
 
-  const remove = async (): Promise<void> => {
-    await deleteOneMediaObjectCmd(imageInfo.id, imageInfo.mediaUrl, session.data?.accessToken)
+  const remove = (): void => {
+    void deleteOneMediaObjectCmd(imageInfo.id, imageInfo.mediaUrl, session.data?.accessToken)
   }
 
   return (

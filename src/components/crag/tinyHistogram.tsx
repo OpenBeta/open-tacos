@@ -16,7 +16,7 @@ interface TinyHistogramProps {
   title?: string
 }
 
-function Column ({ val, vert }: {val: number, vert: number}): JSX.Element {
+function Column ({ val, vert }: { val: number, vert: number }): JSX.Element {
   const cells = Array(vert).fill(0).map((_, index) => {
     if (index < val) {
       return false
