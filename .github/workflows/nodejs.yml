@@ -42,11 +42,9 @@ jobs:
 
       - name: Run unit tests
         run: yarn test
-        if: ${{ github.event_name == 'pull_request' }}
 
       - name: Build project
         run: yarn build
-        if: ${{ github.event_name != 'pull_request' }}
 
   test-docker-compose:
     runs-on: ubuntu-latest
