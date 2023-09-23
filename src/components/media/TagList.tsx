@@ -10,6 +10,7 @@ import { EntityTag, MediaWithTags } from '../../js/types'
 import Tag from './Tag'
 import useMediaCmd, { RemoveEntityTagProps } from '../../js/hooks/useMediaCmd'
 import { AddEntityTagProps } from '../../js/graphql/gql/tags'
+import UsernameTag from './UsernameTag'
 
 export type OnAddCallback = (args: AddEntityTagProps) => Promise<void>
 
@@ -43,7 +44,7 @@ export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthen
     await removeEntityTagCmd(args, session.data?.accessToken)
   }
 
-  const { entityTags, id } = mediaWithTags
+  const { entityTags, id, username } = mediaWithTags
 
   return (
     <div className={
@@ -53,6 +54,7 @@ export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthen
           )
           }
     >
+      {username !== undefined && <UsernameTag username={username} />}
       {entityTags.map((tag: EntityTag) =>
         <Tag
           key={`${tag.targetId}`}
