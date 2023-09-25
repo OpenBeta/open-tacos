@@ -228,7 +228,8 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
       <PhotoMontage photoList={climb.media} isHero />
 
       <FormProvider {...form}>
-        <form onSubmit={() => { void handleSubmit(submitHandler) }} className='mt-6 first:mt-0'>
+        {/* eslint-disable-next-line */}
+        <form onSubmit={handleSubmit(submitHandler)} className='mt-6 first:mt-0'>
 
           <StickyHeader
             isClimbPage
