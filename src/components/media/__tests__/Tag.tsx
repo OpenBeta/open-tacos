@@ -1,6 +1,6 @@
 import { v4 } from 'uuid'
 import ''
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { BaseTag, LocationTag, UsernameTag } from '../Tag'
