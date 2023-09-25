@@ -107,7 +107,8 @@ const Step1 = (props: ChildAreaBaseProps): JSX.Element => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={() => { void handleSubmit(submitHandler) }}>
+      {/* eslint-disable-next-line */}
+      <form onSubmit={handleSubmit(submitHandler)}>
         <Input
           label='Parent:'
           name='parentName'

@@ -154,10 +154,8 @@ export const UsernameChangeForm: React.FC = () => {
             <h2>Change username</h2>
           </>)}
       <FormProvider {...form}>
-        <form
-          onSubmit={() => { void handleSubmit(submitHandler) }}
-          className='mt-10 flex flex-col gap-y-6'
-        >
+        {/* eslint-disable-next-line */}
+        <form onSubmit={handleSubmit(submitHandler)} className='mt-10 flex flex-col gap-y-6'>
           {initials != null && <CurrentUsername {...initials} />}
           <Input
             name='username'
