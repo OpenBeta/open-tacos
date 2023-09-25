@@ -168,7 +168,8 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
       </div>
       <div className='basis-2/3 grow'>
         <FormProvider {...form}>
-          <form onSubmit={() => { void handleSubmit(submitHandler) }} className='min-w-[16em]'>
+          {/* eslint-disable-next-line */}
+          <form onSubmit={handleSubmit(submitHandler)} className='min-w-[16em]'>
             <Input
               label='Display Name:'
               name='displayName'

@@ -385,7 +385,8 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
       )}
 
       <FormProvider {...form}>
-        <form onSubmit={() => { void handleSubmit(submitHandler) }}>
+        {/* eslint-disable-next-line */}
+        <form onSubmit={handleSubmit(submitHandler)}>
           <StickyHeader
             ancestors={ancestors}
             pathTokens={pathTokens}

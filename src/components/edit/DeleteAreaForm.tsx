@@ -79,7 +79,8 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={() => { void handleSubmit(submitHandler) }} className='dialog-form-default'>
+      {/* eslint-disable-next-line */}
+      <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
         <div>You're about to delete '<span className='font-semibold'>{areaName}</span>'.  Type <b>DELETE</b> to confirm.</div>
         <Input
           label=''

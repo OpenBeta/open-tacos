@@ -95,10 +95,8 @@ export const UpdateProfileForm: React.FC = () => {
       <h2 className=''>Edit Profile</h2>
 
       <FormProvider {...form}>
-        <form
-          onSubmit={() => { void handleSubmit(submitHandler) }}
-          className='mt-10 flex flex-col'
-        >
+        {/* eslint-disable-next-line */}
+        <form onSubmit={handleSubmit(submitHandler)} className='mt-10 flex flex-col'>
           <Input
             name='displayName'
             label='Display name'

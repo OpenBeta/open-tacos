@@ -87,7 +87,8 @@ const AddAreaPage: INextPageWithAuth = () => {
           <div className='text-xs mt-4'>Area can be a crag, boulder, or a destination containing other smaller areas.</div>
           <ProgressSteps />
           <FormProvider {...form}>
-            <form onSubmit={() => { void handleSubmit(onSubmit) }}>
+            {/* eslint-disable-next-line */}
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className='mt-8 text-lg text-content-base font-bold'>Location</div>
               <Step1a />
               <Step1b />
