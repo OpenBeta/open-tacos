@@ -128,7 +128,8 @@ export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={() => { void handleSubmit(submitHandler) }} className='dialog-form-default'>
+      {/* eslint-disable-next-line */}
+      <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
         <Input
           label='Name:'
           name='areaName'

@@ -92,7 +92,8 @@ const UserTable = (): JSX.Element => {
         <div className='flex items-center justify-between'>
           <h2 className=''>Users</h2>
           <FormProvider {...form}>
-            <form onSubmit={() => { void handleSubmit(submitHandler) }} className='flex items-center'>
+            {/* eslint-disable-next-line */}
+            <form onSubmit={handleSubmit(submitHandler)} className='flex items-center'>
               <Input
                 name='email'
                 placeholder='Search by email'
