@@ -7,10 +7,9 @@ import { signIn, useSession } from 'next-auth/react'
 import AddTag from './AddTag'
 import { DropdownMenu, DropdownContent, DropdownTrigger, DropdownItem, DropdownSeparator } from '../ui/DropdownMenu'
 import { EntityTag, MediaWithTags } from '../../js/types'
-import Tag from './Tag'
 import useMediaCmd, { RemoveEntityTagProps } from '../../js/hooks/useMediaCmd'
 import { AddEntityTagProps } from '../../js/graphql/gql/tags'
-import UsernameTag from './UsernameTag'
+import { LocationTag, UsernameTag } from './Tag'
 
 export type OnAddCallback = (args: AddEntityTagProps) => Promise<void>
 
@@ -23,12 +22,13 @@ interface TagsProps {
   showDelete?: boolean
   showActions?: boolean
   className?: string
+  showUsernameTag?: boolean
 }
 
 /**
  * A horizontal tag list.  The last item is a CTA.
  */
-export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthenticated = false, showDelete = false, showActions = true, className = '' }: TagsProps): JSX.Element | null {
+export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthenticated = false, showDelete = false, showActions = true, className = '', showUsernameTag = false }: TagsProps): JSX.Element | null {
   const { addEntityTagCmd, removeEntityTagCmd } = useMediaCmd()
   const session = useSession()
 
@@ -54,9 +54,11 @@ export default function TagList ({ mediaWithTags, isAuthorized = false, isAuthen
           )
           }
     >
-      {username !== undefined && <UsernameTag username={username} />}
+      {showUsernameTag &&
+        username !== undefined &&
+          <UsernameTag username={username} />}
       {entityTags.map((tag: EntityTag) =>
-        <Tag
+        <LocationTag
           key={`${tag.targetId}`}
           mediaId={id}
           tag={tag}
@@ -97,7 +99,7 @@ export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAu
   const onDeleteHandler: OnDeleteCallback = async (args) => {
     await removeEntityTagCmd(args, session.data?.accessToken)
   }
-  const { id, entityTags } = mediaWithTags
+  const { id, entityTags, username } = mediaWithTags
   return (
     <div aria-label='tag popup'>
       <DropdownMenu>
@@ -106,9 +108,10 @@ export const MobilePopupTagList: React.FC<TagListProps> = ({ mediaWithTags, isAu
         </DropdownTrigger>
         <DropdownContent align='end'>
           <>
+            {username !== undefined && <UsernameTag username={username} size='lg' />}
             {entityTags.map(tag => (
               <PrimitiveDropdownMenuItem key={`${tag.id}`} className='px-2 py-3'>
-                <Tag
+                <LocationTag
                   mediaId={id}
                   tag={tag}
                   isAuthorized={isAuthorized}

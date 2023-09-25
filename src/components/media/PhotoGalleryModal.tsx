@@ -7,7 +7,7 @@ import TagList from './TagList'
 import clx from 'classnames'
 import { MediaWithTags } from '../../js/types'
 
-interface PhotoGalleryModalProps {
+export interface PhotoGalleryModalProps {
   setShowPhotoGalleryModal: Dispatch<SetStateAction<boolean>>
 }
 
@@ -63,6 +63,7 @@ const PhotoGalleryModal = ({
                     mediaWithTags={mediaWithTags}
                     showDelete
                     showActions={false}
+                    showUsernameTag
                   />
                 </div>
               </div>
