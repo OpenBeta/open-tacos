@@ -120,6 +120,21 @@
           35.200139741452986
         ]
       }
-    }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Calvin",
+        "githubId": "calvincheng919",
+        "favoriteCrag": "f3c655b6-9c95-597f-aaa6-fd7d8a4865ec"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.31531,
+          44.05817299999998
+        ]
+      }
+  }
   ]
 }
