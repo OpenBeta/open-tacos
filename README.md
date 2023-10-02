@@ -250,6 +250,7 @@ Thanks goes to these wonderful people:
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/andrew-jp"><img src="https://avatars.githubusercontent.com/u/74275670?v=4?s=100" width="100px;" alt="Andrew Pritchett"/><br /><sub><b>Andrew Pritchett</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=andrew-jp" title="Code">💻</a> <a href="#ideas-andrew-jp" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/milbmr"><img src="https://avatars.githubusercontent.com/u/94010370?v=4?s=100" width="100px;" alt="MiloudB"/><br /><sub><b>MiloudB</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=milbmr" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://sarthak-kumar-shailendra.github.io/portfolio"><img src="https://avatars.githubusercontent.com/u/69191344?v=4?s=100" width="100px;" alt="Sarthak Kumar Shailendra"/><br /><sub><b>Sarthak Kumar Shailendra</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=sarthak-kumar-shailendra" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
