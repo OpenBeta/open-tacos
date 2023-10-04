@@ -21,7 +21,7 @@ export default function DesktopNavBar ({ branding, search, navList }: DesktopApp
     >
       <div className='w-fit'>{branding}</div>
 
-      <div className='w-9/12 2xl:w-full'>
+      <div className='w-9/12 2xl:w-full mx-[-64px]'>
         {search}
       </div>
 
