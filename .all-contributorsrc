@@ -618,6 +618,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "irfanfaraaz",
+      "name": "Syed Irfan Faraz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/87533725?v=4",
+      "profile": "https://irfanfaraz-portfolio.vercel.app/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
