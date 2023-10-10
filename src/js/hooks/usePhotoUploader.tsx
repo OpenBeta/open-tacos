@@ -93,12 +93,12 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
     }
   }
 
-  const onDrop = (files: File[], rejections: FileRejection[]): void => {
+  const onDrop = async (files: File[], rejections: FileRejection[]): Promise<void> => {
     if (rejections.length > 0) { console.warn('Rejected files: ', rejections) }
 
     setUploading(true)
     ref.current.hasErrors = false
-    void Promise.all(files.map(async file => {
+    await Promise.all(files.map(async file => {
       if (file.size > 11534336) {
         toast.warn('¡Ay, caramba! one of your photos is too cruxy (please reduce the size to 11MB or under)')
         return true
@@ -125,6 +125,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
   }
 
   const { getRootProps, getInputProps, open } = useDropzone({
+    /* eslint-disable-next-line */
     onDrop,
     multiple: true, // support many
     // When I get back from climbing trips, I have a huge pile of photos
