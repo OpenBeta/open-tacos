@@ -252,6 +252,7 @@ Thanks goes to these wonderful people:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/milbmr"><img src="https://avatars.githubusercontent.com/u/94010370?v=4?s=100" width="100px;" alt="MiloudB"/><br /><sub><b>MiloudB</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=milbmr" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://sarthak-kumar-shailendra.github.io/portfolio"><img src="https://avatars.githubusercontent.com/u/69191344?v=4?s=100" width="100px;" alt="Sarthak Kumar Shailendra"/><br /><sub><b>Sarthak Kumar Shailendra</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=sarthak-kumar-shailendra" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/enapupe"><img src="https://avatars.githubusercontent.com/u/291082?v=4?s=100" width="100px;" alt="Iacami Gevaerd"/><br /><sub><b>Iacami Gevaerd</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/issues?q=author%3Aenapupe" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/calvincheng919"><img src="https://avatars.githubusercontent.com/u/12023140?v=4?s=100" width="100px;" alt="Calvin Cheng"/><br /><sub><b>Calvin Cheng</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/issues?q=author%3Acalvincheng919" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
