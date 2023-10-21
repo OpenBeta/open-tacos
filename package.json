@@ -44,7 +44,7 @@
     "mapbox-gl": "^2.7.0",
     "nanoid": "^4.0.0",
     "nanoid-dictionary": "^4.3.0",
-    "next": "12.3.4",
+    "next": "^13.5.6",
     "next-auth": "^4.22.1",
     "nprogress": "^0.2.0",
     "rc-slider": "^10.0.0-alpha.5",
