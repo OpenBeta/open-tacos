@@ -59,6 +59,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
           loader={MobileLoader}
           priority={isHero}
           onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)}
+          alt=''
         />
         <PhotoFooter mediaWithTags={firstMedia} hover />
       </div>
@@ -142,6 +143,7 @@ const ResponsiveImage: React.FC<ResponsiveImageProps> = ({ mediaUrl, isHero = tr
     objectFit='cover'
     priority={isHero}
     onClick={onClick}
+    alt=''
   />)
 
 export const Skeleton: React.FC = () => (
