@@ -43,6 +43,7 @@ export const RecentImageCard = ({
               sizes='100vw'
               objectFit='cover'
               onLoad={() => setLoaded(true)}
+              alt=''
             />
             <div
               className={clx(
