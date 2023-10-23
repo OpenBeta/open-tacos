@@ -49,7 +49,21 @@ export const DesktopHeader: React.FC = () => {
     <GitHubStars key='gh-button' />
   )
 
-  const nav = status === 'authenticated' ? <ProfileNavButton isMobile={false} /> : unauthenticatedMenu
+  let nav
+  switch (status) {
+    case 'authenticated':
+      nav = <ProfileNavButton isMobile={false} />
+      break
+    case 'loading':
+      nav = (
+        <>
+          <div className='rounded-btn bg-base-200 opacity-20 w-16 h-10' />
+        </>
+      )
+      break
+    default:
+      nav = unauthenticatedMenu
+  }
 
   return (
     <header className='hidden lg:flex items-center justify-between'>

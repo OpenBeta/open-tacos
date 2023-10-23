@@ -14,7 +14,7 @@ export default async function Header (): Promise<any> {
 
 export const Logo: React.FC = () => {
   return (
-    <Link href='/' className='' legacyBehavior>
+    <Link href='/'>
       <OpenBetaLogo />
     </Link>
   )

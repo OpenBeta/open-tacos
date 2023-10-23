@@ -7,6 +7,13 @@
   @apply hidden !important;
 }
 
+body,
+html {
+  height: 100%;
+  font-size: 16px;
+  @apply font-sans text-base text-base-content;
+}
+
 h1 {
     @apply text-base-content text-4xl lg:text-5xl tracking-tight mb-4;
 }

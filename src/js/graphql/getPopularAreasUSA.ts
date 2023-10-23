@@ -2,14 +2,24 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_MEDIA_WITH_TAGS } from './gql/tags'
 import { graphqlClient } from './Client'
-import { IndexResponseType, AreaType } from '../types'
+import { AreaType } from '../types'
 
 /**
- * Get high density areas in the US
+ * - Get all US states
+ * - Get high density areas in the US
  */
 const query = gql`
   ${FRAGMENT_MEDIA_WITH_TAGS}
   query UsaAreas( $filter: Filter) {
+    area(uuid: "1db1e8ba-a40e-587c-88a4-64f5ea814b8e") {
+      totalClimbs
+      uuid
+      children {
+        areaName
+        uuid
+        totalClimbs
+      }
+    }
     areas(filter: $filter, sort: { totalClimbs: -1 }) {
       id
       uuid
@@ -54,18 +64,32 @@ const query = gql`
     }
   }`
 
-export const getPopularAreasInUSA = async (): Promise<IndexResponseType> => {
-  const rs = await graphqlClient.query<IndexResponseType>({
+interface StateSimpleStatsProps {
+  /** State name */
+  areaName: string
+  uuid: string
+  totalClimbs: number
+}
+export interface USAToCProps {
+  area: {
+    uuid: string
+    children: StateSimpleStatsProps[]
+  }
+  areas: AreaType[]
+}
+
+export const getPopularAreasInUSA = async (): Promise<USAToCProps> => {
+  const rs = await graphqlClient.query<USAToCProps>({
     query,
     variables: {
       filter: {
         field_compare: [{
           field: 'totalClimbs',
-          num: 400,
+          num: 200,
           comparison: 'gt'
         }, {
           field: 'density',
-          num: 0.5,
+          num: 0.8,
           comparison: 'gt'
         }]
       }
@@ -74,11 +98,10 @@ export const getPopularAreasInUSA = async (): Promise<IndexResponseType> => {
   return rs.data
 }
 
-const US_STATES = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
-
 export interface StateDataProps {
   name: string
-  uuid?: string
+  uuid: string
+  totalClimbs: number
   areas: AreaType[]
 }
 
@@ -87,9 +110,15 @@ export const getUSATableOfContent = async (): Promise<Map<string, StateDataProps
 
   const stateMap = new Map<string, StateDataProps>()
 
-  for (const state of US_STATES) {
-    stateMap.set(state.toLowerCase(), {
-      name: state,
+  for (const state of highDensityList.area.children) {
+    const { areaName, totalClimbs, uuid } = state
+    if (process.env.NEXT_PUBLIC_TEST_AREA_IDS?.match(uuid) != null) {
+      continue
+    }
+    stateMap.set(state.areaName.toLowerCase(), {
+      name: areaName,
+      totalClimbs,
+      uuid,
       areas: []
     })
   }
