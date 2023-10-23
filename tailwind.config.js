@@ -46,6 +46,7 @@ module.exports = {
         ...require('daisyui/src/theming/themes')['[data-theme=light]'],
         primary: '#111827',
         'primary-focus': '#111827',
+        'primary-content': '#FFFFFF',
         secondary: '#b1c077', // OB brand secondary
         accent: '#F15E40', // OB primary brand
         neutral: '#111826',

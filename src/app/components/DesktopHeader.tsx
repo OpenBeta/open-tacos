@@ -1,12 +1,16 @@
 'use client'
 import { signIn } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 
 import { Logo } from 'app/header'
 import { XSearchMinimal } from '@/components/search/XSearch'
 import { NavMenuItem, NavMenuItemProps } from '@/components/ui/NavMenuButton'
 import GitHubStars from '@/components/GitHubStars'
+import ProfileNavButton from './ProfileNavButton'
 
 export const DesktopHeader: React.FC = () => {
+  const { status } = useSession()
+
   const navListDefault: NavMenuItemProps[] = [
     {
       to: 'https://discord.gg/ptpnWWNkJx',
@@ -31,7 +35,7 @@ export const DesktopHeader: React.FC = () => {
     }
   ]
 
-  const menu = navListDefault.map(
+  const unauthenticatedMenu = navListDefault.map(
     ({ onClick, label, to, type }: NavMenuItemProps, index) => (
       <NavMenuItem
         key={index}
@@ -42,16 +46,18 @@ export const DesktopHeader: React.FC = () => {
       />)
   )
 
-  menu.unshift(
+  unauthenticatedMenu.unshift(
     <GitHubStars key='gh-button' />
   )
+
+  const nav = status === 'authenticated' ? <ProfileNavButton isMobile={false} /> : unauthenticatedMenu
 
   return (
     <header className='hidden lg:flex items-center justify-between'>
       <div className='flex items-center gap-6'><Logo />
         <XSearchMinimal />
       </div>
-      <div className='menu menu-vertical lg:menu-horizontal rounded-box gap-2'>{menu}</div>
+      <div className='menu menu-vertical lg:menu-horizontal rounded-box gap-2'>{nav}</div>
     </header>
   )
 }
