@@ -6,3 +6,11 @@
 .aa-hidden-mobile-trigger-btn {
   @apply hidden !important;
 }
+
+h1 {
+    @apply text-base-content text-4xl lg:text-5xl tracking-tight mb-4;
+}
+
+h2 {
+    @apply text-base-content text-xl font-bold tracking-tight leading-loose;
+}

@@ -16,8 +16,9 @@ export default function CragRow ({ areaName, totalClimbs, metadata, aggregate, p
   const { isMobile } = useResponsive()
 
   return (
-    <Link href={`crag/${areaId}`}>
-      <a>
+    (
+      <Link href={`crag/${areaId}`}>
+
         <div
           className='border-b border-b-slate-500 py-6' onMouseOver={() => {
             // Todo set some state to highlight this crag on the map
@@ -38,7 +39,8 @@ export default function CragRow ({ areaName, totalClimbs, metadata, aggregate, p
             </div>
           </div>
         </div>
-      </a>
-    </Link>
+
+      </Link>
+    )
   )
 }

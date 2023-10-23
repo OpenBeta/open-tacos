@@ -52,8 +52,9 @@ interface CountryProps {
 const Country = ({ item }: CountryProps): JSX.Element => {
   const { areaName, uuid, totalClimbs } = item
   return (
-    <Link key={uuid} href={`/crag/${uuid}`}>
-      <a>
+    (
+      <Link key={uuid} href={`/crag/${uuid}`}>
+
         <button
           className={clx(
             'btn  btn-sm gap-4',
@@ -70,8 +71,9 @@ const Country = ({ item }: CountryProps): JSX.Element => {
             {totalClimbs}
           </div>
         </button>
-      </a>
-    </Link>
+
+      </Link>
+    )
   )
 }
 

@@ -33,11 +33,9 @@ export default function PhotoFooter ({
 
 const PhotographerLink = ({ uid }: { uid: string }): JSX.Element => (
   <Link href={urlResolver(3, uid) ?? '#'} passHref>
-    <a>
-      <span className='absolute bottom-2 right-2 rounded-full bg-gray-100 bg-opacity-70 hover:bg-opacity-100 hover:ring p-1'>
-        <UserCircleIcon className='text-black w-6 h-6' />
-      </span>
-    </a>
+    <span className='absolute bottom-2 right-2 rounded-full bg-gray-100 bg-opacity-70 hover:bg-opacity-100 hover:ring p-1'>
+      <UserCircleIcon className='text-black w-6 h-6' />
+    </span>
   </Link>
 )
 
@@ -50,12 +48,14 @@ const DestinationLink: React.FC<EntityTag> = ({
   const url = urlResolver(type, id)
   if (url == null) return null
   return (
-    <Link href={url}>
-      <a>
+    (
+      <Link href={url}>
+
         <span className='absolute bottom-2 left-2 rounded-full bg-gray-100 bg-opacity-70 hover:bg-opacity-100 hover:ring p-2'>
           <TagIcon className='text-black w-4 h-4' />
         </span>
-      </a>
-    </Link>
+
+      </Link>
+    )
   )
 }

@@ -39,12 +39,14 @@ export const LinkButton = ({ href, children, className, linkProps, buttonProps }
     )
   }
   return (
-    <Link href={href} {...linkProps}>
-      <a>
+    (
+      <Link href={href} {...linkProps}>
+
         <button className={className} {...buttonProps}>
           {children}
         </button>
-      </a>
-    </Link>
+
+      </Link>
+    )
   )
 }

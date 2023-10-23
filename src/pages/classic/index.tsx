@@ -45,7 +45,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, recentMediaWithTags }) => {
         return encodeURIComponent(key) + '=' + encodeURIComponent(query[key] as string)
       }).join('&')
 
-      void router.push(`/?${queryString}`, undefined, { shallow: true })
+      void router.push(`/classic?${queryString}`, undefined, { shallow: true })
     }
   }, [activeTab])
 

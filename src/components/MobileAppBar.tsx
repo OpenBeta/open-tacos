@@ -53,7 +53,7 @@ export const LoginButton = (): JSX.Element => (
   />)
 
 const Home = (): JSX.Element => (
-  <Link href='/'>
+  <Link href='/' legacyBehavior>
     <button className='btn btn-square btn-ghost'>
       <HomeIcon className='w-6 h-6 text-white' />
     </button>
@@ -61,11 +61,13 @@ const Home = (): JSX.Element => (
 
 const Branding = (): JSX.Element => {
   return (
-    <Link href='/'>
-      <a className='inline-block px-4'>
+    (
+      <Link href='/' className='inline-block px-4'>
+
         <OpenBetaLogo className='inline-block w-6 h-6 ' />
-      </a>
-    </Link>
+
+      </Link>
+    )
   )
 }
 

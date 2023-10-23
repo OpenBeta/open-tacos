@@ -60,8 +60,8 @@ const Tick = (tick: TickType): JSX.Element => {
   return (
     <div className='grid grid-cols-2 gap-x-4' key={_id}>
       <div>
-        <Link href={`/climbs/${climbId}`}>
-          <a className='hover:underline'>{name}</a>
+        <Link href={`/climbs/${climbId}`} className='hover:underline'>
+          {name}
         </Link>
       </div>
       <div className='text-base-300'>{new Date(dateClimbed).toLocaleDateString()}</div>

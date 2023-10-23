@@ -74,8 +74,9 @@ export const Button = ({
 }: BaseButtonProps): JSX.Element => {
   if (href != null) {
     return (
-      <Link href={href} passHref target={target} rel={rel}>
-        <a>
+      (
+        <Link href={href} passHref target={target} rel={rel}>
+
           <BaseButton
             onClick={onClick}
             label={label}
@@ -85,8 +86,9 @@ export const Button = ({
             size={size}
             ariaLabel={ariaLabel}
           />
-        </a>
-      </Link>
+
+        </Link>
+      )
     )
   }
   return (

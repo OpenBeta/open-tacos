@@ -173,11 +173,17 @@ const WrapLink: React.FC<WrapLinkProps> = ({ climbId, className, noLink, newWind
     return <div className={className}>{children}</div>
   } else {
     return (
-      <Link href={`/climbs/${climbId}`}>
-        <a className={className} {...newWindow ? { target: '_blank', rel: 'noreferrer' } : undefined}>
+      (
+        <Link
+          href={`/climbs/${climbId}`}
+          className={className}
+          {...newWindow ? { target: '_blank', rel: 'noreferrer' } : undefined}
+        >
+
           {children}
-        </a>
-      </Link>
+
+        </Link>
+      )
     )
   }
 }

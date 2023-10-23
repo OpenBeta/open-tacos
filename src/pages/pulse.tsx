@@ -83,7 +83,7 @@ const LeaderboardRow = (value: TagsByUserType, index: number): JSX.Element => {
         </span>
       </div>
       <div className='text-left col-span-4 uppercase thick-link'>
-        {value?.username == null ? 'unknown' : <Link href={url}>{value.username}</Link>}
+        {value?.username == null ? 'unknown' : <Link href={url} legacyBehavior>{value.username}</Link>}
       </div>
       <div className='text-right font-bold text-sm'>
         {value.total}

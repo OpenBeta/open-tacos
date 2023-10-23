@@ -36,9 +36,9 @@ const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
             {formatDistanceToNow(createdAt, { addSuffix: true })}
           </div>
           <Link className='w-8 h-8' href={`/u/${editedByUser}`}>
-            <a>
-              <UserCircleIcon className='w-6 h-6' />
-            </a>
+
+            <UserCircleIcon className='w-6 h-6' />
+
           </Link>
         </div>
         <div className='mt-4 ml-6'>
@@ -68,7 +68,12 @@ const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: Change
         <div className=''>
           {dbOp === 'delete'
             ? <span>{(fullDocument as ClimbType).name}</span>
-            : (<Link href={`/climbs/${(fullDocument as ClimbType).id}`}><a className='link link-hover'>{(fullDocument as ClimbType).name}</a></Link>)}
+            : (
+              <Link
+                href={`/climbs/${(fullDocument as ClimbType).id}`}
+                className='link link-hover'
+              >{(fullDocument as ClimbType).name}
+              </Link>)}
         </div>
         <div className='text-xs text-base-300'>
           <UpdatedFields fields={updateDescription?.updatedFields} doc={fullDocument as ClimbType} />
@@ -94,7 +99,7 @@ const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeT
         <div className=''>
           {dbOp === 'delete'
             ? <span>{(fullDocument as AreaType).areaName}</span>
-            : (<Link href={url}><a className='link link-hover'>{(fullDocument as AreaType).areaName}</a></Link>)}
+            : (<Link href={url} className='link link-hover'>{(fullDocument as AreaType).areaName}</Link>)}
         </div>
         <div className='text-xs text-base-300'>
           <UpdatedFields fields={updateDescription?.updatedFields} doc={fullDocument as AreaType} />

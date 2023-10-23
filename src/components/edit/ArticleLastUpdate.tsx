@@ -59,6 +59,6 @@ const toUserProfile = (uid?: string): JSX.Element | null => uid == null
   : (
     <>
       <b>&nbsp;BY&nbsp;</b>
-      <Link href={`/u/${uid}`}><a className='link-dotted'>{uid}</a></Link>
+      <Link href={`/u/${uid}`} className='link-dotted'>{uid}</Link>
     </>
     )

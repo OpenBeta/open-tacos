@@ -1,6 +1,5 @@
 'use client'
-import { signIn } from 'next-auth/react'
-import { useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 import { Logo } from 'app/header'
 import { XSearchMinimal } from '@/components/search/XSearch'
