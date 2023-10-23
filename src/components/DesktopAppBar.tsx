@@ -33,9 +33,7 @@ export default function DesktopAppBar ({ showFilterBar = true }: DesktopAppBarPr
       <DesktopNavBar
         branding={
           <Link href='/'>
-            <a>
-              <LogoWithText className='h-[36px]' />
-            </a>
+            <LogoWithText className='h-[36px]' />
           </Link>
       }
         search={

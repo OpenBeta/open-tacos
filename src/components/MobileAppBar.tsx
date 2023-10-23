@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import { Popover } from '@headlessui/react'
 
@@ -35,15 +36,16 @@ export default function MobileAppBar ({ isTablet, includeFilters }: HeaderProps)
   )
 }
 
-const AuthenticatedNav = (): JSX.Element => (
+export const AuthenticatedNav = (): JSX.Element => (
   <>
     <NewPost className='inline-flex' />
     <ProfileNavButton />
   </>
-
 )
 
-const LoginButton = (): JSX.Element => (
+export const AuthenticatedNav13: React.FC = () => <ProfileNavButton />
+
+export const LoginButton = (): JSX.Element => (
   <Button
     label='Login'
     onClick={async () => await signIn('auth0', { callbackUrl: '/api/user/me' })}
@@ -67,15 +69,15 @@ const Branding = (): JSX.Element => {
   )
 }
 
-const More = (): JSX.Element => {
+export const More = (): JSX.Element => {
   const { status } = useSession()
   return (
     <Popover>
       <Popover.Button as='div' className='z-50 flex center-items'>
-        <Button label={<Bars3Icon className='text-white w-8 h-8' />} />
+        <Button label={<Bars3Icon className='text-base-content w-8 h-8' />} />
       </Popover.Button>
 
-      <Popover.Panel className='absolute z-20 right-0 mt-2 p-6 bg-white rounded-md w-full max-w-md'>
+      <Popover.Panel className='absolute z-20 right-0 mt-2 p-6 bg-white rounded-md w-full max-w-md drop-shadow-md'>
         <div className='grid'>
           {status === 'authenticated'
             ? (

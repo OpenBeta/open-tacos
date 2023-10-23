@@ -21,12 +21,16 @@ module.exports = {
   },
   generateEtags: false,
   webpack (config) { // required by @svgr/webpack lib
+    const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.('.svg'))
+
     config.module.rules.push({
       test: /\.svg$/i,
-      issuer: /\.[jt]sx?$/,
+      issuer: fileLoaderRule.issuer,
+
+      // issuer: /\.[jt]sx?$/,
       use: ['@svgr/webpack']
     })
-
+    fileLoaderRule.exclude = /\.svg$/i
     return config
   },
   async rewrites () {
