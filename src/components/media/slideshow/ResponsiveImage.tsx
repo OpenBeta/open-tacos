@@ -48,6 +48,7 @@ export default function ResponsiveImage ({ mediaUrl, isHero = true, isSquare = f
         objectFit={isSquare ? 'cover' : 'contain'}
         priority={isHero}
         onLoadingComplete={() => setLoading(false)}
+        alt=''
       />
       <div className='absolute w-full h-full flex items-center'>
         {isLoading &&
@@ -83,6 +84,7 @@ export function ResponsiveImage2 ({ mediaUrl, naturalWidth, naturalHeight, isHer
       placeholder='blur'
       blurDataURL={DefaultPlaceholder}
       onClick={onClick !== undefined ? onClick : undefined}
+      alt=''
     />
   )
 }

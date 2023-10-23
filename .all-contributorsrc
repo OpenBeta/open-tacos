@@ -627,6 +627,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "enapupe",
+      "name": "Iacami Gevaerd",
+      "avatar_url": "https://avatars.githubusercontent.com/u/291082?v=4",
+      "profile": "https://github.com/enapupe",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "calvincheng919",
+      "name": "Calvin Cheng",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12023140?v=4",
+      "profile": "https://github.com/calvincheng919",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
