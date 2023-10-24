@@ -19,10 +19,10 @@ export default function RootLayout ({
       <body className='mx-auto'>
         <NextAuthProvider>
           <Header />
+          <div>
+            {children}
+          </div>
         </NextAuthProvider>
-        <div>
-          {children}
-        </div>
         <Footer />
       </body>
     </html>

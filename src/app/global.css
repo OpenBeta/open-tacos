@@ -21,3 +21,7 @@ h1 {
 h2 {
     @apply text-base-content text-xl font-bold tracking-tight leading-loose;
 }
+
+.card-body {
+  @apply sm:px-0 border-0 !important;
+}
