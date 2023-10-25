@@ -1,7 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
-import { PlusIcon, UserCircleIcon, MinusIcon, PencilIcon, PencilSquareIcon, MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, MinusIcon, PencilIcon, PencilSquareIcon, MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
+import clx from 'classnames'
 
 import { ChangesetType, ChangeType, AreaType, ClimbType, OrganizationType, DocumentTypeName } from '../../js/types'
 
@@ -10,7 +11,7 @@ export interface RecentChangeHistoryProps {
 }
 export default function RecentChangeHistory ({ history }: RecentChangeHistoryProps): JSX.Element {
   return (
-    <div className='flex flex-col gap-y-4 w-full'>
+    <div className='mt-4 flex flex-col gap-y-10 w-full'>
       {history.map(changetset => <ChangesetRow key={changetset.id} changeset={changetset} />)}
     </div>
   )
@@ -20,37 +21,44 @@ interface ChangsetRowProps {
   changeset: ChangesetType
 }
 
-const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
+export const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
   const { createdAt, editedByUser, operation, changes } = changeset
 
   // @ts-expect-error
   const op = operationLabelMap[operation]
-  if (op == null) console.log('#op', operation, changes)
   return (
-    <div className='card card-compact w-full bg-base-100 shadow-xl'>
-      <div className='card-body'>
-        <div className='mx-4 card-actions justify-between items-center align-middle'>
-          {op?.icon}
-          {op?.badge}
-          <div className='text-xs text-base-300'>
-            {formatDistanceToNow(createdAt, { addSuffix: true })}
-          </div>
-          <Link className='w-8 h-8' href={`/u/${editedByUser}`}>
-
-            <UserCircleIcon className='w-6 h-6' />
-
+    <div className='block w-full max-w-md'>
+      <div className='mb-2 flex items-center justify-between flex-wrap gap-y-1.5'>
+        <div className='flex items-center gap-1'>
+          <Link className='flex items-center gap-2' href={`/u/${editedByUser}`}>
+            <div className='avatar placeholder'>
+              <div className='bg-neutral-focus text-neutral-content h-6 rounded-full'>
+                {editedByUser[0].toUpperCase()}
+              </div>
+            </div>
+            <span className='text-sm text-base-content/70'>{editedByUser}</span>
           </Link>
+          <div className='pl-0.5 text-sm'>{op.badge}</div>
         </div>
-        <div className='mt-4 ml-6'>
-          {changes.map(change => (
-            <React.Fragment key={change.changeId}>
-              <AreaChange {...change} />
-              <ClimbChange {...change} />
-              <OrganizationChange {...change} />
-            </React.Fragment>))}
+
+        <div className='text-sm text-base-content/70 italic mr-2'>
+          {formatDistanceToNow(createdAt, { addSuffix: true })}
+        </div>
+      </div>
+      <div className={clx('border-l-8 card card-compact w-full bg-base-100 border shadow-lg', op.borderCue)}>
+        <div className='card-body'>
+          <div className='px-2'>
+            {changes.map(change => (
+              <React.Fragment key={change.changeId}>
+                <AreaChange {...change} />
+                <ClimbChange {...change} />
+                <OrganizationChange {...change} />
+              </React.Fragment>))}
+          </div>
         </div>
       </div>
     </div>
+
   )
 }
 
@@ -61,7 +69,7 @@ const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: Change
   // @ts-expect-error
   const icon = dbOpIcon[dbOp]
   return (
-    <div className='py-2 ml-2 flex gap-x-2'>
+    <div className='ml-2 flex gap-x-2'>
       <div className='flex gap-2'><span>{icon}</span><span className='badge badge-sm badge-info'>Climb</span></div>
 
       <div className=''>
@@ -92,7 +100,7 @@ const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeT
   // @ts-expect-error
   const icon = dbOpIcon[dbOp]
   return (
-    <div className='py-2 ml-2 flex gap-x-2'>
+    <div className='ml-2 flex gap-x-2'>
       <div className='flex gap-2'>{icon} <span className='badge badge-sm badge-warning'>Area</span></div>
 
       <div className=''>
@@ -187,36 +195,43 @@ const OpBadge = ({ label, clz = 'badge-outline' }: OpBadgeProps): JSX.Element =>
 
 const operationLabelMap = {
   addArea: {
-    badge: <OpBadge label='Add Area' clz='badge-warning' />,
+    borderCue: 'border-l-green-500',
+    badge: 'added an area',
     icon: <ActionIcon icon={<PlusIcon className='w-6 h-6 stroke-base-300 stroke-2' />} clz='bg-success' />
   },
   updateArea: {
-    badge: <OpBadge label='Update Area' clz='badge-warning' />,
+    borderCue: 'border-l-black',
+    badge: 'edited an area',
     icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} />
   },
   addCountry: {
-    badge: <OpBadge label='Add Country' clz='badge-primary' />,
+    borderCue: 'border-l-green-500',
+    badge: 'added a country',
     icon: <ActionIcon icon={<PlusIcon className='w-6 h-6 stroke-base-300' />} />
   },
   deleteArea: {
-    badge: <OpBadge label='Delete Area' clz='badge-warning' />,
+    borderCue: 'border-l-pink-500',
+    badge: 'deleted an area',
     icon: <ActionIcon icon={<MinusIcon className='w-6 h-6 stroke-base-300' />} clz='bg-error' />
   },
   updateDestination: {
-    badge: <OpBadge label='Area' clz='badge-warning' />,
+    badge: 'badge-warning',
     icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} />
   },
 
   addClimb: {
-    badge: <OpBadge label='Add Climb' clz='badge-info' />,
+    borderCue: 'border-l-green-500',
+    badge: 'added a climb',
     icon: <ActionIcon icon={<PlusIcon className='w-6 h-6 stroke-base-300 stroke-2' />} clz='bg-success' />
   },
   deleteClimb: {
-    badge: <OpBadge label='Delete Climb' clz='badge-info' />,
+    borderCue: 'border-l-pink-500',
+    badge: 'deleted a climb',
     icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} clz='bg-error' />
   },
   updateClimb: {
-    badge: <OpBadge label='Update Climb' clz='badge-info' />,
+    borderCue: 'border-l-black',
+    badge: 'updated a climb',
     icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} />
   },
   addOrganization: {

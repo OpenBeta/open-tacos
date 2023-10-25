@@ -8,7 +8,7 @@ import { getUSATableOfContent } from '@/js/graphql/getPopularAreasUSA'
 export const USAToC: React.FC = async () => {
   const toc = await getUSATableOfContent()
   return (
-    <section className='mt-16 px-4 2xl:px-0 mx-auto max-w-5xl xl:max-w-7xl'>
+    <section className='block w-full px-4 2xl:px-0 mx-auto max-w-5xl xl:max-w-7xl'>
       <Link href='/crag/1db1e8ba-a40e-587c-88a4-64f5ea814b8e' className='flex flex-row items-center gap-2'><h2>USA</h2><ArrowRightCircleIcon className='w-4 h-4' /></Link>
       <hr className='mb-6 border-2 border-base-content' />
       <div className='columns-3xs gap-x-10'>

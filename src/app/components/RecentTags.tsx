@@ -19,7 +19,7 @@ export const RecentTags: React.FC = async () => {
   })
 
   return (
-    <section className='w-full py-8'>
+    <section className='w-full'>
       <div className='px-4 2xl:px-0 mx-auto max-w-5xl xl:max-w-7xl'>
         <h2>Recent Tags</h2>
       </div>

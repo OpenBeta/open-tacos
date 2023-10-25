@@ -16,10 +16,9 @@ export const DEFAULT_INITIAL_VIEWSTATE: XViewStateType = {
 }
 
 export const MAP_STYLES = {
-  light: 'mapbox://styles/mappandas/ckx5ksor56x3z15qavm57edp9',
+  light: 'mapbox://styles/mappandas/ckf8bb0qv18be19npofybx7yq',
   dark: 'mapbox://styles/mappandas/cl0u44wo8008415pedsbgtml7'
 }
-
 interface BaseMapProps {
   height: number
   viewstate: XViewStateType
