@@ -55,7 +55,7 @@ module.exports = {
         'base-content': '#111827', // gray-900
         'base-300': '#4B5563', // gray-600
         'base-200': '#9ca3af', // gray-400
-        'base-100': '#ffffff', // white
+        'base-100': '#FAFAF9', // stone-50
         '--rounded-box': '0.5rem',
         '--rounded-btn': '0.5rem', // border radius rounded-btn utility class, used in buttons and similar element
 

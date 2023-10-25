@@ -97,7 +97,7 @@ export const More = (): JSX.Element => {
           <a className='btn btn-ghost no-animation btn-block' href='https://openbeta.io/blog'>Blog</a>
           <hr />
           <a className='btn btn-ghost no-animation btn-block' href='https://github.com/OpenBeta/open-tacos'>GitHub</a>
-          <a className='btn btn-outline no-animation btn-block' href='https://discord.gg/ptpnWWNkJx'>Discord community</a>
+          <a className='btn btn-outline no-animation btn-block' href={process.env.DISCORD_INVITE}>Discord community</a>
         </div>
       </Popover.Panel>
     </Popover>

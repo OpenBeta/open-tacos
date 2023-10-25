@@ -12,7 +12,7 @@ export const DesktopHeader: React.FC = () => {
 
   const navListDefault: NavMenuItemProps[] = [
     {
-      to: 'https://discord.gg/ptpnWWNkJx',
+      to: process.env.DISCORD_INVITE ?? '',
       label: 'Discord'
     },
     {
@@ -57,7 +57,7 @@ export const DesktopHeader: React.FC = () => {
     case 'loading':
       nav = (
         <>
-          <div className='rounded-btn bg-base-200 opacity-20 w-16 h-10' />
+          <div className='rounded-full bg-base-200 opacity-10 w-32 h-10' />
         </>
       )
       break
@@ -66,11 +66,11 @@ export const DesktopHeader: React.FC = () => {
   }
 
   return (
-    <header className='hidden lg:flex items-center justify-between'>
+    <header className='hidden lg:flex items-center justify-between h-14'>
       <div className='flex items-center gap-6'><Logo />
         <XSearchMinimal />
       </div>
-      <div className='menu menu-vertical lg:menu-horizontal rounded-box gap-2'>{nav}</div>
+      <div className='menu menu-horizontal rounded-box gap-2'>{nav}</div>
     </header>
   )
 }

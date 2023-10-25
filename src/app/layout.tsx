@@ -1,7 +1,7 @@
 import '../../public/fonts/fonts.css'
 import './global.css'
 import Header from './header'
-import Footer from './footer'
+import { PageFooter } from './components/PageFooter'
 import { NextAuthProvider } from './components/NextAuthProvider'
 
 export const metadata = {
@@ -23,7 +23,7 @@ export default function RootLayout ({
             {children}
           </div>
         </NextAuthProvider>
-        <Footer />
+        <PageFooter />
       </body>
     </html>
   )
