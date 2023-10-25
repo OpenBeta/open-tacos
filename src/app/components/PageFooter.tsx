@@ -16,7 +16,7 @@ export const PageFooter: React.FC = () => {
       </nav>
       <nav>
         <header className='footer-title'>Social</header>
-        <a className='link link-hover' href={process.env.DISCORD_INVITE}>Discord chat</a>
+        <a className='link link-hover' href={process.env.NEXT_PUBLIC_DISCORD_INVITE}>Discord chat</a>
         <a className='link link-hover' href='https://www.instagram.com/openbetaproject/'>Instagram</a>
         <a className='link link-hover' href='https://www.linkedin.com/company/openbetahq/'>LinkedIn</a>
         <a className='link link-hover' href='https://twitter.com/openbetahq'>Twitter</a>

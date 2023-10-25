@@ -12,7 +12,7 @@ export const DesktopHeader: React.FC = () => {
 
   const navListDefault: NavMenuItemProps[] = [
     {
-      to: process.env.DISCORD_INVITE ?? '',
+      to: process.env.NEXT_PUBLIC_DISCORD_INVITE,
       label: 'Discord'
     },
     {
