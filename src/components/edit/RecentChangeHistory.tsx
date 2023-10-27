@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { PlusIcon, MinusIcon, PencilIcon, PencilSquareIcon, MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
-import { formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNowStrict } from 'date-fns'
 import clx from 'classnames'
 
 import { ChangesetType, ChangeType, AreaType, ClimbType, OrganizationType, DocumentTypeName } from '../../js/types'
@@ -42,7 +42,7 @@ export const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
         </div>
 
         <div className='text-sm text-base-content/70 italic mr-2'>
-          {formatDistanceToNow(createdAt, { addSuffix: true })}
+          {formatDistanceToNowStrict(createdAt, { addSuffix: false })}
         </div>
       </div>
       <div className={clx('border-l-8 card card-compact w-full bg-base-100 border shadow-lg', op.borderCue)}>

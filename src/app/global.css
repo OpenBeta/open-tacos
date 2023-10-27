@@ -25,3 +25,7 @@ h2 {
 .card-body {
   @apply sm:px-0 border-0 !important;
 }
+
+.hero-text-shadow {
+  text-shadow: 1px 1px 3px rgb(21, 8, 60);
+}

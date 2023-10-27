@@ -30,7 +30,7 @@ export const DesktopHeader: React.FC = () => {
     {
       onClick: () => { void signIn('auth0', { callbackUrl: '/api/user/me' }) },
       label: 'Login',
-      type: 'rounded-btn border bg-accent'
+      type: 'rounded-btn border bg-accent ring-0 border-b-2 border-b-neutral'
     }
   ]
 
