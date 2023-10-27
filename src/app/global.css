@@ -29,3 +29,11 @@ h2 {
 .hero-text-shadow {
   text-shadow: 1px 1px 3px rgb(21, 8, 60);
 }
+
+.rainbow-border {
+  background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0)) 50% 50%/calc(100% - 2px) calc(100% - 2px) no-repeat,
+            linear-gradient(0deg, #00a7f4 0%, transparent 70%),
+            radial-gradient(at 100% 0%, #00ff53 0%, transparent 70%),
+            #f15e40;
+  box-sizing: border-box;
+}
