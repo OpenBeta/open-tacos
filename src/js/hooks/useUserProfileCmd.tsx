@@ -124,9 +124,9 @@ export default function useUserProfileCmd ({ accessToken = '' }: UseUserProfileC
   const updatePublicProfileCmd: UpdatePublicProfileCmd = async ({ userUuid, displayName, bio, website }: UpdateUserPublicProfileInput) => {
     const trimmedInput: UpdateUserPublicProfileInput = {
       userUuid,
-      ...displayName != null && { displayName },
-      ...bio != null && { bio },
-      ...website != null && { website }
+      ...(displayName != null && { displayName }),
+      ...(bio != null && { bio }),
+      ...(website != null && { website })
     }
     try {
       const res = await graphqlClient.mutate<{ updateUserProfile?: boolean }, UpdateUserPublicProfileInput>({

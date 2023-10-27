@@ -3,6 +3,7 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 // See https://tailwindcss.com/docs/configuration for details
 module.exports = {
   content: [
+    './src/app/**/*.{js,ts,jsx,tsx}',
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/components/**/*.{js,ts,jsx,tsx}'
   ],
@@ -45,6 +46,7 @@ module.exports = {
         ...require('daisyui/src/theming/themes')['[data-theme=light]'],
         primary: '#111827',
         'primary-focus': '#111827',
+        'primary-content': '#FFFFFF',
         secondary: '#b1c077', // OB brand secondary
         accent: '#F15E40', // OB primary brand
         neutral: '#111826',
@@ -53,7 +55,7 @@ module.exports = {
         'base-content': '#111827', // gray-900
         'base-300': '#4B5563', // gray-600
         'base-200': '#9ca3af', // gray-400
-        'base-100': '#ffffff', // white
+        'base-100': '#FAFAF9', // stone-50
         '--rounded-box': '0.5rem',
         '--rounded-btn': '0.5rem', // border radius rounded-btn utility class, used in buttons and similar element
 

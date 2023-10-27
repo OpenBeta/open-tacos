@@ -1,6 +1,5 @@
 import { DefaultContext, useLazyQuery, useMutation } from '@apollo/client'
 import { toast } from 'react-toastify'
-import { useRouter } from 'next/router'
 
 import { graphqlClient } from '../graphql/Client'
 import { AddEntityTagProps, QUERY_USER_MEDIA, QUERY_MEDIA_BY_ID, MUTATION_ADD_ENTITY_TAG, MUTATION_REMOVE_ENTITY_TAG, GetMediaForwardQueryReturn, AddEntityTagMutationReturn, RemoveEntityTagMutationReturn, RemoveEntityTagMutationProps } from '../graphql/gql/tags'
@@ -44,8 +43,6 @@ type DeleteOneMediaObjectCmd = (mediaId: string, mediaUrl: string, jwtToken?: st
  * Apollo cache: https://www.apollographql.com/docs/react/caching/overview
  */
 export default function useMediaCmd (): UseMediaCmdReturn {
-  const router = useRouter()
-
   const addNewMediaToUserGallery = useUserGalleryStore(set => set.addToFront)
   const updateOneMediaUserGallery = useUserGalleryStore(set => set.updateOne)
   const deleteMediaFromUserGallery = useUserGalleryStore(set => set.delete)
@@ -208,7 +205,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
       client: graphqlClient,
       onCompleted: () => toast.success('Tag removed.'),
       onError: () => {
-        toast.error(<span>Error deleting tag.  <button className='btn btn-xs' onClick={() => router.reload()}>Refresh page</button> the browser</span>)
+        toast.error(<span>Error deleting tag.  <button className='btn btn-xs' onClick={() => window.location.reload()}>Refresh page</button> the browser</span>)
       }
     }
   )

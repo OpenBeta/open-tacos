@@ -1,3 +1,4 @@
+'use client'
 import { AutocompleteSource } from '@algolia/autocomplete-js'
 import { geocoderLookup } from '../../../js/mapbox/MapboxClient'
 import { PlaceTemplate } from '../CragFinderTemplates'

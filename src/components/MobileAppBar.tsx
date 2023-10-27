@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import { Popover } from '@headlessui/react'
 
@@ -35,15 +36,16 @@ export default function MobileAppBar ({ isTablet, includeFilters }: HeaderProps)
   )
 }
 
-const AuthenticatedNav = (): JSX.Element => (
+export const AuthenticatedNav = (): JSX.Element => (
   <>
     <NewPost className='inline-flex' />
     <ProfileNavButton />
   </>
-
 )
 
-const LoginButton = (): JSX.Element => (
+export const AuthenticatedNav13: React.FC = () => <ProfileNavButton />
+
+export const LoginButton = (): JSX.Element => (
   <Button
     label='Login'
     onClick={async () => await signIn('auth0', { callbackUrl: '/api/user/me' })}
@@ -51,7 +53,7 @@ const LoginButton = (): JSX.Element => (
   />)
 
 const Home = (): JSX.Element => (
-  <Link href='/'>
+  <Link href='/' legacyBehavior>
     <button className='btn btn-square btn-ghost'>
       <HomeIcon className='w-6 h-6 text-white' />
     </button>
@@ -59,23 +61,25 @@ const Home = (): JSX.Element => (
 
 const Branding = (): JSX.Element => {
   return (
-    <Link href='/'>
-      <a className='inline-block px-4'>
+    (
+      <Link href='/' className='inline-block px-4'>
+
         <OpenBetaLogo className='inline-block w-6 h-6 ' />
-      </a>
-    </Link>
+
+      </Link>
+    )
   )
 }
 
-const More = (): JSX.Element => {
+export const More = (): JSX.Element => {
   const { status } = useSession()
   return (
     <Popover>
       <Popover.Button as='div' className='z-50 flex center-items'>
-        <Button label={<Bars3Icon className='text-white w-8 h-8' />} />
+        <Button label={<Bars3Icon className='text-base-content w-8 h-8' />} />
       </Popover.Button>
 
-      <Popover.Panel className='absolute z-20 right-0 mt-2 p-6 bg-white rounded-md w-full max-w-md'>
+      <Popover.Panel className='absolute z-20 right-0 mt-2 p-6 bg-white rounded-md w-full max-w-md drop-shadow-md'>
         <div className='grid'>
           {status === 'authenticated'
             ? (
@@ -93,7 +97,7 @@ const More = (): JSX.Element => {
           <a className='btn btn-ghost no-animation btn-block' href='https://openbeta.io/blog'>Blog</a>
           <hr />
           <a className='btn btn-ghost no-animation btn-block' href='https://github.com/OpenBeta/open-tacos'>GitHub</a>
-          <a className='btn btn-outline no-animation btn-block' href='https://discord.gg/ptpnWWNkJx'>Discord community</a>
+          <a className='btn btn-outline no-animation btn-block' href={process.env.NEXT_PUBLIC_DISCORD_INVITE}>Discord community</a>
         </div>
       </Popover.Panel>
     </Popover>

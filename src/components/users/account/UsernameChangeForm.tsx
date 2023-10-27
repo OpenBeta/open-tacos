@@ -88,8 +88,8 @@ export const UsernameChangeForm: React.FC = () => {
       await updateUsername({
         userUuid,
         username,
-        ...isNewUser && email != null && { email }, // email is required for new users
-        ...isNewUser && avatar != null && { avatar } // get Auth0 avatar for new users
+        ...(isNewUser && email != null && { email }), // email is required for new users
+        ...(isNewUser && avatar != null && { avatar }) // get Auth0 avatar for new users
       })
       toast.info('Username updated')
       await router.push(`/u/${username}`)

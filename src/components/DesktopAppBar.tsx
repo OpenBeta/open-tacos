@@ -32,10 +32,8 @@ export default function DesktopAppBar ({ showFilterBar = true }: DesktopAppBarPr
     <header className='sticky top-0 z-10'>
       <DesktopNavBar
         branding={
-          <Link href='/'>
-            <a>
-              <LogoWithText className='h-[36px]' />
-            </a>
+          <Link href='/' legacyBehavior>
+            <LogoWithText className='h-[36px]' />
           </Link>
       }
         search={

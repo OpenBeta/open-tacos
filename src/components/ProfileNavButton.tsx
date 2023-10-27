@@ -19,7 +19,7 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
   if (status === 'authenticated') {
     if (isMobile) {
       return (
-        <Link href='/api/user/me'>
+        <Link href='/api/user/me' legacyBehavior>
           <button className='inline-flex btn btn-ghost btn-square'>
             <UserCircleIcon className='stroke-1 stroke-white w-8 h-8' />
           </button>

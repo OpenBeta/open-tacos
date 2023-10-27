@@ -108,16 +108,16 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
     description
   }: HtmlFormProps): Promise<void> => {
     const dirtyEditableFields: OrganizationEditableFieldsType = {
-      ...dirtyFields?.displayName === true && { displayName },
-      ...dirtyFields?.conjoinedAssociatedAreaIds === true && { associatedAreaIds: conjoinedStringToArray(conjoinedAssociatedAreaIds) },
-      ...dirtyFields?.conjoinedExcludedAreaIds === true && { excludedAreaIds: conjoinedStringToArray(conjoinedExcludedAreaIds) },
-      ...dirtyFields?.website === true && { website },
-      ...dirtyFields?.email === true && { email },
-      ...dirtyFields?.donationLink === true && { donationLink },
-      ...dirtyFields?.facebookLink === true && { facebookLink },
-      ...dirtyFields?.instagramLink === true && { instagramLink },
-      ...dirtyFields?.hardwareReportLink === true && { hardwareReportLink },
-      ...dirtyFields?.description === true && { description }
+      ...(dirtyFields?.displayName === true && { displayName }),
+      ...(dirtyFields?.conjoinedAssociatedAreaIds === true && { associatedAreaIds: conjoinedStringToArray(conjoinedAssociatedAreaIds) }),
+      ...(dirtyFields?.conjoinedExcludedAreaIds === true && { excludedAreaIds: conjoinedStringToArray(conjoinedExcludedAreaIds) }),
+      ...(dirtyFields?.website === true && { website }),
+      ...(dirtyFields?.email === true && { email }),
+      ...(dirtyFields?.donationLink === true && { donationLink }),
+      ...(dirtyFields?.facebookLink === true && { facebookLink }),
+      ...(dirtyFields?.instagramLink === true && { instagramLink }),
+      ...(dirtyFields?.hardwareReportLink === true && { hardwareReportLink }),
+      ...(dirtyFields?.description === true && { description })
     }
     if (existingOrg == null) {
       const input: AddOrganizationProps = {

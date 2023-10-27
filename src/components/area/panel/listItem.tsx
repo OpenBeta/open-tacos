@@ -122,7 +122,7 @@ export default function ListItem (props: ListItemProps): JSX.Element {
         </div>
 
         <div className='flex justify-center pt-4'>
-          <Link href={href}>
+          <Link href={href} legacyBehavior>
             <button className='border border-slate-600 rounded p-1 px-4'>
               View
             </button>

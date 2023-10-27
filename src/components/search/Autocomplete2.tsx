@@ -1,3 +1,4 @@
+'use client'
 import React, { createElement, Fragment, ReactNode, useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 

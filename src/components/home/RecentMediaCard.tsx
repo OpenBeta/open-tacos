@@ -1,3 +1,4 @@
+'use client'
 import { useState } from 'react'
 import Image from 'next/image'
 import clx from 'classnames'
@@ -15,13 +16,15 @@ const MOBILE_IMAGE_MAX_WIDITH = 600
 interface RecentImageCardProps {
   header?: JSX.Element
   mediaWithTags: MediaWithTags
+  bordered?: boolean
 }
 
 /**
  * Image card for the home page
  */
 export const RecentImageCard = ({
-  mediaWithTags
+  mediaWithTags,
+  bordered = false
 }: RecentImageCardProps): JSX.Element => {
   const [loaded, setLoaded] = useState(false)
   const { mediaUrl, width, height, entityTags, username } = mediaWithTags
@@ -29,6 +32,7 @@ export const RecentImageCard = ({
   const imageRatio = width / height
   return (
     <Card
+      bordered={bordered}
       header={<PostHeader username={username} />}
       image={
         <div className='relative block w-full h-full'>
@@ -40,8 +44,7 @@ export const RecentImageCard = ({
               })}
               width={MOBILE_IMAGE_MAX_WIDITH}
               height={MOBILE_IMAGE_MAX_WIDITH / imageRatio}
-              sizes='100vw'
-              objectFit='cover'
+              sizes={`${MOBILE_IMAGE_MAX_WIDITH}px`}
               onLoad={() => setLoaded(true)}
               alt=''
             />

@@ -75,7 +75,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
         width,
         height,
         size,
-        ...entityTag != null && { entityTag }
+        ...(entityTag != null && { entityTag })
       }], sessionData?.accessToken)
 
       // if upload is successful but we can't update the database,
