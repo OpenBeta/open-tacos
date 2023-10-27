@@ -21,19 +21,19 @@ export function PostBody ({
 }: PostBodyProps): JSX.Element {
   return (
     <>
-      <Link href={destUrl}>
+      <Link href={destUrl} legacyBehavior>
         <h2 className='cursor-pointer card-title'>{title}</h2>
       </Link>
       <div className='card-actions items-center relative py-2'>
         <div className='absolute left-0'>{getUploadDateSummary(mtime)}</div>
-        <Link href={destUrl}>
+        <Link href={destUrl} legacyBehavior>
           <div className='absolute right-0'>
             <Link href={destUrl} passHref>
-              <a>
-                <div className='rounded-full bg-gray-100 bg-opacity-70 hover:bg-opacity-100 hover:ring p-2'>
-                  <TagIcon className='text-black w-5 h-5' />
-                </div>
-              </a>
+
+              <div className='rounded-full bg-gray-100 bg-opacity-70 hover:bg-opacity-100 hover:ring p-2'>
+                <TagIcon className='text-black w-5 h-5' />
+              </div>
+
             </Link>
           </div>
         </Link>

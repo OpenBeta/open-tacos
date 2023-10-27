@@ -7,15 +7,15 @@ import { gql } from '@apollo/client'
 import { TagIcon, LightBulbIcon, MapPinIcon, PencilIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 
-import Layout from '../components/layout'
-import SeoTags from '../components/SeoTags'
-import { graphqlClient } from '../js/graphql/Client'
-import { getMediaForFeed } from '../js/graphql/api'
-import { IndexResponseType, MediaWithTags } from '../js/types'
-import { ExploreProps } from '../components/home/DenseAreas'
-import TabsTrigger from '../components/ui/TabsTrigger'
-import RecentTaggedMedia from '../components/home/RecentMedia'
-import { FRAGMENT_MEDIA_WITH_TAGS } from '../js/graphql/gql/tags'
+import Layout from '@/components/layout'
+import SeoTags from '@/components/SeoTags'
+import { graphqlClient } from '@/js/graphql/Client'
+import { getMediaForFeed } from '@/js/graphql/api'
+import { IndexResponseType, MediaWithTags } from '@/js/types'
+import { ExploreProps } from '@/components/home/DenseAreas'
+import TabsTrigger from '@/components/ui/TabsTrigger'
+import RecentTaggedMedia from '@/components/home/RecentMedia'
+import { FRAGMENT_MEDIA_WITH_TAGS } from '@/js/graphql/gql/tags'
 
 const allowedViews = ['explore', 'newTags', 'map', 'edit', 'pulse']
 
@@ -45,7 +45,7 @@ const Home: NextPage<HomePageType> = ({ exploreData, recentMediaWithTags }) => {
         return encodeURIComponent(key) + '=' + encodeURIComponent(query[key] as string)
       }).join('&')
 
-      void router.push(`/?${queryString}`, undefined, { shallow: true })
+      void router.push(`/classic?${queryString}`, undefined, { shallow: true })
     }
   }, [activeTab])
 
@@ -225,12 +225,12 @@ export default Home
 
 const DynamicDenseAreas = dynamic<ExploreProps>(
   async () =>
-    await import('../components/home/DenseAreas').then(
+    await import('@/components/home/DenseAreas').then(
       module => module.default), { ssr: false }
 )
 
 const DynamicMap = dynamic(
   async () =>
-    await import('../components/home/Map').then(
+    await import('@/components/home/Map').then(
       module => module.default), { ssr: false }
 )

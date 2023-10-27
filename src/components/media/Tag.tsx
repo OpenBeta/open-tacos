@@ -22,18 +22,20 @@ export default function Tag ({ mediaId, tag, onDelete, size = 'md', showDelete =
   const isArea = tag.type === TagTargetType.area
 
   return (
-    <Link href={url} prefetch={false}>
-      <a
+    (
+      <Link
+        href={url}
+        prefetch={false}
         className={
-          clx('badge hover:underline max-w-full',
-            isArea ? 'badge-info bg-opacity-60' : 'badge-outline',
-            size === 'lg' ? 'badge-lg gap-2' : 'gap-1')
-        }
+        clx('badge hover:underline max-w-full',
+          isArea ? 'badge-info bg-opacity-60' : 'badge-outline',
+          size === 'lg' ? 'badge-lg gap-2' : 'gap-1')
+      }
         onClick={stopPropagation}
         title={name}
       >
-        {isArea && <div className='h-6 w-6 grid place-content-center'><NetworkSquareIcon className='w-6 h-6' /></div>}
 
+        {isArea && <div className='h-6 w-6 grid place-content-center'><NetworkSquareIcon className='w-6 h-6' /></div>}
         <div className='mt-0.5 whitespace-nowrap truncate text-sm'>{name}</div>
         {isAuthorized && showDelete &&
           <button
@@ -47,9 +49,9 @@ export default function Tag ({ mediaId, tag, onDelete, size = 'md', showDelete =
               <XCircleIcon className={clx('cursor-pointer stroke-1 hover:stroke-2', size === 'lg' ? 'w-6 h-6' : 'w-5 h-5')} />
             </div>
           </button>}
-      </a>
-    </Link>
 
+      </Link>
+    )
   )
 }
 

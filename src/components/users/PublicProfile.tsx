@@ -46,10 +46,10 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
           </div>}
         <div className='mt-2 flex items-center gap-2'>
           {username != null &&
-            <Link href={`/u2/${username}`}>
-              <a className='text-xs'>
-                <div className='btn btn-outline btn-xs md:btn-sm'> View ticks</div>
-              </a>
+            <Link href={`/u2/${username}`} className='text-xs'>
+
+              <div className='btn btn-outline btn-xs md:btn-sm'> View ticks</div>
+
             </Link>}
           {username != null && isAuthorized && <ImportFromMtnProj username={username} />}
           {userProfile != null && <EditProfileButton userUuid={userProfile?.userUuid} />}
@@ -77,20 +77,16 @@ export const TinyProfile = ({ userProfile, onClick }: PublicProfileProps): any =
   }
   const { username, avatar } = userProfile
   return (
-
-    <Link as={`/u/${username}`} href='/u/[uid]'>
-      <a onClick={onClickHandler}>
-        <section className='flex items-center space-x-2.5'>
-          <div className='grayscale'>
-            <img className='rounded-full' src={avatar} width={32} height={32} />
-          </div>
-          <div className={ProfileATagStyle}>
-            {username}
-          </div>
-        </section>
-      </a>
+    <Link as={`/u/${username}`} href='/u/[uid]' onClick={onClickHandler}>
+      <section className='flex items-center space-x-2.5'>
+        <div className='grayscale'>
+          <img className='rounded-full' src={avatar} width={32} height={32} />
+        </div>
+        <div className={ProfileATagStyle}>
+          {username}
+        </div>
+      </section>
     </Link>
-
   )
 }
 
@@ -100,10 +96,8 @@ interface ProfileATagProps {
 }
 
 export const ProfileATag = ({ uid, className = ProfileATagStyle }: ProfileATagProps): JSX.Element => (
-  <Link href={`/u/${uid}`}>
-    <a className={className}>
-      <span>{uid}</span>
-    </a>
+  <Link href={`/u/${uid}`} className={className}>
+    <span>{uid}</span>
   </Link>)
 
 const ProfileATagStyle = 'text-primary font-bold hover:underline'

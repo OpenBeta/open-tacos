@@ -1,0 +1,39 @@
+@import '../styles/algolia.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.aa-hidden-mobile-trigger-btn {
+  @apply hidden !important;
+}
+
+body,
+html {
+  height: 100%;
+  font-size: 16px;
+  @apply font-sans text-base text-base-content bg-base-100;
+}
+
+h1 {
+    @apply text-base-content text-4xl lg:text-5xl tracking-tight mb-4;
+}
+
+h2 {
+    @apply text-base-content text-xl font-bold tracking-tight leading-loose;
+}
+
+.card-body {
+  @apply sm:px-0 border-0 !important;
+}
+
+.hero-text-shadow {
+  text-shadow: 1px 1px 3px rgb(21, 8, 60);
+}
+
+.rainbow-border {
+  background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0)) 50% 50%/calc(100% - 2px) calc(100% - 2px) no-repeat,
+            linear-gradient(0deg, #00a7f4 0%, transparent 70%),
+            radial-gradient(at 100% 0%, #00ff53 0%, transparent 70%),
+            #f15e40;
+  box-sizing: border-box;
+}

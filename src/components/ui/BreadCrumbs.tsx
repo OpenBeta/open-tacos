@@ -28,11 +28,11 @@ interface BreakCrumbsProps {
 function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumbsProps): JSX.Element {
   return (
     <div aria-label='area-breadcrumbs' className='inline-flex flex-wrap gap-2 text-sm items-center text-base-300 tracking-tight'>
-      <Link href='/a'>
-        <a className='inline-flex items-center gap-2'>
-          <GlobeAltIcon className='inline w-5 h-5' />
-          <span className='hover:underline mt-0.5'>Home</span>
-        </a>
+      <Link href='/a' className='inline-flex items-center gap-2'>
+
+        <GlobeAltIcon className='inline w-5 h-5' />
+        <span className='hover:underline mt-0.5'>Home</span>
+
       </Link>
 
       {pathTokens.map((place, index, array) => {
@@ -47,11 +47,10 @@ function BreadCrumbs ({ pathTokens, ancestors, isClimbPage = false }: BreakCrumb
                 isLastElement && !isClimbPage
                   ? (<span className='font-semibold'>{sanitizeName(place)}</span>)
                   : (
-                    <Link href={url}>
-                      <a className='hover:underline whitespace-nowrap'>
-                        {sanitizeName(place)}
-                      </a>
-                    </Link>
+                      (
+                        <Link href={url} className='hover:underline whitespace-nowrap'>
+                          {sanitizeName(place)}
+                        </Link>)
                     )
               }
             </span>

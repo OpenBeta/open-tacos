@@ -140,8 +140,8 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
       variables: {
         name,
         parentUuid,
-        ...isBoulder != null && { isBoulder },
-        ...isLeaf != null && { isLeaf }
+        ...(isBoulder != null && { isBoulder }),
+        ...(isLeaf != null && { isLeaf })
       },
       context: {
         headers: {

@@ -1,15 +1,16 @@
 import { QUERY_RECENT_CHANGE_HISTORY } from './gql/contribs'
 import { graphqlClient } from './Client'
+import { ChangesetType } from '../types'
 
-export const getChangeHistoryServerSide = async (): Promise<any> => {
+export const getChangeHistoryServerSide = async (): Promise<ChangesetType[]> => {
   try {
-    const rs = await graphqlClient.query<{ getChangeHistory: any[] }>({
+    const rs = await graphqlClient.query<{ getChangeHistory: ChangesetType[] }>({
       query: QUERY_RECENT_CHANGE_HISTORY,
       fetchPolicy: 'no-cache'
     })
 
     if (Array.isArray(rs.data?.getChangeHistory)) {
-      return rs.data?.getChangeHistory
+      return rs.data?.getChangeHistory.splice(0, 50)
     }
     console.log('WARNING: getChangeHistory() returns non-array data')
     return []

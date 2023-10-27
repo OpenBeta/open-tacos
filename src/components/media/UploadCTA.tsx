@@ -51,8 +51,8 @@ export const UploadCTACragBanner: React.FC<UploadCTACragBannerProps> = ({ isSkel
            <div className='text-center'>
              <div className='text-lg font-semibold'>Thank you for your contribution!</div>
              <div className='text-sm text-base-300'>Photos will be added momentarily.  Click&nbsp;
-               <Link href={router.asPath}>
-                 <a className='underline'>here</a>
+               <Link href={router.asPath} className='underline'>
+                 here
                </Link>
               &nbsp;to manually refresh the page.
              </div>

@@ -115,7 +115,7 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
 
   const [editMode, setEditMode] = useState(false)
   const [resetSignal, setResetSignal] = useState(0)
-  const [cache, setCache] = useState({ name, ...content, legacyFA, ...length > 0 && { length }, disciplines: removeTypenameFromDisciplines(type), gradeStr: gradesObj.toString() })
+  const [cache, setCache] = useState({ name, ...content, legacyFA, ...(length > 0 && { length }), disciplines: removeTypenameFromDisciplines(type), gradeStr: gradesObj.toString() })
 
   const router = useRouter()
   const session = useSession()
@@ -180,13 +180,13 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
     const { description, location, protection, name, gradeStr, disciplines, length, legacyFA } = formData
 
     const onlyDirtyFields: Partial<ClimbEditFormProps> = {
-      ...dirtyFields?.name === true && { name },
-      ...dirtyFields?.description === true && { description },
-      ...dirtyFields?.location === true && { location },
-      ...dirtyFields?.protection === true && { protection },
-      ...dirtyFields?.gradeStr === true && disciplines != null && { grade: gradeStr, disciplines },
-      ...length != null && length > 0 && { length },
-      ...legacyFA != null && { fa: legacyFA.trim() }
+      ...(dirtyFields?.name === true && { name }),
+      ...(dirtyFields?.description === true && { description }),
+      ...(dirtyFields?.location === true && { location }),
+      ...(dirtyFields?.protection === true && { protection }),
+      ...(dirtyFields?.gradeStr === true && disciplines != null && { grade: gradeStr, disciplines }),
+      ...(length != null && length > 0 && { length }),
+      ...(legacyFA != null && { fa: legacyFA.trim() })
     }
 
     if (Object.values(dirtyFields?.disciplines ?? []).some(value => value && true)) {

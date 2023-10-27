@@ -48,15 +48,15 @@ export default function UserMedia ({
       className='block relative rounded-box overflow-hidden hover:shadow transition w-[300px] h-[300px] hover:brightness-75'
 
     >
-      <Link href={shareableUrl}>
-        <a onClick={onClickHandler}>
-          <ResponsiveImage
-            mediaUrl={mediaUrl}
-            isHero={index === 0}
-            isSquare
-            loader={DesktopPreviewLoader}
-          />
-        </a>
+      <Link href={shareableUrl} onClick={onClickHandler}>
+
+        <ResponsiveImage
+          mediaUrl={mediaUrl}
+          isHero={index === 0}
+          isSquare
+          loader={DesktopPreviewLoader}
+        />
+
       </Link>
 
       {canRemoveImage && (
