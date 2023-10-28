@@ -11,7 +11,8 @@ export const metadata: Metadata = {
   openGraph: {
     description: 'OpenBeta is a free climbing platform.  Join the community and share your knowledge today.',
     images: '/south-africa-og.jpeg'
-  }
+  },
+  metadataBase: new URL(`https://${process.env.VERCEL_URL ?? 'http://localhost:3000'}`)
 }
 
 export default function RootLayout ({
