@@ -43,7 +43,7 @@ const Card4All: React.FC = () => {
       body={
         <ul>
           <li>☑️ Add missing climbs.</li>
-          <li>☑️ Help us make your local climbing&#39;s area page even better!</li>
+          <li>☑️ Help us make your local climbing area&#39;s pages even better!</li>
         </ul>
       }
       action={<LoginButtonClient className='btn btn-primary btn-sm px-4 btn-outline' label='Login' />}
@@ -65,7 +65,7 @@ const Donate: React.FC = () => {
   return (
     <Card
       title='Become a financial supporter'
-      body='OpenBeta is nonprofit and funded by users like you!  If you support our mission to keep climbing knowledge free and open, please consider making a donation today.'
+      body='OpenBeta is a nonprofit funded by users like you!  If you support our mission to keep climbing knowledge free and open, please consider making a donation today.'
       action={<a className='btn btn-outline btn-sm bg-emerald-500 border-b-2 px-4' href='https://opencollective.com/openbeta'>Donate</a>}
     />
   )
