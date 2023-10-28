@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
 import { getChangeHistoryServerSide } from '@/js/graphql/contribAPI'
-import { ChangesetRow } from '@/components/edit/RecentChangeHistory'
+import { ChangesetCard } from '@/components/edit/RecentChangeHistory'
 
 /**
  * Cache time in seconds
@@ -23,7 +23,7 @@ export const RecentEdits: React.FC = async () => {
       <hr className='mb-6 border-2 border-base-content' />
       <div className='mt-4 flex justify-center flex-row flex-wrap gap-y-10 gap-x-4'>
         {history.splice(0, 10).map(changetset =>
-          <ChangesetRow key={changetset.id} changeset={changetset} />
+          <ChangesetCard key={changetset.id} changeset={changetset} />
         )}
 
       </div>

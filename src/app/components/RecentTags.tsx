@@ -24,12 +24,12 @@ export const RecentTags: React.FC = async () => {
   })
 
   return (
-    <section className='w-full'>
+    <section className='w-full '>
       <div className='px-4 2xl:px-0 mx-auto max-w-5xl xl:max-w-7xl'>
         <h2>Recent Tags</h2>
       </div>
 
-      <div className='overflow-hidden'>
+      <div className='overflow-hidden bg-base-200/20'>
         <hr className='border-2 border-base-content' />
         <div className='py-8 grid grid-flow-col auto-cols-max gap-x-4 overflow-x-auto'>
           {

@@ -5,6 +5,9 @@ import { RecentEdits, RecentEditsSkeleton } from './components/RecentEdits'
 import { RecentTags } from './components/RecentTags'
 import { USAToC } from './components/USAToC'
 
+/**
+ * Root home page
+ */
 export default async function Home (): Promise<any> {
   return (
     <div className='mt-8 w-full flex flex-col gap-y-24'>

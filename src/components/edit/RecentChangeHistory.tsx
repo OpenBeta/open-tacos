@@ -9,10 +9,14 @@ import { ChangesetType, ChangeType, AreaType, ClimbType, OrganizationType, Docum
 export interface RecentChangeHistoryProps {
   history: ChangesetType[]
 }
+
+/**
+ * Show all changes
+ */
 export default function RecentChangeHistory ({ history }: RecentChangeHistoryProps): JSX.Element {
   return (
     <div className='mt-4 flex flex-col gap-y-10 w-full'>
-      {history.map(changetset => <ChangesetRow key={changetset.id} changeset={changetset} />)}
+      {history.map(changetset => <ChangesetCard key={changetset.id} changeset={changetset} />)}
     </div>
   )
 }
@@ -21,7 +25,10 @@ interface ChangsetRowProps {
   changeset: ChangesetType
 }
 
-export const ChangesetRow = ({ changeset }: ChangsetRowProps): JSX.Element => {
+/**
+ * A card showing individual changeset
+ */
+export const ChangesetCard: React.FC<ChangsetRowProps> = ({ changeset }) => {
   const { createdAt, editedByUser, operation, changes } = changeset
 
   // @ts-expect-error
@@ -186,13 +193,6 @@ const ActionIcon = ({ icon, clz }: ActionIconProps): JSX.Element => (
   <div className={`bg-opacity-60 rounded-full border border-base-300 p-2 ${clz ?? ''}`}>{icon}</div>
 )
 
-interface OpBadgeProps {
-  label: string
-  clz?: string
-}
-
-const OpBadge = ({ label, clz = 'badge-outline' }: OpBadgeProps): JSX.Element => <span className={`badge ${clz}`}>{label}</span>
-
 const operationLabelMap = {
   addArea: {
     borderCue: 'border-l-green-500',
@@ -235,15 +235,18 @@ const operationLabelMap = {
     icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} />
   },
   addOrganization: {
-    badge: <OpBadge label='Add Organization' clz='badge-warning' />,
+    badge: 'added an organization',
+    borderCue: 'border-l-green-500',
     icon: <ActionIcon icon={<PlusIcon className='w-6 h-6 stroke-base-300 stroke-2' />} clz='bg-success' />
   },
   updateOrganization: {
-    badge: <OpBadge label='Update Organization' clz='badge-warning' />,
+    badge: 'updated an organization',
+    borderCue: 'border-l-black',
     icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} />
   },
   deleteOrganization: {
-    badge: <OpBadge label='Delete Organization' clz='badge-warning' />,
+    badge: 'deleted an organization',
+    borderCue: 'border-l-pink-500',
     icon: <ActionIcon icon={<MinusIcon className='w-6 h-6 stroke-base-300' />} clz='bg-error' />
   }
 }

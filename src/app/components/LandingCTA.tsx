@@ -5,7 +5,7 @@ import { ReactNode } from 'react'
 
 export const LandingCTA: React.FC = () => {
   return (
-    <div className='w-full bg-gradient-to-r from-blue-500/40 to-emerald-500/80 rounded-box p-4 md:p-10'>
+    <div className='w-full bg-gradient-to-r from-neutral/80 to-neutral/90 rounded-box p-4 md:p-10'>
       <div className='flex flex-rows flex-wrap gap-6 justify-center'>
         <Card4All />
         <Card4Coders />
@@ -42,7 +42,7 @@ const Card4All: React.FC = () => {
       title='Climbers'
       body={
         <ul>
-          <li>☑️ Add missing climbs</li>
+          <li>☑️ Add missing climbs.</li>
           <li>☑️ Help us make your local climbing&#39;s area page even better!</li>
         </ul>
       }
@@ -81,7 +81,7 @@ interface CTACardProps {
 const Card: React.FC<CTACardProps> = ({ title, body, action, className }) => {
   return (
     <div className='px-4'>
-      <h2 className='font-medium text-base-content/60 uppercase'>{title}</h2>
+      <h2 className='px-4 font-medium text-base-200 uppercase'>{title}</h2>
       <div className={clx('px-4 card card-bordered max-w-sm bg-base-100 shadow-lg', className)}>
         <div className='card-body'>
           <div>{body}</div>
