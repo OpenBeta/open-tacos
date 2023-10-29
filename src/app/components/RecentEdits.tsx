@@ -5,11 +5,6 @@ import { getChangeHistoryServerSide } from '@/js/graphql/contribAPI'
 import { ChangesetCard } from '@/components/edit/RecentChangeHistory'
 
 /**
- * Cache time in seconds
- */
-export const revalidate = 300
-
-/**
  * Show most recent edits
  */
 export const RecentEdits: React.FC = async () => {

@@ -92,7 +92,7 @@ export const getMediaForFeed = async (maxUsers: number, maxFiles: number): Promi
         maxUsers,
         maxFiles
       },
-      notifyOnNetworkStatusChange: true
+      fetchPolicy: 'network-only'
     })
 
     if (Array.isArray(rs.data?.getMediaForFeed)) {

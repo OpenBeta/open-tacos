@@ -6,6 +6,11 @@ import { RecentTags } from './components/RecentTags'
 import { USAToC } from './components/USAToC'
 
 /**
+ * Cache duration in seconds
+ */
+export const revalidate = 300
+
+/**
  * Root home page
  */
 export default async function Home (): Promise<any> {
