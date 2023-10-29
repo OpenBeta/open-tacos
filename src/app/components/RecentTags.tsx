@@ -2,11 +2,6 @@ import { RecentImageCard } from '@/components/home/RecentMediaCard'
 import { getMediaForFeed } from '@/js/graphql/api'
 
 /**
- * Cache time in seconds
- */
-export const revalidate = 300
-
-/**
  * Horizontal gallery of recent images with tags
  */
 export const RecentTags: React.FC = async () => {
