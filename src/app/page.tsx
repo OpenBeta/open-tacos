@@ -5,6 +5,8 @@ import { RecentEdits, RecentEditsSkeleton } from './components/RecentEdits'
 import { RecentTags } from './components/RecentTags'
 import { USAToC } from './components/USAToC'
 
+export const revalidate = 30
+
 /**
  * Root home page
  */
