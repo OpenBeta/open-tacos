@@ -645,6 +645,16 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "robbyriley15",
+      "name": "robbyriley15",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9353679?v=4",
+      "profile": "https://snarfme.com",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
