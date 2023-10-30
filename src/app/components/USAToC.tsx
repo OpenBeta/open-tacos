@@ -9,7 +9,9 @@ export const USAToC: React.FC = async () => {
   const toc = await getUSATableOfContent()
   return (
     <section className='block w-full px-4 2xl:px-0 mx-auto max-w-5xl xl:max-w-7xl'>
-      <Link href='/crag/1db1e8ba-a40e-587c-88a4-64f5ea814b8e' className='flex flex-row items-center gap-2'><h2>USA</h2><ArrowRightCircleIcon className='w-4 h-4' /></Link>
+      <Link href='/crag/1db1e8ba-a40e-587c-88a4-64f5ea814b8e' className='flex flex-row items-center gap-2'>
+        <h2>USA</h2><ArrowRightCircleIcon className='w-4 h-4' />
+      </Link>
       <hr className='mb-6 border-2 border-base-content' />
       <div className='columns-3xs gap-x-10'>
         {Array.from(toc.values()).map(state => {
@@ -24,10 +26,9 @@ export const USAToC: React.FC = async () => {
               </Link>
               <hr className='mb-2 border-1 border-base-content/60' />
               <div className='flex flex-col'>
-                {areas.map(area => {
-                  const { uuid, areaName } = area
-                  return (<Link key={uuid} className='text-xs hover:underline' href={`/crag/${uuid}`} prefetch={false}>{areaName}</Link>)
-                })}
+                {
+                  areas.map((area) => <ToCAreaEntry key={area.uuid} {...area} />)
+                }
               </div>
             </div>
           )
@@ -36,3 +37,6 @@ export const USAToC: React.FC = async () => {
     </section>
   )
 }
+
+export const ToCAreaEntry: React.FC<{ uuid: string, areaName: string }> =
+  ({ uuid, areaName }) => (<Link key={uuid} className='text-xs hover:underline' href={`/crag/${uuid}`} prefetch={false}>{areaName}</Link>)

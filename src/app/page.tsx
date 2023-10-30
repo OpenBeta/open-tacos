@@ -5,6 +5,7 @@ import { RecentEdits, RecentEditsSkeleton } from './components/RecentEdits'
 import { FinancialContributors } from './components/FinancialContributors'
 import { RecentTags } from './components/RecentTags'
 import { USAToC } from './components/USAToC'
+import { InternationalToC } from './components/InternationalToC'
 
 /**
  * Cache duration in seconds
@@ -30,6 +31,7 @@ export default async function Home (): Promise<any> {
         </div>
       </div>
       <RecentTags />
+      <InternationalToC />
       <USAToC />
       <FinancialContributors />
     </div>
