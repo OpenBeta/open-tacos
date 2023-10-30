@@ -5,16 +5,14 @@ interface BackerCardProps {
 
 export default function BackerCard ({ name, imageUrl }: BackerCardProps): JSX.Element {
   return (
-    <div className='shadow-lg card card-compact bg-amber-500'>
-      <div className='card-body items-center'>
-        <div className='avatar'>
-          <div className='rounded-full w-12'>
-            <img src={imageUrl} />
-          </div>
+    <div className='shadow-lg card card-compact card-side bg-amber-500 w-fit rounded-box overflow-hidden'>
+      <div className='avatar'>
+        <div className='rounded w-12'>
+          <img src={imageUrl} />
         </div>
-        <div className='text-center text-xs capitalize'>
-          {name}
-        </div>
+      </div>
+      <div className='card-body text-xs capitalize mx-4'>
+        {name}
       </div>
     </div>
   )
