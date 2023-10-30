@@ -1,11 +1,12 @@
 import clx from 'classnames'
+
 import { LoginButtonClient } from './LoginButton'
 import { ShowEmailJS } from './ShowEmailJS'
 import { ReactNode } from 'react'
 
 export const LandingCTA: React.FC = () => {
   return (
-    <div className='w-full bg-gradient-to-r from-neutral/80 to-neutral/90 rounded-box p-4 md:p-10'>
+    <div className='w-full p-4 md:p-10'>
       <div className='flex flex-rows flex-wrap gap-6 justify-center'>
         <Card4All />
         <Card4Coders />
@@ -46,7 +47,7 @@ const Card4All: React.FC = () => {
           <li>☑️ Help us make your local climbing area&#39;s pages even better!</li>
         </ul>
       }
-      action={<LoginButtonClient className='btn btn-primary btn-sm px-4 btn-outline' label='Login' />}
+      action={<LoginButtonClient className='btn btn-outline bg-accent btn-sm px-4 border-b-neutral border-b-2' label='Login' />}
     />
   )
 }
@@ -61,12 +62,14 @@ const Leaders: React.FC = () => {
   )
 }
 
+export const DonateButton: React.FC = () => (<a className='btn btn-outline btn-sm bg-emerald-500 border-b-2 px-4' href='https://opencollective.com/openbeta'>Donate</a>)
+
 const Donate: React.FC = () => {
   return (
     <Card
       title='Become a financial supporter'
       body='OpenBeta is a nonprofit funded by users like you!  If you support our mission to keep climbing knowledge free and open, please consider making a donation today.'
-      action={<a className='btn btn-outline btn-sm bg-emerald-500 border-b-2 px-4' href='https://opencollective.com/openbeta'>Donate</a>}
+      action={<DonateButton />}
     />
   )
 }
@@ -82,7 +85,7 @@ const Card: React.FC<CTACardProps> = ({ title, body, action, className }) => {
   return (
     <div className='px-4'>
       <h2 className='px-4 font-medium text-base-200 uppercase'>{title}</h2>
-      <div className={clx('px-4 card card-bordered max-w-sm bg-base-100 shadow-lg', className)}>
+      <div className={clx('bg-base-200/20 px-4 card max-w-sm bg-base-100 shadow-lg', className)}>
         <div className='card-body'>
           <div>{body}</div>
           <div className='card-actions justify-end items-center gap-x-4 py-2'>
