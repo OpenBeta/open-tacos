@@ -27,15 +27,16 @@ const Card4Coders: React.FC = () => {
           <li>☑️ Use OpenBeta API & data in your projects.</li>
         </ul>
       }
-      action={
-        <>
-          <a href='https://docs.openbeta.io/how-to-contribute/overview' className='text-sm underline'>Dev onboarding</a>
-          <a className='btn btn-primary btn-sm btn-outline' href='https://github.com/orgs/OpenBeta/'>GitHub</a>
-        </>
-      }
+      action={<CodeContributorsAction />}
     />
   )
 }
+
+export const CodeContributorsAction: React.FC = () => (
+  <>
+    <a href='https://docs.openbeta.io/how-to-contribute/overview' className='text-sm underline'>Dev onboarding</a>
+    <a className='btn btn-primary btn-sm btn-outline' href='https://github.com/orgs/OpenBeta/'>GitHub</a>
+  </>)
 
 const Card4All: React.FC = () => {
   return (
