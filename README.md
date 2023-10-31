@@ -247,6 +247,9 @@ Thanks goes to these wonderful people:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/calvincheng919"><img src="https://avatars.githubusercontent.com/u/12023140?v=4?s=100" width="100px;" alt="Calvin Cheng"/><br /><sub><b>Calvin Cheng</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/issues?q=author%3Acalvincheng919" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://snarfme.com"><img src="https://avatars.githubusercontent.com/u/9353679?v=4?s=100" width="100px;" alt="robbyriley15"/><br /><sub><b>robbyriley15</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=robbyriley15" title="Code">💻</a> <a href="https://github.com/OpenBeta/open-tacos/commits?author=robbyriley15" title="Documentation">📖</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Ali-muhammed7040"><img src="https://avatars.githubusercontent.com/u/81983704?v=4?s=100" width="100px;" alt="Ali Muhammad"/><br /><sub><b>Ali Muhammad</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=Ali-muhammed7040" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 
