@@ -74,6 +74,7 @@ export default function AreaMap (props: AreaMapProps): JSX.Element {
         reuseMaps
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
         mapStyle={MAP_STYLES.dark}
+        cooperativeGestures
       >
         {props.subAreas.map(subArea => (
           <Marker
