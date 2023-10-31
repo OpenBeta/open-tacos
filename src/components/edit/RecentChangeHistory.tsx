@@ -94,7 +94,6 @@ const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: Change
           <UpdatedFields fields={updateDescription?.updatedFields} doc={fullDocument as ClimbType} />
         </div>
       </div>
-      {/* <div className='row-span-2 col-span-2'>{JSON.stringify(updateDescription?.updatedFields)}</div> */}
     </div>
   )
 }
@@ -200,7 +199,7 @@ const operationLabelMap = {
     icon: <ActionIcon icon={<PlusIcon className='w-6 h-6 stroke-base-300 stroke-2' />} clz='bg-success' />
   },
   updateArea: {
-    borderCue: 'border-l-black',
+    borderCue: 'border-l-neutral',
     badge: 'edited an area',
     icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} />
   },
@@ -215,7 +214,8 @@ const operationLabelMap = {
     icon: <ActionIcon icon={<MinusIcon className='w-6 h-6 stroke-base-300' />} clz='bg-error' />
   },
   updateDestination: {
-    badge: 'badge-warning',
+    borderCue: 'border-l-neutral',
+    badge: 'set destination',
     icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} />
   },
 
@@ -230,7 +230,7 @@ const operationLabelMap = {
     icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} clz='bg-error' />
   },
   updateClimb: {
-    borderCue: 'border-l-black',
+    borderCue: 'border-l-neutral',
     badge: 'updated a climb',
     icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} />
   },
@@ -241,7 +241,7 @@ const operationLabelMap = {
   },
   updateOrganization: {
     badge: 'updated an organization',
-    borderCue: 'border-l-black',
+    borderCue: 'border-l-neutral',
     icon: <ActionIcon icon={<PencilIcon className='w-6 h-6 stroke-base-300' />} />
   },
   deleteOrganization: {
