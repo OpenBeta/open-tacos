@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { LandingCTA } from './components/LandingCTA'
 import { LandingHero } from './components/LandingHero'
-import { RecentEdits, RecentEditsSkeleton } from './components/RecentEdits'
+import { LatestContributions, LatestContributionsSkeleton } from './components/LatestContributions'
 import { FinancialContributors } from './components/FinancialContributors'
 import { RecentTags } from './components/RecentTags'
 import { USAToC } from './components/USAToC'
@@ -26,8 +26,8 @@ export default async function Home (): Promise<any> {
           <Annoucement />
         </div>
         <div className='mt-8 lg:mt-0 lg:overflow-y-auto lg:h-[800px] w-full border-2 rounded-box'>
-          <Suspense fallback={<RecentEditsSkeleton />}>
-            <RecentEdits />
+          <Suspense fallback={<LatestContributionsSkeleton />}>
+            <LatestContributions />
           </Suspense>
         </div>
       </div>
