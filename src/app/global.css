@@ -14,6 +14,16 @@ html {
   @apply font-sans text-base text-base-content bg-base-100;
 }
 
+.btn {
+  min-height: 2rem;
+  height: 2rem;  
+}
+
+.btn-md {
+  min-height: 2rem;
+  height: 2rem;
+}
+
 h1 {
     @apply text-base-content text-4xl lg:text-5xl tracking-tight;
 }
@@ -30,14 +40,15 @@ h3 {
   @apply sm:px-0 border-0 !important;
 }
 
-.hero-text-shadow {
-  text-shadow: 1px 1px 3px rgb(21, 8, 60);
+/* Layout for summary section of the area and climb page. 2 columns on desktop, normal stack div on mobile. */
+.area-climb-page-summary {
+  @apply mt-6 lg:grid lg:grid-cols-3 w-full;
 }
 
-.rainbow-border {
-  background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0)) 50% 50%/calc(100% - 2px) calc(100% - 2px) no-repeat,
-            linear-gradient(0deg, #00a7f4 0%, transparent 70%),
-            radial-gradient(at 100% 0%, #00ff53 0%, transparent 70%),
-            #f15e40;
-  box-sizing: border-box;
+.area-climb-page-summary-left {
+  @apply  lg:pr-8 border-base-content;
+}
+
+.area-climb-page-summary-right {
+  @apply mt-6 lg:mt-0 lg:col-span-2 lg:pl-16 w-full;
 }

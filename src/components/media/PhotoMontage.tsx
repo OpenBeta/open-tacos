@@ -1,3 +1,4 @@
+'use client'
 import { useState, useEffect, memo, MouseEventHandler } from 'react'
 import Image from 'next/image'
 import clx from 'classnames'
