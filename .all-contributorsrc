@@ -664,6 +664,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Haviles04",
+      "name": "Henry Aviles",
+      "avatar_url": "https://avatars.githubusercontent.com/u/108551827?v=4",
+      "profile": "http://henryaviles.vercel.app",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
