@@ -12,7 +12,7 @@ function FeatureCard ({ area }: { area: AreaType }): JSX.Element | null {
 
   if (media == null || media.length === 0) return null
 
-  const imageUrl = `${CLIENT_CONFIG.CDN_BASE_URL}${shuffle(media)[0].mediaUrl}?format=webp&h=300&q=90`
+  const imageUrl = `${CLIENT_CONFIG.CDN_BASE_URL}${shuffle(media)[0].mediaUrl}?h=300&q=90`
 
   const image = {
     url: imageUrl,
