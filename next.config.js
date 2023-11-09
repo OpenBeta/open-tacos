@@ -1,20 +1,7 @@
 module.exports = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'openbeta.sirv.com'
-      },
-      {
-        protocol: 'https',
-        hostname: 'openbeta-dev.sirv.com',
-        pathname: '*'
-      },
-      {
-        protocol: 'https',
-        hostname: 'storage.googleapis.com'
-      }
-    ]
+    loader: 'custom',
+    loaderFile: './src/image-loader.js'
   },
   typescript: {
     ignoreBuildErrors: false

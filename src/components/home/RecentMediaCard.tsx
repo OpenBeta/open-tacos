@@ -4,7 +4,6 @@ import Image from 'next/image'
 import clx from 'classnames'
 import Card from '../ui/Card/Card'
 import TagList from '../media/TagList'
-import { MobileLoader } from '../../js/sirv/util'
 import { MediaWithTags } from '../../js/types'
 import { getUploadDateSummary } from '../../js/utils'
 import { PostHeader } from './Post'
@@ -38,10 +37,7 @@ export const RecentImageCard = ({
         <div className='relative block w-full h-full'>
           <ATagWrapper href={firstUrl}>
             <Image
-              src={MobileLoader({
-                src: mediaUrl,
-                width: MOBILE_IMAGE_MAX_WIDITH
-              })}
+              src={mediaUrl}
               width={MOBILE_IMAGE_MAX_WIDITH}
               height={MOBILE_IMAGE_MAX_WIDITH / imageRatio}
               sizes={`${MOBILE_IMAGE_MAX_WIDITH}px`}
