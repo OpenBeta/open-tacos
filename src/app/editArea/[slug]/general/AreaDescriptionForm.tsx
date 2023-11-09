@@ -6,6 +6,11 @@ import { AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '@/components/edit/EditAr
 import useUpdateAreasCmd from '@/js/hooks/useUpdateAreasCmd'
 import { MDTextArea } from '@/components/ui/form/MDTextArea'
 
+/**
+ * Area description edit form
+ * @param param0
+ * @returns
+ */
 export const AreaDescriptionForm: React.FC<{ initialValue: string, uuid: string }> = ({ initialValue, uuid }) => {
   const session = useSession({ required: true })
   const { updateOneAreaCmd } = useUpdateAreasCmd(
@@ -18,8 +23,8 @@ export const AreaDescriptionForm: React.FC<{ initialValue: string, uuid: string 
   return (
     <SingleEntryForm<{ description: string }>
       initialValues={{ description: initialValue }}
-      submitHandler={({ description }) => {
-        void updateOneAreaCmd({ description })
+      submitHandler={async ({ description }) => {
+        await updateOneAreaCmd({ description })
       }}
     >
       <MDTextArea

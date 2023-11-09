@@ -1,5 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
 import slugify from 'slugify'
+import { validate } from 'uuid'
 
 import PhotoMontage from '@/components/media/PhotoMontage'
 import { getArea } from '@/js/graphql/getArea'
@@ -7,21 +8,22 @@ import { StickyHeaderContainer } from '@/app/components/ui/StickyHeaderContainer
 
 import BreadCrumbs from '@/components/ui/BreadCrumbs'
 
-export default async function Page ({ params }: { params: { slug: string[] } }): Promise<any> {
-  if (params.slug.length === 0) {
-    notFound()
+export interface PageWithCatchAllUuidProps {
+  params: {
+    slug: string[]
   }
-  const areaUuid = params.slug[0]
+}
+
+export default async function Page ({ params }: PageWithCatchAllUuidProps): Promise<any> {
+  const areaUuid = parseUuidAsFirstParam({ params })
   const pageData = await getArea(areaUuid)
   if (pageData == null) {
     notFound()
   }
 
-  // const secondSlug = params.slug?.[1] ?? undefined
-
   const optionalNamedSlug = slugify(params.slug?.[1] ?? '', { lower: true, strict: true }).substring(0, 50)
 
-  const { area, getAreaHistory } = pageData
+  const { area } = pageData
 
   const photoList = area?.media ?? []
   const { uuid, pathTokens, ancestors, areaName, content } = area
@@ -76,4 +78,20 @@ export default async function Page ({ params }: { params: { slug: string[] } }):
       {/* {JSON.stringify(pageData.area, null, 2)} */}
     </article>
   )
+}
+
+/**
+ * Extract and validate uuid as the first param in a catch-all route
+ */
+export const parseUuidAsFirstParam = ({ params }: PageWithCatchAllUuidProps): string => {
+  if (params.slug.length === 0) {
+    notFound()
+  }
+
+  const uuid = params.slug[0]
+  if (!validate(uuid)) {
+    console.error('Invalid uuid', uuid)
+    notFound()
+  }
+  return uuid
 }

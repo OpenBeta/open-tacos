@@ -27,7 +27,12 @@ export interface MarkdownEditorProps {
 /**
  * Multiline inplace editor with react-hook-form support.
  */
-export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ fieldName, initialValue = '', preview = false, reset, placeholder = 'Enter some text' }) => {
+export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ fieldName, initialValue = '', preview = false, reset, placeholder = 'Enter some text', rules }) => {
+  // const { field, fieldState: { error } } = useController({ name: fieldName, rules })
+
+  // const onChangeHandler = (arg0: EditorState, arg1: LexicalEditor): void => {
+  //   onChange(arg0, arg1, field)
+  // }
   const config = mdeditorConfig(initialValue, !preview)
   return (
     <div className='relative border'>
@@ -36,7 +41,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ fieldName, initi
           ? (
             <>
               <RichTextPlugin
-                contentEditable={<ContentEditable className={config.theme?.input} />}
+                contentEditable={<ContentEditable data-lpignore='true' className={config.theme?.input} />}
                 placeholder={<MDPlaceholder text='Nothing to preview' className={config.theme?.placeholder} />}
                 ErrorBoundary={LexicalErrorBoundary}
               />
@@ -48,7 +53,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ fieldName, initi
             <>
               <AutoFocusPlugin />
               <PlainTextPlugin
-                contentEditable={<ContentEditable className={config.theme?.input} />}
+                contentEditable={<ContentEditable className={config.theme?.input} data-lpignore='true' />}
                 placeholder={<MDPlaceholder text={placeholder} className={config.theme?.placeholder} />}
                 ErrorBoundary={LexicalErrorBoundary}
               />
@@ -57,7 +62,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ fieldName, initi
                 editable={!preview}
                 resetSignal={reset}
               />
-              <ReactHookFormFieldPlugin fieldName={fieldName} />
+              <ReactHookFormFieldPlugin fieldName={fieldName} rules={rules} />
             </>
             )}
 

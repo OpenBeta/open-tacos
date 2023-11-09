@@ -2,7 +2,6 @@
 import { useSession } from 'next-auth/react'
 
 import { SingleEntryForm } from 'app/area/[...slug]/SingleEntryForm'
-import { AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '@/components/edit/EditAreaForm'
 import { DashboardInput } from '@/components/ui/form/Input'
 import useUpdateAreasCmd from '@/js/hooks/useUpdateAreasCmd'
 
@@ -16,8 +15,8 @@ export const AreaNameForm: React.FC<{ initialValue: string, uuid: string }> = ({
   return (
     <SingleEntryForm<{ areaName: string }>
       initialValues={{ areaName: initialValue }}
-      submitHandler={({ areaName }) => {
-        void updateOneAreaCmd({ areaName })
+      submitHandler={async ({ areaName }) => {
+        await updateOneAreaCmd({ areaName })
       }}
     >
       <DashboardInput

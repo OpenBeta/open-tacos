@@ -1,12 +1,12 @@
 'use client'
 import { useState } from 'react'
-import { useController } from 'react-hook-form'
+import { useController, useFormContext } from 'react-hook-form'
 import clx from 'classnames'
 import dynamic from 'next/dynamic'
 
 import { RulesType } from '@/js/types'
 import { MarkdownEditorProps } from '@/components/editor/MarkdownEditor'
-// import { MarkdownEditor } from '@/components/editor/MarkdownEditor'
+import { SubmitButton } from './Input'
 
 interface EditorProps {
   initialValue?: string
@@ -23,9 +23,9 @@ interface EditorProps {
  * Multiline inplace editor with react-hook-form support.
  */
 export const MDTextArea: React.FC<EditorProps> = ({ initialValue = '', name, placeholder = 'Enter some text', label, description, helper, rules }) => {
-  const { fieldState: { error } } = useController({ name, rules })
-
+  const { fieldState: { error }, formState: { isValid, isDirty, isSubmitting } } = useController({ name, rules })
   const [preview, setPreview] = useState(false)
+  console.log('#Formstate', isValid, isDirty)
   return (
     <div className='card card-compact card-bordered border-base-300  overflow-hidden w-full'>
       <div className='form-control'>
@@ -54,7 +54,7 @@ export const MDTextArea: React.FC<EditorProps> = ({ initialValue = '', name, pla
            (<span className='text-error'>{error?.message}</span>)}
             {(error == null) && <span className='text-base-content/60'>{helper}</span>}
           </label>
-          <button className='btn btn-primary btn-solid w-full lg:w-fit' type='submit'>Save</button>
+          <SubmitButton isDirty={isDirty} isSubmitting={isSubmitting} isValid={isValid} />
         </div>
       </div>
     </div>

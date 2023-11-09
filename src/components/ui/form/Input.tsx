@@ -1,5 +1,6 @@
-import { RegisterOptions, useFormContext, UseFormReturn } from 'react-hook-form'
+import { FormState, RegisterOptions, useFormContext, UseFormReturn } from 'react-hook-form'
 import clx from 'classnames'
+import { SpinnerGap } from '@phosphor-icons/react/dist/ssr'
 
 interface InputProps {
   label?: string
@@ -119,7 +120,7 @@ export interface DashboardInputProps {
 
 export const DashboardInput: React.FC<DashboardInputProps> = ({ name, label, description, helper, placeholder, disabled = false, readOnly = false, registerOptions, type = 'text', spellCheck = false, className = '' }) => {
   const formContext = useFormContext()
-  const { formState: { errors } } = formContext
+  const { formState: { errors, isValid, isSubmitting, isDirty } } = formContext
 
   const error = errors?.[name]
   return (
@@ -150,9 +151,21 @@ export const DashboardInput: React.FC<DashboardInputProps> = ({ name, label, des
            (<span className='text-error'>{error?.message as string}</span>)}
             {(error == null) && <span className='text-base-content/60'>{helper}</span>}
           </label>
-          <button className='btn btn-primary btn-solid w-full lg:w-fit' type='submit'>Save</button>
+          <SubmitButton isDirty={isDirty} isSubmitting={isSubmitting} isValid={isValid} />
         </div>
       </div>
     </div>
   )
 }
+
+export const SubmitButton: React.FC<{ isValid: boolean, isSubmitting: boolean, isDirty: boolean }> = ({
+  isValid, isSubmitting, isDirty
+}) => (
+  <button
+    className='btn btn-primary btn-solid w-full lg:w-fit'
+    disabled={!isValid || isSubmitting || !isDirty}
+    type='submit'
+  >
+    {isSubmitting && <SpinnerGap size={24} className='animate-spin' />} Save
+  </button>
+)

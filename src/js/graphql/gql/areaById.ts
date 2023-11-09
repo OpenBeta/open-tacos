@@ -105,7 +105,7 @@ export const QUERY_AREA_BY_ID = gql`
         }
       }
       content {
-        description 
+        description
       }
       authorMetadata {
         ... AuthorMetadataFields

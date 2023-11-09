@@ -533,7 +533,7 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
 /**
  * Split lat,lng string into lat and lng tuple.  Return null if string is invalid.
  */
-const parseLatLng = (s: string): [number, number] | null => {
+export const parseLatLng = (s: string): [number, number] | null => {
   const [latStr, lngStr] = s.split(',')
   const lat = parseFloat(latStr)
   const lng = parseFloat(lngStr)
