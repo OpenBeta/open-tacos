@@ -4,6 +4,7 @@ import './global.css'
 import Header from './header'
 import { PageFooter } from './components/PageFooter'
 import { NextAuthProvider } from './components/NextAuthProvider'
+import { ReactToastifyProvider } from './components/ReactToastifyProvider'
 
 export const metadata: Metadata = {
   title: 'OpenBeta',
@@ -30,6 +31,7 @@ export default function RootLayout ({
           </div>
         </NextAuthProvider>
         <PageFooter />
+        <ReactToastifyProvider />
       </body>
     </html>
   )

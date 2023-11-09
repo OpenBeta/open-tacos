@@ -57,9 +57,53 @@ module.exports = {
         'base-200': '#f3f4f6', // gray-100
         'base-100': '#FAFAF9', // stone-50
         '--rounded-box': '0.5rem',
-        '--rounded-btn': '0.5rem', // border radius rounded-btn utility class, used in buttons and similar element
+        '--rounded-btn': '0.25rem', // border radius rounded-btn utility class, used in buttons and similar element
         '--border-color': '#AABAC0',
-        '--btn-text-case': s => s
+        '--btn-text-case': s => s,
+        '--input-size-xs': '1rem',
+        '--input-size-sm': '1.5rem',
+        '--input-size-md': '2rem',
+        '--input-size-lg': '3rem',
+        '.btn,.btn-md': {
+          height: 'var(--input-size-md)',
+          'min-height': 'var(--input-size-md)'
+        },
+        '.btn-xs': {
+          height: 'var(--input-size-xs)',
+          'min-height': 'var(--input-size-xs)'
+        },
+        '.btn-sm': {
+          height: 'var(--input-size-sm)',
+          'min-height': 'var(--input-size-sm)'
+        },
+        '.btn-lg': {
+          height: 'var(--input-size-lg)',
+          'min-height': 'var(--input-size-lg)'
+        },
+        '.btn-square,.btn-circle': {
+          width: 'var(--input-size-md)'
+        },
+        '.btn-square.btn-xs,.btn-circle.btn-xs': {
+          width: 'var(--input-size-xs)'
+        },
+        '.btn-square.btn-sm,.btn-circle.btn-sm': {
+          width: 'var(--input-size-sm)'
+        },
+        '.btn-square.btn-lg,.btn-circle.btn-lg': {
+          width: 'var(--input-size-lg)'
+        },
+        '.file-input,.select,.input': {
+          height: 'var(--input-size-md)'
+        },
+        '.file-input.file-input-xs,.select.select-xs,.input.input-xs': {
+          height: 'var(--input-size-xs)'
+        },
+        '.file-input.file-input-sm,.select.select-sm,.input.input-sm': {
+          height: 'var(--input-size-sm)'
+        },
+        '.file-input.file-input-lg,.select.select-lg,.input.input-lg': {
+          height: 'var(--input-size-lg)'
+        }
       }
     }],
     base: true,

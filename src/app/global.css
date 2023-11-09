@@ -14,7 +14,7 @@ html {
   @apply font-sans text-base text-base-content bg-base-100;
 }
 
-.btn {
+/* .btn {
   min-height: 2rem;
   height: 2rem;  
 }
@@ -22,7 +22,7 @@ html {
 .btn-md {
   min-height: 2rem;
   height: 2rem;
-}
+} */
 
 h1 {
     @apply text-base-content text-4xl lg:text-5xl tracking-tight;
@@ -51,4 +51,24 @@ h3 {
 
 .area-climb-page-summary-right {
   @apply mt-6 lg:mt-0 lg:col-span-2 lg:pl-16 w-full;
+}
+
+.mdeditor-input {
+  min-height: 150px;
+  resize: none;
+  position: relative;
+  tab-size: 1;
+  @apply p-4 focus:outline-neutral focus:outline-1;
+  /* outline: 0; */
+}
+
+.mdeditor-placeholder {
+  color: #999;
+  overflow: hidden;
+  position: absolute;
+  text-overflow: ellipsis;
+  user-select: none;
+  display: inline-block;
+  pointer-events: none;
+  @apply top-4 left-4;
 }
