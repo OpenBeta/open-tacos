@@ -47,6 +47,18 @@ const gradeContextToGradeScales = {
     aid: GradeScales.FRENCH,
     snow: GradeScales.FRENCH, // is this the same as alpine?
     ice: GradeScales.FRENCH // is this the same as alpine?
+  },
+  BR: {
+    trad: GradeScales.BRAZILIAN_CRUX,
+    sport: GradeScales.BRAZILIAN_CRUX,
+    bouldering: GradeScales.VSCALE,
+    tr: GradeScales.BRAZILIAN_CRUX,
+    deepwatersolo: GradeScales.BRAZILIAN_CRUX,
+    alpine: GradeScales.BRAZILIAN_CRUX,
+    mixed: GradeScales.BRAZILIAN_CRUX,
+    aid: GradeScales.AID,
+    ice: GradeScales.WI,
+    snow: GradeScales.WI
   }
 }
 
