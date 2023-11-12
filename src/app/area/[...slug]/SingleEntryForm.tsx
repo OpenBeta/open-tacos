@@ -6,7 +6,7 @@ export interface SingleEntryFormProps<T> {
   children: ReactNode
   initialValues: DefaultValues<T>
   validationMode?: keyof ValidationMode
-  submitHandler: (formData: T) => Promise<void>
+  submitHandler: (formData: T) => Promise<void> | void
 }
 
 export function SingleEntryForm<T extends FieldValues> ({ children, initialValues, submitHandler, validationMode = 'onBlur' }: SingleEntryFormProps<T>): ReactNode {
@@ -22,7 +22,7 @@ export function SingleEntryForm<T extends FieldValues> ({ children, initialValue
       {/* eslint-disable-next-line */}
       <form onSubmit={handleSubmit(async data => {
         await submitHandler(data)
-        reset() // clear isDirty flag
+        reset({ ...data }, { keepValues: true }) // clear isDirty flag
       }
       )}
       >

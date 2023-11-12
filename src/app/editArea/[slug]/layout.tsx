@@ -3,7 +3,8 @@ import { SidebarNav } from './SidebarNav'
 export default function RootLayout ({
   children, params
 }: {
-  children: React.ReactNode, params: { slug: string }
+  children: React.ReactNode
+  params: { slug: string }
 }): any {
   return (
     <div>

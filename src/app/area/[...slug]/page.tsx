@@ -83,7 +83,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
 /**
  * Extract and validate uuid as the first param in a catch-all route
  */
-export const parseUuidAsFirstParam = ({ params }: PageWithCatchAllUuidProps): string => {
+const parseUuidAsFirstParam = ({ params }: PageWithCatchAllUuidProps): string => {
   if (params.slug.length === 0) {
     notFound()
   }

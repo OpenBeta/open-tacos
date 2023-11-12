@@ -7,11 +7,9 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
-import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin'
 
 import { mdeditorConfig } from './editorConfig'
 import { MarkdownPreviewPlugin } from './plugins/MarkdownPreviewPlugin'
-import { PlainTextResetPlugin } from './plugins/PlainTextResetPlugin'
 import { ReactHookFormFieldPlugin } from './plugins/ReactHookFormFieldPlugin'
 import { RulesType } from '../../js/types'
 
@@ -27,7 +25,7 @@ export interface MarkdownEditorProps {
 /**
  * Multiline inplace editor with react-hook-form support.
  */
-export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ fieldName, initialValue = '', preview = false, reset, placeholder = 'Enter some text', rules }) => {
+export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ fieldName, initialValue = '', preview = false, placeholder = 'Enter some text', rules }) => {
   // const { field, fieldState: { error } } = useController({ name: fieldName, rules })
 
   // const onChangeHandler = (arg0: EditorState, arg1: LexicalEditor): void => {
@@ -51,16 +49,10 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ fieldName, initi
             )
           : (
             <>
-              <AutoFocusPlugin />
               <PlainTextPlugin
                 contentEditable={<ContentEditable className={config.theme?.input} data-lpignore='true' />}
                 placeholder={<MDPlaceholder text={placeholder} className={config.theme?.placeholder} />}
                 ErrorBoundary={LexicalErrorBoundary}
-              />
-              <PlainTextResetPlugin
-                initialValue={initialValue}
-                editable={!preview}
-                resetSignal={reset}
               />
               <ReactHookFormFieldPlugin fieldName={fieldName} rules={rules} />
             </>

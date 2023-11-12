@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { useController, useFormContext } from 'react-hook-form'
+import { useController } from 'react-hook-form'
 import clx from 'classnames'
 import dynamic from 'next/dynamic'
 
@@ -25,7 +25,6 @@ interface EditorProps {
 export const MDTextArea: React.FC<EditorProps> = ({ initialValue = '', name, placeholder = 'Enter some text', label, description, helper, rules }) => {
   const { fieldState: { error }, formState: { isValid, isDirty, isSubmitting } } = useController({ name, rules })
   const [preview, setPreview] = useState(false)
-  console.log('#Formstate', isValid, isDirty)
   return (
     <div className='card card-compact card-bordered border-base-300  overflow-hidden w-full'>
       <div className='form-control'>
@@ -62,5 +61,5 @@ export const MDTextArea: React.FC<EditorProps> = ({ initialValue = '', name, pla
 }
 
 export const MarkdownEditor = dynamic<MarkdownEditorProps>(async () => await import('@/components/editor/MarkdownEditor').then(
-  module => module.MarkdownEditor), { ssr: false }
+  module => module.MarkdownEditor), { ssr: true }
 )

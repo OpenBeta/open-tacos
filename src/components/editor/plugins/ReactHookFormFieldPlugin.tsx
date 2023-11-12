@@ -1,7 +1,9 @@
-import { useEffect } from 'react'
-import { $getRoot } from 'lexical'
+import { useCallback } from 'react'
+import { $getRoot, EditorState } from 'lexical'
 import { useController } from 'react-hook-form'
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+
 import { RulesType } from '@/js/types'
 
 /**
@@ -10,14 +12,12 @@ import { RulesType } from '@/js/types'
 export const ReactHookFormFieldPlugin: React.FC<{ fieldName: string, rules?: RulesType }> = ({ fieldName, rules }) => {
   const { field } = useController({ name: fieldName, rules })
   const [editor] = useLexicalComposerContext()
-
-  useEffect(() => {
-    console.log('#RHF field plugin')
-    editor.getEditorState().read(() => {
+  const onChange = useCallback((editorState: EditorState): void => {
+    editorState.read(() => {
       const str = $getRoot().getTextContent()
       console.log('#updating form')
       field.onChange(str)
     })
-  })
-  return null
+  }, [editor])
+  return <OnChangePlugin onChange={onChange} />
 }
