@@ -61,5 +61,7 @@ export const MDTextArea: React.FC<EditorProps> = ({ initialValue = '', name, pla
 }
 
 export const MarkdownEditor = dynamic<MarkdownEditorProps>(async () => await import('@/components/editor/MarkdownEditor').then(
-  module => module.MarkdownEditor), { ssr: true }
+  module => module.MarkdownEditor), {
+  ssr: true
+}
 )
