@@ -1,4 +1,4 @@
-import { FormState, RegisterOptions, useFormContext, UseFormReturn } from 'react-hook-form'
+import { RegisterOptions, useFormContext, UseFormReturn } from 'react-hook-form'
 import clx from 'classnames'
 import { SpinnerGap } from '@phosphor-icons/react/dist/ssr'
 

@@ -28,7 +28,7 @@ export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: 
       }}
     >
       <DashboardInput
-        name='latlng'
+        name='latlngStr'
         label='Coordinates'
         description='Specify the approximate latitude and longitude. The location may be where the trail meets the wall or in the middle of a long wall.'
         helper='Please use <latitude>, <longitude>'

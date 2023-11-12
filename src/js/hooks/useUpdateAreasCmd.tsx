@@ -62,11 +62,13 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
       })
   }
 
-  const [updateAreaApi] = useMutation<{ updateAreaApi: UpdateAreaApiReturnType }, UpdateOneAreaInputType>(
+  const [updateAreaApi] = useMutation<{ updateArea: UpdateAreaApiReturnType }, UpdateOneAreaInputType>(
     MUTATION_UPDATE_AREA, {
       client: graphqlClient,
       onCompleted: (data) => {
+        console.log('#onCompleted', data)
         toast.info('Area updated successfully ✔️')
+        void updateCache(data.updateArea.uuid)
         void refreshPage(`/api/revalidate?s=${areaId}`)
         if (onUpdateCompleted != null) onUpdateCompleted(data)
       },
@@ -189,4 +191,8 @@ export const refreshPage = async (url: string): Promise<void> => {
   try {
     await fetch(url)
   } catch {}
+}
+
+const updateCache = async (uuid: string): Promise<void> => {
+  await fetch(`/editArea/${uuid}/updateCache`)
 }

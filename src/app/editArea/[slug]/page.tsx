@@ -16,7 +16,7 @@ export interface DashboardPageProps {
 }
 
 export default async function AreaEditPage ({ params }: DashboardPageProps): Promise<any> {
-  const { area: { areaName, uuid, content: { description }, metadata: { lat, lng } } } = await getPageDataForEdit(params.slug)
+  const { area: { areaName, uuid, content: { description } } } = await getPageDataForEdit(params.slug)
   return (
     <PageContainer>
       <AreaNameForm initialValue={areaName} uuid={uuid} />

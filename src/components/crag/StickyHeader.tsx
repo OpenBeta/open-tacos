@@ -1,4 +1,4 @@
-import { useRef, ReactNode } from 'react'
+import { useRef } from 'react'
 import { useIntersection } from 'react-use'
 import clx from 'classnames'
 

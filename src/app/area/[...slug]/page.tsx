@@ -8,6 +8,11 @@ import { StickyHeaderContainer } from '@/app/components/ui/StickyHeaderContainer
 
 import BreadCrumbs from '@/components/ui/BreadCrumbs'
 
+/**
+ * Cache duration in seconds
+ */
+export const revalidate = 30
+
 export interface PageWithCatchAllUuidProps {
   params: {
     slug: string[]

@@ -15,7 +15,6 @@ export const ReactHookFormFieldPlugin: React.FC<{ fieldName: string, rules?: Rul
   const onChange = useCallback((editorState: EditorState): void => {
     editorState.read(() => {
       const str = $getRoot().getTextContent()
-      console.log('#updating form')
       field.onChange(str)
     })
   }, [editor])
