@@ -655,6 +655,33 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "Ali-muhammed7040",
+      "name": "Ali Muhammad",
+      "avatar_url": "https://avatars.githubusercontent.com/u/81983704?v=4",
+      "profile": "https://github.com/Ali-muhammed7040",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Haviles04",
+      "name": "Henry Aviles",
+      "avatar_url": "https://avatars.githubusercontent.com/u/108551827?v=4",
+      "profile": "http://henryaviles.vercel.app",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ShravaniRoy",
+      "name": "ShravaniRoy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17310598?v=4",
+      "profile": "https://shravaniroy.netlify.app/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -18,6 +18,10 @@ body {
   @apply stroke-white h-auto w-auto p-0 !important;
 }
 
+.aa-SubmitIcon {
+  @apply m-auto  !important;
+}
+
 .aa-LoadingIcon {
   @apply text-white !important;
 }
@@ -44,6 +48,10 @@ body {
 
 .xsearch-detachedSearchButtonPlaceholder {
   @apply ml-2 text-sm text-base-300 !important;
+}
+
+.xsearch-submitButton {
+  @apply p-0 !important;
 }
 
 .xsearch-submitButton .aa-SubmitIcon {
@@ -78,13 +86,11 @@ body {
 }
 /* End of XSearch */
 
-
 /* Climb search for tagging */
 
 .climb-tag-search {
   @apply z-50 w-80 !important;
 }
-
 
 .aa-Form.tag-search-form {
   @apply p-0.5 w-full ring-1  border-0 ring-black rounded-md shadow-gray-500 !important;
@@ -97,7 +103,6 @@ body {
 .tag-search-inputWrapperPrefix {
   @apply flex items-center justify-center w-8 h-8 !important;
 }
-
 
 .tag-search-submit-button {
   @apply bg-inherit p-0 h-auto w-auto !important;
@@ -130,7 +135,6 @@ body {
 .aa-default-mobile-submit-button .aa-SubmitIcon {
   @apply text-black stroke-2 stroke-black w-5 h-5 !important;
 }
-
 
 .aa-default-mobile-form {
   @apply rounded border-0 ring-0 !important;
