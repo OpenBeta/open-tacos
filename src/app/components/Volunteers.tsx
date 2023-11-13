@@ -56,7 +56,7 @@ const Profile: React.FC<GithubProfile> = ({
   >
     <div className='avatar'>
       <div className='w-8 rounded-box'>
-        <img src={avatar_url} alt={name} />
+        <img loading='lazy' src={avatar_url} alt={name} />
       </div>
     </div>
     <div className='text-sm uppercase text-base-content pr-4'>{name}</div>
