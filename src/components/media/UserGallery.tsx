@@ -43,7 +43,7 @@ export interface UserGalleryProps {
  * - GQL pagination: https://graphql.org/learn/pagination/
  * - Apollo queries & caching: https://www.apollographql.com/docs/react/data/queries
  */
-export default function UserGallery ({ uid, postId: initialPostId, userPublicPage }: UserGalleryProps): JSX.Element | null {
+export default function UserGallery ({ uid, postId: initialPostId, userPublicPage }: UserGalleryProps): JSX.Element {
   const router = useRouter()
   const userProfile = userPublicPage.profile
 
@@ -112,7 +112,11 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
     }
   }, [initialPostId, imageList, router])
 
-  const imageOnClickHandler = useCallback((props: any): void => {
+  interface ImageOnClickHandlerProps {
+    index: number
+  }
+
+  const imageOnClickHandler = useCallback((props: ImageOnClickHandlerProps): void => {
     if (isMobile) return
     void navigateHandler(props.index)
   }, [imageList])
