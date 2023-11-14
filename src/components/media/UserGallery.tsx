@@ -55,7 +55,6 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
 
   const authz = usePermissions({ currentUserUuid: userProfile.userUuid })
   const { isAuthorized } = authz
-
   const baseUrl = `/u/${uid}`
 
   const isBase = useCallback((url: string) => {
