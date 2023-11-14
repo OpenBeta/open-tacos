@@ -26,7 +26,7 @@ const favCollection = 'favourites'
 /** Built for rapid single-instancing. This component payloads its own network requests
  * so don't go making many instances without hoisting the requests into a parent.
  */
-export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Element | null {
+export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Element {
   const [loading, setLoading] = useState(false)
   const [isFav, setIsFav] = useState<boolean>(false)
   const session = useSession()
@@ -34,28 +34,14 @@ export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Elemen
   useEffect(() => {
     setLoading(true)
     fetch('/api/user/fav')
-      .then(async res => await res.json())
+      .then(async (res) => await res.json())
       .then((collections: APIFavouriteCollections) => {
         if (climbId !== undefined) {
           const f = collections.climbCollections[favCollection]
-          if (f === undefined) {
-            setIsFav(false)
-            return
-          }
-
-          setIsFav(f.includes(climbId))
-          return // guard block
-        }
-
-        if (areaId !== undefined) {
+          setIsFav(f !== undefined && f.includes(climbId))
+        } else if (areaId !== undefined) {
           const f = collections.areaCollections[favCollection]
-          if (f === undefined) {
-            setIsFav(false)
-            return
-          }
-
-          setIsFav(f.includes(areaId))
-          // guard block
+          setIsFav(f !== undefined && f.includes(areaId))
         }
       })
       .catch(console.error)
@@ -65,29 +51,18 @@ export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Elemen
   }, [climbId, areaId])
 
   const toggle = (): void => {
-    // Choose operation purely on what the current visual
-    // state of the button is.
     setLoading(true)
-    let method = 'POST'
-    if (isFav) {
-      method = 'DELETE'
-    }
+    const method = isFav ? 'DELETE' : 'POST'
 
     fetch('/api/user/fav', {
       method,
       body: JSON.stringify({ climbId, areaId, collection: favCollection })
     })
       .then(() => setIsFav(!isFav))
-      .catch(err => console.error({ err }))
+      .catch((err) => console.error({ err }))
       .finally(() => {
         setLoading(false)
       })
-  }
-
-  // If there is some kind of programming error / user is un-authenticated we render the default
-  // interaction-devoid button
-  if ((climbId === undefined && areaId === null) || session.status === 'unauthenticated') {
-    return <NoLogin />
   }
 
   return (
@@ -100,11 +75,21 @@ export default function FavouriteButton ({ climbId, areaId }: Props): JSX.Elemen
     >
       {loading
         ? (
-          <span className='animate-pulse'>
-            Working on it...
-          </span>
+          <span className='animate-pulse'>Working on it...</span>
           )
-        : (!isFav ? '❤️ Add to Favourites' : '💔 Remove from favourites')}
+        : (
+          <>
+            {!session || session.status === 'unauthenticated'
+              ? (
+                <NoLogin />
+                )
+              : (
+                <>
+                  {!isFav ? '❤️ Add to Favourites' : '💔 Remove from favourites'}
+                </>
+                )}
+          </>
+          )}
     </button>
   )
 }

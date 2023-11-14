@@ -68,27 +68,31 @@ export const ChangesetCard: React.FC<ChangsetRowProps> = ({ changeset }) => {
 
   )
 }
-
-const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element | null => {
+const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element => {
   if (fullDocument.__typename !== DocumentTypeName.Climb) {
-    return null
+    return <></>
   }
-  // @ts-expect-error
-  const icon = dbOpIcon[dbOp]
+
+  const icon = dbOpIcon[dbOp as keyof typeof dbOpIcon]
+
   return (
     <div className='ml-2 flex gap-x-2'>
-      <div className='flex gap-2'><span>{icon}</span><span className='badge badge-sm badge-info'>Climb</span></div>
+      <div className='flex gap-2'>
+        <span>{icon}</span>
+        <span className='badge badge-sm badge-info'>Climb</span>
+      </div>
 
       <div className=''>
         <div className=''>
           {dbOp === 'delete'
-            ? <span>{(fullDocument as ClimbType).name}</span>
+            ? (
+              <span>{(fullDocument as ClimbType).name}</span>
+              )
             : (
-              <Link
-                href={`/climbs/${(fullDocument as ClimbType).id}`}
-                className='link link-hover'
-              >{(fullDocument as ClimbType).name}
-              </Link>)}
+              <Link href={`/climbs/${(fullDocument as ClimbType).id}`} className='link link-hover'>
+                {(fullDocument as ClimbType).name}
+              </Link>
+              )}
         </div>
         <div className='text-xs text-base-300'>
           <UpdatedFields fields={updateDescription?.updatedFields} doc={fullDocument as ClimbType} />
@@ -98,22 +102,31 @@ const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: Change
   )
 }
 
-const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element | null => {
+const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element => {
   if (fullDocument.__typename !== DocumentTypeName.Area) {
-    return null
+    return <></>
   }
+
   const url = `/crag/${(fullDocument as AreaType).uuid}`
-  // @ts-expect-error
-  const icon = dbOpIcon[dbOp]
+  const icon = dbOpIcon[dbOp as keyof typeof dbOpIcon]
+
   return (
     <div className='ml-2 flex gap-x-2'>
-      <div className='flex gap-2'>{icon} <span className='badge badge-sm badge-warning'>Area</span></div>
+      <div className='flex gap-2'>
+        {icon} <span className='badge badge-sm badge-warning'>Area</span>
+      </div>
 
       <div className=''>
         <div className=''>
           {dbOp === 'delete'
-            ? <span>{(fullDocument as AreaType).areaName}</span>
-            : (<Link href={url} className='link link-hover'>{(fullDocument as AreaType).areaName}</Link>)}
+            ? (
+              <span>{(fullDocument as AreaType).areaName}</span>
+              )
+            : (
+              <Link href={url} className='link link-hover'>
+                {(fullDocument as AreaType).areaName}
+              </Link>
+              )}
         </div>
         <div className='text-xs text-base-300'>
           <UpdatedFields fields={updateDescription?.updatedFields} doc={fullDocument as AreaType} />
@@ -123,15 +136,18 @@ const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeT
   )
 }
 
-const OrganizationChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element | null => {
+const OrganizationChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeType): JSX.Element => {
   if (fullDocument.__typename !== DocumentTypeName.Organization) {
-    return null
+    return <></>
   }
-  // @ts-expect-error
-  const icon = dbOpIcon[dbOp]
+
+  const icon = dbOpIcon[dbOp as keyof typeof dbOpIcon]
+
   return (
     <div className='py-2 ml-2 flex gap-x-2'>
-      <div className='flex gap-2'>{icon} <span className='badge badge-sm badge-warning'>Organization</span></div>
+      <div className='flex gap-2'>
+        {icon} <span className='badge badge-sm badge-warning'>Organization</span>
+      </div>
 
       <div className=''>
         <div className=''>
@@ -149,37 +165,58 @@ interface UpdatedFieldsProps {
   fields: string[] | undefined
   doc: any
 }
-const UpdatedFields = ({ fields, doc }: UpdatedFieldsProps): JSX.Element | null => {
-  if (fields == null) return null
+const UpdatedFields = ({ fields, doc }: UpdatedFieldsProps): JSX.Element => {
+  if (fields == null) {
+    return <></>
+  }
+
+  const filteredFields = fields.filter(field => {
+    if (
+      field.startsWith('_change') ||
+      field.startsWith('updatedAt') ||
+      field.startsWith('updatedBy') ||
+      field.startsWith('_deleting') ||
+      field.includes('children')
+    ) {
+      return false
+    }
+
+    return true
+  })
+
   return (
-    <div>{fields.map(field => {
-      if (field.startsWith('_change')) return null
-      if (field.startsWith('updatedAt')) return null
-      if (field.startsWith('updatedBy')) return null
-      if (field.startsWith('_deleting')) return null
-      if (field.includes('children')) return null
-
-      // single access - doc[attr]
-      if (field in doc) {
-        const value = JSON.stringify(doc[field])
-        return (<div key={field}>{field} -&gt; {value}{field.includes('length') ? 'm' : ''}</div>)
-      }
-
-      // double access - doc[parent][child]
-      if (field.includes('.')) {
-        let [parent, child] = field.split('.')
-        if (parent === 'content' && doc.__typename === DocumentTypeName.Area) {
-          parent = 'areaContent' // I had to alias this in the query bc of the overlap with ClimbType
+    <div>
+      {filteredFields.map(field => {
+        // single access - doc[attr]
+        if (field in doc) {
+          const value = JSON.stringify(doc[field])
+          return (
+            <div key={field}>
+              {field} -&gt; {value}
+              {field.includes('length') ? 'm' : ''}
+            </div>
+          )
         }
-        if (parent in doc && child in doc[parent]) {
-          const value = JSON.stringify(doc[parent][child])
-          return (<div key={field}>{child} -&gt; {value}</div>)
-        }
-        return (<div key={field}>{child}</div>)
-      }
 
-      return null
-    })}
+        // double access - doc[parent][child]
+        if (field.includes('.')) {
+          let [parent, child] = field.split('.')
+          if (parent === 'content' && doc.__typename === DocumentTypeName.Area) {
+            parent = 'areaContent' // Alias this in the query to avoid overlap with ClimbType
+          }
+          if (parent in doc && child in doc[parent]) {
+            const value = JSON.stringify(doc[parent][child])
+            return (
+              <div key={field}>
+                {child} -&gt; {value}
+              </div>
+            )
+          }
+          return <div key={field}>{child}</div>
+        }
+
+        return null
+      })}
     </div>
   )
 }
