@@ -1,30 +1,36 @@
-import { useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import { getTicksByUserAndClimb } from '../../js/graphql/api'
 import { TickType } from '../../js/types'
 import TickForm from './TickForm'
 import TicksModal from './TicksModal'
 
-interface Props {
-  climbId: string
-  areaId?: string
-  name?: string
-  grade?: string
+interface IsTickedProps {
+  loading: boolean
+  onClick: () => void
 }
 
-const IsTicked: React.FC<any> = ({ loading, onClick }) => {
+const IsTicked: React.FC<IsTickedProps> = ({ loading, onClick }) => {
   return (
     <button
       type='button'
       disabled={loading}
       onClick={onClick}
       className='btn btn-primary btn-sm'
-    >👀 View Ticks
+    >
+      👀 View Ticks
     </button>
   )
 }
 
-export default function TickButton ({ climbId, areaId, name, grade }: Props): JSX.Element | null {
+interface TickButtonProps {
+  climbId: string
+  areaId?: string
+  name?: string
+  grade?: string
+}
+
+const TickButton: React.FC<TickButtonProps> = ({ climbId, areaId, name, grade }: TickButtonProps) => {
   const [loading, setLoading] = useState(false)
   const [isTicked, setIsTicked] = useState<boolean>(false)
   const [viewTicks, setViewTicks] = useState<boolean>(false)
@@ -48,8 +54,7 @@ export default function TickButton ({ climbId, areaId, name, grade }: Props): JS
           } else {
             setTicks(data)
           }
-        }
-        )
+        })
         .finally(() => {
           setLoading(false)
         })
@@ -58,7 +63,7 @@ export default function TickButton ({ climbId, areaId, name, grade }: Props): JS
 
   // If there is some kind of programming error / user is un-authenticated we render nothing
   if ((climbId === undefined && areaId === null) || session.status === 'unauthenticated') {
-    return null
+    return <></>
   }
 
   return (
@@ -83,3 +88,5 @@ export default function TickButton ({ climbId, areaId, name, grade }: Props): JS
     </>
   )
 }
+
+export default TickButton

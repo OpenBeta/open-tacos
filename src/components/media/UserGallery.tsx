@@ -112,7 +112,11 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
     }
   }, [initialPostId, imageList, router])
 
-  const imageOnClickHandler = useCallback((props: any): void => {
+  interface ImageOnClickHandlerProps {
+    index: number
+  }
+
+  const imageOnClickHandler = useCallback((props: ImageOnClickHandlerProps): void => {
     if (isMobile) return
     void navigateHandler(props.index)
   }, [imageList])
