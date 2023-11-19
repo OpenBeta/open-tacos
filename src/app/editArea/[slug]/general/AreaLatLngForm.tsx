@@ -1,7 +1,7 @@
 'use client'
 import { useSession } from 'next-auth/react'
 
-import { SingleEntryForm } from 'app/area/[...slug]/SingleEntryForm'
+import { SingleEntryForm } from 'app/editArea/[slug]/components/SingleEntryForm'
 import { AREA_LATLNG_FORM_VALIDATION_RULES } from '@/components/edit/EditAreaForm'
 import { DashboardInput } from '@/components/ui/form/Input'
 import useUpdateAreasCmd from '@/js/hooks/useUpdateAreasCmd'
@@ -18,6 +18,8 @@ export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: 
   return (
     <SingleEntryForm<{ latlngStr: string }>
       initialValues={{ latlngStr }}
+      title='Coordinates'
+      helperText='The location may be where the trail meets the wall or the midpoint of the wall.'
       submitHandler={({ latlngStr }) => {
         const latlng = parseLatLng(latlngStr)
         if (latlng != null) {
@@ -29,9 +31,7 @@ export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: 
     >
       <DashboardInput
         name='latlngStr'
-        label='Coordinates'
-        description='Specify the approximate latitude and longitude. The location may be where the trail meets the wall or in the middle of a long wall.'
-        helper='Please use <latitude>, <longitude>'
+        label='Coordinates in latitude, longitude format.'
         className='w-80'
         registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
       />

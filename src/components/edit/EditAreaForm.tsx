@@ -50,6 +50,9 @@ interface HtmlFormProps extends AreaUpdatableFieldsType {
   areaType: AreaTypeFormProp
 }
 
+/**
+ * @deprecated replaced by the new editArea page
+ */
 export default function AreaEditForm (props: AreaType & { formRef?: any }): JSX.Element {
   const { uuid, areaName, shortCode, pathTokens, content: { description }, children, climbs, metadata, formRef } = props
   const { lat, lng } = metadata

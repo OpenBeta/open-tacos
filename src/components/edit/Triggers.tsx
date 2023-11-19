@@ -1,6 +1,7 @@
+'use client'
 import { useState, useCallback } from 'react'
+import { Trash } from '@phosphor-icons/react/dist/ssr'
 import { PlusIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
-import { TrashIcon } from '@heroicons/react/24/outline'
 import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
 import DeleteAreaForm, { DeleteAreaProps } from './DeleteAreaForm'
 import AddAreaForm, { AddAreaFormProps } from './AddChildAreaForm'
@@ -72,18 +73,20 @@ export const DeleteAreaTriggerButtonSm = ({ disabled }: TriggerButtonProps): JSX
       <Tooltip
         content='Please delete child areas or climbs first.' enabled={disabled}
       >
-        <div className='btn btn-ghost btn-circle btn-primary btn-disabled'>
-          <TrashIcon className='w-6 h-6' />
+        <div className='btn btn-ghost btn-circle btn-primary btn-disabled btn-sm'>
+          <Trash size={18} />
         </div>
       </Tooltip>)
     : (
       <DialogTrigger
         data-no-dnd='true'
-        className='z-50 btn btn-ghost btn-circle btn-accent'
         disabled={disabled}
         type='button'
+        asChild
       >
-        <TrashIcon className='w-6 h-6' />
+        <button className='z-50 btn btn-ghost btn-circle btn-sm'>
+          <Trash size={18} />
+        </button>
       </DialogTrigger>)
 
 )

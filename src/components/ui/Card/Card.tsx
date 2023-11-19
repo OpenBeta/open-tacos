@@ -23,7 +23,7 @@ export default function Card ({
         {image}
       </figure>
       {imageActions}
-      <div className={clx('card-body', bordered ? 'mx-4' : '')}>{body}</div>
+      <div className={clx('card-body')}>{body}</div>
     </div>
   )
 }

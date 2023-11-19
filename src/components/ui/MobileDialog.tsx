@@ -76,7 +76,7 @@ export const MobileDialog = DialogPrimitive.Root
 /**
  * A button used to trigger the dialog.
  */
-export const DialogTrigger = React.forwardRef<any, any>((props, forwardedRef) =>
+export const DialogTrigger = React.forwardRef<any, DialogPrimitive.DialogTriggerProps>((props, forwardedRef) =>
   <DialogPrimitive.Trigger {...props} ref={forwardedRef} />)
 
 /**

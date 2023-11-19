@@ -20,8 +20,5 @@ export const getArea = async (uuid: string): Promise<AreaPageDataProps> => {
     fetchPolicy: 'no-cache'
   })
 
-  // eslint-disable-next-line
-  new Promise(resolve => setTimeout(resolve, 5000))
-
   return rs.data
 }

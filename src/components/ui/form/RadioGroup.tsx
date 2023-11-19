@@ -54,7 +54,7 @@ export default function RadioGroup ({ groupLabel, groupLabelAlt, name, labels, v
           </label>
         ))}
       </div>
-      <label className='label h-12' id={`${name}-helper`} htmlFor={name}>
+      <label className='label' id={`${name}-helper`} htmlFor={name}>
         {error?.message != null &&
            (<span className='label-text-alt text-error'>{error?.message as string}</span>)}
       </label>

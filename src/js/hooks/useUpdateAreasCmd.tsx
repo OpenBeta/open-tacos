@@ -66,9 +66,8 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     MUTATION_UPDATE_AREA, {
       client: graphqlClient,
       onCompleted: (data) => {
-        console.log('#onCompleted', data)
         toast.info('Area updated successfully ✔️')
-        void updateCache(data.updateArea.uuid)
+        void updateAreaPageCache(data.updateArea.uuid)
         void refreshPage(`/api/revalidate?s=${areaId}`)
         if (onUpdateCompleted != null) onUpdateCompleted(data)
       },
@@ -127,6 +126,8 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
 
         void refreshPage(`/api/revalidate?s=${data.addArea.uuid}`) // build new area page
         void refreshPage(`/api/revalidate?s=${areaId}`) // rebuild parent page
+
+        void updateAreaPageCache(areaId)
       },
       onError: (error) => {
         toast.error(`Unexpected error: ${error.message}`)
@@ -193,6 +194,6 @@ export const refreshPage = async (url: string): Promise<void> => {
   } catch {}
 }
 
-const updateCache = async (uuid: string): Promise<void> => {
+const updateAreaPageCache = async (uuid: string): Promise<void> => {
   await fetch(`/editArea/${uuid}/updateCache`)
 }

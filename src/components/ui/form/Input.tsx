@@ -1,6 +1,5 @@
 import { RegisterOptions, useFormContext, UseFormReturn } from 'react-hook-form'
 import clx from 'classnames'
-import { SpinnerGap } from '@phosphor-icons/react/dist/ssr'
 
 interface InputProps {
   label?: string
@@ -106,8 +105,6 @@ const AFFIX_DEFAULT_CSS = 'bg-default uppercase text-sm'
 export interface DashboardInputProps {
   name: string
   label: string
-  description: string
-  helper: string
   placeholder?: string
   disabled?: boolean
   readOnly?: boolean
@@ -118,54 +115,32 @@ export interface DashboardInputProps {
 
 }
 
-export const DashboardInput: React.FC<DashboardInputProps> = ({ name, label, description, helper, placeholder, disabled = false, readOnly = false, registerOptions, type = 'text', spellCheck = false, className = '' }) => {
+export const DashboardInput: React.FC<DashboardInputProps> = ({ name, label, placeholder, disabled = false, readOnly = false, registerOptions, type = 'text', spellCheck = false, className = '' }) => {
   const formContext = useFormContext()
-  const { formState: { errors, isValid, isSubmitting, isDirty } } = formContext
+  const { formState: { errors } } = formContext
 
   const error = errors?.[name]
   return (
-    <div className='card card-compact card-bordered border-base-300  overflow-hidden w-full'>
-      <div className='form-control'>
-        <div className='p-6 bg-base-100'>
-          <label className='flex flex-col items-start justify-start gap-2 pb-2' htmlFor={name}>
-            <h2 className='font-semibold text-2xl'>{label}</h2>
-            <span className='text-md'>{description}</span>
-          </label>
-          <BaseInput
-            name={name}
-            placeholder={placeholder}
-            className={clx(INPUT_DEFAULT_CSS, className)}
-            label={label}
-            disabled={disabled}
-            readOnly={readOnly}
-            formContext={formContext}
-            registerOptions={registerOptions}
-            type={type}
-            spellCheck={spellCheck}
-          />
-        </div>
-        {/* Footer */}
-        <div className='px-6 py-2 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 bg-base-200 border-t'>
-          <label className='label' id={`${name}-helper`} htmlFor={name}>
-            {error?.message != null &&
-           (<span className='text-error'>{error?.message as string}</span>)}
-            {(error == null) && <span className='text-base-content/60'>{helper}</span>}
-          </label>
-          <SubmitButton isDirty={isDirty} isSubmitting={isSubmitting} isValid={isValid} />
-        </div>
-      </div>
+    <div className='form-control'>
+      <label className='flex flex-col items-start justify-start gap-2 pb-2' htmlFor={name}>
+        <span className='text-md'>{label}</span>
+      </label>
+      <BaseInput
+        name={name}
+        placeholder={placeholder}
+        className={clx(INPUT_DEFAULT_CSS, className)}
+        label={label}
+        disabled={disabled}
+        readOnly={readOnly}
+        formContext={formContext}
+        registerOptions={registerOptions}
+        type={type}
+        spellCheck={spellCheck}
+      />
+      {error?.message != null &&
+        <label className='label' id={`${name}-helper`} htmlFor={name}>
+          <span className='text-error'>{error?.message as string}</span>
+        </label>}
     </div>
   )
 }
-
-export const SubmitButton: React.FC<{ isValid: boolean, isSubmitting: boolean, isDirty: boolean }> = ({
-  isValid, isSubmitting, isDirty
-}) => (
-  <button
-    className='btn btn-primary btn-solid w-full lg:w-fit'
-    disabled={!isValid || isSubmitting || !isDirty}
-    type='submit'
-  >
-    {isSubmitting && <SpinnerGap size={24} className='animate-spin' />} Save
-  </button>
-)

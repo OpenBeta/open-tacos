@@ -27,7 +27,8 @@ export const AreaDesignationRadioGroup = ({ name = 'areaType', disabled = false 
     values={['area', 'crag', 'boulder']}
     labelTips={['Group other areas.', 'List rope climbing routes.', 'List boulder problems.']}
     requiredErrorMessage='Please select an area type'
-  />)
+  />
+)
 
 export const ExplainAreaTypeLockTooltip = ({ canEdit }: { canEdit: boolean }): JSX.Element | null =>
   (

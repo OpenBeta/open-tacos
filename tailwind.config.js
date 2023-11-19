@@ -52,17 +52,17 @@ module.exports = {
         neutral: '#111826',
         info: '#65C3C8',
         error: '#ec4899',
-        'base-content': '#111827', // gray-900
-        'base-300': '#d1d5db', // gray-300
-        'base-200': '#f3f4f6', // gray-100
-        'base-100': '#FAFAF9', // stone-50
+        'base-content': 'rgb(23 23 23)', // neutral-900
+        'base-300': 'rgb(115 115 115)', // neutral-500
+        'base-200': 'rgb(250 250 250)', // neutral-50
+        'base-100': 'white',
         '--rounded-box': '0.5rem',
         '--rounded-btn': '0.25rem', // border radius rounded-btn utility class, used in buttons and similar element
         '--border-color': '#AABAC0',
         '--btn-text-case': s => s,
-        '--input-size-xs': '1rem',
-        '--input-size-sm': '1.5rem',
-        '--input-size-md': '2rem',
+        '--input-size-xs': '1.25rem',
+        '--input-size-sm': '1.75rem',
+        '--input-size-md': '2.25rem',
         '--input-size-lg': '3rem',
         '.btn,.btn-md': {
           height: 'var(--input-size-md)',

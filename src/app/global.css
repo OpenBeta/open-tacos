@@ -14,16 +14,6 @@ html {
   @apply font-sans text-base text-base-content bg-base-100;
 }
 
-/* .btn {
-  min-height: 2rem;
-  height: 2rem;  
-}
-
-.btn-md {
-  min-height: 2rem;
-  height: 2rem;
-} */
-
 h1 {
     @apply text-base-content text-4xl lg:text-5xl tracking-tight;
 }
@@ -36,9 +26,17 @@ h3 {
     @apply text-base-content text-lg font-semibold tracking-tight leading-loose;
 }
 
-.card-body {
-  @apply sm:px-0 border-0 !important;
+.text-primary {
+  @apply text-base-content;
 }
+
+.text-secondary {
+  @apply text-base-content/60;
+}
+
+/* .card-body {
+  @apply sm:px-0 border-0 !important;
+} */
 
 /* Layout for summary section of the area and climb page. 2 columns on desktop, normal stack div on mobile. */
 .area-climb-page-summary {
@@ -71,4 +69,22 @@ h3 {
   display: inline-block;
   pointer-events: none;
   @apply top-4 left-4;
+}
+
+/** 2-column layout for Area and Climb list */
+.two-column-table {
+  @apply lg:gap-x-24 lg:columns-2;
+}
+
+.area-row {
+  @apply py-4 flex flex-row flex-nowrap gap-4 px-4 items-start border-t break-inside-avoid-column break-inside-avoid;
+}
+
+.area-entity-box {
+  box-shadow: 2px 2px 0px #fe4f1a;
+  @apply rounded h-8 w-8 grid place-content-center bg-area-cue text-base-100 text-sm hover:decoration-0 hover:no-underline;
+}
+
+.thick-link {
+  @apply hover:underline underline-offset-4 decoration-4;
 }

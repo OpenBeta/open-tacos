@@ -1,3 +1,5 @@
+'use client'
+import dynamic from 'next/dynamic'
 import type { MouseEvent } from 'react'
 import clx from 'classnames'
 import {
@@ -31,7 +33,7 @@ import { AreaType } from '../../js/types'
 export type AreaCRUDProps = Pick<AreaType, 'uuid' | 'areaName'> & {
   childAreas: AreaType[]
   editMode: boolean
-  onChange: () => void
+  onChange?: () => void
 }
 
 /**
@@ -173,7 +175,7 @@ type AreaItemProps = AreaSummaryType & {
   borderBottom: boolean
   parentUuid: string
   editMode?: boolean
-  onChange: () => void
+  onChange?: () => void
 }
 
 /**
@@ -247,3 +249,5 @@ function shouldHandleEvent (element: HTMLElement | null): boolean {
 
   return true
 }
+
+export const DynamicAreaCRUD = dynamic<AreaCRUDProps>(async () => await Promise.resolve(AreaCRUD))

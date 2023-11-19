@@ -1,12 +1,12 @@
+'use client'
 import { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import clx from 'classnames'
 import { GraphQLError } from 'graphql'
 import { signIn, useSession } from 'next-auth/react'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 import Input from '../ui/form/Input'
-
 export interface DeleteAreaProps {
   parentUuid: string
   areaUuid: string
@@ -44,7 +44,6 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
     }
     if (returnToParentPageAfterDelete) {
       void router.replace('/crag/' + parentUuid)
-      router.reload()
     }
   }
 
