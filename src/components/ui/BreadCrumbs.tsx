@@ -121,3 +121,36 @@ const Item = ({ path, highlight, current, length }: ItemProps): JSX.Element => (
     {sanitizeName(path)}
     {current < length - 1 ? <span className='text-base-300 px-1'>{SEPARATOR}</span> : null}
   </span>)
+
+/**
+ * Area path crumbs based on DaisyUI.
+ */
+export const GluttenFreeCrumbs: React.FC<{
+  pathTokens: string[]
+  ancestors: string[]
+}> = ({ pathTokens, ancestors }) => {
+  return (
+    <div className='breadcrumbs'>
+      <ul>
+        <li><a href='/' className='text-secondary'>Home</a></li>
+        {pathTokens.map((path, index) => {
+          const uuid = ancestors[index]
+          const url = `/editArea/${uuid}`
+          return <GFItem key={uuid} path={sanitizeName(path)} url={url} isLast={index === pathTokens.length - 1} />
+        })}
+      </ul>
+    </div>
+  )
+}
+
+const GFItem: React.FC<{ path: string, url: string, isLast: boolean }> =
+  ({ path, url, isLast }) => (
+    <li>
+      <a
+        href={url}
+        className={clx(isLast ? 'text-primary pointer-events-none font-semibold' : 'text-secondary')}
+      >
+        {path}
+      </a>
+    </li>
+  )

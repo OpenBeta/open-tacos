@@ -10,6 +10,9 @@ type EType = 'area' | 'crag' | 'boulder' | 'climb'
 
 const CragIcon = forwardRef<any, IconProps>((props, ref) => <ShareNetwork ref={ref} {...props} className='p-1 rotate-90' />)
 
+// type MyIconProps = Icon & {
+//   class
+// }
 const IconMap: Record<EType, Icon> = {
   area: Graph,
   crag: CragIcon,
@@ -17,60 +20,86 @@ const IconMap: Record<EType, Icon> = {
   climb: LineSegments
 }
 
-export const EntityIcon: React.FC<{ type: EType, withLabel?: boolean }> = ({ type, withLabel = true }) => {
+export const EntityIcon: React.FC<{ type: EType, withLabel?: boolean, className?: string }> = ({ type, withLabel = true, className = '' }) => {
   const IconComponent = IconMap?.[type]
   if (IconComponent == null) return null
   return (
     <div className='flex gap-1.5 items-center'>
-      <IconComponent size={20} weight='duotone' />
-      <span className='text-xs text-secondary font-light'>{type.toUpperCase()}</span>
+      <IconComponent size={20} weight='duotone' className={className} />
+      {withLabel && <span className='text-xs font-light'>{type.toUpperCase()}</span>}
     </div>
   )
 }
 
 export const AreaItem: React.FC<{ area: AreaType, parentUuid: string, index: number }> = ({ area, index, parentUuid }) => {
-  const { uuid, areaName } = area
+  const { uuid, areaName, children, climbs } = area
+
+  // undefined array can mean we forget to include the field in GQL so let's make it not editable
+  const canDelete = (children?.length ?? 1) === 0 && (climbs?.length ?? 1) === 0
+
   return (
-    <div className='card card-compact w-full bg-base-100 shadow break-inside-avoid-column break-inside-avoid mb-4 p-2'>
-      <div className='flex items-center gap-4 justify-between'>
-        <div><div className='area-entity-box'>{index}</div></div>
-        <div className='text-sm grow'>
-          <div>{areaName}</div>
-          <AreaIcon area={area} />
+    <div className='break-inside-avoid-column break-inside-avoid pb-8'>
+      <div className='card card-compact card-bordered border-base-300/80 w-full bg-base-100 shadow  p-2'>
+        <div className='flex items-center gap-4 justify-between'>
+          <div>
+            <div className='area-entity-box'>{index}</div>
+          </div>
+          <div className='grow space-y-2'>
+            <Link
+              className='uppercase font-semibold hover:underline underline-offset-4
+'
+              href={`/editArea/${uuid}`}
+            >
+              {areaName}
+            </Link>
+            <div className='flex items-center justify-between'>
+              <AreaIcon area={area} />
+            </div>
+          </div>
         </div>
-        <Actions uuid={uuid} areaName={areaName} parentUuid={parentUuid} />
+      </div>
+      <div className='flex justify-end py-1'>
+        <Actions uuid={uuid} areaName={areaName} parentUuid={parentUuid} canDelete={canDelete} />
       </div>
     </div>
   )
 }
 
-export const AreaIcon: React.FC<{ area: AreaType }> = ({ area: { climbs, metadata: { isBoulder } } }) => {
-  if ((climbs?.length ?? 0) > 0) {
-    return <EntityIcon type='crag' />
+export const AreaIcon: React.FC<{ area: AreaType }> =
+  ({ area: { climbs, metadata: { isBoulder } } }) => {
+    if ((climbs?.length ?? 0) > 0) {
+      return <EntityIcon type='crag' />
+    }
+    if (isBoulder) {
+      return <EntityIcon type='boulder' />
+    }
+    return <EntityIcon type='area' className='text-secondary' />
   }
-  if (isBoulder) {
-    return <EntityIcon type='boulder' />
-  }
-  return <EntityIcon type='area' />
-}
 
-const Actions: React.FC<{ uuid: string, areaName: string, parentUuid: string }> = ({ uuid, parentUuid, areaName }) => {
+const Actions: React.FC<{
+  uuid: string
+  areaName: string
+  parentUuid: string
+  canDelete?: boolean
+}> = ({ uuid, parentUuid, areaName, canDelete = false }) => {
   return (
     <div className='flex items-center divide-x'>
       <Link className='px-4' href={`/editArea/${uuid}`}>
-        <button className='btn btn-link btn-primary btn-sm'>Edit</button>
+        <button className='btn btn-link btn-primary btn-sm text-secondary'>Edit</button>
       </Link>
-      <Link className='px-4' href={`/area/${uuid}`} target='_new'><button className='btn btn-link btn-primary btn-sm'>View</button></Link>
-      <span className='px-4'>
+      <Link className='px-4' href={`/area/${uuid}`} target='_new'>
+        <button className='btn btn-link btn-primary btn-sm text-secondary'>View</button>
+      </Link>
+      <div className='px-4 relative'>
         <DeleteAreaTrigger
           areaName={areaName}
           areaUuid={uuid}
           parentUuid={parentUuid}
           returnToParentPageAfterDelete={false}
         >
-          <DeleteAreaTriggerButtonSm disabled={false} />
+          <DeleteAreaTriggerButtonSm disabled={!canDelete} />
         </DeleteAreaTrigger>
-      </span>
+      </div>
     </div>
   )
 }

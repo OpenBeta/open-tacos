@@ -103,6 +103,9 @@ export const QUERY_AREA_BY_ID = gql`
         children {
           uuid
         }
+        climbs {
+          id
+        }
       }
       content {
         description

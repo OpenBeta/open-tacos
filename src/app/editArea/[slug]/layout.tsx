@@ -1,14 +1,33 @@
+import { ArrowUUpLeft } from '@phosphor-icons/react/dist/ssr'
 import { SidebarNav } from './SidebarNav'
+import { getPageDataForEdit } from './general/page'
+import { GluttenFreeCrumbs } from '@/components/ui/BreadCrumbs'
 
-export default function RootLayout ({
+/**
+ * Layout for edit area dashboard
+ */
+export default async function RootLayout ({
   children, params
 }: {
   children: React.ReactNode
   params: { slug: string }
-}): any {
+}): Promise<any> {
+  const { area: { areaName, uuid, pathTokens, ancestors } } = await getPageDataForEdit(params.slug)
   return (
     <div>
-      <h1 className='px-12 text-4xl tracking-tight py-12 block'>Edit area</h1>
+      <div className='px-12 pt-8 pb-4'>
+        <div className='flex items-center justify-between'>
+          <h1 className='text-4xl tracking-tight'>Edit area <span className='text-secondary'>{areaName}</span>
+          </h1>
+        </div>
+        <GluttenFreeCrumbs pathTokens={pathTokens} ancestors={ancestors} />
+        <div className='text-sm flex justify-end'>
+          <a href={`/area/${uuid}`} className='flex items-center gap-2'>
+            Return to public version <ArrowUUpLeft size={18} />
+          </a>
+        </div>
+      </div>
+
       <hr className='border-1' />
       <div className='pt-12 flex bg-base-200 flex-col lg:flex-row'>
         <SidebarNav slug={params.slug} />
