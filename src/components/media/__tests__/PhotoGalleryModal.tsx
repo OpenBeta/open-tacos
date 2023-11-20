@@ -12,7 +12,8 @@ describe('<PhotoGalleryModal />', () => {
             mediaUrl: 'test.jpg',
             width: 200,
             height: 200,
-            entityTags: []
+            entityTags: [],
+            uploadTime: 1667766325921
           }
         ])
       }

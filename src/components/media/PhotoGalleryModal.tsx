@@ -1,11 +1,10 @@
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import { userMediaStore } from '../../js/stores/media'
-import ResponsiveImage, { ResponsiveImage2 } from './slideshow/ResponsiveImage'
+import ResponsiveImage from './slideshow/ResponsiveImage'
 import { MobileDialog, DialogContent } from '../ui/MobileDialog'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import TagList from './TagList'
-import clx from 'classnames'
 import { MediaWithTags } from '../../js/types'
+import { GalleryImageCard } from './GalleryImageCard'
 
 export interface PhotoGalleryModalProps {
   setShowPhotoGalleryModal: Dispatch<SetStateAction<boolean>>
@@ -23,7 +22,6 @@ const PhotoGalleryModal = ({
 
   // Fetch the list of photos.
   const photoList = userMediaStore.use.photoList()
-  console.log('photoList', photoList)
 
   return (
     <MobileDialog
@@ -34,38 +32,14 @@ const PhotoGalleryModal = ({
       <DialogContent fullScreen title='Gallery'>
         <div className='px-0 lg:px-4 mt-20 relative columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-2 lg:gap-4'>
           {photoList.map((mediaWithTags) => {
-            const { mediaUrl, width, height, entityTags } = mediaWithTags
-
             return (
               <div
                 data-testid='thumbnail'
                 onClick={() => setImageProperties(mediaWithTags)}
-                key={mediaUrl}
-                className='overflow-hidden mt-0 mb-2 lg:mb-4 hover:brightness-75 break-inside-avoid-column cursor-pointer break-inside-avoid relative block rounded-md'
+                key={mediaWithTags.mediaUrl}
+                className='overflow-hidden hover:brightness-75 break-inside-avoid-column cursor-pointer relative block rounded-md mb-4'
               >
-                <ResponsiveImage2
-                  naturalWidth={width}
-                  naturalHeight={height}
-                  mediaUrl={mediaUrl}
-                  isHero={false}
-                />
-                <div
-                  className={
-                      clx(
-                        entityTags.length === 0
-                          ? 'hidden'
-                          : 'absolute inset-x-0 bottom-0 p-2 flex items-center bg-base-100 bg-opacity-60'
-                      )
-                      }
-                >
-                  <TagList
-                    key={mediaUrl}
-                    mediaWithTags={mediaWithTags}
-                    showDelete
-                    showActions={false}
-                    showUsernameTag
-                  />
-                </div>
+                <GalleryImageCard key={mediaWithTags.mediaUrl} mediaWithTags={mediaWithTags} onImageClick={() => setImageProperties(mediaWithTags)} />
               </div>
             )
           })}
