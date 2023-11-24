@@ -10,7 +10,7 @@ import { AreaDesignationRadioGroup, areaDesignationToDb, AreaTypeFormProp } from
 import { AREA_NAME_FORM_VALIDATION_RULES } from '@/components/edit/EditAreaForm'
 
 /**
- *
+ * Add a new area/crag/boulder
  */
 export const AddAreaForm: React.FC<{ area: AreaType }> = ({ area }) => {
   const { uuid } = area
@@ -32,7 +32,7 @@ export const AddAreaForm: React.FC<{ area: AreaType }> = ({ area }) => {
         await addOneAreaCmd({ name: areaName, parentUuid: uuid, isBoulder, isLeaf })
         router.refresh() // Ask Next to refresh props from the server
       }}
-      className='border-primary border-2'
+      className='outline outline-2 outline-accent outline-offset-2'
     >
       <DashboardInput
         name='areaName'

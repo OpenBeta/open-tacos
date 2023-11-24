@@ -130,7 +130,7 @@ export const GluttenFreeCrumbs: React.FC<{
   ancestors: string[]
 }> = ({ pathTokens, ancestors }) => {
   return (
-    <div className='breadcrumbs'>
+    <div className='breadcrumbs text-sm'>
       <ul>
         <li><a href='/' className='text-secondary'>Home</a></li>
         {pathTokens.map((path, index) => {
@@ -148,7 +148,7 @@ const GFItem: React.FC<{ path: string, url: string, isLast: boolean }> =
     <li>
       <a
         href={url}
-        className={clx(isLast ? 'text-primary pointer-events-none font-semibold' : 'text-secondary')}
+        className={clx(isLast ? 'text-primary pointer-events-none font-semibold badge badge-info' : 'text-secondary')}
       >
         {path}
       </a>

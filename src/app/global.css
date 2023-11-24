@@ -26,6 +26,10 @@ h3 {
     @apply text-base-content text-lg font-semibold tracking-tight leading-loose;
 }
 
+h4 {
+    @apply tracking-tight leading-loose;
+}
+
 .text-primary {
   @apply text-base-content !important;
 }

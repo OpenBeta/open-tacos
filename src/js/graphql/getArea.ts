@@ -8,7 +8,7 @@ export interface AreaPageDataProps {
 }
 
 /**
- * Get area page data
+ * Get area page data.
  * @param uuid area uuid
  */
 export const getArea = async (uuid: string): Promise<AreaPageDataProps> => {

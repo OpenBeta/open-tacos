@@ -9,13 +9,13 @@ type AreaListProps = Pick<AreaType, 'uuid' | 'areaName' | 'pathTokens' | 'ancest
 
 export const AreaList: React.FC<AreaListProps> = ({ areaName, uuid, pathTokens, ancestors, areas }) => {
   return (
-    <div className='card card-compact card-bordered border-base-300/50  overflow-hidden w-full'>
+    <div id='children' className='card card-compact card-bordered border-base-300/50  overflow-hidden w-full'>
       <div className='form-control'>
         <div className='p-6'>
           {/* Heading */}
           <label className='flex flex-col items-start justify-start gap-2 pb-2'>
             <div className='flex items-baseline gap-4'>
-              <h2 className='font-semibold text-2xl'>Child areas</h2>
+              <h4 className='font-semibold text-2xl'>Child areas</h4>
               <div className='text-secondary text-sm'>Total: <span>{areas.length}</span></div>
             </div>
           </label>

@@ -30,8 +30,8 @@ export default function RadioGroup ({ groupLabel, groupLabelAlt, name, labels, v
   return (
     <div className='form-control'>
       <label className='label'>
-        <span className='cursor-pointer label-text font-semibold uppercase'>{groupLabel}</span>
-        <span className='cursor-pointer label-text-alt'>{groupLabelAlt}</span>
+        <span>{groupLabel}</span>
+        <span>{groupLabelAlt}</span>
       </label>
       <div className='bg-base-100 rounded-box divide-y border'>
         {labels.map((label, index: number) => (
@@ -39,7 +39,7 @@ export default function RadioGroup ({ groupLabel, groupLabelAlt, name, labels, v
             <div className=''>
               <div>{label}</div>
               {labelTips?.[index] != null &&
-                <div className='text-xs text-base-200'>
+                <div className='text-xs text-secondary'>
                   {labelTips[index]}
                 </div>}
             </div>

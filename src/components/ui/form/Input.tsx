@@ -123,7 +123,7 @@ export const DashboardInput: React.FC<DashboardInputProps> = ({ name, label, pla
   return (
     <div className='form-control'>
       <label className='flex flex-col items-start justify-start gap-2 pb-2' htmlFor={name}>
-        <span className='text-md'>{label}</span>
+        {label}
       </label>
       <BaseInput
         name={name}

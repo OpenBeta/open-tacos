@@ -47,7 +47,7 @@ export function SingleEntryForm<T extends FieldValues> ({
       >
         <div className={clx('card card-bordered border-base-300/40 overflow-hidden w-full bg-base-100', className)}>
           <div className='card-body'>
-            <h2 className='font-semibold text-2xl'>{title}</h2>
+            <h4 className='font-semibold text-2xl'>{title}</h4>
             <div className='pt-2 flex flex-col gap-y-4'>
               {children}
             </div>
