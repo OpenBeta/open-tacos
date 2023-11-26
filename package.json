@@ -17,6 +17,10 @@
     "@lexical/react": "^0.7.5",
     "@math.gl/web-mercator": "3.6.2",
     "@openbeta/sandbag": "^0.0.51",
+<<<<<<< HEAD
+=======
+    "@phosphor-icons/react": "^2.0.14",
+>>>>>>> cd4aee1f (add climb list)
     "@radix-ui/react-alert-dialog": "^1.0.0",
     "@radix-ui/react-dialog": "^1.0.0",
     "@radix-ui/react-dropdown-menu": "^2.0.1",

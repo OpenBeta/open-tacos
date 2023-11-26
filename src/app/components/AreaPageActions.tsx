@@ -7,10 +7,10 @@ import { ShareAreaLinkButton } from '@/app/components/ShareAreaLinkButton'
  */
 export const AreaPageActions: React.FC<{ uuid: string, areaName: string } > = ({ uuid, areaName }) => (
   <ul className='mt-6 flex items-center justify-between'>
-    <Link href={`/editArea/${uuid}`} className='btn btn-primary btn-sm'>
+    <Link href={`/editArea/${uuid}`} className='btn btn-solid btn-primary'>
       <PencilSimple size={20} weight='duotone' /> Edit
     </Link>
-    <Link href='#map' className='btn btn-sm'>
+    <Link href='#map' className='btn'>
       <ArrowElbowLeftDown size={20} /> Map
     </Link>
     <ShareAreaLinkButton uuid={uuid} areaName={areaName} />

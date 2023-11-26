@@ -45,11 +45,12 @@ module.exports = {
       light: {
         ...require('daisyui/src/theming/themes')['[data-theme=light]'],
         primary: '#111827',
-        'primary-focus': '#111827',
+        'primary-focus': 'rgb(51 65 85)',
         'primary-content': '#FFFFFF',
         secondary: '#b1c077', // OB brand secondary
         accent: '#F15E40', // OB primary brand
         neutral: '#111826',
+        'neutral-content': 'white',
         info: '#65C3C8',
         error: '#ec4899',
         'base-content': 'rgb(23 23 23)', // neutral-900

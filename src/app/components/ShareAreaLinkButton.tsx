@@ -25,7 +25,7 @@ export const ShareAreaLinkButton: React.FC<{ uuid: string, areaName: string }> =
   return (
     <ControlledTooltip content={<div className='flex items-center'>Copied <Check size={16} /></div>} open={clicked}>
       <button
-        className='btn btn-sm' onClick={() => {
+        className='btn' onClick={() => {
           void navigator.clipboard.writeText(url)
           setClicked(true)
         }}

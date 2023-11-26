@@ -13,7 +13,8 @@ import { getMapHref, getFriendlySlug } from '@/js/utils'
 import AreaMap from '@/components/area/areaMap'
 import { PageContainer } from '@/app/components/ui/PageContainer'
 import { AreaPageActions } from '../../components/AreaPageActions'
-import { SubAreasSection } from './SubAreasSection'
+import { SubAreasSection } from './sections/SubAreasSection'
+import { ClimbListSection } from './sections/ClimbListSection'
 
 /**
  * Cache duration in seconds
@@ -100,6 +101,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
       </div>
 
       <SubAreasSection area={area} />
+      <ClimbListSection area={area} />
     </PageContainer>
   )
 }

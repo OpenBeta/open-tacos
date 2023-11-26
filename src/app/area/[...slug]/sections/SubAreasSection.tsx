@@ -8,7 +8,8 @@ import { AreaType } from '@/js/types'
  * Sub-areas section
  */
 export const SubAreasSection: React.FC<{ area: AreaType } > = ({ area }) => {
-  const { uuid, children } = area
+  const { uuid, children, metadata: { leaf } } = area
+  if (leaf) return null
   return (
     <section className='w-full mt-16'>
       <div className='flex items-center justify-between'>

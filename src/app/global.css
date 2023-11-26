@@ -83,6 +83,10 @@ A slightly deemphasized dotted underline for a tag in order to not competing wit
   @apply lg:gap-x-24 lg:columns-2;
 }
 
+.three-column-table {
+  @apply lg:gap-x-24 lg:columns-2 xl:columns-3;
+}
+
 .area-row {
   @apply py-4 flex flex-row flex-nowrap gap-4 px-4 items-start border-t break-inside-avoid-column break-inside-avoid;
 }

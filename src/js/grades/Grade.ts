@@ -1,31 +1,34 @@
-import { GradeScales, getScale } from '@openbeta/sandbag'
-import { RulesType, GradeContextType, GradeValuesType, ClimbDisciplineRecord } from '../types'
+import { GradeScales, getScale, GradeScalesTypes } from '@openbeta/sandbag'
+import { RulesType, GradeValuesType, ClimbDisciplineRecord } from '../types'
 import { EditableClimbType } from '../../components/crag/cragSummary'
 
-const gradeContextToGradeScales = {
-  US: {
-    trad: GradeScales.YDS,
-    sport: GradeScales.YDS,
-    bouldering: GradeScales.VSCALE,
-    tr: GradeScales.YDS,
-    alpine: GradeScales.YDS,
-    mixed: GradeScales.YDS,
-    aid: GradeScales.YDS,
-    snow: GradeScales.YDS, // is this the same as alpine?
-    ice: GradeScales.YDS // is this the same as alpine?
-  },
-  FR: {
-    trad: GradeScales.FRENCH,
-    sport: GradeScales.FRENCH,
-    bouldering: GradeScales.FONT,
-    tr: GradeScales.FRENCH,
-    alpine: GradeScales.FRENCH,
-    mixed: GradeScales.FRENCH,
-    aid: GradeScales.FRENCH,
-    snow: GradeScales.FRENCH, // is this the same as alpine?
-    ice: GradeScales.FRENCH // is this the same as alpine?
-  },
-  AU: {
+export enum GradeContexts {
+  /** Alaska (United States) */
+  ALSK = 'ALSK',
+  /** Australia */
+  AU = 'AU',
+  /** Brazil */
+  BRZ = 'BRZ',
+  FIN = 'FIN',
+  FR = 'FR',
+  HK = 'HK',
+  NWG = 'NWG',
+  POL = 'POL',
+  SA = 'SA',
+  /** Sweden */
+  SWE = 'SWE',
+  SX = 'SX',
+  UIAA = 'UIAA',
+  /** United Kingdom */
+  UK = 'UK',
+  /** United States of Ameria */
+  US = 'US'
+}
+
+export type ClimbGradeContextType = Record<keyof ClimbDisciplineRecord, GradeScalesTypes>
+
+const gradeContextToGradeScales: Partial<Record<GradeContexts, ClimbGradeContextType>> = {
+  [GradeContexts.AU]: {
     trad: GradeScales.EWBANK,
     sport: GradeScales.EWBANK,
     bouldering: GradeScales.VSCALE,
@@ -37,14 +40,27 @@ const gradeContextToGradeScales = {
     snow: GradeScales.YDS, // is this the same as alpine?
     ice: GradeScales.WI
   },
-  SA: {
+  [GradeContexts.US]: {
+    trad: GradeScales.YDS,
+    sport: GradeScales.YDS,
+    bouldering: GradeScales.VSCALE,
+    tr: GradeScales.YDS,
+    deepwatersolo: GradeScales.YDS,
+    alpine: GradeScales.YDS,
+    mixed: GradeScales.YDS,
+    aid: GradeScales.AID,
+    snow: GradeScales.YDS, // is this the same as alpine?
+    ice: GradeScales.WI
+  },
+  [GradeContexts.FR]: {
     trad: GradeScales.FRENCH,
     sport: GradeScales.FRENCH,
     bouldering: GradeScales.FONT,
     tr: GradeScales.FRENCH,
+    deepwatersolo: GradeScales.FRENCH,
     alpine: GradeScales.FRENCH,
     mixed: GradeScales.FRENCH,
-    aid: GradeScales.FRENCH,
+    aid: GradeScales.AID,
     snow: GradeScales.FRENCH, // is this the same as alpine?
     ice: GradeScales.FRENCH // is this the same as alpine?
   },
@@ -63,13 +79,13 @@ const gradeContextToGradeScales = {
 }
 
 export default class Grade {
-  context: GradeContextType
+  context: GradeContexts
   values: GradeValuesType
   disciplines: Partial<ClimbDisciplineRecord>
   isBoulder: boolean
   gradescales: any
 
-  constructor (gradeContext: GradeContextType, values: GradeValuesType, disciplines: Partial<ClimbDisciplineRecord>, isBoulder: boolean) {
+  constructor (gradeContext: GradeContexts, values: GradeValuesType, disciplines: Partial<ClimbDisciplineRecord>, isBoulder: boolean) {
     if (gradeContext == null) throw new Error('Missing grade context')
     this.context = gradeContext
     this.values = values
@@ -143,7 +159,7 @@ export class GradeHelper {
   gradeScales: any
   isBoulder: boolean
 
-  constructor (gradeContext: GradeContextType, isBoulder: boolean) {
+  constructor (gradeContext: GradeContexts, isBoulder: boolean) {
     this.gradeScales = gradeContextToGradeScales?.[gradeContext]
     this.isBoulder = isBoulder
   }
