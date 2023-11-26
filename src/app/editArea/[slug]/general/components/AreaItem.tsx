@@ -8,7 +8,7 @@ import { DeleteAreaTrigger, DeleteAreaTriggerButtonSm } from '@/components/edit/
 
 export type EType = 'area' | 'crag' | 'boulder' | 'climb'
 
-const CragIcon = forwardRef<any, IconProps>((props, ref) => <ShareNetwork ref={ref} {...props} className='p-1 rotate-90' />)
+const CragIcon = forwardRef<any, IconProps>((props, ref) => <ShareNetwork ref={ref} {...props} className='rotate-90' />)
 
 // type MyIconProps = Icon & {
 //   class
@@ -31,36 +31,39 @@ export const EntityIcon: React.FC<{ type: EType, withLabel?: boolean, size?: 20 
   )
 }
 
-export const AreaItem: React.FC<{ area: AreaType, parentUuid: string, index: number }> = ({ area, index, parentUuid }) => {
+export const AreaItem: React.FC<{
+  area: AreaType
+  parentUuid: string
+  index: number
+  editMode: boolean
+}> = ({ area, index, parentUuid, editMode = false }) => {
   const { uuid, areaName, children, climbs } = area
 
   // undefined array can mean we forget to include the field in GQL so let's make it not editable
   const canDelete = (children?.length ?? 1) === 0 && (climbs?.length ?? 1) === 0
 
+  const url = editMode ? `/editArea/${uuid}` : `/area/${uuid}`
   return (
     <div className='break-inside-avoid-column break-inside-avoid pb-8'>
-      <div className='card card-compact card-bordered border-base-300/80 w-full bg-base-100 shadow  p-2'>
-        <div className='flex items-center gap-4 justify-between'>
-          <div className='px-2'>
-            <div className='area-entity-box'>{index}</div>
-          </div>
-          <div className='grow'>
-            <Link
-              className='uppercase font-semibold hover:underline underline-offset-4
-'
-              href={`/editArea/${uuid}`}
-            >
+      <Link href={url} className='block hover:outline hover:outline-1 hover:rounded-box'>
+        <div className='card card-compact card-bordered w-full bg-base-100 shadow  p-2'>
+          <div className='flex items-center gap-4 justify-between'>
+            <div className='px-2'>
+              <div className='area-entity-box'>{index}</div>
+            </div>
+            <div className='grow uppercase'>
               {areaName}
-            </Link>
-            <div className='flex items-center justify-between'>
-              <AreaIcon area={area} />
+              <div className='flex items-center justify-between'>
+                <AreaIcon area={area} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className='flex justify-end py-1'>
-        <Actions uuid={uuid} areaName={areaName} parentUuid={parentUuid} canDelete={canDelete} />
-      </div>
+      </Link>
+      {editMode &&
+        <div className='flex justify-end py-1'>
+          <Actions uuid={uuid} areaName={areaName} parentUuid={parentUuid} canDelete={canDelete} />
+        </div>}
     </div>
   )
 }

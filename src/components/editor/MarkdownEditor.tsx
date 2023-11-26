@@ -23,14 +23,9 @@ export interface MarkdownEditorProps {
 }
 
 /**
- * Multiline inplace editor with react-hook-form support.
+ * Multiline markdown editor with react-hook-form support.
  */
 export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ fieldName, initialValue = '', preview = false, placeholder = 'Enter some text', rules }) => {
-  // const { field, fieldState: { error } } = useController({ name: fieldName, rules })
-
-  // const onChangeHandler = (arg0: EditorState, arg1: LexicalEditor): void => {
-  //   onChange(arg0, arg1, field)
-  // }
   const config = mdeditorConfig(initialValue, !preview)
   return (
     <div className='relative border'>

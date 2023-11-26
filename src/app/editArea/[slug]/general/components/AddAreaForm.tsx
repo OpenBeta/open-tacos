@@ -26,7 +26,7 @@ export const AddAreaForm: React.FC<{ area: AreaType }> = ({ area }) => {
       initialValues={{ areaName: '' }}
       keepValuesAfterReset={false}
       title='Add new area'
-      helperText='Do not copy description from guidebooks.'
+      helperText='TIP: Pick &ldquo;AREA&rdquo; if not sure.  You can still change it later.'
       submitHandler={async ({ areaName, areaType }) => {
         const { isBoulder, isLeaf } = areaDesignationToDb(areaType)
         await addOneAreaCmd({ name: areaName, parentUuid: uuid, isBoulder, isLeaf })

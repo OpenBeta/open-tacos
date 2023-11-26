@@ -1,7 +1,8 @@
+import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import slugify from 'slugify'
 import { validate } from 'uuid'
-import { MapPinLine } from '@phosphor-icons/react/dist/ssr'
+import { MapPinLine, PlusCircle } from '@phosphor-icons/react/dist/ssr'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import Markdown from 'react-markdown'
 
@@ -13,6 +14,9 @@ import { ArticleLastUpdate } from '@/components/edit/ArticleLastUpdate'
 import { getMapHref } from '@/js/utils'
 import AreaMap from '@/components/area/areaMap'
 import { PageContainer } from '@/app/components/ui/PageContainer'
+import { AreaList } from 'app/editArea/[slug]/general/components/AreaList'
+import { AreaEntityBullet } from '@/components/cues/Entities'
+
 /**
  * Cache duration in seconds
  */
@@ -92,6 +96,27 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
           <h3>Description</h3>
           <Markdown>{description}</Markdown>
         </div>
+
+      </div>
+
+      <div className='w-full mt-16'>
+        <div className='flex items-center justify-between'>
+          <div className='flex items-center gap-3'>
+            <h3 className='flex items-center gap-4'><AreaEntityBullet />{area.children.length} Areas</h3>
+            {/* <AddAreaTrigger parentName={parentName} parentUuid={parentUuid} onSuccess={onChange}>
+              <AddAreaTriggerButtonSm />
+            </AddAreaTrigger> */}
+          </div>
+          <Link href={`/editArea/${uuid}/general#addArea`}>
+            <button className='btn btn-primary'>
+              <PlusCircle size={24} weight='duotone' /> New Areas
+            </button>
+          </Link>
+        </div>
+
+        <hr className='my-4 border-1 border-base-content' />
+
+        <AreaList parentUuid={uuid} areas={area.children} />
       </div>
     </PageContainer>
   )

@@ -7,7 +7,7 @@ type AreaListProps = Pick<AreaType, 'uuid' | 'areaName' | 'pathTokens' | 'ancest
   areas: AreaType[]
 }
 
-export const AreaList: React.FC<AreaListProps> = ({ areaName, uuid, pathTokens, ancestors, areas }) => {
+export const AreaListForm: React.FC<AreaListProps> = ({ areaName, uuid, pathTokens, ancestors, areas }) => {
   return (
     <div id='children' className='card card-compact card-bordered border-base-300/50  overflow-hidden w-full'>
       <div className='form-control'>
@@ -22,14 +22,15 @@ export const AreaList: React.FC<AreaListProps> = ({ areaName, uuid, pathTokens, 
 
           <GluttenFreeCrumbs ancestors={ancestors} pathTokens={pathTokens} />
           <hr className='border mb-6' />
-
-          {/* Child area list */}
-          <div className='two-column-table'>
-            {areas.map((item, index) =>
-              <AreaItem key={item.uuid} area={item} index={index + 1} parentUuid={uuid} />)}
-          </div>
+          <AreaList areas={areas} parentUuid={uuid} editMode />
         </div>
       </div>
     </div>
   )
 }
+
+export const AreaList: React.FC<{ parentUuid: string, areas: AreaType[], editMode?: boolean }> = ({ areas, parentUuid, editMode = false }) => (
+  <div className='two-column-table'>
+    {areas.map((item, index) =>
+      <AreaItem key={item.uuid} area={item} index={index + 1} parentUuid={parentUuid} editMode={editMode} />)}
+  </div>)

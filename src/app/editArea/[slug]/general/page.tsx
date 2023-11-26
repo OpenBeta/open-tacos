@@ -8,7 +8,7 @@ import { AreaNameForm } from './components/AreaNameForm'
 import { AreaDescriptionForm } from './components/AreaDescriptionForm'
 import { AreaLatLngForm } from './components/AreaLatLngForm'
 import { AddAreaForm } from './components/AddAreaForm'
-import { AreaList } from './components/AreaList'
+import { AreaListForm } from './components/AreaList'
 import { AreaTypeForm } from './components/AreaTypeForm'
 
 // Opt out of caching for all data requests in the route segment
@@ -58,7 +58,7 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
       </PageContainer>
 
       <PageContainer id='children'>
-        <AreaList
+        <AreaListForm
           areaName={areaName}
           uuid={uuid}
           ancestors={ancestors}
