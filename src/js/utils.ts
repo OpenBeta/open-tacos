@@ -1,3 +1,5 @@
+import slugify from 'slugify'
+
 import { ClimbTypeToColor } from './constants'
 import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
 
@@ -261,3 +263,9 @@ export const relayMediaConnectionToMediaArray = (mediaConnection: MediaConnectio
   if (mediaConnection == null) return []
   return mediaConnection.edges.map(entry => entry.node)
 }
+
+/**
+ * Convert climb/area name to url-friendly slug
+ * @param name
+ */
+export const getFriendlySlug = (name: string): string => slugify(name, { lower: true, strict: true }).substring(0, 50)

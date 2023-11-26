@@ -81,7 +81,7 @@ export default function AreaMap (props: AreaMapProps): JSX.Element {
     <div className='w-full h-full'>
       <Map
         ref={mapRef}
-        id='areaHeatmap2'
+        id='map'
         initialViewState={{
           bounds: computeVS(props.area),
           fitBoundsOptions: { padding }

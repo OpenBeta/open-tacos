@@ -18,16 +18,32 @@ export default function Tooltip ({ content, enabled = true, className = '', chil
     <Popover.Root>
       <Popover.Trigger className={className}>{children}</Popover.Trigger>
       {enabled &&
-        <Popover.Content
-          className='z-20 text-sm text-base-300 bg-tooltip rounded-md p-2 drop-shadow-lg border max-w-[300px] focus:outline-none'
-          side='top'
-          align='start'
-          alignOffset={-40}
-          collisionPadding={8}
-        >
+        <Content>
           {content}
-          <Popover.Arrow className='stroke-tooltip fill-tooltip' />
-        </Popover.Content>}
+        </Content>}
     </Popover.Root>
   )
 }
+
+export const ControlledTooltip: React.FC<{ open: boolean, content: React.ReactNode, children: React.ReactNode }> = ({ open, content, children }) => (
+  <Popover.Root open={open}>
+    <Popover.Trigger asChild>{children}</Popover.Trigger>
+    <Content>
+      {content}
+    </Content>
+  </Popover.Root>)
+
+/**
+ * Tooltip body
+ */
+const Content: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <Popover.Content
+    className='z-20 text-sm text-secondary bg-tooltip rounded-btn p-2 drop-shadow-lg border max-w-[300px] focus:outline-none'
+    side='top'
+    align='start'
+    collisionPadding={8}
+  >
+    {children}
+    <Popover.Arrow className='stroke-tooltip fill-tooltip' />
+  </Popover.Content>
+)
