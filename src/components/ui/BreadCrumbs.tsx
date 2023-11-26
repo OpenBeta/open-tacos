@@ -128,14 +128,15 @@ const Item = ({ path, highlight, current, length }: ItemProps): JSX.Element => (
 export const GluttenFreeCrumbs: React.FC<{
   pathTokens: string[]
   ancestors: string[]
-}> = ({ pathTokens, ancestors }) => {
+  editMode?: boolean
+}> = ({ pathTokens, ancestors, editMode = false }) => {
   return (
     <div className='breadcrumbs text-sm'>
       <ul>
         <li><a href='/' className='text-secondary'>Home</a></li>
         {pathTokens.map((path, index) => {
           const uuid = ancestors[index]
-          const url = `/editArea/${uuid}`
+          const url = `/${editMode ? 'editArea' : 'area'}/${uuid}`
           return <GFItem key={uuid} path={sanitizeName(path)} url={url} isLast={index === pathTokens.length - 1} />
         })}
       </ul>

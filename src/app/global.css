@@ -38,9 +38,12 @@ h4 {
   @apply text-base-content/60 !important;
 }
 
-/* .card-body {
-  @apply sm:px-0 border-0 !important;
-} */
+/**
+A slightly deemphasized dotted underline for a tag in order to not competing with horizontal rulers
+*/
+.link-dotted {
+  @apply underline decoration-dotted underline-offset-2 decoration-inherit;
+}
 
 /* Layout for summary section of the area and climb page. 2 columns on desktop, normal stack div on mobile. */
 .area-climb-page-summary {

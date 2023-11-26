@@ -1,13 +1,18 @@
 import { notFound, redirect } from 'next/navigation'
 import slugify from 'slugify'
 import { validate } from 'uuid'
+import { MapPinLine } from '@phosphor-icons/react/dist/ssr'
+import 'mapbox-gl/dist/mapbox-gl.css'
+import Markdown from 'react-markdown'
 
 import PhotoMontage from '@/components/media/PhotoMontage'
 import { getArea } from '@/js/graphql/getArea'
 import { StickyHeaderContainer } from '@/app/components/ui/StickyHeaderContainer'
-
-import BreadCrumbs from '@/components/ui/BreadCrumbs'
-
+import { GluttenFreeCrumbs } from '@/components/ui/BreadCrumbs'
+import { ArticleLastUpdate } from '@/components/edit/ArticleLastUpdate'
+import { getMapHref } from '@/js/utils'
+import AreaMap from '@/components/area/areaMap'
+import { PageContainer } from '@/app/components/ui/PageContainer'
 /**
  * Cache duration in seconds
  */
@@ -31,8 +36,9 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
   const { area } = pageData
 
   const photoList = area?.media ?? []
-  const { uuid, pathTokens, ancestors, areaName, content } = area
+  const { uuid, pathTokens, ancestors, areaName, content, authorMetadata, metadata } = area
   const { description } = content
+  const { lat, lng } = metadata
 
   const friendlySlug = slugify(areaName, { lower: true, strict: true }).substring(0, 50)
 
@@ -41,47 +47,53 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
   }
 
   return (
-    <article className='p-4  mx-auto max-w-5xl xl:max-w-7xl'>
+    <PageContainer
+      map={
+        <AreaMap
+          focused={null}
+          selected={area.id}
+          subAreas={area.children}
+          area={area}
+        />
+      }
+    >
       <PhotoMontage isHero photoList={photoList} />
 
       <StickyHeaderContainer>
-        <BreadCrumbs pathTokens={pathTokens} ancestors={ancestors} />
+        <GluttenFreeCrumbs pathTokens={pathTokens} ancestors={ancestors} />
       </StickyHeaderContainer>
 
       <div className='area-climb-page-summary'>
         <div className='area-climb-page-summary-left'>
-          <h3>{areaName}</h3>
+          <h1>{areaName}</h1>
 
-          {/* {
-                    latlngPair != null && (
-                      <div className='flex flex-col text-xs text-base-300 border-t border-b  divide-y'>
-                        <a
-                          href={getMapHref({
-                            lat: latlngPair[0],
-                            lng: latlngPair[1]
-                          })}
-                          target='blank'
-                          className='flex items-center gap-2 py-3'
-                        >
-                          <MapPinIcon className='w-5 h-5' />
-                          <span className='mt-0.5'>
-                            <b>LAT,LNG</b>&nbsp;
-                            <span className='link-dotted'>
-                              {latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}
-                            </span>
-                          </span>
-                        </a>
-                        {/* <ArticleLastUpdate {...authorMetadata} /> */}
+          <div className='mt-6 flex flex-col text-xs text-base-300 border-t border-b  divide-y'>
+            <a
+              href={getMapHref({
+                lat,
+                lng
+              })}
+              target='blank'
+              className='flex items-center gap-2 py-3'
+            >
+              <MapPinLine size={20} />
+              <span className='mt-0.5'>
+                <b>LAT,LNG</b>&nbsp;
+                <span className='link-dotted'>
+                  {lat.toFixed(5)}, {lng.toFixed(5)}
+                </span>
+              </span>
+            </a>
+            <ArticleLastUpdate {...authorMetadata} />
+          </div>
 
         </div>
         <div className='area-climb-page-summary-right'>
           <h3>Description</h3>
-          <div>{description}</div>
+          <Markdown>{description}</Markdown>
         </div>
       </div>
-
-      {/* {JSON.stringify(pageData.area, null, 2)} */}
-    </article>
+    </PageContainer>
   )
 }
 
