@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import clx from 'classnames'
 
-import { sanitizeName } from '../../js/utils'
+import { getFriendlySlug, sanitizeName } from '../../js/utils'
 import { GlobeAltIcon } from '@heroicons/react/24/outline'
 import { TypesenseAreaType } from '../../js/types'
 
@@ -131,12 +131,12 @@ export const GluttenFreeCrumbs: React.FC<{
   editMode?: boolean
 }> = ({ pathTokens, ancestors, editMode = false }) => {
   return (
-    <div className='breadcrumbs text-sm'>
+    <div className='breadcrumbs text-sm font-medium text tracking-tight'>
       <ul>
         <li><a href='/' className='text-secondary'>Home</a></li>
         {pathTokens.map((path, index) => {
           const uuid = ancestors[index]
-          const url = `/${editMode ? 'editArea' : 'area'}/${uuid}`
+          const url = `/${editMode ? 'editArea' : 'area'}/${uuid}/${getFriendlySlug(path)}`
           return <GFItem key={uuid} path={sanitizeName(path)} url={url} isLast={index === pathTokens.length - 1} />
         })}
       </ul>

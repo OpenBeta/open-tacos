@@ -269,3 +269,11 @@ export const relayMediaConnectionToMediaArray = (mediaConnection: MediaConnectio
  * @param name
  */
 export const getFriendlySlug = (name: string): string => slugify(name, { lower: true, strict: true }).substring(0, 50)
+
+/**
+ * Return the area page url with a trailing friendly area name
+ * @param uuid area uuid
+ * @param areaName area name
+ * @returns `/area/<area uuid>/<slugified area name>`
+ */
+export const getAreaPageFriendlyUrl = (uuid: string, areaName: string): string => `/area/${uuid}/${getFriendlySlug(areaName)}`

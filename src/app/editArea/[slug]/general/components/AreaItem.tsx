@@ -5,6 +5,7 @@ import { Icon, IconProps } from '@phosphor-icons/react'
 
 import { AreaType } from '@/js/types'
 import { DeleteAreaTrigger, DeleteAreaTriggerButtonSm } from '@/components/edit/Triggers'
+import { getFriendlySlug } from '@/js/utils'
 
 export type EType = 'area' | 'crag' | 'boulder' | 'climb'
 
@@ -42,7 +43,7 @@ export const AreaItem: React.FC<{
   // undefined array can mean we forget to include the field in GQL so let's make it not editable
   const canDelete = (children?.length ?? 1) === 0 && (climbs?.length ?? 1) === 0
 
-  const url = editMode ? `/editArea/${uuid}` : `/area/${uuid}`
+  const url = editMode ? `/editArea/${uuid}` : `/area/${uuid}/${getFriendlySlug(areaName)}`
   return (
     <div className='break-inside-avoid-column break-inside-avoid pb-8'>
       <Link href={url} className='block hover:outline hover:outline-1 hover:rounded-box'>

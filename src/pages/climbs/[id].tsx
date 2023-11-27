@@ -17,7 +17,7 @@ import { AreaType, ClimbDisciplineRecord, ClimbType, RulesType } from '../../js/
 import SeoTags from '../../components/SeoTags'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
-import PhotoMontage, { Skeleton as PhotoMontageSkeleton } from '../../components/media/PhotoMontage'
+import PhotoMontage, { GallerySkeleton as PhotoMontageSkeleton } from '../../components/media/PhotoMontage'
 import { useClimbSeo } from '../../js/hooks/seo/useClimbSeo'
 import TickButton from '../../components/users/TickButton'
 import EditModeToggle from '../../components/editor/EditModeToggle'

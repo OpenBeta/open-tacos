@@ -1,4 +1,4 @@
-import { notFound, redirect } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import { validate } from 'uuid'
 import { MapPinLine } from '@phosphor-icons/react/dist/ssr'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -11,7 +11,7 @@ import { GluttenFreeCrumbs } from '@/components/ui/BreadCrumbs'
 import { ArticleLastUpdate } from '@/components/edit/ArticleLastUpdate'
 import { getMapHref, getFriendlySlug } from '@/js/utils'
 import AreaMap from '@/components/area/areaMap'
-import { PageContainer } from '@/app/components/ui/PageContainer'
+import { AreaPageContainer } from '@/app/components/ui/AreaPageContainer'
 import { AreaPageActions } from '../../components/AreaPageActions'
 import { SubAreasSection } from './sections/SubAreasSection'
 import { ClimbListSection } from './sections/ClimbListSection'
@@ -46,11 +46,17 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
   const correctSlug = getFriendlySlug(areaName)
 
   if (correctSlug !== userProvidedSlug) {
-    redirect(`/area/${uuid}/${correctSlug}`)
+    permanentRedirect(`/area/${uuid}/${correctSlug}`)
   }
 
   return (
-    <PageContainer
+    <AreaPageContainer
+      photoGallery={<PhotoMontage isHero photoList={photoList} />}
+      breadcrumbs={
+        <StickyHeaderContainer>
+          <GluttenFreeCrumbs pathTokens={pathTokens} ancestors={ancestors} />
+        </StickyHeaderContainer>
+      }
       map={
         <AreaMap
           focused={null}
@@ -60,17 +66,11 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
         />
       }
     >
-      <PhotoMontage isHero photoList={photoList} />
-
-      <StickyHeaderContainer>
-        <GluttenFreeCrumbs pathTokens={pathTokens} ancestors={ancestors} />
-      </StickyHeaderContainer>
-
       <div className='area-climb-page-summary'>
         <div className='area-climb-page-summary-left'>
           <h1>{areaName}</h1>
 
-          <div className='mt-6 flex flex-col text-xs text-base-300 border-t border-b  divide-y'>
+          <div className='mt-6 flex flex-col text-xs text-secondary border-t border-b  divide-y'>
             <a
               href={getMapHref({
                 lat,
@@ -102,7 +102,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
 
       <SubAreasSection area={area} />
       <ClimbListSection area={area} />
-    </PageContainer>
+    </AreaPageContainer>
   )
 }
 

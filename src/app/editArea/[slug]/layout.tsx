@@ -2,6 +2,7 @@ import { ArrowUUpLeft } from '@phosphor-icons/react/dist/ssr'
 import { SidebarNav } from './SidebarNav'
 import { getPageDataForEdit } from './general/page'
 import { GluttenFreeCrumbs } from '@/components/ui/BreadCrumbs'
+import { getAreaPageFriendlyUrl } from '@/js/utils'
 
 // Opt out of caching for all data requests in the route segment
 export const dynamic = 'force-dynamic'
@@ -15,7 +16,7 @@ export default async function RootLayout ({
   children: React.ReactNode
   params: { slug: string }
 }): Promise<any> {
-  const { area: { uuid, pathTokens, ancestors } } = await getPageDataForEdit(params.slug)
+  const { area: { uuid, pathTokens, ancestors, areaName } } = await getPageDataForEdit(params.slug)
   return (
     <div>
       <div className='px-12 pt-8 pb-4'>
@@ -23,7 +24,7 @@ export default async function RootLayout ({
 
         <GluttenFreeCrumbs pathTokens={pathTokens} ancestors={ancestors} />
         <div className='text-sm flex justify-end'>
-          <a href={`/area/${uuid}`} className='flex items-center gap-2 hover:underline'>
+          <a href={getAreaPageFriendlyUrl(uuid, areaName)} className='flex items-center gap-2 hover:underline'>
             Return to public version <ArrowUUpLeft size={18} />
           </a>
         </div>

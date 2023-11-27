@@ -41,7 +41,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
   const [hover, setHover] = useState(false)
 
   if (showSkeleton) {
-    return <Skeleton />
+    return <GallerySkeleton />
   }
 
   if (!showSkeleton && (shuffledList == null || shuffledList?.length === 0)) { return null }
@@ -147,13 +147,13 @@ const ResponsiveImage: React.FC<ResponsiveImageProps> = ({ mediaUrl, isHero = tr
     alt=''
   />)
 
-export const Skeleton: React.FC = () => (
-  <div className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 bg-base-200/10 lg:bg-transparent'>
-    <div className='hidden lg:block relative col-start-1 col-span-2 row-span-2 col-end-3 bg-base-200/10 h-80' />
-    <div className='hidden lg:block w-full h-[158px] bg-base-200/10 ' />
-    <div className='hidden lg:block w-full h-[158px] bg-base-200/10' />
-    <div className='hidden lg:block w-full h-[158px] bg-base-200/10' />
-    <div className='hidden lg:block w-full h-[158px] bg-base-200/10' />
+export const GallerySkeleton: React.FC = () => (
+  <div className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 bg-base-200 lg:bg-transparent'>
+    <div className='hidden lg:block relative col-start-1 col-span-2 row-span-2 col-end-3 bg-base-200 h-80' />
+    <div className='hidden lg:block w-full h-[158px] bg-base-200 ' />
+    <div className='hidden lg:block w-full h-[158px] bg-base-200' />
+    <div className='hidden lg:block w-full h-[158px] bg-base-200' />
+    <div className='hidden lg:block w-full h-[158px] bg-base-200' />
   </div>
 )
 export default memo(PhotoMontage)
