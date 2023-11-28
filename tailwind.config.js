@@ -49,6 +49,8 @@ module.exports = {
         'primary-content': '#FFFFFF',
         secondary: '#b1c077', // OB brand secondary
         accent: '#F15E40', // OB primary brand
+        'accent-focus': '#f37e66',
+        'accent-content': '#FFFFFF',
         neutral: '#111826',
         'neutral-content': 'white',
         info: '#65C3C8',

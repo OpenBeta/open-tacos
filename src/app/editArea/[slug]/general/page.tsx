@@ -41,7 +41,7 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
         <AreaNameForm initialValue={areaName} uuid={uuid} />
       </PageContainer>
 
-      <PageContainer id='general'>
+      <PageContainer id='description'>
         <AreaDescriptionForm initialValue={description} uuid={uuid} />
       </PageContainer>
 

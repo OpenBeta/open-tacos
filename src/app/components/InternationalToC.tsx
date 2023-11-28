@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { SectionContainer } from './ui/SectionContainer'
 import { INTERNATIONAL_DATA, ToCCountry } from './international-data'
 import { ToCAreaEntry } from './USAToC'
+import { getAreaPageFriendlyUrl } from '@/js/utils'
 
 /**
  * International table of content
@@ -24,7 +25,7 @@ const CountryCard: React.FC<{ country: ToCCountry }> = ({ country }) => {
   const { areaName, uuid, children } = country
   return (
     <div className='mb-10 break-inside-avoid-column break-inside-avoid'>
-      <Link href={`/crag/${uuid}`}>
+      <Link href={getAreaPageFriendlyUrl(uuid, areaName)}>
         <span className=' font-semibold'>{areaName}</span>
       </Link>
       <hr className='mb-2 border-1 border-base-content/60' />

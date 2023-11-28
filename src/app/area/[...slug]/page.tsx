@@ -1,6 +1,7 @@
 import { notFound, permanentRedirect } from 'next/navigation'
+import Link from 'next/link'
 import { validate } from 'uuid'
-import { MapPinLine } from '@phosphor-icons/react/dist/ssr'
+import { MapPinLine, Lightbulb, ArrowRight } from '@phosphor-icons/react/dist/ssr'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import Markdown from 'react-markdown'
 
@@ -9,7 +10,7 @@ import { getArea } from '@/js/graphql/getArea'
 import { StickyHeaderContainer } from '@/app/components/ui/StickyHeaderContainer'
 import { GluttenFreeCrumbs } from '@/components/ui/BreadCrumbs'
 import { ArticleLastUpdate } from '@/components/edit/ArticleLastUpdate'
-import { getMapHref, getFriendlySlug } from '@/js/utils'
+import { getMapHref, getFriendlySlug, getAreaPageFriendlyUrl } from '@/js/utils'
 import AreaMap from '@/components/area/areaMap'
 import { AreaPageContainer } from '@/app/components/ui/AreaPageContainer'
 import { AreaPageActions } from '../../components/AreaPageActions'
@@ -27,6 +28,9 @@ export interface PageWithCatchAllUuidProps {
   }
 }
 
+/**
+ * Area/crag page
+ */
 export default async function Page ({ params }: PageWithCatchAllUuidProps): Promise<any> {
   const areaUuid = parseUuidAsFirstParam({ params })
   const pageData = await getArea(areaUuid)
@@ -46,7 +50,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
   const correctSlug = getFriendlySlug(areaName)
 
   if (correctSlug !== userProvidedSlug) {
-    permanentRedirect(`/area/${uuid}/${correctSlug}`)
+    permanentRedirect(getAreaPageFriendlyUrl(uuid, areaName))
   }
 
   return (
@@ -94,7 +98,13 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
         </div>
 
         <div className='area-climb-page-summary-right'>
-          <h3>Description</h3>
+          <div className='flex items-center gap-2'>
+            <h3>Description</h3>
+            <span className='text-xs inline-block align-baseline'>
+              [<Link href={`/editArea/${uuid}/general#description`} className='hover:underline'>Edit</Link>]
+            </span>
+          </div>
+          {(description == null || description.trim() === '') && <EditDescriptionCTA uuid={uuid} />}
           <Markdown>{description}</Markdown>
         </div>
 
@@ -121,3 +131,16 @@ const parseUuidAsFirstParam = ({ params }: PageWithCatchAllUuidProps): string =>
   }
   return uuid
 }
+
+const EditDescriptionCTA: React.FC<{ uuid: string }> = ({ uuid }) => (
+  <div role='alert' className='alert'>
+    <Lightbulb size={24} />
+    <div className='text-sm'>No description available.  Be the first to contribute!
+      <div className='mt-2'>
+        <Link href={`/editArea/${uuid}/general#description`} className='btn btn-sm btn-outline'>
+          Add description <ArrowRight size={16} />
+        </Link>
+      </div>
+    </div>
+  </div>
+)

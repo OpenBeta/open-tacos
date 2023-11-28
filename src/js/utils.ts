@@ -210,13 +210,13 @@ export const getUploadDateSummary = (dateUploaded: Date): string => {
  * @param dest
  * @returns url for the given destination type (area or climb) and destination uid
  */
-export const urlResolver = (type: number, dest: string | null): string | null => {
+export const urlResolver = (type: number, dest: string | null, name: string): string | null => {
   if (dest == null) return null
   switch (type) {
     case 0:
       return `/climbs/${dest}`
     case 1:
-      return `/crag/${dest}`
+      return getAreaPageFriendlyUrl(dest, name)
     case 3:
       return `/u/${dest}`
     default:

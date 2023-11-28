@@ -32,7 +32,7 @@ const ClimbRow: React.FC<ClimbType & { index: number, gradeContext: GradeContext
     sanitizedDisciplines,
     areaMetadata.isBoulder
   ).toString()
-  const url = `/climb/${id}`
+  const url = `/climbs/${id}`
   return (
     <li className='py-2 break-inside-avoid-column break-inside-avoid'>
       <Link href={url} className='flex gap-x-4 flex-nowrap'>
