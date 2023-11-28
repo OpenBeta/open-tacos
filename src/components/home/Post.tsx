@@ -50,9 +50,10 @@ export interface PostHeaderProps {
 export const PostHeader = ({
   profilePhoto = null,
   username
-}: PostHeaderProps): JSX.Element | null => {
-  if (username == null) return null
-
+}: PostHeaderProps): JSX.Element => {
+  if (username == null) {
+    return <></>
+  }
   return (
     <>
       <ATagWrapper href={urlResolver(3, username)} className='flex py-2 items-center space-x-2 text-base-300'>

@@ -24,7 +24,7 @@ export const Autocomplete = ({ queryParams, forceFocus = false, classNames, ...o
   const containerRef = useRef<HTMLDivElement>(null)
   const panelRootRef = useRef<any>(null)
   const rootRef = useRef<HTMLElement | null>(null)
-  let search: AutocompleteApi<any> | null = null
+  let search: AutocompleteApi<any>
 
   useEffect(() => {
     if (forceFocus) {

@@ -180,12 +180,17 @@ type AreaItemProps = AreaSummaryType & {
  * Individual area entry
  * @param borderBottom true add a bottom border
  */
-export const AreaItem = ({ index, borderBottom, areaName, uuid, parentUuid, onChange, editMode = false, climbs, children, ...props }: AreaItemProps): JSX.Element | null => {
+export const AreaItem = ({ index, borderBottom, areaName, uuid, parentUuid, onChange, editMode = false, climbs, children, ...props }: AreaItemProps): JSX.Element => {
   // undefined array can mean we forget to include the field in GQL so let's make it not editable
   const canEdit = (children?.length ?? 1) === 0 && (climbs?.length ?? 1) === 0
 
   const { totalClimbs, metadata: { leaf, isBoulder } } = props
   const isLeaf = leaf || isBoulder
+
+  if (index === undefined) {
+    return <></>
+  }
+
   return (
     <div className={clx('area-row', borderBottom ? 'border-b' : '')}>
       <a href={`/crag/${uuid}`} className='area-entity-box' data-no-dnd='true'>

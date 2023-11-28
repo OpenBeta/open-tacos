@@ -1,52 +1,45 @@
-import React from 'react'
+import React, { ButtonHTMLAttributes, AnchorHTMLAttributes } from 'react'
 import Link from 'next/link'
 
-export const Button: React.FC<any> = ({ label, onClick, className }) => {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  label: string
+}
+
+export const Button: React.FC<ButtonProps> = ({ label, onClick, className, ...rest }) => {
   return (
     <button
-      className={`${className as string} btn whitespace-nowrap 
-      ${'btn-secondary'} ${'px-4'}`}
+      className={`${className} btn whitespace-nowrap ${'btn-secondary'} ${'px-4'}`}
       onClick={onClick}
+      {...rest}
     >
       {label}
     </button>
   )
 }
 
-export interface LinkButtonProps {
+interface LinkButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string
   children: JSX.Element | JSX.Element[] | string
-  className: string
-  linkProps?: any
-  buttonProps?: any
 }
 
-/**
- * Make URL link looks like a button.  In most cases you should try to use
- * HTML `<a href=` for external link and NextJS `Link` for client-side routing.
- */
-export const LinkButton = ({ href, children, className, linkProps, buttonProps }: LinkButtonProps): any => {
+export const LinkButton: React.FC<LinkButtonProps> = ({ href, children, className, ...rest }) => {
   if (href == null) {
     return null
   }
+
   if (href.startsWith('http')) {
     return (
-      <a href={href} {...linkProps}>
-        <button className={className} {...buttonProps}>
-          {children}
-        </button>
+      <a href={href} className={className} {...rest}>
+        {children}
       </a>
     )
   }
+
   return (
-    (
-      <Link href={href} {...linkProps}>
-
-        <button className={className} {...buttonProps}>
-          {children}
-        </button>
-
-      </Link>
-    )
+    <Link href={href} passHref>
+      <a className={className} {...rest}>
+        {children}
+      </a>
+    </Link>
   )
 }
