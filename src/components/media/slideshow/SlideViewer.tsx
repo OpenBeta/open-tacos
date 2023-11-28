@@ -171,8 +171,10 @@ interface InfoContainerProps {
   onClose?: () => void
 }
 
-const InfoContainer = ({ currentImage, auth, keyboardTip = true, onClose }: InfoContainerProps): ReactElement | null => {
-  if (currentImage == null) return null
+const InfoContainer = ({ currentImage, auth, keyboardTip = true, onClose }: InfoContainerProps): ReactElement => {
+  if (currentImage == null) {
+    return <></>
+  }
 
   const { entityTags } = currentImage
   const tagCount = entityTags.length

@@ -1,90 +1,101 @@
-'use client'
-import React, { createElement, Fragment, ReactNode, useEffect, useRef, useState } from 'react'
-import { createRoot } from 'react-dom/client'
-
-import { autocomplete, AutocompleteOptions, AutocompleteApi } from '@algolia/autocomplete-js'
-import '@algolia/autocomplete-theme-classic'
+import React, { createElement, Fragment, ReactNode, useEffect, useRef, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import { autocomplete, AutocompleteOptions, AutocompleteApi } from '@algolia/autocomplete-js';
+import '@algolia/autocomplete-theme-classic';
 
 interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
   queryParams?: {
-    text: string
-    data: any
-  }
-  label?: string | JSX.Element
-  placeholder?: string
-  open?: boolean
-  onCancel?: () => void
-  detached?: boolean
-  resultContainer?: (children: ReactNode[]) => ReactNode
+    text: string;
+    data: any;
+  };
+  label?: string | JSX.Element;
+  open?: boolean;
+  onCancel?: () => void;
+  detached?: boolean;
+  resultContainer?: (children: ReactNode[]) => ReactNode;
 }
-/**
- * Autocomplete widget based on Algolia Autocomplete.
- * @param props
- */
-export const Autocomplete2 = ({ label, open = false, onCancel, detached = true, queryParams, classNames, resultContainer, ...otherProps }: AutocompleteProps): JSX.Element => {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const panelRootRef = useRef<any>(null)
-  const rootRef = useRef<HTMLElement | null>(null)
-  const [search, setSearch] = useState<AutocompleteApi<any> | null>(null)
+
+interface SearchProps {
+  onCancel?: () => void;
+  detached: boolean;
+  resultContainer?: (children: ReactNode[]) => ReactNode;
+  classNames?: Record<string, string>;
+}
+
+const useAutocomplete = (props: SearchProps): AutocompleteApi<any> | null => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const panelRootRef = useRef<any>(null);
+  const rootRef = useRef<HTMLElement | null>(null);
+  const [search, setSearch] = useState<AutocompleteApi<any> | null>(null);
 
   useEffect(() => {
     if (containerRef.current == null) {
-      return undefined
+      return undefined;
     }
 
-    const search = autocomplete({
+    const searchInstance = autocomplete({
       openOnFocus: true,
-      classNames: { ...AA_DEFAULT_CLASSES, ...classNames },
+      classNames: { ...AA_DEFAULT_CLASSES, ...props.classNames },
       defaultActiveItemId: 0,
       container: containerRef.current,
       renderer: { createElement, Fragment, render: () => {} },
-      onStateChange: props => {
-        if (props.prevState.isOpen && !props.state.isOpen) {
-          if (onCancel != null) onCancel()
+      onStateChange: (autocompleteProps) => {
+        if (autocompleteProps.prevState.isOpen && !autocompleteProps.state.isOpen) {
+          if (props.onCancel != null) props.onCancel();
         }
       },
-      detachedMediaQuery: detached ? '' : 'none',
-      render ({ children, html, render, sections }, root) {
+      detachedMediaQuery: props.detached ? '' : 'none',
+      render: ({ children, sections }, root) => {
         if ((panelRootRef.current == null) || rootRef.current !== root) {
-          rootRef.current = root
-          panelRootRef.current?.unmount()
-          panelRootRef.current = createRoot(root)
+          rootRef.current = root;
+          panelRootRef.current?.unmount();
+          panelRootRef.current = createRoot(root);
         }
 
-        if (resultContainer != null) {
-          panelRootRef.current.render(resultContainer(sections))
+        if (props.resultContainer != null) {
+          panelRootRef.current.render(props.resultContainer(sections));
         } else {
-          panelRootRef.current.render(children)
+          panelRootRef.current.render(children);
         }
       },
-      ...otherProps
-    })
+      ...props
+    });
 
-    setSearch(search)
+    setSearch(searchInstance);
 
     return () => {
-      if (search != null) {
-        search.destroy()
+      if (searchInstance != null) {
+        searchInstance.destroy();
       }
-    }
-  }, [])
+    };
+  }, [props]);
+
+  return search;
+};
+
+export const Autocomplete2 = (props: AutocompleteProps): JSX.Element => {
+  const { label, open = false, onCancel, detached = true, queryParams, classNames, resultContainer, ...otherProps } = props;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const search = useAutocomplete({ onCancel, detached, resultContainer, classNames, ...otherProps });
 
   useEffect(() => {
     if (search != null) {
-      search.setIsOpen(open)
+      search.setIsOpen(open);
     }
-  }, [open])
+  }, [open, search]);
 
   const onClickHandler = (): void => {
     if (search != null) {
-      search.setIsOpen(true)
+      search.setIsOpen(true);
     }
-  }
+  };
 
   return (
-    <div className='z-40 inline-flex xl:w-full' ref={containerRef} onClick={onClickHandler}>{label}</div>
-  )
-}
+    <div className='z-40 inline-flex xl:w-full' ref={containerRef} onClick={onClickHandler}>
+      {label}
+    </div>
+  );
+};
 
 // For customization see algolia.css
 export const AA_DEFAULT_CLASSES = {
@@ -95,4 +106,4 @@ export const AA_DEFAULT_CLASSES = {
   detachedSearchButtonIcon: 'aa-default-mobile-trigger-btn-icon',
   detachedCancelButton: 'aa-default-mobile-cancel-button',
   detachedSearchButtonPlaceholder: 'aa-default-mobile-placeholder'
-}
+};
