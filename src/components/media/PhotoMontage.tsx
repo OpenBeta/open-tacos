@@ -11,6 +11,7 @@ import { DefaultLoader, MobileLoader } from '../../js/sirv/util'
 import PhotoGalleryModal from './PhotoGalleryModal'
 import { userMediaStore } from '../../js/stores/media'
 import { UploadPhotoTextOnlyButton } from '../NewPost'
+import HikingIllustration from '@/assets/icons/hiking'
 
 export interface PhotoMontageProps {
   photoList: MediaWithTags[]
@@ -69,34 +70,42 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
     )
   }
 
+  /**
+   * Show 2 photos
+   */
   if (shuffledList.length <= 4) {
     return (
-      <div
-        className={clx('grid grid-cols-2 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 fadeinEffect', showSkeleton ? 'animate-pulse bg-base-200/20' : '')}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-      >
-        {showPhotoGalleryModal ? photoGalleryModal : undefined}
-        {shuffledList.slice(0, 2).map((media) => {
-          const { mediaUrl } = media
-          return (
-            <div
-              key={mediaUrl}
-              className={
+      <div className='relative'>
+        <div
+          className={clx('grid grid-cols-2 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 fadeinEffect', showSkeleton ? 'animate-pulse bg-base-200/20' : '')}
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
+        >
+          {showPhotoGalleryModal ? photoGalleryModal : undefined}
+          {shuffledList.slice(0, 2).map((media) => {
+            const { mediaUrl } = media
+            return (
+              <div
+                key={mediaUrl}
+                className={
                 clx(
                   'block relative hover:cursor-pointer',
                   shuffledList.length === 1 ? ' overflow-hidden rounded-r-xl' : '')
               }
-            >
-              <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
-              <PhotoFooter mediaWithTags={media} hover={hover} />
-            </div>
-          )
-        })}
-        {shuffledList.length === 1 &&
-          <div className='w-full h-full bg-base-200 rounded-xl relative'>
-            <div className='absolute bottom-8 right-8'><UploadPhotoTextOnlyButton /></div>
-          </div>}
+              >
+                <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
+                <PhotoFooter mediaWithTags={media} hover={hover} />
+              </div>
+            )
+          })}
+          {shuffledList.length === 1 &&
+            <div className='w-full h-full bg-base-300/20 rounded-xl grid grid-rows-1 place-items-center grayscale opacity-50'>
+              <HikingIllustration className='w-80' />
+            </div>}
+        </div>
+        {shuffledList.length === 1
+          ? (<div className='absolute bottom-8 right-8'><UploadPhotoTextOnlyButton /></div>)
+          : (<OpenGalleryButton count={shuffledList.length} onClick={() => setShowPhotoGalleryModal(true)} />)}
       </div>
     )
   }
@@ -128,12 +137,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
           )
         })}
       </div>
-      {shuffledList.length > 5 &&
-        <div className='absolute right-8 top-[70%] drop-shadow-md'>
-          <button className='btn btn-sm btn-outline bg-base-200/60' onClick={() => setShowPhotoGalleryModal(true)}>
-            <SquaresFour size={16} />See all {shuffledList.length} photos
-          </button>
-        </div>}
+      <OpenGalleryButton count={shuffledList.length} onClick={() => setShowPhotoGalleryModal(true)} />
     </div>
   )
 }
@@ -160,10 +164,18 @@ const ResponsiveImage: React.FC<ResponsiveImageProps> = ({ mediaUrl, isHero = tr
     alt=''
   />)
 
+const OpenGalleryButton: React.FC<{ count: number, onClick: () => void }> = ({ count, onClick }) => (
+  <div className='absolute right-8 top-[70%] drop-shadow-md'>
+    <button className='btn btn-sm btn-outline bg-base-200/60' onClick={() => onClick()}>
+      <SquaresFour size={16} />See {count} photos in gallery
+    </button>
+  </div>)
+
 export const UploadPhotoCTA: React.FC = () => {
   return (
-    <div className='bg-base-300/20 h-40 rounded-box relative'>
-      <div className='absolute bottom-3 right-3'><UploadPhotoTextOnlyButton /></div>
+    <div className='bg-base-300/20 h-40 rounded-box relative flex items-center justify-center overflow-hidden'>
+      <HikingIllustration className='h-60 opacity-50 grayscale' />
+      <div className='absolute bottom-4 right-4'><UploadPhotoTextOnlyButton /></div>
     </div>
   )
 }
