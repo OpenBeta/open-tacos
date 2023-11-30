@@ -165,13 +165,13 @@ p {
 }
 
 @layer components {
-  /* .text-primary {
+  .text-primary {
     @apply text-base-content !important;
   }
 
   .text-secondary {
     @apply text-base-content/60 !important;
-  } */
+  }
 
   .text-primary-contrast {
     @apply text-white;

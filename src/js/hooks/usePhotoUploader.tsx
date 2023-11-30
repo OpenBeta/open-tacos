@@ -1,5 +1,6 @@
 import { useRef } from 'react'
-import { useRouter, NextRouter } from 'next/router'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import { useRouter, useParams, usePathname } from 'next/navigation'
 import { useDropzone, DropzoneInputProps, FileRejection } from 'react-dropzone'
 import { toast } from 'react-toastify'
 import { useSession } from 'next-auth/react'
@@ -10,6 +11,7 @@ import useMediaCmd from './useMediaCmd'
 import { MediaFormat } from '../types'
 import { NewEmbeddedEntityTag } from '../graphql/gql/media'
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 
 interface PhotoUploaderReturnType {
   getInputProps: <T extends DropzoneInputProps>(props?: T) => T
@@ -37,7 +39,8 @@ async function readFile (file: File): Promise<ProgressEvent<FileReader>> {
  * */
 export default function usePhotoUploader (): PhotoUploaderReturnType {
   const router = useRouter()
-
+  const pageParams = useParams()
+  const pathName = usePathname()
   const setUploading = useUserGalleryStore(store => store.setUploading)
   const isUploading = useUserGalleryStore(store => store.uploading)
   const { data: sessionData } = useSession()
@@ -63,8 +66,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
 
     const { width, height } = await getImageDimensions(imageData)
     const { name, type, size } = file
-    const [entityTag, postUpdateFn] = await getEntityFromPageContext(router)
-
+    const [entityTag, postUpdateFn] = await getEntityFromPageContext(pathName, pageParams)
     try {
       const url = await uploadPhoto(name, imageData)
 
@@ -85,7 +87,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
         await deleteMediaFromStorage(url)
       } else {
         if (postUpdateFn != null) {
-          await postUpdateFn()
+          await postUpdateFn(router)
         }
       }
     } catch (e) {
@@ -113,13 +115,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
     if (ref.current.hasErrors) {
       toast.error('Error uploading photos.  Please try again.')
     } else {
-      let msg: string | JSX.Element
-      if (router.asPath.startsWith('/?')) {
-        msg = <>Uploading completed! 🎉&nbsp;&nbsp;View <a className='link font-semibold' href='/api/user/me'>gallery.</a></>
-      } else {
-        msg = 'Uploading completed! 🎉'
-      }
-      toast.success(msg)
+      toast.success(<div>Uploading completed! <button className='btn btn-link btn-sm' onClick={() => location.reload()}>Refresh</button></div>)
       ref.current.hasErrors = false
     }
   }
@@ -174,20 +170,27 @@ const getImageDimensions = async (imageData: ArrayBuffer): Promise<Dimensions> =
 }
 
 /**
- *  If photo is uploaded while on a climb or crag page,
- *  obtain entity data to be added to the photo.
+ * If photo is uploaded while on a climb or crag page,
+ * obtain entity data to be added to the photo. Also return
+ * a function to clear Next cache and refresh the page.
  */
-const getEntityFromPageContext = async (router: NextRouter): Promise<[NewEmbeddedEntityTag | null, null | (() => Promise<void>)]> => {
-  const [id, destType, pageToInvalidate, pageToReload] = pagePathToEntityType(router)
+const getEntityFromPageContext = async (pathName: string, pageParams: Params): Promise<[NewEmbeddedEntityTag | null, null | ((router: AppRouterInstance) => Promise<void>)]> => {
+  const [id, destType, pageToInvalidate] = pagePathToEntityType(pathName, pageParams)
 
-  const postUpdate = async (): Promise<void> => {
-    // Request Next.js to re-generate the page being tagged
+  const postUpdate = async (router: AppRouterInstance): Promise<void> => {
     try {
-      if (pageToInvalidate != null) await fetch(pageToInvalidate)
-      if (pageToReload != null) await router.replace(pageToReload)
+      // Request Next.js to re-generate the page being tagged
+      if (pageToInvalidate != null) {
+        await fetch(pageToInvalidate)
+      }
+      router.refresh()
+
+      // if (urlToReload != null) {
+      //   router.replace(urlToReload)
+      // }
     } catch (e) { console.log(e) }
   }
-  // let's see if we're viewing the climb or area page
+
   if (id != null && isValidUuid(id) && (destType === 0 || destType === 1)) {
     return [{
       entityId: id,
@@ -201,21 +204,22 @@ const getEntityFromPageContext = async (router: NextRouter): Promise<[NewEmbedde
  * Convert current page path to a destination type for tagging.  Expect `path` to be in /areas|crag|climb/[id].
  * @param path `path` property as return from `Next.router()`
  */
-const pagePathToEntityType = (router: NextRouter): [string, number, string, string] | [null, null, null, null] => {
+const pagePathToEntityType = (pathName: string, pageParams: Params): [string, number, string, string] | [null, null, null, null] => {
   const nulls: [null, null, null, null] = [null, null, null, null]
-  const { asPath, query } = router
-  const tokens = asPath.split('/')
 
-  if (query == null || query.id == null || tokens.length < 3) return nulls
+  const tokens = pathName.split('/')
 
-  const id = query.id as string
+  // expect at least 2 tokens. Ex: /area or /climbs
+  if (tokens.length < 2) return nulls
+
+  const uuid: string = pageParams?.slug[0] as string ?? null
+  if (uuid == null) return nulls
+
   switch (tokens[1]) {
     case 'climbs':
-      return [id, 0, `/api/revalidate?c=${id}`, `/climbs/${id}`]
-    case 'areas':
-      return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
-    case 'crag':
-      return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
+      return [uuid, 0, `/api/revalidate?c=${uuid}`, `/climbs/${uuid}`]
+    case 'area':
+      return [uuid, 1, `/api/updateAreaPage?uuid=${uuid}`, `/area/${uuid}`]
     default:
       return nulls
   }

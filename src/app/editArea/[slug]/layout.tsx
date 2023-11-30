@@ -16,13 +16,14 @@ export default async function RootLayout ({
   children: React.ReactNode
   params: { slug: string }
 }): Promise<any> {
-  const { area: { uuid, pathTokens, ancestors, areaName } } = await getPageDataForEdit(params.slug)
+  const { area: { uuid, pathTokens, ancestors, areaName, metadata: { leaf } } } = await getPageDataForEdit(params.slug)
   return (
     <div>
       <div className='px-12 pt-8 pb-4'>
         <div className='text-3xl tracking-tight font-semibold'>Edit area</div>
 
-        <GluttenFreeCrumbs pathTokens={pathTokens} ancestors={ancestors} />
+        <GluttenFreeCrumbs pathTokens={pathTokens} ancestors={ancestors} editMode />
+
         <div className='text-sm flex justify-end'>
           <a href={getAreaPageFriendlyUrl(uuid, areaName)} className='flex items-center gap-2 hover:underline'>
             Return to public version <ArrowUUpLeft size={18} />
@@ -32,8 +33,8 @@ export default async function RootLayout ({
 
       <hr className='border-1' />
 
-      <div className='pt-12 flex bg-base-200 flex-col lg:flex-row'>
-        <SidebarNav slug={params.slug} />
+      <div className='py-12 flex bg-base-200 flex-col lg:flex-row'>
+        <SidebarNav slug={params.slug} canAddAreas={!leaf} canAddClimbs={false} />
         <main className='w-full px-2 lg:px-16'>
           {children}
         </main>

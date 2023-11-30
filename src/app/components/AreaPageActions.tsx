@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { PencilSimple, ArrowElbowLeftDown } from '@phosphor-icons/react/dist/ssr'
 import { ShareAreaLinkButton } from '@/app/components/ShareAreaLinkButton'
+import { UploadPhotoButton } from '@/components/NewPost'
 
 /**
  * Main action bar for area page
@@ -10,6 +11,9 @@ export const AreaPageActions: React.FC<{ uuid: string, areaName: string } > = ({
     <Link href={`/editArea/${uuid}`} className='btn btn-solid btn-accent'>
       <PencilSimple size={20} weight='duotone' /> Edit
     </Link>
+
+    <UploadPhotoButton />
+
     <Link href='#map' className='btn'>
       <ArrowElbowLeftDown size={20} /> Map
     </Link>

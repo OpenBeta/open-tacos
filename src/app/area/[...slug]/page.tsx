@@ -20,7 +20,8 @@ import { ClimbListSection } from './sections/ClimbListSection'
 /**
  * Cache duration in seconds
  */
-export const revalidate = 30
+export const revalidate = 300
+export const fetchCache = 'force-no-store'
 
 export interface PageWithCatchAllUuidProps {
   params: {

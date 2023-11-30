@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, memo, MouseEventHandler } from 'react'
+import { useState, useEffect, MouseEventHandler } from 'react'
 import Image from 'next/image'
 import clx from 'classnames'
 
@@ -156,4 +156,4 @@ export const GallerySkeleton: React.FC = () => (
     <div className='hidden lg:block w-full h-[158px] bg-base-200' />
   </div>
 )
-export default memo(PhotoMontage)
+export default PhotoMontage

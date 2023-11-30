@@ -1,12 +1,13 @@
 'use client'
 import Link from 'next/link'
+import clx from 'classnames'
 import { usePathname } from 'next/navigation'
-import { Article, FolderSimplePlus } from '@phosphor-icons/react/dist/ssr'
+import { Article, Plus } from '@phosphor-icons/react/dist/ssr'
 
 /**
  * Sidebar navigation for area edit
  */
-export const SidebarNav: React.FC<{ slug: string }> = ({ slug }) => {
+export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddClimbs: boolean }> = ({ slug, canAddAreas, canAddClimbs }) => {
   const activePath = usePathname()
   /**
    * Disable menu item's hover/click when own page is showing
@@ -24,12 +25,21 @@ export const SidebarNav: React.FC<{ slug: string }> = ({ slug }) => {
         </ul>
 
         <div className='p-2 w-56 mt-4'>
-          <hr className='border-t' />
-          <Link href={`/editArea/${slug}/general#addArea`} className='block py-4'>
-            <button className='btn btn-primary btn-block justify-start'> <FolderSimplePlus size={24} /> Add area</button>
+          <hr className='border-t my-2' />
+          <Link href={`/editArea/${slug}/general#addArea`} className={clx(canAddAreas ? '' : 'cursor-not-allowed pointer-events-none', 'block py-2')}>
+            <button disabled={!canAddAreas} className='btn btn-accent btn-block justify-start'>
+              <Plus size={20} weight='bold' /> Add area
+            </button>
           </Link>
 
-          <hr className='border-t' />
+          <div className={clx(canAddAreas ? '' : 'cursor-not-allowed pointer-events-none', 'block py-1')}>
+            <div className='text-sm italic text-secondary'>Coming soon:</div>
+            <button disabled={!canAddClimbs} className='btn btn-accent btn-block justify-start'>
+              <Plus size={20} weight='bold' /> Add climb
+            </button>
+          </div>
+
+          <hr className='border-t my-2' />
 
         </div>
       </div>

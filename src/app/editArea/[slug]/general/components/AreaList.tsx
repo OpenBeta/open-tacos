@@ -20,8 +20,10 @@ export const AreaListForm: React.FC<AreaListProps> = ({ areaName, uuid, pathToke
             </div>
           </label>
 
-          <GluttenFreeCrumbs ancestors={ancestors} pathTokens={pathTokens} />
-          <hr className='border mb-6' />
+          <GluttenFreeCrumbs ancestors={ancestors} pathTokens={pathTokens} editMode />
+
+          <hr className='border-1 mb-6' />
+
           <AreaList areas={areas} parentUuid={uuid} editMode />
         </div>
       </div>

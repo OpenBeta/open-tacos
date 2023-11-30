@@ -19,6 +19,5 @@ export const getArea = async (uuid: string): Promise<AreaPageDataProps> => {
     },
     fetchPolicy: 'no-cache'
   })
-
   return rs.data
 }

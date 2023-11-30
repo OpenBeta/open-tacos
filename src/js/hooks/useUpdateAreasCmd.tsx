@@ -158,8 +158,6 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     MUTATION_REMOVE_AREA, {
       client: graphqlClient,
       onCompleted: (data) => {
-        // void refreshPage(`/api/revalidate?s=${areaId}`) // rebuild parent area page
-
         void updateAreaPageCache(areaId)
 
         if (onDeleteCompleted != null) {
@@ -197,5 +195,5 @@ export const refreshPage = async (url: string): Promise<void> => {
 }
 
 const updateAreaPageCache = async (uuid: string): Promise<void> => {
-  await fetch(`/editArea/${uuid}/updateCache`)
+  await fetch(`/api/updateAreaPage?uuid=${uuid}`)
 }

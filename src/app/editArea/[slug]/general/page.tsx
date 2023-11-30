@@ -33,8 +33,9 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
   const {
     areaName, uuid, ancestors, pathTokens, children,
     content: { description },
-    metadata: { lat, lng }
+    metadata: { lat, lng, leaf }
   } = area
+
   return (
     <div className='grid grid-cols-1 gap-y-8'>
       <PageContainer id='general'>
@@ -57,15 +58,16 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
         <AddAreaForm area={area} />
       </PageContainer>
 
-      <PageContainer id='children'>
-        <AreaListForm
-          areaName={areaName}
-          uuid={uuid}
-          ancestors={ancestors}
-          pathTokens={pathTokens}
-          areas={children}
-        />
-      </PageContainer>
+      {!leaf &&
+        <PageContainer id='children'>
+          <AreaListForm
+            areaName={areaName}
+            uuid={uuid}
+            ancestors={ancestors}
+            pathTokens={pathTokens}
+            areas={children}
+          />
+        </PageContainer>}
     </div>
   )
 }
