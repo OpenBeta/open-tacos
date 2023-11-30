@@ -8,7 +8,6 @@ import NavMenuButton from './ui/NavMenuButton'
 
 import { ButtonVariant } from './ui/BaseButton'
 import ProfileNavButton from './ProfileNavButton'
-import NewPost from './NewPost'
 import LogoWithText from '../assets/brand/openbeta-logo-with-text.svg'
 import GitHubStars from './GitHubStars'
 
@@ -84,9 +83,4 @@ navListDefault.push(
   <GitHubStars key='gh-button' />
 )
 
-const navListAuthenticated = (
-  <>
-    <NewPost isMobile={false} />
-    <ProfileNavButton key='dropdown' isMobile={false} />
-  </>
-)
+const navListAuthenticated = (<ProfileNavButton key='dropdown' isMobile={false} />)

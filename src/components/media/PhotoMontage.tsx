@@ -110,6 +110,9 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
     )
   }
 
+  /**
+   * Show the first 5
+   */
   const first = shuffledList[0]
   const theRest = shuffledList.slice(1, 5)
   return (
@@ -171,6 +174,9 @@ const OpenGalleryButton: React.FC<{ count: number, onClick: () => void }> = ({ c
     </button>
   </div>)
 
+/**
+ * Show this upload call-to-action when a page has no photos
+ */
 export const UploadPhotoCTA: React.FC = () => {
   return (
     <div className='bg-base-300/20 h-40 rounded-box relative flex items-center justify-center overflow-hidden'>
@@ -180,6 +186,9 @@ export const UploadPhotoCTA: React.FC = () => {
   )
 }
 
+/**
+ * Loading skeleton
+ */
 export const GallerySkeleton: React.FC = () => (
   <div className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 bg-base-200 lg:bg-transparent'>
     <div className='hidden lg:block relative col-start-1 col-span-2 row-span-2 col-end-3 bg-base-200 h-80' />

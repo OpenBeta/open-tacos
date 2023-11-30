@@ -7,7 +7,7 @@ import { UploadPhotoButton } from '@/components/NewPost'
  * Main action bar for area page
  */
 export const AreaPageActions: React.FC<{ uuid: string, areaName: string } > = ({ uuid, areaName }) => (
-  <ul className='flex items-center justify-between gap-2'>
+  <ul className='max-w-sm md:max-w-md flex items-center justify-between gap-2 w-full'>
     <Link href={`/editArea/${uuid}`} className='btn btn-solid btn-accent'>
       <PencilSimple size={20} weight='duotone' /> Edit
     </Link>
@@ -15,7 +15,7 @@ export const AreaPageActions: React.FC<{ uuid: string, areaName: string } > = ({
     <UploadPhotoButton />
 
     <Link href='#map' className='btn'>
-      <ArrowElbowLeftDown size={20} /> Map
+      <ArrowElbowLeftDown size={20} className='hidden md:inline' /> Map
     </Link>
     <ShareAreaLinkButton uuid={uuid} areaName={areaName} />
   </ul>

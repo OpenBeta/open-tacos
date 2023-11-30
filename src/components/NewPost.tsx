@@ -21,7 +21,7 @@ export default function NewPost ({ isMobile = true, className = '' }: ProfileNav
 
 export const UploadPhotoButton: React.FC = () => (
   <UploadPhotoTrigger>
-    <div className='btn'><Camera size={20} /> Photo</div>
+    <div className='btn'><Camera size={20} /> <span className='hidden md:inline'>Photo</span></div>
   </UploadPhotoTrigger>
 )
 

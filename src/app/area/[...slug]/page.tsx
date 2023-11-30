@@ -18,10 +18,10 @@ import { SubAreasSection } from './sections/SubAreasSection'
 import { ClimbListSection } from './sections/ClimbListSection'
 
 /**
- * Cache duration in seconds
+ * Page cache settings
  */
-export const revalidate = 300
-export const fetchCache = 'force-no-store'
+export const revalidate = 86400 // 24 hours
+export const fetchCache = 'force-no-store' // opt out of Nextjs version of 'fetch'
 
 export interface PageWithCatchAllUuidProps {
   params: {
@@ -146,3 +146,20 @@ const EditDescriptionCTA: React.FC<{ uuid: string }> = ({ uuid }) => (
     </div>
   </div>
 )
+
+/**
+ * List of area pages to prebuild
+ */
+export function generateStaticParams (): PageWithCatchAllUuidProps[] {
+  return [
+    { params: { slug: ['bea6bf11-de53-5046-a5b4-b89217b7e9bc'] } }, // Red Rock
+    { params: { slug: ['78da26bc-cd94-5ac8-8e1c-815f7f30a28b'] } }, // Red River Gorge
+    { params: { slug: ['1db1e8ba-a40e-587c-88a4-64f5ea814b8e'] } }, // USA
+    { params: { slug: ['ab48aed5-2e8d-54bb-b099-6140fe1f098f'] } }, // Colorado
+    { params: { slug: ['decc1251-4a67-52b9-b23f-3243e10e93d0'] } }, // Boulder
+    { params: { slug: ['f166e672-4a52-56d3-94f1-14c876feb670'] } }, // Indian Creek
+    { params: { slug: ['5f0ed4d8-ebb0-5e78-ae15-ba7f1b3b5c51'] } }, // Wasatch range
+    { params: { slug: ['b1166235-3328-5537-b5ed-92f406ea8495'] } }, // Lander
+    { params: { slug: ['9abad566-2113-587e-95a5-b3abcfaa28ac'] } } // Ten Sleep
+  ]
+}

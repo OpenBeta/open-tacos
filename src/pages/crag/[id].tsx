@@ -3,21 +3,21 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { shuffle } from 'underscore'
 
-import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import { AreaType, ChangesetType } from '../../js/types'
 import { PageMeta } from '../areas/[id]'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { UploadCTACragBanner } from '../../components/media/UploadCTA'
 import CragSummary, { Skeleton as AreaContentSkeleton } from '../../components/crag/cragSummary'
-import { QUERY_AREA_BY_ID } from '../../js/graphql/gql/areaById'
-import { GraphQLError } from 'graphql/error/GraphQLError'
 
 interface CragProps {
   area: AreaType
   history: ChangesetType[]
 }
 
+/**
+ * @deprecated Migrate to Next13.  See `/src/app/area/* folder`.
+ */
 const CragPage: NextPage<CragProps> = (props) => {
   const { isFallback } = useRouter()
   return (
@@ -89,31 +89,37 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
     }
   }
 
-  const rs = await graphqlClient.query<{ area: AreaType, getAreaHistory: ChangesetType[] }>({
-    query: QUERY_AREA_BY_ID,
-    variables: {
-      uuid: params.id
-    },
-    fetchPolicy: 'no-cache'
-  }).catch((e: GraphQLError) => {
-    if (e.message === 'Invaild UUID') {
-      return null
-    }
-  })
-
-  if (rs?.data == null || rs?.data?.area == null) {
-    return {
-      notFound: true
-    }
-  }
-
   return {
-    props: {
-      area: rs.data.area,
-      history: rs.data.getAreaHistory
-    },
-    revalidate: 30
+    redirect: {
+      destination: `/area/${params.id}`,
+      permanent: true
+    }
   }
+  // const rs = await graphqlClient.query<{ area: AreaType, getAreaHistory: ChangesetType[] }>({
+  //   query: QUERY_AREA_BY_ID,
+  //   variables: {
+  //     uuid: params.id
+  //   },
+  //   fetchPolicy: 'no-cache'
+  // }).catch((e: GraphQLError) => {
+  //   if (e.message === 'Invaild UUID') {
+  //     return null
+  //   }
+  // })
+
+  // if (rs?.data == null || rs?.data?.area == null) {
+  //   return {
+  //     notFound: true
+  //   }
+  // }
+
+  // return {
+  //   props: {
+  //     area: rs.data.area,
+  //     history: rs.data.getAreaHistory
+  //   },
+  //   revalidate: 30
+  // }
 }
 
 export const AreaMap = dynamic<any>(async () => await import('../../components/area/areaMap'), {
