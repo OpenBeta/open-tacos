@@ -5,7 +5,7 @@ import { MapPinLine, Lightbulb, ArrowRight } from '@phosphor-icons/react/dist/ss
 import 'mapbox-gl/dist/mapbox-gl.css'
 import Markdown from 'react-markdown'
 
-import PhotoMontage from '@/components/media/PhotoMontage'
+import PhotoMontage, { UploadPhotoCTA } from '@/components/media/PhotoMontage'
 import { getArea } from '@/js/graphql/getArea'
 import { StickyHeaderContainer } from '@/app/components/ui/StickyHeaderContainer'
 import { GluttenFreeCrumbs } from '@/components/ui/BreadCrumbs'
@@ -56,7 +56,12 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
 
   return (
     <AreaPageContainer
-      photoGallery={<PhotoMontage isHero photoList={photoList} />}
+      photoGallery={
+        photoList.length === 0
+          ? <UploadPhotoCTA />
+          : <PhotoMontage isHero photoList={photoList} />
+      }
+      pageActions={<AreaPageActions areaName={areaName} uuid={uuid} />}
       breadcrumbs={
         <StickyHeaderContainer>
           <GluttenFreeCrumbs pathTokens={pathTokens} ancestors={ancestors} />
@@ -94,8 +99,6 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
             </a>
             <ArticleLastUpdate {...authorMetadata} />
           </div>
-
-          <AreaPageActions uuid={uuid} areaName={areaName} />
         </div>
 
         <div className='area-climb-page-summary-right'>
@@ -136,12 +139,10 @@ const parseUuidAsFirstParam = ({ params }: PageWithCatchAllUuidProps): string =>
 const EditDescriptionCTA: React.FC<{ uuid: string }> = ({ uuid }) => (
   <div role='alert' className='alert'>
     <Lightbulb size={24} />
-    <div className='text-sm'>No description available.  Be the first to contribute!
-      <div className='mt-2'>
-        <Link href={`/editArea/${uuid}/general#description`} className='btn btn-sm btn-outline'>
-          Add description <ArrowRight size={16} />
-        </Link>
-      </div>
+    <div className='text-sm'>No information available.  Be the first to&nbsp;
+      <Link href={`/editArea/${uuid}/general#description`} className='link-dotted inline-flex items-center gap-1'>
+        add a description <ArrowRight size={16} />
+      </Link>
     </div>
   </div>
 )

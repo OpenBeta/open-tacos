@@ -28,13 +28,8 @@ export default function UploadPhotoTrigger ({ className = '', onUploaded, childr
   */
   const sessionRef = useRef<any>()
   sessionRef.current = data?.user
-  console.log('#before useUploader')
   const { getRootProps, getInputProps, openFileDialog } = usePhotoUploader()
-  console.log('#before useStore')
-
   const uploading = useUserGalleryStore(store => store.uploading)
-
-  console.log('#isUploading ', uploading)
   return (
     <div
       className={clx(className, uploading ? 'pointer-events-none' : '')} {...getRootProps()} onClick={(e) => {

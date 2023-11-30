@@ -1,19 +1,24 @@
 import { GallerySkeleton } from '@/components/media/PhotoMontage'
 import React from 'react'
+import { AreaPageActionsSkeleton } from '../AreaPageActions'
 
 /**
  * Area page containter.  Show loading skeleton if no params are provided.
  */
 export const AreaPageContainer: React.FC<{
   photoGallery?: React.ReactNode
+  pageActions?: React.ReactNode
   breadcrumbs?: React.ReactNode
   map?: React.ReactNode
   children?: React.ReactNode
-}> = ({ photoGallery, breadcrumbs, map, children }) => {
+}> = ({ photoGallery, pageActions, breadcrumbs, map, children }) => {
   return (
     <article>
       <div className='p-4 mx-auto max-w-5xl xl:max-w-7xl'>
         {photoGallery == null ? <GallerySkeleton /> : photoGallery}
+        <div className='flex justify-end py-4 border-b'>
+          {pageActions == null ? <AreaPageActionsSkeleton /> : pageActions}
+        </div>
         {breadcrumbs == null ? <BreadCrumbsSkeleton /> : breadcrumbs}
         {children == null ? <ContentSkeleton /> : children}
       </div>

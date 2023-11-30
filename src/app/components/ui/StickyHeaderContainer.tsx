@@ -20,7 +20,7 @@ export const StickyHeaderContainer: React.FC<{ children: ReactNode }> = ({ child
   const atTop = intersection?.isIntersecting ?? false
 
   return (
-    <div ref={intersectionRef} className={clx('sticky top-0 z-40 py-2 lg:min-h-[4rem] block lg:flex lg:items-center lg:justify-between bg-base-100 -mx-6 px-6', atTop ? 'border-b border-base-300/60 bottom-shadow backdrop-blur-sm bg-opacity-90' : '')}>
+    <div ref={intersectionRef} className={clx('sticky top-0 z-40 py-2 lg:min-h-[4rem] block lg:flex lg:items-center lg:justify-between bg-base-100', atTop ? 'border-b border-base-300/60 bottom-shadow backdrop-blur-sm bg-opacity-90' : '')}>
       {children}
     </div>
   )

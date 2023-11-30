@@ -60,7 +60,7 @@ module.exports = {
         'base-100': 'white',
         '--rounded-box': '0.5rem',
         '--rounded-btn': '0.25rem', // border radius rounded-btn utility class, used in buttons and similar element
-        '--border-color': '#AABAC0',
+        // '--border-color': '#AABAC0',
         '--btn-text-case': s => s,
         '--input-size-xs': '1.25rem',
         '--input-size-sm': '1.75rem',

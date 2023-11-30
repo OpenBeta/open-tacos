@@ -12,7 +12,7 @@ export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddCl
   /**
    * Disable menu item's hover/click when own page is showing
    */
-  const classForActivePage = (myPath: string): string => activePath.endsWith(myPath) ? 'bg-base-300/60 pointer-events-none' : ''
+  const classForActivePage = (myPath: string): string => activePath.endsWith(myPath) ? 'font-semibold pointer-events-none' : ''
   return (
     <nav className='px-6'>
       <div className='sticky top-0'>

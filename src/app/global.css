@@ -104,8 +104,9 @@ A slightly deemphasized dotted underline for a tag in order to not competing wit
   .dialog-default {
       @apply  top-0 left-0 h-screen md:dialog-center fixed z-50 w-screen max-w-screen-md bg-base-100 lg:drop-shadow-lg overflow-y-auto h-fit max-h-screen lg:max-h-[95vh];
   }
-  .dialog-title {
-    @apply py-4 lg:py-5 left-0 top-0 w-full text-center fixed bg-base-100 bg-opacity-80 backdrop-blur-sm z-50 leading-none;
+
+  .dialog-wide {
+    @apply top-0 left-0 fixed z-50 w-full h-full w-screen h-screen bg-base-100 overflow-y-auto overscroll-contain;
   }
 
   .dialog-close-button {
@@ -114,5 +115,9 @@ A slightly deemphasized dotted underline for a tag in order to not competing wit
 
   .dialog-form-default {
     @apply mt-16 lg:mt-20 px-2 lg:px-4 mb-6 !important;
+  }
+
+  .dialog-title {
+    @apply py-4 lg:py-5 left-0 top-0 w-full text-center fixed bg-base-100 bg-opacity-80 backdrop-blur-sm z-50 leading-none;
   }
 }

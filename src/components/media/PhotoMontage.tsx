@@ -2,6 +2,7 @@
 import { useState, useEffect, MouseEventHandler } from 'react'
 import Image from 'next/image'
 import clx from 'classnames'
+import { SquaresFour } from '@phosphor-icons/react/dist/ssr'
 
 import PhotoFooter from './PhotoFooter'
 import { MediaWithTags } from '../../js/types'
@@ -9,6 +10,7 @@ import useResponsive from '../../js/hooks/useResponsive'
 import { DefaultLoader, MobileLoader } from '../../js/sirv/util'
 import PhotoGalleryModal from './PhotoGalleryModal'
 import { userMediaStore } from '../../js/stores/media'
+import { UploadPhotoTextOnlyButton } from '../NewPost'
 
 export interface PhotoMontageProps {
   photoList: MediaWithTags[]
@@ -91,6 +93,10 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
             </div>
           )
         })}
+        {shuffledList.length === 1 &&
+          <div className='w-full h-full bg-base-200 rounded-xl relative'>
+            <div className='absolute bottom-8 right-8'><UploadPhotoTextOnlyButton /></div>
+          </div>}
       </div>
     )
   }
@@ -98,29 +104,36 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
   const first = shuffledList[0]
   const theRest = shuffledList.slice(1, 5)
   return (
-    <div
-      className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 hover:cursor-pointer fadeinEffect'
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
-      {showPhotoGalleryModal ? photoGalleryModal : undefined}
-      <div className='block relative col-start-1 col-span-2 row-span-2 col-end-3'>
-        <ResponsiveImage mediaUrl={first.mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
-        <PhotoFooter mediaWithTags={first} hover={hover} />
+    <div className='relative'>
+      <div
+        className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 hover:cursor-pointer fadeinEffect'
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+      >
+        {showPhotoGalleryModal ? photoGalleryModal : undefined}
+        <div className='block relative col-start-1 col-span-2 row-span-2 col-end-3'>
+          <ResponsiveImage mediaUrl={first.mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
+          <PhotoFooter mediaWithTags={first} hover={hover} />
+        </div>
+        {theRest.map((media) => {
+          const { mediaUrl } = media
+          return (
+            <div
+              key={mediaUrl}
+              className='block relative'
+            >
+              <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
+              <PhotoFooter mediaWithTags={media} hover={hover} />
+            </div>
+          )
+        })}
       </div>
-      {theRest.map((media, i) => {
-        const { mediaUrl } = media
-        return (
-          <div
-            key={mediaUrl}
-            className='block relative'
-          >
-            <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
-            <PhotoFooter mediaWithTags={media} hover={hover} />
-          </div>
-        )
-      })}
-
+      {shuffledList.length > 5 &&
+        <div className='absolute right-8 top-[70%] drop-shadow-md'>
+          <button className='btn btn-sm btn-outline bg-base-200/60' onClick={() => setShowPhotoGalleryModal(true)}>
+            <SquaresFour size={16} />See all {shuffledList.length} photos
+          </button>
+        </div>}
     </div>
   )
 }
@@ -146,6 +159,14 @@ const ResponsiveImage: React.FC<ResponsiveImageProps> = ({ mediaUrl, isHero = tr
     onClick={onClick}
     alt=''
   />)
+
+export const UploadPhotoCTA: React.FC = () => {
+  return (
+    <div className='bg-base-300/20 h-40 rounded-box relative'>
+      <div className='absolute bottom-3 right-3'><UploadPhotoTextOnlyButton /></div>
+    </div>
+  )
+}
 
 export const GallerySkeleton: React.FC = () => (
   <div className='grid grid-cols-4 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 bg-base-200 lg:bg-transparent'>
