@@ -1,32 +1,20 @@
 'use client'
 import * as React from 'react'
-import {
-  Map,
-  Marker,
-  ScaleControl,
-  LngLatBoundsLike,
-  MapboxMap
-} from 'react-map-gl'
-import { AreaType } from '../../js/types'
+import { Map, Marker, ScaleControl, LngLatBoundsLike, MapboxMap } from 'react-map-gl'
+import dynamic from 'next/dynamic'
+import { AreaMetadataType, AreaType } from '../../js/types'
 import { MAP_STYLES } from '../maps/BaseMap'
 import { Padding } from '@math.gl/web-mercator/dist/fit-bounds'
 
-interface Mappable {
-  id: string
-  metadata: {
-    lat: number
-    lng: number
-  }
-  areaName: string
-}
-
+type ChildArea = Pick<AreaType, 'uuid' | 'areaName'> & { metadata: Pick<AreaMetadataType, 'lat' | 'lng'> }
 interface AreaMapProps {
-  subAreas: Mappable[]
+  subAreas: ChildArea[]
   area: AreaType
   focused: string | null
   selected: string | null
 }
 
+// TODO: use built-in getBounds()
 /** get the bounds needed to display this map */
 function getBounds (area: AreaType): [[number, number], [number, number]] {
   const initlat = area.metadata.lat
@@ -93,24 +81,15 @@ export default function AreaMap (props: AreaMapProps): JSX.Element {
       >
         {props.subAreas.map((subArea) => (
           <Marker
-            style={{ zIndex: subArea.id === props.focused ? 100 : 0 }}
-            key={subArea.id}
+            style={{ zIndex: subArea.uuid === props.focused ? 100 : 0 }}
+            key={subArea.uuid}
             longitude={subArea.metadata.lng}
             latitude={subArea.metadata.lat}
             anchor='bottom'
           >
-            <div
-              className={`rounded shadow transition text-xs px-1 font-bold 
-            ${
-              subArea.id === props.focused
-                ? 'bg-green-500 text-white scale-125'
-                : 'bg-white'
-            }
-            ${
-              subArea.id === props.selected
-                ? 'bg-violet-500 text-white scale-125'
-                : 'bg-white'
-            }`}
+            <div className={`rounded shadow transition text-xs px-1 font-bold 
+            ${subArea.uuid === props.focused ? 'bg-green-500 text-white scale-125' : ' bg-white'}
+            ${subArea.uuid === props.selected ? 'bg-violet-500 text-white scale-125' : ' bg-white'}`}
             >
               {subArea.areaName}
             </div>
@@ -133,3 +112,8 @@ export default function AreaMap (props: AreaMapProps): JSX.Element {
     </div>
   )
 }
+
+export const LazyAreaMap = dynamic<AreaMapProps>(async () => await import('./areaMap').then(
+  module => module.default), {
+  ssr: true
+})

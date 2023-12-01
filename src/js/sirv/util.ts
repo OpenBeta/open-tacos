@@ -10,13 +10,6 @@ export const DefaultLoader = ({ src, width, quality }: ImageLoaderProps): string
 }
 
 /**
- * Desktop preview loader
- */
-export const DesktopPreviewLoader = ({ src, width, quality }: ImageLoaderProps): string => {
-  return `${CLIENT_CONFIG.CDN_BASE_URL}${src}?thumbnail=300&q=${quality ?? DEFAULT_IMAGE_QUALITY}`
-}
-
-/**
  * Custom NextJS image loader for mobile
  */
 export const MobileLoader = ({ src, width = 650, quality }: ImageLoaderProps): string => {

@@ -7,7 +7,6 @@ const SvgComponent: React.FC<Props> = (props) => (
     xmlns='http://www.w3.org/2000/svg'
     xmlnsXlink='http://www.w3.org/1999/xlink'
     className='illustrations_image'
-    data-imageid='hiking-monochromatic'
     data-name='Layer 1'
     viewBox='0 0 575.08 493.58'
     {...props}

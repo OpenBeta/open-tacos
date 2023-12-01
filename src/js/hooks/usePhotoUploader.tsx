@@ -1,3 +1,4 @@
+'use client'
 import { useRef } from 'react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter, useParams, usePathname } from 'next/navigation'
@@ -43,7 +44,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
   const pathName = usePathname()
   const setUploading = useUserGalleryStore(store => store.setUploading)
   const isUploading = useUserGalleryStore(store => store.uploading)
-  const { data: sessionData } = useSession()
+  const { data: sessionData } = useSession({ required: true })
   const { addMediaObjectsCmd } = useMediaCmd()
 
   // const [hasErrors, setHasErrors] = useState(false)
@@ -115,7 +116,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
     if (ref.current.hasErrors) {
       toast.error('Error uploading photos.  Please try again.')
     } else {
-      toast.success(<div>Uploading completed! <button className='btn btn-link btn-sm' onClick={() => location.reload()}>Refresh</button></div>)
+      toast.success('Uploaded!')
       ref.current.hasErrors = false
     }
   }
@@ -184,10 +185,6 @@ const getEntityFromPageContext = async (pathName: string, pageParams: Params): P
         await fetch(pageToInvalidate)
       }
       router.refresh()
-
-      // if (urlToReload != null) {
-      //   router.replace(urlToReload)
-      // }
     } catch (e) { console.log(e) }
   }
 

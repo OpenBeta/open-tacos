@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { PencilSimple, ArrowElbowLeftDown } from '@phosphor-icons/react/dist/ssr'
 import { ShareAreaLinkButton } from '@/app/components/ShareAreaLinkButton'
-import { UploadPhotoButton } from '@/components/NewPost'
+import { UploadPhotoButton } from '@/components/media/PhotoUploadButtons'
 
 /**
  * Main action bar for area page

@@ -5,7 +5,6 @@ import { shuffle } from 'underscore'
 
 import Layout from '../../components/layout'
 import { AreaType, ChangesetType } from '../../js/types'
-import { PageMeta } from '../areas/[id]'
 import PhotoMontage from '../../components/media/PhotoMontage'
 import { UploadCTACragBanner } from '../../components/media/UploadCTA'
 import CragSummary, { Skeleton as AreaContentSkeleton } from '../../components/crag/cragSummary'
@@ -19,10 +18,8 @@ interface CragProps {
  * @deprecated Migrate to Next13.  See `/src/app/area/* folder`.
  */
 const CragPage: NextPage<CragProps> = (props) => {
-  const { isFallback } = useRouter()
   return (
     <>
-      {!isFallback && <PageMeta {...props} />}
       <Layout contentContainerClass='content-default' showFilterBar={false}>
         <Body {...props} />
       </Layout>
@@ -38,7 +35,7 @@ const Body = ({ area, history }: CragProps): JSX.Element => {
   return (
     <>
       <article className='article'>
-        <PhotoMontage isHero photoList={shuffle(photoList)} showSkeleton={showSkeleton} />
+        <PhotoMontage photoList={shuffle(photoList)} />
         {photoList?.length === 0 && level > 2 && <UploadCTACragBanner />}
         <div className='mt-6 first:mt-0'>
           {showSkeleton

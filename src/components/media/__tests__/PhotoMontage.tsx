@@ -4,7 +4,7 @@ import { mediaList } from './data'
 
 let PhotoMontage: typeof PhotoMontageType
 
-jest.mock('../../UploadPhotoTrigger', () => ({
+jest.mock('../BaseUploader', () => ({
   __esModule: true,
   default: () => <div />
 }))
@@ -17,14 +17,14 @@ describe('PhotoMontage tests', () => {
   })
 
   test('PhotoMontage can render 1 photo', async () => {
-    render(<PhotoMontage photoList={mediaList.slice(0, 1)} isHero />)
+    render(<PhotoMontage photoList={mediaList.slice(0, 1)} />)
     const elements: HTMLImageElement[] = await screen.findAllByRole('img')
     expect(elements.length).toBe(1)
-    expect(elements[0].src).toContain(mediaList[0].mediaUrl)
+    expect(elements[0].src).toMatch(encodeURIComponent(mediaList[0].mediaUrl))
   })
 
   test('PhotoMontage always renders 2 photos when provided with a list of 2 to 4', async () => {
-    render(<PhotoMontage photoList={mediaList.slice(0, 3)} isHero />)
+    render(<PhotoMontage photoList={mediaList.slice(0, 3)} />)
     const elements: HTMLImageElement[] = await screen.findAllByRole('img')
     expect(elements.length).toBe(2) // should be 2
   })

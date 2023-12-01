@@ -5,7 +5,6 @@ import Link from 'next/link'
 
 import { MediaWithTags } from '../../js/types'
 import ResponsiveImage from '../media/slideshow/ResponsiveImage'
-import { DesktopPreviewLoader } from '../../js/sirv/util'
 import RemoveImage from './RemoveImage'
 
 interface UserMediaProps {
@@ -54,7 +53,6 @@ export default function UserMedia ({
           mediaUrl={mediaUrl}
           isHero={index === 0}
           isSquare
-          loader={DesktopPreviewLoader}
         />
 
       </Link>

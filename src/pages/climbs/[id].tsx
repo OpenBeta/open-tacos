@@ -225,7 +225,7 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
         <EditModeToggle onChange={setEditMode} />
       </Portal.Root>
 
-      <PhotoMontage photoList={climb.media} isHero />
+      <PhotoMontage photoList={climb.media} />
 
       <FormProvider {...form}>
         {/* eslint-disable-next-line */}

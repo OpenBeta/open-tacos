@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, MouseEventHandler } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import clx from 'classnames'
 import { SquaresFour } from '@phosphor-icons/react/dist/ssr'
@@ -7,17 +7,13 @@ import { SquaresFour } from '@phosphor-icons/react/dist/ssr'
 import PhotoFooter from './PhotoFooter'
 import { MediaWithTags } from '../../js/types'
 import useResponsive from '../../js/hooks/useResponsive'
-import { DefaultLoader, MobileLoader } from '../../js/sirv/util'
 import PhotoGalleryModal from './PhotoGalleryModal'
 import { userMediaStore } from '../../js/stores/media'
-import { UploadPhotoTextOnlyButton } from '../NewPost'
+import { UploadPhotoTextOnlyButton } from './PhotoUploadButtons'
 import HikingIllustration from '@/assets/icons/hiking'
 
 export interface PhotoMontageProps {
   photoList: MediaWithTags[]
-  /** set to `true` if gallery is placed above the fold */
-  isHero?: boolean
-  showSkeleton?: boolean
 }
 
 /**
@@ -26,12 +22,9 @@ export interface PhotoMontageProps {
  * - 1..4 images: show 2 images
  * - 5 or more: show 5 random images
  *
- * Set isHero=`true` when the gallery is placed visibly at the top of the page or when
- * you see a warning about *'Image was detected as the Largest Contentful Paint (LCP).'*
- *
  * @see https://nextjs.org/docs/api-reference/next/image
  */
-const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = false }: PhotoMontageProps): JSX.Element | null => {
+const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Element | null => {
   const { isMobile } = useResponsive()
   const [showPhotoGalleryModal, setShowPhotoGalleryModal] = useState<boolean>(false)
   useEffect(() => {
@@ -43,11 +36,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
   const photoGalleryModal = <PhotoGalleryModal setShowPhotoGalleryModal={setShowPhotoGalleryModal} />
   const [hover, setHover] = useState(false)
 
-  if (showSkeleton) {
-    return <GallerySkeleton />
-  }
-
-  if (!showSkeleton && (shuffledList == null || shuffledList?.length === 0)) { return null }
+  if (shuffledList == null || shuffledList?.length === 0) { return null }
 
   if (isMobile) {
     const firstMedia = shuffledList[0]
@@ -56,14 +45,12 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
         {showPhotoGalleryModal ? photoGalleryModal : undefined}
         <Image
           src={firstMedia.mediaUrl}
-          layout='fill'
-          sizes='100vw'
-          objectFit='cover'
-          quality={90}
-          loader={MobileLoader}
-          priority={isHero}
+          fill
+          sizes='25vw'
+          priority
           onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)}
           alt=''
+          style={{ objectFit: 'cover' }}
         />
         <PhotoFooter mediaWithTags={firstMedia} hover />
       </div>
@@ -77,7 +64,7 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
     return (
       <div className='relative'>
         <div
-          className={clx('grid grid-cols-2 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 fadeinEffect', showSkeleton ? 'animate-pulse bg-base-200/20' : '')}
+          className='grid grid-cols-2 grid-flow-row-dense gap-1 rounded-xl overflow-hidden h-80 fadeinEffect'
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
@@ -93,7 +80,15 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
                   shuffledList.length === 1 ? ' overflow-hidden rounded-r-xl' : '')
               }
               >
-                <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
+                <Image
+                  priority
+                  fill
+                  sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
+                  src={mediaUrl}
+                  onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)}
+                  alt=''
+                  style={{ objectFit: 'cover' }}
+                />
                 <PhotoFooter mediaWithTags={media} hover={hover} />
               </div>
             )
@@ -124,7 +119,15 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
       >
         {showPhotoGalleryModal ? photoGalleryModal : undefined}
         <div className='block relative col-start-1 col-span-2 row-span-2 col-end-3'>
-          <ResponsiveImage mediaUrl={first.mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
+          <Image
+            priority
+            fill
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
+            src={first.mediaUrl}
+            onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)}
+            alt=''
+            style={{ objectFit: 'cover' }}
+          />
           <PhotoFooter mediaWithTags={first} hover={hover} />
         </div>
         {theRest.map((media) => {
@@ -134,7 +137,15 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
               key={mediaUrl}
               className='block relative'
             >
-              <ResponsiveImage mediaUrl={mediaUrl} isHero={isHero} onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)} />
+              <Image
+                priority
+                fill
+                sizes='15vw'
+                src={mediaUrl}
+                onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)}
+                alt=''
+                style={{ objectFit: 'cover' }}
+              />
               <PhotoFooter mediaWithTags={media} hover={hover} />
             </div>
           )
@@ -144,28 +155,6 @@ const PhotoMontage = ({ photoList: initialList, isHero = false, showSkeleton = f
     </div>
   )
 }
-
-interface ResponsiveImageProps {
-  mediaUrl: string
-  isHero?: boolean
-  onClick: MouseEventHandler
-}
-/**
- * See https://nextjs.org/docs/api-reference/next/image
- * Set priority={true} if the photo montage is above the fold
- */
-const ResponsiveImage: React.FC<ResponsiveImageProps> = ({ mediaUrl, isHero = true, onClick }) => (
-  <Image
-    src={mediaUrl}
-    loader={DefaultLoader}
-    quality={90}
-    layout='fill'
-    sizes='50vw'
-    objectFit='cover'
-    priority={isHero}
-    onClick={onClick}
-    alt=''
-  />)
 
 const OpenGalleryButton: React.FC<{ count: number, onClick: () => void }> = ({ count, onClick }) => (
   <div className='absolute right-8 top-[70%] drop-shadow-md'>

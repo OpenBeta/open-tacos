@@ -1,9 +1,10 @@
+'use client'
 import React from 'react'
 import usePhotoUploader from '../../js/hooks/usePhotoUploader'
 
 interface PhotoUploaderProps {
   className: string
-  children: JSX.Element | JSX.Element []
+  children: React.ReactNode
 }
 
 /** A drop-zone for uploading photos, with click-to-open a file explorer operation */

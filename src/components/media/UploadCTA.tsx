@@ -4,7 +4,7 @@ import { CameraIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import clx from 'classnames'
 
 import UploadPhotoTrigger from '../UploadPhotoTrigger'
-import BaseUploader from './PhotoUploader'
+import BaseUploader from './BaseUploader'
 import Link from 'next/link'
 
 /**
