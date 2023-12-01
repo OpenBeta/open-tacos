@@ -6,7 +6,7 @@ let PhotoMontage: typeof PhotoMontageType
 
 jest.mock('../BaseUploader', () => ({
   __esModule: true,
-  default: () => <div />
+  BaseUploaderWithNext13Context: () => <div />
 }))
 
 describe('PhotoMontage tests', () => {
@@ -30,7 +30,7 @@ describe('PhotoMontage tests', () => {
   })
 
   test('PhotoMontage always renders 5 photos when provided with a list > 5', async () => {
-    render(<PhotoMontage photoList={mediaList} isHero />)
+    render(<PhotoMontage photoList={mediaList} />)
     const elements: HTMLImageElement[] = await screen.findAllByRole('img')
     expect(elements.length).toBe(5) // should be 5
   })

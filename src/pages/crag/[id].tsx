@@ -6,7 +6,6 @@ import { shuffle } from 'underscore'
 import Layout from '../../components/layout'
 import { AreaType, ChangesetType } from '../../js/types'
 import PhotoMontage from '../../components/media/PhotoMontage'
-import { UploadCTACragBanner } from '../../components/media/UploadCTA'
 import CragSummary, { Skeleton as AreaContentSkeleton } from '../../components/crag/cragSummary'
 
 interface CragProps {
@@ -29,14 +28,12 @@ const CragPage: NextPage<CragProps> = (props) => {
 export default CragPage
 
 const Body = ({ area, history }: CragProps): JSX.Element => {
-  const level = area?.ancestors.length ?? 0
   const { isFallback: showSkeleton } = useRouter()
   const photoList = area?.media ?? []
   return (
     <>
       <article className='article'>
         <PhotoMontage photoList={shuffle(photoList)} />
-        {photoList?.length === 0 && level > 2 && <UploadCTACragBanner />}
         <div className='mt-6 first:mt-0'>
           {showSkeleton
             ? <AreaContentSkeleton />

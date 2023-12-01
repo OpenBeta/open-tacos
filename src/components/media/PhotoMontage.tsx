@@ -99,7 +99,7 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
             </div>}
         </div>
         {shuffledList.length === 1
-          ? (<div className='absolute bottom-8 right-8'><UploadPhotoTextOnlyButton /></div>)
+          ? (<div className='absolute bottom-8 right-8 z-50'><UploadPhotoTextOnlyButton /></div>)
           : (<OpenGalleryButton count={shuffledList.length} onClick={() => setShowPhotoGalleryModal(true)} />)}
       </div>
     )

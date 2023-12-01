@@ -277,3 +277,22 @@ export const getFriendlySlug = (name: string): string => slugify(name, { lower: 
  * @returns `/area/<area uuid>/<slugified area name>`
  */
 export const getAreaPageFriendlyUrl = (uuid: string, areaName: string): string => `/area/${uuid}/${getFriendlySlug(areaName)}`
+
+/**
+ * Bust area page cache
+ */
+export const invalidateAreaPageCache = async (uuid: string): Promise<void> => {
+  try {
+    await fetch(`/api/updateAreaPage?s=${uuid}`)
+  } catch (e) {
+    console.log('Invalidating area page cache', e)
+  }
+}
+
+export const legacyInvalidateClimbPageCache = async (uuid: string): Promise<void> => {
+  try {
+    await fetch(`/api/revalidate?c=${uuid}`)
+  } catch (e) {
+    console.log('Invalidating climb page cache', e)
+  }
+}

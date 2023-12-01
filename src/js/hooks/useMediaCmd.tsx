@@ -7,6 +7,7 @@ import { MediaWithTags, EntityTag, MediaConnection, TagTargetType } from '../typ
 import { AddNewMediaObjectsArgs, AddMediaObjectsReturn, MUTATION_ADD_MEDIA_OBJECTS, NewMediaObjectInput, DeleteOneMediaObjectArgs, DeleteOneMediaObjectReturn, MUTATION_DELETE_ONE_MEDIA_OBJECT, NewEmbeddedEntityTag } from '../graphql/gql/media'
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
 import { deleteMediaFromStorage } from '../userApi/media'
+import { invalidateAreaPageCache, legacyInvalidateClimbPageCache } from '../utils'
 
 export interface UseMediaCmdReturn {
   addEntityTagCmd: AddEntityTagCmd
@@ -254,21 +255,13 @@ export default function useMediaCmd (): UseMediaCmdReturn {
  * Request Nextjs to re-generate props for target page when adding or removing a tag.
  */
 const invalidatePageWithEntity = async ({ entityId, entityType }: NewEmbeddedEntityTag): Promise<void> => {
-  let url: string
   switch (entityType) {
     case TagTargetType.climb:
-      url = `/api/revalidate?c=${entityId}`
+      await legacyInvalidateClimbPageCache(entityId)
       break
     case TagTargetType.area:
-      url = `/api/revalidate?s=${entityId}`
+      await invalidateAreaPageCache(entityId)
       break
-  }
-  if (url != null) {
-    try {
-      await fetch(url)
-    } catch (e) {
-      console.log(e)
-    }
   }
 }
 
