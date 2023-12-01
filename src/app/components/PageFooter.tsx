@@ -4,7 +4,7 @@ import { Logo, LogoSize } from 'app/header'
  */
 export const PageFooter: React.FC = () => {
   return (
-    <footer className='mt-16 footer p-10 bg-base-200 bg-base-content text-base-100'>
+    <footer className='footer p-10 bg-base-200 bg-base-content text-base-100'>
       <aside>
         <div className='border-2 border-accent py-3 pl-2 pr-4 rounded-full'><Logo size={LogoSize.md} className='fill-accent' /></div>
         <p><span className='font-semibold text-lg'>OpenBeta</span><br /><span className='tracking-tight font-sm'>Free climbing database built & run by climbers.</span></p>

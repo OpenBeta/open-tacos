@@ -62,12 +62,12 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
       })
   }
 
-  const [updateAreaApi] = useMutation<{ updateAreaApi: UpdateAreaApiReturnType }, UpdateOneAreaInputType>(
+  const [updateAreaApi] = useMutation<{ updateArea: UpdateAreaApiReturnType }, UpdateOneAreaInputType>(
     MUTATION_UPDATE_AREA, {
       client: graphqlClient,
       onCompleted: (data) => {
         toast.info('Area updated successfully ✔️')
-        void refreshPage(`/api/revalidate?s=${areaId}`)
+        void updateAreaPageCache(data.updateArea.uuid)
         if (onUpdateCompleted != null) onUpdateCompleted(data)
       },
       onError: (error) => {
@@ -123,8 +123,8 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
         }
         toast.info('Area added 🔥')
 
-        void refreshPage(`/api/revalidate?s=${data.addArea.uuid}`) // build new area page
-        void refreshPage(`/api/revalidate?s=${areaId}`) // rebuild parent page
+        void updateAreaPageCache(areaId) // parent page
+        void updateAreaPageCache(data.addArea.uuid) // new page
       },
       onError: (error) => {
         toast.error(`Unexpected error: ${error.message}`)
@@ -155,7 +155,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     MUTATION_REMOVE_AREA, {
       client: graphqlClient,
       onCompleted: (data) => {
-        void refreshPage(`/api/revalidate?s=${areaId}`) // rebuild parent area page
+        void updateAreaPageCache(areaId) // update parent page
 
         if (onDeleteCompleted != null) {
           onDeleteCompleted(data)
@@ -189,4 +189,8 @@ export const refreshPage = async (url: string): Promise<void> => {
   try {
     await fetch(url)
   } catch {}
+}
+
+const updateAreaPageCache = async (uuid: string): Promise<void> => {
+  await fetch(`/api/updateAreaPage?uuid=${uuid}`)
 }

@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import { userMediaStore } from '../../js/stores/media'
-import ResponsiveImage, { ResponsiveImage2 } from './slideshow/ResponsiveImage'
+import ResponsiveImage, { FixedWidthImageContainer } from './slideshow/ResponsiveImage'
 import { MobileDialog, DialogContent } from '../ui/MobileDialog'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
@@ -33,11 +33,11 @@ const PhotoGalleryModal = ({
                 key={element.mediaUrl}
                 className='overflow-hidden mt-0 mb-2 lg:mb-4 hover:brightness-75 break-inside-avoid-column cursor-pointer break-inside-avoid relative block rounded-md'
               >
-                <ResponsiveImage2
+                <FixedWidthImageContainer
+                  desiredWidth={300}
                   naturalWidth={width}
                   naturalHeight={height}
                   mediaUrl={mediaUrl}
-                  isHero={false}
                 />
               </div>
             )

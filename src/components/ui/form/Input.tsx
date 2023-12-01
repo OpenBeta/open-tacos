@@ -101,3 +101,46 @@ export default function Input ({ label, labelAlt, unitLabel, unitLabelPlacement 
 export const INPUT_DEFAULT_CSS = 'input input-primary input-bordered input-md focus:outline-0 focus:ring-1 focus:ring-primary'
 
 const AFFIX_DEFAULT_CSS = 'bg-default uppercase text-sm'
+
+export interface DashboardInputProps {
+  name: string
+  label: string
+  placeholder?: string
+  disabled?: boolean
+  readOnly?: boolean
+  registerOptions?: RegisterOptions
+  type?: 'text' | 'number' | 'email'
+  spellCheck?: boolean
+  className?: string
+
+}
+
+export const DashboardInput: React.FC<DashboardInputProps> = ({ name, label, placeholder, disabled = false, readOnly = false, registerOptions, type = 'text', spellCheck = false, className = '' }) => {
+  const formContext = useFormContext()
+  const { formState: { errors } } = formContext
+
+  const error = errors?.[name]
+  return (
+    <div className='form-control'>
+      <label className='flex flex-col items-start justify-start gap-2 pb-2' htmlFor={name}>
+        {label}
+      </label>
+      <BaseInput
+        name={name}
+        placeholder={placeholder}
+        className={clx(INPUT_DEFAULT_CSS, className)}
+        label={label}
+        disabled={disabled}
+        readOnly={readOnly}
+        formContext={formContext}
+        registerOptions={registerOptions}
+        type={type}
+        spellCheck={spellCheck}
+      />
+      {error?.message != null &&
+        <label className='label' id={`${name}-helper`} htmlFor={name}>
+          <span className='text-error'>{error?.message as string}</span>
+        </label>}
+    </div>
+  )
+}

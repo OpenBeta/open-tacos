@@ -1,3 +1,5 @@
+import slugify from 'slugify'
+
 import { ClimbTypeToColor } from './constants'
 import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
 
@@ -208,13 +210,13 @@ export const getUploadDateSummary = (dateUploaded: Date): string => {
  * @param dest
  * @returns url for the given destination type (area or climb) and destination uid
  */
-export const urlResolver = (type: number, dest: string | null): string | null => {
+export const urlResolver = (type: number, dest: string | null, name: string): string | null => {
   if (dest == null) return null
   switch (type) {
     case 0:
       return `/climbs/${dest}`
     case 1:
-      return `/crag/${dest}`
+      return getAreaPageFriendlyUrl(dest, name)
     case 3:
       return `/u/${dest}`
     default:
@@ -260,4 +262,37 @@ export const removeTypenameFromDisciplines = (discplines: ClimbDisciplineRecord)
 export const relayMediaConnectionToMediaArray = (mediaConnection: MediaConnection): MediaWithTags[] => {
   if (mediaConnection == null) return []
   return mediaConnection.edges.map(entry => entry.node)
+}
+
+/**
+ * Convert climb/area name to url-friendly slug
+ * @param name
+ */
+export const getFriendlySlug = (name: string): string => slugify(name, { lower: true, strict: true }).substring(0, 50)
+
+/**
+ * Return the area page url with a trailing friendly area name
+ * @param uuid area uuid
+ * @param areaName area name
+ * @returns `/area/<area uuid>/<slugified area name>`
+ */
+export const getAreaPageFriendlyUrl = (uuid: string, areaName: string): string => `/area/${uuid}/${getFriendlySlug(areaName)}`
+
+/**
+ * Bust area page cache
+ */
+export const invalidateAreaPageCache = async (uuid: string): Promise<void> => {
+  try {
+    await fetch(`/api/updateAreaPage?s=${uuid}`)
+  } catch (e) {
+    console.log('Invalidating area page cache', e)
+  }
+}
+
+export const legacyInvalidateClimbPageCache = async (uuid: string): Promise<void> => {
+  try {
+    await fetch(`/api/revalidate?c=${uuid}`)
+  } catch (e) {
+    console.log('Invalidating climb page cache', e)
+  }
 }

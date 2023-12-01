@@ -26,18 +26,98 @@ h3 {
     @apply text-base-content text-lg font-semibold tracking-tight leading-loose;
 }
 
-.card-body {
-  @apply sm:px-0 border-0 !important;
+h4 {
+    @apply tracking-tight leading-loose;
 }
 
-.hero-text-shadow {
-  text-shadow: 1px 1px 3px rgb(21, 8, 60);
+.text-primary {
+  @apply text-base-content !important;
 }
 
-.rainbow-border {
-  background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0)) 50% 50%/calc(100% - 2px) calc(100% - 2px) no-repeat,
-            linear-gradient(0deg, #00a7f4 0%, transparent 70%),
-            radial-gradient(at 100% 0%, #00ff53 0%, transparent 70%),
-            #f15e40;
-  box-sizing: border-box;
+.text-secondary {
+  @apply text-base-content/60 !important;
+}
+
+/**
+A slightly deemphasized dotted underline for a tag in order to not competing with horizontal rulers
+*/
+.link-dotted {
+  @apply underline decoration-dotted underline-offset-2 decoration-inherit;
+}
+
+/* Layout for summary section of the area and climb page. 2 columns on desktop, normal stack div on mobile. */
+.area-climb-page-summary {
+  @apply mt-6 lg:grid lg:grid-cols-3 w-full;
+}
+
+.area-climb-page-summary-left {
+  @apply  lg:pr-8 border-base-content;
+}
+
+.area-climb-page-summary-right {
+  @apply mt-6 lg:mt-0 lg:col-span-2 lg:pl-16 w-full;
+}
+
+.mdeditor-input {
+  min-height: 150px;
+  resize: none;
+  position: relative;
+  tab-size: 1;
+  @apply p-4 focus:outline-neutral focus:outline-1;
+  /* outline: 0; */
+}
+
+.mdeditor-placeholder {
+  color: #999;
+  overflow: hidden;
+  position: absolute;
+  text-overflow: ellipsis;
+  user-select: none;
+  display: inline-block;
+  pointer-events: none;
+  @apply top-4 left-4;
+}
+
+/** 2-column layout for Area and Climb list */
+.two-column-table {
+  @apply lg:gap-x-24 lg:columns-2;
+}
+
+.three-column-table {
+  @apply lg:gap-x-24 lg:columns-2 xl:columns-3;
+}
+
+.area-row {
+  @apply py-4 flex flex-row flex-nowrap gap-4 px-4 items-start border-t break-inside-avoid-column break-inside-avoid;
+}
+
+.area-entity-box {
+  box-shadow: 2px 2px 0px #fe4f1a;
+  @apply rounded h-8 w-8 grid place-content-center bg-area-cue text-base-100 text-sm hover:decoration-0 hover:no-underline;
+}
+
+@layer utilities {
+  .dialog-center {
+    @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-box !important; 
+  }
+
+  .dialog-default {
+      @apply  top-0 left-0 h-screen md:dialog-center fixed z-50 w-screen max-w-screen-md bg-base-100 lg:drop-shadow-lg overflow-y-auto h-fit max-h-screen lg:max-h-[95vh];
+  }
+
+  .dialog-wide {
+    @apply top-0 left-0 fixed z-50 w-full h-full w-screen h-screen bg-base-100 overflow-y-auto overscroll-contain;
+  }
+
+  .dialog-close-button {
+    @apply fixed top-0.5 left-0.5 lg:top-1 lg:left-1 z-50;
+  }
+
+  .dialog-form-default {
+    @apply mt-16 lg:mt-20 px-2 lg:px-4 mb-6 !important;
+  }
+
+  .dialog-title {
+    @apply py-4 lg:py-5 left-0 top-0 w-full text-center fixed bg-base-100 bg-opacity-80 backdrop-blur-sm z-50 leading-none;
+  }
 }

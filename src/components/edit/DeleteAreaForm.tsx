@@ -1,12 +1,12 @@
+'use client'
 import { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import clx from 'classnames'
 import { GraphQLError } from 'graphql'
 import { signIn, useSession } from 'next-auth/react'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 import Input from '../ui/form/Input'
-
 export interface DeleteAreaProps {
   parentUuid: string
   areaUuid: string
@@ -28,7 +28,7 @@ interface HtmlFormProps {
  * @param returnToParentPageAfterDelete true to be redirected to parent area page
  * @param onSuccess Optional callback
  */
-export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, returnToParentPageAfterDelete = true, onSuccess }: DeleteAreaProps): JSX.Element {
+export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, returnToParentPageAfterDelete = false, onSuccess }: DeleteAreaProps): JSX.Element {
   const session = useSession()
   const router = useRouter()
 
@@ -39,12 +39,12 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
   }, [session])
 
   const onSuccessHandler = (): void => {
+    router.refresh()
     if (onSuccess != null) {
       onSuccess()
     }
     if (returnToParentPageAfterDelete) {
       void router.replace('/crag/' + parentUuid)
-      router.reload()
     }
   }
 

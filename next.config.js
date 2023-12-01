@@ -6,7 +6,6 @@ module.exports = {
   typescript: {
     ignoreBuildErrors: false
   },
-  generateEtags: false,
   webpack (config) { // required by @svgr/webpack lib
     const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.('.svg'))
 

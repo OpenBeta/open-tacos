@@ -4,6 +4,8 @@ import './global.css'
 import Header from './header'
 import { PageFooter } from './components/PageFooter'
 import { NextAuthProvider } from './components/NextAuthProvider'
+import { ReactToastifyProvider } from './components/ReactToastifyProvider'
+import { BlockingAlertUploadingInProgress } from './components/ui/GlobalAlerts'
 
 export const metadata: Metadata = {
   title: 'OpenBeta',
@@ -15,6 +17,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(`https://${process.env.VERCEL_URL ?? 'http://localhost:3000'}`)
 }
 
+/**
+ * Global layout for the site
+ */
 export default function RootLayout ({
   children
 }: {
@@ -30,6 +35,8 @@ export default function RootLayout ({
           </div>
         </NextAuthProvider>
         <PageFooter />
+        <ReactToastifyProvider />
+        <BlockingAlertUploadingInProgress />
       </body>
     </html>
   )

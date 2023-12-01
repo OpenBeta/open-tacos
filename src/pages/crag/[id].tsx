@@ -3,26 +3,22 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { shuffle } from 'underscore'
 
-import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import { AreaType, ChangesetType } from '../../js/types'
-import { PageMeta } from '../areas/[id]'
 import PhotoMontage from '../../components/media/PhotoMontage'
-import { UploadCTACragBanner } from '../../components/media/UploadCTA'
 import CragSummary, { Skeleton as AreaContentSkeleton } from '../../components/crag/cragSummary'
-import { QUERY_AREA_BY_ID } from '../../js/graphql/gql/areaById'
-import { GraphQLError } from 'graphql/error/GraphQLError'
 
 interface CragProps {
   area: AreaType
   history: ChangesetType[]
 }
 
+/**
+ * @deprecated Migrate to Next13.  See `/src/app/area/* folder`.
+ */
 const CragPage: NextPage<CragProps> = (props) => {
-  const { isFallback } = useRouter()
   return (
     <>
-      {!isFallback && <PageMeta {...props} />}
       <Layout contentContainerClass='content-default' showFilterBar={false}>
         <Body {...props} />
       </Layout>
@@ -32,14 +28,12 @@ const CragPage: NextPage<CragProps> = (props) => {
 export default CragPage
 
 const Body = ({ area, history }: CragProps): JSX.Element => {
-  const level = area?.ancestors.length ?? 0
   const { isFallback: showSkeleton } = useRouter()
   const photoList = area?.media ?? []
   return (
     <>
       <article className='article'>
-        <PhotoMontage isHero photoList={shuffle(photoList)} showSkeleton={showSkeleton} />
-        {photoList?.length === 0 && level > 2 && <UploadCTACragBanner />}
+        <PhotoMontage photoList={shuffle(photoList)} />
         <div className='mt-6 first:mt-0'>
           {showSkeleton
             ? <AreaContentSkeleton />
@@ -66,17 +60,18 @@ const Body = ({ area, history }: CragProps): JSX.Element => {
 
 export async function getStaticPaths (): Promise<any> {
   return {
-    paths: [
-      { params: { id: 'bea6bf11-de53-5046-a5b4-b89217b7e9bc' } }, // Red Rock
-      { params: { id: '78da26bc-cd94-5ac8-8e1c-815f7f30a28b' } }, // Red River Gorge
-      { params: { id: '1db1e8ba-a40e-587c-88a4-64f5ea814b8e' } }, // USA
-      { params: { id: 'ab48aed5-2e8d-54bb-b099-6140fe1f098f' } }, // Colorado
-      { params: { id: 'decc1251-4a67-52b9-b23f-3243e10e93d0' } }, // Boulder
-      { params: { id: 'f166e672-4a52-56d3-94f1-14c876feb670' } }, // Indian Creek
-      { params: { id: '5f0ed4d8-ebb0-5e78-ae15-ba7f1b3b5c51' } }, // Wasatch range
-      { params: { id: 'b1166235-3328-5537-b5ed-92f406ea8495' } }, // Lander
-      { params: { id: '9abad566-2113-587e-95a5-b3abcfaa28ac' } } // Ten Sleep
-    ],
+    paths: [],
+    // paths: [
+    //   { params: { id: 'bea6bf11-de53-5046-a5b4-b89217b7e9bc' } }, // Red Rock
+    //   { params: { id: '78da26bc-cd94-5ac8-8e1c-815f7f30a28b' } }, // Red River Gorge
+    //   { params: { id: '1db1e8ba-a40e-587c-88a4-64f5ea814b8e' } }, // USA
+    //   { params: { id: 'ab48aed5-2e8d-54bb-b099-6140fe1f098f' } }, // Colorado
+    //   { params: { id: 'decc1251-4a67-52b9-b23f-3243e10e93d0' } }, // Boulder
+    //   { params: { id: 'f166e672-4a52-56d3-94f1-14c876feb670' } }, // Indian Creek
+    //   { params: { id: '5f0ed4d8-ebb0-5e78-ae15-ba7f1b3b5c51' } }, // Wasatch range
+    //   { params: { id: 'b1166235-3328-5537-b5ed-92f406ea8495' } }, // Lander
+    //   { params: { id: '9abad566-2113-587e-95a5-b3abcfaa28ac' } } // Ten Sleep
+    // ],
     fallback: true
   }
 }
@@ -88,31 +83,37 @@ export const getStaticProps: GetStaticProps<CragProps, { id: string }> = async (
     }
   }
 
-  const rs = await graphqlClient.query<{ area: AreaType, getAreaHistory: ChangesetType[] }>({
-    query: QUERY_AREA_BY_ID,
-    variables: {
-      uuid: params.id
-    },
-    fetchPolicy: 'no-cache'
-  }).catch((e: GraphQLError) => {
-    if (e.message === 'Invaild UUID') {
-      return null
-    }
-  })
-
-  if (rs?.data == null || rs?.data?.area == null) {
-    return {
-      notFound: true
-    }
-  }
-
   return {
-    props: {
-      area: rs.data.area,
-      history: rs.data.getAreaHistory
-    },
-    revalidate: 30
+    redirect: {
+      destination: `/area/${params.id}`,
+      permanent: true
+    }
   }
+  // const rs = await graphqlClient.query<{ area: AreaType, getAreaHistory: ChangesetType[] }>({
+  //   query: QUERY_AREA_BY_ID,
+  //   variables: {
+  //     uuid: params.id
+  //   },
+  //   fetchPolicy: 'no-cache'
+  // }).catch((e: GraphQLError) => {
+  //   if (e.message === 'Invaild UUID') {
+  //     return null
+  //   }
+  // })
+
+  // if (rs?.data == null || rs?.data?.area == null) {
+  //   return {
+  //     notFound: true
+  //   }
+  // }
+
+  // return {
+  //   props: {
+  //     area: rs.data.area,
+  //     history: rs.data.getAreaHistory
+  //   },
+  //   revalidate: 30
+  // }
 }
 
 export const AreaMap = dynamic<any>(async () => await import('../../components/area/areaMap'), {

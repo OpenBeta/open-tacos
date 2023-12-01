@@ -4,6 +4,7 @@ import { BaseItem } from '@algolia/autocomplete-core'
 import { RegisterOptions } from 'react-hook-form'
 import { GradeScalesTypes } from '@openbeta/sandbag'
 import { IUserProfile, UserRole } from './types/User'
+import { GradeContexts } from './grades/Grade'
 
 export type { IUserProfile }
 export { UserRole }
@@ -41,9 +42,7 @@ export interface ClimbMetadataType {
   climbId: string
 }
 
-export type GradeContextType = 'US' | 'FR'
-
-export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' | 'mixed' | 'aid' | 'ice' | 'snow'
+export type ClimbDiscipline = 'sport' | 'bouldering' | 'alpine' | 'tr' | 'trad' | 'mixed' | 'aid' | 'ice' | 'snow' | 'deepwatersolo'
 
 export type ClimbDisciplineRecord = Record<ClimbDiscipline, boolean>
 
@@ -161,7 +160,7 @@ export interface AreaType {
   children: AreaType[]
   climbs: Climb[]
   media: MediaWithTags[]
-  gradeContext: GradeContextType
+  gradeContext: GradeContexts
   authorMetadata: AuthorMetadata
 }
 

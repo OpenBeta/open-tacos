@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
   events: {},
   pages: {
     verifyRequest: '/auth/verify-request',
-    signIn: '/auth/signin'
+    signIn: '/login'
   },
   theme: {
     colorScheme: 'light',

@@ -94,6 +94,7 @@ export const QUERY_AREA_BY_ID = gql`
         areaName
         totalClimbs
         metadata {
+          areaId
           leaf
           isBoulder
           leftRightIndex
@@ -103,9 +104,12 @@ export const QUERY_AREA_BY_ID = gql`
         children {
           uuid
         }
+        climbs {
+          id
+        }
       }
       content {
-        description 
+        description
       }
       authorMetadata {
         ... AuthorMetadataFields

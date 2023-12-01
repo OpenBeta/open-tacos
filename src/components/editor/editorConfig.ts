@@ -10,6 +10,7 @@ import { MarkNode } from '@lexical/mark'
 import { CodeNode } from '@lexical/code'
 
 import DefaultTheme, { textInputTheme, csvTheme } from './themes/DefaultTheme'
+import { MDWithPreviewTheme } from './themes/MDPreview'
 import { $createInitialPlainTextState } from './plugins/PlainTextResetPlugin'
 import { $createInitialState } from './plugins/CsvResetPlugin'
 import { EditableClimbType } from '../crag/cragSummary'
@@ -32,6 +33,31 @@ export const editorConfigRichText = (initialValue: string, editable: boolean): I
     editorState: createInitial,
     namespace: 'editor',
     theme: DefaultTheme,
+    onError (error) {
+      throw error
+    },
+    nodes: [MarkNode, HeadingNode, QuoteNode, LinkNode, ListNode, ListItemNode, CodeNode]
+  }
+}
+
+/**
+ * Create initial config object for rich text editor
+ * @param initialValue
+ * @param editable
+ */
+export const mdeditorConfig = (initialValue: string, preview: boolean): InitialConfigType => {
+  const createInitial = (): void => {
+    if (preview) {
+      $convertFromMarkdownString(initialValue ?? '', TRANSFORMERS)
+    } else {
+      $createInitialPlainTextState(initialValue ?? '')
+    }
+  }
+
+  return {
+    editorState: createInitial,
+    namespace: 'mdeditor',
+    theme: MDWithPreviewTheme,
     onError (error) {
       throw error
     },
