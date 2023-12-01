@@ -1,6 +1,8 @@
 'use client'
-import React from 'react'
+import React, { useCallback, MouseEventHandler } from 'react'
 import { validate } from 'uuid'
+import { useSession, signIn } from 'next-auth/react'
+
 import usePhotoUploader from '../../js/hooks/usePhotoUploader'
 import { usePathname } from 'next/navigation'
 import { TagTargetType } from '@/js/types'
@@ -14,11 +16,19 @@ interface BaseUploaderProps {
 
 /** A drop-zone for uploading photos, with click-to-open a file explorer operation */
 export const BaseUploader: React.FC<BaseUploaderProps> = ({ tagType, uuid, className, children }) => {
+  const session = useSession()
   const { getRootProps, getInputProps } = usePhotoUploader({ tagType, uuid })
+  const onClickHandler: MouseEventHandler<HTMLInputElement> = useCallback((event) => {
+    if (session.status !== 'authenticated') {
+      event.stopPropagation()
+      void signIn('auth0')
+    }
+  }, [session])
+
   return (
     // Fiddling with syntax here seems to make dropzone clicking work.
     // (tested both FF and Chrome on Ubuntu)
-    <div {...getRootProps({ className: `dropzone ${className}` })}>
+    <div {...getRootProps({ className: `dropzone ${className}`, onClick: onClickHandler })}>
       <input {...getInputProps()} />
       {children}
     </div>

@@ -8,7 +8,7 @@ import { UploadPhotoButton } from '@/components/media/PhotoUploadButtons'
  */
 export const AreaPageActions: React.FC<{ uuid: string, areaName: string } > = ({ uuid, areaName }) => (
   <ul className='max-w-sm md:max-w-md flex items-center justify-between gap-2 w-full'>
-    <Link href={`/editArea/${uuid}`} target='_new' className='btn btn-solid btn-accent'>
+    <Link href={`/editArea/${uuid}`} target='_new' className='btn btn-solid btn-accent shadow-md'>
       <PencilSimple size={20} weight='duotone' /> Edit
     </Link>
 

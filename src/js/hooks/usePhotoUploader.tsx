@@ -44,21 +44,20 @@ export default function usePhotoUploader ({ tagType, uuid }: UsePhotoUploaderPro
   const router = useRouter()
   const setUploading = useUserGalleryStore(store => store.setUploading)
   const isUploading = useUserGalleryStore(store => store.uploading)
-  const { data: sessionData } = useSession({ required: true })
+  const { data: sessionData, status: sessionStatus } = useSession()
   const { addMediaObjectsCmd } = useMediaCmd()
-
-  // const [hasErrors, setHasErrors] = useState(false)
 
   const ref = useRef({
     hasErrors: false
   })
+
   /** When a file is loaded by the browser (as in, loaded from the local filesystem,
    * not loaded from a webserver) we can begin to upload the bytedata to the provider */
   const onload = async (event: ProgressEvent<FileReader>, file: File): Promise<void> => {
     if (event.target === null || event.target.result === null) return // guard this
 
     const userUuid = sessionData?.user.metadata.uuid
-    if (userUuid == null) {
+    if (sessionStatus !== 'authenticated' || userUuid == null) {
       // this shouldn't happen
       throw new Error('Login required.')
     }

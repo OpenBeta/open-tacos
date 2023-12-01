@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
+import { User } from '@phosphor-icons/react/dist/ssr'
 import { UserCircleIcon, ChatBubbleOvalLeftEllipsisIcon, Cog6ToothIcon, ChartBarIcon, GiftIcon } from '@heroicons/react/24/outline'
 
 import { DropdownMenu, DropdownTrigger, DropdownContent, DropdownItem, DropdownSeparator } from '@/components/ui/DropdownMenu'
@@ -30,8 +31,8 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
       <div className='block relative'>
         <DropdownMenu>
           <DropdownTrigger asChild>
-            <button className='btn btn-accent gap-2 no-animation'>
-              <UserCircleIcon className='w-6 h-6 rounded-full' />
+            <button className='btn btn-primary btn-outline gap-2 no-animation rounded-full border-2 shadow-md'>
+              <User size={20} weight='fill' className='text-accent' />
               Profile
             </button>
           </DropdownTrigger>

@@ -37,7 +37,7 @@ export function XSearchMinimal ({ placeholder = 'Try "Cat In the Hat" or "Las Ve
       placeholder={placeholder}
       open={false}
       label={
-        <button className='btn btn-outline btn-sm rounded-full no-animation border-2'>
+        <button className='btn btn-outline btn-sm rounded-full no-animation border-2 shadow-md'>
           <MagnifyingGlassIcon className='w-5 h-5 stroke-2' /> <span className='hidden md:block text-xs md:pr-1.5'>Climb search</span>
         </button>
       }
