@@ -6,7 +6,7 @@
       "startServerCommand": "yarn start",
       "url": [
         "http://localhost:3000",
-        "http://localhost:3000/db1e8ba-a40e-587c-88a4-64f5ea814b8e/usa"
+        "http://localhost:3000/area/db1e8ba-a40e-587c-88a4-64f5ea814b8e/usa"
       ]
     },
     "upload": {
