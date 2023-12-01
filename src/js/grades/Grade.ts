@@ -62,9 +62,33 @@ const gradeContextToGradeScales: Partial<Record<GradeContexts, ClimbGradeContext
     mixed: GradeScales.FRENCH,
     aid: GradeScales.AID,
     snow: GradeScales.FRENCH, // is this the same as alpine?
-    ice: GradeScales.FRENCH // is this the same as alpine?
+    ice: GradeScales.WI
   },
-  BR: {
+  [GradeContexts.SA]: {
+    trad: GradeScales.FRENCH,
+    sport: GradeScales.FRENCH,
+    bouldering: GradeScales.FONT,
+    tr: GradeScales.FRENCH,
+    deepwatersolo: GradeScales.FRENCH,
+    alpine: GradeScales.FRENCH,
+    mixed: GradeScales.FRENCH,
+    aid: GradeScales.AID,
+    snow: GradeScales.FRENCH, // SA does not have a whole lot of snow
+    ice: GradeScales.WI
+  },
+  [GradeContexts.UIAA]: {
+    trad: GradeScales.UIAA,
+    sport: GradeScales.UIAA,
+    bouldering: GradeScales.FONT,
+    tr: GradeScales.UIAA,
+    deepwatersolo: GradeScales.FRENCH,
+    alpine: GradeScales.UIAA,
+    mixed: GradeScales.UIAA, // TODO: change to MI scale, once added
+    aid: GradeScales.UIAA,
+    snow: GradeScales.UIAA, // TODO: remove `snow` since it duplicates `ice`
+    ice: GradeScales.WI
+  },
+  [GradeContexts.BRZ]: {
     trad: GradeScales.BRAZILIAN_CRUX,
     sport: GradeScales.BRAZILIAN_CRUX,
     bouldering: GradeScales.VSCALE,
@@ -73,7 +97,11 @@ const gradeContextToGradeScales: Partial<Record<GradeContexts, ClimbGradeContext
     alpine: GradeScales.BRAZILIAN_CRUX,
     mixed: GradeScales.BRAZILIAN_CRUX,
     aid: GradeScales.AID,
+    // definitely no ice in brazil, however once this guy
+    // top roped a fragile frozen waterfall with ice picks
+    // and crampons:
     ice: GradeScales.WI,
+    // whenever it snows in brazil, you see it in the news
     snow: GradeScales.WI
   }
 }
