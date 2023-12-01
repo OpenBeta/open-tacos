@@ -21,6 +21,7 @@ type ProgressState = 'initial' | 'data-entry' | 'confirm'
 
 /**
  * Add child area wizard.  Users must be authenticated.
+ * @deprecated Replaced by the new editArea/[slug] dashboard
  */
 export default function AddAreaForm ({ parentName, parentUuid, onSuccess }: AddAreaFormProps): JSX.Element {
   const session = useSession()

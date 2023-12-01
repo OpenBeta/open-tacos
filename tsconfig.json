@@ -24,6 +24,12 @@
       "@/components/*": [
         "components/*"
       ],
+      "@/app/components/*": [
+        "app/components/*"
+      ],
+      "@/app/*": [
+        "app/*"
+      ],
       "@/js/*": [
         "js/*"
       ],

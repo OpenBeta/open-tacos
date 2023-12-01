@@ -55,7 +55,7 @@ export const PostHeader = ({
 
   return (
     <>
-      <ATagWrapper href={urlResolver(3, username)} className='flex py-2 items-center space-x-2 text-base-300'>
+      <ATagWrapper href={urlResolver(3, username, '')} className='flex py-2 items-center space-x-2 text-base-300'>
         {profilePhoto != null
           ? (
             <div className='cursor-pointer' />

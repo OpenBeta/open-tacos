@@ -5,6 +5,7 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import clx from 'classnames'
 
 import { ChangesetType, ChangeType, AreaType, ClimbType, OrganizationType, DocumentTypeName } from '../../js/types'
+import { getAreaPageFriendlyUrl } from '@/js/utils'
 
 export interface RecentChangeHistoryProps {
   history: ChangesetType[]
@@ -102,7 +103,8 @@ const AreaChange = ({ changeId, fullDocument, updateDescription, dbOp }: ChangeT
   if (fullDocument.__typename !== DocumentTypeName.Area) {
     return null
   }
-  const url = `/crag/${(fullDocument as AreaType).uuid}`
+  const { uuid, areaName } = fullDocument as AreaType
+  const url = getAreaPageFriendlyUrl(uuid, areaName)
   // @ts-expect-error
   const icon = dbOpIcon[dbOp]
   return (

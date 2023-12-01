@@ -3,34 +3,17 @@ import Image from 'next/image'
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
 import clx from 'classnames'
 
-import { DefaultLoader, MobileLoader } from '../../../js/sirv/util'
-
-const keyStr =
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
-
-const triplet = (e1: number, e2: number, e3: number): string =>
-  keyStr.charAt(e1 >> 2) +
-  keyStr.charAt(((e1 & 3) << 4) | (e2 >> 4)) +
-  keyStr.charAt(((e2 & 15) << 2) | (e3 >> 6)) +
-  keyStr.charAt(e3 & 63)
-
-const rgbDataURL = (r: number, g: number, b: number): string =>
-  `data:image/gif;base64,R0lGODlhAQABAPAA${triplet(0, r, g) + triplet(b, 255, 255)
-  }/yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==`
-
-const DefaultPlaceholder = rgbDataURL(226, 232, 240)
-
 interface ResponsiveImageProps {
   mediaUrl: string
   isHero: boolean
   isSquare?: boolean
-  loader?: null | ((props: any) => string)
+  sizes?: string
 }
 
 /**
  * NextJS image wrapper with loading indicator
  */
-export default function ResponsiveImage ({ mediaUrl, isHero = true, isSquare = false, loader = null }: ResponsiveImageProps): JSX.Element {
+export default function ResponsiveImage ({ mediaUrl, isHero = true, isSquare = false, sizes = '20vw' }: ResponsiveImageProps): JSX.Element {
   const [isLoading, setLoading] = useState<boolean>(true)
   useEffect(() => {
     setLoading(true)
@@ -41,13 +24,13 @@ export default function ResponsiveImage ({ mediaUrl, isHero = true, isSquare = f
     >
       <Image
         src={mediaUrl}
-        loader={loader ?? DefaultLoader}
-        quality={90}
-        layout='fill'
-        sizes='100vw'
-        objectFit={isSquare ? 'cover' : 'contain'}
+        fill
+        sizes={sizes}
         priority={isHero}
         onLoadingComplete={() => setLoading(false)}
+        style={{
+          objectFit: isSquare ? 'cover' : 'contain'
+        }}
         alt=''
       />
       <div className='absolute w-full h-full flex items-center'>
@@ -60,29 +43,28 @@ export default function ResponsiveImage ({ mediaUrl, isHero = true, isSquare = f
   )
 }
 
-interface SSRResponsiveImageProps extends ResponsiveImageProps {
+/**
+ * Image container with a known width.
+ */
+export const FixedWidthImageContainer: React.FC<{
+  mediaUrl: string
   naturalWidth: number
   naturalHeight: number
-  onClick?: MouseEventHandler<HTMLImageElement> | undefined
-}
-
-export function ResponsiveImage2 ({ mediaUrl, naturalWidth, naturalHeight, isHero = true, loader = null, onClick = undefined }: SSRResponsiveImageProps): JSX.Element {
+  desiredWidth?: number
+  onClick?: MouseEventHandler<HTMLImageElement>
+  priority?: boolean
+}> = ({ mediaUrl, naturalWidth, naturalHeight, desiredWidth = 300, onClick, priority = false }) => {
   const aspectRatio = naturalWidth / naturalHeight
-  const width = 300
-  const height = width / aspectRatio
+  const height = desiredWidth / aspectRatio
   return (
     <Image
+      priority={priority}
       src={mediaUrl}
-      loader={MobileLoader}
-      layout='responsive'
       sizes='(max-width: 768px) 100vw,
       (max-width: 1200px) 50vw,
-      33vw'
-      width={width}
+      20vw'
+      width={desiredWidth}
       height={height}
-      objectFit='fill'
-      placeholder='blur'
-      blurDataURL={DefaultPlaceholder}
       onClick={onClick !== undefined ? onClick : undefined}
       alt=''
     />

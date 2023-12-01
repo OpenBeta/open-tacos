@@ -1,16 +1,21 @@
+'use client'
 import { useRef } from 'react'
-import { useRouter, NextRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useDropzone, DropzoneInputProps, FileRejection } from 'react-dropzone'
 import { toast } from 'react-toastify'
 import { useSession } from 'next-auth/react'
-import { validate as isValidUuid } from 'uuid'
 
 import { uploadPhoto, deleteMediaFromStorage } from '../userApi/media'
 import useMediaCmd from './useMediaCmd'
-import { MediaFormat } from '../types'
+import { MediaFormat, TagTargetType } from '../types'
 import { NewEmbeddedEntityTag } from '../graphql/gql/media'
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
+import { invalidateAreaPageCache, legacyInvalidateClimbPageCache } from '../utils'
 
+interface UsePhotoUploaderProps {
+  tagType?: TagTargetType
+  uuid?: string
+}
 interface PhotoUploaderReturnType {
   getInputProps: <T extends DropzoneInputProps>(props?: T) => T
   getRootProps: <T extends DropzoneInputProps>(props?: T) => T
@@ -35,26 +40,24 @@ async function readFile (file: File): Promise<ProgressEvent<FileReader>> {
  * is all encapsulated here, as well as some other api shorthand.
  * { onUploaded }: UsePhotoUploaderProps
  * */
-export default function usePhotoUploader (): PhotoUploaderReturnType {
+export default function usePhotoUploader ({ tagType, uuid }: UsePhotoUploaderProps): PhotoUploaderReturnType {
   const router = useRouter()
-
   const setUploading = useUserGalleryStore(store => store.setUploading)
   const isUploading = useUserGalleryStore(store => store.uploading)
-  const { data: sessionData } = useSession()
+  const { data: sessionData, status: sessionStatus } = useSession()
   const { addMediaObjectsCmd } = useMediaCmd()
-
-  // const [hasErrors, setHasErrors] = useState(false)
 
   const ref = useRef({
     hasErrors: false
   })
+
   /** When a file is loaded by the browser (as in, loaded from the local filesystem,
    * not loaded from a webserver) we can begin to upload the bytedata to the provider */
   const onload = async (event: ProgressEvent<FileReader>, file: File): Promise<void> => {
     if (event.target === null || event.target.result === null) return // guard this
 
     const userUuid = sessionData?.user.metadata.uuid
-    if (userUuid == null) {
+    if (sessionStatus !== 'authenticated' || userUuid == null) {
       // this shouldn't happen
       throw new Error('Login required.')
     }
@@ -63,8 +66,15 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
 
     const { width, height } = await getImageDimensions(imageData)
     const { name, type, size } = file
-    const [entityTag, postUpdateFn] = await getEntityFromPageContext(router)
 
+    let entityTag: NewEmbeddedEntityTag | undefined
+
+    if (uuid != null && tagType != null) {
+      entityTag = {
+        entityId: uuid,
+        entityType: tagType
+      }
+    }
     try {
       const url = await uploadPhoto(name, imageData)
 
@@ -75,7 +85,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
         width,
         height,
         size,
-        ...(entityTag != null && { entityTag })
+        ...entityTag != null && { entityTag }
       }], sessionData?.accessToken)
 
       // if upload is successful but we can't update the database,
@@ -84,9 +94,9 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
         ref.current.hasErrors = true
         await deleteMediaFromStorage(url)
       } else {
-        if (postUpdateFn != null) {
-          await postUpdateFn()
-        }
+        if (tagType === 1 && uuid != null) await invalidateAreaPageCache(uuid)
+        if (tagType === 0 && uuid != null) await legacyInvalidateClimbPageCache(uuid)
+        router.refresh() // Ask NextJS to update page props
       }
     } catch (e) {
       ref.current.hasErrors = true
@@ -113,13 +123,7 @@ export default function usePhotoUploader (): PhotoUploaderReturnType {
     if (ref.current.hasErrors) {
       toast.error('Error uploading photos.  Please try again.')
     } else {
-      let msg: string | JSX.Element
-      if (router.asPath.startsWith('/?')) {
-        msg = <>Uploading completed! 🎉&nbsp;&nbsp;View <a className='link font-semibold' href='/api/user/me'>gallery.</a></>
-      } else {
-        msg = 'Uploading completed! 🎉'
-      }
-      toast.success(msg)
+      toast.success('Uploaded!')
       ref.current.hasErrors = false
     }
   }
@@ -171,52 +175,4 @@ const getImageDimensions = async (imageData: ArrayBuffer): Promise<Dimensions> =
     })
     image.onerror = reject
   })
-}
-
-/**
- *  If photo is uploaded while on a climb or crag page,
- *  obtain entity data to be added to the photo.
- */
-const getEntityFromPageContext = async (router: NextRouter): Promise<[NewEmbeddedEntityTag | null, null | (() => Promise<void>)]> => {
-  const [id, destType, pageToInvalidate, pageToReload] = pagePathToEntityType(router)
-
-  const postUpdate = async (): Promise<void> => {
-    // Request Next.js to re-generate the page being tagged
-    try {
-      if (pageToInvalidate != null) await fetch(pageToInvalidate)
-      if (pageToReload != null) await router.replace(pageToReload)
-    } catch (e) { console.log(e) }
-  }
-  // let's see if we're viewing the climb or area page
-  if (id != null && isValidUuid(id) && (destType === 0 || destType === 1)) {
-    return [{
-      entityId: id,
-      entityType: destType
-    }, postUpdate]
-  }
-  return [null, null]
-}
-
-/**
- * Convert current page path to a destination type for tagging.  Expect `path` to be in /areas|crag|climb/[id].
- * @param path `path` property as return from `Next.router()`
- */
-const pagePathToEntityType = (router: NextRouter): [string, number, string, string] | [null, null, null, null] => {
-  const nulls: [null, null, null, null] = [null, null, null, null]
-  const { asPath, query } = router
-  const tokens = asPath.split('/')
-
-  if (query == null || query.id == null || tokens.length < 3) return nulls
-
-  const id = query.id as string
-  switch (tokens[1]) {
-    case 'climbs':
-      return [id, 0, `/api/revalidate?c=${id}`, `/climbs/${id}`]
-    case 'areas':
-      return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
-    case 'crag':
-      return [id, 1, `/api/revalidate?s=${id}`, `/crag/${id}?${Date.now()}`]
-    default:
-      return nulls
-  }
 }

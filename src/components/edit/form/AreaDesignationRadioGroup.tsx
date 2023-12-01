@@ -2,6 +2,7 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
 import { AreaMetadataType, AreaUpdatableFieldsType } from '../../../js/types'
 import { RadioGroup } from '../../ui/form'
 import Tooltip from '../../ui/Tooltip'
+import { EntityIcon } from 'app/editArea/[slug]/general/components/AreaItem'
 
 export type AreaTypeFormProp = 'crag' | 'area' | 'boulder'
 
@@ -16,18 +17,19 @@ export interface AreaDesignationRadioGroupProps {
  */
 export const AreaDesignationRadioGroup = ({ name = 'areaType', disabled = false }: AreaDesignationRadioGroupProps): JSX.Element => (
   <RadioGroup
-    groupLabel='Area designation'
+    groupLabel='Area type helps us organize subareas and climbs.'
     groupLabelAlt={<ExplainAreaTypeLockTooltip canEdit={!disabled} />}
     name={name}
     disabled={disabled}
     labels={[
-      'Area',
-      'Crag (sport, trad, ice)',
-      'Boulder']}
+      <EntityIcon key='area' type='area' size={28} />,
+      <EntityIcon key='crag' type='crag' size={28} />,
+      <EntityIcon key='boulder' type='boulder' size={28} />]}
     values={['area', 'crag', 'boulder']}
-    labelTips={['Group other areas.', 'List rope climbing routes.', 'List boulder problems.']}
+    labelTips={['Group other smaller areas.', 'List rope climbing routes.', 'List boulder problems.']}
     requiredErrorMessage='Please select an area type'
-  />)
+  />
+)
 
 export const ExplainAreaTypeLockTooltip = ({ canEdit }: { canEdit: boolean }): JSX.Element | null =>
   (

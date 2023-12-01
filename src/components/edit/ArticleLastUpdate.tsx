@@ -1,9 +1,9 @@
+'use client'
 import { useEffect, useState, FC } from 'react'
 import Link from 'next/link'
-import { PencilIcon } from '@heroicons/react/24/outline'
 import { AuthorMetadata } from '../../js/types'
 import { getUploadDateSummary } from '../../js/utils'
-import TreeIcon from '../../assets/icons/tree.svg'
+import { Plant, PersonArmsSpread } from '@phosphor-icons/react/dist/ssr'
 
 interface DisplayProps {
   updatedAtStr: string
@@ -38,14 +38,14 @@ export const ArticleLastUpdate: FC<AuthorMetadata> = ({ updatedAt, updatedByUser
     <div className='flex flex-col gap-3 py-3 text-base-300 text-xs'>
       {createdAt != null &&
         <div className='flex items-center gap-2'>
-          <TreeIcon className='h-5 w-5' />
+          <Plant size={20} />
           <span>
             <b>CREATED</b>{toUserProfile(createdByUser)}&nbsp;{createdAtStr}
           </span>
         </div>}
       {updatedAt != null &&
         <div className='flex items-center gap-2'>
-          <PencilIcon className='h-4 w-4 mr-1' />
+          <PersonArmsSpread size={20} />
           <span>
             <b>UPDATED</b>{toUserProfile(updatedByUser)}&nbsp;{updatedAtStr}
           </span>

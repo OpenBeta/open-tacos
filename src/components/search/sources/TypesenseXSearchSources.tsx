@@ -2,6 +2,7 @@ import { AutocompleteSource } from '@algolia/autocomplete-js'
 import { multiSearch, MultisearchReturnType } from '../../../js/typesense/TypesenseClient'
 import { DefaultHeader, DefaultNoResult, ClimbItem, AreaItem, FAItem } from '../templates/ClimbResultXSearch'
 import { TypesenseDocumentType, TypesenseAreaType, EntityType } from '../../../js/types'
+import { getAreaPageFriendlyUrl } from '@/js/utils'
 
 export type OnSelectType = (props: TypesenseDocumentType | TypesenseAreaType) => void
 /**
@@ -93,9 +94,10 @@ const entityToUrl = ({ item }: { item: TypesenseAreaType | TypesenseDocumentType
   const { type } = item
   switch (type) {
     case EntityType.area:
-      return `/crag/${(item as TypesenseAreaType).id}`
-    case EntityType.crag:
-      return `/crag/${(item as TypesenseAreaType).id}`
+    case EntityType.crag: {
+      const { id, name } = item as TypesenseAreaType
+      return getAreaPageFriendlyUrl(id, name)
+    }
     case EntityType.climb:
       return `/climbs/${(item as TypesenseDocumentType).climbUUID}`
     default: return undefined

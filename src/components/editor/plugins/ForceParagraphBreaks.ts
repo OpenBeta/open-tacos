@@ -1,7 +1,6 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { LineBreakNode, EditorState } from 'lexical'
 import { useEffect } from 'react'
-// import { $getRoot } from 'lexical'
 
 /**
  * In progress: Enforce a single line of text by removing new line characters (from enter key or copy-n-paste content)

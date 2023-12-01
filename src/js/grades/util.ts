@@ -64,6 +64,7 @@ export const codesToDisciplines = (codesStr: string): [Partial<ClimbDisciplineRe
 }
 
 export const defaultDisciplines = (): ClimbDisciplineRecord => ({
+  deepwatersolo: false,
   sport: false,
   trad: false,
   bouldering: false,

@@ -1,18 +1,16 @@
 'use client'
+import { MouseEventHandler } from 'react'
 import Link from 'next/link'
 import { Popover } from '@headlessui/react'
-
+import { DotsThreeOutlineVertical, House as HouseIcon } from '@phosphor-icons/react/dist/ssr'
 import MobileNavBar from './ui/MobileNavBar'
-import { HomeIcon, Bars3Icon } from '@heroicons/react/24/outline'
 import OpenBetaLogo from '../assets/brand/openbeta-logo.svg'
 
 import MobileFilterBar from './finder/filters/MobileFilterBar'
 import { Button, ButtonVariant } from './ui/BaseButton'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import ProfileNavButton from './ProfileNavButton'
-import NewPost from './NewPost'
 import { XSearchMobile } from './search/XSearch'
-import { MouseEventHandler } from 'react'
 
 interface HeaderProps {
   includeFilters: boolean
@@ -36,12 +34,7 @@ export default function MobileAppBar ({ isTablet, includeFilters }: HeaderProps)
   )
 }
 
-export const AuthenticatedNav = (): JSX.Element => (
-  <>
-    <NewPost className='inline-flex' />
-    <ProfileNavButton />
-  </>
-)
+export const AuthenticatedNav = (): JSX.Element => <ProfileNavButton />
 
 export const AuthenticatedNav13: React.FC = () => <ProfileNavButton />
 
@@ -55,7 +48,7 @@ export const LoginButton = (): JSX.Element => (
 const Home = (): JSX.Element => (
   <Link href='/' legacyBehavior>
     <button className='btn btn-square btn-ghost'>
-      <HomeIcon className='w-6 h-6 text-white' />
+      <HouseIcon size={28} className='text-base-100' />
     </button>
   </Link>)
 
@@ -63,9 +56,7 @@ const Branding = (): JSX.Element => {
   return (
     (
       <Link href='/' className='inline-block px-4'>
-
         <OpenBetaLogo className='inline-block w-6 h-6 ' />
-
       </Link>
     )
   )
@@ -76,7 +67,7 @@ export const More = (): JSX.Element => {
   return (
     <Popover>
       <Popover.Button as='div' className='z-50 flex center-items'>
-        <Button label={<Bars3Icon className='text-base-content w-8 h-8' />} />
+        <Button label={<DotsThreeOutlineVertical size={28} className='text-base-100' />} />
       </Popover.Button>
 
       <Popover.Panel className='absolute z-20 right-0 mt-2 p-6 bg-white rounded-md w-full max-w-md drop-shadow-md'>

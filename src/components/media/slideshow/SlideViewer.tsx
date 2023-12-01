@@ -46,6 +46,7 @@ export default function SlideViewer ({
         ? <ResponsiveImage
             mediaUrl={imageList[initialIndex].mediaUrl}
             isHero
+            sizes='60vw'
           />
         : null}
       rhsContainer={

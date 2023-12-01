@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { useIntersection } from 'react-use'
 import clx from 'classnames'
 
-import BreadCrumbs from '../ui/BreadCrumbs'
+import { GluttenFreeCrumbs } from '../ui/BreadCrumbs'
 
 interface StickyBreadCrumbsProps {
   isClimbPage?: boolean
@@ -31,8 +31,8 @@ export const StickyHeader = ({ isClimbPage = false, ancestors, pathTokens, formA
   const atTop = intersection?.isIntersecting ?? false
 
   return (
-    <div ref={intersectionRef} className={clx('sticky top-0 z-40 py-2 lg:min-h-[4rem] block lg:flex lg:items-center lg:justify-between bg-base-100 -mx-6 px-6', atTop ? 'border-b bottom-shadow backdrop-blur-sm bg-opacity-90' : '')}>
-      <BreadCrumbs isClimbPage={isClimbPage} ancestors={ancestors} pathTokens={pathTokens} />
+    <div ref={intersectionRef} className={clx('sticky top-0 z-40 py-2 lg:min-h-[4rem] block lg:flex lg:items-center lg:justify-between bg-base-100', atTop ? 'border-b bottom-shadow backdrop-blur-sm bg-opacity-90' : '')}>
+      <GluttenFreeCrumbs ancestors={ancestors} pathTokens={pathTokens} />
       <div className='hidden lg:block'>
         {/* only visible at lg or wider */}
         {formAction}

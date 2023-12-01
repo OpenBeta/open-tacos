@@ -33,6 +33,7 @@ export function PlainTextResetPlugin ({ initialValue, resetSignal, editable = fa
 
 export const $createInitialPlainTextState = (plainText: string): void => {
   const root = $getRoot()
+
   const paragraph = $createParagraphNode()
   paragraph.append(
     $createTextNode(plainText)

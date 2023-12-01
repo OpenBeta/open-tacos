@@ -4,10 +4,10 @@ import { useSortable } from '@dnd-kit/sortable'
 interface SortableItemProps {
   id: string
   children: JSX.Element
-  disabled: boolean
+  disabled?: boolean
 }
 
-export const SortableItem = (props: SortableItemProps): JSX.Element => {
+export const SortableItem = ({ id, disabled = false, children }: SortableItemProps): JSX.Element => {
   const {
     attributes,
     listeners,
@@ -15,7 +15,7 @@ export const SortableItem = (props: SortableItemProps): JSX.Element => {
     transform,
     transition,
     isDragging
-  } = useSortable({ id: props.id, disabled: props.disabled })
+  } = useSortable({ id, disabled })
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -25,7 +25,7 @@ export const SortableItem = (props: SortableItemProps): JSX.Element => {
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      {props.children}
+      {children}
     </div>
   )
 }

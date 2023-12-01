@@ -30,7 +30,7 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
       <div className='block relative'>
         <DropdownMenu>
           <DropdownTrigger asChild>
-            <button className='btn btn-outline btn-secondary gap-2'>
+            <button className='btn btn-outline btn-accent gap-2'>
               <UserCircleIcon className='w-6 h-6 rounded-full' />
               <span className='mt-0.5'>Profile</span>
             </button>

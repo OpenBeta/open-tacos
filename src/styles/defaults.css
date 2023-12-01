@@ -165,16 +165,13 @@ p {
 }
 
 @layer components {
+  .text-primary {
+    @apply text-base-content !important;
+  }
 
-  /* .text-primary {
-    @apply text-gray-800;
-  }
   .text-secondary {
-    @apply text-gray-600;
+    @apply text-base-content/60 !important;
   }
-  .text-tertiary {
-    @apply text-gray-400;
-  } */
 
   .text-primary-contrast {
     @apply text-white;
