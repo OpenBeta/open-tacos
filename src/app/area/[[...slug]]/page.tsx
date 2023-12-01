@@ -170,7 +170,7 @@ export function generateStaticParams (): PageSlugType[] {
 export async function generateMetadata ({ params }: PageWithCatchAllUuidProps): Promise<Metadata> {
   const areaUuid = parseUuidAsFirstParam({ params })
 
-  const { area: { areaName, pathTokens, media } } = await getArea(areaUuid)
+  const { area: { areaName, pathTokens, media } } = await getArea(areaUuid, 'cache-first')
 
   let wall = ''
   if (pathTokens.length >= 2) {
@@ -178,14 +178,14 @@ export async function generateMetadata ({ params }: PageWithCatchAllUuidProps): 
     wall = sanitizeName(pathTokens[pathTokens.length - 2]) + ' • '
   }
 
-  const title = sanitizeName(areaName)
+  const name = sanitizeName(areaName)
 
   const previewImage = media.length > 0 ? `${CLIENT_CONFIG.CDN_BASE_URL}/${media[0].mediaUrl}?w=1200q=75` : null
 
-  const description = `${wall}${title}`
+  const description = `Community knowledge • ${wall}${name}`
 
   return {
-    title,
+    title: `${name} climbing area`,
     description,
     openGraph: {
       description,

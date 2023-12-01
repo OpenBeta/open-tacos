@@ -94,6 +94,7 @@ export const QUERY_AREA_BY_ID = gql`
         areaName
         totalClimbs
         metadata {
+          areaId
           leaf
           isBoulder
           leftRightIndex

@@ -10,6 +10,7 @@ import { AreaLatLngForm } from './components/AreaLatLngForm'
 import { AddAreaForm } from './components/AddAreaForm'
 import { AreaListForm } from './components/AreaList'
 import { AreaTypeForm } from './components/AreaTypeForm'
+import { FetchPolicy } from '@apollo/client'
 
 // Opt out of caching for all data requests in the route segment
 export const dynamic = 'force-dynamic'
@@ -17,7 +18,7 @@ export const fetchCache = 'force-no-store' // opt out of Nextjs version of 'fetc
 
 // Page metadata
 export async function generateMetadata ({ params }: DashboardPageProps): Promise<Metadata> {
-  const { area: { areaName } } = await getPageDataForEdit(params.slug)
+  const { area: { areaName } } = await getPageDataForEdit(params.slug, 'cache-first')
   return {
     title: `Editing area ${areaName}`
   }
@@ -81,14 +82,14 @@ export const PageContainer: React.FC<{ children: ReactNode, id: string }> = ({ i
   </div>
 )
 
-export const getPageDataForEdit = async (pageSlug: string): Promise<AreaPageDataProps> => {
+export const getPageDataForEdit = async (pageSlug: string, fetchPolicy?: FetchPolicy): Promise<AreaPageDataProps> => {
   if (pageSlug == null) notFound()
 
   if (!validate(pageSlug)) {
     notFound()
   }
 
-  const pageData = await getArea(pageSlug)
+  const pageData = await getArea(pageSlug, fetchPolicy)
   if (pageData == null) {
     notFound()
   }
