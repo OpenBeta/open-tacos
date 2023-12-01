@@ -1,5 +1,6 @@
 import { notFound, permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
+import { Metadata } from 'next'
 import { validate } from 'uuid'
 import { MapPinLine, Lightbulb, ArrowRight } from '@phosphor-icons/react/dist/ssr'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -10,13 +11,13 @@ import { getArea } from '@/js/graphql/getArea'
 import { StickyHeaderContainer } from '@/app/components/ui/StickyHeaderContainer'
 import { GluttenFreeCrumbs } from '@/components/ui/BreadCrumbs'
 import { ArticleLastUpdate } from '@/components/edit/ArticleLastUpdate'
-import { getMapHref, getFriendlySlug, getAreaPageFriendlyUrl } from '@/js/utils'
+import { getMapHref, getFriendlySlug, getAreaPageFriendlyUrl, sanitizeName } from '@/js/utils'
 import { LazyAreaMap } from '@/components/area/areaMap'
 import { AreaPageContainer } from '@/app/components/ui/AreaPageContainer'
 import { AreaPageActions } from '../../components/AreaPageActions'
 import { SubAreasSection } from './sections/SubAreasSection'
 import { ClimbListSection } from './sections/ClimbListSection'
-
+import { CLIENT_CONFIG } from '@/js/configs/clientConfig'
 /**
  * Page cache settings
  */
@@ -163,4 +164,32 @@ export function generateStaticParams (): PageSlugType[] {
     { slug: ['b1166235-3328-5537-b5ed-92f406ea8495'] }, // Lander
     { slug: ['9abad566-2113-587e-95a5-b3abcfaa28ac'] } // Ten Sleep
   ]
+}
+
+// Page metadata
+export async function generateMetadata ({ params }: PageWithCatchAllUuidProps): Promise<Metadata> {
+  const areaUuid = parseUuidAsFirstParam({ params })
+
+  const { area: { areaName, pathTokens, media } } = await getArea(areaUuid)
+
+  let wall = ''
+  if (pathTokens.length >= 2) {
+    // Get the ancestor area's name
+    wall = sanitizeName(pathTokens[pathTokens.length - 2]) + ' • '
+  }
+
+  const title = sanitizeName(areaName)
+
+  const previewImage = media.length > 0 ? `${CLIENT_CONFIG.CDN_BASE_URL}/${media[0].mediaUrl}?w=1200q=75` : null
+
+  const description = `${wall}${title}`
+
+  return {
+    title,
+    description,
+    openGraph: {
+      description,
+      ...previewImage != null && { images: previewImage }
+    }
+  }
 }

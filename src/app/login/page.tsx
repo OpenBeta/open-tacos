@@ -15,5 +15,5 @@ export default function Page (): any {
       void signIn('auth0')
     }
   }, [status])
-  return <div className='h-screen w-screen'><div className='m-6'>Loading...</div></div>
+  return <div className='h-screen w-screen'><div className='m-6 text-sm'>Authenticating...</div></div>
 }
