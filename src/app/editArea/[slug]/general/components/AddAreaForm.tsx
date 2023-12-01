@@ -39,7 +39,7 @@ export const AddAreaForm: React.FC<{ area: AreaType }> = ({ area }) => {
       {notEditable &&
         <div role='alert' className='alert alert-info'>
           <WarningOctagon size={24} />
-          <span>Cannot add new areas to a crag or a boulder.</span>
+          <span>This area is either a crag or a boulder.  Adding a new child area is not allowed.</span>
         </div>}
       <DashboardInput
         name='areaName'

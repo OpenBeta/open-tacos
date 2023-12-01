@@ -82,7 +82,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
         <div className='area-climb-page-summary-left'>
           <h1>{areaName}</h1>
 
-          <div className='mt-6 flex flex-col text-xs text-secondary border-t border-b  divide-y'>
+          <div className='mt-6 flex flex-col text-xs text-secondary border-t border-b divide-y'>
             <a
               href={getMapHref({
                 lat,
@@ -107,7 +107,14 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
           <div className='flex items-center gap-2'>
             <h3>Description</h3>
             <span className='text-xs inline-block align-baseline'>
-              [<Link href={`/editArea/${uuid}/general#description`} className='hover:underline'>Edit</Link>]
+              [
+              <Link
+                href={`/editArea/${uuid}/general#description`}
+                target='_new'
+                className='hover:underline'
+              >
+                Edit
+              </Link>]
             </span>
           </div>
           {(description == null || description.trim() === '') && <EditDescriptionCTA uuid={uuid} />}
@@ -142,7 +149,7 @@ const EditDescriptionCTA: React.FC<{ uuid: string }> = ({ uuid }) => (
   <div role='alert' className='alert'>
     <Lightbulb size={24} />
     <div className='text-sm'>No information available.  Be the first to&nbsp;
-      <Link href={`/editArea/${uuid}/general#description`} className='link-dotted inline-flex items-center gap-1'>
+      <Link href={`/editArea/${uuid}/general#description`} target='_new' className='link-dotted inline-flex items-center gap-1'>
         add a description <ArrowRight size={16} />
       </Link>
     </div>
