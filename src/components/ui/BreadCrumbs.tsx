@@ -134,7 +134,7 @@ export const GluttenFreeCrumbs: React.FC<{
   editMode?: boolean
 }> = ({ pathTokens, ancestors, editMode = false }) => {
   return (
-    <div className='breadcrumbs text-sm font-medium text tracking-tight'>
+    <div className='breadcrumbs text-sm font-medium'>
       <ul>
         <li><a href='/' className='text-secondary'>Home</a></li>
         {pathTokens.map((path, index) => {
@@ -153,13 +153,14 @@ export const GluttenFreeCrumbs: React.FC<{
  */
 const GFItem: React.FC<{ path: string, url: string, isLast: boolean }> =
   ({ path, url, isLast }) => (
-    <li>
-      <a
+    <li className='no-underline'>
+      <Link
+        prefetch={false}
         href={url}
-        className={clx(
-          isLast ? 'text-primary font-semibold badge badge-info' : 'text-secondary')}
+        className={clx('tracking-tight',
+          isLast ? 'text-primary font-semibold badge badge-info' : 'text-secondary font-normal')}
       >
         {path}
-      </a>
+      </Link>
     </li>
   )

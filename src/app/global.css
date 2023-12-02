@@ -19,11 +19,11 @@ h1 {
 }
 
 h2 {
-    @apply text-base-content text-xl font-bold tracking-tight leading-loose;
+    @apply text-base-content text-2xl font-bold tracking-tight leading-loose;
 }
 
 h3 {
-    @apply text-base-content text-lg font-semibold tracking-tight leading-loose;
+    @apply text-base-content text-xl font-medium tracking-tight leading-loose;
 }
 
 h4 {
@@ -36,6 +36,10 @@ h4 {
 
 .text-secondary {
   @apply text-base-content/60 !important;
+}
+
+.wiki-content {
+  @apply prose prose-base max-w-none;
 }
 
 /**

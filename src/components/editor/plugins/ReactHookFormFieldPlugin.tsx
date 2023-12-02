@@ -7,7 +7,7 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { RulesType } from '@/js/types'
 
 /**
- * Lexical plugin responsible for updating React-hook-form field
+ * Lexical plugin responsible for updating React-hook-form field with the editor content.
  */
 export const ReactHookFormFieldPlugin: React.FC<{ fieldName: string, rules?: RulesType }> = ({ fieldName, rules }) => {
   const { field } = useController({ name: fieldName, rules })
