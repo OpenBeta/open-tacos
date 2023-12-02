@@ -15,8 +15,8 @@ export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddCl
   const classForActivePage = (myPath: string): string => activePath.endsWith(myPath) ? 'font-semibold pointer-events-none' : ''
   return (
     <nav className='px-6'>
-      <div className='sticky top-0'>
-        <ul className='menu w-56'>
+      <div className='sticky top-16'>
+        <ul className='menu w-56 px-0'>
           <li>
             <Link href={`/editArea/${slug}/general`} className={classForActivePage('general')}>
               <Article size={24} /> General
@@ -24,7 +24,7 @@ export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddCl
           </li>
         </ul>
 
-        <div className='p-2 w-56 mt-4'>
+        <div className='w-56 mt-4'>
           <hr className='border-t my-2' />
           <Link href={`/editArea/${slug}/general#addArea`} className={clx(canAddAreas ? '' : 'cursor-not-allowed pointer-events-none', 'block py-2')}>
             <button disabled={!canAddAreas} className='btn btn-accent btn-block justify-start'>

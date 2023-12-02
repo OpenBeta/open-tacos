@@ -118,7 +118,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
             </span>
           </div>
           {(description == null || description.trim() === '') && <EditDescriptionCTA uuid={uuid} />}
-          <Markdown>{description}</Markdown>
+          <Markdown className='wiki-content'>{description}</Markdown>
         </div>
 
       </div>

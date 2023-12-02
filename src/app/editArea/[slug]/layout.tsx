@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 /**
  * Layout for edit area dashboard
  */
-export default async function RootLayout ({
+export default async function EditAreaDashboardLayout ({
   children, params
 }: {
   children: React.ReactNode
@@ -22,8 +22,6 @@ export default async function RootLayout ({
       <div className='px-12 pt-8 pb-4'>
         <div className='text-3xl tracking-tight font-semibold'>Edit area</div>
 
-        <GluttenFreeCrumbs pathTokens={pathTokens} ancestors={ancestors} editMode />
-
         <div className='text-sm flex justify-end'>
           <a href={getAreaPageFriendlyUrl(uuid, areaName)} className='flex items-center gap-2 hover:underline'>
             Return to public version <ArrowUUpLeft size={18} />
@@ -31,13 +29,16 @@ export default async function RootLayout ({
         </div>
       </div>
 
-      <hr className='border-1' />
-
-      <div className='py-12 flex bg-base-200 flex-col lg:flex-row'>
-        <SidebarNav slug={params.slug} canAddAreas={!leaf} canAddClimbs={false} />
-        <main className='w-full px-2 lg:px-16'>
-          {children}
-        </main>
+      <div className='bg-base-200'>
+        <div className='z-20 sticky top-0 py-2 px-6 bg-base-200 w-full border-t border-b'>
+          <GluttenFreeCrumbs pathTokens={pathTokens} ancestors={ancestors} editMode />
+        </div>
+        <div className='flex bg-base-200 flex-col lg:flex-row py-12'>
+          <SidebarNav slug={params.slug} canAddAreas={!leaf} canAddClimbs={false} />
+          <main className='w-full px-2 lg:px-16'>
+            {children}
+          </main>
+        </div>
       </div>
     </div>
   )
