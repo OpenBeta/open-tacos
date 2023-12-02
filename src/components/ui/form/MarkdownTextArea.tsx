@@ -19,7 +19,7 @@ interface EditorProps {
 /**
  * Multiline inplace editor with react-hook-form support.
  */
-export const MDTextArea: React.FC<EditorProps> = ({ initialValue = '', name, placeholder = 'Enter some text', label, rules }) => {
+export const MarkdownTextArea: React.FC<EditorProps> = ({ initialValue = '', name, placeholder = 'Enter some text', label, rules }) => {
   const { fieldState: { error } } = useController({ name, rules })
   const [preview, setPreview] = useState(false)
   return (
@@ -37,7 +37,14 @@ export const MDTextArea: React.FC<EditorProps> = ({ initialValue = '', name, pla
         </a>
       </div>
 
-      <LazyMarkdownEditor initialValue={initialValue} preview={preview} reset={0} fieldName={name} />
+      <LazyMarkdownEditor
+        initialValue={initialValue}
+        preview={preview}
+        reset={0}
+        fieldName={name}
+        className='border rounded-btn wiki-content'
+        previewClassname='border-none'
+      />
 
       {error?.message != null &&
         <label className='label' id={`${name}-helper`} htmlFor={name}>

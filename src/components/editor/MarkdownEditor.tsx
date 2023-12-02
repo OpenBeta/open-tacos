@@ -7,10 +7,11 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
+import clx from 'classnames'
 
 import { mdeditorConfig } from './editorConfig'
-import { MarkdownPreviewPlugin } from './plugins/MarkdownPreviewPlugin'
 import { ReactHookFormFieldPlugin } from './plugins/ReactHookFormFieldPlugin'
+import { MarkdownPreviewPlugin } from './plugins/MarkdownPreviewPlugin'
 import { RulesType } from '../../js/types'
 
 export interface MarkdownEditorProps {
@@ -19,16 +20,18 @@ export interface MarkdownEditorProps {
   fieldName: string
   reset: number
   placeholder?: string
+  className?: string
+  previewClassname?: string
   rules?: RulesType
 }
 
 /**
  * Multiline markdown editor with react-hook-form support.
  */
-export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ fieldName, initialValue = '', preview = false, placeholder = 'Enter some text', rules }) => {
-  const config = mdeditorConfig(initialValue, !preview)
+export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ fieldName, initialValue = '', preview = false, placeholder = 'Enter some text', rules, className, previewClassname }) => {
+  const config = mdeditorConfig(initialValue, preview)
   return (
-    <div className='relative border'>
+    <div className={clx(className, preview ? previewClassname : '')}>
       <LexicalComposer initialConfig={config}>
         {preview
           ? (
@@ -49,13 +52,13 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ fieldName, initi
                 placeholder={<MDPlaceholder text={placeholder} className={config.theme?.placeholder} />}
                 ErrorBoundary={LexicalErrorBoundary}
               />
+              <HistoryPlugin />
               <ReactHookFormFieldPlugin fieldName={fieldName} rules={rules} />
             </>
             )}
-
-        <HistoryPlugin />
         <MarkdownPreviewPlugin editable={!preview} />
       </LexicalComposer>
+
     </div>
 
   )
