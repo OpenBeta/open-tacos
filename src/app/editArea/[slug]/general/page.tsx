@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 import { validate } from 'uuid'
-import { ReactNode } from 'react'
 import { Metadata } from 'next'
 
 import { AreaPageDataProps, getArea } from '@/js/graphql/getArea'
@@ -11,6 +10,7 @@ import { AddAreaForm } from './components/AddAreaForm'
 import { AreaListForm } from './components/AreaList'
 import { AreaTypeForm } from './components/AreaTypeForm'
 import { FetchPolicy } from '@apollo/client'
+import { PageContainer, SectionContainer } from '../components/EditAreaContainers'
 
 // Opt out of caching for all data requests in the route segment
 export const dynamic = 'force-dynamic'
@@ -39,29 +39,29 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
   } = area
 
   return (
-    <div className='grid grid-cols-1 gap-y-8'>
-      <PageContainer id='general'>
+    <PageContainer>
+      <SectionContainer id='general'>
         <AreaNameForm initialValue={areaName} uuid={uuid} />
-      </PageContainer>
+      </SectionContainer>
 
-      <PageContainer id='description'>
+      <SectionContainer id='description'>
         <AreaDescriptionForm initialValue={description} uuid={uuid} />
-      </PageContainer>
+      </SectionContainer>
 
-      <PageContainer id='location'>
+      <SectionContainer id='location'>
         <AreaLatLngForm initLat={lat} initLng={lng} uuid={uuid} />
-      </PageContainer>
+      </SectionContainer>
 
-      <PageContainer id='areaType'>
+      <SectionContainer id='areaType'>
         <AreaTypeForm area={area} />
-      </PageContainer>
+      </SectionContainer>
 
-      <PageContainer id='addArea'>
+      <SectionContainer id='addArea'>
         <AddAreaForm area={area} />
-      </PageContainer>
+      </SectionContainer>
 
       {!leaf &&
-        <PageContainer id='children'>
+        <SectionContainer id='children'>
           <AreaListForm
             areaName={areaName}
             uuid={uuid}
@@ -69,18 +69,10 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
             pathTokens={pathTokens}
             areas={children}
           />
-        </PageContainer>}
-    </div>
+        </SectionContainer>}
+    </PageContainer>
   )
 }
-
-export const PageContainer: React.FC<{ children: ReactNode, id: string }> = ({ id, children }) => (
-  <div id={id}>
-    <section className='mt-2 w-full flex flex-col gap-y-8'>
-      {children}
-    </section>
-  </div>
-)
 
 export const getPageDataForEdit = async (pageSlug: string, fetchPolicy?: FetchPolicy): Promise<AreaPageDataProps> => {
   if (pageSlug == null) notFound()
