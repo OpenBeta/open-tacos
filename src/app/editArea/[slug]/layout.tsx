@@ -34,7 +34,7 @@ export default async function EditAreaDashboardLayout ({
           <GluttenFreeCrumbs pathTokens={pathTokens} ancestors={ancestors} editMode />
         </div>
         <div className='flex bg-base-200 flex-col lg:flex-row py-12'>
-          <SidebarNav slug={params.slug} canAddAreas={!leaf} canAddClimbs={false} />
+          <SidebarNav slug={params.slug} canAddAreas={!leaf} canAddClimbs={leaf} />
           <main className='w-full px-2 lg:px-16'>
             {children}
           </main>

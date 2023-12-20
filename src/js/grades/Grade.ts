@@ -27,7 +27,9 @@ export enum GradeContexts {
 
 export type ClimbGradeContextType = Record<keyof ClimbDisciplineRecord, GradeScalesTypes>
 
-const gradeContextToGradeScales: Partial<Record<GradeContexts, ClimbGradeContextType>> = {
+export type GradeContextType = Partial<Record<GradeContexts, ClimbGradeContextType>>
+
+export const gradeContextToGradeScales: GradeContextType = {
   [GradeContexts.AU]: {
     trad: GradeScales.EWBANK,
     sport: GradeScales.EWBANK,

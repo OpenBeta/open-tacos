@@ -1,19 +1,24 @@
 'use client'
 import { useSession } from 'next-auth/react'
-
+import { WarningOctagon } from '@phosphor-icons/react/dist/ssr'
 import { SingleEntryForm } from 'app/editArea/[slug]/components/SingleEntryForm'
-import { AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '@/components/edit/EditAreaForm'
-import useUpdateAreasCmd from '@/js/hooks/useUpdateAreasCmd'
-import { MarkdownTextArea } from '@/components/ui/form/MarkdownTextArea'
 import useUpdateClimbsCmd from '@/js/hooks/useUpdateClimbsCmd'
-import { DashboardInput } from '@/components/ui/form/Input'
 import { DynamicClimbInputList } from './DynamicClimbInputList'
+import { GradeContexts } from '@/js/grades/Grade'
+import { defaultDisciplines } from '@/js/grades/util'
+import { IndividualClimbChangeInput } from '@/js/graphql/gql/contribs'
+
+export type QuickAddNewClimbProps =
+  Partial<IndividualClimbChangeInput> &
+  Required<Pick<IndividualClimbChangeInput, 'name' | 'disciplines' | 'grade'>>
+
+export interface AddClimbsFormData {
+  climbList: QuickAddNewClimbProps[]
+}
 /**
- * Area description edit form
- * @param param0
- * @returns
+ * Add new climbs to an area form
  */
-export const AddClimbsForm: React.FC<{ parentAreaUuid: string }> = ({ parentAreaUuid }) => {
+export const AddClimbsForm: React.FC<{ parentAreaName: string, parentAreaUuid: string, gradeContext: GradeContexts, canAddClimbs: boolean }> = ({ parentAreaName, parentAreaUuid, gradeContext, canAddClimbs }) => {
   const session = useSession({ required: true })
   const { updateClimbCmd } = useUpdateClimbsCmd(
     {
@@ -23,16 +28,30 @@ export const AddClimbsForm: React.FC<{ parentAreaUuid: string }> = ({ parentArea
   )
 
   return (
-    <SingleEntryForm<{ climbList: any[] }>
-      title='Add climbs'
-      initialValues={{ climbList: [{ climbName: '' }] }}
-      // initialValues={{ description: initialValue }}
+    <SingleEntryForm<AddClimbsFormData>
+      title={`Add climbs to ${parentAreaName} area`}
+      initialValues={{ climbList: [{ name: '', disciplines: defaultDisciplines() }] }}
+      validationMode='onSubmit'
+      ignoreIsValid
+      keepValuesAfterReset={false}
       submitHandler={async (data) => {
-        console.log(data)
-        // await updateClimbCmd({ description })
+        const { climbList } = data
+        const changes = climbList.filter(el => el.name.trim() !== '')
+        await updateClimbCmd({ parentId: parentAreaUuid, changes })
       }}
     >
-      <DynamicClimbInputList parentAreaUuid={parentAreaUuid} name='climbList' />
+      {canAddClimbs
+        ? <DynamicClimbInputList
+            parentAreaUuid={parentAreaUuid}
+            gradeContext={gradeContext}
+          />
+        : (
+          <div role='alert' className='alert alert-info'>
+            <WarningOctagon size={24} />
+            <span>This area is either a crag or a boulder.  Adding a new child area is not allowed.</span>
+          </div>
+          )}
+
     </SingleEntryForm>
   )
 }

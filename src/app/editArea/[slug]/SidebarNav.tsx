@@ -1,7 +1,7 @@
 'use client'
 import clx from 'classnames'
 import { usePathname } from 'next/navigation'
-import { Article, Plus } from '@phosphor-icons/react/dist/ssr'
+import { Article, Plus, LineSegments } from '@phosphor-icons/react/dist/ssr'
 
 /**
  * Sidebar navigation for area edit
@@ -25,11 +25,10 @@ export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddCl
             <a
               href={`/editArea/${slug}/addClimbs`}
               className={clx(
-                classForActivePage('addClimbs'),
-                canAddClimbs ? '' : 'italic'
+                classForActivePage('addClimbs')
               )}
             >
-              <Plus size={24} /> Add climbs
+              <LineSegments size={24} /> Manage climbs
             </a>
           </li>
         </ul>
@@ -38,14 +37,13 @@ export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddCl
           <hr className='border-t my-2' />
           <a href={`/editArea/${slug}/general#addArea`} className={clx(canAddAreas ? '' : 'cursor-not-allowed pointer-events-none', 'block py-2')}>
             <button disabled={!canAddAreas} className='btn btn-accent btn-block justify-start'>
-              <Plus size={20} weight='bold' /> Add area
+              <Plus size={20} weight='bold' /> Add areas
             </button>
           </a>
 
-          <div className={clx(canAddAreas ? '' : 'cursor-not-allowed pointer-events-none', 'block py-1')}>
-            <div className='text-sm italic text-secondary'>Coming soon:</div>
+          <div className={clx(canAddClimbs ? '' : 'cursor-not-allowed pointer-events-none', 'block py-1')}>
             <button disabled={!canAddClimbs} className='btn btn-accent btn-block justify-start'>
-              <Plus size={20} weight='bold' /> Add climb
+              <Plus size={20} weight='bold' /> Add climbs
             </button>
           </div>
 

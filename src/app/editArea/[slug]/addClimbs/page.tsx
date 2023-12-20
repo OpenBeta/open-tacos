@@ -4,13 +4,12 @@ import { AddClimbsForm } from './components/AddClimbsForm'
 
 export default async function AddClimbsPage ({ params: { slug } }: DashboardPageProps): Promise<any> {
   const { area } = await getPageDataForEdit(slug)
-  const {
-    areaName, uuid, ancestors, pathTokens, children
-  } = area
+  const { areaName, uuid, gradeContext, metadata } = area
+  const { leaf, isBoulder } = metadata
   return (
     <PageContainer>
       <SectionContainer id='general'>
-        <AddClimbsForm parentAreaUuid={uuid} />
+        <AddClimbsForm parentAreaName={areaName} parentAreaUuid={uuid} gradeContext={gradeContext} canAddClimbs={isBoulder || leaf} />
       </SectionContainer>
     </PageContainer>
   )
