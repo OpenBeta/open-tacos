@@ -1,6 +1,8 @@
 'use client'
 import { useSession } from 'next-auth/react'
 import { WarningOctagon } from '@phosphor-icons/react/dist/ssr'
+import { useRouter } from 'next/navigation'
+
 import { SingleEntryForm } from 'app/editArea/[slug]/components/SingleEntryForm'
 import useUpdateClimbsCmd from '@/js/hooks/useUpdateClimbsCmd'
 import { DynamicClimbInputList } from './DynamicClimbInputList'
@@ -15,10 +17,12 @@ export type QuickAddNewClimbProps =
 export interface AddClimbsFormData {
   climbList: QuickAddNewClimbProps[]
 }
+
 /**
  * Add new climbs to an area form
  */
 export const AddClimbsForm: React.FC<{ parentAreaName: string, parentAreaUuid: string, gradeContext: GradeContexts, canAddClimbs: boolean }> = ({ parentAreaName, parentAreaUuid, gradeContext, canAddClimbs }) => {
+  const router = useRouter()
   const session = useSession({ required: true })
   const { updateClimbCmd } = useUpdateClimbsCmd(
     {
@@ -38,6 +42,7 @@ export const AddClimbsForm: React.FC<{ parentAreaName: string, parentAreaUuid: s
         const { climbList } = data
         const changes = climbList.filter(el => el.name.trim() !== '')
         await updateClimbCmd({ parentId: parentAreaUuid, changes })
+        router.refresh() // Ask Next to refresh props from the server
       }}
     >
       {canAddClimbs

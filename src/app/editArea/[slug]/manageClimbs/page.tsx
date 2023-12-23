@@ -12,7 +12,7 @@ export const fetchCache = 'force-no-store' // opt out of Nextjs version of 'fetc
 export async function generateMetadata ({ params }: DashboardPageProps): Promise<Metadata> {
   const { area: { areaName } } = await getPageDataForEdit(params.slug, 'cache-first')
   return {
-    title: `Maging climbs in area ${areaName}`
+    title: `Manage climbs in area ${areaName}`
   }
 }
 
