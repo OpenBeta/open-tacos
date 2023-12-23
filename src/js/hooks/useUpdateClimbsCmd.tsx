@@ -87,7 +87,7 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
     MUTATION_DELETE_CLIMBS, {
       client: graphqlClient,
       onCompleted: (data) => {
-        void refreshPage(`/api/revalidate?s=${parentId}`)
+        void updateAreaPageCache(parentId)
         toast('Climbs deleted ✔️')
         if (onDeleteCompleted != null) {
           onDeleteCompleted(data)

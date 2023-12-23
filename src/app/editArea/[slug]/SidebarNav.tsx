@@ -23,9 +23,9 @@ export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddCl
           </li>
           <li>
             <a
-              href={`/editArea/${slug}/addClimbs`}
+              href={`/editArea/${slug}/manageClimbs`}
               className={clx(
-                classForActivePage('addClimbs')
+                classForActivePage('manageClimbs')
               )}
             >
               <LineSegments size={24} /> Manage climbs
@@ -35,17 +35,23 @@ export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddCl
 
         <div className='w-56 mt-4'>
           <hr className='border-t my-2' />
-          <a href={`/editArea/${slug}/general#addArea`} className={clx(canAddAreas ? '' : 'cursor-not-allowed pointer-events-none', 'block py-2')}>
-            <button disabled={!canAddAreas} className='btn btn-accent btn-block justify-start'>
+          <a
+            href={`/editArea/${slug}/general#addArea`}
+            className={clx(canAddAreas ? '' : 'cursor-not-allowed pointer-events-none', 'block py-2')}
+          >
+            <button disabled={!canAddAreas} className='btn btn-accent btn-outline btn-block justify-start'>
               <Plus size={20} weight='bold' /> Add areas
             </button>
           </a>
 
-          <div className={clx(canAddClimbs ? '' : 'cursor-not-allowed pointer-events-none', 'block py-1')}>
-            <button disabled={!canAddClimbs} className='btn btn-accent btn-block justify-start'>
+          <a
+            href={`/editArea/${slug}/manageClimbs`}
+            className={clx(canAddClimbs ? '' : 'cursor-not-allowed pointer-events-none', 'block py-1')}
+          >
+            <button disabled={!canAddClimbs} className='btn btn-accent btn-outline btn-block justify-start'>
               <Plus size={20} weight='bold' /> Add climbs
             </button>
-          </div>
+          </a>
 
           <hr className='border-t my-2' />
 

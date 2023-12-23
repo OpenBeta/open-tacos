@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation'
 import { validate } from 'uuid'
 import { Metadata } from 'next'
+import { FetchPolicy } from '@apollo/client'
+import { ArrowCircleRight } from '@phosphor-icons/react/dist/ssr'
 
 import { AreaPageDataProps, getArea } from '@/js/graphql/getArea'
 import { AreaNameForm } from './components/AreaNameForm'
@@ -9,7 +11,6 @@ import { AreaLatLngForm } from './components/AreaLatLngForm'
 import { AddAreaForm } from './components/AddAreaForm'
 import { AreaListForm } from './components/AreaList'
 import { AreaTypeForm } from './components/AreaTypeForm'
-import { FetchPolicy } from '@apollo/client'
 import { PageContainer, SectionContainer } from '../components/EditAreaContainers'
 
 // Opt out of caching for all data requests in the route segment
@@ -37,6 +38,8 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
     content: { description },
     metadata: { lat, lng, leaf }
   } = area
+
+  const canAddClimbs = leaf && children.length === 0
 
   return (
     <PageContainer>
@@ -70,6 +73,21 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
             areas={children}
           />
         </SectionContainer>}
+
+      <SectionContainer id='manageClimbs'>
+        <div className='card card-bordered border-base-300 /40 overflow-hidden w-full bg-base-100'>
+          <div className='card-body'>
+            <h4 className='font-semibold text-2xl'>Manage Climbs</h4>
+            {canAddClimbs
+              ? (
+                <div className='alert'>
+                  <a href={`/editArea/${uuid}/manageClimbs`} className='btn btn-link'>Manage climbs page <ArrowCircleRight size={20} /></a>
+                </div>
+                )
+              : <div className='alert'>This area contains subareas.  Please add climbs to areas designated as crags or boulders. </div>}
+          </div>
+        </div>
+      </SectionContainer>
     </PageContainer>
   )
 }

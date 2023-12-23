@@ -48,7 +48,7 @@ export const AddClimbsForm: React.FC<{ parentAreaName: string, parentAreaUuid: s
         : (
           <div role='alert' className='alert alert-info'>
             <WarningOctagon size={24} />
-            <span>This area is either a crag or a boulder.  Adding a new child area is not allowed.</span>
+            <span>This area is either a crag or a boulder.  Adding new child areas is not allowed.</span>
           </div>
           )}
 

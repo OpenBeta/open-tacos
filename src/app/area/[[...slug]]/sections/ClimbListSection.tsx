@@ -1,30 +1,30 @@
-import Link from 'next/link'
 import { Plus } from '@phosphor-icons/react/dist/ssr'
 import { ClimbList } from '@/app/editArea/[slug]/general/components/climb/ClimbListForm'
 import { AreaType } from '@/js/types'
 /**
- * Sub-areas section
+ * Climb list section
  */
-export const ClimbListSection: React.FC<{ area: AreaType }> = ({ area }) => {
+export const ClimbListSection: React.FC<{ area: AreaType, editMode?: boolean }> = ({ area, editMode = false }) => {
   const { uuid, gradeContext, climbs, metadata } = area
   if (!metadata.leaf) return null
   return (
-    <section className='w-full mt-16'>
+    <section className='w-full'>
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>
           <h3 className='flex items-center gap-4'>{climbs.length} Climbs</h3>
         </div>
-        <div className='flex items-center gap-2'>
-          <span className='text-sm italic'>Coming soon:</span>
-          <Link href={`/editArea/${uuid}/general#addArea`} className='btn-disabled btn btn-sm'>
-            <Plus size={18} weight='bold' /> New Climbs
-          </Link>
-        </div>
+        {/* Already in the edit dashboard. Don't show the button */}
+        {!editMode &&
+          <div className='flex items-center gap-2'>
+            <a href={`/editArea/${uuid}/manageClimbs`} className='btn btn-sm btn-accent btn-outline'>
+              <Plus size={18} weight='bold' /> New Climbs
+            </a>
+          </div>}
       </div>
 
-      <hr className='my-6 border-2 border-base-content' />
+      <hr className='mt-2 mb-6 border-2 border-base-content' />
 
-      <ClimbList gradeContext={gradeContext} areaMetadata={metadata} climbs={climbs} />
+      <ClimbList gradeContext={gradeContext} areaMetadata={metadata} climbs={climbs} editMode={editMode} />
     </section>
   )
 }

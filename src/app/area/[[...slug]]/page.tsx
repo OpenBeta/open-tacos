@@ -123,8 +123,11 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
 
       </div>
 
-      <SubAreasSection area={area} />
-      <ClimbListSection area={area} />
+      {/* An area can only have either subareas or climbs, but not both. */}
+      <div className='mt-6'>
+        <SubAreasSection area={area} />
+        <ClimbListSection area={area} />
+      </div>
     </AreaPageContainer>
   )
 }

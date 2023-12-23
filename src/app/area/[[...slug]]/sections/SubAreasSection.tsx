@@ -11,7 +11,7 @@ export const SubAreasSection: React.FC<{ area: AreaType } > = ({ area }) => {
   const { uuid, children, metadata: { leaf } } = area
   if (leaf) return null
   return (
-    <section className='w-full mt-16'>
+    <section className='w-full'>
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>
           <h3 className='flex items-center gap-4'><AreaEntityBullet />{children.length} Areas</h3>
@@ -21,7 +21,7 @@ export const SubAreasSection: React.FC<{ area: AreaType } > = ({ area }) => {
         </Link>
       </div>
 
-      <hr className='my-6 border-2 border-base-content' />
+      <hr className='mt-2 mb-6 border-2 border-base-content' />
 
       <AreaList parentUuid={uuid} areas={children} />
     </section>
