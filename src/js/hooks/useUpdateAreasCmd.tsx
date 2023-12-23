@@ -191,6 +191,6 @@ export const refreshPage = async (url: string): Promise<void> => {
   } catch {}
 }
 
-const updateAreaPageCache = async (uuid: string): Promise<void> => {
+export const updateAreaPageCache = async (uuid: string): Promise<void> => {
   await fetch(`/api/updateAreaPage?uuid=${uuid}`)
 }
