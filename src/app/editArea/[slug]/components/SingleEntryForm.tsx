@@ -8,6 +8,7 @@ export interface SingleEntryFormProps<T> {
   children: ReactNode
   initialValues: DefaultValues<T>
   validationMode?: keyof ValidationMode
+  ignoreIsValid?: boolean
   submitHandler: (formData: T) => Promise<void> | void
   title: string
   helperText?: string
@@ -15,11 +16,16 @@ export interface SingleEntryFormProps<T> {
   className?: string
 }
 
+/**
+ * A form container for abstracting away the react-hook-form  boilerplate.
+ * @param ignoreIsValid If true, the submit button will always be enabled.
+ */
 export function SingleEntryForm<T extends FieldValues> ({
   children,
   initialValues,
   submitHandler,
   validationMode = 'onBlur',
+  ignoreIsValid = false,
   helperText,
   title,
   keepValuesAfterReset = true,
@@ -54,7 +60,10 @@ export function SingleEntryForm<T extends FieldValues> ({
           </div>
           <div className='px-8 py-2 w-full flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 bg-base-200 border-t'>
             <span className='text-base-content/50'>{helperText}</span>
-            <SubmitButton isDirty={isDirty} isSubmitting={isSubmitting} isValid={isValid} />
+            <SubmitButton
+              isDirty={isDirty} isSubmitting={isSubmitting}
+              isValid={ignoreIsValid ? true : isValid}
+            />
           </div>
         </div>
       </form>

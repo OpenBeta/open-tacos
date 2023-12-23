@@ -27,7 +27,7 @@ export const AREA_LATLNG_FORM_VALIDATION_RULES: RulesType = {
   validate: {
     validLatLng:
     (v: string): string | undefined => {
-      if (v.length === 0) return undefined
+      if ((v?.length ?? 0) === 0) return undefined
       return LATLNG_PATTERN.test(v) ? undefined : 'Invalid coordinates. Example: 46.433333,11.85'
     }
   }
