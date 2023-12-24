@@ -1,49 +1,52 @@
 import { Suspense } from 'react'
-import { LandingCTA } from './components/LandingCTA'
 import { LandingHero } from './components/LandingHero'
+import { getChangeHistoryServerSide } from '@/js/graphql/contribAPI'
 import { LatestContributions, LatestContributionsSkeleton } from './components/LatestContributions'
 import { FinancialContributors } from './components/FinancialContributors'
 import { RecentTags } from './components/RecentTags'
 import { USAToC } from './components/USAToC'
 import { InternationalToC } from './components/InternationalToC'
 import { Volunteers } from './components/Volunteers'
+import { RecentContributionsMap } from './components/recent/RecentContributionsMap'
 
 /**
  * Cache duration in seconds
  */
 export const revalidate = 300
+export const fetchCache = 'force-no-store' // opt out of Nextjs version of 'fetch'
 
 /**
  * Root home page
  */
 export default async function Home (): Promise<any> {
+  const history = await getChangeHistoryServerSide()
   return (
-    <div className='mt-8 w-full flex flex-col gap-y-24'>
-      <div className='lg:pl-4 lg:grid lg:grid-cols-3'>
-        <div className='col-span-2 pb-10 rounded-box'>
-          <LandingHero />
-          <LandingCTA />
-          <Annoucement />
+    <div>
+      <LandingHero />
+
+      <hr className='py-2 border-base-content' />
+
+      <div className='w-full flex flex-col gap-y-16'>
+        <div className='lg:grid lg:grid-cols-3 gap-x-2'>
+
+          <div className='mt-8 lg:mt-0 lg:overflow-y-auto lg:h-[450px] w-full border-2 rounded-box'>
+            <Suspense fallback={<LatestContributionsSkeleton />}>
+              <LatestContributions />
+            </Suspense>
+          </div>
+
+          <div className='lg:col-span-2 h-[450px]'>
+            <RecentContributionsMap history={history} />
+          </div>
         </div>
-        <div className='mt-8 lg:mt-0 lg:overflow-y-auto lg:h-[800px] w-full border-2 rounded-box'>
-          <Suspense fallback={<LatestContributionsSkeleton />}>
-            <LatestContributions />
-          </Suspense>
+        <RecentTags />
+        <InternationalToC />
+        <USAToC />
+        <div className='flex flex-col gap-10'>
+          <FinancialContributors />
+          <Volunteers />
         </div>
-      </div>
-      <RecentTags />
-      <InternationalToC />
-      <USAToC />
-      <div className='flex flex-col gap-10'>
-        <FinancialContributors />
-        <Volunteers />
       </div>
     </div>
   )
 }
-
-const Annoucement: React.FC = () => (
-  <p className='mt-12 px-10 text-center text-sm'>
-    Our website is undergoing a facelift. Visit the <a href='/classic' className='underline'>old home</a>. <br />
-    <span className='text-base-content/60'>Questions or comments? <a href='mailto:hello@openbeta.io'>hello@openbeta.io</a></span>
-  </p>)
