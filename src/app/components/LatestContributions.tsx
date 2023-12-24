@@ -23,9 +23,9 @@ export const LatestContributions: React.FC = async () => {
  * Resuable container for actual and skeleton
  */
 const Container: React.FC<{ children: ReactNode }> = ({ children }) => (
-  <section className='px-4 w-full'>
+  <section className='px-4 w-full bg-base-200'>
     <div className='mt-2 flex items-center justify-between'>
-      <h3>Latest contributions </h3>
+      <p>LATEST CONTRIBUTIONS</p>
       <Link href='/edit' className='text-sm hover:underline'>See more</Link>
     </div>
     <hr className='mb-6 border-1 border-base-content' />
