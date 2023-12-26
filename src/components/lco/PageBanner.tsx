@@ -1,5 +1,5 @@
 'use client'
-import { HandHeart, ArrowUpRight } from '@phosphor-icons/react/dist/ssr'
+import { HandHeart, ArrowUpRight, ArrowRight } from '@phosphor-icons/react/dist/ssr'
 import { OrganizationType } from '../../js/types'
 import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
 
@@ -113,7 +113,6 @@ interface ContentProps {
 const LcoCard: React.FC<ContentProps> = ({ profile }) => {
   const { name, description, email, website, facebook, instagram, report, donation } = profile
   return (
-
     <div className='card card-bordered'>
       <div className='card-body'>
         <div className='flex flex-col lg:flex-row gap-6'>
@@ -175,7 +174,7 @@ const SocialLinks: React.FC<{ email?: string, facebook?: string, instagram?: str
   if (email == null && facebook == null && instagram == null) return null
 
   return (
-    <div className='border-t border-b flex items-center gap-8 pt-4 py-6 my-6'>
+    <div className='px-4 border-t border-b flex items-center flex-wrap gap-8 pt-4 py-6 my-6'>
       {email != null && (
         <a
           className='underline'
@@ -209,19 +208,23 @@ const SocialLinks: React.FC<{ email?: string, facebook?: string, instagram?: str
     </div>
   )
 }
+
 const AddLCOCallToAction: React.FC = () => {
   return (
-    <div className='alert'>
-      <p className='text-sm'>
-        No organizations found for this area.&nbsp;
-        <a
-          href='https://openbeta.substack.com/p/openbeta-and-lcos'
-          target='_blank' rel='noreferrer'
-          className='link-dotted'
-        >
-          Suggest an organization
-        </a>.
-      </p>
+    <div>
+      <p className='italic'>No organizations found for this area.</p>
+      <div className='alert mt-2'>
+        <p className='text-sm'>
+          Do you know a great local organization?&nbsp;
+          <a
+            href='https://openbeta.substack.com/p/openbeta-and-lcos'
+            target='_blank' rel='noreferrer'
+            className='link-dotted inline-flex items-center gap-1'
+          >
+            Let us know <ArrowRight />
+          </a>
+        </p>
+      </div>
     </div>
   )
 }
