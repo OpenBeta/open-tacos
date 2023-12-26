@@ -1,4 +1,3 @@
-import { Plus } from '@phosphor-icons/react/dist/ssr'
 import { ClimbList } from '@/app/editArea/[slug]/general/components/climb/ClimbListForm'
 import { AreaType } from '@/js/types'
 /**
@@ -17,7 +16,7 @@ export const ClimbListSection: React.FC<{ area: AreaType, editMode?: boolean }> 
         {!editMode &&
           <div className='flex items-center gap-2'>
             <a href={`/editArea/${uuid}/manageClimbs`} className='btn btn-sm btn-accent btn-outline'>
-              <Plus size={18} weight='bold' /> New Climbs
+              Add Climbs
             </a>
           </div>}
       </div>

@@ -17,7 +17,13 @@ export const ClimbList: React.FC<{ gradeContext: GradeContexts, climbs: ClimbTyp
   const sortedClimbs = climbs.sort(leftRightIndexComparator)
   return (
     <div>
-      {climbs.length === 0 && <div className='alert alert-info text-sm'>No climbs found.  Use the form below to add new climbs.</div>}
+      {climbs.length === 0
+        ? (
+            editMode
+              ? <NoClimbsEditModeCTA />
+              : <NoClimbsCTA areaId={areaMetadata.areaId} />
+          )
+        : null}
       <ol className={clx(climbs.length < 5 ? 'block max-w-sm' : 'three-column-table', 'divide-y divide-base-200')}>
         {sortedClimbs.map((climb, index) => {
           return (
@@ -90,3 +96,16 @@ const DisciplinesInfo: React.FC<{ disciplines: Partial<ClimbDisciplineRecord> }>
     </div>
   )
 }
+
+const NoClimbsEditModeCTA: React.FC = () => (
+  <div className='alert alert-info text-sm'>No climbs found.  Use the form below to add new climbs.</div>
+)
+
+const NoClimbsCTA: React.FC<{ areaId: string }> = ({ areaId }) => (
+  <div className='alert alert-info text-sm'>
+    No climbs found.&nbsp;
+    <a href={`/editArea/${areaId}/manageClimbs`} className='btn btn-sm btn-solid btn-accent'>
+      Add Climbs
+    </a>
+  </div>
+)
