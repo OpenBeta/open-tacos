@@ -1,6 +1,6 @@
 'use client'
 import * as React from 'react'
-import { Map, Marker, ScaleControl, LngLatBoundsLike, MapboxMap } from 'react-map-gl'
+import { Map, Marker, ScaleControl, FullscreenControl, LngLatBoundsLike, MapboxMap } from 'react-map-gl'
 import dynamic from 'next/dynamic'
 import { AreaMetadataType, AreaType } from '../../js/types'
 import { MAP_STYLES } from '../maps/BaseMap'
@@ -108,6 +108,7 @@ export default function AreaMap (props: AreaMapProps): JSX.Element {
         </Marker>
 
         <ScaleControl />
+        <FullscreenControl />
       </Map>
     </div>
   )
