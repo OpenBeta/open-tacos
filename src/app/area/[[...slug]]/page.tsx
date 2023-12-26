@@ -18,6 +18,7 @@ import { AreaPageActions } from '../../components/AreaPageActions'
 import { SubAreasSection } from './sections/SubAreasSection'
 import { ClimbListSection } from './sections/ClimbListSection'
 import { CLIENT_CONFIG } from '@/js/configs/clientConfig'
+import { PageBanner as LCOBanner } from '@/components/lco/PageBanner'
 /**
  * Page cache settings
  */
@@ -46,7 +47,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
   const { area } = pageData
 
   const photoList = area?.media ?? []
-  const { uuid, pathTokens, ancestors, areaName, content, authorMetadata, metadata } = area
+  const { uuid, pathTokens, ancestors, areaName, content, authorMetadata, metadata, organizations } = area
   const { description } = content
   const { lat, lng } = metadata
 
@@ -105,7 +106,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
 
         <div className='area-climb-page-summary-right'>
           <div className='flex items-center gap-2'>
-            <h3>Description</h3>
+            <h3 className='font-bold'>Description</h3>
             <span className='text-xs inline-block align-baseline'>
               [
               <Link
@@ -119,12 +120,17 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
           </div>
           {(description == null || description.trim() === '') && <EditDescriptionCTA uuid={uuid} />}
           <Markdown className='wiki-content'>{description}</Markdown>
-        </div>
 
+          <hr className='border-1 mt-8 mb-4' />
+
+          <LCOBanner orgs={organizations} />
+        </div>
       </div>
 
+      <hr className='border-1 my-8' />
+
       {/* An area can only have either subareas or climbs, but not both. */}
-      <div className='mt-6'>
+      <div className='mt-8'>
         <SubAreasSection area={area} />
         <ClimbListSection area={area} />
       </div>
