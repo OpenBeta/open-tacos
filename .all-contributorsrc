@@ -682,6 +682,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "isaac-aa",
+      "name": "Isaac Alonso",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19895420?v=4",
+      "profile": "https://github.com/isaac-aa",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
