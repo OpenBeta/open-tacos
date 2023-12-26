@@ -3,4 +3,5 @@ Disallow: /account/
 Disallow: /api/
 Disallow: /auth/
 Disallow: /basecamp/
+Disallow: /editArea/
 Sitemap: https://openbeta.io/sitemap.xml

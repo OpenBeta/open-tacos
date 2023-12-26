@@ -36,6 +36,16 @@ module.exports = {
   async redirects () {
     return [
       {
+        source: '/areas/:uuid',
+        destination: '/area/:uuid/',
+        permanent: true
+      },
+      {
+        source: '/crag/:uuid',
+        destination: '/area/:uuid/',
+        permanent: true
+      },
+      {
         source: '/blog',
         destination: 'https://openbeta.substack.com/',
         permanent: false
