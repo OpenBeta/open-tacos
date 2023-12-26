@@ -27,8 +27,10 @@ export const AddAreaForm: React.FC<{ area: AreaType }> = ({ area }) => {
     <SingleEntryForm<{ areaName: string, areaType: AreaTypeFormProp }>
       initialValues={{ areaName: '' }}
       keepValuesAfterReset={false}
+      validationMode='onSubmit'
+      ignoreIsValid
       title='Add new area'
-      helperText='TIP: Pick &ldquo;AREA&rdquo; if not sure.  You can still change it later.'
+      helperText='TIP: Pick &ldquo;AREA&rdquo; type if not sure.  You can change it later.'
       submitHandler={async ({ areaName, areaType }) => {
         const { isBoulder, isLeaf } = areaDesignationToDb(areaType)
         await addOneAreaCmd({ name: areaName, parentUuid: uuid, isBoulder, isLeaf })
@@ -39,7 +41,7 @@ export const AddAreaForm: React.FC<{ area: AreaType }> = ({ area }) => {
       {notEditable &&
         <div role='alert' className='alert alert-info'>
           <WarningOctagon size={24} />
-          <span>This area is either a crag or a boulder.  Adding a new child area is not allowed.</span>
+          <span>This area is either a crag or a boulder.  Adding new child areas is not allowed.</span>
         </div>}
       <DashboardInput
         name='areaName'
