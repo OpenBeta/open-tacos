@@ -1,8 +1,6 @@
-// import * as HoverCard from '@radix-ui/react-hover-card'
+'use client'
+import { HandHeart, ArrowUpRight, ArrowRight } from '@phosphor-icons/react/dist/ssr'
 import { OrganizationType } from '../../js/types'
-import Tooltip from '../../components/ui/Tooltip'
-import { InformationCircleIcon } from '@heroicons/react/20/solid'
-import { UsersIcon, ArrowUpRightIcon } from '@heroicons/react/24/outline'
 import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
 
 export interface LCOProfileType {
@@ -49,27 +47,24 @@ export const PageBanner: React.FC<PageBannerProps> = ({ orgs }) => {
   const lcoList = getLcoList(orgs)
 
   return (
-    <div className='grid pt-6 pb-4 lg:pb-16 lg:pt-16'>
-      <div className='col-span-full flex justify-start items-center pb-6'>
-        <h3 className='mr-4'>Local climbing organizations</h3>
-        <Tooltip content={
-          <p>Learn more about our&nbsp;
-            <a href='https://openbeta.substack.com/p/openbeta-and-lcos' target='_blank' rel='noreferrer' className='underline'>
-              initiative
-            </a>.
-          </p>
-        }
-        >
-          <InformationCircleIcon className='h-6 w-6' />
-        </Tooltip>
+    <div>
+      <div className='flex items-center flex-wrap gap-2 '>
+        <h3 className='font-bold'>Local climbing organizations</h3>
+        <span className='text-xs'>
+          [
+          <a
+            href='https://openbeta.substack.com/p/openbeta-and-lcos'
+            target='_blank' rel='noreferrer' className='hover:underline'
+          >
+            Learn more
+          </a>
+          ]
+        </span>
       </div>
-      <div>
+
+      <div className='mt-3 flex flex-wrap gap-6'>
         {lcoList.length === 0
-          ? (
-            <p className='italic text-base-content/60'>
-              No organizations found for this area
-            </p>
-            )
+          ? <AddLCOCallToAction />
           : (
               lcoList.map((orgProfile) => (
                 <LcoCardTrigger key={orgProfile.id} profile={orgProfile} />
@@ -93,14 +88,18 @@ const LcoCardTrigger: React.FC<{ profile: LCOProfileType }> = ({ profile }): JSX
 
 const IndividualBanner: React.FC<ContentProps> = ({ profile }) => (
   <DialogTrigger asChild className='flex flex-row items-center gap-4'>
-    <div className='sm:inline-block mr-6 mb-6'>
-      <div className='flex items-center bg-light hover:bg-on-hover pl-5 pr-7 rounded-2xl'>
-        <UsersIcon className='h-10 w-10' />
-        <div className='py-5  pl-4 overflow-hidden'>
-          <p className='text-base leading-6'>{profile.name}</p>
-          <p className='text-xs underline'>
-            <a href={profile.website} target='_blank' rel='noreferrer'>{profile.website}</a>
-          </p>
+    <div className='card card-compact w-80 shadow-lg card-bordered'>
+      <div className='card-body overflow-hidden'>
+        <div className='flex items-center gap-3'>
+          <div className='avatar cursor-pointer'>
+            <HandHeart size={32} weight='duotone' className='border rounded border-base-300 p-0.5' />
+          </div>
+          <div className='overflow-hidden'>
+            <p className='text-base leading-6 cursor-pointer truncate'>{profile.name}</p>
+            <p className='text-xs underline text-secondary truncate'>
+              <a href={profile.website} target='_blank' rel='noreferrer' onClick={e => e.stopPropagation()}>{profile.website}</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -114,94 +113,118 @@ interface ContentProps {
 const LcoCard: React.FC<ContentProps> = ({ profile }) => {
   const { name, description, email, website, facebook, instagram, report, donation } = profile
   return (
-
-    <div className='grid md:grid-cols-6 px-11 pt-11 pb-16 gap-2 md:gap-4 bg-white rounded-lg'>
-
-      <div className='md:col-span-1'>
-        <UsersIcon className='h-12 w-12 rounded-lg border-slate-100 border' />
-      </div>
-
-      <div className='gap-10 md:col-span-5'>
-        <p className='text-base-content/60 font-semibold'>Local Climbing Organization</p>
-        <h2 className='card-title my-2 uppercase'>{name}</h2>
-        {website != null && (
-          <a
-            className='underline pb-5'
-            href={website}
-            target='_blank'
-            rel='noreferrer'
-          >
-            <p className='text-sm'>{website}</p>
-          </a>
-        )}
-        {description != null && (
-          <p className='whitespace-pre-line'>
-            {description}
-          </p>
-        )}
-        <div className={email == null && instagram == null && facebook == null ? ('hidden') : ('border-t border-b divide-y')}>
-          <div className='flex felx-row flex-wrap justify-between pt-4 md:pt-6'>
-            {email != null && (
-              <a
-                className='underline pb-4'
-                href={`mailto:${email}`}
-                target='_blank'
-                rel='noreferrer'
-              >
-                contact info
-              </a>
-            )}
-            {instagram != null && (
-              <a
-                className='underline pb-4'
-                href={instagram}
-                target='_blank'
-                rel='noreferrer'
-              >
-                instagram
-              </a>
-            )}
-            {facebook != null && (
-              <a
-                className='underline pb-4'
-                href={facebook}
-                target='_blank'
-                rel='noreferrer'
-              >
-                facebook
-              </a>
-            )}
+    <div className='card card-bordered'>
+      <div className='card-body'>
+        <div className='flex flex-col lg:flex-row gap-6'>
+          <div className='avatar'>
+            <HandHeart size={48} className='border rounded-btn p-1' />
           </div>
-        </div>
-        <div className='space-y-4 py-6'>
           <div>
-            {donation != null && (
+            <p className='text-secondary font-semibold'>Local Climbing Organization</p>
+            <h3 className='card-title mt-4 uppercase'>{name}</h3>
+            {website != null && (
               <a
-                className='btn btn-primary btn-outline'
-                href={donation}
+                className='underline text-xs text-secondary'
+                href={website}
                 target='_blank'
                 rel='noreferrer'
               >
-                Make a Donation <ArrowUpRightIcon className='ml-2 w-4 h-4' />
+                {website}
               </a>
             )}
-          </div>
-          {report != null && (
-            <div className='card-actions '>
-              <a
-                className='btn btn-primary btn-solid'
-                href={report}
-                target='_blank'
-                rel='noreferrer'
-              >
-                Report Hardware Replacement{' '}
-                <ArrowUpRightIcon className='ml-2 w-4 h-4' />
-              </a>
+            {description != null && (
+              <p className='text-base mt-2'>
+                {description}
+              </p>
+            )}
+
+            <SocialLinks email={email} facebook={facebook} instagram={instagram} />
+
+            <div className='card-actions flex flex-col gap-4'>
+              {donation != null && (
+                <a
+                  className='btn btn-primary gap-2'
+                  href={donation}
+                  target='_blank'
+                  rel='noreferrer'
+                >
+                  Make a Donation <ArrowUpRight />
+                </a>
+              )}
+              {report != null && (
+                <a
+                  className='btn btn-accent btn-solid gap-2'
+                  href={report}
+                  target='_blank'
+                  rel='noreferrer'
+                >
+                  Report Hardware Replacement{' '}
+                  <ArrowUpRight />
+                </a>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
+  )
+}
 
+const SocialLinks: React.FC<{ email?: string, facebook?: string, instagram?: string }> = ({ email, facebook, instagram }) => {
+  if (email == null && facebook == null && instagram == null) return null
+
+  return (
+    <div className='px-4 border-t border-b flex items-center flex-wrap gap-8 pt-4 py-6 my-6'>
+      {email != null && (
+        <a
+          className='underline'
+          href={`mailto:${email}`}
+          target='_blank'
+          rel='noreferrer'
+        >
+          contact info
+        </a>
+      )}
+      {instagram != null && (
+        <a
+          className='underline'
+          href={instagram}
+          target='_blank'
+          rel='noreferrer'
+        >
+          instagram
+        </a>
+      )}
+      {facebook != null && (
+        <a
+          className='underline'
+          href={facebook}
+          target='_blank'
+          rel='noreferrer'
+        >
+          facebook
+        </a>
+      )}
+    </div>
+  )
+}
+
+const AddLCOCallToAction: React.FC = () => {
+  return (
+    <div>
+      <p className='italic'>No organizations found for this area.</p>
+      <div className='alert mt-2'>
+        <p className='text-sm'>
+          Do you know a great local organization?&nbsp;
+          <a
+            href='https://openbeta.substack.com/p/openbeta-and-lcos'
+            target='_blank' rel='noreferrer'
+            className='link-dotted inline-flex items-center gap-1'
+          >
+            Let us know <ArrowRight />
+          </a>
+        </p>
+      </div>
+    </div>
   )
 }

@@ -14,7 +14,7 @@ export const SubAreasSection: React.FC<{ area: AreaType } > = ({ area }) => {
     <section className='w-full'>
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>
-          <h3 className='flex items-center gap-4'><AreaEntityBullet />{children.length} Areas</h3>
+          <h3 className='flex items-center gap-4 font-bold'><AreaEntityBullet />{children.length} Areas</h3>
         </div>
         <Link href={`/editArea/${uuid}/general#addArea`} target='_new' className='btn btn-sm btn-accent'>
           <PlusCircle size={16} /> New Areas
