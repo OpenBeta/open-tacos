@@ -260,6 +260,7 @@ Thanks goes to these wonderful people:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Ali-muhammed7040"><img src="https://avatars.githubusercontent.com/u/81983704?v=4?s=100" width="100px;" alt="Ali Muhammad"/><br /><sub><b>Ali Muhammad</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=Ali-muhammed7040" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://henryaviles.vercel.app"><img src="https://avatars.githubusercontent.com/u/108551827?v=4?s=100" width="100px;" alt="Henry Aviles"/><br /><sub><b>Henry Aviles</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=Haviles04" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://shravaniroy.netlify.app/"><img src="https://avatars.githubusercontent.com/u/17310598?v=4?s=100" width="100px;" alt="ShravaniRoy"/><br /><sub><b>ShravaniRoy</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=ShravaniRoy" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/isaac-aa"><img src="https://avatars.githubusercontent.com/u/19895420?v=4?s=100" width="100px;" alt="Isaac Alonso"/><br /><sub><b>Isaac Alonso</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=isaac-aa" title="Code">💻</a> <a href="#ideas-isaac-aa" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
   </tbody>
 </table>
