@@ -17,7 +17,7 @@ type MetadataWithLatLng = ClimbType | AreaType
 interface FEATURE_PROPS { historyIndex: number, name: string}
 type HISTORY_FEATURE = Feature<Point, FEATURE_PROPS>
 
-const fitBoundsOptions = { padding: 200 }
+const fitBoundsOptions = { padding: 50 }
 
 export const RecentContributionsMap: React.FC<{ history: ChangesetType[] }> = ({ history }) => {
   const features = history.reduce < HISTORY_FEATURE[] >((acc, curr, index) => {
