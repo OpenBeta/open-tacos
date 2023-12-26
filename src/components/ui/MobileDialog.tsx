@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { X as XMarkIcon } from '@phosphor-icons/react/dist/ssr'
 import clx from 'classnames'
 interface Props {
   title?: string | ReactNode
@@ -25,13 +25,13 @@ export const DialogContent = React.forwardRef<any, Props>(
           <DialogPrimitive.Title className='dialog-title'>
             {title}
           </DialogPrimitive.Title>
-          {children}
           {/* Use absolute positioning to place the close button on the upper left corner */}
           <DialogPrimitive.Close aria-label='Close' asChild className='dialog-close-button'>
-            <button className='btn btn-circle btn-ghost'>
-              <XMarkIcon className='w-8 h-8' />
+            <button className='btn btn-circle btn-ghost outline-none'>
+              <XMarkIcon size={24} />
             </button>
           </DialogPrimitive.Close>
+          {children}
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     )
