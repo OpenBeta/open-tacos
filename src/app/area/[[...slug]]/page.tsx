@@ -186,7 +186,7 @@ export function generateStaticParams (): PageSlugType[] {
 export async function generateMetadata ({ params }: PageWithCatchAllUuidProps): Promise<Metadata> {
   const areaUuid = parseUuidAsFirstParam({ params })
 
-  const { area: { areaName, pathTokens, media } } = await getArea(areaUuid, 'cache-first')
+  const { area: { uuid, areaName, pathTokens, media } } = await getArea(areaUuid, 'cache-first')
 
   let wall = ''
   if (pathTokens.length >= 2) {
@@ -202,6 +202,9 @@ export async function generateMetadata ({ params }: PageWithCatchAllUuidProps): 
 
   return {
     title: `${name} climbing area`,
+    alternates: {
+      canonical: `https://openbeta.io/area/${uuid}/${getFriendlySlug(areaName)}`
+    },
     description,
     openGraph: {
       description,

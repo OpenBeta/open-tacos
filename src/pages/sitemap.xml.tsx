@@ -13,40 +13,6 @@ const query = gql`query UsaAreas( $filter: Filter) {
       pathTokens
       totalClimbs
       density
-      aggregate {
-        byDiscipline {
-            sport {
-              total
-            }
-            trad {
-              total
-            }
-            boulder {
-              total
-            }
-            tr {
-              total
-            }
-            alpine {
-              total
-            }
-            mixed {
-              total
-            }
-            aid {
-              total
-            }
-          }
-      }
-      metadata {
-        lat
-        lng
-        areaId
-      }
-      media {
-        mediaUrl
-        mediaUuid
-      }
     }
   }`
 
@@ -120,7 +86,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
             .map(({ uuid }) => {
                 return `
                   <url>
-                    <loc>${baseUrl}/areas/${uuid}</loc>
+                    <loc>${baseUrl}/area/${uuid}</loc>
                     <changefreq>monthly</changefreq>
                     <priority>1.0</priority>
                   </url>
