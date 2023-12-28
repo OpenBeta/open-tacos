@@ -15,7 +15,7 @@ interface InputProps {
   helper?: string | JSX.Element
   disabled?: boolean
   readOnly?: boolean
-  type?: 'text' | 'number' | 'email'
+  type?: 'text' | 'number' | 'email' | 'hidden'
   spellCheck?: boolean
 }
 
