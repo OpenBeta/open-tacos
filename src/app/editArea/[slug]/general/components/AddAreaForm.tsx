@@ -28,7 +28,7 @@ export const AddAreaForm: React.FC<{ area: AreaType }> = ({ area }) => {
       initialValues={{ areaName: '' }}
       keepValuesAfterReset={false}
       validationMode='onSubmit'
-      ignoreIsValid
+      alwaysEnableSubmit
       title='Add new area'
       helperText='TIP: Pick &ldquo;AREA&rdquo; type if not sure.  You can change it later.'
       submitHandler={async ({ areaName, areaType }) => {

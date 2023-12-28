@@ -36,7 +36,7 @@ export const AddClimbsForm: React.FC<{ parentAreaName: string, parentAreaUuid: s
       title={`Add climbs to ${parentAreaName} area`}
       initialValues={{ climbList: [{ name: '', disciplines: defaultDisciplines() }] }}
       validationMode='onSubmit'
-      ignoreIsValid
+      alwaysEnableSubmit
       keepValuesAfterReset={false}
       submitHandler={async (data) => {
         const { climbList } = data

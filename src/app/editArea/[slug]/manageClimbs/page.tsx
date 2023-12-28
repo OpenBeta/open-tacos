@@ -3,6 +3,7 @@ import { DashboardPageProps, getPageDataForEdit } from '../general/page'
 import { PageContainer, SectionContainer } from '../components/EditAreaContainers'
 import { AddClimbsForm } from './components/AddClimbsForm'
 import { ClimbListSection } from '@/app/area/[[...slug]]/sections/ClimbListSection'
+import { SortClimbsForm } from './components/sorting/SortClimbsForm'
 
 // Opt out of caching for all data requests in the route segment
 export const dynamic = 'force-dynamic'
@@ -22,6 +23,9 @@ export default async function AddClimbsPage ({ params: { slug } }: DashboardPage
   const { leaf, isBoulder } = metadata
   return (
     <PageContainer>
+      <SectionContainer id='leftToRight'>
+        <SortClimbsForm parentAreaId={area.uuid} climbs={area.climbs} gradeContext={gradeContext} />
+      </SectionContainer>
       <SectionContainer id='climbList'>
         <ClimbListSection area={area} editMode />
       </SectionContainer>

@@ -296,3 +296,15 @@ export const legacyInvalidateClimbPageCache = async (uuid: string): Promise<void
     console.log('Invalidating climb page cache', e)
   }
 }
+
+/**
+ * Comparator for sorting climbs by leftRightIndex.
+ * If leftRightIndex is not defined, use 'name' as the tiebreaker.
+ */
+export const climbLeftRightIndexComparator = (a: ClimbType, b: ClimbType): number => {
+  const aIndex = a.metadata.leftRightIndex ?? a.name
+  const bIndex = b.metadata.leftRightIndex ?? b.name
+  if (aIndex < bIndex) return -1
+  else if (aIndex > bIndex) return 1
+  return 0
+}
