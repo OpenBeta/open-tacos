@@ -1,20 +1,12 @@
 import clx from 'classnames'
 import { AreaMetadataType, ClimbDisciplineRecord, ClimbType } from '@/js/types'
 import { disciplineTypeToDisplay } from '@/js/grades/util'
-import { removeTypenameFromDisciplines } from '@/js/utils'
+import { removeTypenameFromDisciplines, climbLeftRightIndexComparator } from '@/js/utils'
 import Grade, { GradeContexts } from '@/js/grades/Grade'
 import { ClimbListMiniToolbar } from '../../../manageClimbs/components/ClimbListMiniToolbar'
 
-const leftRightIndexComparator = (a: ClimbType, b: ClimbType): number => {
-  const aIndex = a.metadata.leftRightIndex
-  const bIndex = b.metadata.leftRightIndex
-  if (aIndex < bIndex) return -1
-  else if (aIndex > bIndex) return 1
-  return 0
-}
-
 export const ClimbList: React.FC<{ gradeContext: GradeContexts, climbs: ClimbType[], areaMetadata: AreaMetadataType, editMode: boolean }> = ({ gradeContext, climbs, areaMetadata, editMode }) => {
-  const sortedClimbs = climbs.sort(leftRightIndexComparator)
+  const sortedClimbs = [...climbs].sort(climbLeftRightIndexComparator)
   return (
     <div>
       {climbs.length === 0

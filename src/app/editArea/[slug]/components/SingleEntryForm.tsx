@@ -6,9 +6,9 @@ import clx from 'classnames'
 
 export interface SingleEntryFormProps<T> {
   children: ReactNode
-  initialValues: DefaultValues<T>
+  initialValues?: DefaultValues<T>
   validationMode?: keyof ValidationMode
-  ignoreIsValid?: boolean
+  alwaysEnableSubmit?: boolean
   submitHandler: (formData: T) => Promise<void> | void
   title: string
   helperText?: string
@@ -25,7 +25,7 @@ export function SingleEntryForm<T extends FieldValues> ({
   initialValues,
   submitHandler,
   validationMode = 'onBlur',
-  ignoreIsValid = false,
+  alwaysEnableSubmit = false,
   helperText,
   title,
   keepValuesAfterReset = true,
@@ -33,7 +33,7 @@ export function SingleEntryForm<T extends FieldValues> ({
 }: SingleEntryFormProps<T>): ReactNode {
   const form = useForm<T>({
     mode: validationMode,
-    defaultValues: { ...initialValues }
+    ...initialValues != null && { defaultValues: { ...initialValues } }
   })
 
   const { handleSubmit, reset, formState: { isValid, isSubmitting, isDirty } } = form
@@ -48,8 +48,7 @@ export function SingleEntryForm<T extends FieldValues> ({
         } else {
           reset()
         }
-      }
-      )}
+      })}
       >
         <div className={clx('card card-bordered border-base-300/40 overflow-hidden w-full bg-base-100', className)}>
           <div className='card-body'>
@@ -61,8 +60,9 @@ export function SingleEntryForm<T extends FieldValues> ({
           <div className='px-8 py-2 w-full flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 bg-base-200 border-t'>
             <span className='text-base-content/50'>{helperText}</span>
             <SubmitButton
-              isDirty={isDirty} isSubmitting={isSubmitting}
-              isValid={ignoreIsValid ? true : isValid}
+              isSubmitting={isSubmitting}
+              isDirty={alwaysEnableSubmit ? true : isDirty}
+              isValid={alwaysEnableSubmit ? true : isValid}
             />
           </div>
         </div>

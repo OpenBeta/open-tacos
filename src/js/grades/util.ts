@@ -1,4 +1,7 @@
-import { ClimbDisciplineRecord } from '../types'
+import { getScale } from '@openbeta/sandbag'
+
+import { ClimbDisciplineRecord, GradeValuesType } from '../types'
+import { GradeContexts, gradeContextToGradeScales } from './Grade'
 
 export const disciplineTypeToDisplay = (type: Partial<ClimbDisciplineRecord>): string[] => {
   const ret: string[] = []
@@ -75,3 +78,30 @@ export const defaultDisciplines = (): ClimbDisciplineRecord => ({
   tr: false,
   snow: false
 })
+
+/**
+ * Convert grades object to human-readable string.  The next version of @openbeta/sandbag should support this.
+ * @param grades
+ * @param discplines
+ * @param context
+ */
+export const gradesToString = (grades: GradeValuesType, discplines: ClimbDisciplineRecord, context: GradeContexts): string => {
+  if (grades == null) return ''
+  const scale = gradeContextToGradeScales[context]
+  if (scale == null) return ''
+
+  const ret: string[] = []
+  const entries = Object.entries(discplines)
+  for (const [key, value] of entries) {
+    if (key === '__typename') continue
+    // @ts-expect-error
+    const scaleName = scale[key]
+    if (value && scaleName != null) {
+      const k = getScale(scaleName)
+      if (k == null) continue
+      const v = grades[k.name]
+      if (v != null) ret.push(v)
+    }
+  }
+  return ret.join(' ')
+}
