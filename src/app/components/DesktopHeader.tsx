@@ -24,6 +24,10 @@ export const DesktopHeader: React.FC = () => {
       label: 'T-shirts'
     },
     {
+      to: '/partner-with-us',
+      label: 'Become a Partner'
+    },
+    {
       to: 'https://docs.openbeta.io',
       label: 'Docs'
     },

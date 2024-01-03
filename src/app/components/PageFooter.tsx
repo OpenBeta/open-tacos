@@ -28,6 +28,7 @@ export const PageFooter: React.FC = () => {
         <a className='link link-hover' href='https://openbeta.substack.com/'>Our blog</a>
         <a className='link link-hover' href='https://opencollective.com/openbeta'>Make a donation</a>
         <a className='link link-hover' href='https://opencollective.com/openbeta/contribute/t-shirt-31745'>Buy a T-shirt</a>
+        <a className='link link-hover' href='/partner-with-us/'>Become a Partner</a>
       </nav>
       <nav>
         <header className='footer-title'>Source code</header>

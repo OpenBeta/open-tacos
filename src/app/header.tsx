@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import clx from 'classnames'
 
 import OpenBetaLogo from '@/assets/brand/openbeta-logo'
@@ -27,8 +26,8 @@ export enum LogoSize {
  */
 export const Logo: React.FC<{ size?: LogoSize, className?: string }> = ({ size = LogoSize.sm, className }) => {
   return (
-    <Link href='/'>
+    <a href='/'>
       <OpenBetaLogo className={clx(size, className)} />
-    </Link>
+    </a>
   )
 }
