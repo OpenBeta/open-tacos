@@ -2,7 +2,7 @@
 import { MouseEventHandler } from 'react'
 import Link from 'next/link'
 import { Popover } from '@headlessui/react'
-import { DotsThreeOutlineVertical, House as HouseIcon } from '@phosphor-icons/react/dist/ssr'
+import { List, House as HouseIcon } from '@phosphor-icons/react/dist/ssr'
 import MobileNavBar from './ui/MobileNavBar'
 import OpenBetaLogo from '../assets/brand/openbeta-logo.svg'
 
@@ -46,11 +46,11 @@ export const LoginButton = (): JSX.Element => (
   />)
 
 const Home = (): JSX.Element => (
-  <Link href='/' legacyBehavior>
+  <a href='/'>
     <button className='btn btn-square btn-ghost'>
       <HouseIcon size={28} className='text-base-100' />
     </button>
-  </Link>)
+  </a>)
 
 const Branding = (): JSX.Element => {
   return (
@@ -67,7 +67,7 @@ export const More = (): JSX.Element => {
   return (
     <Popover>
       <Popover.Button as='div' className='z-50 flex center-items'>
-        <Button label={<DotsThreeOutlineVertical size={28} className='text-base-100' />} />
+        <button className='btn btn-sm btn-outline btn-square'><List /></button>
       </Popover.Button>
 
       <Popover.Panel className='absolute z-20 right-0 mt-2 p-6 bg-white rounded-md w-full max-w-md drop-shadow-md'>
@@ -82,6 +82,7 @@ export const More = (): JSX.Element => {
             : <a className='btn btn-accent no-animation btn-block' href='/' onClick={signInHandler}>Login</a>}
           <hr />
           <a className='btn btn-ghost no-animation btn-block text-accent' href='https://opencollective.com/openbeta/contribute/t-shirt-31745'>Get your OpenBeta T-shirts</a>
+          <a className='btn btn-ghost no-animation btn-block' href='/partner-with-us'>Become a Partner</a>
           <hr />
           <a className='btn btn-ghost no-animation btn-block' href='/about'>About</a>
           <a className='btn btn-ghost no-animation btn-block' href='https://docs.openbeta.io'>Documentation</a>
