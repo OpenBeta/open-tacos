@@ -1,6 +1,5 @@
 'use client'
 import { useSession } from 'next-auth/react'
-import { WarningOctagon } from '@phosphor-icons/react/dist/ssr'
 import { useRouter } from 'next/navigation'
 
 import { SingleEntryForm } from 'app/editArea/[slug]/components/SingleEntryForm'
@@ -52,8 +51,7 @@ export const AddClimbsForm: React.FC<{ parentAreaName: string, parentAreaUuid: s
           />
         : (
           <div role='alert' className='alert alert-info'>
-            <WarningOctagon size={24} />
-            <span>This area is either a crag or a boulder.  Adding new child areas is not allowed.</span>
+            <p className='text-sm'>Operation not available.  You can only add climbs to a crag or a boulder.</p>
           </div>
           )}
 

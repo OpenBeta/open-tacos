@@ -1,7 +1,8 @@
 'use client'
 import clx from 'classnames'
 import { usePathname } from 'next/navigation'
-import { Article, Plus, LineSegments } from '@phosphor-icons/react/dist/ssr'
+import { Article, Plus } from '@phosphor-icons/react/dist/ssr'
+import { EntityIcon } from './general/components/AreaItem'
 
 /**
  * Sidebar navigation for area edit
@@ -28,7 +29,17 @@ export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddCl
                 classForActivePage('manageClimbs')
               )}
             >
-              <LineSegments size={24} /> Manage climbs
+              <EntityIcon type='climb' withLabel={false} size={24} /> Manage climbs
+            </a>
+          </li>
+          <li>
+            <a
+              href={`/editArea/${slug}/manageAreas`}
+              className={clx(
+                classForActivePage('manageAreas')
+              )}
+            >
+              <EntityIcon type='area' withLabel={false} size={24} /> Manage areas
             </a>
           </li>
         </ul>
