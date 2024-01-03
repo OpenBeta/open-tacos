@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import Link from 'next/link'
-import { Graph, ShareNetwork, LineSegments, Cube } from '@phosphor-icons/react/dist/ssr'
+import { Polygon, ShareNetwork, LineSegment, Cube } from '@phosphor-icons/react/dist/ssr'
 import { Icon, IconProps } from '@phosphor-icons/react'
 
 import { AreaType } from '@/js/types'
@@ -15,10 +15,10 @@ const CragIcon = forwardRef<any, IconProps>((props, ref) => <ShareNetwork ref={r
 //   class
 // }
 const IconMap: Record<EType, Icon> = {
-  area: Graph,
+  area: Polygon,
   crag: CragIcon,
   boulder: Cube,
-  climb: LineSegments
+  climb: LineSegment
 }
 
 export const EntityIcon: React.FC<{ type: EType, withLabel?: boolean, size?: 20 | 24 | 28, className?: string }> = ({ type, withLabel = true, size = 24, className = '' }) => {

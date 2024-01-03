@@ -95,7 +95,8 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     MUTATION_UPDATE_AREAS_SORTING_ORDER, {
       client: graphqlClient,
       onCompleted: (data) => {
-        void refreshPage(`/api/revalidate?s=${areaId}`)
+        void updateAreaPageCache(areaId)
+        toast.info('Areas sorting order updated successfully.')
       },
       onError: (error) => {
         toast.error(`Unexpected error: ${error.message}`)
@@ -104,6 +105,10 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   )
 
   const updateAreasSortingOrderCmd: UpdateAreasSortingOrderCmdType = async (input: AreaSortingInput[]) => {
+    if (input?.length < 1 ?? 0) {
+      toast.info('Nothing to update')
+      return
+    }
     await updateAreasSortingOrder({
       variables: { input },
       context: {

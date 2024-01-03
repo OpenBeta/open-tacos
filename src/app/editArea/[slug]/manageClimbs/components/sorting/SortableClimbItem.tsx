@@ -31,6 +31,7 @@ export const SortableClimbItem: React.FC<SortableItemProps> = ({ id, className, 
       {...listeners}
       className={
         clx(className,
+          'drop-shadow',
           isDragging ? 'text-neutral-content bg-neutral cursor-move' : 'hover:bg-base-200')
       }
     >
