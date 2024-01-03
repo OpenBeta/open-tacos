@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
-import { User } from '@phosphor-icons/react/dist/ssr'
+import { User, HandHeart } from '@phosphor-icons/react/dist/ssr'
 import { UserCircleIcon, ChatBubbleOvalLeftEllipsisIcon, Cog6ToothIcon, ChartBarIcon, GiftIcon } from '@heroicons/react/24/outline'
 
 import { DropdownMenu, DropdownTrigger, DropdownContent, DropdownItem, DropdownSeparator } from '@/components/ui/DropdownMenu'
@@ -60,6 +60,7 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
 
             <DropdownItem
               text='Logout'
+              className='font-semibold'
               onSelect={() => {
                 sessionStorage.setItem('editMode', 'false')
                 void signOut({ callbackUrl: `${window.origin}/api/auth/logout` })
@@ -79,6 +80,14 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
               className='text-accent'
               onSelect={() => { void router.push('https://opencollective.com/openbeta/contribute/t-shirt-31745') }}
             />
+
+            <DropdownItem
+              icon={<HandHeart />}
+              text='Become a Partner'
+              className='font-semibold'
+              onSelect={() => { void router.push('/partner-with-us') }}
+            />
+
             <DropdownSeparator />
 
             <DropdownItem

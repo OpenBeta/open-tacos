@@ -54,6 +54,11 @@ module.exports = {
         source: '/blog/openbeta-vs-mountain-project-vs-thecrag',
         destination: 'https://openbeta.substack.com/p/openbeta-vs-mountainproject-vs-thecrag',
         permanent: false
+      },
+      {
+        source: '/partner-with-us',
+        destination: '/Become-OpenBeta-Partner-in-Climb-dec-2023.pdf',
+        permanent: false
       }
     ]
   }
