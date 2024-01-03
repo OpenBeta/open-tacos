@@ -2,6 +2,7 @@
 import { AreaType } from '@/js/types'
 import { AreaItem } from './AreaItem'
 import { GluttenFreeCrumbs } from '@/components/ui/BreadCrumbs'
+import { areaLeftRightIndexComparator } from '@/js/utils'
 
 type AreaListProps = Pick<AreaType, 'uuid' | 'areaName' | 'pathTokens' | 'ancestors'> & {
   areas: AreaType[]
@@ -33,6 +34,6 @@ export const AreaListForm: React.FC<AreaListProps> = ({ areaName, uuid, pathToke
 
 export const AreaList: React.FC<{ parentUuid: string, areas: AreaType[], editMode?: boolean }> = ({ areas, parentUuid, editMode = false }) => (
   <div className='two-column-table'>
-    {areas.map((item, index) =>
+    {[...areas].sort(areaLeftRightIndexComparator).map((item, index) =>
       <AreaItem key={item.uuid} area={item} index={index + 1} parentUuid={parentUuid} editMode={editMode} />)}
   </div>)
