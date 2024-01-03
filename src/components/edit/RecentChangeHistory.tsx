@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import { PlusIcon, MinusIcon, PencilIcon, PencilSquareIcon, MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
+import { X, PencilSimple, FilePlus, ArrowsDownUp } from '@phosphor-icons/react/dist/ssr'
+import { PlusIcon, MinusIcon, PencilIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNowStrict } from 'date-fns'
 import clx from 'classnames'
 
@@ -33,7 +34,7 @@ export const ChangesetCard: React.FC<ChangsetRowProps> = ({ changeset }) => {
   const { createdAt, editedByUser, operation, changes } = changeset
 
   // @ts-expect-error
-  const op = operationLabelMap[operation]
+  const op = operationLabelMap?.[operation] ?? operationLabelMap.unknown
   return (
     <div className='block w-full max-w-md'>
       <div className='mb-2 flex items-center justify-between flex-wrap gap-y-1.5'>
@@ -250,11 +251,19 @@ const operationLabelMap = {
     badge: 'deleted an organization',
     borderCue: 'border-l-pink-500',
     icon: <ActionIcon icon={<MinusIcon className='w-6 h-6 stroke-base-300' />} clz='bg-error' />
+  },
+  orderArea: {
+    badge: 'ordered child areas'
+  },
+  unknown: {
+    badge: 'unknown',
+    borderCue: '',
+    icon: <ActionIcon icon={<ArrowsDownUp />} />
   }
 }
 
 const dbOpIcon = {
-  insert: <PlusCircleIcon className='w-4 h-4 stroke-base-300' />,
-  update: <PencilSquareIcon className='w-4 h-4 stroke-base-300' />,
-  delete: <MinusCircleIcon className='w-4 h-4 fill-error' />
+  insert: <FilePlus weight='bold' />,
+  update: <PencilSimple />,
+  delete: <X weight='bold' />
 }

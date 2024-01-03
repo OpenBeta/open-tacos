@@ -24,7 +24,7 @@ export default async function AddClimbsPage ({ params: { slug } }: DashboardPage
   return (
     <PageContainer>
       <SectionContainer id='leftToRight'>
-        <SortClimbsForm parentAreaId={area.uuid} climbs={area.climbs} gradeContext={gradeContext} />
+        <SortClimbsForm parentAreaId={area.uuid} climbs={area.climbs} gradeContext={gradeContext} canSortClimbs={isBoulder || leaf} />
       </SectionContainer>
       <SectionContainer id='climbList'>
         <ClimbListSection area={area} editMode />

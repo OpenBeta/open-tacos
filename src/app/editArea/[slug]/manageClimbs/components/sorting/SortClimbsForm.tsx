@@ -13,6 +13,7 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, rectSortingStrategy, sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable'
 import clx from 'classnames'
+import { DotsSixVertical } from '@phosphor-icons/react/dist/ssr'
 
 import { SingleEntryForm } from 'app/editArea/[slug]/components/SingleEntryForm'
 import { ClimbType } from '@/js/types'
@@ -26,7 +27,7 @@ import { GradeContexts } from '@/js/grades/Grade'
 /**
  * Sort climbs form
  */
-export const SortClimbsForm: React.FC<{ parentAreaId: string, climbs: ClimbType[], gradeContext: GradeContexts }> = ({ parentAreaId, climbs, gradeContext }) => {
+export const SortClimbsForm: React.FC<{ parentAreaId: string, climbs: ClimbType[], gradeContext: GradeContexts, canSortClimbs: boolean }> = ({ parentAreaId, climbs, gradeContext, canSortClimbs }) => {
   const router = useRouter()
   const session = useSession({ required: true })
   const { updateClimbCmd } = useUpdateClimbsCmd({
@@ -96,70 +97,81 @@ export const SortClimbsForm: React.FC<{ parentAreaId: string, climbs: ClimbType[
           submitHandler={submitHandler}
           helperText='Drag and drop climbs to set their left-to-right order.'
         >
-          <div>
-            <button
-              type='button'
-              className='btn btn-primary btn-outline'
-              onClick={() => {
-                setEnabled(curr => !curr)
-              }}
-            >
-              {enabled ? 'Cancel' : 'Sort climbs'}
-            </button>
+          <div className='flex flex-col gap-6'>
+            <div>
+              <button
+                type='button'
+                className='btn btn-primary btn-outline'
+                disabled={!canSortClimbs}
+                onClick={() => {
+                  setEnabled(curr => !curr)
+                }}
+              >
+                {enabled ? 'Cancel' : 'Sort climbs'}
+              </button>
+            </div>
+            {!canSortClimbs &&
+              <div className='alert alert-info'>
+                <p className='text-sm'>Operation not available.</p>
+              </div>}
           </div>
-          {enabled &&
-        (
-          <div className='border-t'>
-            <p className='mt-4'>Climbs are ordered from left to right.  Drag and drop climbs to change their position.</p>
 
-            <table className='mt-4 table-auto border-separate border-spacing-y-2'>
+          {enabled && sortedList.length < 2 && (<div>Please create at least 2 climbs.</div>)}
 
-              <thead>
-                <tr>
-                  <th className='border-b border-base-300 py-2'>Position</th>
-                  <th className='border-b border-base-300 py-2'>Name</th>
-                </tr>
-              </thead>
+          {enabled && sortedList.length > 2 && (
+            <div className='border-t'>
+              <p className='mt-4'>Climbs are ordered from left to right.  Drag and drop climbs to change their position.</p>
 
-              <tbody>
-                {sortedList.map((climbId, index) => {
-                  const climb = climbHashmap.get(climbId)
-                  if (climb == null) return null
-                  const { id, name, type, grades, metadata: { leftRightIndex } } = climb
-                  const gradeStr = gradesToString(grades, type, gradeContext)
-                  const hasChanged = leftRightIndex !== index
-                  return (
-                    <SortableClimbItem
-                      key={id}
-                      id={id}
-                      className=''
-                    >
-                      <>
-                        <td className={clx('text-center px-2 border-l-4', hasChanged ? 'italic font-medium border-l-warning' : 'text-secondary border-transparent')}>
-                          {index + 1}
-                        </td>
-                        <td className='max-w-sm flex gap-x-4 items-center nowrap overflow-hidden'>
-                          <span className='pl-2 truncate max-w-xs overflow-hidden font-medium'>{name}</span>
-                          <span className='text-secondary'>{gradeStr}&nbsp;{disciplinesToCodes(type)}</span>
-                        </td>
-                      </>
-                    </SortableClimbItem>
-                  )
-                })}
-              </tbody>
+              <table className='mt-4 table-auto border-separate border-spacing-y-2'>
 
-              <tfoot>
-                <tr>
-                  <td className='border-t border-base-300 py-2' />
-                  <td className='border-t border-base-300 text-right py-2'>
-                    <button className='btn btn-sm' onClick={reset} type='button'>Reset</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+                <thead>
+                  <tr>
+                    <th className='border-b border-base-300 py-2'>Position</th>
+                    <th className='border-b border-base-300 py-2'>Name</th>
+                    <th />
+                  </tr>
+                </thead>
 
-          </div>
-        )}
+                <tbody>
+                  {sortedList.map((climbId, index) => {
+                    const climb = climbHashmap.get(climbId)
+                    if (climb == null) return null
+                    const { id, name, type, grades, metadata: { leftRightIndex } } = climb
+                    const gradeStr = gradesToString(grades, type, gradeContext)
+                    const hasChanged = leftRightIndex !== index
+                    return (
+                      <SortableClimbItem
+                        key={id}
+                        id={id}
+                        className=''
+                      >
+                        <>
+                          <td className={clx('text-center px-2 border-l-4', hasChanged ? 'italic font-medium border-l-warning' : 'text-secondary border-transparent')}>
+                            {index + 1}
+                          </td>
+                          <td className='max-w-sm flex gap-x-4 items-center nowrap overflow-hidden'>
+                            <span className='pl-2 truncate max-w-xs overflow-hidden font-medium'>{name}</span>
+                            <span className='text-secondary'>{gradeStr}&nbsp;{disciplinesToCodes(type)}</span>
+                          </td>
+                          <td className='px-2'><DotsSixVertical /></td>
+                        </>
+                      </SortableClimbItem>
+                    )
+                  })}
+                </tbody>
+
+                <tfoot>
+                  <tr>
+                    <td className='border-t border-base-300 py-2' />
+                    <td className='border-t border-base-300 text-right py-2'>
+                      <button className='btn btn-sm' onClick={reset} type='button'>Reset</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+
+            </div>
+          )}
         </SingleEntryForm>
       </SortableContext>
     </DndContext>
