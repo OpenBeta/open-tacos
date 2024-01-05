@@ -1,6 +1,6 @@
 'use client'
 import * as React from 'react'
-import { Map, Marker, ScaleControl, FullscreenControl, LngLatBoundsLike, MapboxMap } from 'react-map-gl'
+import { Map, ScaleControl, FullscreenControl, LngLatBoundsLike, MapboxMap } from 'react-map-gl'
 import dynamic from 'next/dynamic'
 import { AreaMetadataType, AreaType } from '../../js/types'
 import { MAP_STYLES } from '../maps/BaseMap'
@@ -79,7 +79,7 @@ export default function AreaMap (props: AreaMapProps): JSX.Element {
         mapStyle={MAP_STYLES.light}
         cooperativeGestures
       >
-        {props.subAreas.map((subArea) => (
+        {/* {props.subAreas.map((subArea) => (
           <Marker
             style={{ zIndex: subArea.uuid === props.focused ? 100 : 0 }}
             key={subArea.uuid}
@@ -105,7 +105,7 @@ export default function AreaMap (props: AreaMapProps): JSX.Element {
           <div className='rounded shadow transition text-md px-1 font-bold bg-violet-500 text-white scale-125 z-index-1'>
             {props.area.areaName}
           </div>
-        </Marker>
+        </Marker> */}
 
         <ScaleControl />
         <FullscreenControl />
