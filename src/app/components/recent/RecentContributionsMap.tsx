@@ -108,8 +108,9 @@ export const RecentContributionsMap: React.FC<{ history: ChangesetType[] }> = ({
         <Panel features={selectedFeatures} history={history} onClose={() => setSelectedFeatures([])} />
         <RecentEditsLayer geojson={fc} />
         <UnclusteredSource geojson={fc} />
-        <NavigationControl showCompass={false} />
         <FullscreenControl />
+        <NavigationControl showCompass={false} />
+
         {lastMarker != null && <Marker longitude={lastMarker.lng} latitude={lastMarker.lat}><div className='z-20 w-8 h-8 bg-accent/50 border rounded' /></Marker>}
 
         <div className='absolute bottom-8 right-2'>

@@ -118,7 +118,6 @@ export const FRAGMENT_CHANGE_HISTORY = gql`
             description
           }
           metadata {
-            leaf
             areaId
             isDestination
             leaf
