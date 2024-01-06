@@ -1,12 +1,16 @@
 'use client'
 import * as React from 'react'
-import { Map, ScaleControl, FullscreenControl, LngLatBoundsLike, MapboxMap } from 'react-map-gl'
+import { Map, ScaleControl, FullscreenControl, NavigationControl, LngLatBoundsLike, MapboxMap, Source, Layer, FillLayer } from 'react-map-gl'
 import dynamic from 'next/dynamic'
+import { Padding } from '@math.gl/web-mercator/dist/fit-bounds'
+import { featureCollection } from '@turf/helpers'
+import bbox2Polygon from '@turf/bbox-polygon'
+import convexHull from '@turf/convex'
+
 import { AreaMetadataType, AreaType } from '../../js/types'
 import { MAP_STYLES } from '../maps/BaseMap'
-import { Padding } from '@math.gl/web-mercator/dist/fit-bounds'
 
-type ChildArea = Pick<AreaType, 'uuid' | 'areaName'> & { metadata: Pick<AreaMetadataType, 'lat' | 'lng'> }
+type ChildArea = Pick<AreaType, 'uuid' | 'areaName'> & { metadata: Pick<AreaMetadataType, 'lat' | 'lng' | 'leaf' | 'bbox'> }
 interface AreaMapProps {
   subAreas: ChildArea[]
   area: AreaType
@@ -65,6 +69,15 @@ export default function AreaMap (props: AreaMapProps): JSX.Element {
     }
   }, [props.area.id])
 
+  const childAreas = props.subAreas.map((area) => {
+    const { metadata } = area
+    return bbox2Polygon(metadata.bbox)
+  })
+
+  const childAreasFC = featureCollection(childAreas)
+
+  const boundary = convexHull(childAreasFC, { properties: { name: props.area.areaName } })
+
   return (
     <div className='w-full h-full'>
       <Map
@@ -78,9 +91,13 @@ export default function AreaMap (props: AreaMapProps): JSX.Element {
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
         mapStyle={MAP_STYLES.light}
         cooperativeGestures
-      >
+      >{boundary != null &&
+        <Source id='child-areas-polygon' type='geojson' data={featureCollection([boundary])}>
+          <Layer {...areaPolygonStyle} />
+        </Source>}
         <ScaleControl />
         <FullscreenControl />
+        <NavigationControl showCompass={false} />
       </Map>
     </div>
   )
@@ -90,3 +107,12 @@ export const LazyAreaMap = dynamic<AreaMapProps>(async () => await import('./are
   module => module.default), {
   ssr: true
 })
+
+const areaPolygonStyle: FillLayer = {
+  id: 'polygon',
+  type: 'fill',
+  paint: {
+    'fill-color': '#F15E40',
+    'fill-opacity': ['interpolate', ['linear'], ['zoom'], 8, 0.40, 16, 0.1]
+  }
+}

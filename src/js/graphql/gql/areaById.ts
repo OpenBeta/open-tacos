@@ -100,6 +100,7 @@ export const QUERY_AREA_BY_ID = gql`
           leftRightIndex
           lat
           lng
+          bbox
         }
         children {
           uuid
