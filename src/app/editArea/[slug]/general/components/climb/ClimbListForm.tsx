@@ -5,7 +5,7 @@ import { removeTypenameFromDisciplines, climbLeftRightIndexComparator } from '@/
 import Grade, { GradeContexts } from '@/js/grades/Grade'
 import { ClimbListMiniToolbar } from '../../../manageClimbs/components/ClimbListMiniToolbar'
 
-export const ClimbList: React.FC<{ gradeContext: GradeContexts, climbs: ClimbType[], areaMetadata: AreaMetadataType, editMode: boolean }> = ({ gradeContext, climbs, areaMetadata, editMode }) => {
+export const ClimbList: React.FC<{ gradeContext: GradeContexts, climbs: ClimbType[], areaMetadata: AreaMetadataType, editMode: boolean, routePageId?: string }> = ({ gradeContext, climbs, areaMetadata, editMode, routePageId }) => {
   const sortedClimbs = [...climbs].sort(climbLeftRightIndexComparator)
   return (
     <div>
@@ -16,8 +16,9 @@ export const ClimbList: React.FC<{ gradeContext: GradeContexts, climbs: ClimbTyp
               : <NoClimbsCTA areaId={areaMetadata.areaId} />
           )
         : null}
-      <ol className={clx(climbs.length < 5 ? 'block max-w-sm' : 'three-column-table', 'divide-y divide-base-200')}>
+      <ol className={routePageId === undefined ? clx(climbs.length < 5 ? 'block max-w-sm' : 'three-column-table', 'divide-y divide-base-200') : ''}>
         {sortedClimbs.map((climb, index) => {
+          const isThisRoute = climb.id === routePageId
           return (
             <ClimbRow
               key={climb.id}
@@ -26,6 +27,7 @@ export const ClimbList: React.FC<{ gradeContext: GradeContexts, climbs: ClimbTyp
               {...climb}
               index={index + 1}
               editMode={editMode}
+              isThisRoute={isThisRoute}
             />
           )
         })}
@@ -34,7 +36,7 @@ export const ClimbList: React.FC<{ gradeContext: GradeContexts, climbs: ClimbTyp
   )
 }
 
-const ClimbRow: React.FC<ClimbType & { index: number, gradeContext: GradeContexts, areaMetadata: AreaMetadataType, editMode?: boolean }> = ({ id, name, type: disciplines, index, gradeContext, grades, areaMetadata, editMode = false }) => {
+export const ClimbRow: React.FC<ClimbType & { index: number, gradeContext: GradeContexts, areaMetadata: AreaMetadataType, editMode?: boolean, isThisRoute: boolean }> = ({ id, name, type: disciplines, index, gradeContext, grades, areaMetadata, editMode = false, isThisRoute }) => {
   const sanitizedDisciplines = removeTypenameFromDisciplines(disciplines)
   const gradeStr = new Grade(
     gradeContext,
@@ -44,18 +46,20 @@ const ClimbRow: React.FC<ClimbType & { index: number, gradeContext: GradeContext
   ).toString()
   const url = `/climbs/${id}`
   return (
-    <li className='py-2 break-inside-avoid-column break-inside-avoid'>
+    <li className={clx('py-2 break-inside-avoid-column break-inside-avoid', isThisRoute ? 'opacity-50' : '')}>
       <div className={clx('w-full', editMode ? 'card card-compact p-2 card-bordered bg-base-100 shadow' : '')}>
-        <a href={url} className='flex gap-x-4 flex-nowrap w-full'>
-          <ListBullet index={index} disciplines={disciplines} />
-          <div className='w-full'>
-            <div className='flex justify-between'>
-              <div className='text-base font-semibold uppercase tracking-tight hover:underline'>{name}</div>
-              <div>{gradeStr}</div>
+        <LinkWrapper isThisRoute={isThisRoute} url={url}>
+          <div className='flex gap-x-4 flex-nowrap w-full'>
+            <ListBullet index={index} disciplines={disciplines} />
+            <div className='w-full'>
+              <div className='flex justify-between'>
+                <div className={clx('text-base font-semibold uppercase tracking-tight', isThisRoute ? '' : 'hover:underline')}>{name}</div>
+                <div>{gradeStr}</div>
+              </div>
+              <div><DisciplinesInfo disciplines={disciplines} /></div>
             </div>
-            <div><DisciplinesInfo disciplines={disciplines} /></div>
           </div>
-        </a>
+        </LinkWrapper>
       </div>
       {editMode &&
         <ClimbListMiniToolbar climbId={id} parentAreaId={areaMetadata.areaId} climbName={name} />}
@@ -101,3 +105,11 @@ const NoClimbsCTA: React.FC<{ areaId: string }> = ({ areaId }) => (
     </a>
   </div>
 )
+
+const LinkWrapper: React.FC<{ isThisRoute: boolean, url: string, children: React.ReactNode }> = ({ isThisRoute, url, children }) => {
+  return (
+    <>
+      {isThisRoute ? <>{children} </> : <a href={url}>{children}</a>}
+    </>
+  )
+}
