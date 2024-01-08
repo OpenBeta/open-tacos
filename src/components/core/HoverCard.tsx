@@ -7,7 +7,7 @@ import * as HoverCardBase from '@radix-ui/react-hover-card'
  */
 export const HoverCard: React.FC<{ content: React.ReactNode, children: React.ReactNode }> = ({ content, children }) => {
   return (
-    <HoverCardBase.Root>
+    <HoverCardBase.Root openDelay={500}>
       <HoverCardBase.Trigger asChild>
         {children}
       </HoverCardBase.Trigger>
