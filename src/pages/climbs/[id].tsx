@@ -385,7 +385,7 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
     }
   }
 
-  const parentAreaData = await getArea(climb.ancestors[climb.ancestors.length - 1])
+  const parentAreaData = await getArea(climb.ancestors[climb.ancestors.length - 1], 'cache-first')
   let leftClimb: ClimbType | null = null
   let rightClimb: ClimbType | null = null
 
