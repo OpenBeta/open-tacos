@@ -9,7 +9,7 @@ import Markdown from 'react-markdown'
 import PhotoMontage, { UploadPhotoCTA } from '@/components/media/PhotoMontage'
 import { getArea } from '@/js/graphql/getArea'
 import { StickyHeaderContainer } from '@/app/components/ui/StickyHeaderContainer'
-import { GluttenFreeCrumbs } from '@/components/ui/BreadCrumbs'
+import { AreaCrumbs } from '@/components/breadcrumbs/AreaCrumbs'
 import { ArticleLastUpdate } from '@/components/edit/ArticleLastUpdate'
 import { getMapHref, getFriendlySlug, getAreaPageFriendlyUrl, sanitizeName } from '@/js/utils'
 import { LazyAreaMap } from '@/components/area/areaMap'
@@ -67,7 +67,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
       pageActions={<AreaPageActions areaName={areaName} uuid={uuid} />}
       breadcrumbs={
         <StickyHeaderContainer>
-          <GluttenFreeCrumbs pathTokens={pathTokens} ancestors={ancestors} />
+          <AreaCrumbs pathTokens={pathTokens} ancestors={ancestors} />
         </StickyHeaderContainer>
       }
       map={
