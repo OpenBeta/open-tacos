@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { PlusCircle } from '@phosphor-icons/react/dist/ssr'
+import { PlusSquare } from '@phosphor-icons/react/dist/ssr'
 import { AreaList } from 'app/editArea/[slug]/general/components/AreaList'
 import { AreaEntityBullet } from '@/components/cues/Entities'
 import { AreaType } from '@/js/types'
@@ -17,7 +17,7 @@ export const SubAreasSection: React.FC<{ area: AreaType } > = ({ area }) => {
           <h3 className='flex items-center gap-4 font-bold'><AreaEntityBullet />{children.length} Areas</h3>
         </div>
         <Link href={`/editArea/${uuid}/general#addArea`} target='_new' className='btn btn-sm btn-accent'>
-          <PlusCircle size={16} /> New Areas
+          <PlusSquare size={16} /> New Areas
         </Link>
       </div>
 

@@ -1,7 +1,7 @@
 'use client'
 import { AreaType } from '@/js/types'
 import { AreaItem } from './AreaItem'
-import { GluttenFreeCrumbs } from '@/components/ui/BreadCrumbs'
+import { AreaCrumbs } from '@/components/breadcrumbs/AreaCrumbs'
 import { areaLeftRightIndexComparator } from '@/js/utils'
 
 type AreaListProps = Pick<AreaType, 'uuid' | 'areaName' | 'pathTokens' | 'ancestors'> & {
@@ -21,7 +21,7 @@ export const AreaListForm: React.FC<AreaListProps> = ({ areaName, uuid, pathToke
             </div>
           </label>
 
-          <GluttenFreeCrumbs ancestors={ancestors} pathTokens={pathTokens} editMode />
+          <AreaCrumbs ancestors={ancestors} pathTokens={pathTokens} editMode />
 
           <hr className='border-1 mb-6' />
 

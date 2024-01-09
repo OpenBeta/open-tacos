@@ -124,4 +124,14 @@ A slightly deemphasized dotted underline for a tag in order to not competing wit
   .dialog-title {
     @apply py-2 w-full text-center bg-base-100 z-50 leading-none;
   }
+
+  .minimal-scrollbar::-webkit-scrollbar {
+    width: 0.4rem;
+  }
+  .minimal-scrollbar::-webkit-scrollbar-track {
+    @apply bg-neutral-100 rounded-full;
+  }
+  .minimal-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-neutral-300 rounded-full;
+  }
 }
