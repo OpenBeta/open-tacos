@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { gql } from '@apollo/client'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
@@ -11,7 +10,6 @@ import { useSwipeable } from 'react-swipeable'
 import { toast } from 'react-toastify'
 import ArrowVertical from '../../assets/icons/arrow-vertical.svg'
 
-import { graphqlClient } from '../../js/graphql/Client'
 import Layout from '../../components/layout'
 import { AreaType, ClimbDisciplineRecord, ClimbType, RulesType } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
@@ -33,6 +31,9 @@ import { TotalLengthInput } from '../../components/edit/form/TotalLengthInput'
 import { LegacyFAInput } from '../../components/edit/form/LegacyFAInput'
 import { getClimbById } from '../../js/graphql/api'
 import { GraphQLError } from 'graphql/error/GraphQLError'
+import { ClimbList } from '@/app/editArea/[slug]/general/components/climb/ClimbListForm'
+import { getArea } from '@/js/graphql/getArea'
+import { climbLeftRightIndexComparator } from '@/js/utils'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -59,6 +60,7 @@ interface ClimbPageProps {
   leftClimb: ClimbType | null
   rightClimb: ClimbType | null
   showSkeleton?: boolean
+  parentArea: AreaType
 }
 
 const ClimbPage: NextPage<ClimbPageProps> = (props: ClimbPageProps) => {
@@ -102,7 +104,7 @@ export interface ClimbEditFormProps {
   length?: number
 }
 
-const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => {
+const Body = ({ climb, leftClimb, rightClimb, parentArea }: ClimbPageProps): JSX.Element => {
   const {
     id, name, fa: legacyFA, length, yds, grades, type, content, safety, metadata, ancestors, pathTokens, authorMetadata,
     parent
@@ -295,7 +297,7 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
               </div>
             </div>
 
-            <div className='area-climb-page-summary-right'>
+            <div className='area-climb-page-summary-right col-start-2 col-end-4 row-start-1 row-end-3'>
               <div className='mb-3 flex justify-between items-center'>
                 <h3>Description</h3>
               </div>
@@ -344,6 +346,11 @@ const Body = ({ climb, leftClimb, rightClimb }: ClimbPageProps): JSX.Element => 
                 {FormAction}
               </div>
             </div>
+            <div className='col-start-1 col-end-2'>
+              <h4>Routes in {parentArea.areaName.includes(', The') ? 'The '.concat(parentArea.areaName.slice(0, -5)) : parentArea.areaName}</h4>
+              <hr className='mt-2 mb-2 border-1 border-base-content' />
+              {!editMode && <ClimbList gradeContext={parentArea.gradeContext} climbs={parentArea.climbs} areaMetadata={parentArea.metadata} editMode={editMode} routePageId={climbId} />}
+            </div>
           </div>
         </form>
       </FormProvider>
@@ -378,14 +385,18 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
     }
   }
 
-  const sortedClimbsInArea = await fetchSortedClimbsInArea(climb.ancestors[climb.ancestors.length - 1])
+  const parentAreaData = await getArea(climb.ancestors[climb.ancestors.length - 1], 'cache-first')
   let leftClimb: ClimbType | null = null
   let rightClimb: ClimbType | null = null
 
-  for (const [index, climb] of sortedClimbsInArea.entries()) {
+  const parentArea = parentAreaData.area
+
+  const sortedClimbs = [...parentArea.climbs].sort(climbLeftRightIndexComparator)
+
+  for (const [index, climb] of sortedClimbs.entries()) {
     if (climb.id === params.id) {
-      leftClimb = (sortedClimbsInArea[index - 1] != null) ? sortedClimbsInArea[index - 1] : null
-      rightClimb = sortedClimbsInArea[index + 1] != null ? sortedClimbsInArea[index + 1] : null
+      leftClimb = (sortedClimbs[index - 1] != null) ? sortedClimbs[index - 1] : null
+      rightClimb = sortedClimbs[index + 1] != null ? sortedClimbs[index + 1] : null
     }
   }
 
@@ -395,49 +406,11 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
       key: climb.id,
       climb,
       leftClimb,
-      rightClimb
+      rightClimb,
+      parentArea
     },
     revalidate: 30
   }
-}
-
-/**
- * Fetch and sort the climbs in the area from left to right
- */
-const fetchSortedClimbsInArea = async (uuid: string): Promise<ClimbType[]> => {
-  const query = gql`query SortedNearbyClimbsByAreaUUID($uuid: ID) {
-    area(uuid: $uuid) {
-      uuid,
-      climbs {
-        uuid,
-        id,
-        metadata {
-          climbId,
-          left_right_index
-        }
-      }
-    }
-  }`
-
-  const rs = await graphqlClient.query<{ area: AreaType }>({
-    query,
-    variables: {
-      uuid
-    }
-  })
-
-  if (rs.data == null || rs.data.area == null) {
-    return []
-  }
-
-  // Copy readonly array so we can sort
-  const routes = [...rs.data.area.climbs]
-
-  return routes.sort(
-    (a, b) =>
-      parseInt(a.metadata.left_right_index, 10) -
-      parseInt(b.metadata.left_right_index, 10)
-  )
 }
 
 const trimLegacyFA = (s: string): string => {
