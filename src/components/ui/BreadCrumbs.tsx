@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import clx from 'classnames'
 
-import { getAreaPageFriendlyUrl, sanitizeName } from '../../js/utils'
+import { sanitizeName } from '../../js/utils'
 import { GlobeAltIcon } from '@heroicons/react/24/outline'
 import { TypesenseAreaType } from '../../js/types'
 
@@ -124,43 +124,3 @@ const Item = ({ path, highlight, current, length }: ItemProps): JSX.Element => (
     {sanitizeName(path)}
     {current < length - 1 ? <span className='text-base-300 px-1'>{SEPARATOR}</span> : null}
   </span>)
-
-/**
- * Area path crumbs based on DaisyUI. `editMode = true` lets users remain in edit mode when navigating to other areas.
- */
-export const GluttenFreeCrumbs: React.FC<{
-  pathTokens: string[]
-  ancestors: string[]
-  editMode?: boolean
-}> = ({ pathTokens, ancestors, editMode = false }) => {
-  return (
-    <div className='breadcrumbs text-sm font-medium'>
-      <ul>
-        <li><a href='/' className='text-secondary'>Home</a></li>
-        {pathTokens.map((path, index) => {
-          const uuid = ancestors[index]
-          const url = editMode ? `/editArea/${uuid}` : getAreaPageFriendlyUrl(uuid, path)
-          return <GFItem key={uuid} path={sanitizeName(path)} url={url} isLast={index === pathTokens.length - 1} />
-        })}
-      </ul>
-    </div>
-  )
-}
-
-/**
- * Individual crumb.
- * Todo:  display entity icon with the last item
- */
-const GFItem: React.FC<{ path: string, url: string, isLast: boolean }> =
-  ({ path, url, isLast }) => (
-    <li className='no-underline'>
-      <Link
-        prefetch={false}
-        href={url}
-        className={clx('tracking-tight',
-          isLast ? 'text-primary font-semibold badge badge-info' : 'text-secondary font-normal')}
-      >
-        {path}
-      </Link>
-    </li>
-  )
