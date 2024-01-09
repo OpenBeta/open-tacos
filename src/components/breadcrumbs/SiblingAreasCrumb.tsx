@@ -35,7 +35,7 @@ export const SiblingAreasCrumb: FC<Props> = ({ editMode, pathTokens, ancestors, 
 
 const SiblingAreaContentPanel: FC<Omit<Props, 'children'>> = ({ editMode, pathTokens, ancestors, currentIndex }) => {
   const [siblings, setSiblings] = useState<AreaType[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   let parentUuid: string | null
 
@@ -69,7 +69,7 @@ const SiblingAreaContentPanel: FC<Omit<Props, 'children'>> = ({ editMode, pathTo
       <ul>
         {loading
           ? (
-            <li className='text-sm'>Loading sibling areas...</li>
+            <li className='text-sm w-full bg-base-200 h-24 flex items-center justify-center rounded-btn animate-pulse'>Loading...</li>
             )
           : (
             <>

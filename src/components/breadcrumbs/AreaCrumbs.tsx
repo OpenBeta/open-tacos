@@ -1,4 +1,5 @@
 import { forwardRef } from 'react'
+import Link from 'next/link'
 import clx from 'classnames'
 
 import { getAreaPageFriendlyUrl, sanitizeName } from '@/js/utils'
@@ -14,7 +15,7 @@ export const AreaCrumbs: React.FC<{
 }> = ({ pathTokens, ancestors, editMode = false }) => {
   return (
     <div className='breadcrumbs text-sm font-medium'>
-      <ul>
+      <ul className='flex-wrap gap-y-2'>
         <li><a href='/' className='text-secondary'>Home</a></li>
         {pathTokens.map((path, index) => {
           const uuid = ancestors[index]
@@ -44,13 +45,13 @@ const AreaItem = forwardRef<any, AreaItemProps>((props, ref) => {
   const { path, url, isLast, ...extraProps } = props
   return (
     <li className='no-underline' {...extraProps} ref={ref}>
-      <a
+      <Link
         href={url}
         className={clx('tracking-tight',
           isLast ? 'text-primary font-semibold badge badge-info' : 'text-secondary font-normal')}
       >
         {path}
-      </a>
+      </Link>
     </li>
   )
 })
