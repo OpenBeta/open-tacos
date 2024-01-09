@@ -297,7 +297,7 @@ const Body = ({ climb, leftClimb, rightClimb, parentArea }: ClimbPageProps): JSX
               </div>
             </div>
 
-            <div className='area-climb-page-summary-right lg:h-0 lg:min-h-full'>
+            <div className='area-climb-page-summary-right col-start-2 col-end-4 row-start-1 row-end-3'>
               <div className='mb-3 flex justify-between items-center'>
                 <h3>Description</h3>
               </div>
@@ -346,7 +346,7 @@ const Body = ({ climb, leftClimb, rightClimb, parentArea }: ClimbPageProps): JSX
                 {FormAction}
               </div>
             </div>
-            <div>
+            <div className='col-start-1 col-end-2'>
               <h4>Routes in {parentArea.areaName.includes(', The') ? 'The '.concat(parentArea.areaName.slice(0, -5)) : parentArea.areaName}</h4>
               <hr className='mt-2 mb-2 border-1 border-base-content' />
               {!editMode && <ClimbList gradeContext={parentArea.gradeContext} climbs={parentArea.climbs} areaMetadata={parentArea.metadata} editMode={editMode} routePageId={climbId} />}
