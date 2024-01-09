@@ -1,5 +1,5 @@
+import { forwardRef } from 'react'
 import clx from 'classnames'
-import Link from 'next/link'
 
 import { getAreaPageFriendlyUrl, sanitizeName } from '@/js/utils'
 import { SiblingAreasCrumb } from './SiblingAreasCrumb'
@@ -30,22 +30,30 @@ export const AreaCrumbs: React.FC<{
   )
 }
 
+interface AreaItemProps {
+  path: string
+  url: string
+  isLast: boolean
+}
+
 /**
  * Individual crumb.
  * Todo:  display entity icon with the last item
  */
-const AreaItem: React.FC<{ path: string, url: string, isLast: boolean }> = ({ path, url, isLast }) => (
-  <li className='no-underline'>
-    <Link
-      prefetch={false}
-      href={url}
-      className={clx('tracking-tight',
-        isLast ? 'text-primary font-semibold badge badge-info' : 'text-secondary font-normal')}
-    >
-      {path}
-    </Link>
-  </li>
-)
+const AreaItem = forwardRef<any, AreaItemProps>((props, ref) => {
+  const { path, url, isLast, ...extraProps } = props
+  return (
+    <li className='no-underline' {...extraProps} ref={ref}>
+      <a
+        href={url}
+        className={clx('tracking-tight',
+          isLast ? 'text-primary font-semibold badge badge-info' : 'text-secondary font-normal')}
+      >
+        {path}
+      </a>
+    </li>
+  )
+})
 
 export const makeUrl = (editMode: boolean, uuid: string, path: string): string => {
   return editMode ? `/editArea/${uuid}` : getAreaPageFriendlyUrl(uuid, path)
