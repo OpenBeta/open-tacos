@@ -1,7 +1,7 @@
 import { ArrowUUpLeft } from '@phosphor-icons/react/dist/ssr'
 import { SidebarNav } from './SidebarNav'
 import { getPageDataForEdit } from './general/page'
-import { GluttenFreeCrumbs } from '@/components/ui/BreadCrumbs'
+import { AreaCrumbs } from '@/components/breadcrumbs/AreaCrumbs'
 import { getAreaPageFriendlyUrl } from '@/js/utils'
 
 // Opt out of caching for all data requests in the route segment
@@ -31,7 +31,7 @@ export default async function EditAreaDashboardLayout ({
 
       <div className='bg-base-200'>
         <div className='z-20 sticky top-0 py-2 px-6 bg-base-200 w-full border-t border-b'>
-          <GluttenFreeCrumbs pathTokens={pathTokens} ancestors={ancestors} editMode />
+          <AreaCrumbs pathTokens={pathTokens} ancestors={ancestors} editMode />
         </div>
         <div className='flex bg-base-200 flex-col lg:flex-row py-12'>
           <SidebarNav slug={params.slug} canAddAreas={!leaf} canAddClimbs={leaf} />
