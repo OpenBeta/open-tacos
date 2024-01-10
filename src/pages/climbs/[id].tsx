@@ -34,6 +34,7 @@ import { GraphQLError } from 'graphql/error/GraphQLError'
 import { ClimbList } from '@/app/editArea/[slug]/general/components/climb/ClimbListForm'
 import { getArea } from '@/js/graphql/getArea'
 import { climbLeftRightIndexComparator } from '@/js/utils'
+import { NeighboringRoutesNav } from '@/components/crag/NeighboringRoute'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -239,6 +240,8 @@ const Body = ({ climb, leftClimb, rightClimb, parentArea }: ClimbPageProps): JSX
             pathTokens={pathTokens}
             formAction={FormAction}
           />
+
+          <NeighboringRoutesNav climbs={[leftClimb, rightClimb]} parentArea={parentArea} />
 
           <div className='mt-4 text-right' id='editTogglePlaceholder' />
 
