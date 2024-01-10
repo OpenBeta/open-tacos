@@ -3,11 +3,12 @@ import { useEffect, useState, FC, ReactNode } from 'react'
 import clx from 'classnames'
 import { PlusSquare } from '@phosphor-icons/react/dist/ssr'
 
-import { AreaType } from '@/js/types'
-import { getArea } from '@/js/graphql/getArea'
+import { getChildAreasForBreadcrumbs } from '@/js/graphql/getArea'
 import { makeUrl } from './AreaCrumbs'
 import { Card } from '@/components/core/Card'
 import { HoverCard } from '@/components/core/HoverCard'
+import { SiblingArea } from '@/js/graphql/gql/breadcrumbs'
+import { areaLeftRightIndexComparator } from '@/js/utils'
 
 interface Props {
   editMode: boolean
@@ -34,7 +35,7 @@ export const SiblingAreasCrumb: FC<Props> = ({ editMode, pathTokens, ancestors, 
 }
 
 const SiblingAreaContentPanel: FC<Omit<Props, 'children'>> = ({ editMode, pathTokens, ancestors, currentIndex }) => {
-  const [siblings, setSiblings] = useState<AreaType[]>([])
+  const [siblings, setSiblings] = useState<SiblingArea[]>([])
   const [loading, setLoading] = useState(true)
 
   let parentUuid: string | null
@@ -53,14 +54,15 @@ const SiblingAreaContentPanel: FC<Omit<Props, 'children'>> = ({ editMode, pathTo
       return
     }
     setLoading(true)
-    getArea(parentUuid, 'cache-first').then((data) => {
+    getChildAreasForBreadcrumbs(parentUuid, 'cache-first').then((data) => {
       setLoading(false)
-      const children = data.area.children
+      const children = data.children
       setSiblings(children)
     }).finally(() => {
       setLoading(false)
     })
   }, [currentIndex])
+
   return parentUuid == null
     ? (
       <p>Please use the search box to switch country</p>
@@ -69,12 +71,12 @@ const SiblingAreaContentPanel: FC<Omit<Props, 'children'>> = ({ editMode, pathTo
       <ul>
         {loading
           ? (
-            <li className='text-sm w-full bg-base-200 h-24 flex items-center justify-center rounded-btn animate-pulse'>Loading...</li>
+            <li className='text-sm w-full bg-base-200 h-32 flex items-center justify-center rounded-btn animate-pulse' />
             )
           : (
             <>
-              {siblings.map((sibling) => (
-                <SiblingArea key={sibling.uuid} area={sibling} highlight={sibling.uuid === currentUuid} editMode={editMode} />
+              {[...siblings].sort(areaLeftRightIndexComparator).map((sibling) => (
+                <SiblingAreaItem key={sibling.uuid} area={sibling} highlight={sibling.uuid === currentUuid} editMode={editMode} />
               ))}
               <li>
                 <a
@@ -92,7 +94,7 @@ const SiblingAreaContentPanel: FC<Omit<Props, 'children'>> = ({ editMode, pathTo
       )
 }
 
-const SiblingArea: FC<{ area: AreaType, highlight: boolean, editMode: boolean }> = ({ area, highlight, editMode }) => {
+const SiblingAreaItem: FC<{ area: SiblingArea, highlight: boolean, editMode: boolean }> = ({ area, highlight, editMode }) => {
   const { uuid, areaName } = area
   const url = makeUrl(editMode, uuid, areaName)
   return (
