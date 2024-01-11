@@ -6,11 +6,11 @@ export const getChangeHistoryServerSide = async (): Promise<ChangesetType[]> => 
   try {
     const rs = await graphqlClient.query<{ getChangeHistory: ChangesetType[] }>({
       query: QUERY_RECENT_CHANGE_HISTORY,
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'cache-first'
     })
 
     if (Array.isArray(rs.data?.getChangeHistory)) {
-      return rs.data?.getChangeHistory.splice(0, 50)
+      return rs.data?.getChangeHistory.slice(0, 50)
     }
     console.log('WARNING: getChangeHistory() returns non-array data')
     return []

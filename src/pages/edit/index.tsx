@@ -5,7 +5,7 @@ import SeoTags from '../../components/SeoTags'
 import Layout from '../../components/layout'
 import { getChangeHistoryServerSide } from '../../js/graphql/contribAPI'
 import { RecentChangeHistoryProps } from '../../components/edit/RecentChangeHistory'
-import DefaultView from '../../components/edit/DefaultView'
+
 interface PageProps {
   history: any[]
 }
@@ -22,7 +22,6 @@ const Page: NextPage<PageProps> = ({ history }: PageProps) => {
         showFooter
       >
         <section className='max-w-lg mx-auto w-full'>
-          <DefaultView />
           <h2 className='px-4 sm:px-0'>Recent history</h2>
           <RecentChangeHistory history={history} />
         </section>
@@ -38,7 +37,7 @@ export const getStaticProps: GetStaticProps<PageProps> = async ({ params }): Pro
     props: {
       history
     },
-    revalidate: 5 // regenerate page when a request comes in but no faster than every 5s
+    revalidate: 30 // regenerate page when a request comes in but no faster than every 5s
   })
 }
 

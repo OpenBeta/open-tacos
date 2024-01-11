@@ -12,8 +12,7 @@ import { RecentContributionsMap } from './components/recent/RecentContributionsM
 /**
  * Cache duration in seconds
  */
-export const revalidate = 300
-export const fetchCache = 'force-no-store' // opt out of Nextjs version of 'fetch'
+export const revalidate = 3600
 
 /**
  * Root home page
