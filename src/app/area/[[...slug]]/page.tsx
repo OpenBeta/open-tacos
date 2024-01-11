@@ -169,7 +169,7 @@ const EditDescriptionCTA: React.FC<{ uuid: string }> = ({ uuid }) => (
  * List of area pages to prebuild
  */
 export function generateStaticParams (): PageSlugType[] {
-  return [
+  const list = [
     { slug: ['bea6bf11-de53-5046-a5b4-b89217b7e9bc'] }, // Red Rock
     { slug: ['78da26bc-cd94-5ac8-8e1c-815f7f30a28b'] }, // Red River Gorge
     { slug: ['1db1e8ba-a40e-587c-88a4-64f5ea814b8e'] }, // USA
@@ -180,6 +180,10 @@ export function generateStaticParams (): PageSlugType[] {
     { slug: ['b1166235-3328-5537-b5ed-92f406ea8495'] }, // Lander
     { slug: ['9abad566-2113-587e-95a5-b3abcfaa28ac'] } // Ten Sleep
   ]
+  if (process.env.NODE_ENV === 'development') {
+    return list.slice(0, 1)
+  }
+  return list
 }
 
 // Page metadata

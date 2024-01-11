@@ -162,6 +162,7 @@ export const FRAGMENT_CHANGE_HISTORY = gql`
           length
         }
         ... on Organization {
+          orgId
           displayName
         }
       }
