@@ -180,7 +180,7 @@ export function generateStaticParams (): PageSlugType[] {
     { slug: ['b1166235-3328-5537-b5ed-92f406ea8495'] }, // Lander
     { slug: ['9abad566-2113-587e-95a5-b3abcfaa28ac'] } // Ten Sleep
   ]
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.VERCEL_ENV !== 'production') {
     return list.slice(0, 1)
   }
   return list
