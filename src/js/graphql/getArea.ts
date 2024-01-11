@@ -1,7 +1,9 @@
+import { FetchPolicy } from '@apollo/client'
+
 import { QUERY_AREA_BY_ID } from './gql/areaById'
+import { QUERY_CHILD_AREAS_FOR_BREADCRUMBS, ChildAreasQueryReturn, AreaWithChildren } from './gql/breadcrumbs'
 import { graphqlClient } from './Client'
 import { AreaType, ChangesetType } from '../types'
-import { FetchPolicy } from '@apollo/client'
 
 export interface AreaPageDataProps {
   area: AreaType
@@ -21,4 +23,20 @@ export const getArea = async (uuid: string, fetchPolicy: FetchPolicy = 'no-cache
     fetchPolicy
   })
   return rs.data
+}
+
+/**
+ * Get child areas for breadcrumbs.
+ * @param uuid parent area uuid
+ * @param fetchPolicy
+ */
+export const getChildAreasForBreadcrumbs = async (uuid: string, fetchPolicy: FetchPolicy = 'no-cache'): Promise<AreaWithChildren> => {
+  const rs = await graphqlClient.query<ChildAreasQueryReturn>({
+    query: QUERY_CHILD_AREAS_FOR_BREADCRUMBS,
+    variables: {
+      uuid
+    },
+    fetchPolicy
+  })
+  return rs.data.area
 }

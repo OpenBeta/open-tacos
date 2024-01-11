@@ -41,7 +41,7 @@ a:active, a:focus {
 }
 
 .area-climb-page-summary-right {
-  @apply mt-6 lg:mt-0 lg:col-span-2 lg:pl-16 w-full;
+  @apply mt-6 lg:mt-0 lg:pl-16 w-full;
 }
 
 /**
@@ -473,10 +473,6 @@ a:focus {
 
 .tooltip:before {
   @apply border bg-tooltip text-sm text-base-content !important;
-}
-
-.card-body {
-  @apply sm:px-0 border-0 !important;
 }
 
 .label-helper {

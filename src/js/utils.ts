@@ -3,7 +3,7 @@ import slugify from 'slugify'
 import { ClimbTypeToColor } from './constants'
 import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
 
-import { AreaType, ClimbType, ClimbDisciplineRecord, ClimbDiscipline, MediaWithTags, MediaConnection } from './types'
+import { AreaType, ClimbType, ClimbDisciplineRecord, ClimbDiscipline, MediaWithTags, MediaConnection, AreaMetadataType } from './types'
 
 /**
  * Given a path or parent id and the type of the page generate the GitHub URL
@@ -308,7 +308,9 @@ export const climbLeftRightIndexComparator = (a: ClimbType, b: ClimbType): numbe
   return 0
 }
 
-export const areaLeftRightIndexComparator = (a: AreaType, b: AreaType): number => {
+export interface SortableAreaType { metadata: Pick<AreaMetadataType, 'leftRightIndex' | 'areaId'> }
+
+export const areaLeftRightIndexComparator = (a: SortableAreaType, b: SortableAreaType): number => {
   const aIndex = a.metadata.leftRightIndex ?? -1
   const bIndex = b.metadata.leftRightIndex ?? -1
   if (aIndex < bIndex) return -1
