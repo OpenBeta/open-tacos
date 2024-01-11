@@ -135,6 +135,21 @@
           44.05817299999998
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Blake",
+        "githubId": "btmccord",
+        "favoriteCrag": "ccf26565-71c6-59ff-8c42-0564bfa96ef8"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -111.65141214144266,
+          35.198478054480816
+        ]
+      }
   }
   ]
 }
