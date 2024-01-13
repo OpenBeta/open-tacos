@@ -51,16 +51,16 @@ interface AreaItemProps {
 export const AreaItem = ({ item }: AreaItemProps): JSX.Element => {
   const { pathTokens, highlightIndices, name } = item
   return (
-    <div className='py-4 text-xs flex flex-col gap-2'>
+    <div className='py-4 text-xs flex flex-row justify-between gap-2'>
       {pathTokens.length === 1 &&
         <>
-          <div className='badge bg-area-cue bg-opacity-60 badge-sm'>country</div>
           <div className='badge badge-outline badge-lg'>{name} →</div>
+          <div className='rounded-lg p-1 px-3 bg-area-cue bg-opacity-40 text-xs mr-2 self-center h-fit'>country</div>
         </>}
       {pathTokens.length > 1 &&
         <>
-          <div className='badge bg-area-cue badge-sm'>area</div>
           <TextOnlyCrumbs pathTokens={pathTokens} highlightIndices={highlightIndices} />
+          <div className='rounded-lg p-1 px-3 bg-area-cue text-base-100 text-xs mr-2 self-center h-fit'>area</div>
         </>}
     </div>
   )
