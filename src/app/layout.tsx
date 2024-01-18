@@ -26,8 +26,8 @@ export default function RootLayout ({
   children: React.ReactNode
 }): any {
   return (
-    <html lang='en'>
-      <body className='mx-auto'>
+    <html lang='en' className='snap-proximity snap-y'>
+      <body>
         <NextAuthProvider>
           <Header />
           <div>

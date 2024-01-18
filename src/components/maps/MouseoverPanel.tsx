@@ -1,15 +1,45 @@
+import * as Popover from '@radix-ui/react-popover'
 import { MapAreaFeatureProperties } from './AreaMap'
 import { getAreaPageFriendlyUrl } from '@/js/utils'
+import { Card } from '../core/Card'
+import { EntityIcon } from '@/app/editArea/[slug]/general/components/AreaItem'
 
 /**
- * Show the name of the area on hover
+ * Area info panel
  */
-export const MouseoverPanel: React.FC<MapAreaFeatureProperties> = ({ id, name }) => {
+export const MouseoverPanel: React.FC<{ data: MapAreaFeatureProperties | null, onClose?: () => void }> = ({ data, onClose }) => {
+  const parent = data?.parent == null ? null : JSON.parse(data.parent)
+  const parentName = parent?.name ?? 'Unknown'
+  const parentId = parent?.id ?? null
   return (
-    <div className='absolute top-3 right-12'>
-      <div className='px-2 py-1 bg-neutral text-neutral-content shadow-ls rounded text-xs'>
-        <a href={getAreaPageFriendlyUrl(id, name)} className='hover:underline'>{name}</a>
+    <Popover.Root open={data != null}>
+      <Popover.Anchor className='absolute top-3 left-3 z-50' />
+      <Popover.Content align='start'>
+        {data != null && <Content {...data} parentName={parentName} parentId={parentId} />}
+      </Popover.Content>
+    </Popover.Root>
+  )
+}
+
+export const Content: React.FC<MapAreaFeatureProperties & { parentName: string, parentId: string | null }> = ({ id, name, parentName, parentId }) => {
+  const url = parentId == null
+    ? parentName
+    : (
+      <a
+        href={getAreaPageFriendlyUrl(parentId, name)}
+        className='inline-flex items-center gap-1.5'
+      >
+        <EntityIcon type='area' size={16} /><span className='text-secondary font-medium hover:underline '>{parentName}</span>
+      </a>
+      )
+  return (
+    <Card>
+      <div className='flex flex-col gap-y-1 text-xs'>
+        <div>{url}</div>
+        <div className='ml-2'>
+          <span className='text-secondary'>&#8735;</span><a href={getAreaPageFriendlyUrl(id, name)} className='font-semibold hover:underline'>{name}</a>
+        </div>
       </div>
-    </div>
+    </Card>
   )
 }
