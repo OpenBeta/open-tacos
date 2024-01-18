@@ -7,7 +7,7 @@ import { EntityIcon } from '@/app/editArea/[slug]/general/components/AreaItem'
 /**
  * Area info panel
  */
-export const MouseoverPanel: React.FC<{ data: MapAreaFeatureProperties | null, onClose?: () => void }> = ({ data, onClose }) => {
+export const AreaInfoDrawer: React.FC<{ data: MapAreaFeatureProperties | null, onClose?: () => void }> = ({ data, onClose }) => {
   const parent = data?.parent == null ? null : JSON.parse(data.parent)
   const parentName = parent?.name ?? 'Unknown'
   const parentId = parent?.id ?? null
@@ -37,7 +37,7 @@ export const Content: React.FC<MapAreaFeatureProperties & { parentName: string, 
       <div className='flex flex-col gap-y-1 text-xs'>
         <div>{url}</div>
         <div className='ml-2'>
-          <span className='text-secondary'>&#8735;</span><a href={getAreaPageFriendlyUrl(id, name)} className='font-semibold hover:underline'>{name}</a>
+          <span className='text-secondary'>&#8735;</span><a href={getAreaPageFriendlyUrl(id, name)} className='text-sm font-medium hover:underline'>{name}</a>
         </div>
       </div>
     </Card>

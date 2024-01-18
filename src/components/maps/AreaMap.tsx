@@ -1,15 +1,14 @@
 'use client'
-import { useRef, useState } from 'react'
-import { Map, ScaleControl, FullscreenControl, NavigationControl, Source, Layer, FillLayer, MapLayerMouseEvent } from 'react-map-gl'
+import { useEffect, useRef, useState } from 'react'
+import { Map, ScaleControl, FullscreenControl, NavigationControl, Source, Layer, MapLayerMouseEvent, LineLayer } from 'react-map-gl'
 import dynamic from 'next/dynamic'
-import { Padding } from '@math.gl/web-mercator/dist/fit-bounds'
-import { lineString, Point } from '@turf/helpers'
+import { lineString, Point, point } from '@turf/helpers'
 import lineToPolygon from '@turf/line-to-polygon'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { AreaMetadataType, AreaType } from '../../js/types'
 import { MAP_STYLES } from './BaseMap'
-import { MouseoverPanel } from './MouseoverPanel'
+import { AreaInfoDrawer } from './AreaInfoDrawer'
 import { AreaActiveMarker } from './AreaActiveMarker'
 
 type ChildArea = Pick<AreaType, 'uuid' | 'areaName'> & { metadata: Pick<AreaMetadataType, 'lat' | 'lng' | 'leaf' | 'bbox' | 'polygon'> }
@@ -37,9 +36,9 @@ const AreaMap: React.FC<AreaMapProps> = ({ area, subAreas }) => {
   const [hovered, setHovered] = useState<MapAreaFeatureProperties | null>(null)
   const [selected, setSelected] = useState<Point | null>(null)
   const mapRef = useRef(null)
-  let padding: Padding = { top: 45, left: 45, bottom: 45, right: 45 }
+  let fitBoundOpts: any = { padding: { top: 45, left: 45, bottom: 45, right: 45 } }
   if (subAreas.length === 0) {
-    padding = { top: 100, left: 100, bottom: 100, right: 100 }
+    fitBoundOpts = { maxZoom: 14 }
   }
 
   const { metadata } = area
@@ -56,6 +55,14 @@ const AreaMap: React.FC<AreaMapProps> = ({ area, subAreas }) => {
     }
   }
 
+  useEffect(() => {
+    /**
+     * Show drop pin if viewing a leaf area
+     */
+    if (metadata.leaf) {
+      setSelected(point([metadata.lng, metadata.lat]).geometry as unknown as Point)
+    }
+  }, [metadata.leaf])
   return (
     <div className='relative w-full h-full'>
       <Map
@@ -63,7 +70,7 @@ const AreaMap: React.FC<AreaMapProps> = ({ area, subAreas }) => {
         id='map'
         initialViewState={{
           bounds: metadata.bbox,
-          fitBoundsOptions: { padding }
+          fitBoundsOptions: fitBoundOpts
         }}
         onClick={useDebouncedCallback(onClick, 200, { leading: true, maxWait: 200 })}
         reuseMaps
@@ -77,7 +84,7 @@ const AreaMap: React.FC<AreaMapProps> = ({ area, subAreas }) => {
         <NavigationControl showCompass={false} />
         {selected != null &&
           <AreaActiveMarker point={selected} />}
-        <MouseoverPanel data={hovered} />
+        <AreaInfoDrawer data={hovered} />
         {boundary != null &&
           <Source id='child-areas-polygon' type='geojson' data={boundary}>
             <Layer {...areaPolygonStyle} />
@@ -94,12 +101,12 @@ export const LazyAreaMap = dynamic<AreaMapProps>(async () => await import('./Are
   ssr: false
 })
 
-const areaPolygonStyle: FillLayer = {
+const areaPolygonStyle: LineLayer = {
   id: 'polygon',
-  type: 'fill',
+  type: 'line',
   paint: {
-    'fill-antialias': true,
-    'fill-color': 'rgb(236,72,153)',
-    'fill-opacity': ['step', ['zoom'], 0.2, 15, 0]
+    'line-opacity': ['step', ['zoom'], 0.85, 10, 0.5],
+    'line-width': ['step', ['zoom'], 2, 10, 6],
+    'line-color': 'rgb(219,39,119)'
   }
 }
