@@ -19,7 +19,7 @@ export interface AreaMetadataType {
   mp_id: string
   area_id: string
   areaId: string
-  polygon: Position[] // Pick<LineString, 'coordinates'>
+  polygon: Position[]
 }
 
 export enum SafetyType {
