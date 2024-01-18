@@ -12,7 +12,7 @@ import { StickyHeaderContainer } from '@/app/components/ui/StickyHeaderContainer
 import { AreaCrumbs } from '@/components/breadcrumbs/AreaCrumbs'
 import { ArticleLastUpdate } from '@/components/edit/ArticleLastUpdate'
 import { getMapHref, getFriendlySlug, getAreaPageFriendlyUrl, sanitizeName } from '@/js/utils'
-import { LazyAreaMap } from '@/components/area/areaMap'
+import { LazyAreaMap } from '@/components/maps/AreaMap'
 import { AreaPageContainer } from '@/app/components/ui/AreaPageContainer'
 import { AreaPageActions } from '../../components/AreaPageActions'
 import { SubAreasSection } from './sections/SubAreasSection'
