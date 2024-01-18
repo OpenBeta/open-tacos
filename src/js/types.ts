@@ -1,4 +1,4 @@
-import { BBox, Feature } from '@turf/helpers'
+import { BBox, Feature, Position } from '@turf/helpers'
 import { ViewState } from 'react-map-gl'
 import { BaseItem } from '@algolia/autocomplete-core'
 import { RegisterOptions } from 'react-hook-form'
@@ -19,6 +19,7 @@ export interface AreaMetadataType {
   mp_id: string
   area_id: string
   areaId: string
+  polygon: Position[]
 }
 
 export enum SafetyType {

@@ -21,11 +21,11 @@ const IconMap: Record<EType, Icon> = {
   climb: LineSegment
 }
 
-export const EntityIcon: React.FC<{ type: EType, withLabel?: boolean, size?: 20 | 24 | 28, className?: string }> = ({ type, withLabel = true, size = 24, className = '' }) => {
+export const EntityIcon: React.FC<{ type: EType, withLabel?: boolean, size?: 16 | 20 | 24 | 28, className?: string }> = ({ type, withLabel = true, size = 24, className = '' }) => {
   const IconComponent = IconMap?.[type]
   if (IconComponent == null) return null
   return (
-    <div className='flex gap-1.5 items-center'>
+    <div className='flex gap-1 items-center'>
       <IconComponent size={size} weight='duotone' className={className} />
       {withLabel && <span className='text-xs font-light'>{type.toUpperCase()}</span>}
     </div>

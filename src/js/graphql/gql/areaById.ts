@@ -46,6 +46,8 @@ export const QUERY_AREA_BY_ID = gql`
         lat
         lng 
         leftRightIndex
+        polygon
+        bbox
       }
       pathTokens  
       ancestors
@@ -101,6 +103,7 @@ export const QUERY_AREA_BY_ID = gql`
           lat
           lng
           bbox
+          polygon
         }
         children {
           uuid
