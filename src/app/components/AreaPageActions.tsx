@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { PencilSimple, ArrowElbowLeftDown } from '@phosphor-icons/react/dist/ssr'
+import { PencilSimple, MapPin } from '@phosphor-icons/react/dist/ssr'
 import { ShareAreaLinkButton } from '@/app/components/ShareAreaLinkButton'
 import { UploadPhotoButton } from '@/components/media/PhotoUploadButtons'
 
@@ -15,7 +15,7 @@ export const AreaPageActions: React.FC<{ uuid: string, areaName: string } > = ({
     <UploadPhotoButton />
 
     <Link href='#map' className='btn'>
-      <ArrowElbowLeftDown size={20} className='hidden md:inline' /> Map
+      <MapPin size={20} className='hidden md:inline' /> Map
     </Link>
     <ShareAreaLinkButton uuid={uuid} areaName={areaName} />
   </ul>
