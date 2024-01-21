@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { LinkSimple, Check } from '@phosphor-icons/react/dist/ssr'
+import { ShareNetwork, Check } from '@phosphor-icons/react/dist/ssr'
 
 import { getFriendlySlug } from '@/js/utils'
 import { ControlledTooltip } from '@/components/ui/Tooltip'
