@@ -135,3 +135,11 @@ A slightly deemphasized dotted underline for a tag in order to not competing wit
     @apply bg-neutral-300 rounded-full;
   }
 }
+
+/**
+  * Force mapbox-gl library to use our font otherwise components inside the map 
+  * will use their font and look out of place.
+  */
+.mapboxgl-map {
+  font-family: inherit !important;
+}
