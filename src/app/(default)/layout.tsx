@@ -26,11 +26,11 @@ export default function RootLayout ({
   children: React.ReactNode
 }): any {
   return (
-    <html lang='en' className='snap-proximity snap-y'>
-      <body>
+    <html lang='en' className='snap-proximity snap-y scroll-smooth'>
+      <body className='relative'>
         <NextAuthProvider>
           <Header />
-          <div className='relative w-full h-full'>
+          <div>
             {children}
           </div>
         </NextAuthProvider>

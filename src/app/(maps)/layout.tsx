@@ -21,7 +21,7 @@ export default function MapsRootLayout ({
 }
 
 export const metadata: Metadata = {
-  title: 'OpenBeta climbing maps',
+  title: 'Open climb maps',
   description: 'Free rock climbing platform',
   openGraph: {
     description: 'OpenBeta is a free climbing platform.  Join the community and share your knowledge today.',

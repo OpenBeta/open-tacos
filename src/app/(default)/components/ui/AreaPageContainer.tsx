@@ -1,6 +1,7 @@
 import { GallerySkeleton } from '@/components/media/PhotoMontage'
 import React from 'react'
 import { AreaPageActionsSkeleton } from '../AreaPageActions'
+import { HeroAlert } from '../LandingHero'
 
 /**
  * Area page containter.  Show loading skeleton if no params are provided.
@@ -14,7 +15,10 @@ export const AreaPageContainer: React.FC<{
 }> = ({ photoGallery, pageActions, breadcrumbs, map, children }) => {
   return (
     <article>
-      <div className='p-4 mx-auto max-w-5xl xl:max-w-7xl'>
+      <div className='px-4 mb-2'>
+        <HeroAlert />
+      </div>
+      <div className='px-4 mx-auto max-w-5xl xl:max-w-7xl'>
         {photoGallery == null ? <GallerySkeleton /> : photoGallery}
         <div className='flex justify-end py-4 border-b'>
           {pageActions == null ? <AreaPageActionsSkeleton /> : pageActions}

@@ -1,5 +1,6 @@
 'use client'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import mapboxgl from 'mapbox-gl'
 import { Map, ScaleControl, FullscreenControl, NavigationControl, MapLayerMouseEvent, MapInstance } from 'react-map-gl'
 import { Point, Polygon } from '@turf/helpers'
 
@@ -29,38 +30,36 @@ export interface HoverInfo {
 
 interface GlobalMapProps {
   showFullscreenControl?: boolean
+  initialCenter?: { longitude: number, latitude: number }
 }
+
 /**
  * Global map
  */
 export const GlobalMap: React.FC<GlobalMapProps> = ({ showFullscreenControl = true }) => {
-  const [defaultCenter, setDefaultCenter] = useState<{ longitude: number, latitude: number } | null >(null)
+  const [initialCenter, setInitialCenter] = useState<[number, number] | undefined>(undefined)
   const [clickInfo, setClickInfo] = useState<MapAreaFeatureProperties | null>(null)
   const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null)
   const [selected, setSelected] = useState<Point | Polygon | null>(null)
   const [mapInstance, setMapInstance] = useState<MapInstance | null>(null)
   const [cursor, setCursor] = useState<string>('default')
-  const mapRef = useRef<any>(null)
 
   useEffect(() => {
-    if (mapRef.current != null) {
-      setMapInstance(mapRef.current)
-    }
-  }, [mapRef?.current])
-
-  useEffect(() => {
-    const fetchDefaultCenter = async (): Promise<void> => {
-      const res = await fetch('/api/geo')
-      if (res.ok) {
-        res.json().then(({ longitude, latitude }) => {
-          setDefaultCenter({ longitude, latitude })
-        }).catch((err) => {
-          console.error(err)
-        })
+    getVisitorLocation().then((visitorLocation) => {
+      if (visitorLocation != null) {
+        setInitialCenter([visitorLocation.longitude, visitorLocation.latitude])
       }
-    }
-    void fetchDefaultCenter()
+    }).catch(() => {
+      console.log('Unable to determine user\'s location')
+    })
   }, [])
+
+  const onLoad = useCallback((e: mapboxgl.MapboxEvent) => {
+    setMapInstance(e.target)
+    if (initialCenter != null) {
+      e.target.jumpTo({ center: initialCenter })
+    }
+  }, [initialCenter])
 
   const onClick = useCallback((event: MapLayerMouseEvent): void => {
     const feature = event?.features?.[0]
@@ -98,9 +97,8 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({ showFullscreenControl = tr
   return (
     <div className='relative w-full h-full'>
       <Map
-        ref={mapRef}
         id='global-map'
-        {...defaultCenter != null && { initialViewState: { ...defaultCenter, zoom: 8 } }}
+        onLoad={onLoad}
         onDragStart={() => {
           setCursor('move')
         }}
@@ -130,4 +128,14 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({ showFullscreenControl = tr
       </Map>
     </div>
   )
+}
+
+const getVisitorLocation = async (): Promise<{ longitude: number, latitude: number } | undefined> => {
+  try {
+    const res = await fetch('/api/geo')
+    return await res.json()
+  } catch (err) {
+    console.log('ERROR', err)
+    return undefined
+  }
 }

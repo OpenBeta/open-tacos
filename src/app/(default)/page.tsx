@@ -12,7 +12,7 @@ import { RecentContributionsMap } from './components/recent/RecentContributionsM
 /**
  * Cache duration in seconds
  */
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
 
 /**
  * Root home page
