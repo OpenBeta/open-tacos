@@ -6,6 +6,7 @@ import { PageFooter } from './components/PageFooter'
 import { NextAuthProvider } from './components/NextAuthProvider'
 import { ReactToastifyProvider } from './components/ReactToastifyProvider'
 import { BlockingAlertUploadingInProgress } from './components/ui/GlobalAlerts'
+import { inter } from './fonts'
 
 export const metadata: Metadata = {
   title: 'OpenBeta',
@@ -27,7 +28,7 @@ export default function RootLayout ({
 }): any {
   return (
     <html lang='en' className='snap-proximity snap-y'>
-      <body>
+      <body className={ inter.className}>
         <NextAuthProvider>
           <Header />
           <div>
