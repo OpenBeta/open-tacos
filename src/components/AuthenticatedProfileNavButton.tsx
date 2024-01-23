@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession, signIn, signOut } from 'next-auth/react'
+import { UserCircle, HandHeart } from '@phosphor-icons/react/dist/ssr'
 import { UserCircleIcon, ChatBubbleOvalLeftEllipsisIcon, Cog6ToothIcon, ChartBarIcon, GiftIcon } from '@heroicons/react/24/outline'
 
-import { DropdownMenu, DropdownTrigger, DropdownContent, DropdownItem, DropdownSeparator } from './ui/DropdownMenu'
-import GitHubIcon from '../assets/icons/github.inline.svg'
+import { DropdownMenu, DropdownTrigger, DropdownContent, DropdownItem, DropdownSeparator } from '@/components/ui/DropdownMenu'
+import GitHubIcon from '@/assets/icons/github.inline.svg'
 
 interface ProfileNavButtonProps {
   isMobile?: boolean
@@ -12,17 +13,16 @@ interface ProfileNavButtonProps {
 
 /**
  * Render user dropdown menu if the user has logged in.  Return null otherwise.
- * @deprecated
  */
-export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonProps): JSX.Element | null {
+export default function AuthenticatedProfileNavButton ({ isMobile = true }: ProfileNavButtonProps): JSX.Element | null {
   const router = useRouter()
   const { status } = useSession()
   if (status === 'authenticated') {
     if (isMobile) {
       return (
-        <Link href='/api/user/me' legacyBehavior>
+        <Link href='/api/user/me'>
           <button className='inline-flex btn btn-ghost btn-square'>
-            <UserCircleIcon className='stroke-1 stroke-white w-8 h-8' />
+            <UserCircleIcon className='stroke-1 w-8 h-8' />
           </button>
         </Link>
       )
@@ -31,9 +31,9 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
       <div className='block relative'>
         <DropdownMenu>
           <DropdownTrigger asChild>
-            <button className='btn btn-outline btn-accent gap-2'>
-              <UserCircleIcon className='w-6 h-6 rounded-full' />
-              <span className='mt-0.5'>Profile</span>
+            <button className='btn btn-primary btn-solid no-animation border-2 shadow-md'>
+              <UserCircle size={24} weight='fill' className='text-accent' />
+              Profile
             </button>
           </DropdownTrigger>
 
@@ -60,6 +60,7 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
 
             <DropdownItem
               text='Logout'
+              className='font-semibold'
               onSelect={() => {
                 sessionStorage.setItem('editMode', 'false')
                 void signOut({ callbackUrl: `${window.origin}/api/auth/logout` })
@@ -79,6 +80,14 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
               className='text-accent'
               onSelect={() => { void router.push('https://opencollective.com/openbeta/contribute/t-shirt-31745') }}
             />
+
+            <DropdownItem
+              icon={<HandHeart />}
+              text='Become a Partner'
+              className='font-semibold'
+              onSelect={() => { void router.push('/partner-with-us') }}
+            />
+
             <DropdownSeparator />
 
             <DropdownItem
@@ -97,5 +106,13 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
     )
   }
 
-  return null
+  return (
+    <button
+      className='btn btn-solid ring-0 border-b-2 border-b-neutral shadow-md btn-accent'
+      disabled={status === 'loading'}
+      onClick={() => { void signIn('auth0') }}
+    >
+      <UserCircle size={24} weight='fill' />Login
+    </button>
+  )
 }

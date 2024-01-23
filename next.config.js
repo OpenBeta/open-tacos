@@ -36,6 +36,11 @@ module.exports = {
   async redirects () {
     return [
       {
+        source: '/map',
+        destination: '/maps',
+        permanent: true
+      },
+      {
         source: '/areas/:uuid',
         destination: '/area/:uuid/',
         permanent: true

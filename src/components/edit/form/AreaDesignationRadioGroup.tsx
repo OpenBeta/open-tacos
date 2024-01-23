@@ -2,7 +2,7 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
 import { AreaMetadataType, AreaUpdatableFieldsType } from '../../../js/types'
 import { RadioGroup } from '../../ui/form'
 import Tooltip from '../../ui/Tooltip'
-import { EntityIcon } from 'app/editArea/[slug]/general/components/AreaItem'
+import { EntityIcon } from '@/app/(default)/editArea/[slug]/general/components/AreaItem'
 
 export type AreaTypeFormProp = 'crag' | 'area' | 'boulder'
 

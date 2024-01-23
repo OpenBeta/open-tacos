@@ -2,7 +2,7 @@ import * as Popover from '@radix-ui/react-popover'
 import { HoverInfo, MapAreaFeatureProperties } from './AreaMap'
 import { getAreaPageFriendlyUrl } from '@/js/utils'
 import { Card } from '../core/Card'
-import { EntityIcon } from '@/app/editArea/[slug]/general/components/AreaItem'
+import { EntityIcon } from '@/app/(default)/editArea/[slug]/general/components/AreaItem'
 import { SelectedPolygon } from './AreaActiveMarker'
 /**
  * Area info panel
