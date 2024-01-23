@@ -100,7 +100,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({ showFullscreenControl = tr
       <Map
         ref={mapRef}
         id='global-map'
-        {...(defaultCenter != null ? { ...defaultCenter, zoom: 3 } : {})}
+        {...defaultCenter != null && { initialViewState: { ...defaultCenter, zoom: 8 } }}
         onDragStart={() => {
           setCursor('move')
         }}
