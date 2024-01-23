@@ -33,6 +33,7 @@ interface BaseMapProps {
 /**
  * Important! if you want MapGL to pass custom layer data to onClick/onHover,
  * you need to provide the layer id to MapGL via interactiveLayerIds
+ * @deprecated
  */
 export default function BaseMap ({
   height,

@@ -38,6 +38,9 @@
       ],
       "@/assets/*": [
         "assets/*"
+      ],
+      "@/public/*": [
+        "../public/*"
       ]
     },
     "plugins": [

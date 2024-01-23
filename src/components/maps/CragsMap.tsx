@@ -13,6 +13,7 @@ import { MapLayerMouseEvent } from 'mapbox-gl'
 const mapElementId = 'my-area-map'
 /**
  * Make a map of crag markers.
+ * @deprecated
  */
 export default function CragsMap (): JSX.Element {
   const geojson = store.filters.allGeoJson()
