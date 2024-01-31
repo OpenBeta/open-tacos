@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { ShareNetwork, Check } from '@phosphor-icons/react/dist/ssr'
+import { LinkSimple, Check } from '@phosphor-icons/react/dist/ssr'
 
 import { getFriendlySlug } from '@/js/utils'
 import { ControlledTooltip } from '@/components/ui/Tooltip'
@@ -30,7 +30,7 @@ export const ShareAreaLinkButton: React.FC<{ uuid: string, areaName: string }> =
           setClicked(true)
         }}
       >
-        <ShareNetwork  size={20} /><span className='hidden md:inline'>Share</span>
+        <LinkSimple size={20} /><span className='hidden md:inline'>Copy Link</span>
       </button>
     </ControlledTooltip>
   )
