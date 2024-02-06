@@ -139,6 +139,21 @@
     {
       "type": "Feature",
       "properties": {
+        "firstName": "Alex",
+        "githubId": "alexoj46",
+        "favoriteCrag": "b81f8942-4e04-56eb-a681-84568676c681"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.18008,
+          -85.81680
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "firstName": "Blake",
         "githubId": "btmccord",
         "favoriteCrag": "ccf26565-71c6-59ff-8c42-0564bfa96ef8"
