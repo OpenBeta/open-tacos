@@ -37,23 +37,7 @@ export const ChangesetCard: React.FC<ChangsetRowProps> = ({ changeset }) => {
   const op = operationLabelMap?.[operation] ?? operationLabelMap.unknown
   return (
     <div className='block w-full max-w-md'>
-      <div className='mb-2 flex items-center justify-between flex-wrap gap-y-1.5'>
-        <div className='flex items-center gap-1'>
-          <Link className='flex items-center gap-2' href={`/u/${editedByUser}`}>
-            <div className='avatar placeholder'>
-              <div className='bg-neutral-focus text-neutral-content h-6 rounded-full'>
-                {editedByUser[0].toUpperCase()}
-              </div>
-            </div>
-            <span className='text-sm text-base-content/70'>{editedByUser}</span>
-          </Link>
-          <div className='pl-0.5 text-sm'>{op.badge}</div>
-        </div>
-
-        <div className='text-sm text-base-content/70 italic mr-2'>
-          {formatDistanceToNowStrict(createdAt, { addSuffix: false })}
-        </div>
-      </div>
+      <Header userId={editedByUser} opStr={op.badge} createdAt={createdAt} />
       <div className={clx('border-l-8 card card-compact w-full bg-base-100 border shadow-lg', op.borderCue)}>
         <div className='card-body'>
           <div className='px-2'>
@@ -68,6 +52,40 @@ export const ChangesetCard: React.FC<ChangsetRowProps> = ({ changeset }) => {
       </div>
     </div>
 
+  )
+}
+
+const UserAvatar: React.FC<{ userId?: string }> = ({ userId }) => {
+  return (
+    <div className='avatar placeholder'>
+      <div className='bg-neutral-focus text-neutral-content h-6 rounded-full'>
+        {userId?.[0]?.toUpperCase() ?? 'U'}
+      </div>
+    </div>
+  )
+}
+const Header: React.FC<{ userId?: string, opStr: string, createdAt: number }> = ({ userId, opStr, createdAt }) => {
+  return (
+    <div className='mb-2 flex items-center justify-between flex-wrap gap-y-1.5'>
+      <div className='flex items-center gap-1'>
+        {userId == null
+          ? (
+            <div className='flex items-center gap-2'>
+              <UserAvatar userId={userId} />
+              <span className='text-sm text-secondary'>Unknown</span>
+            </div>)
+          : (
+            <Link className='flex items-center gap-2' href={`/u/${userId}`}>
+              <UserAvatar userId={userId} />
+              <span className='text-sm text-secondary'>{userId}</span>
+            </Link>)}
+        <div className='pl-0.5 text-sm'>{opStr}</div>
+      </div>
+
+      <div className='text-sm text-base-content/70 italic mr-2'>
+        {formatDistanceToNowStrict(createdAt, { addSuffix: false })}
+      </div>
+    </div>
   )
 }
 
