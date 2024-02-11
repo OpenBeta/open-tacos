@@ -30,7 +30,7 @@ export const ShareAreaLinkButton: React.FC<{ uuid: string, areaName: string }> =
           setClicked(true)
         }}
       >
-        <LinkSimple size={20} /><span className='hidden md:inline'>Share</span>
+        <LinkSimple size={20} /><span className='hidden md:inline'>Copy Link</span>
       </button>
     </ControlledTooltip>
   )
