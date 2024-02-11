@@ -15,5 +15,6 @@
   "standard.treatErrorsAsWarnings": true,
   "javascript.format.enable": false,
   "javascript.format.semicolons": "remove",
-  "typescript.format.enable": true
+  "typescript.format.enable": true,
+  "workbench.colorTheme": "Material Theme DeepForest High Contrast"
 }

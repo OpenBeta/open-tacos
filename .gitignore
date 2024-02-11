@@ -78,7 +78,10 @@ content
 .env.local 
 .env.test.local
 *.pem
-.vscode/launch.json
 
 .lighthouseci
+
+# IDE
 .idea/
+.vscode/launch.json
+.vscode/settings.json
