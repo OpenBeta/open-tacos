@@ -10,10 +10,10 @@ import 'react-toastify/dist/ReactToastify.min.css'
 
 import '../styles/global.css'
 import '../../public/fonts/fonts.css'
-import useUsernameCheck from '../js/hooks/useUsernameCheck'
 import { useUserGalleryStore } from '../js/stores/useUserGalleryStore'
 import { BlockingAlert } from '../components/ui/micro/AlertDialogue'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { OnboardingCheck } from '@/components/auth/OnboardingCheck'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
@@ -42,7 +42,7 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
                 </>
                 )
           }
-        <NewUserCheck />
+        <OnboardingCheck isAppDir={false} />
       </SessionProvider>
       <ToastContainer
         position='bottom-right'
@@ -81,15 +81,6 @@ const Auth: React.FC<any> = ({ children }) => {
   }
 
   return children
-}
-
-/**
- * A wrapper component so that we can call the username check hook
- * inside SessionProvider.
- */
-const NewUserCheck: React.FC = () => {
-  useUsernameCheck()
-  return null
 }
 
 const ToastCloseButton: React.FC<any> = ({ closeToast }) => (
