@@ -1,0 +1,372 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "areas": {
+      "description": "An array of area objects.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Area"
+      }
+    }
+  },
+  "required": [
+    "areas"
+  ],
+  "definitions": {
+    "Area": {
+      "description": "Represents a climbing area with its properties and nested areas or climbs.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "A unique identifier for the area.",
+          "type": "string",
+          "format": "uuid"
+        },
+        "areaName": {
+          "description": "The name that this area is commonly identified by within the climbing community.",
+          "type": "string"
+        },
+        "climbs": {
+          "description": "The climbs that appear within this area. If this area is a leaf node, then these climbs can be understood as appearing physically on - rather than within - this area.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Climb"
+          }
+        },
+        "children": {
+          "description": "Nested areas within the current area. Can be either an array of areas or a single area object.",
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Area"
+              }
+            },
+            {
+              "type": "object",
+              "$ref": "#/definitions/Area"
+            }
+          ]
+        },
+        "gradeContext": {
+          "description": "The grading system used for climbing/bouldering in the area. Inherits from parent node if current node does not have one. UIAA = UIAA/font, US = yds/vscale, FR = french/font (see https://github.com/OpenBeta/openbeta-graphql/blob/9c517329db079c922fe7f092a78b658cb295e158/src/GradeUtils.ts#L40)",
+          "type": "string",
+          "enum": [
+            "ALSK",
+            "AU",
+            "BRZ",
+            "FIN",
+            "FR",
+            "HK",
+            "NWG",
+            "POL",
+            "SA",
+            "SWE",
+            "SX",
+            "UIAA",
+            "UK",
+            "US"
+          ]
+        },
+        "metadata": {
+          "description": "Additional metadata about the area.",
+          "type": "object",
+          "properties": {
+            "leaf": {
+              "description": "Indicates if the area has no child areas.",
+              "type": "boolean"
+            },
+            "isBoulder": {
+              "description": "Indicates if the area is primarily for bouldering.",
+              "type": "boolean"
+            },
+            "lnglat": {
+              "description": "The longitude and latitude of the area.",
+              "type": "object",
+              "properties": {
+                "type": {
+                  "description": "The type of the geo-coordinate, always 'Point'.",
+                  "type": "string",
+                  "enum": [
+                    "Point"
+                  ]
+                },
+                "coordinates": {
+                  "description": "The longitude and latitude coordinates.",
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              }
+            },
+            "bbox": {
+              "description": "The bounding box of the area.",
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 4,
+              "maxItems": 4
+            },
+            "leftRightIndex": {
+              "description": "A numeric index used for sorting climbs from left to right (of a wall).",
+              "type": "number"
+            },
+            "ext_id": {
+              "description": "An external identifier for the area.",
+              "type": "string"
+            },
+            "additionalProperties": true
+          },
+          "additionalProperties": true
+        },
+        "content": {
+          "description": "Content related to the area, such as descriptions.",
+          "type": "object",
+          "properties": {
+            "description": {
+              "description": "A textual description of the area.",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "areaName"
+          ]
+        },
+        {
+          "required": [
+            "id"
+          ]
+        }
+      ],
+      "additionalProperties": false
+    },
+    "Climb": {
+      "description": "Represents a climbing route with its properties.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "A unique identifier for the climb.",
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "description": "The name that this climb is commonly identified by.",
+          "type": "string"
+        },
+        "grade": {
+          "description": "The difficulty grade of the climb. Must be coherent with gradeContext. I. e. gradeContext = 'US' requires denomination in yds/vscale (climbing/bouldering), so '5.11'/'V14', 'FR' would be french/font '9c+'/'9a', 'UIIA' would be uiaa/font '9+'/'9a'. (see https://github.com/OpenBeta/sandbag)",
+          "type": "string"
+        },
+        "gradeContext": {
+          "description": "The grading system used for climbing/bouldering in the area. Normally inherited from parent area. UIAA = UIAA/font, US = yds/vscale, FR = french/font (climbing/bouldering) (see https://github.com/OpenBeta/openbeta-graphql/blob/9c517329db079c922fe7f092a78b658cb295e158/src/GradeUtils.ts#L40)",
+          "type": "string",
+          "enum": [
+            "ALSK",
+            "AU",
+            "BRZ",
+            "FIN",
+            "FR",
+            "HK",
+            "NWG",
+            "POL",
+            "SA",
+            "SWE",
+            "SX",
+            "UIAA",
+            "UK",
+            "US"
+          ]
+        },
+        "fa": {
+          "description": "The first ascent information of the climb. Usually formatted as: name(s) (year).",
+          "type": "string"
+        },
+        "type": {
+          "description": "What sort of climb is this? Climbs can combine these fields, which is why this is not an enumeration.",
+          "type": "object",
+          "properties": {
+            "trad": {
+              "type": "boolean"
+            },
+            "sport": {
+              "type": "boolean"
+            },
+            "bouldering": {
+              "type": "boolean"
+            },
+            "deepwatersolo": {
+              "type": "boolean"
+            },
+            "alpine": {
+              "type": "boolean"
+            },
+            "ice": {
+              "type": "boolean"
+            },
+            "mixed": {
+              "type": "boolean"
+            },
+            "aid": {
+              "type": "boolean"
+            },
+            "tr": {
+              "description": "Top Rope",
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "safety": {
+          "description": "The safety rating of a climb based on US movie ratings. See https://github.com/OpenBeta/openbeta-graphql/blob/9c517329db079c922fe7f092a78b658cb295e158/src/graphql/schema/Climb.gql#L177.",
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "PG",
+            "PG13",
+            "R",
+            "X"
+          ]
+        },
+        "boltsCount": {
+          "description": "The number of bolts (fixed anchors) on the climb.",
+          "type": "number"
+        },
+        "length": {
+          "description": "Total length in meters if known (-1 otherwise)",
+          "type": "number"
+        },
+        "pitches": {
+          "description": "List of Pitch objects representing individual pitches of a multi-pitch climb",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "A unique identifier for the pitch.",
+                "type": "string",
+                "format": "uuid"
+              },
+              "parentId": {
+                "description": "The unique identifier of the parent climb.",
+                "type": "string",
+                "format": "uuid"
+              },
+              "pitchNumber": {
+                "description": "The number of the pitch in the sequence.",
+                "type": "number"
+              },
+              "grade": {
+                "description": "The difficulty grade of the pitch (see Climb.grade)",
+                "type": "string"
+              },
+              "disciplines": {
+                "description": "The climbing disciplines applicable to the pitch. (see Climb.grade)",
+                "type": "object"
+              },
+              "length": {
+                "description": "The length of the pitch in meters",
+                "type": "number"
+              },
+              "boltsCount": {
+                "description": "The number of bolts (fixed anchors) on the pitch.",
+                "type": "number"
+              },
+              "description": {
+                "description": "A textual description of the pitch.",
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "metadata": {
+          "description": "Additional metadata about the climb.",
+          "type": "object",
+          "properties": {
+            "lnglat": {
+              "description": "The longitude and latitude of the climb.",
+              "type": "object",
+              "properties": {
+                "type": {
+                  "description": "The type of the geo-coordinate, always 'Point'.",
+                  "type": "string",
+                  "enum": [
+                    "Point"
+                  ]
+                },
+                "coordinates": {
+                  "description": "The longitude and latitude coordinates.",
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              }
+            },
+            "leftRightIndex": {
+              "description": "A numeric index used for sorting or positioning.",
+              "type": "number"
+            },
+            "mp_id": {
+              "description": "An identifier used in Mountain Project's database.",
+              "type": "string"
+            },
+            "mp_crag_id": {
+              "description": "The identifier of the crag in Mountain Project's database.",
+              "type": "string"
+            },
+            "areaRef": {
+              "description": "A reference to the area containing the climb.",
+              "type": "object"
+            }
+          },
+          "additionalProperties": false
+        },
+        "content": {
+          "description": "Composable attributes for this climb, these are the bread and butter guidebook-like data that make up the bulk of the text beta for this climb.",
+          "type": "object",
+          "properties": {
+            "description": {
+              "description": "The description of this climb, this is the main text field for this climb. This contains beta, visual descriptors, and any other information useful to identifying and attempting the climb",
+              "type": "string"
+            },
+            "protection": {
+              "description": "What do climbers need to know about making a safe attempt of this climb? What gear do they need, what are the hazards, etc.",
+              "type": "string"
+            },
+            "location": {
+              "description": "Information regarding Approach and other location context for this climb. Could also include information about the situation of this specific climb.",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "name"
+          ]
+        },
+        {
+          "required": [
+            "id"
+          ]
+        }
+      ],
+      "additionalProperties": false
+    }
+  }
+}
