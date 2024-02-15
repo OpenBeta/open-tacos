@@ -1,25 +1,15 @@
 //'use client'
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Alert,
-  Box,
-  Button,
-  Container,
-  Snackbar,
-  Typography
-} from "@mui/material";
 import Ajv from "ajv";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react"; // Import useRef
+import { toast } from 'react-toastify';
 import Layout from '../components/layout';
 import schema from "./schema.json";
 const addFormats = require("ajv-formats");
 const betterAjvErrors = require("better-ajv-errors").default
 
 function FileUploadClientComponent() {
-  const [alertMessage, setAlertMessage] = useState("")
   const [validationErrors, setValidationErrors] = useState([])
+  const fileInputRef = useRef<HTMLInputElement>(null); // Create a ref for the file input
 
   const handleValidationErrors = (rawJSON: object) => {
     try {
@@ -31,20 +21,20 @@ function FileUploadClientComponent() {
         const betterErrors = betterAjvErrors(schema, rawJSON, compiledSchema.errors, {format: 'js'})
         console.log(betterErrors)
         setValidationErrors(betterErrors);
-        setAlertMessage(
+        toast.error(
           betterErrors.length > 0
             ? "Error: Schema validation errors found."
             : "Error: Schema validation failed, but no errors were provided."
         );
       } else {
-        setAlertMessage(
+        toast.success(
           "JSON file and schema successfully validated. 🎊 Proceed to database upload."
         );
         setValidationErrors([]);
       }
     } catch (error) {
       console.error("Error during validation:", error);
-      setAlertMessage(
+      toast.error(
         "Error: An unexpected error occurred during validation. See browser console log for more details."
       );
     }
@@ -53,7 +43,7 @@ function FileUploadClientComponent() {
     try {
       return JSON.parse(json);
     } catch (e) {
-      setAlertMessage(`Error: Could not parse JSON file. ${e}`);
+      toast.error(`Error: Could not parse JSON file. ${e}`);
       return null;
     }
   }
@@ -71,7 +61,7 @@ function FileUploadClientComponent() {
           if (isValidJSON) {
             handleValidationErrors(isValidJSON);
           } else {
-            setAlertMessage("Error: Not a valid JSON file");
+            toast.error("Error: Not a valid JSON file");
           }
         }
       };
@@ -79,61 +69,58 @@ function FileUploadClientComponent() {
     }
   };
 
+  // Function to trigger file input click
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
-    <Box sx={{ width: "100%", maxWidth: 500 }}>
+    <div style={{ width: "100%", maxWidth: 500 }}>
       <input
         accept="application/json"
         style={{ display: "none" }}
         id="contained-button-file"
         type="file"
         onChange={(event) => handleFileSelect(event)}
+        ref={fileInputRef} // Attach the ref to the file input
       />
       <label htmlFor="contained-button-file">
-        <Button variant="contained" component="span">
-          Select File
-        </Button>
+        <button
+          className='btn btn-outline bg-accent btn-sm px-4 border-b-neutral border-b-2'
+          onClick={handleButtonClick} // Add onClick handler to the button
+        >
+          Select JSON File to Upload
+        </button>
       </label>
-      {alertMessage && (
-        <Snackbar open={!!alertMessage} autoHideDuration={6000}>
-          <Alert severity={alertMessage.startsWith("Error") ? "error" : "info"}>
-            {alertMessage}
-          </Alert>
-        </Snackbar>
-      )}
-      <Box mt={2}>
-        <Typography variant="h6">Validation Errors</Typography>
+      <div>
+        <h6>Validation Errors</h6>
         {validationErrors.map((error, index) => (
-          <Accordion key={index}>
-            <AccordionSummary
-              expandIcon={"▼"}
-            >
-              <Typography>{error['error']}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                <pre style={{ fontSize: '10px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>{JSON.stringify(error, null, 2)}</pre>
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
+          <div key={index}>
+            <div>
+              <h6>{error['error']}</h6>
+            </div>
+            <div>
+              <pre style={{ fontSize: '10px', whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>{JSON.stringify(error, null, 2)}</pre>
+            </div>
+          </div>
         ))}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 }
 
 const BulkImport = (): JSX.Element => {
   return (
     <Layout contentContainerClass='content-default' showFilterBar={false}>
-<Container maxWidth="md">
-      <Box sx={{ width: "100%" }}>
-        <Typography variant="h4" gutterBottom>
+      <div style={{ maxWidth: "md", width: "100%" }}>
+        <h4 style={{ marginBottom: "16px" }}>
           Bulk Data Import V2
-        </Typography>
-        <Typography variant="subtitle1">
+        </h4>
+        <h6>
           Upload Area, Crag, Climbing Data.
-        </Typography>
-        <Box my={2}>
-          <Alert severity="info">
+        </h6>
+        <div>
+          <div>
             <ul>
               <li>- Allows for adding or changing large amounts of data at once.</li>
               <li>- Utilizes <a href="./schema/schema.json" target="_blank" rel="noopener noreferrer">JSON schema</a> to ensure correct data structure.</li>
@@ -144,23 +131,22 @@ const BulkImport = (): JSX.Element => {
               <li>- Note: OpenBeta’s route database is licensed as CC-BY-SA 4.0.</li>
               <li>- Special permissions required (ask on <a href="https://discord.gg/a6vuuTQxS8">Discord</a>).</li>
             </ul>
-          </Alert>
-        </Box>
+          </div>
+        </div>
 
-        <Box my={2}>
+        <div>
           <FileUploadClientComponent />
-        </Box>
+        </div>
 
-        <Box my={2}>
-          <Button variant="contained" color="primary">
+        <div>
+        <button className='btn btn-outline bg-accent btn-sm px-4 border-b-neutral border-b-2'>
             Upload to Database
-          </Button>
-        </Box>
-        <Typography variant="h6" gutterBottom>
+          </button>
+        </div>
+        <h6>
           Database Response Log
-        </Typography>
-      </Box>
-    </Container>
+        </h6>
+      </div>
     </Layout>
   )
 }
