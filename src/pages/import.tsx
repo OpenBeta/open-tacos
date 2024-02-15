@@ -6,6 +6,7 @@ import Layout from '../components/layout';
 import schema from "./schema.json";
 const addFormats = require("ajv-formats");
 const betterAjvErrors = require("better-ajv-errors").default
+  
 
 function FileUploadClientComponent() {
   const [validationErrors, setValidationErrors] = useState([])
@@ -112,8 +113,8 @@ function FileUploadClientComponent() {
 const BulkImport = (): JSX.Element => {
   return (
     <Layout contentContainerClass='content-default' showFilterBar={false}>
-      <div style={{ maxWidth: "md", width: "100%" }}>
-        <h4 style={{ marginBottom: "16px" }}>
+      <div className="max-w-md mx-auto">
+        <h4 className="text-lg font-bold mb-4">
           Bulk Data Import V2
         </h4>
         <h6>
@@ -145,7 +146,7 @@ const BulkImport = (): JSX.Element => {
         </div>
         <h6>
           Database Response Log
-        </h6>
+          </h6>
       </div>
     </Layout>
   )
