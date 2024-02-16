@@ -1,0 +1,36 @@
+{
+  "areas": [
+    {
+      "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "climbs": [
+        {
+          "name": "The Key Flake (updated)",
+          "grade": "5.11",
+          "fa": "Bobby Updated"
+        },
+        {
+          "name": "Incredible Hand Crack (updated)",
+          "grade": "5.12",
+          "fa": "Someone Updated",
+          "type": {
+            "trad": false
+          },
+          "content": {
+            "description": "I have updated this"
+          },
+          "pitches": [
+            {
+              "pitchNumber": 1,
+              "length": 110,
+              "boltsCount": 0
+            },
+            {
+              "pitchNumber": 2,
+              "description": "Updated: Easier climbing with good protection. Features a mix of crack sizes. Shorter than the first pitch but equally enjoyable."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

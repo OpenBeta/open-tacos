@@ -1,0 +1,128 @@
+{
+  "areas": [
+    {
+      "areaName": "Utah",
+      "children": [
+        {
+          "areaName": "Southeast Utah",
+          "children": [
+            {
+              "areaName": "Indian Creek",
+              "children": [
+                {
+                  "areaName": "Supercrack Buttress",
+                  "climbs": [
+                    {
+                      "name": "The Key Flake",
+                      "grade": "5.10",
+                      "fa": "unknown",
+                      "type": {
+                        "trad": true
+                      },
+                      "safety": "UNSPECIFIED",
+                      "metadata": {
+                        "lnglat": {
+                          "type": "Point",
+                          "coordinates": [
+                            -109.54552,
+                            38.03635
+                          ]
+                        },
+                        "leftRightIndex": 1
+                      },
+                      "content": {
+                        "description": "Cool off-width that requires off-width and face skills.",
+                        "protection": "Anchors hidden up top. Need 80m to make it all the way down.",
+                        "location": "Opposite keyhole flake. Obvious right leaning offwidth that starts atop 20 ft boulder."
+                      }
+                    },
+                    {
+                      "name": "Incredible Hand Crack",
+                      "grade": "5.10",
+                      "fa": "Rich Perch, John Bragg, Doug Snively, and Anne Tarver,  1978",
+                      "type": {
+                        "trad": true
+                      },
+                      "safety": "UNSPECIFIED",
+                      "metadata": {
+                        "lnglat": {
+                          "type": "Point",
+                          "coordinates": [
+                            -109.54552,
+                            38.03635
+                          ]
+                        },
+                        "leftRightIndex": 2
+                      },
+                      "content": {
+                        "description": "Route starts at the top of the trail from the parking lot to Supercrack Buttress.",
+                        "protection": "Cams from 2-2.5\". Heavy on 2.5\" (#2 Camalot)",
+                        "location": ""
+                      },
+                      "pitches": [
+                        {
+                          "pitchNumber": 1,
+                          "grade": "5.10",
+                          "disciplines": {
+                            "trad": true
+                          },
+                          "length": 100,
+                          "boltsCount": 0,
+                          "description": "A classic hand crack that widens slightly towards the top. Requires a range of cam sizes. Sustained and excellent quality."
+                        },
+                        {
+                          "pitchNumber": 2,
+                          "grade": "5.9",
+                          "disciplines": {
+                            "trad": true
+                          },
+                          "length": 30,
+                          "boltsCount": 0,
+                          "description": "Easier climbing with good protection. Features a mix of crack sizes. Shorter than the first pitch but equally enjoyable."
+                        }
+                      ]
+                    }
+                  ],
+                  "gradeContext": "US",
+                  "metadata": {
+                    "isBoulder": false,
+                    "isDestination": false,
+                    "leaf": true,
+                    "lnglat": {
+                      "type": "Point",
+                      "coordinates": [
+                        -109.54552,
+                        38.03635
+                      ]
+                    },
+                    "bbox": [
+                      -109.54609091005857,
+                      38.03590033981814,
+                      -109.54494908994141,
+                      38.03679966018186
+                    ]
+                  },
+                  "content": {
+                    "description": ""
+                  }
+                }
+              ],
+              "metadata": {
+                "lnglat": {
+                  "type": "Point",
+                  "coordinates": [
+                    -109.5724044642857,
+                    38.069429035714286
+                  ]
+                }
+              },
+              "content": {
+                "description": "Indian Creek is a crack climbing mecca in the southeastern region of Utah, USA. Located within the [Bears Ears National Monument](https://en.wikipedia.org/wiki/Bears_Ears_National_Monument)."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

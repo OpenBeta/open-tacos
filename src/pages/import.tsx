@@ -1,9 +1,9 @@
 //'use client'
 import Ajv from "ajv";
-import React, { useState, useRef } from "react"; // Import useRef
+import React, { useState, useRef } from "react"
 import { toast } from 'react-toastify';
 import Layout from '../components/layout';
-import schema from "./schema.json";
+import schema from "../../public/bulk-import/bulk-import-schema.json"
 import { File, Lightbulb, Detective } from "@phosphor-icons/react";
 const addFormats = require("ajv-formats");
 const betterAjvErrors = require("better-ajv-errors").default
@@ -160,9 +160,9 @@ const BulkImport = (): JSX.Element => {
           <div className='text-sm'>
             <ul className="list-disc pl-5">
               <li>Allows for adding or changing large amounts of data at once.</li>
-              <li>Utilizes this <a href="./schema/schema.json" target="_blank" rel="noopener noreferrer" className="link">JSON schema</a> to ensure correct data structure.</li>
-              <li>Example upload files and detailed instructions are available in this <a href="./schema/README.md" target="_blank" rel="noopener noreferrer" className="link">README</a>.</li>
-              <br></br>
+              
+              <li>Utilizes this <a href="/bulk-import/bulk-import-schema.json" target="_blank" rel="noopener noreferrer" className="link">JSON schema</a> to ensure correct data structure.</li>
+              <li>Example upload files and detailed instructions are available in this <a href="/bulk-import/README.md" target="_blank" rel="noopener noreferrer" className="link">README</a>.</li>
               <li>Note: OpenBeta’s route database is licensed as CC-BY-SA 4.0.</li>
               <li>Need help? Find us on <a href="https://discord.gg/a6vuuTQxS8" className="link">Discord</a>.</li>
             </ul>
