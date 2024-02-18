@@ -18,7 +18,7 @@
       "description": "Represents a climbing area with its properties and nested areas or climbs.",
       "type": "object",
       "properties": {
-        "id": {
+        "uuid": {
           "description": "A unique identifier for the area.",
           "type": "string",
           "format": "uuid"
@@ -103,7 +103,7 @@
         },
         {
           "required": [
-            "id"
+            "uuid"
           ]
         }
       ],
@@ -113,7 +113,7 @@
       "description": "Represents a climbing route with its properties.",
       "type": "object",
       "properties": {
-        "id": {
+        "uuid": {
           "description": "A unique identifier for the climb.",
           "type": "string",
           "format": "uuid"

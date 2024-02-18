@@ -4,9 +4,10 @@ import React, { useState, useRef } from "react"
 import { toast } from 'react-toastify';
 import Layout from '../components/layout';
 import schema from "../../public/bulk-import/bulk-import-schema.json"
-import { File, Lightbulb, Detective } from "@phosphor-icons/react";
+import { Lightbulb } from "@phosphor-icons/react";
 const addFormats = require("ajv-formats");
 const betterAjvErrors = require("better-ajv-errors").default
+import { jsonToGraphQLQuery } from 'json-to-graphql-query'
 
 
 function FileUploadAndValidationClientComponent() {
