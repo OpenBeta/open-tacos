@@ -51,11 +51,11 @@ Let's look at the example `add-areas-with-climbs.json` for an illustration:
 >                  - "Pitch 2" (Pitch, Type: `Climb.Pitch`)
 
 ### A note on `Area`s
-* an `Area` may be a country, state, region, crag or sector (and may be infinetely nested)
-* it is only the leaf area node that determines its type, which is automatically determined server-side based on certain criteria: 
-   * an area with *climbs* => a *sector* (then, metadata property `isLeaf` is set to `TRUE`)
-   * an area with *sectors* => a *crag* (not a leaf)
-   * an area with *only boulder routes* as children => *boulder field* (metadata property `isBoulder` may be set to `TRUE`)
+* An `Area` may be a country, state, region, crag or sector (and may be infinetely nested)
+* It is only the leaf area node that determines its type, which is (moslty) automatically determined server-side based on certain criteria: 
+   * an area with *climbs* => a *sector*
+   * an area with *sectors* => a *crag*
+   * an area with *only boulder routes* as children => *boulder field*
 
 # How to Update Data
 * On the use of `uuid`s  for `Area`, `Climb`, or `Climb.Pitch`:
