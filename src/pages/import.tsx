@@ -161,8 +161,8 @@ const BulkImport = (): JSX.Element => {
             <ul className="list-disc pl-5">
               <li>Allows for adding or changing large amounts of data at once.</li>
               
-              <li>Utilizes this <a href="/bulk-import/bulk-import-schema.json" target="_blank" rel="noopener noreferrer" className="link">JSON schema</a> to ensure correct data structure.</li>
-              <li>Example upload files and detailed instructions are available in this <a href="/bulk-import/README.md" target="_blank" rel="noopener noreferrer" className="link">README</a>.</li>
+              <li>Used a JSON schema to validate your upload's data structure before uploading</li>
+              <li>See this <a href="/bulk-import/README.md" target="_blank" rel="noopener noreferrer" className="link">README.md</a> for example upload files, schema, and detailed instructions.</li>
               <li>Note: OpenBeta’s route database is licensed as CC-BY-SA 4.0.</li>
               <li>Need help? Find us on <a href="https://discord.gg/a6vuuTQxS8" className="link">Discord</a>.</li>
             </ul>

@@ -55,15 +55,15 @@ Let's look at the example `add-areas-with-climbs.json` for an illustration:
 * it is only the leaf area node that determines its type, which is automatically determined server-side based on certain criteria: 
    * an area with *climbs* => a *sector* (then, metadata property `isLeaf` is set to `TRUE`)
    * an area with *sectors* => a *crag* (not a leaf)
-   * if an area has only boulders as children => *boulder field* (metadata property `isBoulder` is set to `TRUE`)
+   * an area with *only boulder routes* as children => *boulder field* (metadata property `isBoulder` may be set to `TRUE`)
 
 # How to Update Data
 * On the use of `uuid`s  for `Area`, `Climb`, or `Climb.Pitch`:
     * The schema requires EITHER
         *`name` (for areas: `areaName`)
         * OR `uuid` (for pitches: `id`)
-    * omitting an uuid => **creates** new entries
-    * providing an uuid => **updates** existing entries
+    * omitting a uuid => **creates** new entries
+    * providing a uuid => **updates** existing entries
 
 * Deleting climbs is not supported (join our Discord for help: https://discord.gg/a6vuuTQxS8)
 
