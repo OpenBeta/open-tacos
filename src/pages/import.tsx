@@ -7,7 +7,7 @@ import schema from "../../public/bulk-import/bulk-import-schema.json"
 import { Lightbulb } from "@phosphor-icons/react";
 const addFormats = require("ajv-formats");
 const betterAjvErrors = require("better-ajv-errors").default
-import { jsonToGraphQLQuery } from 'json-to-graphql-query'
+import { jsonToGraphQLQuery, VariableType } from 'json-to-graphql-query'
 
 
 function FileUploadAndValidationClientComponent() {
@@ -89,21 +89,21 @@ function FileUploadAndValidationClientComponent() {
       <div className="flex flex-row ">
         <h2>File Upload</h2>
       </div>
-      
+
 
       <div className="flex flex-col items-center">
-      <input
-        accept="application/json"
-        style={{ display: "none" }}
-        id="contained-button-file"
-        type="file"
-        onChange={(event) => {
-          handleFileSelect(event)
-          if (event.target.files && event.target.files[0]) {
-            setFileName(event.target.files[0].name)
-          }
-        }}
-        ref={fileInputRef} />
+        <input
+          accept="application/json"
+          style={{ display: "none" }}
+          id="contained-button-file"
+          type="file"
+          onChange={(event) => {
+            handleFileSelect(event)
+            if (event.target.files && event.target.files[0]) {
+              setFileName(event.target.files[0].name)
+            }
+          }}
+          ref={fileInputRef} />
 
 
         <label htmlFor="contained-button-file">
@@ -114,8 +114,8 @@ function FileUploadAndValidationClientComponent() {
             📁 Select JSON File to Upload
           </button>
         </label>
-        </div>  
-        <p>{fileName ? `Selected file: ${fileName}` : "No file selected."}</p>
+      </div>
+      <p>{fileName ? `Selected file: ${fileName}` : "No file selected."}</p>
 
 
     </div>
@@ -149,6 +149,80 @@ function FileUploadAndValidationClientComponent() {
 }
 
 
+function createMutationAndUploadToDB(parsedJsonData: string) {
+
+  const bulkImportMutation = {
+    mutation: {
+      __name: "BulkImport",
+      __variables: {
+        input: "BulkImportInputType!"
+      },
+      bulkImport: {
+        __args: {
+          input: parsedJsonData
+        },
+        addedAreas: {
+          uuid: true,
+          areaName: true,
+          description: true,
+          countryCode: true,
+          gradeContext: true,
+          leftRightIndex: true,
+          lng: true,
+          lat: true,
+          bbox: true,
+          children: {
+            uuid: true,
+            areaName: true,
+            description: true,
+            countryCode: true,
+            gradeContext: true,
+            leftRightIndex: true,
+            lng: true,
+            lat: true,
+            bbox: true,
+            // TODO: recursion is handled appropriately
+          },
+          climbs: {
+            uuid: true,
+            name: true,
+            grade: true,
+            disciplines: true,
+            safety: true,
+            lng: true,
+            lat: true,
+            leftRightIndex: true,
+            description: true,
+            location: true,
+            protection: true,
+            fa: true,
+            length: true,
+            boltsCount: true,
+            experimentalAuthor: {
+              displayName: true,
+              url: true
+            },
+            pitches: {
+              id: true,
+              pitchNumber: true,
+              grade: true,
+              disciplines: true,
+              description: true,
+              length: true,
+              boltsCount: true
+            }
+          }
+        }
+      }
+    }
+  };
+
+  const graphqlMutation = jsonToGraphQLQuery(bulkImportMutation, { pretty: true });
+
+  console.log(graphqlMutation
+}
+
+
 const BulkImport = (): JSX.Element => {
   return (
     <Layout contentContainerClass='content-default' showFilterBar={false}>
@@ -161,7 +235,7 @@ const BulkImport = (): JSX.Element => {
           <div className='text-sm'>
             <ul className="list-disc pl-5">
               <li>Allows for adding or changing large amounts of data at once.</li>
-              
+
               <li>Used a JSON schema to validate your upload's data structure before uploading</li>
               <li>See this <a href="/bulk-import/README.md" target="_blank" rel="noopener noreferrer" className="link">README.md</a> for example upload files, schema, and detailed instructions.</li>
               <li>Note: OpenBeta’s route database is licensed as CC-BY-SA 4.0.</li>
