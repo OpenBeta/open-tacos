@@ -12,12 +12,10 @@
           "name": "Incredible Hand Crack (updated)",
           "grade": "5.12",
           "fa": "Someone Updated",
-          "type": {
+          "disciplines": {
             "trad": false
           },
-          "content": {
-            "description": "I have updated this"
-          },
+          "description": "I have updated this",
           "pitches": [
             {
               "pitchNumber": 1,

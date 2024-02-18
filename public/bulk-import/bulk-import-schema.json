@@ -28,7 +28,7 @@
           "type": "string"
         },
         "countryCode": {
-          "description": "Only relevant when adding NEW countries. Database already contains most countries. Must be ISO 3166-1 Alpha-3 country code (e. g. `USA`).",
+          "description": "Relevant for adding areas directly below a country (E. g. USA -> Utah). ISO 3166-1 Alpha-2 country code (e. g. `us`). Children areas inherit the countryCode",
           "type": "string"
         },
         "climbs": {

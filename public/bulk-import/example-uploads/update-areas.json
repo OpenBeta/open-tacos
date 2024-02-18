@@ -2,86 +2,37 @@
   "areas": [
     {
       "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-      "name": "Area with updated name, coordinates, description",
-      "metadata": {
-        "lnglat": {
-          "type": "Point",
-          "coordinates": [
-            -99.99,
-            11.11
-          ]
-        }
-      },
-      "content": {
-        "description": "Some new description."
-      }
+      "areaName": "Area with updated name, coordinates, description",
+      "lng": -99.99,
+      "lat": 11.11,
+      "description": "Some new description."
     },
     {
       "id": "a3f159cb-2f10-4e3a-8bce-6689a70b76b8",
-      "name": "Existing area, where new children areas are added", 
-      "children": 
-    [
-      {
-        "id": "b1a6492f-8d58-4d5b-8b1a-51b75f51e990",
-        "areaName": "New Area 1",
-        "metadata": {
-          "isDestination": true,
-          "leaf": false,
-          "isBoulder": false,
-          "lnglat": {
-            "type": "Point",
-            "coordinates": [
-              -100.00,
-              20.00
-            ]
-          },
-          "leftRightIndex": 1
-        },
-        "content": {
+      "areaName": "Existing area, where new children areas are added", 
+      "children": [
+        {
+          "id": "b1a6492f-8d58-4d5b-8b1a-51b75f51e990",
+          "areaName": "New Area 1",
+          "lng": -100.00,
+          "lat": 20.00,
           "description": "Description of New Area 1"
-        }
-      },
-      {
-        "id": "c2d3e1f4-41e4-4dce-9bce-5b6a6395d570",
-        "areaName": "New Area 2",
-        "metadata": {
-          "isDestination": false,
-          "leaf": true,
-          "isBoulder": true,
-          "lnglat": {
-            "type": "Point",
-            "coordinates": [
-              -101.00,
-              21.00
-            ]
-          },
-          "leftRightIndex": 2
         },
-        "content": {
+        {
+          "id": "c2d3e1f4-41e4-4dce-9bce-5b6a6395d570",
+          "areaName": "New Area 2",
+          "lng": -101.00,
+          "lat": 21.00,
           "description": "Description of New Area 2"
-        }
-      },
-      {
-        "id": "d4e5f6a7-8b9c-4d0e-9abc-7d8e9fa6b7c8",
-        "areaName": "New Area 3",
-        "metadata": {
-          "isDestination": true,
-          "leaf": false,
-          "isBoulder": false,
-          "lnglat": {
-            "type": "Point",
-            "coordinates": [
-              -102.00,
-              22.00
-            ]
-          },
-          "leftRightIndex": 3
         },
-        "content": {
+        {
+          "id": "d4e5f6a7-8b9c-4d0e-9abc-7d8e9fa6b7c8",
+          "areaName": "New Area 3",
+          "lng": -102.00,
+          "lat": 22.00,
           "description": "Description of New Area 3"
         }
-      }
-    ]
+      ]
     }
   ]
 }
