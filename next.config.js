@@ -6,8 +6,10 @@ module.exports = {
   typescript: {
     ignoreBuildErrors: false
   },
-  webpack (config) { // required by @svgr/webpack lib
+  webpack (config, { isServer }) { // required by @svgr/webpack lib
     const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.('.svg'))
+
+    config.externals = [...config.externals, isServer ? { canvas: 'canvas', jsdom: 'jsdom', paper: 'paper' } : {}]
 
     config.module.rules.push({
       test: /\.svg$/i,

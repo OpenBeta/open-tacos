@@ -1,13 +1,13 @@
 import { forwardRef } from 'react'
 import Link from 'next/link'
-import { Polygon, ShareNetwork, LineSegment, Cube } from '@phosphor-icons/react/dist/ssr'
+import { Polygon, ShareNetwork, LineSegment, Cube, Path } from '@phosphor-icons/react/dist/ssr'
 import { Icon, IconProps } from '@phosphor-icons/react'
 
 import { AreaType } from '@/js/types'
 import { DeleteAreaTrigger, DeleteAreaTriggerButtonSm } from '@/components/edit/Triggers'
 import { getFriendlySlug } from '@/js/utils'
 
-export type EType = 'area' | 'crag' | 'boulder' | 'climb'
+export type EType = 'area' | 'crag' | 'boulder' | 'climb' | 'topo'
 
 const CragIcon = forwardRef<any, IconProps>((props, ref) => <ShareNetwork ref={ref} {...props} className='rotate-90' />)
 
@@ -18,7 +18,8 @@ const IconMap: Record<EType, Icon> = {
   area: Polygon,
   crag: CragIcon,
   boulder: Cube,
-  climb: LineSegment
+  climb: LineSegment,
+  topo: Path
 }
 
 export const EntityIcon: React.FC<{ type: EType, withLabel?: boolean, size?: 16 | 20 | 24 | 28, className?: string }> = ({ type, withLabel = true, size = 24, className = '' }) => {
