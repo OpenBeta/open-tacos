@@ -46,6 +46,7 @@
     "graphql": "^16.2.0",
     "i18n-iso-countries": "^7.5.0",
     "immer": "^10.0.2",
+    "json-to-graphql-query": "^2.2.5",
     "lexical": "^0.7.5",
     "mapbox-gl": "^2.7.0",
     "nanoid": "^4.0.0",
