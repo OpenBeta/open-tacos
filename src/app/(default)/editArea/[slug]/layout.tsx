@@ -1,5 +1,5 @@
 import { ArrowUUpLeft } from '@phosphor-icons/react/dist/ssr'
-import { SidebarNav } from './SidebarNav'
+import { SidebarNav } from './components/SidebarNav'
 import { getPageDataForEdit } from './general/page'
 import { AreaCrumbs } from '@/components/breadcrumbs/AreaCrumbs'
 import { getAreaPageFriendlyUrl } from '@/js/utils'

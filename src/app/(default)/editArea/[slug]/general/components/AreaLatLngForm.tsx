@@ -37,7 +37,7 @@ export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: 
             registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
             readOnly={!isLeaf}
            />)
-        : (<p className='text-secondary'>Field available for crag or boulder only.</p>)}
+        : (<p className='text-secondary'>Coordinates field available only when area type is either 'Crag' or 'Boulder'.</p>)}
     </SingleEntryForm>
   )
 }

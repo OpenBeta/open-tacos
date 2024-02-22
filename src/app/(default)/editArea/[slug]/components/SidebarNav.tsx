@@ -2,9 +2,10 @@
 import clx from 'classnames'
 import { usePathname } from 'next/navigation'
 import { Article, Plus } from '@phosphor-icons/react/dist/ssr'
-import { EntityIcon, EType } from './general/components/AreaItem'
+import { EntityIcon } from '../general/components/AreaItem'
+import { AreaAttributesPanel } from './AreaAttributesPanel'
 
-interface Props {
+export interface SidebarNavProps {
   slug: string
   canAddAreas: boolean
   canAddClimbs: boolean
@@ -16,7 +17,7 @@ interface Props {
 /**
  * Sidebar navigation for area edit
  */
-export const SidebarNav: React.FC<Props> = ({ slug, canAddAreas, canAddClimbs, areaCount, climbCount, isLeaf, isBoulder }) => {
+export const SidebarNav: React.FC<SidebarNavProps> = ({ slug, canAddAreas, canAddClimbs, areaCount, climbCount, isLeaf, isBoulder }) => {
   const activePath = usePathname()
   /**
    * Disable menu item's hover/click when own page is showing
@@ -87,64 +88,17 @@ export const SidebarNav: React.FC<Props> = ({ slug, canAddAreas, canAddClimbs, a
 
         </div>
 
-        <Summary
-          canAddAreas={canAddAreas}
-          canAddClimbs={canAddClimbs}
-          areaCount={areaCount}
-          climbCount={climbCount}
-          isLeaf={isLeaf}
-          isBoulder={isBoulder}
-        />
+        <div className='my-6'>
+          <AreaAttributesPanel
+            canAddAreas={canAddAreas}
+            canAddClimbs={canAddClimbs}
+            areaCount={areaCount}
+            climbCount={climbCount}
+            isLeaf={isLeaf}
+            isBoulder={isBoulder}
+          />
+        </div>
       </div>
     </nav>
   )
 }
-
-const Summary: React.FC<Omit<Props, 'slug'>> = ({ canAddAreas, canAddClimbs, areaCount, climbCount, isLeaf, isBoulder }) => {
-  let type: EType
-  if (isLeaf) {
-    type = isBoulder ? 'boulder' : 'crag'
-  } else {
-    type = 'area'
-  }
-  return (
-    <section className='mt-6'>
-
-      <p className='pl-4 pb-1 font-semibold text-secondary text-sm uppercase'>Area attributes</p>
-
-      <div className='bg-base-100 rounded-box px-4'>
-        <div className='flex flex-col gap-3 py-3 text-base-300 text-xs w-full '>
-
-          <div className='flex items-center gap-2 justify-between'>
-            <span className='text-scondary'>Entity type</span> <span className='text-primary font-semibold'><EntityIcon type={type} size={16} /></span>
-          </div>
-          <div className='flex items-center gap-2 justify-between'>
-            <span className='text-scondary'>Crag</span> <span className='text-primary font-semibold'>{isLeaf ? 'YES' : 'NO'}</span>
-          </div>
-          <div className='flex items-center gap-2 justify-between'>
-            <span className='text-scondary'>Boulder</span> <span className='text-primary font-semibold'>{isBoulder ? 'YES' : 'NO'}</span>
-          </div>
-
-          <hr />
-
-          <div className='flex items-center gap-2 justify-between'>
-            <span className='text-scondary'>Child areas</span> <span className='text-primary font-semibold'>{areaCount}</span>
-          </div>
-          <div className='flex items-center gap-2 justify-between'>
-            <span className='text-scondary'>Climbs</span> <span className='text-primary font-semibold'>{climbCount}</span>
-          </div>
-
-          <hr />
-
-          <div className='flex items-center gap-2 justify-between'>
-            <span className='text-scondary'>Can add areas?</span> <span className='text-primary font-semibold'>{booleanToYesNo(canAddAreas)}</span>
-          </div>
-          <div className='flex items-center gap-2 justify-between'>
-            <span className='text-scondary'>Climbs</span> <span className='text-primary font-semibold'>{booleanToYesNo(canAddClimbs)}</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-const booleanToYesNo = (bool: boolean): string => bool ? 'YES' : 'NO'
