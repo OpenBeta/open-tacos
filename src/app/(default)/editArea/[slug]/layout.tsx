@@ -16,7 +16,7 @@ export default async function EditAreaDashboardLayout ({
   children: React.ReactNode
   params: { slug: string }
 }): Promise<any> {
-  const { area: { uuid, pathTokens, ancestors, areaName, metadata: { leaf } } } = await getPageDataForEdit(params.slug)
+  const { area: { uuid, pathTokens, ancestors, areaName, children: subAreas, climbs, metadata: { leaf, isBoulder } } } = await getPageDataForEdit(params.slug)
   return (
     <div className='relative w-full h-full'>
       <div className='px-12 pt-8 pb-4'>
@@ -34,7 +34,15 @@ export default async function EditAreaDashboardLayout ({
           <AreaCrumbs pathTokens={pathTokens} ancestors={ancestors} editMode />
         </div>
         <div className='flex bg-base-200 flex-col lg:flex-row py-12'>
-          <SidebarNav slug={params.slug} canAddAreas={!leaf} canAddClimbs={leaf} />
+          <SidebarNav
+            slug={params.slug}
+            canAddAreas={!leaf}
+            canAddClimbs={leaf}
+            areaCount={subAreas.length}
+            climbCount={climbs.length}
+            isLeaf={leaf}
+            isBoulder={isBoulder}
+          />
           <main className='relative h-full w-full px-2 lg:px-16'>
             {children}
           </main>

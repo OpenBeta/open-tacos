@@ -52,7 +52,7 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
       </SectionContainer>
 
       <SectionContainer id='location'>
-        <AreaLatLngForm initLat={lat} initLng={lng} uuid={uuid} />
+        <AreaLatLngForm initLat={lat} initLng={lng} uuid={uuid} isLeaf={leaf} />
       </SectionContainer>
 
       <SectionContainer id='areaType'>
