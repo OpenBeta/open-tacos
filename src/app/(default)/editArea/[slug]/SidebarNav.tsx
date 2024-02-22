@@ -2,7 +2,7 @@
 import clx from 'classnames'
 import { usePathname } from 'next/navigation'
 import { Article, Plus } from '@phosphor-icons/react/dist/ssr'
-import { EntityIcon, AreaIcon, EType } from './general/components/AreaItem'
+import { EntityIcon, EType } from './general/components/AreaItem'
 
 interface Props {
   slug: string
@@ -108,7 +108,7 @@ const Summary: React.FC<Omit<Props, 'slug'>> = ({ canAddAreas, canAddClimbs, are
     type = 'area'
   }
   return (
-    <section>
+    <section className='mt-6'>
 
       <p className='pl-4 pb-1 font-semibold text-secondary text-sm uppercase'>Area attributes</p>
 
