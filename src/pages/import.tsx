@@ -8,7 +8,7 @@ import { Lightbulb } from "@phosphor-icons/react";
 const addFormats = require("ajv-formats");
 const betterAjvErrors = require("better-ajv-errors").default
 import { jsonToGraphQLQuery } from 'json-to-graphql-query'
-import { useMutation, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
 import { graphqlClient } from '../js/graphql/Client'
 
 
