@@ -42,6 +42,16 @@ export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddCl
               <EntityIcon type='area' withLabel={false} size={24} /> Manage areas
             </a>
           </li>
+          <li>
+            <a
+              href={`/editArea/${slug}/manageTopos`}
+              className={clx(
+                classForActivePage('manageTopos')
+              )}
+            >
+              <EntityIcon type='topo' withLabel={false} size={24} /> Manage topos
+            </a>
+          </li>
         </ul>
 
         <div className='w-56 mt-4'>
