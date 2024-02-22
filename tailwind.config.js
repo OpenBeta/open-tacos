@@ -26,6 +26,7 @@ module.exports = {
         'custom-primary': '#F07933',
         'area-cue': '#004F6E', // background cue for Areas
         'sport-climb-cue': '#00b896', // cue for sport climbs
+        shadow: '#84848442',
         tooltip: 'rgb(254 243 199)' // background for Daist tooltip bg-amber-100
       },
       height: {

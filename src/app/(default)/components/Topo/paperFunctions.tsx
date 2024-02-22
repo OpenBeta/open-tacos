@@ -1,5 +1,5 @@
 import { StaticImageData } from 'next/image'
-import paper, { Path, Layer, Raster, Color, Point, Group, Size } from 'paper'
+import paper, { Path, Layer, Raster, Color, Point, Group, Size, CompoundPath } from 'paper'
 import { PaperOffset } from 'paperjs-offset'
 
 const TOPO_VERSION = 1
@@ -25,6 +25,15 @@ let drawingLayer: paper.Layer | undefined
 
 // TOOLS
 const drawTool = new paper.Tool()
+
+const DEFAULT_TOPO_SCALE = 1
+const TOPO_PATH_BASE_WIDTH = 3
+const TOPO_PATH_BASE_STROKE = 2
+const TOPO_NUMBER_BG_BASE_SIZE = 5
+const TOPO_NUMBER_BASE_SIZE = 20
+const TOPO_PATH_TERMINATION_BASE_RADIUS = 10
+const TOPO_DASH_PATH_BASE_STROKE = 5
+const TOPO_DASH_PATH_BASE_SIZE = 10
 
 // TOPO ELEMENT KEYS
 // const ROUTE_GROUP: keyof RouteTopo = 'routeGroup'
@@ -60,10 +69,8 @@ interface RouteTopo {
   topoPath: paper.Path
   topoNumber: paper.PointText
   topoNumberBg: paper.Path
-  topoPathTermination: paper.Path
+  topoPathTermination: paper.CompoundPath
   topoDashPath: paper.CompoundPath
-  sharesStartWith: string[]
-  endsOn?: string
   smoothFrom?: number | null
   smoothTo?: paper.Segment
 }
@@ -79,11 +86,12 @@ export function initPaper (canvas: HTMLCanvasElement, isEditorMode: boolean): vo
     // console.log("InitPaper")
     drawTool.onMouseUp = handleMouseUp
     drawTool.onMouseMove = handleMouseMove
-    // drawTool.onKeyUp = function (event: paper.KeyEvent) {
+
+    //   drawTool.onKeyUp = function (event: paper.KeyEvent) {
     //     if (event.key == 'space' && drawingLayer) {
     //         cleanUpTopo()
     //         download(new File([drawingLayer.exportJSON()], 'path.json', {
-    //             type: 'json',
+    //            type: 'json',
     //         }))
     //     }
     // }
@@ -132,8 +140,7 @@ export function drawTopo (image: StaticImageData, data?: string): void {
               topoNumber: findChildByName(child, TOPO_NUMBER_TEXT) as paper.PointText,
               topoNumberBg: findChildByName(child, TOPO_NUMBER_BG) as paper.Path,
               topoPathTermination: findChildByName(child, TOPO_PATH_TERMINATION) as paper.Path,
-              topoDashPath: findChildByName(child, TOPO_DASH_PATH) as paper.Path,
-              sharesStartWith: [] // TODO - FIX THIS
+              topoDashPath: findChildByName(child, TOPO_DASH_PATH) as paper.Path
             }
           }
           hookupRouteEventHandlers(child as paper.Group)
@@ -153,18 +160,18 @@ export function setActiveRoute (routeInfo: RouteInfo): boolean {
   }
   // If route doesnt exist create it
   if (findChildByName(drawingLayer, routeInfo.id) == null) {
-    const routeGroup = new Group({ name: routeInfo.id, data: routeInfo })
+    const routeGroup = new Group({ name: routeInfo.id, data: { ...routeInfo, scale: DEFAULT_TOPO_SCALE, sharesStartWith: [] } })
+    console.log(routeGroup)
     const routeTopo = {
       routeGroup,
-      topoPath: new Path({ name: TOPO_PATH, parent: routeGroup, strokeColor: BLACK, strokeWidth: 3, strokeCap: 'butt', strokeJoin: 'round', fullySelected: false }),
-      topoNumber: new paper.PointText({ name: TOPO_NUMBER_TEXT, parent: routeGroup, content: routeInfo.routeNumber, fillColor: WHITE, fontSize: 20 }),
-      topoPathTermination: new Path.Circle({ name: TOPO_PATH_TERMINATION, parent: routeGroup, radius: 10, strokeWidth: 2, strokeColor: WHITE, fillColor: BLACK, visible: false }),
-      topoNumberBg: new Path({ name: TOPO_NUMBER_BG, parent: routeGroup, fillColor: BLACK, strokeWidth: 2, strokeColor: WHITE }),
-      topoDashPath: new paper.CompoundPath({ name: TOPO_DASH_PATH, parent: routeGroup, strokeColor: WHITE, strokeWidth: 5, dashArray: [10, 10] }),
-      sharesStartWith: []
+      topoPath: new Path({ name: TOPO_PATH, parent: routeGroup, strokeColor: BLACK, strokeWidth: TOPO_PATH_BASE_WIDTH, strokeCap: 'butt', strokeJoin: 'round', fullySelected: false }),
+      topoNumber: new paper.PointText({ name: TOPO_NUMBER_TEXT, parent: routeGroup, content: routeInfo.routeNumber, fillColor: WHITE, fontSize: TOPO_NUMBER_BASE_SIZE }),
+      topoPathTermination: new CompoundPath({ name: TOPO_PATH_TERMINATION, parent: routeGroup, strokeWidth: TOPO_PATH_BASE_STROKE, strokeColor: WHITE, fillColor: BLACK, visible: false, data: { type: ANCHOR } }),
+      topoNumberBg: new Path({ name: TOPO_NUMBER_BG, parent: routeGroup, fillColor: BLACK, strokeWidth: TOPO_PATH_BASE_STROKE, strokeColor: WHITE }),
+      topoDashPath: new paper.CompoundPath({ name: TOPO_DASH_PATH, parent: routeGroup, strokeColor: WHITE, strokeWidth: TOPO_DASH_PATH_BASE_STROKE, dashArray: [TOPO_DASH_PATH_BASE_SIZE] })
     }
     hookupRouteEventHandlers(routeGroup)
-    const path = new Path({ name: routeInfo.id + TOPO_STROKE_PATH, parent: strokeGroup, strokeColor: WHITE, strokeWidth: 7, strokeCap: 'square', strokeJoin: 'round' })
+    const path = new Path({ name: routeInfo.id + TOPO_STROKE_PATH, parent: strokeGroup, strokeColor: WHITE, strokeWidth: 7, strokeCap: 'butt', strokeJoin: 'round' })
     path.opacity = 1
     routeTopos = { ...routeTopos, [routeInfo.id]: routeTopo }
   }
@@ -201,7 +208,9 @@ export function removeLastPoint (): void {
 }
 
 export function setTerminationStyle (terminationType: string): void {
-  if (activeRouteTopo?.topoPath.lastSegment != null) drawTermination(activeRouteTopo, terminationType)
+  if (activeRouteTopo == null) return
+  activeRouteTopo.topoPathTermination.data.type = terminationType
+  activeRouteTopo.topoPath.lastSegment != null && drawTermination(activeRouteTopo)
 }
 
 // Saves state and removes all data from paper project in order to draw new topo
@@ -217,6 +226,28 @@ export function highlightRoute (id: string): void {
 
 export function unHighlightRoute (id: string): void {
   id in routeTopos && setTopoPathColor(id, BLACK)
+}
+
+export function scaleTopo (scale: number): void {
+  if (activeRouteTopo != null) {
+    const { topoPath, topoNumber, topoNumberBg, topoDashPath, routeGroup } = activeRouteTopo
+    routeGroup.data.scale = scale
+    topoPath.strokeWidth = TOPO_PATH_BASE_STROKE * scale
+    topoNumber.fontSize = TOPO_NUMBER_BASE_SIZE * scale
+    const bgSize = TOPO_NUMBER_BG_BASE_SIZE * scale
+    topoNumberBg.strokeWidth = TOPO_PATH_BASE_STROKE * scale
+    topoDashPath.strokeWidth = TOPO_DASH_PATH_BASE_STROKE * scale
+    topoDashPath.dashArray = [TOPO_DASH_PATH_BASE_SIZE * scale]
+    if (!currentlyDrawing && topoPath.segments.length > 0) {
+      topoNumberBg.pathData = new Path.Rectangle(topoNumber.bounds.expand(bgSize * 2), new Size(bgSize, bgSize)).pathData
+      drawTermination(activeRouteTopo)
+      topoNumber.position = topoPath.firstSegment.point
+      topoNumberBg.position = topoPath.firstSegment.point
+    }
+    const stroke = strokeGroup?.getItem({ name: routeGroup.name + TOPO_STROKE_PATH })
+    console.log(strokeGroup)
+    if (stroke != null) stroke.strokeWidth = (TOPO_PATH_BASE_STROKE * 2 + TOPO_PATH_BASE_WIDTH) * scale
+  }
 }
 
 function hookupRouteEventHandlers (routeGroup: paper.Group): void {
@@ -252,18 +283,18 @@ function startRouteFrom (e: paper.ToolEvent): void {
     activeRouteTopo.smoothFrom = activeRouteTopo.topoPath.lastSegment.index
     activeRouteTopo.topoPath.add(e.point)
 
-    upstreamRoute.sharesStartWith.forEach((name) => {
-      const route = routeTopos[name]
-      routeNumber.push(route.routeGroup.data.routeNumber)
-      routeSharesWith.push(route)
+    upstreamRoute.routeGroup.data.sharesStartWith.forEach((name: string) => {
+      const routeGroup = routeTopos[name].routeGroup
+      routeNumber.push(routeGroup.data.routeNumber)
+      routeSharesWith.push(routeTopos[name])
       if (activeRouteTopo != null) {
-        route.sharesStartWith = [...route.sharesStartWith, activeRouteTopo.routeGroup.name]
-        activeRouteTopo.sharesStartWith = [...activeRouteTopo.sharesStartWith, route.routeGroup.name]
+        routeGroup.data.sharesStartWith = [...routeGroup.data.sharesStartWith, activeRouteTopo.routeGroup.name]
+        activeRouteTopo.routeGroup.data.sharesStartWith = [...activeRouteTopo.routeGroup.data.sharesStartWith, routeGroup.name]
       }
     })
 
-    upstreamRoute.sharesStartWith = [...upstreamRoute.sharesStartWith, activeRouteTopo.routeGroup.name]
-    activeRouteTopo.sharesStartWith = [...activeRouteTopo.sharesStartWith, upstreamRoute.routeGroup.name]
+    upstreamRoute.routeGroup.data.sharesStartWith = [...upstreamRoute.routeGroup.data.sharesStartWith, activeRouteTopo.routeGroup.name]
+    activeRouteTopo.routeGroup.data.sharesStartWith = [...activeRouteTopo.routeGroup.data.sharesStartWith, upstreamRoute.routeGroup.name]
     // Update route number
     routeNumber.push(activeRouteTopo.routeGroup.data.routeNumber)
     routeNumber.sort(function (a, b) {
@@ -297,8 +328,9 @@ function joinWithRoute (e: paper.ToolEvent): void {
 
 // Draws/upates the outter stroke on topo lines as well as the topo nunmber
 function drawPathLook (routeTopo: RouteTopo, updateNumber?: boolean): void {
-  const { topoPath, topoNumberBg, topoNumber, topoPathTermination } = routeTopo
+  const { topoPath, topoNumberBg, topoNumber, topoPathTermination, routeGroup } = routeTopo
   const topoStrokePath = findChildByName(strokeGroup, routeTopo.routeGroup.name + TOPO_STROKE_PATH) as paper.Path
+  const numberSize = routeGroup.data.scale * TOPO_NUMBER_BG_BASE_SIZE
 
   // Diplicate path for white stroke
   topoStrokePath.pathData = topoPath.pathData
@@ -311,9 +343,9 @@ function drawPathLook (routeTopo: RouteTopo, updateNumber?: boolean): void {
   // Place number and BG on line origin
   topoNumber.position = topoLineOrigin.point
   topoNumberBg.position = topoLineOrigin.point
-  if (topoNumberBg.segments.length === 0 || updateNumber === true) topoNumberBg.pathData = new Path.Rectangle(topoNumber.bounds.expand(10), new Size(5, 5)).pathData
+  if (topoNumberBg.segments.length === 0 || updateNumber === true) topoNumberBg.pathData = new Path.Rectangle(topoNumber.bounds.expand(numberSize * 2), new Size(numberSize, numberSize)).pathData
 
-  !currentlyDrawing && drawTermination(routeTopo, topoPathTermination.data.type)
+  !currentlyDrawing && drawTermination(routeTopo)
 
   // Z-Order
   topoPathTermination.bringToFront()
@@ -332,24 +364,41 @@ function setTopoPathColor (id: String, color: paper.Color): void {
 }
 
 // Draws the termination of the topoline. Default is an anchor circle
-function drawTermination (activeRouteTopo: RouteTopo, type?: string): void {
+function drawTermination (activeRouteTopo: RouteTopo): void {
   const termination = activeRouteTopo.topoPathTermination
-  if (type === ARROW) {
-    const drawOn = activeRouteTopo.topoPath.getPointAt(activeRouteTopo.topoPath.length - 5)
-    const arrow = new Path([new Point(0, 0), new Point(15, 10), new Point(0, 20)])
-    const expandedArrow = PaperOffset.offsetStroke(arrow, 2.5, { cap: 'round', join: 'round' })
-    termination.pathData = expandedArrow.pathData
-    termination.position = drawOn
-    termination.rotation = activeRouteTopo.topoPath.lastSegment.handleIn.angle + 180
-    termination.data = { type: ARROW }
-    arrow.remove()
-  } else {
-    const drawOn = activeRouteTopo.topoPath.lastSegment.point
-    const circle = new Path.Circle(drawOn, 10)
-    termination.pathData = circle.pathData
-    termination.data = { type: ANCHOR }
-    circle.remove()
+  const scale = activeRouteTopo.routeGroup.data.scale
+  const tangent = activeRouteTopo.topoPath.getTangentAt(activeRouteTopo.topoPath.length)
+  const point = tangent.multiply((TOPO_PATH_TERMINATION_BASE_RADIUS - TOPO_PATH_BASE_STROKE) * scale)
+  let drawOn = activeRouteTopo.topoPath.lastSegment.point.add(point)
+  let terminationShape
+  switch (termination.data.type) {
+    case ARROW:
+      terminationShape = new Path([new Point(0, 0), new Point(15 * scale, 10 * scale), new Point(0, 20 * scale)])
+      terminationShape = PaperOffset.offsetStroke(terminationShape, 2.5 * scale, { cap: 'round', join: 'round' })
+      drawOn = activeRouteTopo.topoPath.getPointAt(activeRouteTopo.topoPath.length - 5 * scale)
+      break
+    case ANCHOR:
+      terminationShape = new Path.Circle(drawOn, TOPO_PATH_TERMINATION_BASE_RADIUS * scale)
+      break
+    case BELAY:
+      terminationShape = new CompoundPath({
+        children: [
+          new Path.Circle(new Point(0, 0), TOPO_PATH_TERMINATION_BASE_RADIUS * scale),
+          new Path.Circle(new Point(0, 0), TOPO_PATH_TERMINATION_BASE_RADIUS - TOPO_DASH_PATH_BASE_SIZE - TOPO_DASH_PATH_BASE_STROKE * scale)
+        ]
+      })
+      termination.fillRule = 'evenodd'
+      break
+    default:
+      break
   }
+  if (terminationShape != null) {
+    termination.pathData = terminationShape.pathData
+    terminationShape.remove()
+  }
+  termination.position = drawOn
+  termination.strokeWidth = TOPO_PATH_BASE_STROKE * scale
+  termination.rotation = activeRouteTopo.topoPath.lastSegment.handleIn.angle + 180
   termination.insertBelow(activeRouteTopo.topoPath)
   termination.visible = true
 }

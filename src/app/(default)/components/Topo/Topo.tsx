@@ -9,9 +9,11 @@ interface TopoProps {
 
 export const Topo: React.FC<TopoProps> = ({ activeRoute, image, isEditor }) => {
   const canvasCallback = useCallback((node: HTMLCanvasElement) => {
-    node.addEventListener('wheel', (e: WheelEvent) => { zoomViaWheel(e) }, { passive: false })
-    initPaper(node, isEditor)
-    drawTopo(image)
+    if (node !== null) {
+      node.addEventListener('wheel', (e: WheelEvent) => { zoomViaWheel(e) }, { passive: false })
+      initPaper(node, isEditor)
+      drawTopo(image)
+    }
   }, [])
 
   useEffect(() => {
