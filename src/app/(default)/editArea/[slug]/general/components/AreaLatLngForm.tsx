@@ -7,7 +7,7 @@ import { DashboardInput } from '@/components/ui/form/Input'
 import useUpdateAreasCmd from '@/js/hooks/useUpdateAreasCmd'
 import { parseLatLng } from '@/components/crag/cragSummary'
 
-export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: string }> = ({ uuid, initLat, initLng }) => {
+export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: string, isLeaf: boolean }> = ({ uuid, initLat, initLng, isLeaf }) => {
   const session = useSession({ required: true })
   const { updateOneAreaCmd } = useUpdateAreasCmd({
     areaId: uuid,
@@ -29,12 +29,15 @@ export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: 
         }
       }}
     >
-      <DashboardInput
-        name='latlngStr'
-        label='Coordinates in latitude, longitude format.'
-        className='w-80'
-        registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
-      />
+      {isLeaf
+        ? (<DashboardInput
+            name='latlngStr'
+            label='Coordinates in latitude, longitude format.'
+            className='w-80'
+            registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
+            readOnly={!isLeaf}
+           />)
+        : (<p className='text-secondary'>Coordinates field available only when area type is either 'Crag' or 'Boulder'.</p>)}
     </SingleEntryForm>
   )
 }

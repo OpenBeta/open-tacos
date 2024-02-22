@@ -33,7 +33,7 @@ export const BaseInput: React.FC<BaseInputProps> = ({ label, name, placeholder =
       {...inputProps}
       type={type}
       placeholder={placeholder}
-      className={clx(classDefault, className)}
+      className={clx(classDefault, className, readOnly && 'cursor-not-allowed bg-base-200 focus:ring-0')}
       aria-label={label}
       aria-describedby={`${name}-helper`}
       disabled={disabled}

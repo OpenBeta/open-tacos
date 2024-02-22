@@ -2,12 +2,22 @@
 import clx from 'classnames'
 import { usePathname } from 'next/navigation'
 import { Article, Plus } from '@phosphor-icons/react/dist/ssr'
-import { EntityIcon } from './general/components/AreaItem'
+import { EntityIcon } from '../general/components/AreaItem'
+import { AreaAttributesPanel } from './AreaAttributesPanel'
 
+export interface SidebarNavProps {
+  slug: string
+  canAddAreas: boolean
+  canAddClimbs: boolean
+  areaCount: number
+  climbCount: number
+  isLeaf: boolean
+  isBoulder: boolean
+}
 /**
  * Sidebar navigation for area edit
  */
-export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddClimbs: boolean }> = ({ slug, canAddAreas, canAddClimbs }) => {
+export const SidebarNav: React.FC<SidebarNavProps> = ({ slug, canAddAreas, canAddClimbs, areaCount, climbCount, isLeaf, isBoulder }) => {
   const activePath = usePathname()
   /**
    * Disable menu item's hover/click when own page is showing
@@ -54,7 +64,7 @@ export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddCl
           </li>
         </ul>
 
-        <div className='w-56 mt-4'>
+        <div className='w-56 my-4'>
           <hr className='border-t my-2' />
           <a
             href={`/editArea/${slug}/general#addArea`}
@@ -67,7 +77,7 @@ export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddCl
 
           <a
             href={`/editArea/${slug}/manageClimbs`}
-            className={clx(canAddClimbs ? '' : 'cursor-not-allowed pointer-events-none', 'block py-1')}
+            className={clx(canAddClimbs ? '' : 'cursor-not-allowed pointer-events-none', 'block py-2')}
           >
             <button disabled={!canAddClimbs} className='btn btn-accent btn-outline btn-block justify-start'>
               <Plus size={20} weight='bold' /> Add climbs
@@ -76,6 +86,17 @@ export const SidebarNav: React.FC<{ slug: string, canAddAreas: boolean, canAddCl
 
           <hr className='border-t my-2' />
 
+        </div>
+
+        <div className='my-6'>
+          <AreaAttributesPanel
+            canAddAreas={canAddAreas}
+            canAddClimbs={canAddClimbs}
+            areaCount={areaCount}
+            climbCount={climbCount}
+            isLeaf={isLeaf}
+            isBoulder={isBoulder}
+          />
         </div>
       </div>
     </nav>
