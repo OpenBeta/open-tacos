@@ -17,7 +17,7 @@ function FileUploadAndValidationClientComponent() {
   const [fileName, setFileName] = useState<string | null>(null)
   const [validationErrors, setValidationErrors] = useState([])
   const [isValidationSuccessful, setIsValidationSuccessful] = useState(false)
-  const [resetDbUploadErrorTrigger, setResetDbUploadErrorTrigger] = useState(false)
+  const [encounteredDbUploadError, setEncounteredDbUploadError] = useState(false)
   const [parsedJSON, setParsedJSON] = useState<object | null>(null)
 
   const handleValidationErrors = (parsedJSON: object) => {
@@ -62,7 +62,7 @@ function FileUploadAndValidationClientComponent() {
     toast.dismiss()
     setValidationErrors([])
     setIsValidationSuccessful(false)
-    setResetDbUploadErrorTrigger(true)
+    setEncounteredDbUploadError(false)
 
     const file = event.target.files ? event.target.files[0] : null
 
@@ -142,89 +142,96 @@ function FileUploadAndValidationClientComponent() {
         </div>
       )}
 
-      <UploadToDBComponent parsedJsonData={parsedJSON} isValidationSuccessful={isValidationSuccessful} resetDbUploadErrorTrigger={resetDbUploadErrorTrigger} />
+      <UploadToDBComponent parsedJsonData={parsedJSON} isValidationSuccessful={isValidationSuccessful} encounteredDbUploadError={encounteredDbUploadError} setEncounteredDbUploadError={setEncounteredDbUploadError} />
 
     </>
   );
 }
 
 interface UploadToDBProps {
-  parsedJsonData: object | null // TODO: remove nullableness?
+  parsedJsonData: object | null
   isValidationSuccessful: boolean
-  resetDbUploadErrorTrigger: boolean
+  encounteredDbUploadError: boolean;
+  setEncounteredDbUploadError: (error: boolean) => void;
 }
 
-// Assuming `graphqlClient` is an instance of ApolloClient
-const UploadToDBComponent: React.FC<UploadToDBProps> = ({ parsedJsonData, isValidationSuccessful, resetDbUploadErrorTrigger }) => {
+const UploadToDBComponent: React.FC<UploadToDBProps> = ({
+  parsedJsonData,
+  isValidationSuccessful,
+  encounteredDbUploadError,
+  setEncounteredDbUploadError,
+}) => {
   const [loading, setLoading] = useState(false);
-  const [dbUploadError, setDbUploadError] = useState<Error | null>(null);
 
   useEffect(() => {
-    setDbUploadError(null);
-  }, [resetDbUploadErrorTrigger]);
+    if (encounteredDbUploadError) {
+      setEncounteredDbUploadError(false);
+    }
+  }, [parsedJsonData, setEncounteredDbUploadError]);
 
   const handleUpload = useCallback(async () => {
-    if (!isValidationSuccessful) {
-      toast.error("JSON schema validation had not been successful. Fix the errors and try again.");
+    if (!isValidationSuccessful || !parsedJsonData) {
+      toast.error("JSON schema validation unsuccessful. Fix the errors and try again.");
       return;
     }
 
-    setLoading(true)
-    setDbUploadError(null)
-
-    const bulkImportMutation = {
-      mutation: {
-        bulkImportAreas: {
-          __args: {
-            input: parsedJsonData,
-          },
-          addedAreas: {
-            id: true,
-            uuid: true,
-            area_name: true,
-            areaName: true,
-            climbs: {
+    setLoading(true);
+    try {
+      const bulkImportMutation = {
+        mutation: {
+          bulkImportAreas: {
+            __args: {
+              input: parsedJsonData,
+            },
+            addedAreas: {
               id: true,
               uuid: true,
-              name: true,
-              fa: true,
-              length: true,
-              boltsCount: true,
-              gradeContext: true,
-              pitches: {
+              area_name: true,
+              areaName: true,
+              climbs: {
                 id: true,
-                parentId: true,
-                pitchNumber: true,
+                uuid: true,
+                name: true,
+                fa: true,
                 length: true,
                 boltsCount: true,
-                description: true,
+                gradeContext: true,
+                pitches: {
+                  id: true,
+                  parentId: true,
+                  pitchNumber: true,
+                  length: true,
+                  boltsCount: true,
+                  description: true,
+                }
               }
-            }
-          },
-          updatedAreas: {
-            id: true,
-            uuid: true,
-            area_name: true,
-            areaName: true,
-            climbs: {
+            },
+            updatedAreas: {
               id: true,
               uuid: true,
-              name: true,
-              fa: true,
-              length: true,
-              boltsCount: true,
-              gradeContext: true,
+              area_name: true,
+              areaName: true,
+              climbs: {
+                id: true,
+                uuid: true,
+                name: true,
+                fa: true,
+                length: true,
+                boltsCount: true,
+                gradeContext: true,
+              }
             }
           }
         }
-      }
-    };
+      };
 
-    const generatedGraphqlMutation = jsonToGraphQLQuery(bulkImportMutation, { pretty: true })
+      const generatedGraphqlMutation = jsonToGraphQLQuery(bulkImportMutation, { pretty: true });
+      console.log('generatedGraphqlMutation:', generatedGraphqlMutation)
 
-    console.log('generatedGraphqlMutation:', generatedGraphqlMutation)
+      await graphqlClient.mutate({
+        mutation: gql`${generatedGraphqlMutation}`,
+      });
 
-    try {
       const { data } = await graphqlClient.mutate({
         mutation: gql`${generatedGraphqlMutation}`,
       });
@@ -232,31 +239,31 @@ const UploadToDBComponent: React.FC<UploadToDBProps> = ({ parsedJsonData, isVali
       if (data) {
         console.log("Data successfully uploaded to the database:", data);
         toast.success("Data successfully uploaded to the database.");
+        setEncounteredDbUploadError(false)
       }
-    } catch (e) {
-      const error = e as Error;
+    } catch (error) {
       console.error("Error uploading to DB:", error);
-      setDbUploadError(error);
       toast.error("Error uploading data to the database. See console log for more details.");
+      setEncounteredDbUploadError(true)
     } finally {
       setLoading(false);
     }
-  }, [parsedJsonData, isValidationSuccessful]);
+  }, [parsedJsonData, isValidationSuccessful, setEncounteredDbUploadError]);
 
   return (
     <>
       {loading && <p>Uploading...</p>}
-      {dbUploadError && <p>An error occurred while uploading to the database. See console log for more details.</p>}
+      {encounteredDbUploadError && <p>An error occurred while uploading to the database. See console log for more details.</p>}
       <button
         className='btn btn-primary btn-wide shadow-lg hover:scale-110 duration-300 bg-accent text-accent-content btn-lg'
         onClick={handleUpload}
-        disabled={!isValidationSuccessful || loading || dbUploadError !== null}
+        disabled={!isValidationSuccessful || loading || encounteredDbUploadError}
       >
         Upload to Database
       </button>
     </>
-  )
-}
+  );
+};
 
 
 const BulkImport = (): JSX.Element => {
