@@ -10,6 +10,7 @@ const betterAjvErrors = require("better-ajv-errors").default
 import { jsonToGraphQLQuery } from 'json-to-graphql-query'
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../js/graphql/Client'
+import { useSession } from 'next-auth/react';
 
 
 function FileUploadAndValidationClientComponent() {
@@ -37,7 +38,7 @@ function FileUploadAndValidationClientComponent() {
         );
       } else {
         toast.success(
-          "JSON file and schema successfully validated. 🎊 Proceed to database upload."
+          "JSON file and schema successfully validated. ➤ Proceed to database upload."
         );
         setValidationErrors([])
         setIsValidationSuccessful(true)
@@ -161,6 +162,8 @@ const UploadToDBComponent: React.FC<UploadToDBProps> = ({
   encounteredDbUploadError,
   setEncounteredDbUploadError,
 }) => {
+  const { data: sessionData } = useSession();
+  const accessToken = sessionData?.accessToken ?? '';
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -188,38 +191,17 @@ const UploadToDBComponent: React.FC<UploadToDBProps> = ({
               uuid: true,
               area_name: true,
               areaName: true,
-              climbs: {
-                id: true,
-                uuid: true,
-                name: true,
-                fa: true,
-                length: true,
-                boltsCount: true,
-                gradeContext: true,
-                pitches: {
-                  id: true,
-                  parentId: true,
-                  pitchNumber: true,
-                  length: true,
-                  boltsCount: true,
-                  description: true,
-                }
-              }
             },
             updatedAreas: {
               id: true,
               uuid: true,
               area_name: true,
               areaName: true,
-              climbs: {
-                id: true,
-                uuid: true,
-                name: true,
-                fa: true,
-                length: true,
-                boltsCount: true,
-                gradeContext: true,
-              }
+            },
+            addedOrUpdatedClimbs: {
+              id: true,
+              uuid: true,
+              name: true,
             }
           }
         }
@@ -228,17 +210,21 @@ const UploadToDBComponent: React.FC<UploadToDBProps> = ({
       const generatedGraphqlMutation = jsonToGraphQLQuery(bulkImportMutation, { pretty: true });
       console.log('generatedGraphqlMutation:', generatedGraphqlMutation)
 
-      await graphqlClient.mutate({
-        mutation: gql`${generatedGraphqlMutation}`,
-      });
-
       const { data } = await graphqlClient.mutate({
         mutation: gql`${generatedGraphqlMutation}`,
-      });
+        context: {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      })
+      
       console.log("Sending mutation to the database...");
       if (data) {
-        console.log("Data successfully uploaded to the database:", data);
-        toast.success("Data successfully uploaded to the database.");
+        const updatedCount = data.bulkImportAreas.addedAreas.length + data.bulkImportAreas.updatedAreas.length + data.bulkImportAreas.addedOrUpdatedClimbs.length
+      
+        console.log("Added areas: ${addedAreasCount}, Updated areas: ${updatedAreasCount}, Added/Updated climbs: ${addedOrUpdatedClimbsCount}.", data);
+        toast.success(`Successfully updated ${updatedCount} database items. See console log for more details.`)
         setEncounteredDbUploadError(false)
       }
     } catch (error) {
@@ -248,7 +234,7 @@ const UploadToDBComponent: React.FC<UploadToDBProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [parsedJsonData, isValidationSuccessful, setEncounteredDbUploadError]);
+  }, [parsedJsonData, isValidationSuccessful, setEncounteredDbUploadError, accessToken]);
 
   return (
     <>
