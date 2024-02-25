@@ -12,13 +12,12 @@ import { gql } from '@apollo/client'
 import { graphqlClient } from '../js/graphql/Client'
 import { useSession } from 'next-auth/react';
 
-
 function FileUploadAndValidationClientComponent() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [fileName, setFileName] = useState<string | null>(null)
   const [validationErrors, setValidationErrors] = useState([])
   const [isValidationSuccessful, setIsValidationSuccessful] = useState(false)
-  const [encounteredDbUploadError, setEncounteredDbUploadError] = useState(false)
+  const [hasEncounteredDbUploadError, setEncounteredDbUploadError] = useState(false)
   const [parsedJSON, setParsedJSON] = useState<object | null>(null)
 
   const handleValidationErrors = (parsedJSON: object) => {
@@ -143,7 +142,7 @@ function FileUploadAndValidationClientComponent() {
         </div>
       )}
 
-      <UploadToDBComponent parsedJsonData={parsedJSON} isValidationSuccessful={isValidationSuccessful} encounteredDbUploadError={encounteredDbUploadError} setEncounteredDbUploadError={setEncounteredDbUploadError} />
+      <UploadToDBComponent parsedJsonData={parsedJSON} isValidationSuccessful={isValidationSuccessful} hasEncounteredDbUploadError={hasEncounteredDbUploadError} setEncounteredDbUploadError={setEncounteredDbUploadError} />
 
     </>
   );
@@ -152,14 +151,14 @@ function FileUploadAndValidationClientComponent() {
 interface UploadToDBProps {
   parsedJsonData: object | null
   isValidationSuccessful: boolean
-  encounteredDbUploadError: boolean;
+  hasEncounteredDbUploadError: boolean;
   setEncounteredDbUploadError: (error: boolean) => void;
 }
 
 const UploadToDBComponent: React.FC<UploadToDBProps> = ({
   parsedJsonData,
   isValidationSuccessful,
-  encounteredDbUploadError,
+  hasEncounteredDbUploadError,
   setEncounteredDbUploadError,
 }) => {
   const { data: sessionData } = useSession();
@@ -167,7 +166,7 @@ const UploadToDBComponent: React.FC<UploadToDBProps> = ({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (encounteredDbUploadError) {
+    if (hasEncounteredDbUploadError) {
       setEncounteredDbUploadError(false);
     }
   }, [parsedJsonData, setEncounteredDbUploadError]);
@@ -218,13 +217,14 @@ const UploadToDBComponent: React.FC<UploadToDBProps> = ({
           },
         },
       })
-      
+
       console.log("Sending mutation to the database...");
       if (data) {
-        const updatedCount = data.bulkImportAreas.addedAreas.length + data.bulkImportAreas.updatedAreas.length + data.bulkImportAreas.addedOrUpdatedClimbs.length
-      
-        console.log("Added areas: ${addedAreasCount}, Updated areas: ${updatedAreasCount}, Added/Updated climbs: ${addedOrUpdatedClimbsCount}.", data);
-        toast.success(`Successfully updated ${updatedCount} database items. See console log for more details.`)
+        const updatedCountAreas = data.bulkImportAreas.addedAreas.length + data.bulkImportAreas.updatedAreas.length + data.bulkImportAreas.addedOrUpdatedClimbs.length
+        const updatedCountClimbs = data.bulkImportAreas.addedOrUpdatedClimbs.length
+
+        console.log("Detailed database update log:", data);
+        toast.success(`Successfully created/updated ${updatedCountAreas} database items. See console log for more details.`)
         setEncounteredDbUploadError(false)
       }
     } catch (error) {
@@ -238,15 +238,15 @@ const UploadToDBComponent: React.FC<UploadToDBProps> = ({
 
   return (
     <>
-      {loading && <p>Uploading...</p>}
-      {encounteredDbUploadError && <p>An error occurred while uploading to the database. See console log for more details.</p>}
-      <button
-        className='btn btn-primary btn-wide shadow-lg hover:scale-110 duration-300 bg-accent text-accent-content btn-lg'
-        onClick={handleUpload}
-        disabled={!isValidationSuccessful || loading || encounteredDbUploadError}
-      >
-        Upload to Database
-      </button>
+      <div className='flex justify-center m-8'>
+        <button
+          className='btn btn-primary btn-wide shadow-lg hover:scale-110 duration-300 bg-accent text-accent-content btn-lg'
+          onClick={handleUpload}
+          disabled={!isValidationSuccessful || loading || hasEncounteredDbUploadError}
+        >
+          {loading ? "Uploading..." : "Upload to Database"}
+        </button>
+      </div>
     </>
   );
 };
@@ -264,8 +264,7 @@ const BulkImport = (): JSX.Element => {
           <div className='text-sm'>
             <ul className="list-disc pl-5">
               <li>Allows for adding or changing large amounts of data at once.</li>
-
-              <li>Used a JSON schema to validate your upload's data structure before uploading</li>
+              <li>Uses a JSON schema to validate your upload's data structure before uploading</li>
               <li>See this <a href="/bulk-import/README.md" target="_blank" rel="noopener noreferrer" className="link">README.md</a> for example upload files, schema, and detailed instructions.</li>
               <li>Note: OpenBeta’s route database is licensed as CC-BY-SA 4.0.</li>
               <li>Need help? Find us on <a href="https://discord.gg/a6vuuTQxS8" className="link">Discord</a>.</li>
@@ -281,4 +280,4 @@ const BulkImport = (): JSX.Element => {
   );
 };
 
-export default BulkImport;
+export default BulkImport

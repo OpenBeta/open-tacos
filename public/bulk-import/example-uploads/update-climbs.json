@@ -1,21 +1,13 @@
 {
   "areas": [
     {
-      "uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "uuid": "73da6733-68f7-5b73-8fbf-79cec45d9691",
       "climbs": [
         {
-          "name": "The Key Flake (updated)",
-          "grade": "5.11",
-          "fa": "Bobby Updated"
-        },
-        {
-          "name": "Incredible Hand Crack (updated)",
-          "grade": "5.12",
-          "fa": "Someone Updated",
-          "disciplines": {
-            "trad": false
-          },
-          "description": "I have updated this",
+          "uuid": "524963d9-a8d0-43da-a3b6-6f4576cf4ab7",
+          "name": "Credible Hand Crack (updated)",
+          "grade": "5.6",
+          "fa": "Bobby Updated",
           "pitches": [
             {
               "pitchNumber": 1,
@@ -24,9 +16,18 @@
             },
             {
               "pitchNumber": 2,
-              "description": "Updated: Easier climbing with good protection. Features a mix of crack sizes. Shorter than the first pitch but equally enjoyable."
+              "description": "(update test) Updated: Easier climbing with good protection. Features a mix of crack sizes. Shorter than the first pitch but equally enjoyable."
             }
           ]
+        },
+        {
+          "uuid": "973b3434-191d-4d00-be0e-217e66aa8b9c",
+          "name": "Key Fake (updated)",
+          "grade": "5.3",
+          "disciplines": {
+            "trad": false
+          },
+          "description": "I have updated this (test)"
         }
       ]
     }

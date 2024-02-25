@@ -1,20 +1,20 @@
 {
   "areas": [
     {
-      "areaName": "Utah",
+      "areaName": "Utah (upload-test 2)",
       "countryCode": "us",
       "children": [
         {
-          "areaName": "Southeast Utah",
+          "areaName": "Southeast Utah (upload-test)",
           "children": [
             {
-              "areaName": "Indian Creek",
+              "areaName": "Indian Creek (upload-test)",
               "description": "Indian Creek is a crack climbing mecca in the southeastern region of Utah, USA. Located within the [Bears Ears National Monument](https://en.wikipedia.org/wiki/Bears_Ears_National_Monument).",
               "lng": -109.5724044642857,
               "lat": 38.069429035714286,
               "children": [
                 {
-                  "areaName": "Supercrack Buttress",
+                  "areaName": "Supercrack Buttress (upload-test)",
                   "gradeContext": "US",
                   "description": "",
                   "lng": -109.54552,
@@ -27,7 +27,7 @@
                   ],
                   "climbs": [
                     {
-                      "name": "The Key Flake",
+                      "name": "The Key Flake (upload-test)",
                       "grade": "5.10",
                       "fa": "unknown",
                       "disciplines": {
@@ -56,13 +56,13 @@
                           "grade": "5.10",
                           "length": 100,
                           "boltsCount": 0,
-                          "description": "A classic hand crack that widens slightly towards the top. Requires a range of cam sizes. Sustained and excellent quality."
+                          "description": "(upload-test) A classic hand crack that widens slightly towards the top. Requires a range of cam sizes. Sustained and excellent quality."
                         },
                         {
                           "pitchNumber": 2,
                           "grade": "5.9",
                           "length": 30,
-                          "description": "Easier climbing with good protection. Features a mix of crack sizes. Shorter than the first pitch but equally enjoyable."
+                          "description": "(upload-test) Easier climbing with good protection. Features a mix of crack sizes. Shorter than the first pitch but equally enjoyable."
                         }
                       ]
                     }
