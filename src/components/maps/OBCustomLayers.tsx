@@ -27,9 +27,9 @@ export const OBCustomLayers: React.FC = () => {
           'text-size': 12,
           'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
           'icon-image': 'circle',
-          'icon-size': ['interpolate', ['linear'], ['zoom'], 8, 0.25, 16, 1],
-          'text-variable-anchor': ['bottom', 'left', 'right'],
-          'text-radial-offset': 0.5
+          'icon-size': ['interpolate', ['linear'], ['zoom'], 8, 0.25, 18, 1],
+          'text-variable-anchor': ['bottom', 'top', 'left', 'right'],
+          'text-radial-offset': ['interpolate', ['linear'], ['zoom'], 6, 0.25, 16, 1]
         }}
         paint={{
           'icon-color': '#111827',

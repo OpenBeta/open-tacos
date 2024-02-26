@@ -96,13 +96,13 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({ showFullscreenControl = tr
     }
   }, [mapInstance])
 
-  useEffect(() => {
-    const protocol = new Protocol()
-    maplibregl.addProtocol('pmtiles', protocol.tile)
-    return () => {
-      maplibregl.removeProtocol('pmtiles')
-    }
-  }, [])
+  // useEffect(() => {
+  //   const protocol = new Protocol()
+  //   maplibregl.addProtocol('pmtiles', protocol.tile)
+  //   return () => {
+  //     maplibregl.removeProtocol('pmtiles')
+  //   }
+  // }, [])
 
   return (
     <div className='relative w-full h-full'>

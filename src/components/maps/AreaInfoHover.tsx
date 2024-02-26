@@ -8,9 +8,8 @@ import { SelectedPolygon } from './AreaActiveMarker'
  * Area info panel
  */
 export const AreaInfoHover: React.FC<HoverInfo> = ({ data, geometry, mapInstance }) => {
-  const parent = data?.parent == null ? null : JSON.parse(data.parent)
-  const parentName = parent?.name ?? 'Unknown'
-  const parentId = parent?.id ?? null
+  const ancestors = data?.ancestors == null ? null : JSON.parse(data.ancestors)
+  const pathTokens = data?.pathTokens == null ? null : JSON.parse(data.pathTokens)
 
   let screenXY
   if (geometry.type === 'Point') {
@@ -18,6 +17,9 @@ export const AreaInfoHover: React.FC<HoverInfo> = ({ data, geometry, mapInstance
   } else {
     return <SelectedPolygon geometry={geometry} />
   }
+
+  const parentId = ancestors?.[ancestors.length - 2] ?? null
+  const parentName = pathTokens?.[pathTokens.length - 2] ?? 'Unknown'
   return (
     <Popover.Root defaultOpen>
       <Popover.Anchor style={{ position: 'absolute', left: screenXY.x, top: screenXY.y }} />
@@ -34,10 +36,10 @@ export const Content: React.FC<MapAreaFeatureProperties & { parentName: string, 
     ? parentName
     : (
       <a
-        href={getAreaPageFriendlyUrl(parentId, name)}
+        href={getAreaPageFriendlyUrl(parentId, parentName)}
         className='inline-flex items-center gap-1.5'
       >
-        <EntityIcon type='area' size={16} /><span className='text-secondary font-medium hover:underline '>{parentName}</span>
+        <EntityIcon type='crag' size={16} /><span className='text-secondary font-medium hover:underline '>{parentName}</span>
       </a>
       )
   return (
