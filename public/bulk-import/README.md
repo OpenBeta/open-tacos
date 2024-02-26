@@ -10,11 +10,8 @@ Each upload is tested against the database as an uncommitted transaction, only i
 
 # Example Files
 This document will refer to the following example files:
-* The schema file used for client-side validation: `https://openbeta.io/bulk-import/bulk-import-schema.json` 
-* Example files that guide you how to structure your JSON files for mass upload
-    * (1) `https://openbeta.io/bulk-import/example-uploads/add-areas-with-climbs.json`
-    * (2) `https://openbeta.io/bulk-import/example-uploads/update-areas-with-climbs.json`
-    * (3) `https://openbeta.io/bulk-import/example-uploads/update-climbs-with-pitches.json`
+* The schema file used for client-side validation: `https://openbeta.io/bulk-import/schema.json` (use the schema locally by adding `"$schema": "schema.json"` to the first line of your JSON file to be uploaded)
+* Example files that guide you how to structure your JSON files for mass upload are located at TODO: Link to GitHub dir
 
 # Schema
 ## General Data Hierarchy
@@ -49,6 +46,9 @@ Let's look at the example `add-areas-with-climbs.json` for an illustration:
 >              - "Incredible Hand Crack" (Route, Type: `Climb`)
 >                  - "Pitch 1" (Pitch, Type: `Climb.Pitch`)
 >                  - "Pitch 2" (Pitch, Type: `Climb.Pitch`)
+
+## Using the schema.json
+
 
 ### A note on `Area`s
 * An `Area` may be a country, state, region, crag or sector (and may be infinetely nested)

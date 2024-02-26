@@ -1,16 +1,16 @@
 //'use client'
-import Ajv from "ajv";
+import Ajv from "ajv"
 import React, { useState, useRef, useCallback, useEffect } from "react"
-import { toast } from 'react-toastify';
-import Layout from '../components/layout';
-import schema from "../../public/bulk-import/bulk-import-schema.json"
-import { Lightbulb } from "@phosphor-icons/react";
-const addFormats = require("ajv-formats");
+import { toast } from 'react-toastify'
+import Layout from '../components/layout'
+import schema from "../../public/bulk-import/schema.json"
+import { Lightbulb } from "@phosphor-icons/react"
+const addFormats = require("ajv-formats")
 const betterAjvErrors = require("better-ajv-errors").default
 import { jsonToGraphQLQuery } from 'json-to-graphql-query'
 import { gql } from '@apollo/client'
 import { graphqlClient } from '../js/graphql/Client'
-import { useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react'
 
 function FileUploadAndValidationClientComponent() {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -22,39 +22,39 @@ function FileUploadAndValidationClientComponent() {
 
   const handleValidationErrors = (parsedJSON: object) => {
     try {
-      const ajv = new Ajv({ allErrors: true, verbose: true });
-      addFormats(ajv);
-      const compiledSchema = ajv.compile(schema);
-      const validate = compiledSchema(parsedJSON);
+      const ajv = new Ajv({ allErrors: true, verbose: true })
+      addFormats(ajv)
+      const compiledSchema = ajv.compile(schema)
+      const validate = compiledSchema(parsedJSON)
       if (!validate) {
         const betterErrors = betterAjvErrors(schema, parsedJSON, compiledSchema.errors, { format: 'js' })
         console.log(betterErrors)
-        setValidationErrors(betterErrors);
+        setValidationErrors(betterErrors)
         toast.error(
           betterErrors.length > 0
             ? "Error: Schema validation errors found."
             : "Error: Schema validation failed, but no errors were provided."
-        );
+        )
       } else {
         toast.success(
           "JSON file and schema successfully validated. ➤ Proceed to database upload."
-        );
+        )
         setValidationErrors([])
         setIsValidationSuccessful(true)
       }
     } catch (error) {
-      console.error("Error during validation:", error);
+      console.error("Error during validation:", error)
       toast.error(
         "Error: An unexpected error occurred during validation. See browser console log for more details."
-      );
+      )
     }
-  };
+  }
   function safelyParseJSON(json: string) {
     try {
-      return JSON.parse(json);
+      return JSON.parse(json)
     } catch (e) {
-      toast.error(`Error: Could not parse JSON file. ${e}`);
-      return null;
+      toast.error(`Error: Could not parse JSON file. ${e}`)
+      return null
     }
   }
 
@@ -67,27 +67,27 @@ function FileUploadAndValidationClientComponent() {
     const file = event.target.files ? event.target.files[0] : null
 
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader()
 
       reader.onload = (event) => {
-        const file = event.target?.result;
+        const file = event.target?.result
         if (typeof file === "string") {
-          const parsedJSON = safelyParseJSON(file);
+          const parsedJSON = safelyParseJSON(file)
           if (parsedJSON) {
-            setParsedJSON(parsedJSON); // Update the state
-            handleValidationErrors(parsedJSON);
+            setParsedJSON(parsedJSON)
+            handleValidationErrors(parsedJSON)
           } else {
-            toast.error("Error: Not a valid JSON file");
+            toast.error("Error: Not a valid JSON file")
           }
         }
-      };
-      reader.readAsText(file);
+      }
+      reader.readAsText(file)
     }
-  };
+  }
 
   const handleButtonClick = () => {
-    fileInputRef.current?.click();
-  };
+    fileInputRef.current?.click()
+  }
 
   return (
     <><div className="alert mt-2 flex flex-col gap-2 items-start">
@@ -145,14 +145,14 @@ function FileUploadAndValidationClientComponent() {
       <UploadToDBComponent parsedJsonData={parsedJSON} isValidationSuccessful={isValidationSuccessful} hasEncounteredDbUploadError={hasEncounteredDbUploadError} setEncounteredDbUploadError={setEncounteredDbUploadError} />
 
     </>
-  );
+  )
 }
 
 interface UploadToDBProps {
   parsedJsonData: object | null
   isValidationSuccessful: boolean
-  hasEncounteredDbUploadError: boolean;
-  setEncounteredDbUploadError: (error: boolean) => void;
+  hasEncounteredDbUploadError: boolean
+  setEncounteredDbUploadError: (error: boolean) => void
 }
 
 const UploadToDBComponent: React.FC<UploadToDBProps> = ({
@@ -161,23 +161,23 @@ const UploadToDBComponent: React.FC<UploadToDBProps> = ({
   hasEncounteredDbUploadError,
   setEncounteredDbUploadError,
 }) => {
-  const { data: sessionData } = useSession();
-  const accessToken = sessionData?.accessToken ?? '';
-  const [loading, setLoading] = useState(false);
+  const { data: sessionData } = useSession()
+  const accessToken = sessionData?.accessToken ?? ''
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (hasEncounteredDbUploadError) {
-      setEncounteredDbUploadError(false);
+      setEncounteredDbUploadError(false)
     }
-  }, [parsedJsonData, setEncounteredDbUploadError]);
+  }, [parsedJsonData, setEncounteredDbUploadError])
 
   const handleUpload = useCallback(async () => {
     if (!isValidationSuccessful || !parsedJsonData) {
-      toast.error("JSON schema validation unsuccessful. Fix the errors and try again.");
-      return;
+      toast.error("JSON schema validation unsuccessful. Fix the errors and try again.")
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
     try {
       const bulkImportMutation = {
         mutation: {
@@ -204,9 +204,9 @@ const UploadToDBComponent: React.FC<UploadToDBProps> = ({
             }
           }
         }
-      };
+      }
 
-      const generatedGraphqlMutation = jsonToGraphQLQuery(bulkImportMutation, { pretty: true });
+      const generatedGraphqlMutation = jsonToGraphQLQuery(bulkImportMutation, { pretty: true })
       console.log('generatedGraphqlMutation:', generatedGraphqlMutation)
 
       const { data } = await graphqlClient.mutate({
@@ -218,23 +218,23 @@ const UploadToDBComponent: React.FC<UploadToDBProps> = ({
         },
       })
 
-      console.log("Sending mutation to the database...");
+      console.log("Sending mutation to the database...")
       if (data) {
         const updatedCountAreas = data.bulkImportAreas.addedAreas.length + data.bulkImportAreas.updatedAreas.length + data.bulkImportAreas.addedOrUpdatedClimbs.length
         const updatedCountClimbs = data.bulkImportAreas.addedOrUpdatedClimbs.length
 
-        console.log("Detailed database update log:", data);
+        console.log("Detailed database update log:", data)
         toast.success(`Successfully created/updated ${updatedCountAreas} database items. See console log for more details.`)
         setEncounteredDbUploadError(false)
       }
     } catch (error) {
-      console.error("Error uploading to DB:", error);
-      toast.error("Error uploading data to the database. See console log for more details.");
+      console.error("Error uploading to DB:", error)
+      toast.error("Error uploading data to the database. See console log for more details.")
       setEncounteredDbUploadError(true)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [parsedJsonData, isValidationSuccessful, setEncounteredDbUploadError, accessToken]);
+  }, [parsedJsonData, isValidationSuccessful, setEncounteredDbUploadError, accessToken])
 
   return (
     <>
@@ -248,8 +248,8 @@ const UploadToDBComponent: React.FC<UploadToDBProps> = ({
         </button>
       </div>
     </>
-  );
-};
+  )
+}
 
 
 const BulkImport = (): JSX.Element => {
@@ -277,7 +277,7 @@ const BulkImport = (): JSX.Element => {
 
       </div>
     </Layout>
-  );
-};
+  )
+}
 
 export default BulkImport
