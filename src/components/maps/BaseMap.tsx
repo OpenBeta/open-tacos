@@ -17,7 +17,9 @@ export const DEFAULT_INITIAL_VIEWSTATE: XViewStateType = {
 
 export const MAP_STYLES = {
   light: 'mapbox://styles/mappandas/ckf8bb0qv18be19npofybx7yq',
-  dark: 'mapbox://styles/mappandas/cl0u44wo8008415pedsbgtml7'
+  dark: 'mapbox://styles/mappandas/cl0u44wo8008415pedsbgtml7',
+  outdoor: 'https://api.maptiler.com/maps/outdoor-v2/style.json?key=IJlqluHVT3Au1mC0w78q',
+  dataviz: 'https://api.maptiler.com/maps/dataviz/style.json?key=IJlqluHVT3Au1mC0w78q'
 }
 interface BaseMapProps {
   height: number

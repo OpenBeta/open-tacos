@@ -1,13 +1,15 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
-import mapboxgl from 'mapbox-gl'
-import { Map, ScaleControl, FullscreenControl, NavigationControl, MapLayerMouseEvent, MapInstance } from 'react-map-gl'
+import { Map, ScaleControl, FullscreenControl, NavigationControl, MapLayerMouseEvent, MapInstance } from 'react-map-gl/maplibre'
+import maplibregl, { MapLibreEvent } from 'maplibre-gl'
+import { Protocol } from 'pmtiles'
 import { Point, Polygon } from '@turf/helpers'
 
 import { MAP_STYLES } from './BaseMap'
 import { AreaInfoDrawer } from './AreaInfoDrawer'
 import { AreaInfoHover } from './AreaInfoHover'
 import { SelectedFeature } from './AreaActiveMarker'
+import { OBCustomLayers } from './OBCustomLayers'
 
 export interface MapAreaFeatureProperties {
   id: string
@@ -54,10 +56,10 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({ showFullscreenControl = tr
     })
   }, [])
 
-  const onLoad = useCallback((e: mapboxgl.MapboxEvent) => {
+  const onLoad = useCallback((e: MapLibreEvent) => {
     setMapInstance(e.target)
     if (initialCenter != null) {
-      e.target.jumpTo({ center: initialCenter })
+      e.target.jumpTo({ center: initialCenter, zoom: 6 })
     }
   }, [initialCenter])
 
@@ -94,9 +96,18 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({ showFullscreenControl = tr
     }
   }, [mapInstance])
 
+  useEffect(() => {
+    const protocol = new Protocol()
+    maplibregl.addProtocol('pmtiles', protocol.tile)
+    return () => {
+      maplibregl.removeProtocol('pmtiles')
+    }
+  }, [])
+
   return (
     <div className='relative w-full h-full'>
       <Map
+        mapLib={maplibregl}
         id='global-map'
         onLoad={onLoad}
         onDragStart={() => {
@@ -113,11 +124,12 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({ showFullscreenControl = tr
         onClick={onClick}
         reuseMaps
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
-        mapStyle={MAP_STYLES.light}
+        mapStyle={MAP_STYLES.dataviz}
         cursor={cursor}
         cooperativeGestures={showFullscreenControl}
         interactiveLayerIds={['crags', 'crag-group-boundaries']}
       >
+        <OBCustomLayers />
         <ScaleControl />
         {showFullscreenControl && <FullscreenControl />}
         <NavigationControl showCompass={false} position='bottom-right' />
