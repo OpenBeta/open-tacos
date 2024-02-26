@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 import { validate } from 'uuid'
 import { MapPinLine, Lightbulb, ArrowRight } from '@phosphor-icons/react/dist/ssr'
-import 'mapbox-gl/dist/mapbox-gl.css'
 import Markdown from 'react-markdown'
 
 import PhotoMontage, { UploadPhotoCTA } from '@/components/media/PhotoMontage'
