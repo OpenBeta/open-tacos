@@ -3,7 +3,7 @@
   "[typescriptreact]": {
     "editor.formatOnType": true,
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "standard.vscode-standard"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "[typescript]": {
     "editor.formatOnSave": true,
@@ -15,5 +15,6 @@
   "standard.treatErrorsAsWarnings": true,
   "javascript.format.enable": false,
   "javascript.format.semicolons": "remove",
-  "typescript.format.enable": true
+  "typescript.format.enable": true,
+  "workbench.colorTheme": "Tomorrow Night Blue"
 }
