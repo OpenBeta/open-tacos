@@ -1,11 +1,12 @@
 import clx from 'classnames'
+import { ReactNode } from 'react'
 
 /**
  * A simple card component.
  * @see https://daisyui.com/components/card/
  */
-export const Card: React.FC<{ children: React.ReactNode, compact?: boolean, bordered?: boolean, className?: string }> =
-  ({ compact = false, bordered: border = true, className = '', children }) => {
+export const Card: React.FC<{ children: React.ReactNode, compact?: boolean, bordered?: boolean, className?: string, image?: ReactNode }> =
+  ({ compact = false, bordered: border = true, className = '', image, children }) => {
     return (
       <div className={
         clx(
@@ -15,6 +16,7 @@ export const Card: React.FC<{ children: React.ReactNode, compact?: boolean, bord
           className)
       }
       >
+        {image}
         <div className='card-body overflow-y-auto minimal-scrollbar'>
           {children}
         </div>

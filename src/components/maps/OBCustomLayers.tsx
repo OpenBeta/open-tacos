@@ -23,13 +23,16 @@ export const OBCustomLayers: React.FC = () => {
         type='symbol'
         source-layer='crags' // source-layer is the layer name in the vector tileset
         layout={{
+          'icon-anchor': 'center',
           'text-field': ['get', 'name'],
           'text-size': 12,
-          'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
+          'text-font': ['Segoe UI', 'Roboto', 'Ubuntu', 'Helvetica Neue', 'Oxygen', 'Cantarell', 'sans-serif'],
           'icon-image': 'circle',
           'icon-size': ['interpolate', ['linear'], ['zoom'], 8, 0.25, 18, 1],
           'text-variable-anchor': ['bottom', 'top', 'left', 'right'],
-          'text-radial-offset': ['interpolate', ['linear'], ['zoom'], 6, 0.25, 16, 1]
+          'text-radial-offset': ['interpolate', ['linear'], ['zoom'], 6, 0.25, 16, 1],
+          'text-optional': true,
+          'icon-padding': 8
         }}
         paint={{
           'icon-color': '#111827',

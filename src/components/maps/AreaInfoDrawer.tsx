@@ -19,7 +19,7 @@ export const AreaInfoDrawer: React.FC<{ data: MapAreaFeatureProperties | null, o
   )
 }
 
-export const Content: React.FC<MapAreaFeatureProperties> = ({ id, areaName, climbs, content: { description } }) => {
+export const Content: React.FC<MapAreaFeatureProperties> = ({ id, areaName, climbs, content: { description }, media }) => {
   const friendlyUrl = getAreaPageFriendlyUrl(id, areaName)
   const editUrl = `/editArea/${id}/general`
   return (

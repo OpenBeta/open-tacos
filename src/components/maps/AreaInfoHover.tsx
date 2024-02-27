@@ -4,6 +4,7 @@ import { Card } from '../core/Card'
 import { EntityIcon } from '@/app/(default)/editArea/[slug]/general/components/AreaItem'
 import { SelectedPolygon } from './AreaActiveMarker'
 import { HoverInfo, MapAreaFeatureProperties } from './GlobalMap'
+import { MiniCarousel } from './CardGallery'
 
 /**
  * Area info panel
@@ -26,9 +27,9 @@ export const AreaInfoHover: React.FC<HoverInfo> = ({ data, geometry, mapInstance
   )
 }
 
-export const Content: React.FC<MapAreaFeatureProperties> = ({ id, areaName, climbs }) => {
+export const Content: React.FC<MapAreaFeatureProperties> = ({ id, areaName, climbs, media }) => {
   return (
-    <Card>
+    <Card image={<MiniCarousel mediaList={media} />}>
       <div className='flex flex-col gap-y-1 text-xs'>
         <a href={getAreaPageFriendlyUrl(id, areaName)} className='text-base font-medium hover:underline'>{areaName}</a>
         <div className='font-sm text-secondary flex items-center gap-1'>
