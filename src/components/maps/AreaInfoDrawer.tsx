@@ -1,59 +1,72 @@
 import * as Popover from '@radix-ui/react-popover'
 
-import { MapAreaFeatureProperties } from './AreaMap'
+import { MapAreaFeatureProperties, SimpleClimbType } from './GlobalMap'
 import { getAreaPageFriendlyUrl } from '@/js/utils'
 import { Card } from '../core/Card'
 import { EntityIcon } from '@/app/(default)/editArea/[slug]/general/components/AreaItem'
-import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
 
 /**
  * Area info panel
  */
 export const AreaInfoDrawer: React.FC<{ data: MapAreaFeatureProperties | null, onClose?: () => void }> = ({ data, onClose }) => {
-  const parent = data?.parent == null ? null : JSON.parse(data.parent)
-  const parentName = parent?.name ?? ''
-  const parentId = parent?.id ?? null
   return (
     <Popover.Root open={data != null}>
       <Popover.Anchor className='absolute top-3 left-3 z-50' />
       <Popover.Content align='start'>
-        {data != null && <Content {...data} parentName={parentName} parentId={parentId} />}
+        {data != null && <Content {...data} />}
       </Popover.Content>
     </Popover.Root>
   )
 }
 
-export const Content: React.FC<MapAreaFeatureProperties & { parentName: string, parentId: string | null }> = ({ id, name, parentName, parentId, content }) => {
-  const url = parentId == null
-    ? (
-      <div className='inline-flex items-center gap-1.5'>
-        <EntityIcon type='area' size={16} />
-        <span className='text-secondary font-medium'>{parentName}</span>
-      </div>
-      )
-    : (
-      <a
-        href={getAreaPageFriendlyUrl(parentId, name)}
-        className='inline-flex items-center gap-1.5'
-      >
-        <EntityIcon type='area' size={16} /><span className='text-secondary font-medium hover:underline '>{parentName}</span>
-      </a>
-      )
-
-  const friendlyUrl = getAreaPageFriendlyUrl(id, name)
+export const Content: React.FC<MapAreaFeatureProperties> = ({ id, areaName, climbs, content: { description } }) => {
+  const friendlyUrl = getAreaPageFriendlyUrl(id, areaName)
+  const editUrl = `/editArea/${id}/general`
   return (
     <Card>
-      <div className='flex flex-col gap-y-1 text-xs'>
-        <div>{url}</div>
-        <div className='ml-2'>
-          <span className='text-secondary'>&#8735;</span><a href={getAreaPageFriendlyUrl(id, name)} className='text-sm font-medium hover:underline'>{name}</a>
-        </div>
-      </div>
-      <hr className='mt-6' />
-      <div className='flex items-center justify-end gap-2'>
-        <a className='btn btn-link btn-sm no-underline' href={`/editArea/${id}`}>Edit</a>
-        <a className='btn btn-primary btn-sm' href={friendlyUrl}>Visit area <ArrowRight /></a>
+      <div className='flex flex-col gap-4'>
+        <section className='flex flex-col gap-y-2'>
+          <div className='text-lg font-medium leading-snug tracking-tight'>{areaName}</div>
+          <div className='font-sm text-secondary flex items-center gap-1'>
+            <EntityIcon type='crag' size={16} />
+            ·
+            <span className='text-xs font-medium'>{climbs.length} climbs</span>
+            <a href={friendlyUrl} className='text-info text-xs font-semibold ml-auto hover:underline'>Visit page</a>
+          </div>
+        </section>
+
+        <a className='btn btn-primary btn-outline btn-sm' href={editUrl}>Edit area</a>
+
+        <hr />
+
+        <section className='text-xs'>
+          {description == null || description.trim() === ''
+            ? <p>No description available. <a className='text-info hover:underline' href={editUrl}>[Add]</a></p>
+            : <p>{description}</p>}
+        </section>
+
+        <hr />
+
+        <MicroClimbList climbs={climbs} />
       </div>
     </Card>
+  )
+}
+
+const MicroClimbList: React.FC<{ climbs: SimpleClimbType[] }> = ({ climbs }) => {
+  return (
+    <section>
+      <h3 className='text-base font-semibold text-secondary'>Climbs</h3>
+      <ol>
+        {climbs.map((climb) => {
+          const url = `/climb/${climb.id}`
+          return (
+            <li key={climb.id} className='text-xs'>
+              <a href={url} className='hover:underline'>{climb.name}</a>
+            </li>
+          )
+        })}
+      </ol>
+    </section>
   )
 }

@@ -5,18 +5,19 @@ import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import { Point, Polygon } from '@turf/helpers'
 import dynamic from 'next/dynamic'
 
-import { MAP_STYLES } from './BaseMap'
+import { MAP_STYLES } from './MapSelector'
 import { AreaInfoDrawer } from './AreaInfoDrawer'
 import { AreaInfoHover } from './AreaInfoHover'
 import { SelectedFeature } from './AreaActiveMarker'
 import { OBCustomLayers } from './OBCustomLayers'
-import { AreaType, ClimbType } from '@/js/types'
+import { AreaType, ClimbType, MediaWithTags } from '@/js/types'
 import { TileProps, transformTileProps } from './utils'
 
 export type SimpleClimbType = Pick<ClimbType, 'id' | 'name' | 'type'>
 
 export type MapAreaFeatureProperties = Pick<AreaType, 'id' | 'areaName' | 'content' | 'ancestors' | 'pathTokens'> & {
   climbs: SimpleClimbType[]
+  media: MediaWithTags[]
 }
 
 export interface HoverInfo {
@@ -63,7 +64,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
       setClickInfo(null)
     } else {
       setSelected(feature.geometry as Point | Polygon)
-      setClickInfo(feature.properties as MapAreaFeatureProperties)
+      setClickInfo(transformTileProps(feature.properties as TileProps))
     }
   }, [mapInstance])
 
