@@ -15,9 +15,10 @@ import { TileProps, transformTileProps } from './utils'
 
 export type SimpleClimbType = Pick<ClimbType, 'id' | 'name' | 'type'>
 
+export type MediaWithTagsInMapTile = Omit<MediaWithTags, 'id'> & { _id: string }
 export type MapAreaFeatureProperties = Pick<AreaType, 'id' | 'areaName' | 'content' | 'ancestors' | 'pathTokens'> & {
   climbs: SimpleClimbType[]
-  media: MediaWithTags[]
+  media: MediaWithTagsInMapTile[]
 }
 
 export interface HoverInfo {
@@ -30,8 +31,8 @@ interface GlobalMapProps {
   showFullscreenControl?: boolean
   initialCenter?: [number, number]
   initialViewState?: {
-    bounds: any
-    fitBoundsOptions: any
+    bounds: maplibregl.LngLatBoundsLike
+    fitBoundsOptions: maplibregl.FitBoundsOptions
   }
   children?: React.ReactNode
 }
@@ -57,6 +58,9 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
     }
   }, [initialCenter])
 
+  /**
+   * Handle click event on the map. Place a market on the map and activate the side drawer.
+   */
   const onClick = useCallback((event: MapLayerMouseEvent): void => {
     const feature = event?.features?.[0]
     if (feature == null) {
@@ -68,6 +72,17 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
     }
   }, [mapInstance])
 
+  /**
+   * Handle click event on the popover.  Behave as if the user clicked on a feature on the map.
+   */
+  const onHoverCardClick = ({ geometry, data }: HoverInfo): void => {
+    setSelected(geometry)
+    setClickInfo(data)
+  }
+
+  /**
+   * Handle over event on the map.  Show the popover with the area info.
+   */
   const onHover = useCallback((event: MapLayerMouseEvent) => {
     const obLayerId = event.features?.findIndex((f) => f.layer.id === 'crags' || f.layer.id === 'crag-group-boundaries') ?? -1
 
@@ -121,7 +136,11 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         {selected != null &&
           <SelectedFeature geometry={selected} />}
         <AreaInfoDrawer data={clickInfo} />
-        {hoverInfo != null && <AreaInfoHover {...hoverInfo} />}
+        {hoverInfo != null && (
+          <AreaInfoHover
+            {...hoverInfo}
+            onClick={onHoverCardClick}
+          />)}
         {children}
       </Map>
     </div>

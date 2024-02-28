@@ -14,11 +14,11 @@ export const OBCustomLayers: React.FC = () => {
       ]}
       attribution='© OpenBeta contributors'
     >
-      <Layer
-        /**
+      {/* /**
          * Can be any unique id.  In order for the mouse to interact with the layer,
          * the id must be specified in ReactMapGL's interactiveLayerIds prop
-         */
+         */}
+      <Layer
         id='crags'
         type='symbol'
         source-layer='crags' // source-layer is the layer name in the vector tileset
@@ -27,18 +27,19 @@ export const OBCustomLayers: React.FC = () => {
           'text-field': ['get', 'name'],
           'text-size': 12,
           'text-font': ['Segoe UI', 'Roboto', 'Ubuntu', 'Helvetica Neue', 'Oxygen', 'Cantarell', 'sans-serif'],
-          'icon-image': 'circle',
-          'icon-size': ['interpolate', ['linear'], ['zoom'], 8, 0.25, 18, 1],
+          'icon-image': 'circle-dot',
+          'icon-size': ['interpolate', ['linear'], ['zoom'], 8, 0.5, 18, 1],
           'text-variable-anchor': ['bottom', 'top', 'left', 'right'],
           'text-radial-offset': ['interpolate', ['linear'], ['zoom'], 6, 0.25, 16, 1],
           'text-optional': true,
-          'icon-padding': 8
+          'icon-padding': 8,
+          'symbol-sort-key': ['match', ['string', ['get', 'media']], ['[]'], 1, 0]
         }}
         paint={{
-          'icon-color': '#111827',
+          'icon-color': ['match', ['string', ['get', 'media']], ['[]'], '#111827', '#881337'],
           'text-halo-blur': 1,
-          'text-halo-width': 1,
-          'text-color': '#111827',
+          'text-halo-width': 2,
+          'text-color': ['match', ['string', ['get', 'media']], ['[]'], '#111827', '#881337'],
           'text-halo-color': '#f8fafc'
         }}
       />

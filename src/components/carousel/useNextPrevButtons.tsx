@@ -1,4 +1,5 @@
 import React, {
+  MouseEventHandler,
   PropsWithChildren,
   useCallback,
   useEffect,
@@ -9,25 +10,30 @@ import { CaretLeft, CaretRight } from '@phosphor-icons/react/dist/ssr'
 import clx from 'classnames'
 import { Icon } from '@phosphor-icons/react'
 
+type ButtonClickHandler = MouseEventHandler<HTMLButtonElement>
 interface UsePrevNextButtonsType {
   prevBtnDisabled: boolean
   nextBtnDisabled: boolean
-  onPrevButtonClick: () => void
-  onNextButtonClick: () => void
+  onPrevButtonClick: ButtonClickHandler
+  onNextButtonClick: ButtonClickHandler
 }
-
+/**
+ * Reusable hook for prev/next buttons
+ */
 export const usePrevNextButtons = (
   emblaApi: EmblaCarouselType | undefined
 ): UsePrevNextButtonsType => {
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true)
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true)
 
-  const onPrevButtonClick = useCallback(() => {
+  const onPrevButtonClick: ButtonClickHandler = useCallback((e) => {
+    e.stopPropagation()
     if (emblaApi == null) return
     emblaApi.scrollPrev()
   }, [emblaApi])
 
-  const onNextButtonClick = useCallback(() => {
+  const onNextButtonClick: ButtonClickHandler = useCallback((e) => {
+    e.stopPropagation()
     if (emblaApi == null) return
     emblaApi.scrollNext()
   }, [emblaApi])
@@ -68,7 +74,7 @@ const BaseButton: React.FC<PropType & {
 
   return (
     <button
-      className={clx('h-full px-2', !disabled && 'hover:bg-base-300/40')}
+      className={clx('h-full px-2', !disabled && 'hover:bg-base-300/60')}
       type='button'
       disabled={disabled ?? false}
       {...restProps}
