@@ -1,8 +1,9 @@
 import { Source, Layer } from 'react-map-gl'
 
 /**
- * OpenBeta custom map tiles
- * @returns
+ * OpenBeta custom map tiles.
+ * - Crags: crag markers and labels
+ * - Crag groups: polygon boundaries for crag groups (TBD)
  */
 export const OBCustomLayers: React.FC = () => {
   return (
@@ -14,12 +15,8 @@ export const OBCustomLayers: React.FC = () => {
       ]}
       attribution='© OpenBeta contributors'
     >
-      {/* /**
-         * Can be any unique id.  In order for the mouse to interact with the layer,
-         * the id must be specified in ReactMapGL's interactiveLayerIds prop
-         */}
       <Layer
-        id='crags'
+        id='crags' // can be any unique id. Must match the id in ReactMapGL.interactiveLayerIds
         type='symbol'
         source-layer='crags' // source-layer is the layer name in the vector tileset
         layout={{
