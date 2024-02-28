@@ -12,14 +12,14 @@ export const AreaInfoDrawer: React.FC<{ data: MapAreaFeatureProperties | null, o
   return (
     <Popover.Root open={data != null}>
       <Popover.Anchor className='absolute top-3 left-3 z-50' />
-      <Popover.Content align='start'>
+      <Popover.Content align='start' className='hover:outline-none'>
         {data != null && <Content {...data} />}
       </Popover.Content>
     </Popover.Root>
   )
 }
 
-export const Content: React.FC<MapAreaFeatureProperties> = ({ id, areaName, climbs, content: { description } }) => {
+export const Content: React.FC<MapAreaFeatureProperties> = ({ id, areaName, climbs, content: { description }, media }) => {
   const friendlyUrl = getAreaPageFriendlyUrl(id, areaName)
   const editUrl = `/editArea/${id}/general`
   return (
@@ -31,17 +31,17 @@ export const Content: React.FC<MapAreaFeatureProperties> = ({ id, areaName, clim
             <EntityIcon type='crag' size={16} />
             ·
             <span className='text-xs font-medium'>{climbs.length} climbs</span>
-            <a href={friendlyUrl} className='text-info text-xs font-semibold ml-auto hover:underline'>Visit page</a>
+            <a href={friendlyUrl} className='text-accent text-xs font-semibold ml-auto hover:underline'>Visit page</a>
           </div>
         </section>
 
-        <a className='btn btn-primary btn-outline btn-sm' href={editUrl}>Edit area</a>
+        <a className='btn btn-primary btn-outline btn-sm no-animation' href={editUrl}>Edit area</a>
 
         <hr />
 
-        <section className='text-xs'>
+        <section className='text-sm'>
           {description == null || description.trim() === ''
-            ? <p>No description available. <a className='text-info hover:underline' href={editUrl}>[Add]</a></p>
+            ? <p className='text-secondary'>No description available. <a className='text-accent hover:underline' href={editUrl}>[Add]</a></p>
             : <p>{description}</p>}
         </section>
 

@@ -1,7 +1,7 @@
 'use client'
-import { Source, Layer, LineLayer, MapInstance } from 'react-map-gl'
+import { Source, Layer, LineLayer } from 'react-map-gl'
 import dynamic from 'next/dynamic'
-import { lineString, Point, Polygon } from '@turf/helpers'
+import { lineString } from '@turf/helpers'
 import lineToPolygon from '@turf/line-to-polygon'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
@@ -16,32 +16,13 @@ interface AreaMapProps {
   selected: string | null
 }
 
-export interface MapAreaFeatureProperties {
-  id: string
-  name: string
-  content: {
-    description: string
-  }
-  parent: string // due to a backend backend bug, this is a string instead of a parent object
-  // parent: {
-  //   id: string
-  //   name: string
-  // }
-}
-
-export interface HoverInfo {
-  geometry: Point | Polygon
-  data: MapAreaFeatureProperties
-  mapInstance: MapInstance
-}
-
 /**
- * Area map
+ * Area map to be included on the area page
  */
 const AreaMap: React.FC<AreaMapProps> = ({ area, subAreas }) => {
-  let fitBoundOpts: any = { padding: { top: 45, left: 45, bottom: 45, right: 45 } }
+  let fitBoundOpts: maplibregl.FitBoundsOptions = { padding: { top: 45, left: 45, bottom: 45, right: 45 }, duration: 0, maxZoom: 12 }
   if (subAreas.length === 0) {
-    fitBoundOpts = { maxZoom: 14 }
+    fitBoundOpts = { maxZoom: 14, duration: 0 }
   }
 
   const { metadata } = area
