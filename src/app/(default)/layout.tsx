@@ -27,7 +27,7 @@ export default function RootLayout ({
   children: React.ReactNode
 }): any {
   return (
-    <html lang='en' className='snap-proximity snap-y scroll-smooth'>
+    <html lang='en' className='scroll-smooth'>
       <body className='relative'>
         <NextAuthProvider>
           <Header />
