@@ -26,7 +26,7 @@ export const AreaPageContainer: React.FC<{
         {breadcrumbs == null ? <BreadCrumbsSkeleton /> : breadcrumbs}
         {children == null ? <ContentSkeleton /> : children}
       </div>
-      <div id='map' className='w-full mt-16 relative h-[90vh] border-t snap-start snap-normal'>
+      <div id='map' className='w-full mt-16 relative h-[90vh] border-t'>
         {map != null && map}
       </div>
     </article>
