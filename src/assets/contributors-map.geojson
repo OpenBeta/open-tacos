@@ -150,6 +150,21 @@
           35.198478054480816
         ]
       }
-  }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Melissa",
+        "githubId": "melissapthai",
+        "favoriteCrag": "8aa15dd0-878e-5a34-ad5d-bd1f96f2e17e"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.28787643505346,
+          39.98884394309755
+        ]
+      }
+    }
   ]
 }
