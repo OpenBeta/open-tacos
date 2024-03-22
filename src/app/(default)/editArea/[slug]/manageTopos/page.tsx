@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { DashboardPageProps, getPageDataForEdit } from '../general/page'
 import { TopoEditor } from './components/TopoEditor'
 import { PageContainer } from '../components/EditAreaContainers'
+import { notFound } from 'next/navigation'
 
 // Opt out of caching for all data requests in the route segment
 export const dynamic = 'force-dynamic'
@@ -9,14 +10,24 @@ export const fetchCache = 'force-no-store' // opt out of Nextjs version of 'fetc
 
 // Page metadata
 export async function generateMetadata ({ params }: DashboardPageProps): Promise<Metadata> {
-  const { area: { areaName } } = await getPageDataForEdit(params.slug, 'cache-first')
+  const pageDataForEdit = await getPageDataForEdit(params.slug, 'cache-first')
+  if (pageDataForEdit == null || pageDataForEdit.area == null) {
+    return {}
+  }
+
+  const { area: { areaName } } = pageDataForEdit
   return {
     title: `Manage topos in area ${areaName}`
   }
 }
 
 export default async function EditToposPage ({ params: { slug } }: DashboardPageProps): Promise<any> {
-  const { area } = await getPageDataForEdit(slug)
+  const pageDataForEdit = await getPageDataForEdit(slug)
+  if (pageDataForEdit == null || pageDataForEdit.area == null) {
+    notFound()
+  }
+
+  const { area } = pageDataForEdit
 
   return (
     <PageContainer>

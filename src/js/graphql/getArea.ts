@@ -6,7 +6,7 @@ import { graphqlClient } from './Client'
 import { AreaType, ChangesetType } from '../types'
 
 export interface AreaPageDataProps {
-  area: AreaType
+  area: AreaType | null
   getAreaHistory: ChangesetType[]
 }
 
@@ -15,14 +15,19 @@ export interface AreaPageDataProps {
  * @param uuid area uuid
  */
 export const getArea = async (uuid: string, fetchPolicy: FetchPolicy = 'no-cache'): Promise<AreaPageDataProps> => {
-  const rs = await graphqlClient.query<AreaPageDataProps>({
-    query: QUERY_AREA_BY_ID,
-    variables: {
-      uuid
-    },
-    fetchPolicy
-  })
-  return rs.data
+  try {
+    const rs = await graphqlClient.query<AreaPageDataProps>({
+      query: QUERY_AREA_BY_ID,
+      variables: {
+        uuid
+      },
+      fetchPolicy
+    })
+    return rs.data
+  } catch (error) {
+    console.error(error)
+    return { area: null, getAreaHistory: [] }
+  }
 }
 
 /**
