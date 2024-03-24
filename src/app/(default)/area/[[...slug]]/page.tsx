@@ -37,7 +37,7 @@ export interface PageWithCatchAllUuidProps {
 export default async function Page ({ params }: PageWithCatchAllUuidProps): Promise<any> {
   const areaUuid = parseUuidAsFirstParam({ params })
   const pageData = await getArea(areaUuid)
-  if (pageData == null) {
+  if (pageData == null || pageData.area == null) {
     notFound()
   }
 
@@ -188,8 +188,13 @@ export function generateStaticParams (): PageSlugType[] {
 // Page metadata
 export async function generateMetadata ({ params }: PageWithCatchAllUuidProps): Promise<Metadata> {
   const areaUuid = parseUuidAsFirstParam({ params })
+  const area = await getArea(areaUuid, 'cache-first')
 
-  const { area: { uuid, areaName, pathTokens, media } } = await getArea(areaUuid, 'cache-first')
+  if (area == null || area.area == null) {
+    return {}
+  }
+
+  const { area: { uuid, areaName, pathTokens, media } } = area
 
   let wall = ''
   if (pathTokens.length >= 2) {

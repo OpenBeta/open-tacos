@@ -16,7 +16,11 @@ export default async function EditAreaDashboardLayout ({
   children: React.ReactNode
   params: { slug: string }
 }): Promise<any> {
-  const { area: { uuid, pathTokens, ancestors, areaName, children: subAreas, climbs, metadata: { leaf, isBoulder } } } = await getPageDataForEdit(params.slug)
+  const pageDataForEdit = await getPageDataForEdit(params.slug)
+  if (pageDataForEdit == null || pageDataForEdit.area == null) {
+    return <div />
+  }
+  const { area: { uuid, pathTokens, ancestors, areaName, children: subAreas, climbs, metadata: { leaf, isBoulder } } } = pageDataForEdit
   return (
     <div className='relative w-full h-full'>
       <div className='px-12 pt-8 pb-4'>

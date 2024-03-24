@@ -11,14 +11,24 @@ export const fetchCache = 'force-no-store' // opt out of Nextjs version of 'fetc
 
 // Page metadata
 export async function generateMetadata ({ params }: DashboardPageProps): Promise<Metadata> {
-  const { area: { areaName } } = await getPageDataForEdit(params.slug, 'cache-first')
+  const pageDataForEdit = await getPageDataForEdit(params.slug, 'cache-first')
+  if (pageDataForEdit == null || pageDataForEdit.area == null) {
+    return {}
+  }
+
+  const { area: { areaName } } = pageDataForEdit
   return {
     title: `Manage climbs in area ${areaName}`
   }
 }
 
 export default async function AddClimbsPage ({ params: { slug } }: DashboardPageProps): Promise<any> {
-  const { area } = await getPageDataForEdit(slug)
+  const pageDataForEdit = await getPageDataForEdit(slug)
+  if (pageDataForEdit == null || pageDataForEdit.area == null) {
+    return {}
+  }
+
+  const { area } = pageDataForEdit
   const { areaName, uuid, gradeContext, metadata } = area
   const { leaf, isBoulder } = metadata
   return (
