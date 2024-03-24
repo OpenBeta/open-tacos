@@ -45,14 +45,11 @@ interface GlobalMapSkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const GlobalMapSkeleton: React.FC<GlobalMapSkeletonProps> = ({
-  width = '100%',
-  height = '100%',
   ...props
 }) => {
   return (
     <div
-      className='relative animate-pulse rounded-md bg-gray-300'
-      style={{ width, height }}
+      className='relative animate-pulse rounded-md bg-gray-300 w-full h-full'
       {...props}
     >
       <div className='flex justify-center items-center h-full'>
