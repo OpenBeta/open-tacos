@@ -256,6 +256,9 @@ Thanks goes to these wonderful people:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/heliodor"><img src="https://avatars.githubusercontent.com/u/395678?v=4?s=100" width="100px;" alt="Heliodor Jalba"/><br /><sub><b>Heliodor Jalba</b></sub></a><br /><a href="#ideas-heliodor" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/OpenBeta/open-tacos/issues?q=author%3Aheliodor" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/athuv"><img src="https://avatars.githubusercontent.com/u/21102277?v=4?s=100" width="100px;" alt="Ahamed Athhar"/><br /><sub><b>Ahamed Athhar</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=athuv" title="Code">💻</a> <a href="#ideas-athuv" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/melissapthai"><img src="https://avatars.githubusercontent.com/u/3220734?v=4?s=100" width="100px;" alt="Melissa Thai"/><br /><sub><b>Melissa Thai</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=melissapthai" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 
