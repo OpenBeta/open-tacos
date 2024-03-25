@@ -15,7 +15,7 @@ export const LandingHero: React.FC = () => {
 }
 
 export const HeroAlert: React.FC = () => (
-  <div className='mt-2 alert alert-warning'>
+  <div className='alert alert-warning'>
     <span className='badge badge-sm badge-primary'>NEW</span>
     <a href='/maps' className='underline flex items-center gap-1 text-sm'>Crag maps<ArrowRight size={20} /></a>
   </div>)
