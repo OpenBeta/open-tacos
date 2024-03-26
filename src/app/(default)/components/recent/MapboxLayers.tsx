@@ -15,10 +15,10 @@ export const labelLayer: LayerProps = {
     'icon-image': 'circle'
   },
   paint: {
-    'text-halo-blur': 4,
-    'text-halo-width': 1,
-    'text-color': '#ffffff',
-    'text-halo-color': '#262626'
+    'text-halo-blur': 1,
+    'text-halo-width': 2,
+    'text-color': '#000000',
+    'text-halo-color': '#ebeced'
   }
 }
 
@@ -28,7 +28,7 @@ export const clusterLayer: LayerProps = {
   source: 'areas',
   filter: ['has', 'point_count'],
   paint: {
-    'circle-color': ['step', ['get', 'point_count'], '#51bbd6', 5, '#f1f075', 50, '#f28cb1'],
+    'circle-color': '#51bbd6',
     'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40]
   }
 }

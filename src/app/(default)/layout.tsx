@@ -1,4 +1,6 @@
 import { Metadata } from 'next'
+import 'maplibre-gl/dist/maplibre-gl.css'
+
 import '@/public/fonts/fonts.css'
 import '../global.css'
 import Header from './header'

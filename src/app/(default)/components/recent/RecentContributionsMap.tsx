@@ -1,14 +1,12 @@
 'use client'
 import { useRef, useState } from 'react'
-import { Map, NavigationControl, FullscreenControl, MapRef, GeoJSONSource, LngLat, Marker } from 'react-map-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
+import { Map, NavigationControl, FullscreenControl, MapRef, GeoJSONSource, LngLat, Marker } from 'react-map-gl/maplibre'
 import { point, featureCollection } from '@turf/helpers'
 import bboxFn from '@turf/bbox'
 import { BBox2d, Point, Feature } from '@turf/helpers/dist/js/lib/geojson'
-import mapboxgl from 'mapbox-gl'
 
 import { ChangesetType, ClimbType, AreaType } from '@/js/types'
-import { MAP_STYLES } from '@/components/maps/BaseMap'
+import { MAP_STYLES } from '@/components/maps/MapSelector'
 import { RecentEditsLayer, clusterLayer, UnclusteredSource, labelLayer } from './MapboxLayers'
 import { ChangesetCard } from '@/components/edit/RecentChangeHistory'
 
@@ -54,7 +52,7 @@ export const RecentContributionsMap: React.FC<{ history: ChangesetType[] }> = ({
   /**
    * On click handler.  Zoom in on cluster or show popup.
    */
-  const onClick = (event: mapboxgl.MapLayerMouseEvent): void => {
+  const onClick = async (event: maplibregl.MapLayerMouseEvent): Promise<void> => {
     if (mapRef.current == null) return
     const feature = event?.features?.[0]
 
@@ -73,16 +71,12 @@ export const RecentContributionsMap: React.FC<{ history: ChangesetType[] }> = ({
 
     const mapboxSource = mapRef?.current?.getSource('areas') as GeoJSONSource
 
-    mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
-      if (err != null) {
-        return
-      }
+    const zoom = await mapboxSource.getClusterExpansionZoom(clusterId)
 
-      mapRef?.current?.flyTo({
-        center: (feature.geometry as Point).coordinates as [number, number],
-        zoom,
-        duration: 2000
-      })
+    mapRef?.current?.easeTo({
+      center: (feature.geometry as Point).coordinates as [number, number],
+      zoom,
+      duration: 800
     })
   }
 
@@ -93,12 +87,11 @@ export const RecentContributionsMap: React.FC<{ history: ChangesetType[] }> = ({
     <div className='relative w-full h-full'>
       <Map
         reuseMaps
-        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
-        mapStyle={MAP_STYLES.dark}
+        mapStyle={MAP_STYLES.dataviz}
         cooperativeGestures
         {...clickableLayer1 != null && clickableLayer2 != null &&
         { interactiveLayerIds: [clickableLayer2, clickableLayer1] }}
-        onClick={onClick}
+        onClick={(e) => { void onClick(e) }}
         ref={mapRef}
         initialViewState={{
           bounds: bbox,
