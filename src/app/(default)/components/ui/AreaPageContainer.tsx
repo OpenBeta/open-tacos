@@ -15,10 +15,10 @@ export const AreaPageContainer: React.FC<{
 }> = ({ photoGallery, pageActions, breadcrumbs, map, children }) => {
   return (
     <article>
-      <div className='px-4 mb-2'>
+      <div className='default-page-margins my-2'>
         <HeroAlert />
       </div>
-      <div className='px-4 mx-auto max-w-5xl xl:max-w-7xl'>
+      <div className='default-page-margins'>
         {photoGallery == null ? <GallerySkeleton /> : photoGallery}
         <div className='flex justify-end py-4 border-b'>
           {pageActions == null ? <AreaPageActionsSkeleton /> : pageActions}

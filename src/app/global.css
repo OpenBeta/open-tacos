@@ -134,6 +134,14 @@ A slightly deemphasized dotted underline for a tag in order to not competing wit
   .minimal-scrollbar::-webkit-scrollbar-thumb {
     @apply bg-neutral-300 rounded-full;
   }
+
+  .default-page-margins {
+    @apply px-4 mx-auto max-w-5xl xl:max-w-7xl;
+  }
+
+  .narrow-page-margins {
+    @apply px-4 mx-auto max-w-5xl;
+  }
 }
 
 /**
