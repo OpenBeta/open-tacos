@@ -1,6 +1,6 @@
 'use client'
 import { useCallback, useState } from 'react'
-import { Map, ScaleControl, FullscreenControl, NavigationControl, MapLayerMouseEvent, MapInstance } from 'react-map-gl/maplibre'
+import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, MapInstance } from 'react-map-gl/maplibre'
 import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import { Point, Polygon } from '@turf/helpers'
 import dynamic from 'next/dynamic'
@@ -50,6 +50,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   const [cursor, setCursor] = useState<string>('default')
 
   const onLoad = useCallback((e: MapLibreEvent) => {
+    if (e.target == null) return
     setMapInstance(e.target)
     if (initialCenter != null) {
       e.target.jumpTo({ center: initialCenter, zoom: 6 })
@@ -108,7 +109,6 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   return (
     <div className='relative w-full h-full'>
       <Map
-        mapLib={maplibregl}
         id='global-map'
         onLoad={onLoad}
         onDragStart={() => {
@@ -123,14 +123,15 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
           setCursor('default')
         }}
         onClick={onClick}
-        reuseMaps
         mapStyle={MAP_STYLES.dataviz}
         cursor={cursor}
         cooperativeGestures={showFullscreenControl}
         interactiveLayerIds={['crags', 'crag-group-boundaries']}
       >
+        <ScaleControl unit='imperial' style={{ marginBottom: 10 }} position='bottom-left' />
+        <ScaleControl unit='metric' style={{ marginBottom: 0 }} position='bottom-left' />
+
         <OBCustomLayers />
-        <ScaleControl />
         {showFullscreenControl && <FullscreenControl />}
         <NavigationControl showCompass={false} position='bottom-right' />
         {selected != null &&

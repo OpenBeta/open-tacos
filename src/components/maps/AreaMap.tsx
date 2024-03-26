@@ -3,7 +3,6 @@ import { Source, Layer, LineLayer } from 'react-map-gl'
 import dynamic from 'next/dynamic'
 import { lineString } from '@turf/helpers'
 import lineToPolygon from '@turf/line-to-polygon'
-import 'maplibre-gl/dist/maplibre-gl.css'
 
 import { AreaMetadataType, AreaType } from '../../js/types'
 import { GlobalMap } from './GlobalMap'
