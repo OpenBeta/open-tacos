@@ -24,10 +24,11 @@ export enum LogoSize {
 /**
  * Reusable logo component
  */
-export const Logo: React.FC<{ size?: LogoSize, className?: string }> = ({ size = LogoSize.sm, className }) => {
+export const Logo: React.FC<{ size?: LogoSize, className?: string, withText?: boolean }> = ({ size = LogoSize.sm, className, withText = false }) => {
   return (
-    <a href='/'>
+    <a href='/' className='flex items-center gap-2'>
       <OpenBetaLogo className={clx(size, className)} />
+      {withText && <span className='font-bold text-lg tracking-tight'>OpenBeta</span>}
     </a>
   )
 }

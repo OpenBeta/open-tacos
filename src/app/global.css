@@ -138,6 +138,10 @@ A slightly deemphasized dotted underline for a tag in order to not competing wit
   .default-page-margins {
     @apply px-4 mx-auto max-w-5xl xl:max-w-7xl;
   }
+
+  .narrow-page-margins {
+    @apply px-4 mx-auto max-w-5xl;
+  }
 }
 
 /**
