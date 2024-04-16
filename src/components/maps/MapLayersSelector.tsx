@@ -30,7 +30,7 @@ const MapLayersSelector: React.FC<Props> = ({ emit }) => {
                 src={mapImgUrl}
                 alt='Currently selected maptiler layer'
               />
-              <span className=' text-[10px] absolute bottom-2 left-1/2 -translate-x-1/2'>{mapName}</span>
+              <span className={`text-[10px] absolute bottom-2 left-1/2 -translate-x-1/2 ${mapName === 'satellite' ? 'text-white' : ''}`}>{mapName}</span>
             </span>
           </span>
         </HoverCard.Trigger>

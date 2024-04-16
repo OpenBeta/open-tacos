@@ -10,6 +10,10 @@ export const MAP_STYLES: MapStyles = {
   basic: {
     style: 'https://api.maptiler.com/maps/basic/style.json?key=ejjLkz58mUNz9TgNs0Ed',
     imgUrl: 'https://docs.maptiler.com/sdk-js/api/map-styles/img/style-basic-v2.jpeg'
+  },
+  satellite: {
+    style: 'https://api.maptiler.com/maps/satellite/style.json?key=ejjLkz58mUNz9TgNs0Ed',
+    imgUrl: 'https://docs.maptiler.com/sdk-js/api/map-styles/img/style-satellite.jpeg'
   }
 }
 export interface MapStyles {
@@ -22,6 +26,10 @@ export interface MapStyles {
     imgUrl: string
   }
   basic: {
+    style: string
+    imgUrl: string
+  }
+  satellite: {
     style: string
     imgUrl: string
   }
