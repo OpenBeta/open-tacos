@@ -49,7 +49,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   const [selected, setSelected] = useState<Point | Polygon | null>(null)
   const [mapInstance, setMapInstance] = useState<MapInstance | null>(null)
   const [cursor, setCursor] = useState<string>('default')
-  const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.dataviz)
+  const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.dataviz.style)
 
   const onLoad = useCallback((e: MapLibreEvent) => {
     if (e.target == null) return
@@ -110,7 +110,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
 
   const updateMapLayer = (key: keyof MapStyles): void => {
     const style = MAP_STYLES[key]
-    setMapStyle(style)
+    setMapStyle(style.style)
   }
 
   return (
