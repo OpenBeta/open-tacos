@@ -49,7 +49,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   const [selected, setSelected] = useState<Point | Polygon | null>(null)
   const [mapInstance, setMapInstance] = useState<MapInstance | null>(null)
   const [cursor, setCursor] = useState<string>('default')
-  const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.minimal.style)
+  const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.standard.style)
 
   const onLoad = useCallback((e: MapLibreEvent) => {
     if (e.target == null) return
