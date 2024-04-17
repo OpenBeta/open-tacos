@@ -31,17 +31,17 @@ a:active, a:focus {
   @apply max-w-4xl mx-auto flex flex-col gap-y-8;
 }
 
-/* Layout for summary section of the area and climb page. 2 columns on desktop, normal stack div on mobile. */
-.area-climb-page-summary {
+/* Layout for summary section. 2 columns on desktop, normal stack div on mobile. */
+.area-summary {
   @apply mt-6 lg:grid lg:grid-cols-3 w-full;
 }
 
-.area-climb-page-summary-left {
+.area-summary-left {
   @apply  lg:pr-8 border-base-content;
 }
 
-.area-climb-page-summary-right {
-  @apply mt-6 lg:mt-0 lg:pl-16 w-full;
+.area-summary-right {
+  @apply mt-6 lg:mt-0 lg:col-span-2 lg:pl-16 w-full;
 }
 
 /**

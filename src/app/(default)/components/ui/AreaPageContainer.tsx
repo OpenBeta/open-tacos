@@ -2,6 +2,7 @@ import { GallerySkeleton } from '@/components/media/PhotoMontage'
 import React from 'react'
 import { AreaPageActionsSkeleton } from '../AreaPageActions'
 import { HeroAlert } from '../LandingHero'
+import { Summary } from './Summary'
 
 /**
  * Area page containter.  Show loading skeleton if no params are provided.
@@ -11,8 +12,9 @@ export const AreaPageContainer: React.FC<{
   pageActions?: React.ReactNode
   breadcrumbs?: React.ReactNode
   map?: React.ReactNode
+  summary?: { left: React.ReactNode, right: React.ReactNode }
   children?: React.ReactNode
-}> = ({ photoGallery, pageActions, breadcrumbs, map, children }) => {
+}> = ({ photoGallery, pageActions, breadcrumbs, map, summary, children }) => {
   return (
     <article>
       <div className='default-page-margins my-2'>
@@ -24,6 +26,7 @@ export const AreaPageContainer: React.FC<{
           {pageActions == null ? <AreaPageActionsSkeleton /> : pageActions}
         </div>
         {breadcrumbs == null ? <BreadCrumbsSkeleton /> : breadcrumbs}
+        {summary != null && <Summary columns={summary} />}
         {children == null ? <ContentSkeleton /> : children}
       </div>
       <div id='map' className='w-full mt-16 relative h-[90vh] border-t'>
