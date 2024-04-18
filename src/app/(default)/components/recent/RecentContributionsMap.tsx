@@ -87,7 +87,7 @@ export const RecentContributionsMap: React.FC<{ history: ChangesetType[] }> = ({
     <div className='relative w-full h-full'>
       <Map
         reuseMaps
-        mapStyle={MAP_STYLES.dataviz}
+        mapStyle={MAP_STYLES.standard.style}
         cooperativeGestures
         {...clickableLayer1 != null && clickableLayer2 != null &&
         { interactiveLayerIds: [clickableLayer2, clickableLayer1] }}
