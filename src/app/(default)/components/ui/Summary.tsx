@@ -10,6 +10,6 @@ interface Props {
 export const Summary: React.FC<Props> = ({ columns: { left, right } }) => (
   <div className='area-summary'>
     <div className='area-summary-left'>{left}</div>
-    {right !== undefined ? <div className='area-summary-right'>{right}</div> : null}
+    {right != null ? <div className='area-summary-right'>{right}</div> : null}
   </div>
 )
