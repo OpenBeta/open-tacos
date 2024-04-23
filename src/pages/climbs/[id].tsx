@@ -26,7 +26,7 @@ import { ClientSideFormSaveAction, Skeleton as ContentSkeleton } from '../../com
 import { ArticleLastUpdate } from '../../components/edit/ArticleLastUpdate'
 import { TradSportGradeInput, BoulderingGradeInput } from '../../components/edit/form/GradeTextInput'
 import Grade from '../../js/grades/Grade'
-import { removeTypenameFromDisciplines } from '../../js/utils'
+import { getMapHref, removeTypenameFromDisciplines } from '../../js/utils'
 import { TotalLengthInput } from '../../components/edit/form/TotalLengthInput'
 import { LegacyFAInput } from '../../components/edit/form/LegacyFAInput'
 import { getClimbById } from '../../js/graphql/api'
@@ -35,6 +35,7 @@ import { ClimbList } from '@/app/(default)/editArea/[slug]/general/components/cl
 import { getArea } from '@/js/graphql/getArea'
 import { climbLeftRightIndexComparator } from '@/js/utils'
 import { NeighboringRoutesNav } from '@/components/crag/NeighboringRoute'
+import { MapPinLine } from '@phosphor-icons/react/dist/ssr'
 
 export const CLIMB_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
@@ -110,7 +111,7 @@ const Body = ({ climb, leftClimb, rightClimb, parentArea }: ClimbPageProps): JSX
     id, name, fa: legacyFA, length, yds, grades, type, content, safety, metadata, ancestors, pathTokens, authorMetadata,
     parent
   } = climb
-  const { climbId } = metadata
+  const { lat, lng, climbId } = metadata
 
   const gradesObj = new Grade(parent.gradeContext, grades, type, parent.metadata.isBoulder)
 
@@ -287,10 +288,38 @@ const Body = ({ climb, leftClimb, rightClimb, parentArea }: ClimbPageProps): JSX
                     </div>)}
                 </div>
 
-                {(authorMetadata.createdAt != null || authorMetadata.updatedAt != null) &&
-                  <div className='mt-8  border-t border-b'>
-                    <ArticleLastUpdate {...authorMetadata} />
-                  </div>}
+                {/* trying to put my stuff here */}
+                <div className='mt-6 flex flex-col text-xs text-secondary border-t border-b divide-y'>
+                  <a
+                    href={getMapHref({
+                      lat,
+                      lng
+                    })}
+                    target='blank'
+                    className='flex items-center gap-2 py-3'
+                  >
+                    <MapPinLine size={20} />
+                    <span className='mt-0.5'>
+                      <b>LAT,LNG</b>&nbsp;
+                      <span className='link-dotted'>
+                        {(lat != null && lng != null)
+                          ? (
+                            <span className='link-dotted'>
+                              {lat.toFixed(5)}, {lng.toFixed(5)}
+                            </span>
+                            )
+                          : (
+                            <span className='link-dotted'>
+                              NA, NA
+                            </span>
+                            )}
+                      </span>
+                    </span>
+                  </a>
+
+                  {(authorMetadata.createdAt != null || authorMetadata.updatedAt != null) &&
+                    <ArticleLastUpdate {...authorMetadata} />}
+                </div>
 
                 {!editMode &&
                   <div className='mt-8'>
