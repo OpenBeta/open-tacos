@@ -259,6 +259,7 @@ Thanks goes to these wonderful people:
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/melissapthai"><img src="https://avatars.githubusercontent.com/u/3220734?v=4?s=100" width="100px;" alt="Melissa Thai"/><br /><sub><b>Melissa Thai</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=melissapthai" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/d-k-lippert"><img src="https://avatars.githubusercontent.com/u/51745385?v=4?s=100" width="100px;" alt="Dom Klip"/><br /><sub><b>Dom Klip</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=d-k-lippert" title="Code">💻</a> <a href="#ideas-d-k-lippert" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/salgadopietrini"><img src="https://avatars.githubusercontent.com/u/67206170?v=4?s=100" width="100px;" alt="Manuel Salgado"/><br /><sub><b>Manuel Salgado</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=salgadopietrini" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
