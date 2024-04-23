@@ -6,8 +6,9 @@ import { useSession } from 'next-auth/react'
 import * as Portal from '@radix-ui/react-portal'
 import { MapPinIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
+import { Summary } from '@/app/(default)/components/ui/Summary'
 
-import { AreaUpdatableFieldsType, AreaType, ClimbDisciplineRecord, ClimbDiscipline, ChangesetType } from '../../js/types'
+import { AreaUpdatableFieldsType, AreaType, ClimbDisciplineRecord, ClimbDiscipline, ChangesetType, AuthorMetadata, OrganizationType } from '../../js/types'
 import { IndividualClimbChangeInput, UpdateOneAreaInputType } from '../../js/graphql/gql/contribs'
 import { getMapHref, sortByLeftRightIndex, removeTypenameFromDisciplines } from '../../js/utils'
 import { AREA_NAME_FORM_VALIDATION_RULES, AREA_LATLNG_FORM_VALIDATION_RULES, AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '../edit/EditAreaForm'
@@ -409,91 +410,29 @@ export default function CragSummary ({ area, history }: CragSummaryProps): JSX.E
               </MobileDialog>
             )}
           </div>
-
-          <div className='area-climb-page-summary'>
-            <div className='area-climb-page-summary-left'>
-              <h1 className='text-4xl md:text-5xl'>
-                <InplaceTextInput
-                  initialValue={areaName}
-                  name='areaName'
-                  reset={resetSignal}
-                  editable={editMode}
-                  placeholder='Area name'
-                  rules={AREA_NAME_FORM_VALIDATION_RULES}
+          <Summary
+            columns={{
+              left: (
+                <AreaSection
+                  areaName={areaName}
+                  resetSignal={resetSignal}
+                  editMode={editMode}
+                  currentLatLngStr={currentLatLngStr}
+                  latlngPair={latlngPair}
+                  authorMetadata={authorMetadata}
+                  canChangeAreaType={canChangeAreaType}
                 />
-              </h1>
-
-              {editMode
-                ? (
-                  <InplaceTextInput
-                    initialValue={currentLatLngStr}
-                    name='latlng'
-                    reset={resetSignal}
-                    editable={editMode}
-                    placeholder='Enter a latitude,longitude. Ex: 46.433333,11.85'
-                    rules={AREA_LATLNG_FORM_VALIDATION_RULES}
-                  />
-                  )
-                : (
-                    latlngPair != null && (
-                      <div className='flex flex-col text-xs text-base-300 border-t border-b  divide-y'>
-                        <a
-                          href={getMapHref({
-                            lat: latlngPair[0],
-                            lng: latlngPair[1]
-                          })}
-                          target='blank'
-                          className='flex items-center gap-2 py-3'
-                        >
-                          <MapPinIcon className='w-5 h-5' />
-                          <span className='mt-0.5'>
-                            <b>LAT,LNG</b>&nbsp;
-                            <span className='link-dotted'>
-                              {latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}
-                            </span>
-                          </span>
-                        </a>
-                        <ArticleLastUpdate {...authorMetadata} />
-                      </div>
-                    )
-                  )}
-
-              {editMode && (
-                <div className='fadeinEffect'>
-                  <div className='mt-8'>
-                    <h3>Housekeeping</h3>
-                    <AreaDesignationRadioGroup disabled={!canChangeAreaType} />
-                  </div>
-                  <div className='mt-6 form-control'>
-                    <label className='label'>
-                      <span className='label-text font-semibold'>
-                        Permanently delete this area
-                      </span>
-                    </label>
-                    <div className='ml-2' id='deleteButtonPlaceholder' />
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className='area-climb-page-summary-right'>
-              {/* <div className='flex-1 flex justify-end'>
-        // vnguyen: temporarily removed until we have view favorites feature
-        <FavouriteButton areaId={props.areaMeta.areaId} />
-      </div> */}
-
-              <h3>Description</h3>
-
-              <InplaceEditor
-                initialValue={description}
-                name='description'
-                reset={resetSignal}
-                editable={editMode}
-                placeholder='Area description'
-                rules={AREA_DESCRIPTION_FORM_VALIDATION_RULES}
-              />
-              {!editMode && <LCOBanner orgs={organizations} />}
-            </div>
-          </div>
+              ),
+              right: (
+                <DescriptionSection
+                  description={description}
+                  resetSignal={resetSignal}
+                  editMode={editMode}
+                  organizations={organizations}
+                />
+              )
+            }}
+          />
 
           <div className='mt-4 block lg:hidden'>
             {/* Mobile-only */}
@@ -630,3 +569,92 @@ const AreaDesignationRadioGroup = dynamic<AreaDesignationRadioGroupProps>(
       (module) => module.AreaDesignationRadioGroup
     )
 )
+
+const AreaSection: React.FC<{ areaName: string, resetSignal: number, editMode: boolean, currentLatLngStr: string, latlngPair: [number, number] | null, authorMetadata: AuthorMetadata, canChangeAreaType: boolean }> = ({
+  areaName, resetSignal, editMode, currentLatLngStr, latlngPair, authorMetadata, canChangeAreaType
+}) => {
+  return (
+    <>
+      <h1 className='text-4xl md:text-5xl'>
+        <InplaceTextInput
+          initialValue={areaName}
+          name='areaName'
+          reset={resetSignal}
+          editable={editMode}
+          placeholder='Area name'
+          rules={AREA_NAME_FORM_VALIDATION_RULES}
+        />
+      </h1>
+
+      {editMode
+        ? (
+          <InplaceTextInput
+            initialValue={currentLatLngStr}
+            name='latlng'
+            reset={resetSignal}
+            editable={editMode}
+            placeholder='Enter a latitude,longitude. Ex: 46.433333,11.85'
+            rules={AREA_LATLNG_FORM_VALIDATION_RULES}
+          />
+          )
+        : (
+            latlngPair != null && (
+              <div className='flex flex-col text-xs text-base-300 border-t border-b  divide-y'>
+                <a
+                  href={getMapHref({
+                    lat: latlngPair[0],
+                    lng: latlngPair[1]
+                  })}
+                  target='blank'
+                  className='flex items-center gap-2 py-3'
+                >
+                  <MapPinIcon className='w-5 h-5' />
+                  <span className='mt-0.5'>
+                    <b>LAT,LNG</b>&nbsp;
+                    <span className='link-dotted'>
+                      {latlngPair[0].toFixed(5)}, {latlngPair[1].toFixed(5)}
+                    </span>
+                  </span>
+                </a>
+                <ArticleLastUpdate {...authorMetadata} />
+              </div>
+            )
+          )}
+
+      {editMode && (
+        <div className='fadeinEffect'>
+          <div className='mt-8'>
+            <h3>Housekeeping</h3>
+            <AreaDesignationRadioGroup disabled={!canChangeAreaType} />
+          </div>
+          <div className='mt-6 form-control'>
+            <label className='label'>
+              <span className='label-text font-semibold'>Permanently delete this area</span>
+            </label>
+            <div className='ml-2' id='deleteButtonPlaceholder' />
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
+const DescriptionSection: React.FC<{ description: string, resetSignal: number, editMode: boolean, organizations: OrganizationType[] }> = ({
+  description, resetSignal, editMode, organizations
+}) => {
+  return (
+    <>
+      <h3>Description</h3>
+
+      <InplaceEditor
+        initialValue={description}
+        name='description'
+        reset={resetSignal}
+        editable={editMode}
+        placeholder='Area description'
+        rules={AREA_DESCRIPTION_FORM_VALIDATION_RULES}
+      />
+      {!editMode && <LCOBanner orgs={organizations} />}
+    </>
+  )
+}
