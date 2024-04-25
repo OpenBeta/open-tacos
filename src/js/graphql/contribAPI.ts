@@ -10,7 +10,7 @@ export const getChangeHistoryServerSide = async (): Promise<ChangesetType[]> => 
     })
 
     if (Array.isArray(rs.data?.getChangeHistory)) {
-      return rs.data?.getChangeHistory.slice(0, 50)
+      return rs.data?.getChangeHistory.slice(0, 20)
     }
     console.log('WARNING: getChangeHistory() returns non-array data')
     return []
