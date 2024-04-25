@@ -1,12 +1,12 @@
 import { QUERY_RECENT_CHANGE_HISTORY } from './gql/contribs'
-import { graphqlClient } from './Client'
+import { getClient } from './ServerClient'
 import { ChangesetType } from '../types'
 
 export const getChangeHistoryServerSide = async (): Promise<ChangesetType[]> => {
   try {
-    const rs = await graphqlClient.query<{ getChangeHistory: ChangesetType[] }>({
-      query: QUERY_RECENT_CHANGE_HISTORY,
-      fetchPolicy: 'cache-first'
+    const rs = await getClient().query<{ getChangeHistory: ChangesetType[] }>({
+      query: QUERY_RECENT_CHANGE_HISTORY
+      // fetchPolicy: 'cache-first'
     })
 
     if (Array.isArray(rs.data?.getChangeHistory)) {
