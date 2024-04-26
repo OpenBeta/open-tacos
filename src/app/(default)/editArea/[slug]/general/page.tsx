@@ -19,7 +19,12 @@ export const fetchCache = 'force-no-store' // opt out of Nextjs version of 'fetc
 
 // Page metadata
 export async function generateMetadata ({ params }: DashboardPageProps): Promise<Metadata> {
-  const { area: { areaName } } = await getPageDataForEdit(params.slug, 'cache-first')
+  const pageDataForEdit = await getPageDataForEdit(params.slug, 'cache-first')
+  if (pageDataForEdit == null || pageDataForEdit.area == null) {
+    return {}
+  }
+
+  const { area: { areaName } } = pageDataForEdit
   return {
     title: `Editing area ${areaName}`
   }
@@ -32,7 +37,12 @@ export interface DashboardPageProps {
 }
 
 export default async function AreaEditPage ({ params }: DashboardPageProps): Promise<any> {
-  const { area } = await getPageDataForEdit(params.slug)
+  const pageDataForEdit = await getPageDataForEdit(params.slug)
+  if (pageDataForEdit == null || pageDataForEdit.area == null) {
+    notFound()
+  }
+
+  const { area } = pageDataForEdit
   const {
     areaName, uuid, ancestors, pathTokens, children,
     content: { description },
@@ -100,7 +110,7 @@ export const getPageDataForEdit = async (pageSlug: string, fetchPolicy?: FetchPo
   }
 
   const pageData = await getArea(pageSlug, fetchPolicy)
-  if (pageData == null) {
+  if (pageData == null || pageData.area == null) {
     notFound()
   }
   return pageData

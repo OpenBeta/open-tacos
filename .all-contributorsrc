@@ -722,6 +722,34 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "melissapthai",
+      "name": "Melissa Thai",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3220734?v=4",
+      "profile": "https://github.com/melissapthai",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "d-k-lippert",
+      "name": "Dom Klip",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51745385?v=4",
+      "profile": "https://github.com/d-k-lippert",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
+    },
+    {
+      "login": "salgadopietrini",
+      "name": "Manuel Salgado",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67206170?v=4",
+      "profile": "https://github.com/salgadopietrini",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -8,10 +8,11 @@ import * as Portal from '@radix-ui/react-portal'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useSwipeable } from 'react-swipeable'
 import { toast } from 'react-toastify'
+import { Summary } from '@/app/(default)/components/ui/Summary'
 import ArrowVertical from '../../assets/icons/arrow-vertical.svg'
 
 import Layout from '../../components/layout'
-import { AreaType, ClimbDisciplineRecord, ClimbType, RulesType } from '../../js/types'
+import { AreaType, AuthorMetadata, ClimbDisciplineRecord, ClimbType, RulesType, SafetyType } from '../../js/types'
 import SeoTags from '../../components/SeoTags'
 import RouteGradeChip from '../../components/ui/RouteGradeChip'
 import RouteTypeChips from '../../components/ui/RouteTypeChips'
@@ -244,120 +245,231 @@ const Body = ({ climb, leftClimb, rightClimb, parentArea }: ClimbPageProps): JSX
           <NeighboringRoutesNav climbs={[leftClimb, rightClimb]} parentArea={parentArea} />
 
           <div className='mt-4 text-right' id='editTogglePlaceholder' />
-
-          <div className='area-climb-page-summary'>
-            <div
-              id='Title Information'
-              className='area-climb-page-summary-left'
-            >
-
-              <h1 className='text-4xl md:text-5xl mr-10'>
-                <InplaceTextInput
-                  reset={resetSignal}
-                  name='name'
-                  editable={editMode}
-                  initialValue={cache.name}
-                  placeholder='Climb name'
-                  rules={AREA_NAME_FORM_VALIDATION_RULES}
+          <Summary
+            columns={{
+              left: (
+                <ClimbData
+                  resetSignal={resetSignal}
+                  editMode={editMode}
+                  cache={cache}
+                  isBouldering={isBouldering}
+                  gradesObj={gradesObj}
+                  safety={safety}
+                  disciplinesField={disciplinesField}
+                  length={length}
+                  legacyFA={legacyFA}
+                  authorMetadata={authorMetadata}
+                  climbId={climbId}
+                  name={name}
+                  yds={yds}
                 />
-              </h1>
-              <div className='mt-6'>
-                {editMode && isBouldering &&
-                  <BoulderingGradeInput gradeObj={gradesObj} />}
-                {editMode && !isBouldering &&
-                  <TradSportGradeInput gradeObj={gradesObj} />}
-                <div className='flex items-center space-x-2 w-full'>
-                  {!editMode && cache.gradeStr != null && <RouteGradeChip gradeStr={cache.gradeStr} safety={safety} />}
-                  {!editMode && <RouteTypeChips type={disciplinesField} />}
-                </div>
-
-                {length !== -1 && !editMode && (
-                  <div className='mt-6 inline-flex items-center justify-left border-2 border-neutral/80 rounded'>
-                    <ArrowVertical className='h-5 w-5' />
-                    <span className='bg-neutral/80 text-base-100 px-2 text-sm'>{length}m</span>
-                  </div>
-                )}
-                {editMode && <TotalLengthInput />}
-
-                <div className='mt-6'>{editMode
-                  ? (<LegacyFAInput />)
-                  : (
-                    <div className='text-sm font-medium text-base-content'>
-                      {trimLegacyFA(legacyFA)}
-                    </div>)}
-                </div>
-
-                {(authorMetadata.createdAt != null || authorMetadata.updatedAt != null) &&
-                  <div className='mt-8  border-t border-b'>
-                    <ArticleLastUpdate {...authorMetadata} />
-                  </div>}
-
-                {!editMode &&
-                  <div className='mt-8'>
-                    <TickButton climbId={climbId} name={name} grade={yds} />
-                  </div>}
-
-              </div>
-            </div>
-
-            <div className='area-climb-page-summary-right col-start-2 col-end-4 row-start-1 row-end-3'>
-              <div className='mb-3 flex justify-between items-center'>
-                <h3>Description</h3>
-              </div>
-              <Editor
-                reset={resetSignal}
-                initialValue={cache.description}
-                editable={editMode}
-                name='description'
-                placeholder={editMode ? 'Enter a description' : 'This climb is missing some beta. Turn on Edit mode and help us improve this page.'}
-                rules={CLIMB_DESCRIPTION_FORM_VALIDATION_RULES}
-              />
-
-              {(cache.location?.trim() !== '' || editMode) &&
-                  (
-                    <>
-                      <h3 className='mb-3 mt-6'>Location</h3>
-                      <Editor
-                        reset={resetSignal}
-                        name='location'
-                        initialValue={cache.location}
-                        editable={editMode}
-                        placeholder='How to find this climb'
-                        rules={CLIMB_LOCATION_FORM_VALIDATION_RULES}
-                      />
-
-                    </>
-                  )}
-
-              {(cache.protection?.trim() !== '' || editMode) &&
-                  (
-                    <>
-                      <h3 className='mb-3 mt-6'>Protection</h3>
-                      <Editor
-                        reset={resetSignal}
-                        name='protection'
-                        initialValue={cache.protection}
-                        editable={editMode}
-                        placeholder='Example: 16 quickdraws'
-                        rules={CLIMB_PROTECTON_FORM_VALIDATION_RULES}
-                      />
-                    </>
-                  )}
-
-              <div className='mt-4 block lg:hidden'>
-                {/* Mobile-only */}
-                {FormAction}
-              </div>
-            </div>
-            <div className='col-start-1 col-end-2 mt-8'>
-              <h4>Routes in {parentArea.areaName.includes(', The') ? 'The '.concat(parentArea.areaName.slice(0, -5)) : parentArea.areaName}</h4>
-              <hr className='mt-2 mb-2 border-1 border-base-content' />
-              {!editMode && <ClimbList gradeContext={parentArea.gradeContext} climbs={parentArea.climbs} areaMetadata={parentArea.metadata} editMode={editMode} routePageId={climbId} />}
-            </div>
-          </div>
+              ),
+              right: (
+                <DescriptionSection
+                  resetSignal={resetSignal}
+                  cache={cache}
+                  editMode={editMode}
+                  FormAction={FormAction}
+                />
+              )
+            }}
+          />
+          <Summary
+            columns={{ left: <Routes parentArea={parentArea} editMode={editMode} climbId={climbId} /> }}
+          />
         </form>
       </FormProvider>
     </div>
+  )
+}
+
+const DescriptionSection: React.FC<{
+  resetSignal: number
+  cache: {
+    disciplines: Partial<ClimbDisciplineRecord>
+    gradeStr: string | undefined
+    length?: number | undefined
+    legacyFA: string
+    description: string
+    location: string
+    protection: string
+    name: string
+  }
+  editMode: boolean
+  FormAction: React.JSX.Element
+}> = ({ resetSignal, cache, editMode, FormAction }) => {
+  return (
+    <>
+      <div className='mb-3 flex justify-between items-center'>
+        <h3>Description</h3>
+      </div>
+      <Editor
+        reset={resetSignal}
+        initialValue={cache.description}
+        editable={editMode}
+        name='description'
+        placeholder={
+          editMode
+            ? 'Enter a description'
+            : 'This climb is missing some beta. Turn on Edit mode and help us improve this page.'
+        }
+        rules={CLIMB_DESCRIPTION_FORM_VALIDATION_RULES}
+      />
+
+      {(cache.location?.trim() !== '' || editMode) && (
+        <>
+          <h3 className='mb-3 mt-6'>Location</h3>
+          <Editor
+            reset={resetSignal}
+            name='location'
+            initialValue={cache.location}
+            editable={editMode}
+            placeholder='How to find this climb'
+            rules={CLIMB_LOCATION_FORM_VALIDATION_RULES}
+          />
+        </>
+      )}
+
+      {(cache.protection?.trim() !== '' || editMode) && (
+        <>
+          <h3 className='mb-3 mt-6'>Protection</h3>
+          <Editor
+            reset={resetSignal}
+            name='protection'
+            initialValue={cache.protection}
+            editable={editMode}
+            placeholder='Example: 16 quickdraws'
+            rules={CLIMB_PROTECTON_FORM_VALIDATION_RULES}
+          />
+        </>
+      )}
+
+      <div className='mt-4 block lg:hidden'>
+        {/* Mobile-only */}
+        {FormAction}
+      </div>
+    </>
+  )
+}
+
+const Routes: React.FC<{ parentArea: AreaType, editMode: boolean, climbId: string }> = ({
+  parentArea,
+  editMode,
+  climbId
+}) => {
+  return (
+    <>
+      <h4>
+        Routes in{' '}
+        {parentArea.areaName.includes(', The')
+          ? 'The '.concat(parentArea.areaName.slice(0, -5))
+          : parentArea.areaName}
+      </h4>
+      <hr className='mt-2 mb-2 border-1 border-base-content' />
+      {!editMode && (
+        <ClimbList
+          gradeContext={parentArea.gradeContext}
+          climbs={parentArea.climbs}
+          areaMetadata={parentArea.metadata}
+          editMode={editMode}
+          routePageId={climbId}
+        />
+      )}
+    </>
+  )
+}
+
+const ClimbData: React.FC<{
+  resetSignal: number
+  editMode: boolean
+  cache: {
+    disciplines: Partial<ClimbDisciplineRecord>
+    gradeStr: string | undefined
+    length?: number | undefined
+    legacyFA: string
+    description: string
+    location: string
+    protection: string
+    name: string
+  }
+  isBouldering: boolean
+  gradesObj: Grade
+  safety: SafetyType
+  disciplinesField: ClimbDisciplineRecord
+  length: number
+  legacyFA: string
+  authorMetadata: AuthorMetadata
+  climbId: string
+  name: string
+  yds: string
+}> = ({
+  resetSignal,
+  editMode,
+  cache,
+  isBouldering,
+  gradesObj,
+  safety,
+  disciplinesField,
+  length,
+  legacyFA,
+  authorMetadata,
+  climbId,
+  name,
+  yds
+}) => {
+  return (
+    <>
+      <h1 className='text-4xl md:text-5xl mr-10'>
+        <InplaceTextInput
+          reset={resetSignal}
+          name='name'
+          editable={editMode}
+          initialValue={cache.name}
+          placeholder='Climb name'
+          rules={AREA_NAME_FORM_VALIDATION_RULES}
+        />
+      </h1>
+      <div className='mt-6'>
+        {editMode && isBouldering && <BoulderingGradeInput gradeObj={gradesObj} />}
+        {editMode && !isBouldering && <TradSportGradeInput gradeObj={gradesObj} />}
+        <div className='flex items-center space-x-2 w-full'>
+          {!editMode && cache.gradeStr != null && (
+            <RouteGradeChip gradeStr={cache.gradeStr} safety={safety} />
+          )}
+          {!editMode && <RouteTypeChips type={disciplinesField} />}
+        </div>
+
+        {length !== -1 && !editMode && (
+          <div className='mt-6 inline-flex items-center justify-left border-2 border-neutral/80 rounded'>
+            <ArrowVertical className='h-5 w-5' />
+            <span className='bg-neutral/80 text-base-100 px-2 text-sm'>{length}m</span>
+          </div>
+        )}
+        {editMode && <TotalLengthInput />}
+
+        <div className='mt-6'>
+          {editMode
+            ? (
+              <LegacyFAInput />
+              )
+            : (
+              <div className='text-sm font-medium text-base-content'>{trimLegacyFA(legacyFA)}</div>
+              )}
+        </div>
+
+        {(authorMetadata.createdAt != null || authorMetadata.updatedAt != null) && (
+          <div className='mt-8  border-t border-b'>
+            <ArticleLastUpdate {...authorMetadata} />
+          </div>
+        )}
+
+        {!editMode && (
+          <div className='mt-8'>
+            <TickButton climbId={climbId} name={name} grade={yds} />
+          </div>
+        )}
+      </div>
+    </>
   )
 }
 
@@ -389,6 +501,13 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
   }
 
   const parentAreaData = await getArea(climb.ancestors[climb.ancestors.length - 1], 'cache-first')
+
+  if (parentAreaData == null || parentAreaData.area == null) {
+    return {
+      notFound: true
+    }
+  }
+
   let leftClimb: ClimbType | null = null
   let rightClimb: ClimbType | null = null
 

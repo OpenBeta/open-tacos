@@ -1,11 +1,11 @@
 'use client'
 import { useCallback, useState } from 'react'
-import { Map, ScaleControl, FullscreenControl, NavigationControl, MapLayerMouseEvent, MapInstance } from 'react-map-gl/maplibre'
+import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, MapInstance } from 'react-map-gl/maplibre'
 import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import { Point, Polygon } from '@turf/helpers'
 import dynamic from 'next/dynamic'
 
-import { MAP_STYLES } from './MapSelector'
+import { MAP_STYLES, type MapStyles } from './MapSelector'
 import { AreaInfoDrawer } from './AreaInfoDrawer'
 import { AreaInfoHover } from './AreaInfoHover'
 import { SelectedFeature } from './AreaActiveMarker'
@@ -13,6 +13,7 @@ import { OBCustomLayers } from './OBCustomLayers'
 import { AreaType, ClimbType, MediaWithTags } from '@/js/types'
 import { TileProps, transformTileProps } from './utils'
 import Spinner from '../ui/Spinner'
+import MapLayersSelector from './MapLayersSelector'
 
 export type SimpleClimbType = Pick<ClimbType, 'id' | 'name' | 'type'>
 
@@ -71,8 +72,10 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   const [mapInstance, setMapInstance] = useState<MapInstance | null>(null)
   const [cursor, setCursor] = useState<string>('default')
   const [mapLoaded, setMapLoaded] = useState(false)
+  const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.standard.style)
 
   const onLoad = useCallback((e: MapLibreEvent) => {
+    if (e.target == null) return
     setMapInstance(e.target)
     if (initialCenter != null && initialZoom != null) {
       e.target.jumpTo({ center: initialCenter, zoom: initialZoom })
@@ -128,10 +131,14 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
     }
   }, [mapInstance])
 
+  const updateMapLayer = (key: keyof MapStyles): void => {
+    const style = MAP_STYLES[key]
+    setMapStyle(style.style)
+  }
+
   return (
     <div className='relative w-full h-full'>
       <Map
-        mapLib={maplibregl}
         id='global-map'
         onLoad={onLoad}
         initialViewState={{
@@ -163,14 +170,16 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
           setCursor('default')
         }}
         onClick={onClick}
-        reuseMaps
-        mapStyle={MAP_STYLES.dataviz}
+        mapStyle={mapStyle}
         cursor={cursor}
         cooperativeGestures={showFullscreenControl}
         interactiveLayerIds={['crags', 'crag-group-boundaries']}
       >
+        <MapLayersSelector emit={updateMapLayer} />
+        <ScaleControl unit='imperial' style={{ marginBottom: 10 }} position='bottom-left' />
+        <ScaleControl unit='metric' style={{ marginBottom: 0 }} position='bottom-left' />
+
         <OBCustomLayers />
-        <ScaleControl />
         {showFullscreenControl && <FullscreenControl />}
         <NavigationControl showCompass={false} position='bottom-right' />
         {selected != null &&

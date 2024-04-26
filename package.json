@@ -47,7 +47,7 @@
     "immer": "^10.0.2",
     "lexical": "^0.7.5",
     "mapbox-gl": "^2.7.0",
-    "maplibre-gl": "^4.0.2",
+    "maplibre-gl": "^4.1.1",
     "nanoid": "^4.0.0",
     "nanoid-dictionary": "^4.3.0",
     "next": "^13.5.6",

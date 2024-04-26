@@ -74,7 +74,7 @@ export const DesktopHeader: React.FC = () => {
       <div className='flex items-center gap-6'><Logo />
         <XSearchMinimal />
       </div>
-      <div className='menu menu-horizontal rounded-box gap-2'>{nav}</div>
+      <div className='menu menu-horizontal rounded-box gap-2 px-0'>{nav}</div>
     </header>
   )
 }

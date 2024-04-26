@@ -18,6 +18,7 @@ import { SubAreasSection } from './sections/SubAreasSection'
 import { ClimbListSection } from './sections/ClimbListSection'
 import { CLIENT_CONFIG } from '@/js/configs/clientConfig'
 import { PageBanner as LCOBanner } from '@/components/lco/PageBanner'
+import { AuthorMetadata, OrganizationType } from '@/js/types'
 /**
  * Page cache settings
  */
@@ -37,7 +38,7 @@ export interface PageWithCatchAllUuidProps {
 export default async function Page ({ params }: PageWithCatchAllUuidProps): Promise<any> {
   const areaUuid = parseUuidAsFirstParam({ params })
   const pageData = await getArea(areaUuid)
-  if (pageData == null) {
+  if (pageData == null || pageData.area == null) {
     notFound()
   }
 
@@ -77,55 +78,13 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
           area={area}
         />
       }
+      summary={{
+        left: <AreaData areaName={areaName} lat={lat} lng={lng} authorMetadata={authorMetadata} />,
+        right: (
+          <DescriptionSection uuid={uuid} description={description} organizations={organizations} />
+        )
+      }}
     >
-      <div className='area-climb-page-summary'>
-        <div className='area-climb-page-summary-left'>
-          <h1>{areaName}</h1>
-
-          <div className='mt-6 flex flex-col text-xs text-secondary border-t border-b divide-y'>
-            <a
-              href={getMapHref({
-                lat,
-                lng
-              })}
-              target='blank'
-              className='flex items-center gap-2 py-3'
-            >
-              <MapPinLine size={20} />
-              <span className='mt-0.5'>
-                <b>LAT,LNG</b>&nbsp;
-                <span className='link-dotted'>
-                  {lat.toFixed(5)}, {lng.toFixed(5)}
-                </span>
-              </span>
-            </a>
-            <ArticleLastUpdate {...authorMetadata} />
-          </div>
-        </div>
-
-        <div className='area-climb-page-summary-right'>
-          <div className='flex items-center gap-2'>
-            <h3 className='font-bold'>Description</h3>
-            <span className='text-xs inline-block align-baseline'>
-              [
-              <Link
-                href={`/editArea/${uuid}/general#description`}
-                target='_new'
-                className='hover:underline'
-              >
-                Edit
-              </Link>]
-            </span>
-          </div>
-          {(description == null || description.trim() === '') && <EditDescriptionCTA uuid={uuid} />}
-          <Markdown className='wiki-content'>{description}</Markdown>
-
-          <hr className='border-1 mt-8 mb-4' />
-
-          <LCOBanner orgs={organizations} />
-        </div>
-      </div>
-
       <hr className='border-1 my-8' />
 
       {/* An area can only have either subareas or climbs, but not both. */}
@@ -141,7 +100,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
  * Extract and validate uuid as the first param in a catch-all route
  */
 const parseUuidAsFirstParam = ({ params }: PageWithCatchAllUuidProps): string => {
-  if (params.slug.length === 0) {
+  if (params.slug == null || params.slug?.length === 0) {
     notFound()
   }
 
@@ -163,6 +122,65 @@ const EditDescriptionCTA: React.FC<{ uuid: string }> = ({ uuid }) => (
     </div>
   </div>
 )
+
+const DescriptionSection: React.FC<{ uuid: string, description: string, organizations: OrganizationType[] }> = ({
+  uuid, description, organizations
+}) => {
+  return (
+    <>
+      <div className='flex items-center gap-2'>
+        <h3 className='font-bold'>Description</h3>
+        <span className='text-xs inline-block align-baseline'>
+          [
+          <Link
+            href={`/editArea/${uuid}/general#description`}
+            target='_new'
+            className='hover:underline'
+          >
+            Edit
+          </Link>
+          ]
+        </span>
+      </div>
+      {(description == null || description.trim() === '') && <EditDescriptionCTA uuid={uuid} />}
+      <Markdown className='wiki-content'>{description}</Markdown>
+
+      <hr className='border-1 mt-8 mb-4' />
+
+      <LCOBanner orgs={organizations} />
+    </>
+  )
+}
+
+const AreaData: React.FC<{ areaName: string, lat: number, lng: number, authorMetadata: AuthorMetadata }> = ({
+  areaName, lat, lng, authorMetadata
+}) => {
+  return (
+    <>
+      <h1>{areaName}</h1>
+
+      <div className='mt-6 flex flex-col text-xs text-secondary border-t border-b divide-y'>
+        <a
+          href={getMapHref({
+            lat,
+            lng
+          })}
+          target='blank'
+          className='flex items-center gap-2 py-3'
+        >
+          <MapPinLine size={20} />
+          <span className='mt-0.5'>
+            <b>LAT,LNG</b>&nbsp;
+            <span className='link-dotted'>
+              {lat.toFixed(5)}, {lng.toFixed(5)}
+            </span>
+          </span>
+        </a>
+        <ArticleLastUpdate {...authorMetadata} />
+      </div>
+    </>
+  )
+}
 
 /**
  * List of area pages to prebuild
@@ -188,8 +206,13 @@ export function generateStaticParams (): PageSlugType[] {
 // Page metadata
 export async function generateMetadata ({ params }: PageWithCatchAllUuidProps): Promise<Metadata> {
   const areaUuid = parseUuidAsFirstParam({ params })
+  const area = await getArea(areaUuid, 'cache-first')
 
-  const { area: { uuid, areaName, pathTokens, media } } = await getArea(areaUuid, 'cache-first')
+  if (area == null || area.area == null) {
+    return {}
+  }
+
+  const { area: { uuid, areaName, pathTokens, media } } = area
 
   let wall = ''
   if (pathTokens.length >= 2) {
