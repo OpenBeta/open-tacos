@@ -6,7 +6,7 @@ export const getChangeHistoryServerSide = async (): Promise<ChangesetType[]> => 
   try {
     const rs = await getClient().query<{ getChangeHistory: ChangesetType[] }>({
       query: QUERY_RECENT_CHANGE_HISTORY,
-      fetchPolicy: 'cache-first'
+      fetchPolicy: 'no-cache'
     })
 
     if (Array.isArray(rs.data?.getChangeHistory)) {
