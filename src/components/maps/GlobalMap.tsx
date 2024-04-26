@@ -1,6 +1,6 @@
 'use client'
 import { useCallback, useState } from 'react'
-import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, MapInstance } from 'react-map-gl/maplibre'
+import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, MapInstance, MapEvent } from 'react-map-gl/maplibre'
 import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import { Point, Polygon } from '@turf/helpers'
 import dynamic from 'next/dynamic'
@@ -13,6 +13,7 @@ import { OBCustomLayers } from './OBCustomLayers'
 import { AreaType, ClimbType, MediaWithTags } from '@/js/types'
 import { TileProps, transformTileProps } from './utils'
 import MapLayersSelector from './MapLayersSelector'
+import { throttle } from 'underscore'
 
 export type SimpleClimbType = Pick<ClimbType, 'id' | 'name' | 'type'>
 
@@ -28,13 +29,23 @@ export interface HoverInfo {
   mapInstance: MapInstance
 }
 
+export interface CameraInfo {
+  center: {
+    lng: number
+    lat: number
+  }
+  zoom: number
+}
+
 interface GlobalMapProps {
   showFullscreenControl?: boolean
   initialCenter?: [number, number]
+  initialZoom?: number
   initialViewState?: {
     bounds: maplibregl.LngLatBoundsLike
     fitBoundsOptions: maplibregl.FitBoundsOptions
   }
+  onCameraMovement?: (camera: CameraInfo) => void
   children?: React.ReactNode
 }
 
@@ -42,7 +53,7 @@ interface GlobalMapProps {
  * Global map
  */
 export const GlobalMap: React.FC<GlobalMapProps> = ({
-  showFullscreenControl = true, initialCenter, initialViewState, children
+  showFullscreenControl = true, initialCenter, initialZoom, initialViewState, onCameraMovement, children
 }) => {
   const [clickInfo, setClickInfo] = useState<MapAreaFeatureProperties | null>(null)
   const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null)
@@ -51,11 +62,23 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   const [cursor, setCursor] = useState<string>('default')
   const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.standard.style)
 
+  const onRender = useCallback(throttle((e: MapEvent) => {
+    const zoom = e.target.getZoom()
+    const center = e.target.getCenter()
+
+    if (onCameraMovement != null) {
+      onCameraMovement({
+        center,
+        zoom
+      })
+    }
+  }, 300), [])
+
   const onLoad = useCallback((e: MapLibreEvent) => {
     if (e.target == null) return
     setMapInstance(e.target)
-    if (initialCenter != null) {
-      e.target.jumpTo({ center: initialCenter, zoom: 6 })
+    if (initialCenter != null && initialZoom != null) {
+      e.target.jumpTo({ center: initialCenter, zoom: initialZoom })
     } else if (initialViewState != null) {
       e.target.fitBounds(initialViewState.bounds, initialViewState.fitBoundsOptions)
     }
@@ -121,6 +144,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         onDragStart={() => {
           setCursor('move')
         }}
+        onRender={onRender}
         onDragEnd={() => {
           setCursor('default')
         }}
