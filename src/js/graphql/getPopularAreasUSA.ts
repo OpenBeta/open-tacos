@@ -1,7 +1,8 @@
 import { gql } from '@apollo/client'
 
 import { FRAGMENT_MEDIA_WITH_TAGS } from './gql/tags'
-import { graphqlClient } from './Client'
+import { getClientForServerComponent } from './ServerClient'
+
 import { AreaType } from '../types'
 
 /**
@@ -79,7 +80,7 @@ export interface USAToCProps {
 }
 
 export const getPopularAreasInUSA = async (): Promise<USAToCProps> => {
-  const rs = await graphqlClient.query<USAToCProps>({
+  const rs = await getClientForServerComponent().query<USAToCProps>({
     query,
     variables: {
       filter: {

@@ -18,7 +18,7 @@ interface GithubProfile {
  * managed by all-contributors bot.
  */
 export const Volunteers: React.FC = async () => {
-  const res = await fetch(url, { cache: 'no-store' })
+  const res = await fetch(url)
   const { contributors }: { contributors: GithubProfile[] } = await res.json()
   return (
     <SectionContainer
