@@ -7,7 +7,7 @@ if (uri === '' || uri == null) {
   throw new Error('NEXT_PUBLIC_API_SERVER is not set')
 }
 
-export const { getClient: getClientForServerComponent } = registerApolloClient(() => {
+export const { getClient } = registerApolloClient(() => {
   return new ApolloClient({
     cache: new InMemoryCache(),
     link: new HttpLink({
