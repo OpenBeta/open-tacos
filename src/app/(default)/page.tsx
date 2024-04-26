@@ -9,7 +9,7 @@ import { InternationalToC } from './components/InternationalToC'
 import { Volunteers } from './components/Volunteers'
 import { RecentContributionsMap } from './components/recent/RecentContributionsMap'
 
-export const revalidate = 86400
+export const revalidate = 300 // 86400
 /**
  * Root home page
  */
