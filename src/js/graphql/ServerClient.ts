@@ -13,7 +13,7 @@ export const { getClient } = registerApolloClient(() => {
     link: new HttpLink({
       uri,
       fetchOptions: {
-        next: { revalidate: 0 }
+        next: { revalidate: 3600 }
       }
     })
   })
