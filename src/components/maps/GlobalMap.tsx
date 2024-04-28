@@ -1,6 +1,6 @@
 'use client'
 import { useCallback, useState } from 'react'
-import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, MapInstance, MapEvent } from 'react-map-gl/maplibre'
+import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, MapInstance, ViewStateChangeEvent } from 'react-map-gl/maplibre'
 import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import { Point, Polygon } from '@turf/helpers'
 import dynamic from 'next/dynamic'
@@ -62,14 +62,14 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   const [cursor, setCursor] = useState<string>('default')
   const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.standard.style)
 
-  const onRender = useCallback(debounce((e: MapEvent) => {
-    const zoom = e.target.getZoom()
-    const center = e.target.getCenter()
-
+  const onMove = useCallback(debounce((e: ViewStateChangeEvent) => {
     if (onCameraMovement != null) {
       onCameraMovement({
-        center,
-        zoom
+        center: {
+          lat: e.viewState.latitude,
+          lng: e.viewState.longitude
+        },
+        zoom: e.viewState.zoom
       })
     }
   }, 300), [])
@@ -144,7 +144,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         onDragStart={() => {
           setCursor('move')
         }}
-        onRender={onRender}
+        onMove={onMove}
         onDragEnd={() => {
           setCursor('default')
         }}
