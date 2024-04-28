@@ -1,11 +1,11 @@
 import { RecentImageCard } from '@/components/home/RecentMediaCard'
-import { getMediaForFeed } from '@/js/graphql/api'
+import { getMediaForFeedSC } from '@/js/graphql/gql/serverApi'
 
 /**
  * Horizontal gallery of recent images with tags
  */
 export const RecentTags: React.FC = async () => {
-  const recentTagsByUsers = await getMediaForFeed(20, 4)
+  const recentTagsByUsers = await getMediaForFeedSC(20, 4)
   const testAreaIds = Array.from(new Set((process.env.NEXT_PUBLIC_TEST_AREA_IDS ?? '').split(',')))
   const mediaWithTags = recentTagsByUsers.flatMap(entry => entry.mediaWithTags)
 

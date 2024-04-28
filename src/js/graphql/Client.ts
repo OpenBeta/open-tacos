@@ -113,6 +113,11 @@ if (openCollectiveApiKey !== '') {
 }
 
 export const openCollectiveClient = new ApolloClient({
-  uri: openCollectiveUri,
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
+  link: new HttpLink({
+    uri: openCollectiveUri,
+    fetchOptions: {
+      next: { revalidate: 3600 }
+    }
+  })
 })
