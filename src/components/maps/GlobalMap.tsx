@@ -13,7 +13,7 @@ import { OBCustomLayers } from './OBCustomLayers'
 import { AreaType, ClimbType, MediaWithTags } from '@/js/types'
 import { TileProps, transformTileProps } from './utils'
 import MapLayersSelector from './MapLayersSelector'
-import { throttle } from 'underscore'
+import { debounce } from 'underscore'
 
 export type SimpleClimbType = Pick<ClimbType, 'id' | 'name' | 'type'>
 
@@ -62,7 +62,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   const [cursor, setCursor] = useState<string>('default')
   const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.standard.style)
 
-  const onRender = useCallback(throttle((e: MapEvent) => {
+  const onRender = useCallback(debounce((e: MapEvent) => {
     const zoom = e.target.getZoom()
     const center = e.target.getCenter()
 

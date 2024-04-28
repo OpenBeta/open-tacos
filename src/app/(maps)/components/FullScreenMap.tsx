@@ -61,9 +61,13 @@ function useCameraParams (): { toUrl: (camera: CameraInfo) => string, fromUrl: (
   function toUrl (camera: CameraInfo): string {
     const params = new URLSearchParams(initialSearchParams)
     params.delete('camera')
-    params.append('camera', cameraInfoToQuery(camera))
 
-    return `${pathname}?${params.toString()}`
+    const queryParams = [
+      params.toString(),
+      `camera=${cameraInfoToQuery(camera)}`
+    ]
+
+    return `${pathname}?${queryParams.filter(Boolean).join('&')}`
   }
 
   function fromUrl (): CameraInfo | null {
@@ -79,7 +83,7 @@ function useCameraParams (): { toUrl: (camera: CameraInfo) => string, fromUrl: (
 }
 
 const cameraInfoToQuery = ({ zoom, center }: CameraInfo): string => {
-  return `${Math.ceil(zoom)}/${center.lat.toPrecision(3)}/${center.lng.toPrecision(3)}`
+  return `${Math.ceil(zoom)}/${center.lat.toFixed(5)}/${center.lng.toFixed(5)}`
 }
 
 const queryToCameraInfo = (cameraParam: string): CameraInfo | null => {
