@@ -77,12 +77,12 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   const onLoad = useCallback((e: MapLibreEvent) => {
     if (e.target == null) return
     setMapInstance(e.target)
-    if (initialCenter != null && initialZoom != null) {
-      e.target.jumpTo({ center: initialCenter, zoom: initialZoom })
+    if (initialCenter != null) {
+      e.target.jumpTo({ center: initialCenter, zoom: initialZoom ?? 6 })
     } else if (initialViewState != null) {
       e.target.fitBounds(initialViewState.bounds, initialViewState.fitBoundsOptions)
     }
-  }, [initialCenter])
+  }, [initialCenter, initialZoom])
 
   /**
    * Handle click event on the map. Place a market on the map and activate the side drawer.
