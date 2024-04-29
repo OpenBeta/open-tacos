@@ -750,6 +750,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "svkorepanov",
+      "name": "Sergey Korepanov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38503175?v=4",
+      "profile": "https://github.com/svkorepanov",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
