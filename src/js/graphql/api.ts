@@ -3,6 +3,7 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
 import { AreaType, ClimbType, TickType, MediaByUsers, CountrySummaryType, MediaWithTags } from '../types'
 import { graphqlClient } from './Client'
+
 import { CORE_CRAG_FIELDS, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
 import { QUERY_MEDIA_FOR_FEED } from './gql/tags'
 import { QUERY_USER_MEDIA } from './gql/users'
@@ -91,8 +92,8 @@ export const getMediaForFeed = async (maxUsers: number, maxFiles: number): Promi
       variables: {
         maxUsers,
         maxFiles
-      },
-      fetchPolicy: 'network-only'
+      }
+      // fetchPolicy: 'network-only'
     })
 
     if (Array.isArray(rs.data?.getMediaForFeed)) {

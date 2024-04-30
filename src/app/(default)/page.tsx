@@ -9,10 +9,7 @@ import { InternationalToC } from './components/InternationalToC'
 import { Volunteers } from './components/Volunteers'
 import { RecentContributionsMap } from './components/recent/RecentContributionsMap'
 
-/**
- * Cache duration in seconds
- */
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600 // 1 hour
 
 /**
  * Root home page

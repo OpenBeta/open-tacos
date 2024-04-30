@@ -22,7 +22,7 @@ import { AuthorMetadata, OrganizationType } from '@/js/types'
 /**
  * Page cache settings
  */
-export const revalidate = 86400 // 24 hours
+export const revalidate = 300 // 5 mins
 export const fetchCache = 'force-no-store' // opt out of Nextjs version of 'fetch'
 
 interface PageSlugType {

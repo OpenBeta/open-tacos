@@ -1,4 +1,5 @@
 import clx from 'classnames'
+import Link from 'next/link'
 
 import OpenBetaLogo from '@/assets/brand/openbeta-logo'
 import { DesktopHeader } from './components/DesktopHeader'
@@ -26,9 +27,9 @@ export enum LogoSize {
  */
 export const Logo: React.FC<{ size?: LogoSize, className?: string, withText?: boolean }> = ({ size = LogoSize.sm, className, withText = false }) => {
   return (
-    <a href='/' className='flex items-center gap-2'>
+    <Link href='/' className='flex items-center gap-2'>
       <OpenBetaLogo className={clx(size, className)} />
       {withText && <span className='font-bold text-lg tracking-tight'>OpenBeta</span>}
-    </a>
+    </Link>
   )
 }

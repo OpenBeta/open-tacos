@@ -15,6 +15,8 @@ export async function GET (request: NextRequest): Promise<any> {
   } else {
     revalidatePath(`/area/${uuid}`, 'page')
     revalidatePath(`/editArea/${uuid}`, 'layout')
+    revalidatePath('/', 'page')
+    revalidatePath('/edit', 'page')
     return NextResponse.json({ message: 'OK' }, { status: 200 })
   }
 }

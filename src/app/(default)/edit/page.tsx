@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: 'Share your climbing adventure photos and contribute to the climbing route catalog.'
 }
 
-export const revalidate = 3600
+export const revalidate = 600
 
 export default async function Page (): Promise<ReactElement> {
   const history = await getChangeHistoryServerSide()
