@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { EntityTag, TagTargetType, UserMedia } from '../../types'
+import { AnyJson, EntityTag, TagTargetType, UserMedia } from '../../types'
 
 export const FRAGMENT_ENTITY_TAG = gql`
   fragment EntityTagFields on EntityTag {
@@ -9,6 +9,7 @@ export const FRAGMENT_ENTITY_TAG = gql`
     areaName
     ancestors
     type
+    topoData
   }
 `
 
@@ -30,6 +31,7 @@ export interface AddEntityTagProps {
   mediaId: string
   entityId: string
   entityType: TagTargetType
+  topoData?: AnyJson
 }
 
 /**
@@ -45,12 +47,13 @@ export interface AddEntityTagMutationReturn {
  */
 export const MUTATION_ADD_ENTITY_TAG = gql`
   ${FRAGMENT_ENTITY_TAG}
-  mutation addEntityTag($mediaId: ID!, $entityId: ID!, $entityType: Int!) {
+  mutation addEntityTag($mediaId: ID!, $entityId: ID!, $entityType: Int!, $topoData: JSONObject) {
     addEntityTag(
       input: {
         mediaId: $mediaId,
         entityId: $entityId,
         entityType: $entityType
+        topoData: $topoData
       }
     ) {
         ... EntityTagFields
