@@ -8,6 +8,11 @@ import { GradeContexts } from './grades/Grade'
 
 export type { IUserProfile }
 export { UserRole }
+
+export type AnyJson = boolean | number | string | null | JsonArray | JsonMap
+export interface JsonMap { [key: string]: AnyJson }
+export interface JsonArray extends Array<AnyJson> {}
+
 export interface AreaMetadataType {
   leaf: boolean
   isDestination: boolean
@@ -250,6 +255,7 @@ export interface EntityTag {
   ancestors: string
   climbName?: string
   areaName: string
+  topoData?: AnyJson
 }
 
 export enum MediaFormat {
