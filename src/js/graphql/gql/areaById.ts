@@ -1,12 +1,11 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_AUTHOR_METADATA, FRAGMENT_CHANGE_HISTORY } from './contribs'
+import { FRAGMENT_AUTHOR_METADATA } from './contribs'
 import { FRAGMENT_MEDIA_WITH_TAGS } from './tags'
 import { FRAGMENT_CLIMB_DISCIPLINES } from './climbById'
 
 export const QUERY_AREA_BY_ID = gql`
   ${FRAGMENT_CLIMB_DISCIPLINES}
-  ${FRAGMENT_CHANGE_HISTORY}
   ${FRAGMENT_MEDIA_WITH_TAGS}
   ${FRAGMENT_AUTHOR_METADATA}
   query ($uuid: ID) {
@@ -118,9 +117,6 @@ export const QUERY_AREA_BY_ID = gql`
       authorMetadata {
         ... AuthorMetadataFields
       }
-    }
-    getAreaHistory(filter: {areaId: $uuid}) {
-       ...ChangeHistoryFields
     }
   }
   `
