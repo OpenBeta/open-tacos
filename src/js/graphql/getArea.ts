@@ -3,11 +3,10 @@ import { FetchPolicy } from '@apollo/client'
 import { QUERY_AREA_BY_ID } from './gql/areaById'
 import { QUERY_CHILD_AREAS_FOR_BREADCRUMBS, ChildAreasQueryReturn, AreaWithChildren } from './gql/breadcrumbs'
 import { graphqlClient } from './Client'
-import { AreaType, ChangesetType } from '../types'
+import { AreaType } from '../types'
 
 export interface AreaPageDataProps {
   area: AreaType | null
-  getAreaHistory: ChangesetType[]
 }
 
 /**
@@ -26,7 +25,7 @@ export const getArea = async (uuid: string, fetchPolicy: FetchPolicy = 'no-cache
     return rs.data
   } catch (error) {
     console.error(error)
-    return { area: null, getAreaHistory: [] }
+    return { area: null }
   }
 }
 
