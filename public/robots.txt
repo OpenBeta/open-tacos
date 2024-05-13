@@ -1,10 +1,9 @@
 User-agent: PetalBot
-Disallow: /
-
 User-agent: SemrushBot
-Disallow: /
-
 User-agent: AhrefsBot
+User-agent: Dotbot
+User-agent: MJ12bot
+User-agent: rogerbot
 ​Disallow: /
 
 User-agent: *
