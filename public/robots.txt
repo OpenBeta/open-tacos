@@ -1,5 +1,10 @@
 User-agent: PetalBot
-Disallow: /
+User-agent: SemrushBot
+User-agent: AhrefsBot
+User-agent: Dotbot
+User-agent: MJ12bot
+User-agent: rogerbot
+​Disallow: /
 
 User-agent: *
 Disallow: /account/
