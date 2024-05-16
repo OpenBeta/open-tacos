@@ -1,6 +1,6 @@
 'use client'
 import { useCallback, useState } from 'react'
-import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, ViewStateChangeEvent, Marker, Popup } from 'react-map-gl/maplibre'
+import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, ViewStateChangeEvent, Marker, Popup, MarkerDragEvent } from 'react-map-gl/maplibre'
 import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
 import { debounce } from 'underscore'
@@ -86,6 +86,11 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
     setMapStyle(style.style)
   }
 
+  const onMarkerDragEnd = (event: MarkerDragEvent): void => {
+    const { lngLat } = event
+    setSelectedCoord([lngLat.lng, lngLat.lat])
+  }
+
   return (
     <div className='relative w-full h-full'>
       <Map
@@ -111,7 +116,7 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         <NavigationControl showCompass={false} position='bottom-right' />
         {(selectedCoord != null) && (
           <>
-            <Marker longitude={selectedCoord[0]} latitude={selectedCoord[1]} />
+            <Marker longitude={selectedCoord[0]} latitude={selectedCoord[1]} draggable onDragEnd={onMarkerDragEnd} />
             <Popup longitude={selectedCoord[0]} latitude={selectedCoord[1]} closeOnClick={false} anchor='top'>
               <div>
                 <p>Coordinates: {selectedCoord[1].toFixed(5)}, {selectedCoord[0].toFixed(5)}</p>
