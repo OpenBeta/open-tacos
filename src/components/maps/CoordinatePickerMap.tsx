@@ -74,7 +74,7 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
 
   const confirmSelection = (): void => {
     if (selectedCoord != null) {
-      setValue('latlngStr', `${selectedCoord[1].toFixed(5)},${selectedCoord[0].toFixed(5)}`)
+      setValue('latlngStr', `${selectedCoord[1].toFixed(5)},${selectedCoord[0].toFixed(5)}`, { shouldDirty: true, shouldValidate: true })
     }
     if ((onCoordinateConfirmed != null) && (selectedCoord != null)) {
       onCoordinateConfirmed(selectedCoord)
