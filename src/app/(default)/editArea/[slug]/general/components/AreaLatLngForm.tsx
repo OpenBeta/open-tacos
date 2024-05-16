@@ -1,11 +1,14 @@
 'use client'
 import { useSession } from 'next-auth/react'
+import { useState } from 'react'
+import { MobileDialog, DialogContent, DialogTrigger } from '@/components/ui/MobileDialog'
 
 import { SingleEntryForm } from '@/app/(default)/editArea/[slug]/components/SingleEntryForm'
 import { AREA_LATLNG_FORM_VALIDATION_RULES } from '@/components/edit/EditAreaForm'
 import { DashboardInput } from '@/components/ui/form/Input'
 import useUpdateAreasCmd from '@/js/hooks/useUpdateAreasCmd'
 import { parseLatLng } from '@/components/crag/cragSummary'
+import { GlobalMap } from '@/components/maps/GlobalMap'
 
 export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: string, isLeaf: boolean }> = ({ uuid, initLat, initLng, isLeaf }) => {
   const session = useSession({ required: true })
@@ -15,6 +18,8 @@ export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: 
   }
   )
   const latlngStr = `${initLat.toString()},${initLng.toString()}`
+  const [pickerSelected, setPickerSelected] = useState(false)
+
   return (
     <SingleEntryForm<{ latlngStr: string }>
       initialValues={{ latlngStr }}
@@ -30,14 +35,32 @@ export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: 
       }}
     >
       {isLeaf
-        ? (<DashboardInput
-            name='latlngStr'
-            label='Coordinates in latitude, longitude format.'
-            className='w-80'
-            registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
-            readOnly={!isLeaf}
-           />)
-        : (<p className='text-secondary'>Coordinates field available only when area type is either 'Crag' or 'Boulder'.</p>)}
+        ? (
+          <div className='flex items-end'>
+            <DashboardInput
+              name='latlngStr'
+              label='Coordinates in latitude, longitude format.'
+              className='w-80'
+              registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
+              readOnly={!isLeaf}
+            />
+            <MobileDialog open={pickerSelected} onOpenChange={setPickerSelected}>
+              <DialogTrigger asChild>
+                <button type='button' onClick={() => setPickerSelected(true)} className='btn btn-link'>
+                  Picker
+                </button>
+              </DialogTrigger>
+              <DialogContent>
+                <div className='w-full h-80'>
+                  <GlobalMap />
+                </div>
+              </DialogContent>
+            </MobileDialog>
+          </div>
+          )
+        : (
+          <p className='text-secondary'>Coordinates field available only when area type is either 'Crag' or 'Boulder'.</p>
+          )}
     </SingleEntryForm>
   )
 }
