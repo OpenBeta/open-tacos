@@ -8,9 +8,9 @@ import { AREA_LATLNG_FORM_VALIDATION_RULES } from '@/components/edit/EditAreaFor
 import { DashboardInput } from '@/components/ui/form/Input'
 import useUpdateAreasCmd from '@/js/hooks/useUpdateAreasCmd'
 import { parseLatLng } from '@/components/crag/cragSummary'
-import { GlobalMap } from '@/components/maps/GlobalMap'
+import { CoordinatePickerMap } from '@/components/maps/CoordinatePickerMap'
 
-export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: string, isLeaf: boolean }> = ({ uuid, initLat, initLng, isLeaf }) => {
+export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: string, isLeaf: boolean, areaName: string }> = ({ uuid, initLat, initLng, isLeaf, areaName }) => {
   const session = useSession({ required: true })
   const { updateOneAreaCmd } = useUpdateAreasCmd({
     areaId: uuid,
@@ -50,9 +50,15 @@ export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: 
                   Picker
                 </button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent title={`Pick location for ${areaName}`}>
                 <div className='w-full h-80'>
-                  <GlobalMap />
+                  <CoordinatePickerMap
+                    initialCenter={[initLng, initLat]}
+                    initialZoom={14}
+                    onCoordinateConfirmed={(coord) => {
+                      setPickerSelected(false)
+                    }}
+                  />
                 </div>
               </DialogContent>
             </MobileDialog>
