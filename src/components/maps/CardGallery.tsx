@@ -3,7 +3,7 @@ import Image from 'next/image'
 import clx from 'classnames'
 
 import { usePrevNextButtons, PrevButton, NextButton } from '../carousel/useNextPrevButtons'
-import { MediaWithTagsInMapTile } from './GlobalMap'
+import { MediaWithTagsInMapTile } from './TileTypes'
 
 export const CardGallery: React.FC<{ media: MediaWithTagsInMapTile[] }> = () => {
   return (
