@@ -1,25 +1,9 @@
-import * as Popover from '@radix-ui/react-popover'
-
-import { MapAreaFeatureProperties, SimpleClimbType } from './GlobalMap'
+import { CragFeatureProperties, SimpleClimbType } from '../TileTypes'
 import { getAreaPageFriendlyUrl } from '@/js/utils'
-import { Card } from '../core/Card'
+import { Card } from '../../core/Card'
 import { EntityIcon } from '@/app/(default)/editArea/[slug]/general/components/AreaItem'
 
-/**
- * Area info panel
- */
-export const AreaInfoDrawer: React.FC<{ data: MapAreaFeatureProperties | null, onClose?: () => void }> = ({ data, onClose }) => {
-  return (
-    <Popover.Root open={data != null}>
-      <Popover.Anchor className='absolute top-3 left-3 z-50' />
-      <Popover.Content align='start' className='hover:outline-none'>
-        {data != null && <Content {...data} />}
-      </Popover.Content>
-    </Popover.Root>
-  )
-}
-
-export const Content: React.FC<MapAreaFeatureProperties> = ({ id, areaName, climbs, content: { description }, media }) => {
+export const CragPanelContent: React.FC<CragFeatureProperties> = ({ id, areaName, climbs, content: { description }, media }) => {
   const friendlyUrl = getAreaPageFriendlyUrl(id, areaName)
   const editUrl = `/editArea/${id}/general`
   return (

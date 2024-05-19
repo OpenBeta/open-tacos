@@ -1,11 +1,12 @@
 import { Marker, Source, Layer, LineLayer } from 'react-map-gl'
+import { Geometry } from 'geojson'
 import { Point, Polygon } from '@turf/helpers'
 import { MapPin } from '@phosphor-icons/react/dist/ssr'
 
 /**
  * Highlight selected feature on the map
  */
-export const SelectedFeature: React.FC<{ geometry: Point | Polygon }> = ({ geometry }) => {
+export const SelectedFeature: React.FC<{ geometry: Geometry }> = ({ geometry }) => {
   switch (geometry.type) {
     case 'Point':
       return <SelectedPoint geometry={geometry} />

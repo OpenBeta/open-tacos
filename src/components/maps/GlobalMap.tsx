@@ -2,32 +2,19 @@
 import { useCallback, useState } from 'react'
 import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, MapInstance, ViewStateChangeEvent } from 'react-map-gl/maplibre'
 import maplibregl, { MapLibreEvent } from 'maplibre-gl'
-import { Point, Polygon } from '@turf/helpers'
 import dynamic from 'next/dynamic'
+import { Geometry } from 'geojson'
 
 import { MAP_STYLES, type MapStyles } from './MapSelector'
-import { AreaInfoDrawer } from './AreaInfoDrawer'
-import { AreaInfoHover } from './AreaInfoHover'
+import { AreaInfoDrawer } from './TileHandlers/AreaInfoDrawer'
+import { AreaInfoHover } from './TileHandlers/AreaInfoHover'
 import { SelectedFeature } from './AreaActiveMarker'
 import { OBCustomLayers } from './OBCustomLayers'
-import { AreaType, ClimbType, MediaWithTags } from '@/js/types'
-import { TileProps, transformTileProps } from './utils'
+import { tileToFeature } from './utils'
+import { ActiveFeature, TileProps } from './TileTypes'
 import MapLayersSelector from './MapLayersSelector'
 import { debounce } from 'underscore'
-
-export type SimpleClimbType = Pick<ClimbType, 'id' | 'name' | 'type'>
-
-export type MediaWithTagsInMapTile = Omit<MediaWithTags, 'id'> & { _id: string }
-export type MapAreaFeatureProperties = Pick<AreaType, 'id' | 'areaName' | 'content' | 'ancestors' | 'pathTokens'> & {
-  climbs: SimpleClimbType[]
-  media: MediaWithTagsInMapTile[]
-}
-
-export interface HoverInfo {
-  geometry: Point | Polygon
-  data: MapAreaFeatureProperties
-  mapInstance: MapInstance
-}
+import { MapToolbar } from './MapToolbar'
 
 export interface CameraInfo {
   center: {
@@ -37,6 +24,10 @@ export interface CameraInfo {
   zoom: number
 }
 
+export interface DataLayersDisplayState {
+  cragGroups: boolean
+  organizations: boolean
+}
 interface GlobalMapProps {
   showFullscreenControl?: boolean
   initialCenter?: [number, number]
@@ -55,12 +46,16 @@ interface GlobalMapProps {
 export const GlobalMap: React.FC<GlobalMapProps> = ({
   showFullscreenControl = true, initialCenter, initialZoom, initialViewState, onCameraMovement, children
 }) => {
-  const [clickInfo, setClickInfo] = useState<MapAreaFeatureProperties | null>(null)
-  const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null)
-  const [selected, setSelected] = useState<Point | Polygon | null>(null)
+  const [clickInfo, setClickInfo] = useState<ActiveFeature | null>(null)
+  const [hoverInfo, setHoverInfo] = useState < ActiveFeature | null>(null)
+  const [selected, setSelected] = useState<Geometry | null>(null)
   const [mapInstance, setMapInstance] = useState<MapInstance | null>(null)
   const [cursor, setCursor] = useState<string>('default')
   const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.standard.style)
+  const [dataLayersDisplayState, setDataLayersDisplayState] = useState<DataLayersDisplayState>({
+    cragGroups: false,
+    organizations: false
+  })
 
   const onMove = useCallback(debounce((e: ViewStateChangeEvent) => {
     if (onCameraMovement != null) {
@@ -89,41 +84,36 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
    */
   const onClick = useCallback((event: MapLayerMouseEvent): void => {
     const feature = event?.features?.[0]
-    if (feature == null) {
+    if (feature == null || mapInstance == null) {
       setSelected(null)
       setClickInfo(null)
     } else {
-      setSelected(feature.geometry as Point | Polygon)
-      setClickInfo(transformTileProps(feature.properties as TileProps))
+      const { layer, geometry, properties } = feature
+      setSelected(feature.geometry)
+      setClickInfo(tileToFeature(layer.id, event.point, geometry, properties as TileProps, mapInstance))
     }
   }, [mapInstance])
 
   /**
    * Handle click event on the popover.  Behave as if the user clicked on a feature on the map.
    */
-  const onHoverCardClick = ({ geometry, data }: HoverInfo): void => {
-    setSelected(geometry)
-    setClickInfo(data)
+  const onHoverCardClick = (feature: ActiveFeature): void => {
+    setSelected(feature.geometry)
+    setClickInfo(feature)
   }
 
   /**
    * Handle over event on the map.  Show the popover with the area info.
    */
   const onHover = useCallback((event: MapLayerMouseEvent) => {
-    const obLayerId = event.features?.findIndex((f) => f.layer.id === 'crags' || f.layer.id === 'crag-group-boundaries') ?? -1
+    const obLayerId = event.features?.findIndex((f) => f.layer.id === 'crag-markers' || f.layer.id === 'crag-name-labels' || f.layer.id === 'crag-group-boundaries') ?? -1
 
     if (obLayerId !== -1) {
       setCursor('pointer')
       const feature = event.features?.[obLayerId]
       if (feature != null && mapInstance != null) {
-        const { geometry } = feature
-        if (geometry.type === 'Point' || geometry.type === 'Polygon') {
-          setHoverInfo({
-            geometry: feature.geometry as Point | Polygon,
-            data: transformTileProps(feature.properties as TileProps),
-            mapInstance
-          })
-        }
+        const { layer, geometry, properties } = feature
+        setHoverInfo(tileToFeature(layer.id, event.point, geometry, properties as TileProps, mapInstance))
       }
     } else {
       setHoverInfo(null)
@@ -157,18 +147,19 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         mapStyle={mapStyle}
         cursor={cursor}
         cooperativeGestures={showFullscreenControl}
-        interactiveLayerIds={['crags', 'crag-group-boundaries']}
+        interactiveLayerIds={['crag-markers', 'crag-name-labels', 'crag-group-boundaries', 'organizations']}
       >
+        <MapToolbar layerState={dataLayersDisplayState} onChange={setDataLayersDisplayState} />
         <MapLayersSelector emit={updateMapLayer} />
         <ScaleControl unit='imperial' style={{ marginBottom: 10 }} position='bottom-left' />
         <ScaleControl unit='metric' style={{ marginBottom: 0 }} position='bottom-left' />
 
-        <OBCustomLayers />
+        <OBCustomLayers layersState={dataLayersDisplayState} />
         {showFullscreenControl && <FullscreenControl />}
         <NavigationControl showCompass={false} position='bottom-right' />
         {selected != null &&
           <SelectedFeature geometry={selected} />}
-        <AreaInfoDrawer data={clickInfo} />
+        <AreaInfoDrawer feature={clickInfo} />
         {hoverInfo != null && (
           <AreaInfoHover
             {...hoverInfo}
