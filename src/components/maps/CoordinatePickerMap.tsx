@@ -32,7 +32,8 @@ interface CoordinatePickerMapProps {
 }
 
 /**
- * Coordinate Picker Map
+ * Map for picking coordinates to update the AreaLatLngForm component.
+ * Allows user to place a marker on the map and confirm the selection.
  */
 export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
   showFullscreenControl = true, initialCenter, initialZoom, initialViewState, onCameraMovement, onCoordinateConfirmed, children

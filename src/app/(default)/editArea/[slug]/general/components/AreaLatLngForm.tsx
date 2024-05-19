@@ -9,16 +9,17 @@ import { DashboardInput } from '@/components/ui/form/Input'
 import useUpdateAreasCmd from '@/js/hooks/useUpdateAreasCmd'
 import { parseLatLng } from '@/components/crag/cragSummary'
 import { CoordinatePickerMap } from '@/components/maps/CoordinatePickerMap'
+import { useResponsive } from '@/js/hooks'
 
 export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: string, isLeaf: boolean, areaName: string }> = ({ uuid, initLat, initLng, isLeaf, areaName }) => {
   const session = useSession({ required: true })
   const { updateOneAreaCmd } = useUpdateAreasCmd({
     areaId: uuid,
     accessToken: session?.data?.accessToken as string
-  }
-  )
+  })
   const latlngStr = `${initLat.toString()},${initLng.toString()}`
   const [pickerSelected, setPickerSelected] = useState(false)
+  const { isMobile } = useResponsive()
 
   return (
     <SingleEntryForm<{ latlngStr: string }>
@@ -40,7 +41,6 @@ export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: 
             <DashboardInput
               name='latlngStr'
               label='Coordinates in latitude, longitude format.'
-              className='w-80'
               registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
               readOnly={!isLeaf}
             />
@@ -50,15 +50,17 @@ export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: 
                   Picker
                 </button>
               </DialogTrigger>
-              <DialogContent title={`Pick location for ${areaName}`}>
-                <div className='w-full h-80'>
-                  <CoordinatePickerMap
-                    initialCenter={[initLng, initLat]}
-                    initialZoom={14}
-                    onCoordinateConfirmed={(coord) => {
-                      setPickerSelected(false)
-                    }}
-                  />
+              <DialogContent title={`Pick location for  ${areaName}`} fullScreen={!!isMobile}>
+                <div className='w-full h-100vh'>
+                  <div className='h-[90vh] w-full'>
+                    <CoordinatePickerMap
+                      initialCenter={[initLng, initLat]}
+                      initialZoom={14}
+                      onCoordinateConfirmed={(coord) => {
+                        setPickerSelected(false)
+                      }}
+                    />
+                  </div>
                 </div>
               </DialogContent>
             </MobileDialog>
