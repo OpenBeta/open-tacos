@@ -11,11 +11,15 @@ export const AreaInfoDrawer: React.FC<{ feature: ActiveFeature | null, onClose?:
   if (feature == null) return null
   let ContentComponent = null
   switch (feature.type) {
-    case 'crags':
+    case 'crag-markers':
+    case 'crag-name-labels':
       ContentComponent = <CragPanelContent {...(feature.data as CragFeatureProperties)} />
       break
-    case 'crag-groups':
+    case 'area-boundaries':
       ContentComponent = <CragGroupPanelContent {...(feature.data as CragGroupFeatureProps)} />
+      break
+    default:
+      return null
   }
   return (
     <Popover.Root open={feature != null}>

@@ -17,7 +17,7 @@ export const MapToolbar: React.FC<MapToolbarProps> = ({ onChange, layerState }) 
           <input
             type='checkbox' className='checkbox' checked={cragGroups}
             onChange={() => onChange({ ...layerState, cragGroups: !cragGroups })}
-          /> Crag groups
+          /> Area boundaries
         </li>
       </ul>
     </div>

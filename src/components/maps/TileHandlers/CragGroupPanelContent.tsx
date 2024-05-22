@@ -3,7 +3,7 @@ import { getAreaPageFriendlyUrl } from '@/js/utils'
 import { Card } from '../../core/Card'
 import { EntityIcon } from '@/app/(default)/editArea/[slug]/general/components/AreaItem'
 
-export const CragGroupPanelContent: React.FC<CragGroupFeatureProps> = ({ id, name, children }) => {
+export const CragGroupPanelContent: React.FC<CragGroupFeatureProps> = ({ uuid: id, areaName: name, children }) => {
   const friendlyUrl = getAreaPageFriendlyUrl(id, name)
   const editUrl = `/editArea/${id}/general`
   console.log('#children', children)

@@ -2,7 +2,7 @@ import { Point, Polygon } from '@turf/helpers'
 import { MapInstance } from 'react-map-gl/maplibre'
 import { AreaType, ClimbType, MediaWithTags } from '@/js/types'
 
-export type LayerId = 'crag-markers' | 'crag-name-labels' | 'crag-group-boundaries'
+export type LayerId = 'crag-markers' | 'crag-name-labels' | 'area-boundaries'
 
 export type TileProps = CragTileProps | CragGroupTileProps
 
@@ -17,8 +17,8 @@ export interface CragTileProps {
 }
 
 export interface CragGroupTileProps {
-  id: string
-  name: string
+  uuid: string
+  areaName: string
   children: string
 }
 
@@ -30,20 +30,20 @@ export type CragFeatureProperties = Pick<AreaType, 'id' | 'areaName' | 'content'
   media: MediaWithTagsInMapTile[]
 }
 export interface SimpleCragType {
-  id: string
-  name: string
+  uuid: string
+  areaName: string
 }
 
 export interface CragGroupFeatureProps {
-  id: string
-  name: string
+  uuid: string
+  areaName: string
   children: SimpleCragType[]
 }
 
 export type FeatureProps = CragGroupFeatureProps | CragFeatureProperties
 
 export interface ActiveFeature {
-  type: 'crags' | 'crag-groups' // typically name of the data layer
+  type: LayerId
   point: { x: number, y: number }
   geometry: Point | Polygon
   data: FeatureProps

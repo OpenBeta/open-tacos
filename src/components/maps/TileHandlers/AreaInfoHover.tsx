@@ -23,13 +23,17 @@ export const AreaInfoHover: React.FC<ActiveFeature & {
   let ContentComponent = null
 
   switch (type) {
-    case 'crags':
+    case 'crag-markers':
+    case 'crag-name-labels':
       screenXY = mapInstance.project(geometry.coordinates)
       ContentComponent = <Content {...(data as CragFeatureProperties)} />
       break
-    case 'crag-groups':
+    case 'area-boundaries':
       screenXY = point
       ContentComponent = <CragGroupContent {...(data as CragGroupFeatureProps)} />
+      break
+    default:
+      return null
   }
 
   return (
@@ -73,7 +77,7 @@ export const Content: React.FC<CragFeatureProperties> = ({ id, areaName, climbs,
   )
 }
 
-const CragGroupContent: React.FC<CragGroupFeatureProps> = ({ id, name, children }) => {
+const CragGroupContent: React.FC<CragGroupFeatureProps> = ({ uuid: id, areaName: name, children }) => {
   return (
     <Card>
       <a

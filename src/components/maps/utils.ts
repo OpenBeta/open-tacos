@@ -1,6 +1,6 @@
 import { MapInstance } from 'react-map-gl/maplibre'
 import { Geometry } from 'geojson'
-import { CragFeatureProperties, CragGroupFeatureProps, SimpleClimbType, CragGroupTileProps, CragTileProps, SimpleCragType, ActiveFeature } from './TileTypes'
+import { CragFeatureProperties, CragGroupFeatureProps, SimpleClimbType, CragGroupTileProps, CragTileProps, ActiveFeature } from './TileTypes'
 
 /**
  * Convert maplibre tile feature to our model
@@ -14,15 +14,15 @@ export const tileToFeature = (type: string, point: { x: number, y: number }, geo
     case 'crag-markers':
     case 'crag-name-labels':
       return {
-        type: 'crags',
+        type,
         point,
         geometry: geometry as GeoJSON.Point,
         data: transformCragTileProps(tile as CragTileProps),
         mapInstance
       }
-    case 'crag-group-boundaries':
+    case 'area-boundaries':
       return {
-        type: 'crag-groups',
+        type,
         point,
         geometry: geometry as GeoJSON.Polygon,
         data: transformCragGroupTileProps(tile as CragGroupTileProps),
@@ -49,9 +49,8 @@ const transformCragTileProps = (props: CragTileProps): CragFeatureProperties => 
 }
 
 const transformCragGroupTileProps = (props: CragGroupTileProps): CragGroupFeatureProps => {
-  const { children } = props
   return {
     ...props,
-    children: JSON.parse(children) as SimpleCragType[]
+    children: []// JSON.parse(children) as SimpleCragType[]
   }
 }

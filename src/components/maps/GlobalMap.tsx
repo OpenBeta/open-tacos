@@ -1,20 +1,19 @@
 'use client'
 import { useCallback, useState } from 'react'
-import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, MapInstance, ViewStateChangeEvent } from 'react-map-gl/maplibre'
+import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, ViewStateChangeEvent } from 'react-map-gl/maplibre'
 import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
-import { Geometry } from 'geojson'
 
 import { MAP_STYLES, type MapStyles } from './MapSelector'
 import { AreaInfoDrawer } from './TileHandlers/AreaInfoDrawer'
 import { AreaInfoHover } from './TileHandlers/AreaInfoHover'
-import { SelectedFeature } from './AreaActiveMarker'
 import { OBCustomLayers } from './OBCustomLayers'
 import { tileToFeature } from './utils'
 import { ActiveFeature, TileProps } from './TileTypes'
 import MapLayersSelector from './MapLayersSelector'
 import { debounce } from 'underscore'
 import { MapToolbar } from './MapToolbar'
+import { SelectedFeature } from './AreaActiveMarker'
 
 export interface CameraInfo {
   center: {
@@ -47,11 +46,12 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   showFullscreenControl = true, initialCenter, initialZoom, initialViewState, onCameraMovement, children
 }) => {
   const [clickInfo, setClickInfo] = useState<ActiveFeature | null>(null)
-  const [hoverInfo, setHoverInfo] = useState < ActiveFeature | null>(null)
-  const [selected, setSelected] = useState<Geometry | null>(null)
-  const [mapInstance, setMapInstance] = useState<MapInstance | null>(null)
+  const [hoverInfo, setHoverInfo] = useState<ActiveFeature | null>(null)
+  const [hoverStateId, setHoverStateId] = useState<string | null>(null)
+  const [selectedStateId, setSelectedStateId] = useState<string | null>(null)
+  const [mapInstance, setMapInstance] = useState<maplibregl.Map | null>(null)
   const [cursor, setCursor] = useState<string>('default')
-  const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.standard.style)
+  const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.light.style)
   const [dataLayersDisplayState, setDataLayersDisplayState] = useState<DataLayersDisplayState>({
     cragGroups: false,
     organizations: false
@@ -82,44 +82,85 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   /**
    * Handle click event on the map. Place a market on the map and activate the side drawer.
    */
-  const onClick = useCallback((event: MapLayerMouseEvent): void => {
+  const onClick = (event: MapLayerMouseEvent): void => {
+    if (mapInstance == null) return
     const feature = event?.features?.[0]
-    if (feature == null || mapInstance == null) {
-      setSelected(null)
+    if (feature == null) {
+      if (selectedStateId != null) {
+        mapInstance.setFeatureState({
+          source: 'areas',
+          sourceLayer: 'areas',
+          id: selectedStateId
+        }, { selected: false })
+      }
+      setSelectedStateId(null)
       setClickInfo(null)
     } else {
       const { layer, geometry, properties } = feature
-      setSelected(feature.geometry)
+
+      if (selectedStateId != null) {
+        mapInstance.setFeatureState({
+          source: 'areas',
+          sourceLayer: 'areas',
+          id: selectedStateId
+        }, { selected: false })
+      }
+
+      setSelectedStateId(feature.id as string)
+      mapInstance.setFeatureState({
+        source: 'areas',
+        sourceLayer: 'areas',
+        id: feature.id
+      }, { selected: true })
+
       setClickInfo(tileToFeature(layer.id, event.point, geometry, properties as TileProps, mapInstance))
     }
-  }, [mapInstance])
+  }
 
   /**
    * Handle click event on the popover.  Behave as if the user clicked on a feature on the map.
    */
   const onHoverCardClick = (feature: ActiveFeature): void => {
-    setSelected(feature.geometry)
+    // setSelected(feature)
     setClickInfo(feature)
   }
 
   /**
    * Handle over event on the map.  Show the popover with the area info.
    */
-  const onHover = useCallback((event: MapLayerMouseEvent) => {
-    const obLayerId = event.features?.findIndex((f) => f.layer.id === 'crag-markers' || f.layer.id === 'crag-name-labels' || f.layer.id === 'crag-group-boundaries') ?? -1
+  const onHover = (event: MapLayerMouseEvent): void => {
+    const obLayerId = event.features?.findIndex((f) => f.layer.id === 'crag-markers' || f.layer.id === 'crag-name-labels' || f.layer.id === 'area-boundaries' || f.layer.id === 'area-background') ?? -1
 
     if (obLayerId !== -1) {
       setCursor('pointer')
       const feature = event.features?.[obLayerId]
+      console.log('#Hover', feature)
+
       if (feature != null && mapInstance != null) {
         const { layer, geometry, properties } = feature
+
+        if (hoverStateId != null) {
+          mapInstance.setFeatureState({
+            source: 'areas',
+            sourceLayer: 'areas',
+            id: feature.id
+          }, { hover: false })
+        }
+
+        setHoverStateId(feature.id as string)
+        mapInstance.setFeatureState({
+          source: 'areas',
+          sourceLayer: 'areas',
+          id: feature.id
+        }, { hover: true })
+
         setHoverInfo(tileToFeature(layer.id, event.point, geometry, properties as TileProps, mapInstance))
       }
     } else {
       setHoverInfo(null)
       setCursor('default')
     }
-  }, [mapInstance])
+  }
 
   const updateMapLayer = (key: keyof MapStyles): void => {
     const style = MAP_STYLES[key]
@@ -140,6 +181,14 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         }}
         onMouseEnter={onHover}
         onMouseLeave={() => {
+          if (hoverStateId != null && mapInstance != null) {
+            mapInstance.setFeatureState({
+              source: 'areas',
+              sourceLayer: 'areas',
+              id: hoverStateId
+            }, { hover: false })
+          }
+          setHoverStateId(null)
           setHoverInfo(null)
           setCursor('default')
         }}
@@ -147,7 +196,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         mapStyle={mapStyle}
         cursor={cursor}
         cooperativeGestures={showFullscreenControl}
-        interactiveLayerIds={['crag-markers', 'crag-name-labels', 'crag-group-boundaries', 'organizations']}
+        interactiveLayerIds={['crag-markers', 'crag-name-labels', 'area-boundaries', 'organizations']}
       >
         <MapToolbar layerState={dataLayersDisplayState} onChange={setDataLayersDisplayState} />
         <MapLayersSelector emit={updateMapLayer} />
@@ -157,8 +206,8 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         <OBCustomLayers layersState={dataLayersDisplayState} />
         {showFullscreenControl && <FullscreenControl />}
         <NavigationControl showCompass={false} position='bottom-right' />
-        {selected != null &&
-          <SelectedFeature geometry={selected} />}
+        {clickInfo != null &&
+          <SelectedFeature feature={clickInfo} />}
         <AreaInfoDrawer feature={clickInfo} />
         {hoverInfo != null && (
           <AreaInfoHover
