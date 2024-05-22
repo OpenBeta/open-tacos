@@ -165,6 +165,21 @@
           39.98884394309755
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Aimee",
+        "githubId": "aimeekang",
+        "favoriteCrag": "2c8c115a-0a69-5b68-9bd7-3af66dd4eb44"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -108.73960,
+          42.59040
+        ]
+      }
     }
   ]
 }
