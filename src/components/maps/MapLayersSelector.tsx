@@ -43,7 +43,7 @@ const MapLayersSelector: React.FC<Props> = ({ emit }) => {
                   <div className='px-1.5' key={key} onClick={() => emitMap(key)}>
                     <span className='grid grid-cols-1 justify-items-center'>
                       <img
-                        className={`w-12 h-12 md:w-16 md:h-16 rounded col-span-1 shadow border-base-300 ${mapKey === mapName ? 'border-2' : '' }`}
+                        className={`w-12 h-12 md:w-16 md:h-16 rounded col-span-1 shadow border-base-300 ${mapKey === mapName ? 'border-2' : ''}`}
                         src={imgUrl}
                         alt='Currently selected maptiler layer'
                       />
