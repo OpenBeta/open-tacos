@@ -52,11 +52,10 @@ export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: 
               </DialogTrigger>
               <DialogContent title={`Pick location for  ${areaName}`} fullScreen={!!isMobile}>
                 <div className='w-full h-100vh'>
-                  <div className='h-[90vh] w-full'>
+                  <div className='h-[90vh] lg:h-[50vh] w-full'>
                     <CoordinatePickerMap
                       initialCenter={[initLng, initLat]}
-                      initialZoom={14}
-                      onCoordinateConfirmed={(coord) => {
+                      onCoordinateConfirmed={() => {
                         setPickerSelected(false)
                       }}
                     />
