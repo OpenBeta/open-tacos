@@ -19,7 +19,7 @@ export const OBCustomLayers: React.FC<OBCustomLayersProps> = ({ layersState }) =
         tiles={[
           'https://maptiles.openbeta.io/areas/{z}/{x}/{y}.pbf'
         ]}
-        promoteId='uuid'
+        promoteId='id'
         maxzoom={8}
         attribution='© OpenBeta contributors'
       >
@@ -32,11 +32,11 @@ export const OBCustomLayers: React.FC<OBCustomLayersProps> = ({ layersState }) =
               'case',
               ['boolean', ['feature-state', 'hover'], false],
               '#ec407a',
-              '#6366f1'
+              '#004F6E'
             ],
-            'line-width': { stops: [[6, 0.5], [8, 4]] },
-            'line-opacity': 0.65,
-            'line-dasharray': [2, 0.5]
+            'line-width': { stops: [[6, 2], [6.1, 4]] },
+            'line-blur': 4,
+            'line-opacity': 0.8
 
           }}
           layout={{

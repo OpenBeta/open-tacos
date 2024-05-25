@@ -5,8 +5,8 @@ import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
 
 import { MAP_STYLES, type MapStyles } from './MapSelector'
-import { AreaInfoDrawer } from './TileHandlers/AreaInfoDrawer'
-import { AreaInfoHover } from './TileHandlers/AreaInfoHover'
+import { AreaInfoDrawer } from './TileHandlers/AreaDrawer'
+import { AreaHoverCard } from './TileHandlers/AreaHoverCard'
 import { OBCustomLayers } from './OBCustomLayers'
 import { tileToFeature } from './utils'
 import { ActiveFeature, TileProps } from './TileTypes'
@@ -134,7 +134,6 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
     if (obLayerId !== -1) {
       setCursor('pointer')
       const feature = event.features?.[obLayerId]
-      console.log('#Hover', feature)
 
       if (feature != null && mapInstance != null) {
         const { layer, geometry, properties } = feature
@@ -154,7 +153,11 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
           id: feature.id
         }, { hover: true })
 
-        setHoverInfo(tileToFeature(layer.id, event.point, geometry, properties as TileProps, mapInstance))
+        const feat = tileToFeature(layer.id, event.point, geometry, properties as TileProps, mapInstance)
+
+        console.log('#props', feat)
+
+        setHoverInfo(feat)
       }
     } else {
       setHoverInfo(null)
@@ -210,7 +213,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
           <SelectedFeature feature={clickInfo} />}
         <AreaInfoDrawer feature={clickInfo} />
         {hoverInfo != null && (
-          <AreaInfoHover
+          <AreaHoverCard
             {...hoverInfo}
             onClick={onHoverCardClick}
           />)}

@@ -17,27 +17,38 @@ export interface CragTileProps {
 }
 
 export interface CragGroupTileProps {
-  uuid: string
+  id: string
   areaName: string
-  children: string
+  pathTokens: string
+  ancestors: string
+  media: string // stringified json
+  children: string // stringified json
+  content: string // stringified json
 }
 
 export type SimpleClimbType = Pick<ClimbType, 'id' | 'name' | 'type'>
 
-export type MediaWithTagsInMapTile = Omit<MediaWithTags, 'id'> & { _id: string }
-export type CragFeatureProperties = Pick<AreaType, 'id' | 'areaName' | 'content' | 'ancestors' | 'pathTokens'> & {
-  climbs: SimpleClimbType[]
+export type MediaWithTagsInMapTile = MediaWithTags
+
+type AreaFeatureProperties = Pick<AreaType, 'id' | 'areaName' | 'content' | 'ancestors' | 'pathTokens'> & {
   media: MediaWithTagsInMapTile[]
 }
+
+export type CragFeatureProperties = AreaFeatureProperties & {
+  climbs: SimpleClimbType[]
+}
 export interface SimpleCragType {
-  uuid: string
+  id: string
   areaName: string
 }
 
-export interface CragGroupFeatureProps {
-  uuid: string
+export interface SubArea {
+  id: string
   areaName: string
-  children: SimpleCragType[]
+}
+export interface CragGroupFeatureProps extends AreaFeatureProperties {
+  subareas: SubArea[]
+  media: MediaWithTagsInMapTile[]
 }
 
 export type FeatureProps = CragGroupFeatureProps | CragFeatureProperties

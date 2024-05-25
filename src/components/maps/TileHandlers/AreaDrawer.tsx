@@ -1,8 +1,8 @@
 import * as Popover from '@radix-ui/react-popover'
 
 import { ActiveFeature, CragFeatureProperties, CragGroupFeatureProps } from '../TileTypes'
-import { CragPanelContent } from './CragPanelContent'
-import { CragGroupPanelContent } from './CragGroupPanelContent'
+import { CragPanelContent } from './CragContent'
+import { AreaPanelContent } from './AreaContent'
 
 /**
  * Area info panel
@@ -16,7 +16,7 @@ export const AreaInfoDrawer: React.FC<{ feature: ActiveFeature | null, onClose?:
       ContentComponent = <CragPanelContent {...(feature.data as CragFeatureProperties)} />
       break
     case 'area-boundaries':
-      ContentComponent = <CragGroupPanelContent {...(feature.data as CragGroupFeatureProps)} />
+      ContentComponent = <AreaPanelContent {...(feature.data as CragGroupFeatureProps)} />
       break
     default:
       return null
