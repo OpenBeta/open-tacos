@@ -106,9 +106,9 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
       const { layer, geometry, properties } = feature
 
       setClickInfo(prev => {
-        setActiveFeatureVisual(prev, { selected: false })
+        setActiveFeatureVisual(prev, { selected: false, hover: false })
         const activeFeature = tileToFeature(layer.id, event.point, geometry, properties as TileProps, mapInstance)
-        setActiveFeatureVisual(activeFeature, { selected: true })
+        setActiveFeatureVisual(activeFeature, { selected: true, hover: false })
         return activeFeature
       })
     }
@@ -119,9 +119,10 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
    */
   const onHoverCardClick = (feature: ActiveFeature): void => {
     setClickInfo(prevFeature => {
-      setActiveFeatureVisual(prevFeature, { selected: false })
+      setHoverInfo(null)
+      setActiveFeatureVisual(prevFeature, { selected: false, hover: false })
       if (feature.type === 'area-boundaries') {
-        setActiveFeatureVisual(feature, { selected: true })
+        setActiveFeatureVisual(feature, { selected: true, hover: false })
       }
       return feature
     })

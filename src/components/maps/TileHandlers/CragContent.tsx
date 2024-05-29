@@ -58,7 +58,7 @@ const MicroClimbList: React.FC<{ climbs: SimpleClimbType[] }> = ({ climbs }) => 
   )
 }
 
-export const CragHoverCardContent: React.FC<CragFeatureProperties> = ({ id, areaName, climbs, media }) => {
+export const CragHoverCardContent: React.FC<CragFeatureProperties> = ({ id, areaName, climbs }) => {
   return (
     <div className='flex flex-col gap-y-1 text-xs'>
       <a
@@ -68,11 +68,7 @@ export const CragHoverCardContent: React.FC<CragFeatureProperties> = ({ id, area
       >
         {areaName}
       </a>
-      <div className='font-sm text-secondary flex items-center gap-1'>
-        <EntityIcon type='crag' size={16} />
-        ·
-        <span className='text-xs'>{climbs.length} climbs</span>
-      </div>
+      <Subheading id={id} totalClimbs={climbs.length} />
     </div>
   )
 }
