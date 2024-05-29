@@ -5,8 +5,8 @@ import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
 
 import { MAP_STYLES, type MapStyles } from './MapSelector'
-import { AreaInfoDrawer } from './TileHandlers/AreaDrawer'
-import { AreaHoverCard } from './TileHandlers/AreaHoverCard'
+import { Drawer } from './TileHandlers/Drawer'
+import { HoverCard } from './TileHandlers/HoverCard'
 import { OBCustomLayers } from './OBCustomLayers'
 import { tileToFeature } from './utils'
 import { ActiveFeature, TileProps } from './TileTypes'
@@ -23,9 +23,15 @@ export interface CameraInfo {
   zoom: number
 }
 
+interface FeatureState {
+  selected?: boolean
+  hover?: boolean
+}
 export interface DataLayersDisplayState {
-  cragGroups: boolean
+  areaBoundaries: boolean
   organizations: boolean
+  heatmap: boolean
+  crags: boolean
 }
 interface GlobalMapProps {
   showFullscreenControl?: boolean
@@ -47,15 +53,24 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
 }) => {
   const [clickInfo, setClickInfo] = useState<ActiveFeature | null>(null)
   const [hoverInfo, setHoverInfo] = useState<ActiveFeature | null>(null)
-  const [hoverStateId, setHoverStateId] = useState<string | null>(null)
-  const [selectedStateId, setSelectedStateId] = useState<string | null>(null)
   const [mapInstance, setMapInstance] = useState<maplibregl.Map | null>(null)
   const [cursor, setCursor] = useState<string>('default')
   const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.light.style)
   const [dataLayersDisplayState, setDataLayersDisplayState] = useState<DataLayersDisplayState>({
-    cragGroups: false,
-    organizations: false
+    areaBoundaries: false,
+    organizations: false,
+    heatmap: false,
+    crags: true
   })
+
+  const setActiveFeatureVisual = (feature: ActiveFeature | null, fState: FeatureState): void => {
+    if (feature == null || mapInstance == null) return
+    mapInstance.setFeatureState({
+      source: 'areas',
+      sourceLayer: 'areas',
+      id: feature.data.id
+    }, fState)
+  }
 
   const onMove = useCallback(debounce((e: ViewStateChangeEvent) => {
     if (onCameraMovement != null) {
@@ -86,34 +101,16 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
     if (mapInstance == null) return
     const feature = event?.features?.[0]
     if (feature == null) {
-      if (selectedStateId != null) {
-        mapInstance.setFeatureState({
-          source: 'areas',
-          sourceLayer: 'areas',
-          id: selectedStateId
-        }, { selected: false })
-      }
-      setSelectedStateId(null)
       setClickInfo(null)
     } else {
       const { layer, geometry, properties } = feature
 
-      if (selectedStateId != null) {
-        mapInstance.setFeatureState({
-          source: 'areas',
-          sourceLayer: 'areas',
-          id: selectedStateId
-        }, { selected: false })
-      }
-
-      setSelectedStateId(feature.id as string)
-      mapInstance.setFeatureState({
-        source: 'areas',
-        sourceLayer: 'areas',
-        id: feature.id
-      }, { selected: true })
-
-      setClickInfo(tileToFeature(layer.id, event.point, geometry, properties as TileProps, mapInstance))
+      setClickInfo(prev => {
+        setActiveFeatureVisual(prev, { selected: false })
+        const activeFeature = tileToFeature(layer.id, event.point, geometry, properties as TileProps, mapInstance)
+        setActiveFeatureVisual(activeFeature, { selected: true })
+        return activeFeature
+      })
     }
   }
 
@@ -121,12 +118,17 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
    * Handle click event on the popover.  Behave as if the user clicked on a feature on the map.
    */
   const onHoverCardClick = (feature: ActiveFeature): void => {
-    // setSelected(feature)
-    setClickInfo(feature)
+    setClickInfo(prevFeature => {
+      setActiveFeatureVisual(prevFeature, { selected: false })
+      if (feature.type === 'area-boundaries') {
+        setActiveFeatureVisual(feature, { selected: true })
+      }
+      return feature
+    })
   }
 
   /**
-   * Handle over event on the map.  Show the popover with the area info.
+   * Handle mouseover event on the map.  Show the popover with the area info.
    */
   const onHover = (event: MapLayerMouseEvent): void => {
     const obLayerId = event.features?.findIndex((f) => f.layer.id === 'crag-markers' || f.layer.id === 'crag-name-labels' || f.layer.id === 'area-boundaries' || f.layer.id === 'area-background') ?? -1
@@ -137,27 +139,12 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
 
       if (feature != null && mapInstance != null) {
         const { layer, geometry, properties } = feature
-
-        if (hoverStateId != null) {
-          mapInstance.setFeatureState({
-            source: 'areas',
-            sourceLayer: 'areas',
-            id: feature.id
-          }, { hover: false })
-        }
-
-        setHoverStateId(feature.id as string)
-        mapInstance.setFeatureState({
-          source: 'areas',
-          sourceLayer: 'areas',
-          id: feature.id
-        }, { hover: true })
-
-        const feat = tileToFeature(layer.id, event.point, geometry, properties as TileProps, mapInstance)
-
-        console.log('#props', feat)
-
-        setHoverInfo(feat)
+        setHoverInfo(prev => {
+          setActiveFeatureVisual(prev, { hover: false })
+          const feat = tileToFeature(layer.id, event.point, geometry, properties as TileProps, mapInstance)
+          setActiveFeatureVisual(feat, { hover: true })
+          return feat
+        })
       }
     } else {
       setHoverInfo(null)
@@ -184,15 +171,10 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         }}
         onMouseEnter={onHover}
         onMouseLeave={() => {
-          if (hoverStateId != null && mapInstance != null) {
-            mapInstance.setFeatureState({
-              source: 'areas',
-              sourceLayer: 'areas',
-              id: hoverStateId
-            }, { hover: false })
-          }
-          setHoverStateId(null)
-          setHoverInfo(null)
+          setHoverInfo(prev => {
+            setActiveFeatureVisual(prev, { hover: false })
+            return null
+          })
           setCursor('default')
         }}
         onClick={onClick}
@@ -211,9 +193,9 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         <NavigationControl showCompass={false} position='bottom-right' />
         {clickInfo != null &&
           <SelectedFeature feature={clickInfo} />}
-        <AreaInfoDrawer feature={clickInfo} />
+        <Drawer feature={clickInfo} />
         {hoverInfo != null && (
-          <AreaHoverCard
+          <HoverCard
             {...hoverInfo}
             onClick={onHoverCardClick}
           />)}

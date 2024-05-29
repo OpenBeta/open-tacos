@@ -56,6 +56,7 @@ const transformCragGroupTileProps = (props: CragGroupTileProps): CragGroupFeatur
     pathTokens: JSON.parse(pathTokens) as string[],
     content: JSON.parse(props?.content ?? {}),
     subareas: JSON.parse(children) as SubArea[],
-    media: JSON.parse(media) as MediaWithTagsInMapTile[]
+    media: JSON.parse(media) as MediaWithTagsInMapTile[],
+    aggregate: JSON.parse(props.aggregate)
   }
 }

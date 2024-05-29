@@ -10,7 +10,7 @@ interface OBCustomLayersProps {
  * - Areas: polygon boundaries for areas
  */
 export const OBCustomLayers: React.FC<OBCustomLayersProps> = ({ layersState }) => {
-  const { cragGroups } = layersState
+  const { areaBoundaries, crags } = layersState
   return (
     <>
       <Source
@@ -40,7 +40,7 @@ export const OBCustomLayers: React.FC<OBCustomLayersProps> = ({ layersState }) =
 
           }}
           layout={{
-            visibility: cragGroups ? 'visible' : 'none'
+            visibility: areaBoundaries ? 'visible' : 'none'
           }}
         />
         <Layer
@@ -57,7 +57,7 @@ export const OBCustomLayers: React.FC<OBCustomLayersProps> = ({ layersState }) =
             ]
           }}
           layout={{
-            visibility: cragGroups ? 'visible' : 'none'
+            visibility: areaBoundaries ? 'visible' : 'none'
           }}
         />
       </Source>
@@ -85,7 +85,8 @@ export const OBCustomLayers: React.FC<OBCustomLayersProps> = ({ layersState }) =
             'text-optional': true,
             'symbol-sort-key': ['match', ['string', ['get', 'media']], ['[]'], 1, 0],
             'icon-image': 'circle-dot',
-            'icon-size': ['interpolate', ['linear'], ['zoom'], 6, 0.5, 18, 1]
+            'icon-size': ['interpolate', ['linear'], ['zoom'], 6, 0.5, 18, 1],
+            visibility: crags ? 'visible' : 'none'
           }}
           paint={{
             'icon-color': ['match', ['string', ['get', 'media']], ['[]'], '#0c4a6e', '#881337'],
