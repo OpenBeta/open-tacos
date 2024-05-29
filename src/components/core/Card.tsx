@@ -10,7 +10,7 @@ export const Card: React.FC<{ children: React.ReactNode, compact?: boolean, bord
     return (
       <div className={
         clx(
-          'card card-compact card-bordered border-base-300/50 overflow-hidden shadow-lg bg-base-100 w-80 max-h-[400px]',
+          'card card-compact card-bordered border-base-300/50 overflow-hidden shadow-lg bg-base-100 w-80 h-full',
           compact ? 'card-compact' : '',
           border ? 'card-bordered border-base-300/50 ' : '',
           className)

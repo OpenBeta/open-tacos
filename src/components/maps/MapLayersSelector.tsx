@@ -7,8 +7,8 @@ interface Props {
 }
 
 const MapLayersSelector: React.FC<Props> = ({ emit }) => {
-  const [mapImgUrl, setMapImgUrl] = useState<string>(MAP_STYLES.standard.imgUrl)
-  const [mapName, setMapName] = useState<string>('standard')
+  const [mapImgUrl, setMapImgUrl] = useState<string>(MAP_STYLES.light.imgUrl)
+  const [mapName, setMapName] = useState<string>('light')
 
   const emitMap = (key: string): void => {
     const styleKey = key as keyof MapStyles
