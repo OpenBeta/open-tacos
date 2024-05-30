@@ -28,7 +28,7 @@ export const CoordinatePickerPopup: React.FC<CoordinatePickerPopupProps> = ({ in
 
   const anchorClass = isMobile
     ? 'fixed top-15 left-1/2 transform -translate-x-1/2'
-    : 'fixed top-1/3 left-1/2 transform -translate-x-1/2'
+    : 'fixed top-1/4 left-1/2 transform -translate-x-1/2'
 
   return (
     <Popover.Root open={open}>
