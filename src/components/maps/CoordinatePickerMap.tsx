@@ -106,9 +106,9 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         <ScaleControl unit='metric' style={{ marginBottom: 0 }} position='bottom-left' />
         {showFullscreenControl && <FullscreenControl />}
         <NavigationControl showCompass={false} position='bottom-right' />
-        {(selectedCoord != null) && (
+        {(selectedCoord.lat !== 0 && selectedCoord.lng !== 0) && (
           <>
-            <Marker longitude={selectedCoord.lng} latitude={selectedCoord.lat} draggable onDragEnd={onMarkerDragEnd}>
+            <Marker longitude={selectedCoord.lng} latitude={selectedCoord.lat} draggable onDragEnd={onMarkerDragEnd} anchor='bottom'>
               <MapPin size={36} weight='fill' className='text-accent' />
             </Marker>
             <CoordinatePickerPopup
