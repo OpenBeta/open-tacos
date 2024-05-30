@@ -49,7 +49,7 @@ describe('AreaLatLngForm', () => {
 
   test('triggers the coordinate picker map dialog', async () => {
     renderWithForm(<AreaLatLngForm initLat={0} initLng={0} uuid='test-uuid' isLeaf areaName='Test Area' />)
-    fireEvent.click(screen.getByText('Picker'))
+    fireEvent.click(screen.getByText('Coordinate Picker'))
     await waitFor(() => {
       expect(screen.getByTestId('coordinate-picker-map')).toBeInTheDocument()
     })

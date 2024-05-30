@@ -32,11 +32,7 @@ export const CoordinatePickerPopup: React.FC<CoordinatePickerPopupProps> = ({ in
 
   return (
     <Popover.Root open={open}>
-      <Popover.Anchor
-        // className={anchorClass} style={isMobile ? {} : { position: 'absolute', left: screenXY?.x, top: screenXY?.y + 125 }}
-        // className={anchorClass} style={isMobile ? {} : { position: 'absolute', left: 150, top: 110 }}
-        className={anchorClass}
-      />
+      <Popover.Anchor className={anchorClass} />
       <Popover.Content
         align='center'
         side='top'
