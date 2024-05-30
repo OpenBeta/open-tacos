@@ -1,3 +1,4 @@
+import { useResponsive } from '@/js/hooks'
 import * as Popover from '@radix-ui/react-popover'
 import { useCallback } from 'react'
 import { MapInstance } from 'react-map-gl'
@@ -16,6 +17,7 @@ export const CoordinatePickerPopup: React.FC<CoordinatePickerPopupProps> = ({ in
   const { coordinates, mapInstance } = info
   const { lng: longitude, lat: latitude } = coordinates
   const screenXY = mapInstance?.project(coordinates)
+  const { isMobile } = useResponsive()
 
   const handleConfirmClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation()
@@ -24,15 +26,23 @@ export const CoordinatePickerPopup: React.FC<CoordinatePickerPopupProps> = ({ in
 
   if (screenXY == null) return null
 
+  const anchorClass = isMobile
+    ? 'fixed top-15 left-1/2 transform -translate-x-1/2'
+    : 'fixed top-1/3 left-1/2 transform -translate-x-1/2'
+
   return (
     <Popover.Root open={open}>
-      <Popover.Anchor style={{ position: 'absolute', left: screenXY?.x, top: screenXY?.y + -10 }} />
+      <Popover.Anchor
+        // className={anchorClass} style={isMobile ? {} : { position: 'absolute', left: screenXY?.x, top: screenXY?.y + 125 }}
+        // className={anchorClass} style={isMobile ? {} : { position: 'absolute', left: 150, top: 110 }}
+        className={anchorClass}
+      />
       <Popover.Content
         align='center'
         side='top'
         sideOffset={8}
         collisionPadding={24}
-        className='z-[50] focus:outline-none cursor-pointer p-4 bg-white rounded shadow-md'
+        className='z-50 focus:outline-none cursor-pointer p-4 bg-white rounded shadow-md'
         onClick={(e) => e.stopPropagation()}
       >
         <div className='text-center'>

@@ -37,17 +37,19 @@ export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: 
     >
       {isLeaf
         ? (
-          <div className='flex items-end'>
-            <DashboardInput
-              name='latlngStr'
-              label='Coordinates in latitude, longitude format.'
-              registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
-              readOnly={!isLeaf}
-            />
+          <div className='flex flex-wrap items-end'>
+            <div className='pr-1'>
+              <DashboardInput
+                name='latlngStr'
+                label='Coordinates in latitude, longitude format.'
+                registerOptions={AREA_LATLNG_FORM_VALIDATION_RULES}
+                readOnly={!isLeaf}
+              />
+            </div>
             <MobileDialog open={pickerSelected} onOpenChange={setPickerSelected}>
               <DialogTrigger asChild>
-                <button type='button' onClick={() => setPickerSelected(true)} className='btn btn-link'>
-                  Picker
+                <button type='button' onClick={() => setPickerSelected(true)} className='btn btn-link p-0'>
+                  Coordinate Picker
                 </button>
               </DialogTrigger>
               <DialogContent title={`Pick location for  ${areaName}`} fullScreen={!!isMobile}>
