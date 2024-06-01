@@ -1,6 +1,6 @@
 'use client'
 import { useCallback, useState } from 'react'
-import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, Marker, MapInstance, MarkerDragEvent } from 'react-map-gl/maplibre'
+import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, Marker, MapInstance, MarkerDragEvent, GeolocateControl, GeolocateResultEvent } from 'react-map-gl/maplibre'
 import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
 import { useDebouncedCallback } from 'use-debounce'
@@ -81,6 +81,14 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
     setMapStyle(style.style)
   }
 
+  const handleGeolocate = useCallback((e: GeolocateResultEvent) => {
+    const { coords } = e
+    if (coords != null) {
+      setPopupOpen(false)
+      updateCoordinates(coords.longitude, coords.latitude)
+    }
+  }, [updateCoordinates])
+
   return (
     <div className='relative w-full h-full'>
       <Map
@@ -105,6 +113,7 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         <ScaleControl unit='imperial' style={{ marginBottom: 10 }} position='bottom-left' />
         <ScaleControl unit='metric' style={{ marginBottom: 0 }} position='bottom-left' />
         {showFullscreenControl && <FullscreenControl />}
+        <GeolocateControl position='top-left' onGeolocate={handleGeolocate} />
         <NavigationControl showCompass={false} position='bottom-right' />
         {(selectedCoord.lat !== 0 && selectedCoord.lng !== 0) && (
           <>
