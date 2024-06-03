@@ -34,7 +34,7 @@ const MapLayersSelector: React.FC<Props> = ({ emit }) => {
           </button>
         </Popover.Trigger>
         <Popover.Portal>
-          <Popover.Content className=' pt-1.5 bg-base-100 rounded grid grid-cols-1' side='top' sideOffset={20}>
+          <Popover.Content className=' pt-1.5 bg-base-100 rounded grid grid-cols-1 z-[1000]' side='top' sideOffset={20}>
             <button className='cursor-pointer col-span-1'>
               {Object.keys(MAP_STYLES).map((key) => {
                 const mapKey = key as keyof typeof MAP_STYLES
