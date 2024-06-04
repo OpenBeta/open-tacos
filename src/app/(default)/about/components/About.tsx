@@ -60,7 +60,6 @@ export function About (): ReactNode {
                   src={bouldering}
                   alt='Picture of a rock climber bouldering in Bishop, California.'
                   width={700}
-                  unoptimized
                 />
                 <div className='absolute left-0 bottom-0 bg-base-200/80 p-2 text-xs'>
                   <Link href='/climbs/197b6958-c871-5c81-b463-d493d7515656' className='block'>Flyboy (Bishop, California)</Link>
