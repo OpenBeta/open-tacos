@@ -180,6 +180,21 @@
           42.59040
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Cam",
+        "githubId": "cammcinnes",
+        "favoriteCrag": "20a6f4b3-c767-53e9-a593-7b0d96484d4a"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.90644802932367, 
+          -123.16229248871166
+        ]
+      }
     }
   ]
 }
