@@ -17,14 +17,13 @@ export const revalidate = 3600 // 1 hour
 export default async function Home (): Promise<any> {
   const history = await getChangeHistoryServerSide()
   return (
-    <div>
-      <LandingHero />
-
-      <hr className='py-2 border-base-content' />
-
-      <div className='w-full flex flex-col gap-y-16'>
+    <>
+      <div className='default-page-margins'>
+        <LandingHero />
+        <hr className='my-4 border-base-content' />
+      </div>
+      <div className='default-page-margins flex flex-col gap-y-16 mb-16'>
         <div className='lg:grid lg:grid-cols-3 gap-x-2'>
-
           <div className='mt-8 lg:mt-0 lg:overflow-y-auto lg:h-[450px] w-full border-2 rounded-box'>
             <Suspense fallback={<LatestContributionsSkeleton />}>
               <LatestContributions />
@@ -38,11 +37,9 @@ export default async function Home (): Promise<any> {
         <RecentTags />
         <InternationalToC />
         <USAToC />
-        <div className='flex flex-col gap-10'>
-          <FinancialContributors />
-          <Volunteers />
-        </div>
+        <FinancialContributors />
+        <Volunteers />
       </div>
-    </div>
+    </>
   )
 }

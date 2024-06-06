@@ -1,5 +1,5 @@
 import { CodeContributorsAction } from './LandingCTA'
-import { SectionContainer, Width } from './ui/SectionContainer'
+import { SectionContainer, Padding } from './ui/SectionContainer'
 
 const url = 'https://raw.githubusercontent.com/OpenBeta/open-tacos/develop/.all-contributorsrc'
 
@@ -22,8 +22,8 @@ export const Volunteers: React.FC = async () => {
   const { contributors }: { contributors: GithubProfile[] } = await res.json()
   return (
     <SectionContainer
-      width={Width.compact}
       className='border rounded-box bg-base-200/20'
+      padding={Padding.default}
       header={
         <div className='flex items-center gap-6'>
           <h2 className='text-base-content'>Volunteers</h2>
