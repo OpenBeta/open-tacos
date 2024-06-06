@@ -1,4 +1,5 @@
 import { RecentImageCard } from '@/components/home/RecentMediaCard'
+import { SectionContainer } from './ui/SectionContainer'
 import { getMediaForFeedSC } from '@/js/graphql/gql/serverApi'
 
 /**
@@ -19,29 +20,25 @@ export const RecentTags: React.FC = async () => {
   })
 
   return (
-    <section className='w-full '>
-      <div className='px-4 2xl:px-0 mx-auto max-w-5xl xl:max-w-7xl'>
-        <h2>Latest Photos</h2>
-      </div>
 
+    <SectionContainer header={<h2>Latest Photos</h2>}>
       <div className='overflow-hidden bg-base-200/20'>
-        <hr className='border-2 border-base-content' />
         <div className='py-8 grid grid-flow-col auto-cols-max gap-x-4 overflow-x-auto'>
           {
-                recentMediaWithTags.map(media => {
-                  const { mediaUrl } = media
-                  return (
-                    <div
-                      key={mediaUrl} className='w-64 first:pl-6 2xl:first:ml-16 last:mr-16'
-                    >
-                      <RecentImageCard mediaWithTags={media} bordered />
-                    </div>
-                  )
-                }
-                )
+            recentMediaWithTags.map(media => {
+              const { mediaUrl } = media
+              return (
+                <div
+                  key={mediaUrl} className='w-64 first:pl-6 2xl:first:ml-16 last:mr-16'
+                >
+                  <RecentImageCard mediaWithTags={media} bordered />
+                </div>
+              )
+            }
+            )
               }
         </div>
       </div>
-    </section>
+    </SectionContainer>
   )
 }

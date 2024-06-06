@@ -1,7 +1,7 @@
 import { getSummaryReport } from '@/js/graphql/opencollective'
 import { FinancialBackerAccountType } from '@/js/types'
 import { DonateButton } from './LandingCTA'
-import { SectionContainer, Width } from './ui/SectionContainer'
+import { SectionContainer, Padding } from './ui/SectionContainer'
 /**
  * List financial contributors
  */
@@ -10,8 +10,8 @@ export const FinancialContributors: React.FC = async () => {
 
   return (
     <SectionContainer
-      width={Width.compact}
       className='bg-accent/80 rounded-box'
+      padding={Padding.default}
       header={
         <div className='flex items-center gap-6'>
           <h2>Financial Contributors</h2>

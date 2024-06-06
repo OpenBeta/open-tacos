@@ -24,7 +24,7 @@ export const InternationalToC: React.FC = () => {
 const CountryCard: React.FC<{ country: ToCCountry }> = ({ country }) => {
   const { areaName, uuid, children } = country
   return (
-    <div className='mb-10 break-inside-avoid-column break-inside-avoid'>
+    <div className='mb-10 break-inside-avoid-column'>
       <Link href={getAreaPageFriendlyUrl(uuid, areaName)}>
         <span className=' font-semibold'>{areaName}</span>
       </Link>
