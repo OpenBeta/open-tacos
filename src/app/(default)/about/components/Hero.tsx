@@ -51,7 +51,6 @@ const Values: React.FC = () => (
           src={mapHero}
           alt='Picture of a map'
           width={400}
-          unoptimized
         />
       </div>
       <div className='absolute bottom-0 left-24'>
