@@ -114,7 +114,7 @@ A slightly deemphasized dotted underline for a tag in order to not competing wit
   }
 
   .dialog-close-button {
-    @apply absolute top-1 left-1 z-50;
+    @apply mx-auto z-auto;
   }
 
   .dialog-form-default {
@@ -122,7 +122,7 @@ A slightly deemphasized dotted underline for a tag in order to not competing wit
   }
 
   .dialog-title {
-    @apply py-2 w-full text-center bg-base-100 z-50 leading-none;
+    @apply flex-grow text-center bg-base-100 leading-none;
   }
 
   .minimal-scrollbar::-webkit-scrollbar {

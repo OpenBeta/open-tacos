@@ -22,15 +22,16 @@ export const DialogContent = React.forwardRef<any, Props>(
           data-no-dnd='true'
           className={clx(fullScreen ? 'dialog-wide' : 'dialog-default')} {...props} ref={forwardedRef}
         >
-          <DialogPrimitive.Title className='dialog-title'>
-            {title}
-          </DialogPrimitive.Title>
-          {/* Use absolute positioning to place the close button on the upper left corner */}
-          <DialogPrimitive.Close aria-label='Close' asChild className='dialog-close-button'>
-            <button className='btn btn-circle btn-ghost outline-none'>
-              <XMarkIcon size={24} />
-            </button>
-          </DialogPrimitive.Close>
+          <div className='flex items-center px-2'>
+            <DialogPrimitive.Close aria-label='Close' asChild className='dialog-close-button'>
+              <button className='btn btn-circle btn-ghost outline-none'>
+                <XMarkIcon size={24} />
+              </button>
+            </DialogPrimitive.Close>
+            <DialogPrimitive.Title className='dialog-title'>
+              {title}
+            </DialogPrimitive.Title>
+          </div>
           {children}
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
