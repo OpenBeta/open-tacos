@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import React from 'react'
-import { MediaType } from '../../js/types'
+import { MediaType } from '../../../js/types'
 import {
   UserCircleIcon,
   TagIcon
 } from '@heroicons/react/24/outline'
-import { getUploadDateSummary, urlResolver } from '../../js/utils'
-import { ATagWrapper } from '../Utils'
+import { getUploadDateSummary, urlResolver } from '../../../js/utils'
+import { ATagWrapper } from '../../../components/Utils'
 
 export interface PostBodyProps {
   destUrl: string
