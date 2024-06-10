@@ -2,13 +2,13 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import clx from 'classnames'
-import Card from '../ui/Card/Card'
-import TagList from '../media/TagList'
-import { MediaWithTags } from '../../js/types'
-import { getUploadDateSummary } from '../../js/utils'
+import Card from '../../../components/ui/Card/Card'
+import TagList from '../../../components/media/TagList'
+import { MediaWithTags } from '../../../js/types'
+import { getUploadDateSummary } from '../../../js/utils'
 import { PostHeader } from './Post'
-import { resolver as urlResolver } from '../media/Tag'
-import { ATagWrapper } from '../Utils'
+import { resolver as urlResolver } from '../../../components/media/Tag'
+import { ATagWrapper } from '../../../components/Utils'
 
 const MOBILE_IMAGE_MAX_WIDITH = 600
 

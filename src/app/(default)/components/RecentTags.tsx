@@ -1,4 +1,4 @@
-import { RecentImageCard } from '@/components/home/RecentMediaCard'
+import { RecentImageCard } from '@/app/(default)/components/RecentMediaCard'
 import { SectionContainer } from './ui/SectionContainer'
 import { getMediaForFeedSC } from '@/js/graphql/gql/serverApi'
 

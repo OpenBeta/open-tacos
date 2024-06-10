@@ -1,11 +1,9 @@
 import { gql } from '@apollo/client'
-import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
-import { AreaType, ClimbType, TickType, MediaByUsers, CountrySummaryType, MediaWithTags } from '../types'
+import { AreaType, ClimbType, TickType, CountrySummaryType, MediaWithTags } from '../types'
 import { graphqlClient } from './Client'
 
-import { CORE_CRAG_FIELDS, QUERY_CRAGS_WITHIN, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
-import { QUERY_MEDIA_FOR_FEED } from './gql/tags'
+import { CORE_CRAG_FIELDS, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
 import { QUERY_USER_MEDIA } from './gql/users'
 import { QUERY_CLIMB_BY_ID } from './gql/climbById'
 
@@ -84,58 +82,6 @@ export const getAreaByUUID = (uuid: string): AreaType | null => {
   }
   return null
 }
-
-export const getMediaForFeed = async (maxUsers: number, maxFiles: number): Promise<MediaByUsers[]> => {
-  try {
-    const rs = await graphqlClient.query<{ getMediaForFeed: MediaByUsers[] }>({
-      query: QUERY_MEDIA_FOR_FEED,
-      variables: {
-        maxUsers,
-        maxFiles
-      }
-      // fetchPolicy: 'network-only'
-    })
-
-    if (Array.isArray(rs.data?.getMediaForFeed)) {
-      return rs.data?.getMediaForFeed
-    }
-    console.log('WARNING: getMediaForFeed() returns non-array data')
-    return []
-  } catch (e) {
-    console.log('####### getMediaForFeed() error', e)
-  }
-  return []
-}
-
-interface GetCragsWithinProps {
-  bbox: number[]
-  zoom: number
-}
-export const getCragsWithin = async ({ bbox, zoom }: GetCragsWithinProps): Promise<AreaType[]> => {
-  try {
-    const rs = await graphqlClient.query<{ cragsWithin: AreaType[] }>({
-      query: QUERY_CRAGS_WITHIN,
-      variables: {
-        filter: {
-          bbox,
-          zoom
-        }
-      },
-      notifyOnNetworkStatusChange: true
-    })
-
-    if (Array.isArray(rs.data?.cragsWithin)) {
-      return rs.data?.cragsWithin ?? []
-    }
-    console.log('WARNING: cragsWithin() returns non-array data')
-    return []
-  } catch (e) {
-    console.log('cragsWithin() error', e)
-  }
-  return []
-}
-
-export const getCragsWithinNicely = AwesomeDebouncePromise(getCragsWithin, 1000)
 
 export const getTicksByUserAndClimb = async (climbId: string, userId: string): Promise<any> => {
   try {
