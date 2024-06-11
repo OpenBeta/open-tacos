@@ -18,6 +18,7 @@ interface PoiDoc extends BaseItem {
  * match 'query'.  Wrap result in Algolia.Source object to allow Autocomplete component.
  * See also https://www.algolia.com/doc/ui-libraries/autocomplete/core-concepts/sources/
  * to render the result.
+ * @deprecated
  * @param query search string
  */
 export const searchPoi = async (query: string): Promise<AutocompleteSource<any>> => {

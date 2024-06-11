@@ -2,7 +2,7 @@
 import { AutocompleteClassNames } from '@algolia/autocomplete-js'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { Autocomplete2 } from './Autocomplete2'
-import { xsearchTypesense, searchPoi } from './sources'
+import { xsearchTypesense } from './sources'
 import { AddNewButton } from './templates/ClimbResultXSearch'
 import { ReactNode } from 'react'
 interface XSearchProps {
@@ -19,10 +19,7 @@ export default function XSearch ({ placeholder = 'Try "Cat In the Hat" or "Las V
       placeholder={placeholder}
       getSources={async ({ query }) => {
         'use client'
-        const sources = await xsearchTypesense(query)
-        const poiSource = await searchPoi(query)
-        sources.push(poiSource)
-        return sources
+        return await xsearchTypesense(query)
       }}
       classNames={CUSTOM_CLASSES}
       resultContainer={ResultContainer}
@@ -42,10 +39,7 @@ export function XSearchMinimal ({ placeholder = 'Try "Cat In the Hat" or "Las Ve
         </button>
       }
       getSources={async ({ query }) => {
-        const sources = await xsearchTypesense(query)
-        const poiSource = await searchPoi(query)
-        sources.push(poiSource)
-        return sources
+        return await xsearchTypesense(query)
       }}
       classNames={{ ...CUSTOM_CLASSES, detachedSearchButton: 'aa-hidden-mobile-trigger-btn' }}
       resultContainer={ResultContainer}
@@ -82,10 +76,7 @@ export const XSearchMobile = (): JSX.Element => {
       getSources={async ({ query }) => {
         'use client'
         if (query?.trim() === '') return []
-        const sources = await xsearchTypesense(query)
-        const poiSource = await searchPoi(query)
-        sources.push(poiSource)
-        return sources
+        return await xsearchTypesense(query)
       }}
       resultContainer={ResultContainer}
     />

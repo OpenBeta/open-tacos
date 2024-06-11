@@ -14,6 +14,9 @@ interface HeaderProps {
   showFilterBar?: boolean
 }
 
+/**
+ * @deprecated
+ */
 export default function Header (props: HeaderProps): JSX.Element {
   const { isTablet, isMobile } = useResponsive()
   const includeFilters = Boolean(props.showFilterBar)
