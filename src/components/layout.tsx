@@ -38,4 +38,7 @@ function Layout ({
   )
 }
 
+/**
+ * @deprecated
+ */
 export default Layout
