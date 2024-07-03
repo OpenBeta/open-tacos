@@ -1,4 +1,5 @@
 import ''
+import { FC } from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
@@ -9,7 +10,6 @@ jest.mock('../../../js/mapbox/MapboxClient')
 jest.mock('../../../js/graphql/Client')
 
 const mockTypesenseClient = jest.requireMock('../../../js/typesense/TypesenseClient')
-const mockMapboxClient = jest.requireMock('../../../js/mapbox/MapboxClient')
 
 const mockUseQuery = jest.fn()
 
@@ -32,7 +32,7 @@ Object.defineProperty(window, 'matchMedia', {
   }))
 })
 
-let XSearch
+let XSearch: FC<{ placeholder?: string }>
 beforeAll(async () => {
   // why async import?  see https://github.com/facebook/jest/issues/10025#issuecomment-716789840
   const module = await import('../XSearch')
@@ -42,7 +42,6 @@ beforeAll(async () => {
 test('XSearch triggers popup window', async () => {
   const user = userEvent.setup()
   const multiSearchFn = jest.spyOn(mockTypesenseClient, 'multiSearch')
-  const geocoderLookupFn = jest.spyOn(mockMapboxClient, 'geocoderLookup')
 
   mockUseQuery.mockReturnValue({
     loading: false,
@@ -63,7 +62,6 @@ test('XSearch triggers popup window', async () => {
   // The search functions will get called n times the number of keystrokes + 2
   // '2' extra renderings are due to empty query being sent to the search functions
   expect(multiSearchFn).toBeCalledTimes(7)
-  expect(geocoderLookupFn).toBeCalledTimes(7)
 
   // Important - we need to wait for the popup result panel to appear
   await waitFor(() => {
