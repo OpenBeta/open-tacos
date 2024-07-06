@@ -8,7 +8,8 @@ import { useFormContext } from 'react-hook-form'
 import MapLayersSelector from './MapLayersSelector'
 import AlertDialog from '../ui/micro/AlertDialogue'
 import useResponsive from '@/js/hooks/useResponsive'
-import { MapPin, Crosshair } from '@phosphor-icons/react'
+import { MapPin, Crosshair, Trash, FloppyDiskBack } from '@phosphor-icons/react'
+import CustomOverlay from './controls/CustomControl'
 
 export interface CameraInfo {
   center: {
@@ -38,13 +39,19 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
   //   latitude: (initialCenter != null) ? initialCenter[1] : 0,
   //   zoom: initialZoom
   // })
-  const [newSelectedCoord, setNewSelectedCoord] = useState<{ lng: number, lat: number }>({ lng: 0, lat: 0 })
+
+  const defaultCoords = { lng: 0, lat: 0 }
+  const [newSelectedCoord, setNewSelectedCoord] = useState<{ lng: number, lat: number }>(defaultCoords)
   const [cursor, setCursor] = useState<string>('default')
   const { isMobile } = useResponsive()
   const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.light.style)
   const triggerButtonRef = useRef<HTMLButtonElement>(null)
   const initialCoordinates = initialCenter != null ? { lng: initialCenter[0], lat: initialCenter[1] } : { lng: 0, lat: 0 }
   const { setValue } = useFormContext()
+
+  const hasNewSelectedCoord = (): boolean => {
+    return newSelectedCoord.lat !== defaultCoords.lat || newSelectedCoord.lng !== defaultCoords.lng
+  }
 
   const onLoad = useCallback((e: MapLibreEvent) => {
     if (e.target == null) return
@@ -92,6 +99,16 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
     }
   }
 
+  const handleReset = (): void => {
+    // trigger the dialog close if it is open
+    if (hasNewSelectedCoord()) {
+      if (triggerButtonRef.current != null) {
+        triggerButtonRef.current.click()
+      }
+      setNewSelectedCoord({ lng: 0, lat: 0 })
+    }
+  }
+
   const anchorClass = isMobile
     ? 'fixed bottom-1/4 left-1/2 transform -translate-x-1/2'
     : 'fixed bottom-1/4 left-1/2 transform -translate-x-1/2'
@@ -121,6 +138,20 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         <MapLayersSelector emit={updateMapLayer} />
         <ScaleControl unit='imperial' style={{ marginBottom: 10 }} position='bottom-left' />
         <ScaleControl unit='metric' style={{ marginBottom: 0 }} position='bottom-left' />
+        {hasNewSelectedCoord() && (
+          <CustomOverlay position='top-right'>
+            <button onClick={confirmSelection}>
+              <FloppyDiskBack size={29} />
+            </button>
+          </CustomOverlay>
+        )}
+        {hasNewSelectedCoord() && (
+          <CustomOverlay position='top-left'>
+            <button onClick={handleReset}>
+              <Trash size={29} />
+            </button>
+          </CustomOverlay>
+        )}
         {showFullscreenControl && <FullscreenControl />}
         <GeolocateControl position='top-left' onGeolocate={handleGeolocate} />
         <NavigationControl showCompass={false} position='bottom-right' />
@@ -153,7 +184,7 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         cancelText='Cancel'
         onConfirm={confirmSelection}
         onCancel={() => {
-          console.log('Cancelled')
+          setNewSelectedCoord({ lng: 0, lat: 0 })
         }}
         hideCancel={false}
         hideConfirm={false}
