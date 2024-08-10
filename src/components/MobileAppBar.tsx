@@ -85,6 +85,7 @@ export const More = (): JSX.Element => {
           <a className='btn btn-ghost no-animation btn-block' href='/partner-with-us'>Become a Partner</a>
           <hr />
           <a className='btn btn-ghost no-animation btn-block' href='/about'>About</a>
+          <a className='btn btn-ghost no-animation btn-block' href='https://community.openbeta.io/'>Forums</a>
           <a className='btn btn-ghost no-animation btn-block' href='https://docs.openbeta.io'>Documentation</a>
           <a className='btn btn-ghost no-animation btn-block' href='https://openbeta.io/blog'>Blog</a>
           <hr />

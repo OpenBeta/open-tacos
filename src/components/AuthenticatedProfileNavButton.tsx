@@ -69,6 +69,7 @@ export default function AuthenticatedProfileNavButton ({ isMobile = true }: Prof
             <DropdownSeparator />
 
             <DropdownItem text='About' onSelect={() => { void router.push('/about') }} />
+            <DropdownItem text='Forums' onSelect={() => { void router.push('https://community.openbeta.io/') }} />
             <DropdownItem text='Documentation' onSelect={() => { void router.push('https://docs.openbeta.io') }} />
             <DropdownItem text='Blog' onSelect={() => { void router.push('https://openbeta.io/blog') }} />
 
