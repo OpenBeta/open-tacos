@@ -7998,11 +7998,6 @@ react-style-singleton@^2.2.1:
     invariant "^2.2.4"
     tslib "^2.0.0"
 
-react-swipeable@^7.0.0:
-  version "7.0.1"
-  resolved "https://registry.npmjs.org/react-swipeable/-/react-swipeable-7.0.1.tgz"
-  integrity sha512-RKB17JdQzvECfnVj9yDZsiYn3vH0eyva/ZbrCZXZR0qp66PBRhtg4F9yJcJTWYT5Adadi+x4NoG53BxKHwIYLQ==
-
 react-test-renderer@^18.0.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react-test-renderer/-/react-test-renderer-18.2.0.tgz"

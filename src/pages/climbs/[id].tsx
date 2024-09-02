@@ -5,8 +5,6 @@ import { useForm, FormProvider } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import * as Portal from '@radix-ui/react-portal'
-import { useHotkeys } from 'react-hotkeys-hook'
-import { useSwipeable } from 'react-swipeable'
 import { toast } from 'react-toastify'
 import { Summary } from '@/app/(default)/components/ui/Summary'
 import ArrowVertical from '../../assets/icons/arrow-vertical.svg'
@@ -136,29 +134,6 @@ const Body = ({ climb, leftClimb, rightClimb, parentArea }: ClimbPageProps): JSX
 
   useState([leftClimb, rightClimb])
 
-  const navLeft = (): void => {
-    if (leftClimb != null) {
-      void router.push(`/climbs/${leftClimb.id}`)
-    }
-  }
-
-  const navRight = (): void => {
-    if (rightClimb != null) {
-      void router.push(`/climbs/${rightClimb.id}`)
-    }
-  }
-
-  const swipeHandlers = useSwipeable({
-    onSwipedLeft: navLeft,
-    onSwipedRight: navRight,
-    swipeDuration: 250,
-    // touchEventOptions: { passive: true },
-    preventScrollOnSwipe: false
-  }
-  )
-  useHotkeys('left', navLeft, [leftClimb])
-  useHotkeys('right', navRight, [rightClimb])
-
   const parentId = ancestors[ancestors.length - 1]
 
   const { updateClimbCmd } = useUpdateClimbsCmd({
@@ -224,7 +199,7 @@ const Body = ({ climb, leftClimb, rightClimb, parentArea }: ClimbPageProps): JSX
   )
 
   return (
-    <div {...swipeHandlers}>
+    <div>
       <Portal.Root container={editTogglePlaceholderRef}>
         <EditModeToggle onChange={setEditMode} />
       </Portal.Root>
