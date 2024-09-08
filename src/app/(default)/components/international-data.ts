@@ -32,6 +32,15 @@ export const INTERNATIONAL_DATA: ToCCountry[] = [
     ]
   },
   {
+    areaName: 'Germany',
+    uuid: 'be9733db-21a2-53ec-86a2-3fb6fab552d9',
+    children: [{
+      uuid: 'f67770f6-9aba-52da-a597-c8738ffa56e4',
+      areaName: 'Plankenstein'
+    }
+    ]
+  },
+  {
     areaName: 'South Africa',
     uuid: '1d33c773-e381-5b8a-a13f-3dfd7991732b',
     children: [{

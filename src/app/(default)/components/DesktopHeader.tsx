@@ -12,8 +12,8 @@ export const DesktopHeader: React.FC = () => {
 
   const navListDefault: NavMenuItemProps[] = [
     {
-      to: process.env.NEXT_PUBLIC_DISCORD_INVITE,
-      label: 'Discord'
+      to: 'https://community.openbeta.io',
+      label: 'Forums'
     },
     {
       to: '/about',
