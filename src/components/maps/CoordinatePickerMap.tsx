@@ -33,12 +33,6 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
   showFullscreenControl = true, initialCenter, onCoordinateConfirmed
 }) => {
   const initialZoom = 14
-  // const [viewState, setViewState] = useState<Pick<ViewState, 'longitude' | 'latitude' | 'zoom'>>({
-  //   longitude: (initialCenter != null) ? initialCenter[0] : 0,
-  //   latitude: (initialCenter != null) ? initialCenter[1] : 0,
-  //   zoom: initialZoom
-  // })
-
   const defaultCoords = { lng: 0, lat: 0 }
   const [newSelectedCoord, setNewSelectedCoord] = useState<{ lng: number, lat: number }>(defaultCoords)
   const [cursor, setCursor] = useState<string>('default')
@@ -80,14 +74,8 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
     }
   }, [updateCoordinates])
 
-  // const onMove = useCallback(({ viewState }: { viewState: ViewState }) => {
-  //   setViewState(viewState)
-  //   // updateCoordinates(viewState.longitude, viewState.latitude)
-  // }, [])
-
   const handleClick = (event: any): void => {
     const { lng, lat } = event.lngLat
-    // setNewSelectedCoord({ lng, lat })
     updateCoordinates(lng, lat)
     if (triggerButtonRef.current != null) {
       triggerButtonRef.current.click()
@@ -114,7 +102,6 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         onDragEnd={() => {
           setCursor('default')
         }}
-        // onMove={onMove}
         onClick={handleClick}
         mapStyle={mapStyle}
         cursor={cursor}
