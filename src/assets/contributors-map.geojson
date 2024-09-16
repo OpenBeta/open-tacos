@@ -180,6 +180,21 @@
           42.59040
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Adam",
+        "githubId": "adamgilg",
+        "favoriteCrag": "a354b580-870b-5444-9f11-2c0e78995841"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -123.15394,
+          49.67997
+        ]
+      }
     }
   ]
 }
