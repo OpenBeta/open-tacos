@@ -180,6 +180,21 @@
           42.59040
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Sreeharsha",
+        "githubId": "sreeharsha-rav",
+        "favoriteCrag": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.438385875596104, 
+          -111.92938763085397
+        ]
+      }
     }
   ]
 }
