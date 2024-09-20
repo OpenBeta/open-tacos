@@ -1,3 +1,4 @@
+'use client'
 import React, { useCallback, useState, useRef, useEffect } from 'react'
 import { Map, FullscreenControl, ScaleControl, NavigationControl, Marker, GeolocateControl, GeolocateResultEvent } from 'react-map-gl/maplibre'
 import { MapLibreEvent } from 'maplibre-gl'
