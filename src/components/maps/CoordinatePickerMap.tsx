@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react'
+import React, { useCallback, useState, useRef, useEffect } from 'react'
 import { Map, FullscreenControl, ScaleControl, NavigationControl, Marker, GeolocateControl, GeolocateResultEvent } from 'react-map-gl/maplibre'
 import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
@@ -36,29 +36,48 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
   const defaultCoords = { lng: 0, lat: 0 }
   const [newSelectedCoord, setNewSelectedCoord] = useState<{ lng: number, lat: number }>(defaultCoords)
   const [cursor, setCursor] = useState<string>('default')
+  const [dynamicInitialCenter, setDynamicInitialCenter] = useState<[number, number] | null>(initialCenter ?? null)
   const { isMobile } = useResponsive()
   const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.light.style)
   const triggerButtonRef = useRef<HTMLButtonElement>(null)
-  const initialCoordinates = initialCenter != null ? { lng: initialCenter[0], lat: initialCenter[1] } : { lng: 0, lat: 0 }
-  const { setValue } = useFormContext()
+  const { watch, setValue } = useFormContext()
+
+  // Use latlngStr from form context as it may differ from initialCenter if updated without page reload
+  const watchedCoords = watch('latlngStr') as string
+
+  const initialCoordinates = dynamicInitialCenter != null
+    ? { lng: dynamicInitialCenter[0], lat: dynamicInitialCenter[1] }
+    : { lng: 0, lat: 0 }
+
+  useEffect(() => {
+    if (watchedCoords != null) {
+      const [lat, lng] = watchedCoords.split(',').map(Number)
+
+      // Update dynamicInitialCenter if it's different from watchedCoords
+      if (dynamicInitialCenter == null || lat !== dynamicInitialCenter[1] || lng !== dynamicInitialCenter[0]) {
+        setDynamicInitialCenter([lng, lat])
+      }
+
+      setNewSelectedCoord({ lat, lng })
+    }
+  }, [watchedCoords, dynamicInitialCenter])
 
   const onLoad = useCallback((e: MapLibreEvent) => {
     if (e.target == null) return
-    if (initialCenter != null) {
-      e.target.jumpTo({ center: { lng: initialCenter?.[0] ?? 0, lat: initialCenter?.[1] ?? 0 }, zoom: initialZoom ?? 6 })
+    if (dynamicInitialCenter != null) {
+      e.target.jumpTo({ center: { lng: dynamicInitialCenter?.[0] ?? 0, lat: dynamicInitialCenter?.[1] ?? 0 }, zoom: initialZoom })
     }
-  }, [initialCenter])
+  }, [dynamicInitialCenter])
 
   const updateCoordinates = useDebouncedCallback((lng, lat) => {
     setNewSelectedCoord({ lng, lat })
   }, 100)
 
   const confirmSelection = (): void => {
-    if (initialCoordinates != null) {
-      setValue('latlngStr', `${newSelectedCoord.lat?.toFixed(5) ?? 0},${newSelectedCoord.lng?.toFixed(5) ?? 0}`, { shouldDirty: true, shouldValidate: true })
-      if (onCoordinateConfirmed != null) {
-        onCoordinateConfirmed([newSelectedCoord.lng ?? 0, newSelectedCoord.lat ?? 0])
-      }
+    setValue('latlngStr', `${newSelectedCoord.lat?.toFixed(5) ?? 0},${newSelectedCoord.lng?.toFixed(5) ?? 0}`, { shouldDirty: true, shouldValidate: true })
+    setDynamicInitialCenter([newSelectedCoord.lng, newSelectedCoord.lat])
+    if (onCoordinateConfirmed != null) {
+      onCoordinateConfirmed([newSelectedCoord.lng ?? 0, newSelectedCoord.lat ?? 0])
     }
   }
 
@@ -113,27 +132,21 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         {showFullscreenControl && <FullscreenControl />}
         <GeolocateControl position='top-left' onGeolocate={handleGeolocate} />
         <NavigationControl showCompass={false} position='bottom-right' />
-        {(initialCoordinates.lat !== 0 && initialCoordinates.lng !== 0) && (
+        {(dynamicInitialCenter != null) && (
           <Marker longitude={initialCoordinates.lng} latitude={initialCoordinates.lat} anchor='bottom'>
             <MapPin size={36} weight='fill' className='text-accent' />
           </Marker>
         )}
-        <Marker
-          draggable
-          onDragEnd={(event) => {
-            const { lng, lat } = event.lngLat
-            console.log('Dragged')
-            updateCoordinates(lng, lat)
-            if (triggerButtonRef.current != null) {
-              triggerButtonRef.current.click()
-            }
-          }}
-          longitude={newSelectedCoord.lng}
-          latitude={newSelectedCoord.lat}
-          anchor='center'
-        >
-          <Crosshair size={36} weight='fill' className='text-accent' />
-        </Marker>
+        {/* Show crosshair marker if the selected coordinates are different from the initial center */}
+        {(newSelectedCoord.lng !== dynamicInitialCenter?.[0] && newSelectedCoord.lat !== dynamicInitialCenter?.[1]) && (
+          <Marker
+            longitude={newSelectedCoord.lng}
+            latitude={newSelectedCoord.lat}
+            anchor='center'
+          >
+            <Crosshair size={36} weight='fill' className='text-accent' />
+          </Marker>
+        )}
       </Map>
       <AlertDialog
         title='Confirm Selection'
