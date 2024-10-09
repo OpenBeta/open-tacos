@@ -35,8 +35,8 @@ export const AREA_LATLNG_FORM_VALIDATION_RULES: RulesType = {
 
 export const AREA_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
-    value: 3500,
-    message: 'Maximum 3500 characters.'
+    value: 10000,
+    message: 'Maximum 10,000 characters.'
   }
 }
 
