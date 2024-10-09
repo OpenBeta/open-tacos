@@ -262,6 +262,7 @@ Thanks goes to these wonderful people:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/salgadopietrini"><img src="https://avatars.githubusercontent.com/u/67206170?v=4?s=100" width="100px;" alt="Manuel Salgado"/><br /><sub><b>Manuel Salgado</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=salgadopietrini" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/svkorepanov"><img src="https://avatars.githubusercontent.com/u/38503175?v=4?s=100" width="100px;" alt="Sergey Korepanov"/><br /><sub><b>Sergey Korepanov</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=svkorepanov" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://aimeekang.dev"><img src="https://avatars.githubusercontent.com/u/112139070?v=4?s=100" width="100px;" alt="Aimee Kang"/><br /><sub><b>Aimee Kang</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=aimeekang" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.nodebb.org"><img src="https://avatars.githubusercontent.com/u/923011?v=4?s=100" width="100px;" alt="Julian Lam"/><br /><sub><b>Julian Lam</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=julianlam" title="Code">💻</a> <a href="#ideas-julianlam" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
   </tbody>
 </table>
