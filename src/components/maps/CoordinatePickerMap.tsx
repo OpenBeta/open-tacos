@@ -1,7 +1,7 @@
 'use client'
 import React, { useCallback, useState, useRef, useEffect } from 'react'
 import { Map, FullscreenControl, ScaleControl, NavigationControl, Marker, GeolocateControl, GeolocateResultEvent } from 'react-map-gl/maplibre'
-import { MapLibreEvent } from 'maplibre-gl'
+import { MapLayerMouseEvent, MapLibreEvent } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
 import { useDebouncedCallback } from 'use-debounce'
 import { MAP_STYLES, type MapStyles } from '@/components/maps/MapSelector'
@@ -80,7 +80,7 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
     }
   }, [updateCoordinates])
 
-  const handleClick = (event: any): void => {
+  const handleClick = (event: MapLayerMouseEvent): void => {
     const { lng, lat } = event.lngLat
     updateCoordinates(lng, lat)
     if (triggerButtonRef.current != null) {
