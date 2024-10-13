@@ -1,7 +1,6 @@
 'use client'
 import React, { useCallback, useState, useRef, useEffect } from 'react'
-import { Map, FullscreenControl, ScaleControl, NavigationControl, Marker, GeolocateControl, GeolocateResultEvent } from 'react-map-gl/maplibre'
-import { MapLayerMouseEvent, MapLibreEvent } from 'maplibre-gl'
+import { Map, ScaleControl, NavigationControl, Marker, GeolocateControl, GeolocateResultEvent, MapLayerMouseEvent, MapEvent } from 'react-map-gl/maplibre'
 import dynamic from 'next/dynamic'
 import { useDebouncedCallback } from 'use-debounce'
 import { MAP_STYLES, type MapStyles } from '@/components/maps/MapSelector'
@@ -12,7 +11,6 @@ import useResponsive from '@/js/hooks/useResponsive'
 import { MapPin, Crosshair } from '@phosphor-icons/react'
 
 interface CoordinatePickerMapProps {
-  showFullscreenControl?: boolean
   onCoordinateConfirmed: () => void
   name?: string
 }
@@ -27,9 +25,7 @@ interface Coord {
   newSelectedCoordinate: Coordinate | null
 }
 
-export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
-  showFullscreenControl = true, onCoordinateConfirmed
-}) => {
+export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({ onCoordinateConfirmed }) => {
   const initialZoom = 14
   const [cursor, setCursor] = useState<string>('default')
   const [coord, setCoord] = useState<Coord>({
@@ -52,7 +48,7 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
     }
   }, [watchedCoords, newSelectedCoordinate])
 
-  const onLoad = useCallback((e: MapLibreEvent) => {
+  const onLoad = useCallback((e: MapEvent) => {
     if (e.target == null || initialCoordinate == null) return
     e.target.jumpTo({ center: { lat: initialCoordinate.lat, lng: initialCoordinate.lng }, zoom: initialZoom })
   }, [initialCoordinate])
@@ -111,12 +107,10 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         onClick={handleClick}
         mapStyle={mapStyle}
         cursor={cursor}
-        cooperativeGestures={showFullscreenControl}
       >
         <MapLayersSelector emit={updateMapLayer} />
         <ScaleControl unit='imperial' style={{ marginBottom: 10 }} position='bottom-left' />
         <ScaleControl unit='metric' style={{ marginBottom: 0 }} position='bottom-left' />
-        {showFullscreenControl && <FullscreenControl />}
         <GeolocateControl position='top-left' onGeolocate={handleGeolocate} />
         <NavigationControl showCompass={false} position='bottom-right' />
         {initialCoordinate !== null && (
@@ -133,23 +127,24 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
             <Crosshair size={36} weight='fill' className='text-accent' />
           </Marker>
         )}
+        <AlertDialog
+          title='Confirm Selection'
+          button={<button ref={triggerButtonRef} className='hidden'>Open Dialog</button>} // Hidden button as trigger
+          confirmText='Confirm'
+          cancelText='Cancel'
+          onConfirm={confirmSelection}
+          onCancel={() => {
+            setCoord((prev) => ({ initialCoordinate: prev.initialCoordinate, newSelectedCoordinate: null }))
+          }}
+          hideCancel={false}
+          hideConfirm={false}
+          hideTitle
+          customPositionClasses={anchorClass}
+        >
+          Coordinates: {newSelectedCoordinate !== null ? `${newSelectedCoordinate.lat.toFixed(5)}, ${newSelectedCoordinate.lng.toFixed(5)}` : ''}
+        </AlertDialog>
       </Map>
-      <AlertDialog
-        title='Confirm Selection'
-        button={<button ref={triggerButtonRef} className='hidden'>Open Dialog</button>} // Hidden button as trigger
-        confirmText='Confirm'
-        cancelText='Cancel'
-        onConfirm={confirmSelection}
-        onCancel={() => {
-          setCoord((prev) => ({ initialCoordinate: prev.initialCoordinate, newSelectedCoordinate: null }))
-        }}
-        hideCancel={false}
-        hideConfirm={false}
-        hideTitle
-        customPositionClasses={anchorClass}
-      >
-        Coordinates: {newSelectedCoordinate !== null ? `${newSelectedCoordinate.lat.toFixed(5)}, ${newSelectedCoordinate.lng.toFixed(5)}` : ''}
-      </AlertDialog>
+
     </div>
   )
 }
