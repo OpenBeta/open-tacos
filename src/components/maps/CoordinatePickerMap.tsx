@@ -132,7 +132,7 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
       </Map>
       <AlertDialog
         title='Confirm Selection'
-        button={<button ref={triggerButtonRef} style={{ display: 'none' }}>Open Dialog</button>} // Hidden button as trigger
+        button={<button ref={triggerButtonRef} className='hidden'>Open Dialog</button>} // Hidden button as trigger
         confirmText='Confirm'
         cancelText='Cancel'
         onConfirm={confirmSelection}
