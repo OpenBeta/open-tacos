@@ -17,13 +17,26 @@ interface CoordinatePickerMapProps {
   name?: string
 }
 
+interface Coordinate {
+  lat: number
+  lng: number
+}
+
+interface Coord {
+  center: Coordinate | null
+  newSelected: Coordinate | null
+}
+
 export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
   showFullscreenControl = true, onCoordinateConfirmed
 }) => {
   const initialZoom = 14
-  const [newSelectedCoord, setNewSelectedCoord] = useState<{ lng: number, lat: number } | null>(null)
   const [cursor, setCursor] = useState<string>('default')
-  const [center, setCenter] = useState<{ lat: number, lng: number } | null>(null)
+  const [coord, setCoord] = useState<Coord>({
+    center: null,
+    newSelected: null
+  })
+  const { center, newSelected } = coord
   const { isMobile } = useResponsive()
   const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.light.style)
   const triggerButtonRef = useRef<HTMLButtonElement>(null)
@@ -35,10 +48,9 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
   useEffect(() => {
     if (watchedCoords != null) {
       const [lat, lng] = watchedCoords.split(',').map(Number)
-      setCenter({ lat, lng })
-      setNewSelectedCoord({ lat, lng })
+      setCoord({ center: { lat, lng }, newSelected })
     }
-  }, [watchedCoords])
+  }, [watchedCoords, newSelected])
 
   const onLoad = useCallback((e: MapLibreEvent) => {
     if (e.target == null || center == null) return
@@ -46,12 +58,12 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
   }, [center])
 
   const updateCoordinates = useDebouncedCallback((lng, lat) => {
-    setNewSelectedCoord({ lng, lat })
+    setCoord((prev) => ({ center: prev.center, newSelected: { lat, lng } }))
   }, 100)
 
   const confirmSelection = (): void => {
-    if (newSelectedCoord != null) {
-      setValue('latlngStr', `${newSelectedCoord.lat?.toFixed(5) ?? 0},${newSelectedCoord.lng?.toFixed(5) ?? 0}`, { shouldDirty: true, shouldValidate: true })
+    if (newSelected !== null) {
+      setValue('latlngStr', `${newSelected.lat.toFixed(5)},${newSelected.lng.toFixed(5)}`, { shouldDirty: true, shouldValidate: true })
       onCoordinateConfirmed()
     }
   }
@@ -76,13 +88,6 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
     }
   }
 
-  // Compare newSelectedCoord with watchedCoords to decide whether to show the crosshair
-  const isNewCoord = (): boolean => {
-    if (watchedCoords === null || newSelectedCoord === null) return false
-    const [lat, lng] = watchedCoords.split(',').map(Number)
-    return !(newSelectedCoord.lat === lat && newSelectedCoord.lng === lng)
-  }
-
   const anchorClass = isMobile
     ? 'fixed bottom-2 left-1/2 transform -translate-x-1/2'
     : 'fixed bottom-1/4 left-1/2 transform -translate-x-1/2'
@@ -93,8 +98,8 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         id='coordinate-picker-map'
         onLoad={onLoad}
         initialViewState={{
-          longitude: center?.lng ?? 0,
-          latitude: center?.lat ?? 0,
+          longitude: center?.lng,
+          latitude: center?.lat,
           zoom: initialZoom
         }}
         onDragStart={() => {
@@ -114,15 +119,15 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         {showFullscreenControl && <FullscreenControl />}
         <GeolocateControl position='top-left' onGeolocate={handleGeolocate} />
         <NavigationControl showCompass={false} position='bottom-right' />
-        {center != null && (
+        {center !== null && (
           <Marker longitude={center.lng} latitude={center.lat} anchor='bottom'>
             <MapPin size={36} weight='fill' className='text-accent' />
           </Marker>
         )}
-        {isNewCoord() && newSelectedCoord !== null && (
+        {newSelected !== null && (
           <Marker
-            longitude={newSelectedCoord.lng}
-            latitude={newSelectedCoord.lat}
+            longitude={newSelected.lng}
+            latitude={newSelected.lat}
             anchor='center'
           >
             <Crosshair size={36} weight='fill' className='text-accent' />
@@ -136,14 +141,14 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         cancelText='Cancel'
         onConfirm={confirmSelection}
         onCancel={() => {
-          setNewSelectedCoord(null)
+          setCoord((prev) => ({ center: prev.center, newSelected: null }))
         }}
         hideCancel={false}
         hideConfirm={false}
         hideTitle
         customPositionClasses={anchorClass}
       >
-        Coordinates: {newSelectedCoord !== null ? `${newSelectedCoord.lat.toFixed(5)}, ${newSelectedCoord.lng.toFixed(5)}` : ''}
+        Coordinates: {newSelected !== null ? `${newSelected.lat.toFixed(5)}, ${newSelected.lng.toFixed(5)}` : ''}
       </AlertDialog>
     </div>
   )
