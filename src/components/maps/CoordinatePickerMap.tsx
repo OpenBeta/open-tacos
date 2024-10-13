@@ -23,8 +23,8 @@ interface Coordinate {
 }
 
 interface Coord {
-  center: Coordinate | null
-  newSelected: Coordinate | null
+  initialCoordinate: Coordinate | null
+  newSelectedCoordinate: Coordinate | null
 }
 
 export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
@@ -33,10 +33,10 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
   const initialZoom = 14
   const [cursor, setCursor] = useState<string>('default')
   const [coord, setCoord] = useState<Coord>({
-    center: null,
-    newSelected: null
+    initialCoordinate: null,
+    newSelectedCoordinate: null
   })
-  const { center, newSelected } = coord
+  const { initialCoordinate, newSelectedCoordinate } = coord
   const { isMobile } = useResponsive()
   const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.light.style)
   const triggerButtonRef = useRef<HTMLButtonElement>(null)
@@ -48,22 +48,22 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
   useEffect(() => {
     if (watchedCoords != null) {
       const [lat, lng] = watchedCoords.split(',').map(Number)
-      setCoord({ center: { lat, lng }, newSelected })
+      setCoord({ initialCoordinate: { lat, lng }, newSelectedCoordinate })
     }
-  }, [watchedCoords, newSelected])
+  }, [watchedCoords, newSelectedCoordinate])
 
   const onLoad = useCallback((e: MapLibreEvent) => {
-    if (e.target == null || center == null) return
-    e.target.jumpTo({ center: { lat: center.lat, lng: center.lng }, zoom: initialZoom })
-  }, [center])
+    if (e.target == null || initialCoordinate == null) return
+    e.target.jumpTo({ center: { lat: initialCoordinate.lat, lng: initialCoordinate.lng }, zoom: initialZoom })
+  }, [initialCoordinate])
 
   const updateCoordinates = useDebouncedCallback((lng, lat) => {
-    setCoord((prev) => ({ center: prev.center, newSelected: { lat, lng } }))
+    setCoord((prev) => ({ initialCoordinate: prev.initialCoordinate, newSelectedCoordinate: { lat, lng } }))
   }, 100)
 
   const confirmSelection = (): void => {
-    if (newSelected !== null) {
-      setValue('latlngStr', `${newSelected.lat.toFixed(5)},${newSelected.lng.toFixed(5)}`, { shouldDirty: true, shouldValidate: true })
+    if (newSelectedCoordinate !== null) {
+      setValue('latlngStr', `${newSelectedCoordinate.lat.toFixed(5)},${newSelectedCoordinate.lng.toFixed(5)}`, { shouldDirty: true, shouldValidate: true })
       onCoordinateConfirmed()
     }
   }
@@ -98,8 +98,8 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         id='coordinate-picker-map'
         onLoad={onLoad}
         initialViewState={{
-          longitude: center?.lng,
-          latitude: center?.lat,
+          longitude: initialCoordinate?.lng,
+          latitude: initialCoordinate?.lat,
           zoom: initialZoom
         }}
         onDragStart={() => {
@@ -119,15 +119,15 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         {showFullscreenControl && <FullscreenControl />}
         <GeolocateControl position='top-left' onGeolocate={handleGeolocate} />
         <NavigationControl showCompass={false} position='bottom-right' />
-        {center !== null && (
-          <Marker longitude={center.lng} latitude={center.lat} anchor='bottom'>
+        {initialCoordinate !== null && (
+          <Marker longitude={initialCoordinate.lng} latitude={initialCoordinate.lat} anchor='bottom'>
             <MapPin size={36} weight='fill' className='text-accent' />
           </Marker>
         )}
-        {newSelected !== null && (
+        {newSelectedCoordinate !== null && (
           <Marker
-            longitude={newSelected.lng}
-            latitude={newSelected.lat}
+            longitude={newSelectedCoordinate.lng}
+            latitude={newSelectedCoordinate.lat}
             anchor='center'
           >
             <Crosshair size={36} weight='fill' className='text-accent' />
@@ -141,14 +141,14 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
         cancelText='Cancel'
         onConfirm={confirmSelection}
         onCancel={() => {
-          setCoord((prev) => ({ center: prev.center, newSelected: null }))
+          setCoord((prev) => ({ initialCoordinate: prev.initialCoordinate, newSelectedCoordinate: null }))
         }}
         hideCancel={false}
         hideConfirm={false}
         hideTitle
         customPositionClasses={anchorClass}
       >
-        Coordinates: {newSelected !== null ? `${newSelected.lat.toFixed(5)}, ${newSelected.lng.toFixed(5)}` : ''}
+        Coordinates: {newSelectedCoordinate !== null ? `${newSelectedCoordinate.lat.toFixed(5)}, ${newSelectedCoordinate.lng.toFixed(5)}` : ''}
       </AlertDialog>
     </div>
   )
