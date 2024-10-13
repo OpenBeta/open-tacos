@@ -85,7 +85,7 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
   }
 
   const anchorClass = isMobile
-    ? 'fixed bottom-1/4 left-1/2 transform -translate-x-1/2'
+    ? 'fixed bottom-2 left-1/2 transform -translate-x-1/2'
     : 'fixed bottom-1/4 left-1/2 transform -translate-x-1/2'
 
   return (
