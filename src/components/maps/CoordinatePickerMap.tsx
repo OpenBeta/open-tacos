@@ -4,7 +4,7 @@ import { Map, FullscreenControl, ScaleControl, NavigationControl, Marker, Geoloc
 import { MapLibreEvent } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
 import { useDebouncedCallback } from 'use-debounce'
-import { MAP_STYLES, type MapStyles } from './MapSelector'
+import { MAP_STYLES, type MapStyles } from '@/components/maps/MapSelector'
 import { useFormContext } from 'react-hook-form'
 import MapLayersSelector from '@/components/maps/MapLayersSelector'
 import AlertDialog from '@/components/ui/micro/AlertDialogue'
@@ -13,7 +13,7 @@ import { MapPin, Crosshair } from '@phosphor-icons/react'
 
 interface CoordinatePickerMapProps {
   showFullscreenControl?: boolean
-  onCoordinateConfirmed?: (coordinates: [number, number] | null) => void
+  onCoordinateConfirmed: () => void
   name?: string
 }
 
@@ -52,9 +52,7 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
   const confirmSelection = (): void => {
     if (newSelectedCoord != null) {
       setValue('latlngStr', `${newSelectedCoord.lat?.toFixed(5) ?? 0},${newSelectedCoord.lng?.toFixed(5) ?? 0}`, { shouldDirty: true, shouldValidate: true })
-      if (onCoordinateConfirmed != null) {
-        onCoordinateConfirmed([newSelectedCoord.lng ?? 0, newSelectedCoord.lat ?? 0])
-      }
+      onCoordinateConfirmed()
     }
   }
 
