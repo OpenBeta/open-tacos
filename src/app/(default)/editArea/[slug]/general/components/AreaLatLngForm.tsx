@@ -56,7 +56,6 @@ export const AreaLatLngForm: React.FC<{ initLat: number, initLng: number, uuid: 
                 <div className='w-full h-100vh'>
                   <div className='h-[90vh] lg:h-[50vh] w-full'>
                     <CoordinatePickerMap
-                      initialCenter={[initLng, initLat]}
                       onCoordinateConfirmed={() => {
                         setPickerSelected(false)
                       }}

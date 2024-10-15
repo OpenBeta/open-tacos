@@ -24,7 +24,7 @@ export const DialogContent = React.forwardRef<any, Props>(
         >
           <div className='flex items-center px-2'>
             <DialogPrimitive.Close aria-label='Close' asChild className='dialog-close-button'>
-              <button className='btn btn-circle btn-ghost outline-none'>
+              <button className='btn btn-circle btn-ghost outline-none m-1'>
                 <XMarkIcon size={24} />
               </button>
             </DialogPrimitive.Close>

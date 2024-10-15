@@ -1,78 +1,66 @@
 'use client'
-import { useCallback, useState } from 'react'
-import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, Marker, MapInstance, MarkerDragEvent, GeolocateControl, GeolocateResultEvent } from 'react-map-gl/maplibre'
-import maplibregl, { MapLibreEvent } from 'maplibre-gl'
+import React, { useCallback, useState, useRef, useEffect } from 'react'
+import { Map, ScaleControl, NavigationControl, Marker, GeolocateControl, GeolocateResultEvent, MapLayerMouseEvent, MapEvent } from 'react-map-gl/maplibre'
 import dynamic from 'next/dynamic'
 import { useDebouncedCallback } from 'use-debounce'
-import { MAP_STYLES, type MapStyles } from './MapSelector'
+import { MAP_STYLES, type MapStyles } from '@/components/maps/MapSelector'
 import { useFormContext } from 'react-hook-form'
-import MapLayersSelector from './MapLayersSelector'
-import { MapPin } from '@phosphor-icons/react/dist/ssr'
-import { CoordinatePickerPopup } from './CoordinatePickerPopup'
-
-export interface CameraInfo {
-  center: {
-    lng: number
-    lat: number
-  }
-  zoom: number
-}
+import MapLayersSelector from '@/components/maps/MapLayersSelector'
+import AlertDialog from '@/components/ui/micro/AlertDialogue'
+import useResponsive from '@/js/hooks/useResponsive'
+import { MapPin, Crosshair } from '@phosphor-icons/react'
 
 interface CoordinatePickerMapProps {
-  showFullscreenControl?: boolean
-  initialCenter?: [number, number]
-  initialViewState?: {
-    bounds: maplibregl.LngLatBoundsLike
-    fitBoundsOptions: maplibregl.FitBoundsOptions
-  }
-  onCoordinateConfirmed?: (coordinates: [number, number] | null) => void
+  onCoordinateConfirmed: () => void
   name?: string
 }
 
-export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
-  showFullscreenControl = true, initialCenter, onCoordinateConfirmed
-}) => {
-  const [selectedCoord, setSelectedCoord] = useState({ lng: 0, lat: 0 })
-  const [cursor, setCursor] = useState<string>('default')
-  const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.light.style)
-  const [mapInstance, setMapInstance] = useState<MapInstance | null>(null)
-  const [popupOpen, setPopupOpen] = useState(false)
+interface Coordinate {
+  lat: number
+  lng: number
+}
+
+interface Coord {
+  initialCoordinate: Coordinate | null
+  newSelectedCoordinate: Coordinate | null
+}
+
+export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({ onCoordinateConfirmed }) => {
   const initialZoom = 14
+  const [cursor, setCursor] = useState<string>('default')
+  const [coord, setCoord] = useState<Coord>({
+    initialCoordinate: null,
+    newSelectedCoordinate: null
+  })
+  const { initialCoordinate, newSelectedCoordinate } = coord
+  const { isMobile } = useResponsive()
+  const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.light.style)
+  const triggerButtonRef = useRef<HTMLButtonElement>(null)
+  const { watch, setValue } = useFormContext()
 
-  const { setValue } = useFormContext()
+  // Watch the 'latlngStr' value from form context
+  const watchedCoords = watch('latlngStr') as string
 
-  const onLoad = useCallback((e: MapLibreEvent) => {
-    if (e.target == null) return
-    setMapInstance(e.target)
-    if (initialCenter != null) {
-      e.target.jumpTo({ center: initialCenter, zoom: initialZoom ?? 6 })
+  useEffect(() => {
+    if (watchedCoords != null) {
+      const [lat, lng] = watchedCoords.split(',').map(Number)
+      setCoord({ initialCoordinate: { lat, lng }, newSelectedCoordinate })
     }
-  }, [initialCenter])
+  }, [watchedCoords, newSelectedCoordinate])
+
+  const onLoad = useCallback((e: MapEvent) => {
+    if (e.target == null || initialCoordinate == null) return
+    e.target.jumpTo({ center: { lat: initialCoordinate.lat, lng: initialCoordinate.lng }, zoom: initialZoom })
+  }, [initialCoordinate])
 
   const updateCoordinates = useDebouncedCallback((lng, lat) => {
-    setSelectedCoord({ lng, lat })
-    setPopupOpen(true)
+    setCoord((prev) => ({ initialCoordinate: prev.initialCoordinate, newSelectedCoordinate: { lat, lng } }))
   }, 100)
 
-  const onClick = useCallback((event: MapLayerMouseEvent): void => {
-    const { lngLat } = event
-    setPopupOpen(false)
-    updateCoordinates(lngLat.lng, lngLat.lat)
-  }, [updateCoordinates])
-
-  const onMarkerDragEnd = (event: MarkerDragEvent): void => {
-    const { lngLat } = event
-    setPopupOpen(false)
-    updateCoordinates(lngLat.lng, lngLat.lat)
-  }
-
   const confirmSelection = (): void => {
-    if (selectedCoord != null) {
-      setValue('latlngStr', `${selectedCoord.lat.toFixed(5)},${selectedCoord.lng.toFixed(5)}`, { shouldDirty: true, shouldValidate: true })
-      if (onCoordinateConfirmed != null) {
-        onCoordinateConfirmed([selectedCoord.lng, selectedCoord.lat])
-      }
-      setPopupOpen(false)
+    if (newSelectedCoordinate !== null) {
+      setValue('latlngStr', `${newSelectedCoordinate.lat.toFixed(5)},${newSelectedCoordinate.lng.toFixed(5)}`, { shouldDirty: true, shouldValidate: true })
+      onCoordinateConfirmed()
     }
   }
 
@@ -84,51 +72,79 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({
   const handleGeolocate = useCallback((e: GeolocateResultEvent) => {
     const { coords } = e
     if (coords != null) {
-      setPopupOpen(false)
       updateCoordinates(coords.longitude, coords.latitude)
     }
   }, [updateCoordinates])
+
+  const handleClick = (event: MapLayerMouseEvent): void => {
+    const { lng, lat } = event.lngLat
+    updateCoordinates(lng, lat)
+    if (triggerButtonRef.current != null) {
+      triggerButtonRef.current.click()
+    }
+  }
+
+  const anchorClass = isMobile
+    ? 'fixed bottom-2 left-1/2 transform -translate-x-1/2'
+    : 'fixed bottom-1/4 left-1/2 transform -translate-x-1/2'
 
   return (
     <div className='relative w-full h-full'>
       <Map
         id='coordinate-picker-map'
         onLoad={onLoad}
+        initialViewState={{
+          longitude: initialCoordinate?.lng,
+          latitude: initialCoordinate?.lat,
+          zoom: initialZoom
+        }}
         onDragStart={() => {
-          setPopupOpen(false)
           setCursor('move')
         }}
         onDragEnd={() => {
-          if (selectedCoord != null) {
-            setPopupOpen(true)
-          }
           setCursor('default')
         }}
-        onClick={onClick}
+        onClick={handleClick}
         mapStyle={mapStyle}
         cursor={cursor}
-        cooperativeGestures={showFullscreenControl}
       >
         <MapLayersSelector emit={updateMapLayer} />
         <ScaleControl unit='imperial' style={{ marginBottom: 10 }} position='bottom-left' />
         <ScaleControl unit='metric' style={{ marginBottom: 0 }} position='bottom-left' />
-        {showFullscreenControl && <FullscreenControl />}
         <GeolocateControl position='top-left' onGeolocate={handleGeolocate} />
         <NavigationControl showCompass={false} position='bottom-right' />
-        {(selectedCoord.lat !== 0 && selectedCoord.lng !== 0) && (
-          <>
-            <Marker longitude={selectedCoord.lng} latitude={selectedCoord.lat} draggable onDragEnd={onMarkerDragEnd} anchor='bottom'>
-              <MapPin size={36} weight='fill' className='text-accent' />
-            </Marker>
-            <CoordinatePickerPopup
-              info={{ coordinates: selectedCoord, mapInstance }}
-              onConfirm={confirmSelection}
-              onClose={() => setPopupOpen(false)}
-              open={popupOpen}
-            />
-          </>
+        {initialCoordinate !== null && (
+          <Marker longitude={initialCoordinate.lng} latitude={initialCoordinate.lat} anchor='bottom'>
+            <MapPin size={36} weight='fill' className='text-accent' />
+          </Marker>
         )}
+        {newSelectedCoordinate !== null && (
+          <Marker
+            longitude={newSelectedCoordinate.lng}
+            latitude={newSelectedCoordinate.lat}
+            anchor='center'
+          >
+            <Crosshair size={36} weight='fill' className='text-accent' />
+          </Marker>
+        )}
+        <AlertDialog
+          title='Confirm Selection'
+          button={<button ref={triggerButtonRef} className='hidden'>Open Dialog</button>} // Hidden button as trigger
+          confirmText='Confirm'
+          cancelText='Cancel'
+          onConfirm={confirmSelection}
+          onCancel={() => {
+            setCoord((prev) => ({ initialCoordinate: prev.initialCoordinate, newSelectedCoordinate: null }))
+          }}
+          hideCancel={false}
+          hideConfirm={false}
+          hideTitle
+          customPositionClasses={anchorClass}
+        >
+          Coordinates: {newSelectedCoordinate !== null ? `${newSelectedCoordinate.lat.toFixed(5)}, ${newSelectedCoordinate.lng.toFixed(5)}` : ''}
+        </AlertDialog>
       </Map>
+
     </div>
   )
 }
