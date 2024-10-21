@@ -46,7 +46,7 @@ export default function Tag ({ mediaId, tag, onDelete, size = 'md', showDelete =
             }}
             title='Delete tag'
           >
-            <div className='rounded-full -mr-2.5'>
+            <div className='rounded-full relative -mr-2.5'>
               <XCircleIcon className={clx('cursor-pointer stroke-1 hover:stroke-2', size === 'lg' ? 'w-6 h-6' : 'w-5 h-5')} />
             </div>
           </button>}
