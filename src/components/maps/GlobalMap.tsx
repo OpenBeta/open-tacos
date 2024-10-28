@@ -192,7 +192,13 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         <OBCustomLayers layersState={dataLayersDisplayState} />
         {showFullscreenControl && <FullscreenControl />}
         <NavigationControl showCompass={false} position='bottom-right' />
-        <GeolocateControl position='bottom-right' />
+        <GeolocateControl
+          position='bottom-right'
+          positionOptions={{
+            enableHighAccuracy: true
+          }}
+          trackUserLocation
+        />
         {clickInfo != null &&
           <SelectedFeature feature={clickInfo} />}
         <Drawer feature={clickInfo} />
