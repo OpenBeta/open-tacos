@@ -71,7 +71,7 @@ export const authOptions: NextAuthOptions = {
         })
       }
 
-      if (token?.expires_at != null && ((token.expires_at as number) < (Date.now() / 1000))) {
+      if (token?.refreshToken != null && token?.expires_at != null && ((token.expires_at as number) < (Date.now() / 1000))) {
         const response = await axios.request({
           method: 'POST',
           url: `${issuer}/oauth/token`,
@@ -90,6 +90,7 @@ export const authOptions: NextAuthOptions = {
 
         token.accessToken = response.data.access_token
         token.refreshToken = response.data.refresh_token
+        token.expires_at = Math.floor((Date.now() / 1000) + (response.data.expires_in as number))
       }
 
       return token
