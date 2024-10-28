@@ -1,6 +1,6 @@
 'use client'
 import { useCallback, useState } from 'react'
-import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, ViewStateChangeEvent } from 'react-map-gl/maplibre'
+import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, ViewStateChangeEvent, GeolocateControl } from 'react-map-gl/maplibre'
 import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
 
@@ -192,6 +192,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         <OBCustomLayers layersState={dataLayersDisplayState} />
         {showFullscreenControl && <FullscreenControl />}
         <NavigationControl showCompass={false} position='bottom-right' />
+        <GeolocateControl position='bottom-right' />
         {clickInfo != null &&
           <SelectedFeature feature={clickInfo} />}
         <Drawer feature={clickInfo} />
