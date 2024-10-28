@@ -1,4 +1,5 @@
 import NextAuth from 'next-auth'
+import axios from 'axios'
 import type { NextAuthOptions } from 'next-auth'
 import Auth0Provider from 'next-auth/providers/auth0'
 
@@ -22,7 +23,7 @@ export const authOptions: NextAuthOptions = {
       clientId,
       clientSecret,
       issuer,
-      authorization: { params: { audience: `${issuer}/api/v2/`, scope: 'access_token_authz openid email profile read:current_user create:current_user_metadata update:current_user_metadata read:stats update:area_attrs' } },
+      authorization: { params: { audience: `${issuer}/api/v2/`, scope: 'offline_access access_token_authz openid email profile read:current_user create:current_user_metadata update:current_user_metadata read:stats update:area_attrs' } },
       client: {
         token_endpoint_auth_method: clientSecret.length === 0 ? 'none' : 'client_secret_basic'
       }
@@ -46,6 +47,15 @@ export const authOptions: NextAuthOptions = {
       if (account?.access_token != null) {
         token.accessToken = account.access_token
       }
+
+      if (account?.refresh_token != null) {
+        token.refreshToken = account.refresh_token
+      }
+
+      if (account?.expires_at != null) {
+        token.expires_at = account.expires_at
+      }
+
       if (profile?.sub != null) {
         token.id = profile.sub
       }
@@ -59,6 +69,27 @@ export const authOptions: NextAuthOptions = {
         token.userMetadata.roles = customClaimRoles.map((r: string) => {
           return UserRole[r.toUpperCase() as keyof typeof UserRole]
         })
+      }
+
+      if (token?.expires_at != null && ((token.expires_at as number) < (Date.now() / 1000))) {
+        const response = await axios.request({
+          method: 'POST',
+          url: `${issuer}/oauth/token`,
+          headers: { 'content-type': 'application/x-www-form-urlencoded' },
+          data: new URLSearchParams({
+            grant_type: 'refresh_token',
+            client_id: clientId,
+            client_secret: clientSecret,
+            refresh_token: token.refreshToken as string
+          })
+        })
+
+        if (response.data.access_token == null) {
+          throw new Error('No access token in refresh_token flow')
+        }
+
+        token.accessToken = response.data.access_token
+        token.refreshToken = response.data.refresh_token
       }
 
       return token
