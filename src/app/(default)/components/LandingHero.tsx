@@ -17,15 +17,15 @@ export const LandingHero: React.FC = () => {
 }
 
 interface HeroAlertProps {
-  link: string
-  text: string
-  badge: string
+  link?: string
+  text?: string
+  badge?: string
 }
 
 export const HeroAlert: React.FC<HeroAlertProps> = ({ link, text, badge }) => (
   <div className='alert alert-warning w-[50%]'>
     <span className='badge badge-sm badge-primary'>{badge}</span>
-    <Link href={link} className='underline flex items-center gap-1 text-sm'>
+    <Link href={link ?? '#'} className='underline flex items-center gap-1 text-sm'>
       {text} <ArrowRight size={20} />
     </Link>
   </div>
