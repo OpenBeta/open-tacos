@@ -55,9 +55,32 @@ export const QUERY_CLIMB_BY_ID = gql`
         climbId
       }
       parent {
+        areaName
         gradeContext
         metadata {
           isBoulder
+          bbox
+          polygon
+        }
+        climbs {
+          id
+          name
+          grades {
+            ...ClimbDisciplineFields
+          }
+          safety
+          type {
+            sport
+            bouldering
+            alpine
+            tr
+            trad
+            mixed
+            aid
+          }
+          metadata {
+            leftRightIndex
+          }
         }
       }
       authorMetadata {

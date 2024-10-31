@@ -1,9 +1,11 @@
 import slugify from 'slugify'
-
-import { ClimbTypeToColor } from './constants'
+import { notFound } from 'next/navigation'
+import { validate } from 'uuid'
 import { formatDistanceToNowStrict, differenceInYears, format } from 'date-fns'
 
+import { ClimbTypeToColor } from './constants'
 import { AreaType, ClimbType, ClimbDisciplineRecord, ClimbDiscipline, MediaWithTags, MediaConnection, AreaMetadataType } from './types'
+import { PageWithCatchAllUuidProps } from './types/pages'
 
 /**
  * Given a path or parent id and the type of the page generate the GitHub URL
@@ -316,4 +318,19 @@ export const areaLeftRightIndexComparator = (a: SortableAreaType, b: SortableAre
   if (aIndex < bIndex) return -1
   else if (aIndex > bIndex) return 1
   return 0
+}
+/**
+ * Extract and validate uuid as the first param in a catch-all route
+ */
+export const parseUuidAsFirstParam = ({ params }: PageWithCatchAllUuidProps): string => {
+  if (params.slug == null || params.slug?.length === 0) {
+    notFound()
+  }
+
+  const uuid = params.slug[0]
+  if (!validate(uuid)) {
+    console.error('Invalid uuid', uuid)
+    notFound()
+  }
+  return uuid
 }

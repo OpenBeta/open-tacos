@@ -44,7 +44,7 @@ export const ClimbRow: React.FC<ClimbType & { index: number, gradeContext: Grade
     sanitizedDisciplines,
     areaMetadata.isBoulder
   ).toString()
-  const url = `/climbs/${id}`
+  const url = `/climb/${id}`
   return (
     <li className={clx('py-2 break-inside-avoid-column break-inside-avoid', isThisRoute ? 'opacity-50' : '')}>
       <div className={clx('w-full', editMode ? 'card card-compact p-2 card-bordered bg-base-100 shadow' : '')}>

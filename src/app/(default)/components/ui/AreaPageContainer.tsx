@@ -13,8 +13,9 @@ export const AreaPageContainer: React.FC<{
   breadcrumbs?: React.ReactNode
   map?: React.ReactNode
   summary?: { left: React.ReactNode, right: React.ReactNode }
+  mapContainerClass?: string
   children?: React.ReactNode
-}> = ({ photoGallery, pageActions, breadcrumbs, map, summary, children }) => {
+}> = ({ photoGallery, pageActions, breadcrumbs, map, summary, children, mapContainerClass = 'w-full mt-16 relative h-[90vh] border-t' }) => {
   return (
     <article>
       <div className='default-page-margins my-2'>
@@ -29,9 +30,10 @@ export const AreaPageContainer: React.FC<{
         {summary != null && <Summary columns={summary} />}
         {children == null ? <ContentSkeleton /> : children}
       </div>
-      <div id='map' className='w-full mt-16 relative h-[90vh] border-t'>
-        {map != null && map}
-      </div>
+      {map != null && (
+        <div id='map' className={mapContainerClass}>
+          {map}
+        </div>)}
     </article>
   )
 }
