@@ -4,7 +4,7 @@ import { AreaCrumbs } from '@/components/breadcrumbs/AreaCrumbs'
 import { AreaPageContainer } from '../../components/ui/AreaPageContainer'
 import PhotoMontage, { UploadPhotoCTA } from '@/components/media/PhotoMontage'
 import { StickyHeaderContainer } from '../../components/ui/StickyHeaderContainer'
-import { parseUuidAsFirstParam } from '@/js/utils'
+import { parseUuidAsFirstParam, climbLeftRightIndexComparator } from '@/js/utils'
 import { PageWithCatchAllUuidProps } from '@/js/types/pages'
 import { getClimbById } from '@/js/graphql/api'
 import { ClimbData } from './components/ClimbData'
@@ -12,6 +12,8 @@ import { ContentBlock } from './components/ContentBlock'
 import { Summary } from '../../components/ui/Summary'
 import { SiblingClimbs } from './components/SiblingClimbs'
 import { LazyAreaMap } from '@/components/maps/AreaMap'
+import { ClimbType } from '@/js/types'
+import { NeighboringRoutesNav } from '@/components/crag/NeighboringRoute'
 
 export default async function Page ({ params }: PageWithCatchAllUuidProps): Promise<any> {
   const climbId = parseUuidAsFirstParam({ params })
@@ -23,8 +25,21 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
   const photoList = climb.media
 
   const {
-    id, ancestors, pathTokens
+    id, ancestors, pathTokens, parent
   } = climb
+
+  let leftClimb: ClimbType | null = null
+  let rightClimb: ClimbType | null = null
+
+  const sortedClimbs = [...parent.climbs].sort(climbLeftRightIndexComparator)
+
+  for (const [index, climb] of sortedClimbs.entries()) {
+    if (climb.id === id) {
+      leftClimb = (sortedClimbs[index - 1] != null) ? sortedClimbs[index - 1] : null
+      rightClimb = sortedClimbs[index + 1] != null ? sortedClimbs[index + 1] : null
+    }
+  }
+
   return (
     <AreaPageContainer
       photoGallery={
@@ -38,6 +53,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
           <AreaCrumbs pathTokens={pathTokens} ancestors={ancestors} />
         </StickyHeaderContainer>
         }
+      leftRightNav={<NeighboringRoutesNav climbs={[leftClimb, rightClimb]} parentArea={parent} />}
       summary={{
         left: <ClimbData {...climb} />,
         right: <ContentBlock content={climb.content} />
