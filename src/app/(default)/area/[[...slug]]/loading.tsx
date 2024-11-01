@@ -1,8 +1,8 @@
-import { AreaPageContainer } from '@/app/(default)/components/ui/AreaPageContainer'
+import { DefaultPageContainer } from '@/app/(default)/components/ui/DefaultPageContainer'
 
 /**
  * Loading skeleton for /area/<id> page.
  */
 export default function Loading (): JSX.Element {
-  return (<AreaPageContainer />)
+  return (<DefaultPageContainer />)
 }

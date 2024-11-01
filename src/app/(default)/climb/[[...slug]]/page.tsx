@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 
 import { AreaCrumbs } from '@/components/breadcrumbs/AreaCrumbs'
-import { AreaPageContainer } from '../../components/ui/AreaPageContainer'
+import { DefaultPageContainer } from '../../components/ui/DefaultPageContainer'
 import PhotoMontage, { UploadPhotoCTA } from '@/components/media/PhotoMontage'
 import { StickyHeaderContainer } from '../../components/ui/StickyHeaderContainer'
 import { parseUuidAsFirstParam, climbLeftRightIndexComparator } from '@/js/utils'
@@ -12,9 +12,19 @@ import { ContentBlock } from './components/ContentBlock'
 import { Summary } from '../../components/ui/Summary'
 import { SiblingClimbs } from './components/SiblingClimbs'
 import { LazyAreaMap } from '@/components/maps/AreaMap'
-import { ClimbType } from '@/js/types'
+import { ClimbType, TagTargetType } from '@/js/types'
 import { NeighboringRoutesNav } from '@/components/crag/NeighboringRoute'
+import { AreaAndClimbPageActions } from '../../components/AreaAndClimbPageActions'
 
+/**
+ * Page cache settings
+ */
+export const revalidate = 300 // 5 mins
+export const fetchCache = 'force-no-store' // opt out of Nextjs version of 'fetch'
+
+/**
+ * Climb page
+ */
 export default async function Page ({ params }: PageWithCatchAllUuidProps): Promise<any> {
   const climbId = parseUuidAsFirstParam({ params })
   const climb = await getClimbById(climbId)
@@ -25,7 +35,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
   const photoList = climb.media
 
   const {
-    id, ancestors, pathTokens, parent
+    id, name, ancestors, pathTokens, parent
   } = climb
 
   let leftClimb: ClimbType | null = null
@@ -40,14 +50,16 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
     }
   }
 
+  console.log('#photo list', photoList)
+
   return (
-    <AreaPageContainer
+    <DefaultPageContainer
       photoGallery={
                 photoList.length === 0
                   ? <UploadPhotoCTA />
                   : <PhotoMontage photoList={photoList} />
         }
-      // pageActions={<AreaPageActions areaName={areaName} uuid={uuid} />}
+      pageActions={<AreaAndClimbPageActions name={name} uuid={id} targetType={TagTargetType.climb} />}
       breadcrumbs={
         <StickyHeaderContainer>
           <AreaCrumbs pathTokens={pathTokens} ancestors={ancestors} />
@@ -72,7 +84,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
         columns={{
           left: <SiblingClimbs parentArea={climb.parent} climbId={id} />,
           right: (
-            <div className='hidden lg:min-h-[500px] lg:h-full lg:block lg:relative'>
+            <div id='map' className='hidden lg:min-h-[500px] lg:h-full lg:block lg:relative'>
               <LazyAreaMap
                 focused={null}
                 selected={climb.parent.id}
@@ -83,6 +95,6 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
         }}
       />
       <div className='mt-16' />
-    </AreaPageContainer>
+    </DefaultPageContainer>
   )
 }

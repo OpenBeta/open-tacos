@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql, FetchPolicy } from '@apollo/client'
 
 import { AreaType, ClimbType, TickType, CountrySummaryType, MediaWithTags } from '../types'
 import { graphqlClient } from './Client'
@@ -155,13 +155,13 @@ export const getUserMedia = async (userUuid: string, maxFiles = 1000): Promise<M
  * Get climb by id
  * @param id climb id as string in uuid v4 format
  */
-export const getClimbById = async (id: string): Promise<ClimbType> => {
+export const getClimbById = async (id: string, fetchPolicy: FetchPolicy = 'no-cache'): Promise<ClimbType> => {
   const res = await graphqlClient.query<{ climb: ClimbType }, { id: string }>({
     query: QUERY_CLIMB_BY_ID,
     variables: {
       id
     },
-    fetchPolicy: 'no-cache'
+    fetchPolicy
   }).catch(e => { throw new Error(e) })
   return res.data.climb
 }
