@@ -4,13 +4,16 @@ import clx from 'classnames'
 
 import Grade from '@/js/grades/Grade'
 import { AreaType, Climb } from '@/js/types'
-import { removeTypenameFromDisciplines } from '@/js/utils'
+import { getClimbPageFriendlyUrl, removeTypenameFromDisciplines } from '@/js/utils'
 
 interface NeighboringRoutesNavProps {
   climbs: Array<Climb | null>
   parentArea: AreaType
 }
 
+/**
+ * Nav bar to jump to left/right sibling climb
+ */
 export const NeighboringRoutesNav = ({ climbs, parentArea }: NeighboringRoutesNavProps): JSX.Element => {
   return (
     <div className={clx('my-4 flex flex-row', (climbs[0] == null) ? 'justify-end' : 'justify-between')}>
@@ -32,8 +35,7 @@ export const NeighboringRoutesNav = ({ climbs, parentArea }: NeighboringRoutesNa
 }
 
 const NeighboringRoute: React.FC<{ climb: Climb, gradeStr: String | undefined, isLeftRoute: boolean }> = ({ climb, gradeStr, isLeftRoute }) => {
-  const url = `/climb/${climb.id}`
-
+  const url = getClimbPageFriendlyUrl(climb.id, climb.name)
   return (
     <Link className={clx('btn btn-lg no-animation flex items-center', isLeftRoute ? 'flex-row' : ' flex-row-reverse')} href={url}>
       {isLeftRoute ? <CaretCircleLeft size={28} /> : <CaretCircleRight size={28} />}

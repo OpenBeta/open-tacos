@@ -1,7 +1,7 @@
 import clx from 'classnames'
 import { AreaMetadataType, ClimbDisciplineRecord, ClimbType } from '@/js/types'
 import { disciplineTypeToDisplay } from '@/js/grades/util'
-import { removeTypenameFromDisciplines, climbLeftRightIndexComparator } from '@/js/utils'
+import { removeTypenameFromDisciplines, climbLeftRightIndexComparator, getClimbPageFriendlyUrl } from '@/js/utils'
 import Grade, { GradeContexts } from '@/js/grades/Grade'
 import { ClimbListMiniToolbar } from '../../../manageClimbs/components/ClimbListMiniToolbar'
 
@@ -44,7 +44,7 @@ export const ClimbRow: React.FC<ClimbType & { index: number, gradeContext: Grade
     sanitizedDisciplines,
     areaMetadata.isBoulder
   ).toString()
-  const url = `/climb/${id}`
+  const url = getClimbPageFriendlyUrl(id, name)
   return (
     <li className={clx('py-2 break-inside-avoid-column break-inside-avoid', isThisRoute ? 'opacity-50' : '')}>
       <div className={clx('w-full', editMode ? 'card card-compact p-2 card-bordered bg-base-100 shadow' : '')}>

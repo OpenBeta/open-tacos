@@ -1,10 +1,10 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 
 import { AreaCrumbs } from '@/components/breadcrumbs/AreaCrumbs'
 import { DefaultPageContainer } from '../../components/ui/DefaultPageContainer'
 import PhotoMontage, { UploadPhotoCTA } from '@/components/media/PhotoMontage'
 import { StickyHeaderContainer } from '../../components/ui/StickyHeaderContainer'
-import { parseUuidAsFirstParam, climbLeftRightIndexComparator } from '@/js/utils'
+import { parseUuidAsFirstParam, climbLeftRightIndexComparator, getFriendlySlug, getClimbPageFriendlyUrl } from '@/js/utils'
 import { PageWithCatchAllUuidProps } from '@/js/types/pages'
 import { getClimbById } from '@/js/graphql/api'
 import { ClimbData } from './components/ClimbData'
@@ -15,7 +15,6 @@ import { LazyAreaMap } from '@/components/maps/AreaMap'
 import { ClimbType, TagTargetType } from '@/js/types'
 import { NeighboringRoutesNav } from '@/components/crag/NeighboringRoute'
 import { AreaAndClimbPageActions } from '../../components/AreaAndClimbPageActions'
-
 /**
  * Page cache settings
  */
@@ -32,11 +31,19 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
     notFound()
   }
 
+  const userProvidedSlug = getFriendlySlug(params.slug?.[1] ?? '')
+
   const photoList = climb.media
 
   const {
     id, name, ancestors, pathTokens, parent
   } = climb
+
+  const correctSlug = getFriendlySlug(name)
+
+  if (correctSlug !== userProvidedSlug) {
+    permanentRedirect(getClimbPageFriendlyUrl(id, name))
+  }
 
   let leftClimb: ClimbType | null = null
   let rightClimb: ClimbType | null = null
@@ -49,8 +56,6 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
       rightClimb = sortedClimbs[index + 1] != null ? sortedClimbs[index + 1] : null
     }
   }
-
-  console.log('#photo list', photoList)
 
   return (
     <DefaultPageContainer

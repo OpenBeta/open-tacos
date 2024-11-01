@@ -274,11 +274,19 @@ export const getFriendlySlug = (name: string): string => slugify(name, { lower: 
 
 /**
  * Return the area page url with a trailing friendly area name
- * @param uuid area uuid
+ * @param uuid page id
  * @param areaName area name
  * @returns `/area/<area uuid>/<slugified area name>`
  */
 export const getAreaPageFriendlyUrl = (uuid: string, areaName: string): string => `/area/${uuid}/${getFriendlySlug(areaName)}`
+
+/**
+ * Return the climb page url with a trailing friendly name
+ * @param uuid page id
+ * @param climbName climb name
+ * @returns `/area/<area uuid>/<slugified area name>`
+ */
+export const getClimbPageFriendlyUrl = (uuid: string, climbName: string): string => `/climb/${uuid}/${getFriendlySlug(climbName)}`
 
 /**
  * Bust area page cache

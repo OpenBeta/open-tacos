@@ -7,7 +7,7 @@ import { UploadPhotoButton } from '@/components/media/PhotoUploadButtons'
 import { TagTargetType } from '@/js/types'
 
 /**
- * Main action bar for area page
+ * Main action bar for area & climb page
  */
 export const AreaAndClimbPageActions: React.FC<{ uuid: string, name: string, targetType: TagTargetType }> = ({ uuid, name, targetType }) => {
   let url: string
