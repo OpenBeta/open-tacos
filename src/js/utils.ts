@@ -216,7 +216,7 @@ export const urlResolver = (type: number, dest: string | null, name: string): st
   if (dest == null) return null
   switch (type) {
     case 0:
-      return `/climbs/${dest}`
+      return `/climb/${dest}`
     case 1:
       return getAreaPageFriendlyUrl(dest, name)
     case 3:

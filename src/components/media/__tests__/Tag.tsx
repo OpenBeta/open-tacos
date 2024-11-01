@@ -23,7 +23,7 @@ test.skip('Default tag', () => {
   expect(aTag).not.toBeNull()
   // @ts-expect-error
   expect(aTag).toHaveTextContent(TAG_DATA.climbName)
-  expect(aTag.getAttribute('href')).toEqual('/climbs/' + TAG_DATA.targetId)
+  expect(aTag.getAttribute('href')).toEqual('/climb/' + TAG_DATA.targetId)
 
   expect(screen.queryByRole('button')).toBeNull()
 })

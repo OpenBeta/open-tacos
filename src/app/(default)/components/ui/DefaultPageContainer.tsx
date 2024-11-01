@@ -1,13 +1,13 @@
 import { GallerySkeleton } from '@/components/media/PhotoMontage'
 import React from 'react'
 import { AreaPageActionsSkeleton } from '../AreaAndClimbPageActions'
-import { HeroAlert } from '../LandingHero'
 import { Summary } from './Summary'
 
 /**
- * Area page containter.  Show loading skeleton if no params are provided.
+ * Area & Climb page containter.  Show loading skeleton if no params are provided.
  */
 export const DefaultPageContainer: React.FC<{
+  heroAlert?: React.ReactNode
   photoGallery?: React.ReactNode
   pageActions?: React.ReactNode
   breadcrumbs?: React.ReactNode
@@ -16,12 +16,13 @@ export const DefaultPageContainer: React.FC<{
   summary?: { left: React.ReactNode, right: React.ReactNode }
   mapContainerClass?: string
   children?: React.ReactNode
-}> = ({ photoGallery, pageActions, breadcrumbs, leftRightNav, map, summary, children, mapContainerClass = 'w-full mt-16 relative h-[90vh] border-t' }) => {
+}> = ({ heroAlert, photoGallery, pageActions, breadcrumbs, leftRightNav, map, summary, children, mapContainerClass = 'w-full mt-16 relative h-[90vh] border-t' }) => {
   return (
     <article>
-      <div className='default-page-margins my-2'>
-        <HeroAlert />
-      </div>
+      {heroAlert != null &&
+        <div className='default-page-margins my-2'>
+          {heroAlert}
+        </div>}
       <div className='default-page-margins'>
         {photoGallery == null ? <GallerySkeleton /> : photoGallery}
         <div className='flex justify-end py-4 border-b'>

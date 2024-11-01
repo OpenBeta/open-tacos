@@ -99,7 +99,7 @@ const entityToUrl = ({ item }: { item: TypesenseAreaType | TypesenseDocumentType
       return getAreaPageFriendlyUrl(id, name)
     }
     case EntityType.climb:
-      return `/climbs/${(item as TypesenseDocumentType).climbUUID}`
+      return `/climb/${(item as TypesenseDocumentType).climbUUID}`
     default: return undefined
   }
 }

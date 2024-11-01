@@ -69,7 +69,7 @@ export const AreaItem = ({ item }: AreaItemProps): JSX.Element => {
 export const FAItem = ({ item }: ItemProps): JSX.Element => {
   const { climbName, areaNames, fa } = item
   return (
-    <a className='py-4 text-xs' href={`/climbs/${item.climbUUID}`}>
+    <a className='py-4 text-xs' href={`/climb/${item.climbUUID}`}>
       <TextOnlyCrumbs pathTokens={areaNames} highlightIndices={[]} />
       <div>
         Route: <b>{climbName}</b>

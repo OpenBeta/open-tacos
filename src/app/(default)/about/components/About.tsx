@@ -62,7 +62,7 @@ export function About (): ReactNode {
                   width={700}
                 />
                 <div className='absolute left-0 bottom-0 bg-base-200/80 p-2 text-xs'>
-                  <Link href='/climbs/197b6958-c871-5c81-b463-d493d7515656' className='block'>Flyboy (Bishop, California)</Link>
+                  <Link href='/climb/197b6958-c871-5c81-b463-d493d7515656' className='block'>Flyboy (Bishop, California)</Link>
                   <a href='https://www.instagram.com/rayphungphoto/' target='_blank' rel='noreferrer' className='font-semibold'>&copy; Ray Phung</a>
                 </div>
               </div>

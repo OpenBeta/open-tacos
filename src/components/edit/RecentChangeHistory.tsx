@@ -6,7 +6,7 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import clx from 'classnames'
 
 import { ChangesetType, ChangeType, AreaType, ClimbType, OrganizationType, DocumentTypeName } from '../../js/types'
-import { getAreaPageFriendlyUrl } from '@/js/utils'
+import { getAreaPageFriendlyUrl, getClimbPageFriendlyUrl } from '@/js/utils'
 
 export interface RecentChangeHistoryProps {
   history: ChangesetType[]
@@ -93,6 +93,9 @@ const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: Change
   if (fullDocument.__typename !== DocumentTypeName.Climb) {
     return null
   }
+
+  const climbName = (fullDocument as ClimbType).name
+  const climbPageUrl = getClimbPageFriendlyUrl((fullDocument as ClimbType).id, climbName)
   // @ts-expect-error
   const icon = dbOpIcon[dbOp]
   return (
@@ -105,9 +108,10 @@ const ClimbChange = ({ changeId, fullDocument, updateDescription, dbOp }: Change
             ? <span>{(fullDocument as ClimbType).name}</span>
             : (
               <Link
-                href={`/climbs/${(fullDocument as ClimbType).id}`}
+                href={climbPageUrl}
                 className='link link-hover'
-              >{(fullDocument as ClimbType).name}
+              >
+                {climbName}
               </Link>)}
         </div>
         <div className='text-xs text-base-300'>

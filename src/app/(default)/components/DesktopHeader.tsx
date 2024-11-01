@@ -1,11 +1,13 @@
 'use client'
 import { signIn, useSession } from 'next-auth/react'
+import { MapTrifold } from '@phosphor-icons/react/dist/ssr'
 
 import { Logo } from '../header'
 import { XSearchMinimal } from '@/components/search/XSearch'
 import { NavMenuItem, NavMenuItemProps } from '@/components/ui/NavMenuButton'
 import GitHubStars from '@/components/GitHubStars'
 import AuthenticatedProfileNavButton from '../../../components/AuthenticatedProfileNavButton'
+import Link from 'next/link'
 
 export const DesktopHeader: React.FC = () => {
   const { status } = useSession()
@@ -71,8 +73,11 @@ export const DesktopHeader: React.FC = () => {
 
   return (
     <header className='hidden lg:flex items-center justify-between h-14'>
-      <div className='flex items-center gap-6'><Logo />
+      <div className='flex items-center gap-6'>
+        <Logo />
         <XSearchMinimal />
+        <span className='text-secondary/80'>|</span>
+        <Link href='/maps' className='flex items-center gap-1.5 whitespace-nowrap hover:underline hover:decoration-1 font-semibold'><MapTrifold size={20} />Maps</Link>
       </div>
       <div className='menu menu-horizontal rounded-box gap-2 px-0'>{nav}</div>
     </header>

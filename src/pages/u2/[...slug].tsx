@@ -60,7 +60,7 @@ const Tick = (tick: TickType): JSX.Element => {
   return (
     <div className='grid grid-cols-2 gap-x-4' key={_id}>
       <div>
-        <Link href={`/climbs/${climbId}`} className='hover:underline'>
+        <Link href={`/climb/${climbId}`} className='hover:underline'>
           {name}
         </Link>
       </div>

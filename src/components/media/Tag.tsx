@@ -68,7 +68,7 @@ export const resolver = (props: EntityTag): [string, string] | [null, null] => {
   const { targetId: id, climbName, areaName, type } = props
   switch (type) {
     case TagTargetType.climb: {
-      return [`/climbs/${id}`, climbName ?? '']
+      return [`/climb/${id}`, climbName ?? '']
     }
     case TagTargetType.area: {
       return [getAreaPageFriendlyUrl(id, areaName), areaName]
