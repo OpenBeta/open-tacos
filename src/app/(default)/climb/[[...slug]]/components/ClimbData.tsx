@@ -1,13 +1,23 @@
 import { ArrowsVertical } from '@phosphor-icons/react/dist/ssr'
 
-// import RouteGradeChip from '@/components/ui/RouteGradeChip'
+import RouteGradeChip from '@/components/ui/RouteGradeChip'
 import RouteTypeChips from '@/components/ui/RouteTypeChips'
 import { ArticleLastUpdate } from '@/components/edit/ArticleLastUpdate'
-import { Climb } from '@/js/types'
+import { ClimbType, AreaType } from '@/js/types'
+import Grade from '@/js/grades/Grade'
+import { removeTypenameFromDisciplines } from '@/js/utils'
 
-export const ClimbData: React.FC<Climb> = (props) => {
-  const { name, type, safety, length, grades, fa: legacyFA, authorMetadata } = props
-  console.log(safety, grades)
+export const ClimbData: React.FC<ClimbType & Pick<AreaType, 'gradeContext'> & { isBoulder: boolean }> = (props) => {
+  const { name, type, safety, length, grades, fa: legacyFA, authorMetadata, gradeContext, isBoulder } = props
+
+  const sanitizedDisciplines = removeTypenameFromDisciplines(type)
+
+  const gradeStr = new Grade(
+    gradeContext,
+    grades,
+    sanitizedDisciplines,
+    isBoulder
+  ).toString()
   return (
     <>
       <h1 className='text-4xl md:text-5xl mr-10'>
@@ -15,9 +25,9 @@ export const ClimbData: React.FC<Climb> = (props) => {
       </h1>
       <div className='mt-6'>
         <div className='flex items-center space-x-2 w-full'>
-          {/* {gradeStr != null && (
+          {gradeStr != null && (
             <RouteGradeChip gradeStr={gradeStr} safety={safety} />
-          )} */}
+          )}
           <RouteTypeChips type={type} />
         </div>
 

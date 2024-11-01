@@ -25,7 +25,7 @@ export const SharePageURLButton: React.FC<{ path: string, name: string }> = ({ p
   return (
     <ControlledTooltip content={<div className='flex items-center'>Copied <Check size={16} /></div>} open={clicked}>
       <button
-        className='btn' onClick={() => {
+        className='btn no-animation' onClick={() => {
           void navigator.clipboard.writeText(url)
           setClicked(true)
         }}

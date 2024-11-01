@@ -36,7 +36,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
   const photoList = climb.media
 
   const {
-    id, name, ancestors, pathTokens, parent
+    id, name, type, ancestors, pathTokens, parent
   } = climb
 
   const correctSlug = getFriendlySlug(name)
@@ -72,7 +72,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
         }
       leftRightNav={<NeighboringRoutesNav climbs={[leftClimb, rightClimb]} parentArea={parent} />}
       summary={{
-        left: <ClimbData {...climb} />,
+        left: <ClimbData {...climb} isBoulder={type.bouldering} gradeContext={parent.gradeContext} />,
         right: <ContentBlock content={climb.content} />
       }}
       map={(
