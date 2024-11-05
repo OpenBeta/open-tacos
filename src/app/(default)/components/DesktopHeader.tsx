@@ -1,6 +1,6 @@
 'use client'
 import { signIn, useSession } from 'next-auth/react'
-import { MapTrifold } from '@phosphor-icons/react/dist/ssr'
+import { MapTrifold, Pulse, LineSegments, Planet } from '@phosphor-icons/react/dist/ssr'
 
 import { Logo } from '../header'
 import { XSearchMinimal } from '@/components/search/XSearch'
@@ -72,14 +72,73 @@ export const DesktopHeader: React.FC = () => {
   }
 
   return (
-    <header className='hidden lg:flex items-center justify-between h-14'>
-      <div className='flex items-center gap-6'>
-        <Logo />
-        <XSearchMinimal />
-        <span className='text-secondary/80'>|</span>
-        <Link href='/maps' className='flex items-center gap-1.5 whitespace-nowrap hover:underline hover:decoration-1 font-semibold'><MapTrifold size={20} />Maps</Link>
+    <header className='hidden xl:block'>
+      <div className='my-2 flex items-center justify-between'>
+        <div className='flex items-center gap-6'>
+          <Logo />
+          <XSearchMinimal />
+          <div className='text-base-300/50 font-thin text-xl'>|</div>
+          <Link href='/maps' className='text-sm flex items-center whitespace-nowrap hover:underline hover:decoration-1 font-semibold gap-2'><MapTrifold size={18} />Maps</Link>
+        </div>
+        <div className='menu menu-horizontal rounded-box gap-2 px-0'>{nav}</div>
       </div>
-      <div className='menu menu-horizontal rounded-box gap-2 px-0'>{nav}</div>
+      <hr className='my-2' />
+      <QuickLinks />
     </header>
   )
 }
+
+const QuickLinks: React.FC = () => {
+  return (
+    <div className='mt-4 flex items-center gap-8'>
+      {[
+        {
+          href: '/pulse',
+          label: 'Pulse',
+          icon: <Pulse size={18} />
+        },
+        {
+          href: '/area/1d33c773-e381-5b8a-a13f-3dfd7991732b/south-africa',
+          label: 'S.Africa',
+          icon: <LineSegments size={18} />
+        },
+        {
+          href: '/area/2996145f-e1ba-5b56-9da8-30c64ccc3776/canada',
+          label: 'Canada',
+          icon: <LineSegments size={18} />
+        },
+        {
+          href: '/area/be9733db-21a2-53ec-86a2-3fb6fab552d9/germany',
+          label: 'Germany',
+          icon: <LineSegments size={18} />
+        },
+        {
+          href: '/area/1db1e8ba-a40e-587c-88a4-64f5ea814b8e/usa',
+          label: 'USA',
+          icon: <LineSegments size={18} />
+        },
+        {
+          href: '/a',
+          label: 'All',
+          icon: <Planet size={18} />
+        }
+      ].map(({ href, label, icon }) => (
+        <Link
+          key={href}
+          href={href}
+          className='text-xs flex flex-col items-center whitespace-nowrap hover:underline hover:decoration-1 gap-1.5'
+        >
+          {icon}{label}
+        </Link>
+      ))}
+
+    </div>
+  )
+}
+
+// <Link href='/maps' className='text-sm flex flex-col items-center whitespace-nowrap hover:underline hover:decoration-1 font-semibold'><MapTrifold size={18} />Maps</Link>
+// <Link href='/pulse' className='text-sm flex flex-col items-center whitespace-nowrap hover:underline hover:decoration-1'><Pulse size={18} /> Pulse</Link>
+// <Link href='/area/1db1e8ba-a40e-587c-88a4-64f5ea814b8e/usa' className='text-sm flex flex-col items-center whitespace-nowrap hover:underline hover:decoration-1'><LineSegments size={18} />USA</Link>
+// <Link href='/area/2996145f-e1ba-5b56-9da8-30c64ccc3776/canada' className='text-sm flex flex-col items-center whitespace-nowrap hover:underline hover:decoration-1'><LineSegments size={18} />Canada</Link>
+// <Link href='/area/1d33c773-e381-5b8a-a13f-3dfd7991732b/south-africa' className='text-sm flex flex-col items-center whitespace-nowrap hover:underline hover:decoration-1'><LineSegments size={18} />S. Africa</Link>
+// <Link href='/area/be9733db-21a2-53ec-86a2-3fb6fab552d9/germany' className='text-sm flex flex-col items-center whitespace-nowrap hover:underline hover:decoration-1'><LineSegments size={18} />Germany</Link>
