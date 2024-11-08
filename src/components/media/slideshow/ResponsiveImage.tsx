@@ -13,7 +13,7 @@ interface ResponsiveImageProps {
 /**
  * NextJS image wrapper with loading indicator
  */
-export default function ResponsiveImage ({ mediaUrl, isHero = true, isSquare = false, sizes = '20vw' }: ResponsiveImageProps): JSX.Element {
+export default function ResponsiveImage ({ mediaUrl, isHero = true, isSquare = false, sizes = '100vw' }: ResponsiveImageProps): JSX.Element {
   const [isLoading, setLoading] = useState<boolean>(true)
   useEffect(() => {
     setLoading(true)
