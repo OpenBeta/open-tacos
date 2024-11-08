@@ -58,7 +58,7 @@ const PhotoGalleryModal = ({
                   </button>
                 </div>
                 <div className='flex items-center justify-center h-full'>
-                  <ResponsiveImage mediaUrl={ShowImage} isHero={false} />
+                  <ResponsiveImage mediaUrl={ShowImage} isHero={false} sizes='100vw' />
                 </div>
               </div>
             </div>
