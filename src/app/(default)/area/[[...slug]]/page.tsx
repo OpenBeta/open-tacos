@@ -199,7 +199,7 @@ export async function generateMetadata ({ params }: PageWithCatchAllUuidProps): 
 
   const name = sanitizeName(areaName)
 
-  const previewImage = media.length > 0 ? `${CLIENT_CONFIG.CDN_BASE_URL}${media[0].mediaUrl}?w=1200&h=630&q=75` : null
+  const previewImage = media.length > 0 ? `${CLIENT_CONFIG.CDN_BASE_URL}${media[0].mediaUrl}?q=75` : null
 
   const description = `Community knowledge • ${wall}${name}`
 
