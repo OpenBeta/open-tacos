@@ -4,7 +4,7 @@ import { formatDistanceToNow, parseISO } from 'date-fns'
 import { useSession, signIn } from 'next-auth/react'
 import useSWR from 'swr'
 import axios from 'axios'
-import { UserPage } from 'auth0'
+import { GetUsers200ResponseOneOf, GetUsers200ResponseOneOfInner } from 'auth0'
 
 import { MagnifyingGlassIcon, PencilSquareIcon } from '@heroicons/react/20/solid'
 import { IUserMetadata, UserRole } from '../../js/types/User'
@@ -12,7 +12,7 @@ import { usersToCsv, saveAsCSVFile } from '../../js/utils/csv'
 import { CLIENT_CONFIG } from '../../js/configs/clientConfig'
 import { Input } from '../ui/form'
 import { useForm, FormProvider } from 'react-hook-form'
-import type { User } from 'auth0'
+import type { UserProfile } from 'auth0'
 import CreateUpdateModal from './CreateUpdateModal'
 import UserForm from './UserForm'
 import { RulesType } from '../../js/types'
@@ -55,7 +55,7 @@ const UserTable = (): JSX.Element => {
   const [currentPage, setPage] = useState(0)
   const [emailFilter, setEmailFilter] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
-  const [focussedUser, setFocussedUser] = useState<User | null>(null)
+  const [focussedUser, setFocussedUser] = useState<UserProfile | null>(null)
 
   // React-hook-form declaration
   const form = useForm<HtmlFormProps>({
@@ -67,7 +67,7 @@ const UserTable = (): JSX.Element => {
   const { handleSubmit } = form
   const submitHandler = ({ email }: HtmlFormProps): void => { setEmailFilter(email) }
 
-  const { isLoading, data: userPage, error, mutate } = useSWR<UserPage>(`/api/basecamp/users?page=${currentPage}&email=${emailFilter}&type=auth0`, fetcher)
+  const { isLoading, data: userPage, error, mutate } = useSWR<GetUsers200ResponseOneOf>(`/api/basecamp/users?page=${currentPage}&email=${emailFilter}&type=auth0`, fetcher)
   if (isLoading) return <div className='my-8>'>Loading...</div>
 
   const totalPages = Math.ceil((userPage?.total ?? 0) / (userPage?.limit ?? 0))
@@ -144,7 +144,7 @@ const UserTable = (): JSX.Element => {
 interface UserRowProps {
   index: number
   user: any
-  setFocussedUser: (arg0: User) => void
+  setFocussedUser: (arg0: GetUsers200ResponseOneOfInner) => void
   setModalOpen: (arg0: boolean) => void
 }
 
@@ -182,7 +182,7 @@ const UserRow = ({ index, user, setFocussedUser, setModalOpen }: UserRowProps): 
 
 const PasswordlessUsers = (): JSX.Element => {
   const [currentPage, setPage] = useState(0)
-  const { data: userPage } = useSWR<UserPage>(`/api/basecamp/users?page=${currentPage}&type=email`, fetcher)
+  const { data: userPage } = useSWR<GetUsers200ResponseOneOf>(`/api/basecamp/users?page=${currentPage}&type=email`, fetcher)
 
   const onClickHandler = (userId: string): void => {
     void axios.get(`/api/basecamp/migrate?id=${userId}`)

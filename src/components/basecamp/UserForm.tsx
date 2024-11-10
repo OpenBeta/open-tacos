@@ -1,17 +1,17 @@
-import type { User } from 'auth0'
+import type { UserProfile } from 'auth0'
 import clx from 'classnames'
 import { TextArea } from '../ui/form'
 import { useForm, FormProvider } from 'react-hook-form'
 import { MUUID_VALIDATION, conjoinedStringToArray } from './utils'
 import axios from 'axios'
 import useSWR from 'swr'
-import { Role } from 'auth0'
+import { UserInfoResponse } from 'auth0'
 import { UserRole } from '../../js/types'
 import MultiSelect from '../ui/form/MultiSelect'
 import { useEffect } from 'react'
 
 interface UserFormProps {
-  user: User
+  user: UserProfile
   onClose: () => void
 }
 
@@ -26,11 +26,11 @@ const fetcher = async (url: string): Promise<any> => (await axios.get(url)).data
  * Form for updating users.
 */
 export default function UserForm ({ user, onClose }: UserFormProps): JSX.Element {
-  const userId = user.user_id
+  const userId = user.user_id as string
   if (userId == null) {
     return <div>Can't load user. Missing user_id.</div>
   }
-  const { data: roles, error, mutate } = useSWR<Role[]>(`/api/basecamp/userRoles?userId=${userId}`, fetcher)
+  const { data: roles, error, mutate } = useSWR<UserInfoResponse[]>(`/api/basecamp/userRoles?userId=${userId}`, fetcher)
   if (error != null) {
     return <div>{error}</div>
   }
