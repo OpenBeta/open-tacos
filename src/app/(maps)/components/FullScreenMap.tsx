@@ -2,44 +2,71 @@
 import { useCallback, useEffect, useState } from 'react'
 import { CameraInfo, GlobalMap } from '@/components/maps/GlobalMap'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { MapLayerMouseEvent } from 'maplibre-gl'
 
 export const FullScreenMap: React.FC = () => {
-  const [initialCenter, setInitialCenter] = useState<[number, number] | undefined>(undefined)
-  const [initialZoom, setInitialZoom] = useState<number | undefined>(undefined)
+  const [center, setCenter] = useState<[number, number] | undefined>(undefined)
+  const [zoom, setZoom] = useState<number | undefined>(undefined)
+  const [isInitialized, setIsInitialized] = useState(false)
+
   const router = useRouter()
+  const urlParams = useUrlParams()
 
-  const cameraParams = useCameraParams()
-
+  // Handle initial state setup only once
   useEffect(() => {
-    const initialStateFromUrl = cameraParams.fromUrl()
+    if (isInitialized) return
 
-    if (initialStateFromUrl != null) {
-      setInitialCenter([initialStateFromUrl.center.lng, initialStateFromUrl.center.lat])
-      setInitialZoom(initialStateFromUrl.zoom)
+    const { camera } = urlParams.fromUrl()
+
+    if (camera !== null) {
+      setCenter([camera.center.lng, camera.center.lat])
+      setZoom(camera.zoom)
+      setIsInitialized(true)
       return
     }
 
-    getVisitorLocation().then((visitorLocation) => {
-      if (visitorLocation != null) {
-        setInitialCenter([visitorLocation.longitude, visitorLocation.latitude])
+    getVisitorLocation()
+      .then((visitorLocation) => {
+        if (visitorLocation !== null && visitorLocation !== undefined) {
+          setCenter([visitorLocation.longitude, visitorLocation.latitude])
+          setIsInitialized(true)
+        }
+      })
+      .catch(() => {
+        console.log('Unable to determine user\'s location')
+        setIsInitialized(true)
+      })
+  }, [urlParams, isInitialized])
+
+  const handleCameraMovement = useCallback(
+    (camera: CameraInfo) => {
+      const { areaId } = urlParams.fromUrl()
+      const url = urlParams.toUrl({ camera, areaId })
+      router.replace(url, { scroll: false })
+    },
+    [urlParams, router]
+  )
+
+  const handleMapClick = useCallback(
+    (e: MapLayerMouseEvent) => {
+      const areaId = e.features?.[0]?.properties?.id
+      if (areaId == null) {
+        return
       }
-    }).catch(() => {
-      console.log('Unable to determine user\'s location')
-    })
-  }, [])
 
-  const handleCamerMovement = useCallback((camera: CameraInfo) => {
-    const url = cameraParams.toUrl(camera)
-
-    router.replace(url, { scroll: false })
-  }, [])
+      const { camera } = urlParams.fromUrl()
+      const url = urlParams.toUrl({ camera: camera ?? null, areaId })
+      router.replace(url, { scroll: false })
+    },
+    [urlParams, router]
+  )
 
   return (
     <GlobalMap
-      showFullscreenControl={false}
-      initialCenter={initialCenter}
-      initialZoom={initialZoom}
-      onCameraMovement={handleCamerMovement}
+      initialCenter={center}
+      initialZoom={zoom}
+      onCameraMovement={handleCameraMovement}
+      handleOnClick={handleMapClick}
     />
   )
 }
@@ -54,29 +81,48 @@ const getVisitorLocation = async (): Promise<{ longitude: number, latitude: numb
   }
 }
 
-function useCameraParams (): { toUrl: (camera: CameraInfo) => string, fromUrl: () => CameraInfo | null } {
+interface UrlProps { camera: CameraInfo | null, areaId: string | null }
+
+interface UseUrlParamsReturn {
+  toUrl: (props: UrlProps) => string
+  fromUrl: () => UrlProps
+}
+
+const useUrlParams = (): UseUrlParamsReturn => {
   const pathname = usePathname()
-  const initialSearchParams = useSearchParams()
+  const searchParams = useSearchParams()
 
-  function toUrl (camera: CameraInfo): string {
-    const params = new URLSearchParams(initialSearchParams)
-    params.delete('camera')
+  const toUrl = ({ camera, areaId }: UrlProps): string => {
+    const params = new URLSearchParams()
 
-    const queryParams = [
-      params.toString(),
-      `camera=${cameraInfoToQuery(camera)}`
-    ]
-
-    return `${pathname}?${queryParams.filter(Boolean).join('&')}`
-  }
-
-  function fromUrl (): CameraInfo | null {
-    const cameraParams = initialSearchParams.get('camera')
-    if (cameraParams == null) {
-      return null
+    if (areaId !== null && areaId !== undefined) {
+      params.set('areaId', areaId)
     }
 
-    return queryToCameraInfo(cameraParams)
+    const baseUrl = `${pathname}?`
+    const cameraParam = (camera !== null && camera !== undefined) ? `camera=${cameraInfoToQuery(camera)}` : ''
+    const otherParams = params.toString()
+
+    if (cameraParam !== null && otherParams !== null) {
+      return `${baseUrl}${cameraParam}&${otherParams}`
+    } else if (cameraParam !== null) {
+      return `${baseUrl}${cameraParam}`
+    } else if (otherParams !== null) {
+      return `${baseUrl}${otherParams}`
+    }
+
+    return pathname
+  }
+
+  const fromUrl = (): UrlProps => {
+    const rawUrl = window.location.search
+    const cameraMatch = rawUrl.match(/[?&]camera=([^&]+)/)
+    const cameraParam = (cameraMatch !== null) ? cameraMatch[1] : null
+
+    return {
+      camera: cameraParam !== null ? queryToCameraInfo(cameraParam) : null,
+      areaId: searchParams.get('areaId')
+    }
   }
 
   return { toUrl, fromUrl }

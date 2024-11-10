@@ -11,7 +11,6 @@ import { OBCustomLayers } from './OBCustomLayers'
 import { tileToFeature } from './utils'
 import { ActiveFeature, TileProps } from './TileTypes'
 import MapLayersSelector from './MapLayersSelector'
-import { debounce } from 'underscore'
 import { MapToolbar } from './MapToolbar'
 import { SelectedFeature } from './AreaActiveMarker'
 
@@ -27,12 +26,14 @@ interface FeatureState {
   selected?: boolean
   hover?: boolean
 }
+
 export interface DataLayersDisplayState {
   areaBoundaries: boolean
   organizations: boolean
   heatmap: boolean
   crags: boolean
 }
+
 interface GlobalMapProps {
   showFullscreenControl?: boolean
   initialCenter?: [number, number]
@@ -43,13 +44,14 @@ interface GlobalMapProps {
   }
   onCameraMovement?: (camera: CameraInfo) => void
   children?: React.ReactNode
+  handleOnClick?: (e: MapLayerMouseEvent) => void
 }
 
 /**
  * Global map
  */
 export const GlobalMap: React.FC<GlobalMapProps> = ({
-  showFullscreenControl = true, initialCenter, initialZoom, initialViewState, onCameraMovement, children
+  showFullscreenControl = true, initialCenter, initialZoom, initialViewState, onCameraMovement, children, handleOnClick
 }) => {
   const [clickInfo, setClickInfo] = useState<ActiveFeature | null>(null)
   const [hoverInfo, setHoverInfo] = useState<ActiveFeature | null>(null)
@@ -72,30 +74,31 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
     }, fState)
   }
 
-  const onMove = useCallback(debounce((e: ViewStateChangeEvent) => {
-    if (onCameraMovement != null) {
-      onCameraMovement({
-        center: {
-          lat: e.viewState.latitude,
-          lng: e.viewState.longitude
-        },
-        zoom: e.viewState.zoom
-      })
-    }
-  }, 300), [])
+  const onMove = useCallback((e: ViewStateChangeEvent) => {
+    if ((mapInstance == null) || e.viewState == null || (onCameraMovement == null)) return
+    onCameraMovement({
+      center: {
+        lat: e.viewState.latitude,
+        lng: e.viewState.longitude
+      },
+      zoom: e.viewState.zoom
+    })
+  }, [mapInstance, onCameraMovement])
 
   const onLoad = useCallback((e: MapLibreEvent) => {
     if (e.target == null) return
     setMapInstance(e.target)
-    if (initialCenter != null) {
+
+    // Only apply jumpTo if initial values are defined
+    if (initialCenter != null && initialZoom != null) {
       e.target.jumpTo({ center: initialCenter, zoom: initialZoom ?? 6 })
     } else if (initialViewState != null) {
       e.target.fitBounds(initialViewState.bounds, initialViewState.fitBoundsOptions)
     }
-  }, [initialCenter, initialZoom])
+  }, [initialCenter, initialZoom, initialViewState])
 
   /**
-   * Handle click event on the map. Place a market on the map and activate the side drawer.
+   * Handle click event on the map. Place a marker on the map and activate the side drawer.
    */
   const onClick = (event: MapLayerMouseEvent): void => {
     if (mapInstance == null) return
@@ -104,7 +107,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
       setClickInfo(null)
     } else {
       const { layer, geometry, properties } = feature
-
+      handleOnClick?.(event)
       setClickInfo(prev => {
         setActiveFeatureVisual(prev, { selected: false, hover: false })
         const activeFeature = tileToFeature(layer.id, event.point, geometry, properties as TileProps, mapInstance)
@@ -115,7 +118,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   }
 
   /**
-   * Handle click event on the popover.  Behave as if the user clicked on a feature on the map.
+   * Handle click event on the popover. Behave as if the user clicked on a feature on the map.
    */
   const onHoverCardClick = (feature: ActiveFeature): void => {
     setClickInfo(prevFeature => {
@@ -129,10 +132,15 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   }
 
   /**
-   * Handle mouseover event on the map.  Show the popover with the area info.
+   * Handle mouseover event on the map. Show the popover with the area info.
    */
   const onHover = (event: MapLayerMouseEvent): void => {
-    const obLayerId = event.features?.findIndex((f) => f.layer.id === 'crag-markers' || f.layer.id === 'crag-name-labels' || f.layer.id === 'area-boundaries' || f.layer.id === 'area-background') ?? -1
+    const obLayerId = event.features?.findIndex((f) =>
+      f.layer.id === 'crag-markers' ||
+      f.layer.id === 'crag-name-labels' ||
+      f.layer.id === 'area-boundaries' ||
+      f.layer.id === 'area-background'
+    ) ?? -1
 
     if (obLayerId !== -1) {
       setCursor('pointer')
@@ -163,13 +171,9 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
       <Map
         id='global-map'
         onLoad={onLoad}
-        onDragStart={() => {
-          setCursor('move')
-        }}
+        onDragStart={() => setCursor('move')}
         onMove={onMove}
-        onDragEnd={() => {
-          setCursor('default')
-        }}
+        onDragEnd={() => setCursor('default')}
         onMouseEnter={onHover}
         onMouseLeave={() => {
           setHoverInfo(prev => {
@@ -188,25 +192,19 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         <MapLayersSelector emit={updateMapLayer} />
         <ScaleControl unit='imperial' style={{ marginBottom: 10 }} position='bottom-left' />
         <ScaleControl unit='metric' style={{ marginBottom: 0 }} position='bottom-left' />
-
         <OBCustomLayers layersState={dataLayersDisplayState} />
         {showFullscreenControl && <FullscreenControl />}
         <NavigationControl showCompass={false} position='bottom-right' />
         <GeolocateControl
           position='bottom-right'
-          positionOptions={{
-            enableHighAccuracy: true
-          }}
+          positionOptions={{ enableHighAccuracy: true }}
           trackUserLocation
         />
-        {clickInfo != null &&
-          <SelectedFeature feature={clickInfo} />}
+        {clickInfo != null && <SelectedFeature feature={clickInfo} />}
         <Drawer feature={clickInfo} />
         {hoverInfo != null && (
-          <HoverCard
-            {...hoverInfo}
-            onClick={onHoverCardClick}
-          />)}
+          <HoverCard {...hoverInfo} onClick={onHoverCardClick} />
+        )}
         {children}
       </Map>
     </div>
