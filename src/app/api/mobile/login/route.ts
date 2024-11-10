@@ -59,5 +59,5 @@ export async function POST (request: NextRequest): Promise<any> {
 }
 
 function isNullOrEmpty (str: string | null | undefined): boolean {
-  return str?.trim() === ''
+  return str == null || str?.trim() === ''
 }
