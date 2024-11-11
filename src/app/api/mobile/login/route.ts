@@ -27,7 +27,8 @@ async function postHandler (request: NextRequest): Promise<NextResponse> {
       username,
       password,
       scope: 'openid profile email offline_access',
-      audience: 'https://api.openbeta.io'
+      audience: 'https://api.openbeta.io',
+      realm: 'Username-Password-Authentication'
     })
 
     return NextResponse.json({ data: response.data })
