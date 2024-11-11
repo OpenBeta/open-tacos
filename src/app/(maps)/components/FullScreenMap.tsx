@@ -17,13 +17,15 @@ export const FullScreenMap: React.FC = () => {
   useEffect(() => {
     if (isInitialized) return
 
-    const { camera } = urlParams.fromUrl()
-    const { areaId } = urlParams.fromUrl()
+    const { camera, areaId: urlAreaId } = urlParams.fromUrl()
+    const DEFAULT_CENTER: [number, number] = [-98.5795, 39.8283] // Center of US
+    const DEFAULT_ZOOM = 3
 
-    if (areaId !== null) {
-      setAreaId(areaId)
+    if (urlAreaId !== null) {
+      setAreaId(urlAreaId)
     }
 
+    // If camera params exist in URL, use them
     if (camera !== null) {
       setCenter([camera.center.lng, camera.center.lat])
       setZoom(camera.zoom)
@@ -31,18 +33,54 @@ export const FullScreenMap: React.FC = () => {
       return
     }
 
-    getVisitorLocation().then(
-      (visitorLocation) => {
-        if (visitorLocation !== null && visitorLocation !== undefined) {
-          setCenter([visitorLocation.longitude, visitorLocation.latitude])
-          setIsInitialized(true)
+    // If no camera params, get visitor location and set URL
+    setZoom(DEFAULT_ZOOM)
+    getVisitorLocation()
+      .then((visitorLocation) => {
+        const newCenter: [number, number] = (visitorLocation != null)
+          ? [visitorLocation.longitude, visitorLocation.latitude]
+          : DEFAULT_CENTER
+
+        setCenter(newCenter)
+
+        // Always update URL with camera position
+        const newCamera: CameraInfo = {
+          center: {
+            lng: newCenter[0],
+            lat: newCenter[1]
+          },
+          zoom: DEFAULT_ZOOM
         }
-      }
-    ).catch(() => {
-      console.log('Unable to determine user\'s location')
-      setIsInitialized(true)
-    })
-  }, [urlParams, isInitialized])
+
+        const url = urlParams.toUrl({
+          camera: newCamera,
+          areaId: urlAreaId
+        })
+        router.replace(url, { scroll: false })
+      })
+      .catch(() => {
+        console.log('Unable to determine user\'s location')
+        setCenter(DEFAULT_CENTER)
+
+        // Set URL with default camera position on error
+        const defaultCamera: CameraInfo = {
+          center: {
+            lng: DEFAULT_CENTER[0],
+            lat: DEFAULT_CENTER[1]
+          },
+          zoom: DEFAULT_ZOOM
+        }
+
+        const url = urlParams.toUrl({
+          camera: defaultCamera,
+          areaId: urlAreaId
+        })
+        router.replace(url, { scroll: false })
+      })
+      .finally(() => {
+        setIsInitialized(true)
+      })
+  }, [urlParams, isInitialized, router])
 
   const handleCameraMovement = useCallback(
     (camera: CameraInfo) => {

@@ -33,7 +33,7 @@ export const Drawer: React.FC<{ feature: ActiveFeature | null, onClose?: () => v
   )
 }
 
-export const BaseDrawerContent: React.FC<{ media: ReactNode, heading: ReactNode, subheading: ReactNode, cta: ReactNode, children: ReactNode }> = ({ media, heading, subheading, cta, children }) => {
+export const BaseDrawerContent: React.FC<{ media: ReactNode, heading: ReactNode, subheading: ReactNode, cta: ReactNode, children: ReactNode, share?: ReactNode }> = ({ media, heading, subheading, cta, children, share }) => {
   return (
     <Card className='max-h-screen lg:w-[420px] rounded-none'>
       <div>
@@ -46,8 +46,10 @@ export const BaseDrawerContent: React.FC<{ media: ReactNode, heading: ReactNode,
           </div>
           {subheading}
         </section>
-
-        {cta}
+        <div className='flex gap-2 w-full justify-between'>
+          {cta}
+          {share}
+        </div>
 
         <hr />
 

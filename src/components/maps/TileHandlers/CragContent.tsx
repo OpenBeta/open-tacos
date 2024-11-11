@@ -15,6 +15,7 @@ export const CragDrawerContent: React.FC<CragFeatureProperties> = ({ id, areaNam
         heading={<Link href={friendlyUrl}>{areaName}</Link>}
         subheading={<Subheading id={id} totalClimbs={climbs.length} />}
         cta={<Link className='btn btn-primary btn-outline btn-sm no-animation' href={editUrl}>Edit area</Link>}
+        share={<button className='btn btn-primary btn-sm no-animation'>Share</button>}
       >
         <section className='text-sm'>
           {description == null || description.trim() === ''
