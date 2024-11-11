@@ -1,9 +1,24 @@
 import { NextApiHandler } from 'next'
+import { getServerSession } from 'next-auth'
 import csv from 'csvtojson'
-import withAuth from '../withAuth'
-import createMetadataClient, { Tick } from './metadataClient'
 import axios, { AxiosInstance } from 'axios'
 import { v5 as uuidv5, NIL } from 'uuid'
+
+import withAuth from '../withAuth'
+import { authOptions } from '../auth/[...nextauth]'
+import { updateUser } from '@/js/auth/ManagementClient'
+
+export interface Tick {
+  name: string
+  notes: string
+  climbId: string
+  userId: string | undefined
+  style: string
+  attemptType: string
+  dateClimbed: Date
+  grade: string
+  source: string
+}
 
 const MP_ID_REGEX: RegExp = /route\/(?<id>\d+)\//
 /**
@@ -63,47 +78,40 @@ async function getMPTicks (uid: string): Promise<MPTick[]> {
 }
 
 const handler: NextApiHandler<any> = async (req, res) => {
-  try {
-    const metadataClient = await createMetadataClient(req, res)
-    if (metadataClient == null) throw new Error('Can\'t create ManagementAPI client')
-    const meta = await metadataClient.getUserMetadata()
-    if (req.method === 'GET') {
-      res.end()
-    } else if (req.method === 'POST') {
-      // fetch data from mountain project here
-      const uid: string = JSON.parse(req.body)
-      const tickCollection: Tick[] = []
-      if (uid.length > 0 && meta.uuid !== undefined) {
-        const ret = await getMPTicks(uid)
-        ret.forEach((tick) => {
-          const newTick: Tick = {
-            name: tick.Route,
-            notes: tick.Notes,
-            climbId: tick.mp_id,
-            userId: meta.uuid,
-            style: tick.Style === '' ? 'N/A' : tick.Style,
-            attemptType: tick.Style === '' ? 'N/A' : tick.Style,
-            dateClimbed: new Date(Date.parse(`${tick.Date}T00:00:00`)), // Date.parse without timezone specified converts date to user's present timezone.
-            grade: tick.Rating,
-            source: 'MP'
-          }
-          tickCollection.push(newTick)
-        })
-        // set the user flag to true, so the popup doesn't show anymore and
-        // update the metadata
-        meta.ticksImported = true
-        await metadataClient.updateUserMetadata(meta)
-        // return the new ticks object
-        res.json({ ticks: tickCollection })
-        res.end()
-      }
-    } else if (req.method === 'PUT') {
-      meta.ticksImported = true
-      await metadataClient.updateUserMetadata(meta)
-      res.status(200).end()
+  if (req.method !== 'POST') res.end()
+  const session = await getServerSession(req, res, authOptions)
+  if (session == null) res.end()
+
+  const uuid = session?.user.metadata?.uuid
+  const uid: string = JSON.parse(req.body)
+  if (uuid == null || uid == null) res.status(500)
+
+  // fetch data from mountain project here
+  const tickCollection: Tick[] = []
+  const ret = await getMPTicks(uid)
+
+  ret.forEach((tick) => {
+    const newTick: Tick = {
+      name: tick.Route,
+      notes: tick.Notes,
+      climbId: tick.mp_id,
+      userId: uuid,
+      style: tick.Style === '' ? 'N/A' : tick.Style,
+      attemptType: tick.Style === '' ? 'N/A' : tick.Style,
+      dateClimbed: new Date(Date.parse(`${tick.Date}T00:00:00`)), // Date.parse without timezone specified converts date to user's present timezone.
+      grade: tick.Rating,
+      source: 'MP'
     }
-  } catch (e: any) {
-    res.status(500).json({ error: e.message })
+    tickCollection.push(newTick)
+  })
+  // set the user flag to true, so the popup doesn't show anymore and
+  // update the metadata
+  // Note: null check is to make TS happy.  We wouldn't get here if session is null.
+  if (session != null) {
+    await updateUser(session.id, { ticksImported: true })
   }
+
+  res.json({ ticks: tickCollection })
+  res.end()
 }
 export default withAuth(handler)

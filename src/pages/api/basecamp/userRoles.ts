@@ -42,7 +42,7 @@ const handler: NextApiHandler<any> = async (req, res) => {
 
 async function handleGetRequest (req: NextApiRequest, res: NextApiResponse): Promise<void> {
   const rolesResp = await getUserRoles(req.query.userId as string)
-  res.json(rolesResp)
+  res.json(rolesResp.data)
 }
 
 async function handlePostRequest (req: NextApiRequest, res: NextApiResponse): Promise<void> {
