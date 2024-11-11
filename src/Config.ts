@@ -27,7 +27,7 @@ if (typeof window === 'undefined') {
     clientSecret: checkAndPrintWarning('AUTH0_CLIENT_SECRET', process.env.AUTH0_CLIENT_SECRET),
     mgmtClientId: checkAndPrintWarning('AUTH0_MGMT_CLIENT_ID', process.env.AUTH0_MGMT_CLIENT_ID),
     mgmtClientSecret: checkAndPrintWarning('AUTH0_MGMT_CLIENT_SECRET', process.env.AUTH0_MGMT_CLIENT_SECRET),
-    mgmtClientAudience: checkAndPrintWarning('AUTH0_MGMT_CLIENT_SECRET', process.env.AUTH0_MGMT_CLIENT_AUDIENCE),
+    mgmtClientAudience: checkAndPrintWarning('AUTH0_MGMT_CLIENT_AUDIENCE', process.env.AUTH0_MGMT_CLIENT_AUDIENCE),
     nextauthSecret: checkAndPrintWarning('NEXTAUTH_SECRET', process.env.NEXTAUTH_SECRET)
   }
 } else {
