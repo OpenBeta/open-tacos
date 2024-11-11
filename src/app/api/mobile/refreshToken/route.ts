@@ -4,17 +4,16 @@ import { auth0Client, isNullOrEmpty } from '@/js/auth/mobile'
 import { withMobileAuth } from '@/js/auth/withMobileAuth'
 
 /**
- * Mobile login handler
+ * Mobile refresh token handler
  */
-async function postHandler (request: NextRequest): Promise<NextResponse> {
-  let username: string, password: string
+async function postHandler (request: NextRequest): Promise<any> {
+  let refreshToken: string
   try {
     const data = await request.json()
-    username = data.username
-    password = data.password
+    refreshToken = data.refreshToken
 
-    if (isNullOrEmpty(username) || isNullOrEmpty(password)) {
-      console.error('Empty username/password!')
+    if (isNullOrEmpty(refreshToken)) {
+      console.error('Empty refreshToken!')
       throw new Error('Invalid payload')
     }
   } catch (error) {
@@ -23,10 +22,8 @@ async function postHandler (request: NextRequest): Promise<NextResponse> {
 
   let response: Auth0.JSONApiResponse<Auth0.TokenSet> | undefined
   try {
-    response = await auth0Client.oauth.passwordGrant({
-      username,
-      password,
-      scope: 'openid profile email offline_access',
+    response = await auth0Client.oauth.refreshTokenGrant({
+      refresh_token: refreshToken,
       audience: 'https://api.openbeta.io'
     })
 
