@@ -7,7 +7,7 @@ import { MapLayerMouseEvent } from 'maplibre-gl'
 export const FullScreenMap: React.FC = () => {
   const [center, setCenter] = useState<[number, number] | undefined>(undefined)
   const [zoom, setZoom] = useState<number | undefined>(undefined)
-  const [initialAreaId, setInitialAreaId] = useState<string | undefined>(undefined)
+  const [areaId, setAreaId] = useState<string | undefined>(undefined)
   const [isInitialized, setIsInitialized] = useState(false)
 
   const router = useRouter()
@@ -21,7 +21,7 @@ export const FullScreenMap: React.FC = () => {
     const { areaId } = urlParams.fromUrl()
 
     if (areaId !== null) {
-      setInitialAreaId(areaId)
+      setAreaId(areaId)
     }
 
     if (camera !== null) {
@@ -68,7 +68,7 @@ export const FullScreenMap: React.FC = () => {
 
   return (
     <GlobalMap
-      initialAreaId={initialAreaId}
+      initialAreaId={areaId}
       initialCenter={center}
       initialZoom={zoom}
       onCameraMovement={handleCameraMovement}
