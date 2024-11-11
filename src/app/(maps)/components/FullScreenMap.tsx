@@ -7,6 +7,7 @@ import { MapLayerMouseEvent } from 'maplibre-gl'
 export const FullScreenMap: React.FC = () => {
   const [center, setCenter] = useState<[number, number] | undefined>(undefined)
   const [zoom, setZoom] = useState<number | undefined>(undefined)
+  const [initialAreaId, setInitialAreaId] = useState<string | undefined>(undefined)
   const [isInitialized, setIsInitialized] = useState(false)
 
   const router = useRouter()
@@ -17,6 +18,11 @@ export const FullScreenMap: React.FC = () => {
     if (isInitialized) return
 
     const { camera } = urlParams.fromUrl()
+    const { areaId } = urlParams.fromUrl()
+
+    if (areaId !== null) {
+      setInitialAreaId(areaId)
+    }
 
     if (camera !== null) {
       setCenter([camera.center.lng, camera.center.lat])
@@ -25,17 +31,17 @@ export const FullScreenMap: React.FC = () => {
       return
     }
 
-    getVisitorLocation()
-      .then((visitorLocation) => {
+    getVisitorLocation().then(
+      (visitorLocation) => {
         if (visitorLocation !== null && visitorLocation !== undefined) {
           setCenter([visitorLocation.longitude, visitorLocation.latitude])
           setIsInitialized(true)
         }
-      })
-      .catch(() => {
-        console.log('Unable to determine user\'s location')
-        setIsInitialized(true)
-      })
+      }
+    ).catch(() => {
+      console.log('Unable to determine user\'s location')
+      setIsInitialized(true)
+    })
   }, [urlParams, isInitialized])
 
   const handleCameraMovement = useCallback(
@@ -57,12 +63,12 @@ export const FullScreenMap: React.FC = () => {
       const { camera } = urlParams.fromUrl()
       const url = urlParams.toUrl({ camera: camera ?? null, areaId })
       router.replace(url, { scroll: false })
-    },
-    [urlParams, router]
+    }, [urlParams, router]
   )
 
   return (
     <GlobalMap
+      initialAreaId={initialAreaId}
       initialCenter={center}
       initialZoom={zoom}
       onCameraMovement={handleCameraMovement}

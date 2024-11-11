@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, ViewStateChangeEvent, GeolocateControl } from 'react-map-gl/maplibre'
 import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
@@ -45,19 +45,21 @@ interface GlobalMapProps {
   onCameraMovement?: (camera: CameraInfo) => void
   children?: React.ReactNode
   handleOnClick?: (e: MapLayerMouseEvent) => void
+  initialAreaId?: string
 }
 
 /**
  * Global map
  */
 export const GlobalMap: React.FC<GlobalMapProps> = ({
-  showFullscreenControl = true, initialCenter, initialZoom, initialViewState, onCameraMovement, children, handleOnClick
+  showFullscreenControl = true, initialCenter, initialZoom, initialViewState, onCameraMovement, children, handleOnClick, initialAreaId
 }) => {
   const [clickInfo, setClickInfo] = useState<ActiveFeature | null>(null)
   const [hoverInfo, setHoverInfo] = useState<ActiveFeature | null>(null)
   const [mapInstance, setMapInstance] = useState<maplibregl.Map | null>(null)
   const [cursor, setCursor] = useState<string>('default')
   const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.light.style)
+  const [isSourceLoaded, setIsSourceLoaded] = useState(false)
   const [dataLayersDisplayState, setDataLayersDisplayState] = useState<DataLayersDisplayState>({
     areaBoundaries: false,
     organizations: false,
@@ -165,6 +167,39 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
     const style = MAP_STYLES[key]
     setMapStyle(style.style)
   }
+
+  const findAreaById = useCallback((map: maplibregl.Map, areaId: string) => {
+    const features = map.querySourceFeatures('crags', {
+      sourceLayer: 'crags',
+      filter: ['==', ['get', 'id'], areaId]
+    })
+    return features[0] // return first feature because it could be duplicated by the tileset
+  }, [])
+
+  useEffect(() => {
+    if (mapInstance == null) return
+
+    if (!isSourceLoaded) {
+      mapInstance.on('sourcedata', (e) => {
+        if (e.sourceId === 'crags' && e.isSourceLoaded) {
+          setIsSourceLoaded(true)
+        }
+      })
+    }
+
+    if (isSourceLoaded && initialAreaId !== undefined) {
+      const feature = findAreaById(mapInstance, initialAreaId)
+      if (feature != null) {
+        setClickInfo(prev => {
+          setActiveFeatureVisual(prev, { selected: false, hover: false })
+
+          const activeFeature = tileToFeature('crag-name-labels', { x: 0, y: 0 }, feature.geometry, feature.properties as TileProps, mapInstance)
+          setActiveFeatureVisual(activeFeature, { selected: true, hover: false })
+          return activeFeature
+        })
+      }
+    }
+  }, [mapInstance, isSourceLoaded, initialAreaId, findAreaById])
 
   return (
     <div className='relative w-full h-full'>
