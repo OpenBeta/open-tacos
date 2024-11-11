@@ -9,6 +9,8 @@ export const FullScreenMap: React.FC = () => {
   const [zoom, setZoom] = useState<number | undefined>(undefined)
   const [areaId, setAreaId] = useState<string | undefined>(undefined)
   const [isInitialized, setIsInitialized] = useState(false)
+  const DEFAULT_CENTER: [number, number] = [0, 0]
+  const DEFAULT_ZOOM = 2
 
   const router = useRouter()
   const urlParams = useUrlParams()
@@ -18,8 +20,6 @@ export const FullScreenMap: React.FC = () => {
     if (isInitialized) return
 
     const { camera, areaId: urlAreaId } = urlParams.fromUrl()
-    const DEFAULT_CENTER: [number, number] = [-98.5795, 39.8283] // Center of US
-    const DEFAULT_ZOOM = 3
 
     if (urlAreaId !== null) {
       setAreaId(urlAreaId)
@@ -106,6 +106,7 @@ export const FullScreenMap: React.FC = () => {
 
   return (
     <GlobalMap
+      showFullscreenControl={false}
       initialAreaId={areaId}
       initialCenter={center}
       initialZoom={zoom}
@@ -159,10 +160,7 @@ const useUrlParams = (): UseUrlParamsReturn => {
   }
 
   const fromUrl = (): UrlProps => {
-    const rawUrl = window.location.search
-    const cameraMatch = rawUrl.match(/[?&]camera=([^&]+)/)
-    const cameraParam = (cameraMatch !== null) ? cameraMatch[1] : null
-
+    const cameraParam = searchParams.get('camera')
     return {
       camera: cameraParam !== null ? queryToCameraInfo(cameraParam) : null,
       areaId: searchParams.get('areaId')
