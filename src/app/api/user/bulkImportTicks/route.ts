@@ -1,12 +1,12 @@
-import { NextApiHandler } from 'next'
-import { getServerSession } from 'next-auth'
 import csv from 'csvtojson'
 import axios, { AxiosInstance } from 'axios'
 import { v5 as uuidv5, NIL } from 'uuid'
+import { NextRequest, NextResponse } from 'next/server'
 
-import withAuth from '../withAuth'
-import { authOptions } from '../auth/[...nextauth]'
 import { updateUser } from '@/js/auth/ManagementClient'
+import { graphqlClient } from '@/js/graphql/Client'
+import { MUTATION_IMPORT_TICKS } from '@/js/graphql/gql/fragments'
+import { withUserAuth } from '@/js/auth/withUserAuth'
 
 export interface Tick {
   name: string
@@ -58,11 +58,12 @@ interface MPTick {
   'Rating Code': string
 }
 
-async function getMPTicks (uid: string): Promise<MPTick[]> {
+async function getMPTicks (profileUrl: string): Promise<MPTick[]> {
   const mpClient: AxiosInstance = axios.create({
-    baseURL: 'https://www.mountainproject.com/user'
+    baseURL: 'https://www.mountainproject.com/user',
+    timeout: 60000
   })
-  const res = await mpClient.get(`${uid}/tick-export`)
+  const res = await mpClient.get(`${profileUrl}/tick-export`)
   if (res.status === 200) {
     const data = await csv({
       // output: "csv",
@@ -77,20 +78,22 @@ async function getMPTicks (uid: string): Promise<MPTick[]> {
   return []
 }
 
-const handler: NextApiHandler<any> = async (req, res) => {
-  if (req.method !== 'POST') res.end()
-  const session = await getServerSession(req, res, authOptions)
-  if (session == null) res.end()
+const postHandler = async (req: NextRequest): Promise<any> => {
+  const uuid = req.headers.get('x-openbeta-user-uuid')
+  const auth0Userid = req.headers.get('x-auth0-userid')
+  const payload = await req.json()
+  const profileUrl: string = payload.profileUrl
 
-  const uuid = session?.user.metadata?.uuid
-  const uid: string = JSON.parse(req.body)
-  if (uuid == null || uid == null) res.status(500)
+  if (uuid == null || profileUrl == null || auth0Userid == null) {
+    // A bug in our code - shouldn't get here.
+    return NextResponse.json({ status: 500 })
+  }
 
   // fetch data from mountain project here
   const tickCollection: Tick[] = []
-  const ret = await getMPTicks(uid)
+  const ret = await getMPTicks(profileUrl)
 
-  ret.forEach((tick) => {
+  for (const tick of ret) {
     const newTick: Tick = {
       name: tick.Route,
       notes: tick.Notes,
@@ -103,15 +106,24 @@ const handler: NextApiHandler<any> = async (req, res) => {
       source: 'MP'
     }
     tickCollection.push(newTick)
-  })
+  }
+
+  if (tickCollection.length > 0) {
+    // send ticks to OB backend
+    await graphqlClient.mutate<any, { input: Tick[] }>({
+      mutation: MUTATION_IMPORT_TICKS,
+      variables: {
+        input: tickCollection
+      }
+    })
+  }
+
   // set the user flag to true, so the popup doesn't show anymore and
   // update the metadata
   // Note: null check is to make TS happy.  We wouldn't get here if session is null.
-  if (session != null) {
-    await updateUser(session.id, { ticksImported: true })
-  }
+  await updateUser(auth0Userid, { ticksImported: true })
 
-  res.json({ ticks: tickCollection })
-  res.end()
+  return NextResponse.json({ count: tickCollection.length }, { status: 200 })
 }
-export default withAuth(handler)
+
+export const POST = withUserAuth(postHandler)
