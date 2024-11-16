@@ -71,7 +71,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   const urlParams = useUrlParams()
 
   const setActiveFeatureVisual = (feature: ActiveFeature | null, fState: FeatureState): void => {
-    if (feature == null || mapInstance == null) return
+    if (feature === null || mapInstance === null) return
     mapInstance.setFeatureState({
       source: 'areas',
       sourceLayer: 'areas',
@@ -80,7 +80,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   }
 
   const onMove = useCallback((e: ViewStateChangeEvent) => {
-    if ((mapInstance == null) || e.viewState == null || (onCameraMovement == null)) return
+    if ((mapInstance === null) || e.viewState === null || (onCameraMovement === undefined)) return
     onCameraMovement({
       center: {
         lat: e.viewState.latitude,
@@ -91,7 +91,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   }, [mapInstance, onCameraMovement])
 
   const onLoad = useCallback((e: MapLibreEvent) => {
-    if (e.target == null) return
+    if (e.target === null) return
     setMapInstance(e.target)
 
     // Only apply jumpTo if initial values are defined
@@ -106,9 +106,9 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
    * Handle click event on the map. Place a marker on the map and activate the side drawer.
    */
   const onClick = (event: MapLayerMouseEvent): void => {
-    if (mapInstance == null) return
+    if (mapInstance === null) return
     const feature = event?.features?.[0]
-    if (feature == null) {
+    if (feature === undefined) {
       setClickInfo(null)
     } else {
       const { layer, geometry, properties } = feature
@@ -127,7 +127,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
    */
   const onHoverCardClick = (feature: ActiveFeature): void => {
     const areaId = feature.data?.id
-    if (areaId == null) {
+    if (areaId === '') {
       return
     }
 
@@ -188,7 +188,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   }, [])
 
   useEffect(() => {
-    if (mapInstance == null) return
+    if (mapInstance === null) return
 
     if (!isSourceLoaded) {
       mapInstance.on('sourcedata', (e) => {

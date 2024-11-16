@@ -95,7 +95,7 @@ export const FullScreenMap: React.FC = () => {
   const handleMapClick = useCallback(
     (e: MapLayerMouseEvent) => {
       const areaId = e.features?.[0]?.properties?.id
-      if (areaId == null) {
+      if (areaId === '') {
         return
       }
 
