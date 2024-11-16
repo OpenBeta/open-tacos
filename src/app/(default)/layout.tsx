@@ -6,7 +6,7 @@ import '../global.css'
 import Header from './header'
 import { PageFooter } from './components/PageFooter'
 import { NextAuthProvider } from '@/components/auth/NextAuthProvider'
-import { ReactToastifyProvider } from './components/ReactToastifyProvider'
+import { ReactToastifyProvider } from '@/components/toast/ReactToastifyProvider'
 import { BlockingAlertUploadingInProgress } from './components/ui/GlobalAlerts'
 import { OnboardingCheck } from '@/components/auth/OnboardingCheck'
 
