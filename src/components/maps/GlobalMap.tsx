@@ -63,9 +63,6 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
     crags: true
   })
 
-  console.log('mapinstance', mapInstance);
-  
-
   const setActiveFeatureVisual = (feature: ActiveFeature | null, fState: FeatureState): void => {
     if (feature == null || mapInstance == null) return
     mapInstance.setFeatureState({
