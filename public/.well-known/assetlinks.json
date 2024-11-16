@@ -3,7 +3,7 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "openbeta.io.debug",
+      "package_name": "io.openbeta.debug",
       "sha256_cert_fingerprints":
         ["F4:32:1C:12:02:48:08:7D:02:96:33:5B:93:58:77:EE:0D:EC:A0:46:E4:84:42:3D:27:21:EE:E6:F2:14:CF:DF"]
     }
@@ -12,7 +12,7 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "openbeta.io",
+      "package_name": "io.openbeta",
       "sha256_cert_fingerprints":
         ["8E:38:28:3A:23:35:D3:08:57:4F:D2:33:42:33:A4:87:2D:16:6F:E0:DF:16:85:5A:7D:D6:E5:8D:DE:12:5B:D3"]
     }

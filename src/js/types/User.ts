@@ -22,6 +22,10 @@ export interface IWritableUserMetadata {
   bio: string
   website?: string
   ticksImported?: boolean
+  /**
+   * Indicate whether or not we have initialized user account in our own db
+   */
+  initializedDb?: boolean
   collections?: {
     /** Users can organize entities into their own 'climbing playlists'
      * Strictly speaking, this should always be mutated as a SET rather than an

@@ -2,13 +2,10 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
 import { FolderArrowDownIcon } from '@heroicons/react/24/outline'
-import { useMutation } from '@apollo/client'
 import { signIn, useSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
 import clx from 'classnames'
 
-import { graphqlClient } from '../../js/graphql/Client'
-import { MUTATION_IMPORT_TICKS } from '../../js/graphql/gql/fragments'
 import { INPUT_DEFAULT_CSS } from '../ui/form/TextArea'
 import Spinner from '../ui/Spinner'
 import { LeanAlert } from '../ui/micro/AlertDialogue'
@@ -33,42 +30,6 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
   const [showInput, setShowInput] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<string[]>([])
-  const [addTicks] = useMutation(
-    MUTATION_IMPORT_TICKS, {
-      client: graphqlClient,
-      errorPolicy: 'none'
-    })
-
-  async function fetchMPData (url: string, method: 'GET' | 'POST' | 'PUT' = 'GET', body?: string): Promise<any> {
-    try {
-      const headers = {
-        'Content-Type': 'application/json'
-      }
-      const config: RequestInit = {
-        method,
-        headers
-      }
-
-      if (body !== null && body !== undefined && body !== '') {
-        config.body = JSON.stringify(body)
-      }
-
-      const response = await fetch(url, config)
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.statusText)
-      }
-
-      return await response.json()
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('Fetch error:', error.message)
-        throw error
-      }
-      throw new Error('An unexpected error occurred')
-    }
-  }
 
   // this function is for when the component is rendered as a button and sends the user straight to the input form
   function straightToInput (): void {
@@ -81,25 +42,17 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
   }
 
   async function getTicks (): Promise<void> {
-    // get the ticks and add it to the database
     setErrors([])
     if (pattern.test(mpUID)) {
       setLoading(true)
 
       try {
-        const response = await fetchMPData('/api/user/ticks', 'POST', JSON.stringify(mpUID))
+        const { count } = await bulkImportProxy(mpUID)
 
-        if (response.ticks[0] !== undefined) {
-          await addTicks({
-            variables: {
-              input: response.ticks
-            }
-          })
-          // Add a delay before rerouting to the new page
-          const ticksCount: number = response.ticks?.length ?? 0
+        if (count > 0) {
           toast.info(
             <>
-              {ticksCount} ticks have been imported! 🎉 <br />
+              {count} ticks have been imported! 🎉 <br />
               Redirecting in a few seconds...`
             </>
           )
@@ -149,6 +102,7 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
                 onChange={(e) => setMPUID(e.target.value)}
                 className={clx(INPUT_DEFAULT_CSS, 'w-full')}
                 placeholder='https://www.mountainproject.com/user/123456789/username'
+                disabled={loading}
               />
             </div>
           )}
@@ -183,7 +137,7 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
                 setErrors([])
               }}
             >
-              <button className='Button mauve'>Cancel</button>
+              <button className='btn btn-outline' disabled={loading}>Cancel</button>
             </AlertDialogPrimitive.Cancel>
           </div>
         </LeanAlert>
@@ -193,3 +147,18 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
 }
 
 export default ImportFromMtnProj
+
+type BulkImportFn = (profileUrl: string) => Promise<{ count: number }>
+
+const bulkImportProxy: BulkImportFn = async (profileUrl: string) => {
+  const res = await fetch('/api/user/bulkImportTicks', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      profileUrl
+    })
+  })
+  return await res.json()
+}

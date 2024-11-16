@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth'
 import withAuth from '../withAuth'
 import { getUserRoles, setUserRoles } from '../../../js/auth/ManagementClient'
 import { UserRole } from '../../../js/types'
-import { authOptions } from '../auth/[...nextauth]'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 const handler: NextApiHandler<any> = async (req, res) => {
   try {

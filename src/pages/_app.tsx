@@ -13,7 +13,6 @@ import '../../public/fonts/fonts.css'
 import { useUserGalleryStore } from '../js/stores/useUserGalleryStore'
 import { BlockingAlert } from '../components/ui/micro/AlertDialogue'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { OnboardingCheck } from '@/components/auth/OnboardingCheck'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
@@ -42,7 +41,6 @@ export default function MyApp ({ Component, pageProps: { session, ...pageProps }
                 </>
                 )
           }
-        <OnboardingCheck isAppDir={false} />
       </SessionProvider>
       <ToastContainer
         position='bottom-right'

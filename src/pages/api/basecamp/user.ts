@@ -5,7 +5,7 @@ import withAuth from '../withAuth'
 import { updateUser } from '../../../js/auth/ManagementClient'
 import { UserRole } from '../../../js/types'
 import { IUserMetadataOriginal } from '../../../js/types/User'
-import { authOptions } from '../auth/[...nextauth]'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 const handler: NextApiHandler<any> = async (req, res) => {
   try {
