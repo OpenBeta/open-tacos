@@ -45,8 +45,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     // See https://next-auth.js.org/configuration/callbacks#jwt-callback
     async jwt ({ token, account, profile, user }) {
-      // console.log('## token', token)
-      // console.log('## account', account)
       /**
        * `account` object is only populated once when the user first logged in.
        */
@@ -87,7 +85,6 @@ export const authOptions: NextAuthOptions = {
       }
 
       if (!(token.userMetadata?.initializedDb ?? false)) {
-        console.log('## NEED TO INITIALIZE DB', token)
         const { userMetadata, email, picture: avatar, id: auth0UserId } = token
         const { nick: username, uuid: userUuid } = userMetadata
         const { accessToken } = token
@@ -96,7 +93,6 @@ export const authOptions: NextAuthOptions = {
         if (success) {
           token.userMetadata.initializedDb = true
         }
-        console.log('## init user()', success)
       }
 
       if ((token.expiresAt as number) < (Date.now() / 1000)) {
@@ -110,7 +106,6 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session ({ session, user, token }) {
-      console.log('# SESSION', token)
       if (token.userMetadata == null ||
         token?.userMetadata?.uuid == null || token?.userMetadata?.nick == null) {
         // we must have user uuid and nickname for everything to work
