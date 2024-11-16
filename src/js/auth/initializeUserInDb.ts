@@ -1,5 +1,5 @@
 import { getClient } from '../graphql/ServerClient'
-import { MUTATION_UPDATE_PROFILE } from '../graphql/gql/users'
+import { MUTATION_UPDATE_PROFILE, QUERY_DOES_USERNAME_EXIST } from '../graphql/gql/users'
 import { updateUser } from './ManagementClient'
 
 export interface UpdateUsernameInput {
@@ -14,9 +14,15 @@ interface InitializeUserInDBParams extends UpdateUsernameInput {
   auth0UserId: string
 }
 
+const serverClient = getClient()
+
 export const initializeUserInDB = async (params: InitializeUserInDBParams): Promise<boolean> => {
   const { auth0UserId, accessToken, userUuid, username, email, avatar } = params
-  const res = await getClient().mutate<{ updateUserProfile?: boolean }, UpdateUsernameInput>({
+  const existed = await doesUserExist(username)
+  if (existed) {
+    return false
+  }
+  const res = await serverClient.mutate<{ updateUserProfile?: boolean }, UpdateUsernameInput>({
     mutation: MUTATION_UPDATE_PROFILE,
     variables: {
       userUuid,
@@ -41,4 +47,15 @@ export const initializeUserInDB = async (params: InitializeUserInDBParams): Prom
     }
   }
   return success
+}
+
+const doesUserExist = async (username: string): Promise<boolean> => {
+  const res = await serverClient.query<{ usernameExists: boolean }, { username: string }>({
+    query: QUERY_DOES_USERNAME_EXIST,
+    variables: {
+      username
+    },
+    fetchPolicy: 'no-cache'
+  })
+  return res.data.usernameExists
 }
