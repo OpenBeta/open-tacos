@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { SessionProvider } from 'next-auth/react'
 import { House } from '@phosphor-icons/react/dist/ssr'
 import AuthenticatedProfileNavButton from '@/components/AuthenticatedProfileNavButton'
-import { OnboardingCheck } from '@/components/auth/OnboardingCheck'
 
 export const ProfileMenu: React.FC = () => {
   return (
@@ -14,7 +13,6 @@ export const ProfileMenu: React.FC = () => {
           <AuthenticatedProfileNavButton isMobile={false} />
         </nav>
       </div>
-      <OnboardingCheck />
     </SessionProvider>
   )
 }

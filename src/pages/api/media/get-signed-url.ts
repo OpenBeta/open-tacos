@@ -4,7 +4,7 @@ import { nolookalikesSafe } from 'nanoid-dictionary'
 import { extname } from 'path'
 import { getServerSession } from 'next-auth'
 import withAuth from '../withAuth'
-import { authOptions } from '../auth/[...nextauth]'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { getSignedUrlForUpload } from '../../../js/media/storageClient'
 
 export interface MediaPreSignedProps {

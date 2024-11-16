@@ -9,7 +9,7 @@ import { UserPublicProfile } from '../types/User'
 interface GetUsernameByIdInput {
   userUuid: string
 }
-interface UpdateUsernameInput {
+export interface UpdateUsernameInput {
   userUuid: string
   username: string
   email?: string

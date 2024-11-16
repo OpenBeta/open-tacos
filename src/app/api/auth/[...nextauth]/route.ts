@@ -3,8 +3,9 @@ import axios from 'axios'
 import type { NextAuthOptions } from 'next-auth'
 import Auth0Provider from 'next-auth/providers/auth0'
 
-import { AUTH_CONFIG_SERVER } from '../../../Config'
-import { IUserMetadata, UserRole } from '../../../js/types/User'
+import { AUTH_CONFIG_SERVER } from '../../../../Config'
+import { IUserMetadata, UserRole } from '../../../../js/types/User'
+import { initializeUserInDB } from '@/js/auth/initializeUserInDb'
 
 const CustomClaimsNS = 'https://tacos.openbeta.io/'
 const CustomClaimUserMetadata = CustomClaimsNS + 'user_metadata'
@@ -24,7 +25,6 @@ export const authOptions: NextAuthOptions = {
       clientSecret,
       issuer,
       authorization: { params: { audience: 'https://api.openbeta.io', scope: 'offline_access access_token_authz openid email profile read:current_user create:current_user_metadata update:current_user_metadata read:stats update:area_attrs' } },
-
       client: {
         token_endpoint_auth_method: clientSecret.length === 0 ? 'none' : 'client_secret_basic'
       }
@@ -45,6 +45,8 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     // See https://next-auth.js.org/configuration/callbacks#jwt-callback
     async jwt ({ token, account, profile, user }) {
+      // console.log('## token', token)
+      // console.log('## account', account)
       /**
        * `account` object is only populated once when the user first logged in.
        */
@@ -84,6 +86,19 @@ export const authOptions: NextAuthOptions = {
         throw new Error('Invalid auth data')
       }
 
+      if (!(token.userMetadata?.initializedDb ?? false)) {
+        console.log('## NEED TO INITIALIZE DB', token)
+        const { userMetadata, email, picture: avatar, id: auth0UserId } = token
+        const { nick: username, uuid: userUuid } = userMetadata
+        const { accessToken } = token
+
+        const success = await initializeUserInDB({ auth0UserId, accessToken, username, userUuid, avatar, email })
+        if (success) {
+          token.userMetadata.initializedDb = true
+        }
+        console.log('## init user()', success)
+      }
+
       if ((token.expiresAt as number) < (Date.now() / 1000)) {
         const { accessToken, refreshToken, expiresAt } = await refreshAccessTokenSilently(token.refreshToken as string)
         token.accessToken = accessToken
@@ -95,6 +110,7 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session ({ session, user, token }) {
+      console.log('# SESSION', token)
       if (token.userMetadata == null ||
         token?.userMetadata?.uuid == null || token?.userMetadata?.nick == null) {
         // we must have user uuid and nickname for everything to work
@@ -109,7 +125,8 @@ export const authOptions: NextAuthOptions = {
   }
 }
 
-export default NextAuth(authOptions)
+const handler = NextAuth(authOptions)
+export { handler as GET, handler as POST }
 
 const refreshAccessTokenSilently = async (refreshToken: string): Promise<any> => {
   const response = await axios.request<{

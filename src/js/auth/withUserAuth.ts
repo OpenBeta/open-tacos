@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth'
 import { NextRequest, NextResponse } from 'next/server'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 type Next13APIHandler = (req: NextRequest) => Promise<any>
 
@@ -15,6 +15,7 @@ export const withUserAuth = (handler: Next13APIHandler): Next13APIHandler => {
       // Passing useful session data downstream
       req.headers.set('x-openbeta-user-uuid', session.user.metadata.uuid)
       req.headers.set('x-auth0-userid', session.id)
+      req.headers.set('x-auth0-access-token', session.accessToken)
       return await handler(req)
     } else {
       return NextResponse.json({ status: 401 })

@@ -8,7 +8,6 @@ import { PageFooter } from './components/PageFooter'
 import { NextAuthProvider } from '@/components/auth/NextAuthProvider'
 import { ReactToastifyProvider } from './components/ReactToastifyProvider'
 import { BlockingAlertUploadingInProgress } from './components/ui/GlobalAlerts'
-import { OnboardingCheck } from '@/components/auth/OnboardingCheck'
 
 export const metadata: Metadata = {
   title: 'OpenBeta',
@@ -36,7 +35,6 @@ export default function RootLayout ({
           <div>
             {children}
           </div>
-          <OnboardingCheck />
         </NextAuthProvider>
         <PageFooter />
         <ReactToastifyProvider />
