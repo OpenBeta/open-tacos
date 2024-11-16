@@ -79,7 +79,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
     }, fState)
   }
 
-  const onMove = useCallback((e: ViewStateChangeEvent) => {
+  const onMoveEnd = useCallback((e: ViewStateChangeEvent) => {
     if ((mapInstance === null) || e.viewState === null || (onCameraMovement === undefined)) return
     onCameraMovement({
       center: {
@@ -218,7 +218,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         id='global-map'
         onLoad={onLoad}
         onDragStart={() => setCursor('move')}
-        onMove={onMove}
+        onMoveEnd={onMoveEnd}
         onDragEnd={() => setCursor('default')}
         onMouseEnter={onHover}
         onMouseLeave={() => {
