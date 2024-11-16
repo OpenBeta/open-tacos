@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, ViewStateChangeEvent, GeolocateControl } from 'react-map-gl/maplibre'
 import maplibregl, { MapLibreEvent } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
-
 import { MAP_STYLES, type MapStyles } from './MapSelector'
 import { Drawer } from './TileHandlers/Drawer'
 import { HoverCard } from './TileHandlers/HoverCard'
@@ -13,6 +12,8 @@ import { ActiveFeature, TileProps } from './TileTypes'
 import MapLayersSelector from './MapLayersSelector'
 import { MapToolbar } from './MapToolbar'
 import { SelectedFeature } from './AreaActiveMarker'
+import { useRouter } from 'next/navigation'
+import { useUrlParams } from '@/js/hooks/useUrlParams'
 
 export interface CameraInfo {
   center: {
@@ -66,6 +67,8 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
     heatmap: false,
     crags: true
   })
+  const router = useRouter()
+  const urlParams = useUrlParams()
 
   const setActiveFeatureVisual = (feature: ActiveFeature | null, fState: FeatureState): void => {
     if (feature == null || mapInstance == null) return
@@ -123,6 +126,14 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
    * Handle click event on the popover. Behave as if the user clicked on a feature on the map.
    */
   const onHoverCardClick = (feature: ActiveFeature): void => {
+    const areaId = feature.data?.id
+    if (areaId == null) {
+      return
+    }
+
+    const { camera } = urlParams.fromUrl()
+    const url = urlParams.toUrl({ camera: camera ?? null, areaId })
+    router.replace(url, { scroll: false })
     setClickInfo(prevFeature => {
       setHoverInfo(null)
       setActiveFeatureVisual(prevFeature, { selected: false, hover: false })
