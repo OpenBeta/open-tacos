@@ -12,7 +12,6 @@ export const ContentBlock: React.FC<Pick<Climb, 'content'>> = ({ content: { desc
         <>
           <h3 className='mb-3 mt-6'>Location</h3>
           <Markdown className='wiki-content'>{location}</Markdown>
-
         </>
       )}
 
