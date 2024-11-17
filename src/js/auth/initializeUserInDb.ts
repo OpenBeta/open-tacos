@@ -1,7 +1,7 @@
 import { getClient } from '../graphql/ServerClient'
-import { MUTATION_UPDATE_PROFILE, QUERY_DOES_USERNAME_EXIST } from '../graphql/gql/users'
+import { MUTATION_UPDATE_PROFILE, QUERY_GET_USERNAME_BY_UUID } from '../graphql/gql/users'
 import { updateUser } from './ManagementClient'
-
+import { Username } from '../types'
 export interface UpdateUsernameInput {
   userUuid: string
   username: string
@@ -16,10 +16,13 @@ interface InitializeUserInDBParams extends UpdateUsernameInput {
 
 const serverClient = getClient()
 
+/**
+ * Look up in our db (not Auth0) to see whether a user by uuid exists.  If it doesn't then insert a new user profile.
+ */
 export const initializeUserInDB = async (params: InitializeUserInDBParams): Promise<boolean> => {
   const { auth0UserId, accessToken, userUuid, username, email, avatar } = params
-  const existed = await doesUserExist(username)
-  if (existed) {
+  const existed = await doesUserByUuidExist(userUuid)
+  if (existed != null) {
     return false
   }
   const res = await serverClient.mutate<{ updateUserProfile?: boolean }, UpdateUsernameInput>({
@@ -49,13 +52,13 @@ export const initializeUserInDB = async (params: InitializeUserInDBParams): Prom
   return success
 }
 
-const doesUserExist = async (username: string): Promise<boolean> => {
-  const res = await serverClient.query<{ usernameExists: boolean }, { username: string }>({
-    query: QUERY_DOES_USERNAME_EXIST,
+const doesUserByUuidExist = async (userUuid: string): Promise<Username | null> => {
+  const res = await serverClient.query<{ getUsername?: Username }, { userUuid: string }>({
+    query: QUERY_GET_USERNAME_BY_UUID,
     variables: {
-      username
+      userUuid
     },
     fetchPolicy: 'no-cache'
   })
-  return res.data.usernameExists
+  return res.data?.getUsername ?? null
 }
