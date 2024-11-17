@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { updateUser } from '@/js/auth/ManagementClient'
 import { graphqlClient } from '@/js/graphql/Client'
 import { MUTATION_IMPORT_TICKS } from '@/js/graphql/gql/fragments'
-import { withUserAuth } from '@/js/auth/withUserAuth'
+import { withUserAuth, PREDEFINED_HEADERS } from '@/js/auth/withUserAuth'
 
 export interface Tick {
   name: string
@@ -79,8 +79,8 @@ async function getMPTicks (profileUrl: string): Promise<MPTick[]> {
 }
 
 const postHandler = async (req: NextRequest): Promise<any> => {
-  const uuid = req.headers.get('x-openbeta-user-uuid')
-  const auth0Userid = req.headers.get('x-auth0-userid')
+  const uuid = req.headers.get(PREDEFINED_HEADERS.user_uuid)
+  const auth0Userid = req.headers.get(PREDEFINED_HEADERS.auth0_id)
   const payload = await req.json()
   const profileUrl: string = payload.profileUrl
 
