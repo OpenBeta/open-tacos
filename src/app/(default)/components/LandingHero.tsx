@@ -1,10 +1,10 @@
-import { MiniAlert } from '@/components/broadcast/MiniAlert'
+import { AppAlert } from '@/components/broadcast/AppAlert'
 import { SignupButton } from './DesktopHeader'
 
 export const LandingHero: React.FC = () => {
   return (
     <section className='mt-4'>
-      <MiniAlert
+      <AppAlert
         message={
           <>
             <h1 className='text-xl tracking-tighter font-bold'>Share your climbing route knowledge!</h1>

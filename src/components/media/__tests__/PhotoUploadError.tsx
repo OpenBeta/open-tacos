@@ -5,7 +5,7 @@ jest.mock('next/router')
 
 jest.mock('../../DesktopAppBar')
 jest.mock('../../MobileAppBar')
-jest.mock('../../broadcast/MiniAlert')
+jest.mock('../../broadcast/AppAlert')
 
 const getPhotoUploadErrorMessageFn = jest.fn()
 const setPhotoUploadErrorMessageFn = jest.fn()
