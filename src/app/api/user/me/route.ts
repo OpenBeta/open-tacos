@@ -1,13 +1,13 @@
-import { withUserAuth } from '@/js/auth/withUserAuth'
 import { NextRequest, NextResponse } from 'next/server'
+import { PREDEFINED_HEADERS, withUserAuth } from '@/js/auth/withUserAuth'
 import useUserProfileCmd from '@/js/hooks/useUserProfileCmd'
 
 /**
  * Direct `/api/user/me` to `/u/<user_id`
  */
 const getHandler = async (req: NextRequest): Promise<any> => {
-  const uuid = req.headers.get('x-openbeta-user-uuid')
-  const accessToken = req.headers.get('x-auth0-access-token')
+  const uuid = req.headers.get(PREDEFINED_HEADERS.user_uuid)
+  const accessToken = req.headers.get(PREDEFINED_HEADERS.access_token)
 
   if (accessToken == null || uuid == null) {
     return NextResponse.json({ status: 500 })

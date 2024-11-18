@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { MediaPreSignedProps } from '../../pages/api/media/get-signed-url'
+import { MediaPreSignedProps } from '@/app/api/user/get-signed-url/route'
 
 const client = axios.create()
 
@@ -12,7 +12,7 @@ const client = axios.create()
  */
 export const uploadPhoto = async (filename: string, rawData: ArrayBuffer): Promise<string> => {
   const res = await client.get<MediaPreSignedProps>(
-    '/api/media/get-signed-url?filename=' + encodeURIComponent(filename))
+    '/api/user/get-signed-url?filename=' + encodeURIComponent(filename))
 
   if (res.data?.url != null && res.data?.fullFilename != null) {
     const signedUploadUrl = res.data.url
@@ -30,7 +30,7 @@ export const uploadPhoto = async (filename: string, rawData: ArrayBuffer): Promi
 
 export const deleteMediaFromStorage = async (filename: string): Promise<void> => {
   const res = await client.post(
-    '/api/media/remove?filename=' + encodeURIComponent(filename),
+    '/api/user/remove-media?filename=' + encodeURIComponent(filename),
     {
       headers: {
         'Content-Type': 'application/json'

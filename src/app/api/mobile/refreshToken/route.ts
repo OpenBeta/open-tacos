@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import * as Auth0 from 'auth0'
 import { auth0Client, isNullOrEmpty } from '@/js/auth/mobile'
 import { withMobileAuth } from '@/js/auth/withMobileAuth'
+import { errorHandler } from '../login/route'
 
 /**
  * Mobile refresh token handler
@@ -27,10 +28,9 @@ async function postHandler (request: NextRequest): Promise<any> {
       audience: 'https://api.openbeta.io'
     })
 
-    return NextResponse.json({ data: response.data })
+    return NextResponse.json({ ...response.data }, { status: response.status })
   } catch (error) {
-    console.error('#### Auth0 error ####', error)
-    return NextResponse.json({ error: 'Unexpected auth error', status: 403 })
+    return errorHandler(error)
   }
 }
 

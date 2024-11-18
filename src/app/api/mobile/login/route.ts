@@ -18,7 +18,7 @@ async function postHandler (request: NextRequest): Promise<NextResponse> {
       throw new Error('Invalid payload')
     }
   } catch (error) {
-    return NextResponse.json({ error: 'Unexpected error', status: 400 })
+    return NextResponse.json({ error: 'Unexpected error' }, { status: 400 })
   }
 
   let response: Auth0.JSONApiResponse<Auth0.TokenSet> | undefined
@@ -30,12 +30,21 @@ async function postHandler (request: NextRequest): Promise<NextResponse> {
       audience: 'https://api.openbeta.io',
       realm: 'Username-Password-Authentication'
     })
-
-    return NextResponse.json({ data: response.data })
+    return NextResponse.json({ ...response.data }, { status: response.status })
   } catch (error) {
-    console.error('#### Auth0 error ####', error)
-    return NextResponse.json({ error: 'Unexpected auth error', status: 403 })
+    return errorHandler(error)
   }
 }
 
 export const POST = withMobileAuth(postHandler)
+
+/**
+ * Handle Auth0 errors
+ */
+export const errorHandler = (error: any): NextResponse => {
+  console.error('#### Auth0 error ####', error)
+  if (error instanceof Auth0.AuthApiError) {
+    return NextResponse.json({ error: error?.error_description ?? '' }, { status: error?.statusCode ?? 401 })
+  }
+  return NextResponse.json({ error: 'Unexpected auth error' }, { status: 401 })
+}
