@@ -18,11 +18,11 @@ export default async function Home (): Promise<any> {
   const history = await getChangeHistoryServerSide()
   return (
     <>
-      <div className='default-page-margins'>
+      <div className='default-page-margins flex flex-col justify-center w-fit'>
         <LandingHero />
-        <hr className='my-4 border-base-content' />
       </div>
       <div className='default-page-margins flex flex-col gap-y-16 mb-16'>
+        <RecentTags />
         <div className='lg:grid lg:grid-cols-3 gap-x-2'>
           <div className='mt-8 lg:mt-0 lg:overflow-y-auto lg:h-[450px] w-full border-2 rounded-box'>
             <Suspense fallback={<LatestContributionsSkeleton />}>
@@ -34,7 +34,6 @@ export default async function Home (): Promise<any> {
             <RecentContributionsMap history={history} />
           </div>
         </div>
-        <RecentTags />
         <InternationalToC />
         <USAToC />
         <FinancialContributors />

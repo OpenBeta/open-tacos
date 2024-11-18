@@ -24,7 +24,12 @@ export const authOptions: NextAuthOptions = {
       clientId,
       clientSecret,
       issuer,
-      authorization: { params: { audience: 'https://api.openbeta.io', scope: 'offline_access access_token_authz openid email profile read:current_user create:current_user_metadata update:current_user_metadata read:stats update:area_attrs' } },
+      authorization: {
+        params: {
+          audience: 'https://api.openbeta.io',
+          scope: 'offline_access access_token_authz openid email profile read:current_user create:current_user_metadata update:current_user_metadata read:stats update:area_attrs'
+        }
+      },
       client: {
         token_endpoint_auth_method: clientSecret.length === 0 ? 'none' : 'client_secret_basic'
       }

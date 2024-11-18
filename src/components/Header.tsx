@@ -1,12 +1,10 @@
 import React from 'react'
-import Link from 'next/link'
 
 import MobileTabletAppBar from './MobileAppBar'
 import DesktopAppBar from './DesktopAppBar'
 import useResponsive from '../js/hooks/useResponsive'
 import PhotoUploadError from './media/PhotoUploadError'
 import { userMediaStore } from '../js/stores/media'
-import AppAlert from './broadcast/AppAlert'
 
 const NAV_BAR_IDENTIFIER = 'tacos-nav-bar'
 
@@ -33,24 +31,6 @@ export default function Header (props: HeaderProps): JSX.Element {
               showFilterBar={includeFilters}
             />}
       </div>
-      <AppAlert
-        message={
-          <>
-            <div className='text-sm'>
-              • January 2023: Use this special&nbsp;
-              <Link
-                href='/crag/18c5dd5c-8186-50b6-8a60-ae2948c548d1'
-                className='link-dotted font-semibold'
-              >
-
-                Test area
-
-              </Link>&nbsp;for test driving the new edit feature&nbsp;<a className='btn-link font-light text-xs' href='https://openbeta.substack.com/p/new-year-new-milestone'>Learn more</a>
-            </div>
-
-          </>
-      }
-      />
     </>
   )
 }
