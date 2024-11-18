@@ -17,11 +17,8 @@ export const MiniAlert: React.FC<MiniAlertProps> = ({ message }) => {
   const [showAlert, setShowAlert] = useState(false)
   useEffect(() => {
     const suppressed = Cookies.get(STORAGE_KEY)
-    console.log('#cookie value', suppressed)
     setShowAlert(suppressed == null)
   }, [])
-
-  console.log('## Alert state', message, showAlert)
 
   return showAlert
     ? (
