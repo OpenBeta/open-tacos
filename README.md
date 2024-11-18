@@ -93,27 +93,6 @@ yarn dev
 
 The application is now available at http://localhost:3000
 
-
-### Alternate build method using Docker
-
-If you just want to run the app locally without installing node, npm, etc., you can do so with Docker.
-
-**Requirements:** [Docker](https://docs.docker.com/get-docker/)
-
-```
-docker compose up
-```
-
-The application is now available at http://localhost:3000.  The project will rebuild automatically when you make changes to files in `./src` dir.
-  
-Note: If you install new NPM packages, you will need to rebuild the docker image with
-
-```
-docker compose up --build
-```
-
-The application is now available at `http://localhost:3000`
-
 ## Tips
 
 ### API key errors
