@@ -15,19 +15,19 @@ const useUrlParams = (): UseUrlParamsReturn => {
   const toUrl = ({ camera, areaId }: UrlProps): string => {
     const params = new URLSearchParams()
 
-    if (areaId !== null && areaId !== undefined) {
+    if (areaId != null) {
       params.set('areaId', areaId)
     }
 
     const baseUrl = `${pathname}?`
-    const cameraParam = (camera !== null && camera !== undefined) ? `camera=${cameraInfoToQuery(camera)}` : ''
+    const cameraParam = (camera != null) ? `camera=${cameraInfoToQuery(camera)}` : ''
     const otherParams = params.toString()
 
-    if (cameraParam !== null && otherParams !== null) {
+    if (cameraParam != null && otherParams != null) {
       return `${baseUrl}${cameraParam}&${otherParams}`
-    } else if (cameraParam !== null) {
+    } else if (cameraParam != null) {
       return `${baseUrl}${cameraParam}`
-    } else if (otherParams !== null) {
+    } else if (otherParams != null) {
       return `${baseUrl}${otherParams}`
     }
 
@@ -37,7 +37,7 @@ const useUrlParams = (): UseUrlParamsReturn => {
   const fromUrl = (): UrlProps => {
     const cameraParam = searchParams.get('camera')
     return {
-      camera: cameraParam !== null ? queryToCameraInfo(cameraParam) : null,
+      camera: cameraParam != null ? queryToCameraInfo(cameraParam) : null,
       areaId: searchParams.get('areaId')
     }
   }

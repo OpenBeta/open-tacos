@@ -22,12 +22,12 @@ export const FullScreenMap: React.FC = () => {
 
     const { camera, areaId: urlAreaId } = urlParams.fromUrl()
 
-    if (urlAreaId !== null) {
+    if (urlAreaId != null) {
       setAreaId(urlAreaId)
     }
 
     // If camera params exist in URL, use them
-    if (camera !== null) {
+    if (camera != null) {
       setCenter([camera.center.lng, camera.center.lat])
       setZoom(camera.zoom)
       setIsInitialized(true)
