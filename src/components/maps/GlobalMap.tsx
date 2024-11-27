@@ -108,11 +108,11 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   const onClick = (event: MapLayerMouseEvent): void => {
     if (mapInstance === null) return
     const feature = event?.features?.[0]
+    handleOnClick?.(event)
     if (feature === undefined) {
       setClickInfo(null)
     } else {
       const { layer, geometry, properties } = feature
-      handleOnClick?.(event)
       setClickInfo(prev => {
         setActiveFeatureVisual(prev, { selected: false, hover: false })
         const activeFeature = tileToFeature(layer.id, event.point, geometry, properties as TileProps, mapInstance)

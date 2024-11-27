@@ -20,18 +20,14 @@ const useUrlParams = (): UseUrlParamsReturn => {
     }
 
     const baseUrl = `${pathname}?`
-    const cameraParam = (camera != null) ? `camera=${cameraInfoToQuery(camera)}` : ''
+    const cameraParam = camera != null ? `camera=${cameraInfoToQuery(camera)}` : ''
     const otherParams = params.toString()
 
-    if (cameraParam != null && otherParams != null) {
-      return `${baseUrl}${cameraParam}&${otherParams}`
-    } else if (cameraParam != null) {
-      return `${baseUrl}${cameraParam}`
-    } else if (otherParams != null) {
-      return `${baseUrl}${otherParams}`
-    }
+    const query = [cameraParam, otherParams]
+      .filter(param => param !== '') // Remove empty params
+      .join('&') // Join non-empty params with `&`
 
-    return pathname
+    return query !== '' ? `${baseUrl}${query}` : pathname // Return base URL if query is empty
   }
 
   const fromUrl = (): UrlProps => {

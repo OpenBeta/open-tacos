@@ -94,11 +94,7 @@ export const FullScreenMap: React.FC = () => {
 
   const handleMapClick = useCallback(
     (e: MapLayerMouseEvent) => {
-      const areaId = e.features?.[0]?.properties?.id
-      if (areaId === '') {
-        return
-      }
-
+      const areaId = e.features?.[0]?.properties?.id ?? null
       const { camera } = urlParams.fromUrl()
       const url = urlParams.toUrl({ camera: camera ?? null, areaId })
       router.replace(url, { scroll: false })
