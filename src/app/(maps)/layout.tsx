@@ -2,7 +2,6 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { Metadata } from 'next'
 import '@/public/fonts/fonts.css'
 import './../global.css'
-import { ReactToastifyProvider } from '@/components/toast/ReactToastifyProvider'
 
 /**
  * Root layout for `/maps` route
@@ -16,7 +15,6 @@ export default function MapsRootLayout ({
     <html lang='en'>
       <body className='relative'>
         {children}
-        <ReactToastifyProvider />
       </body>
     </html>
   )
