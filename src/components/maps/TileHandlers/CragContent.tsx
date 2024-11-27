@@ -4,11 +4,14 @@ import { getAreaPageFriendlyUrl } from '@/js/utils'
 import { EntityIcon } from '@/app/(default)/editArea/[slug]/general/components/AreaItem'
 import { BaseDrawerContent } from './Drawer'
 import { MiniCarousel } from '../CardGallery'
-import { ShareButton } from '../../ui/ShareButton'
+import { SharePageURLButton } from '@/app/(default)/components/SharePageURLButton'
+import { usePathname } from 'next/navigation'
 
 export const CragDrawerContent: React.FC<CragFeatureProperties> = ({ id, areaName, climbs, content: { description }, media }) => {
   const friendlyUrl = getAreaPageFriendlyUrl(id, areaName)
   const editUrl = `/editArea/${id}/general`
+  const pathname = `${usePathname()}${window.location.search}`
+
   return (
     <>
       <BaseDrawerContent
@@ -16,7 +19,7 @@ export const CragDrawerContent: React.FC<CragFeatureProperties> = ({ id, areaNam
         heading={<Link href={friendlyUrl}>{areaName}</Link>}
         subheading={<Subheading id={id} totalClimbs={climbs.length} />}
         cta={<Link className='btn btn-primary btn-outline btn-sm no-animation' href={editUrl}>Edit area</Link>}
-        share={<ShareButton />}
+        share={<SharePageURLButton path={pathname} name='' />}
       >
         <section className='text-sm'>
           {description == null || description.trim() === ''
