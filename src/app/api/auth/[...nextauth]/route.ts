@@ -7,7 +7,7 @@ import { AUTH_CONFIG_SERVER } from '../../../../Config'
 import { IUserMetadata, UserRole } from '../../../../js/types/User'
 import { initializeUserInDB } from '@/js/auth/initializeUserInDb'
 
-const CustomClaimsNS = 'https://tacos.openbeta.io/'
+const CustomClaimsNS = 'https://tacos.openbeta.io'
 const CustomClaimUserMetadata = CustomClaimsNS + 'user_metadata'
 const CustomClaimRoles = CustomClaimsNS + 'roles'
 
