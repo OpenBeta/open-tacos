@@ -1,53 +1,41 @@
+'use client'
+import Cookies from 'js-cookie'
 import { useState, useEffect } from 'react'
-import { XMarkIcon } from '@heroicons/react/20/solid'
+import { useSession } from 'next-auth/react'
+import { SuppressButton } from './SuppressButton'
 
-const STORAGE_KEY = 'alert.main'
+const STORAGE_KEY = 'suppress-main-banner'
 
-interface Props {
+export interface AppAlertProps {
   message: JSX.Element
 }
 
 /**
- * Main alert to be displayed under the nav bar.  Users can disable or snooze the alert.
+ * Main alert to be displayed under the nav bar.  Users can snooze the alert.
  * @param message alert content
  */
-export default function MiniAlert ({ message }: Props): JSX.Element | null {
-  const [open, setOpen] = useState(false)
-
+export const AppAlert: React.FC<AppAlertProps> = ({ message }) => {
+  const { status } = useSession()
+  const [showAlert, setShowAlert] = useState(false)
   useEffect(() => {
-    const disabledFlag = localStorage.getItem(STORAGE_KEY) // indefinitely in this browser
-    const snoozedFlag = sessionStorage.getItem(STORAGE_KEY) // current session only
-    if (snoozedFlag === '1' || disabledFlag === '1') {
-      setOpen(false)
-    } else {
-      setOpen(true)
-    }
-  })
-  return open
+    const suppressed = Cookies.get(STORAGE_KEY)
+    setShowAlert(suppressed == null)
+  }, [])
+
+  // Hide alert if user is logged in
+  return showAlert && status !== 'authenticated'
     ? (
-      <div className='w-full z-40 alert alert-info flex-wrap justify-center xl:p-4 rounded-none gap-4'>
-        <div className='block flex flex-col gap-2 items-start'>
+      <div className='z-40 w-fit alert alert-info flex flex-wrap justify-center xl:p-4 gap-4'>
+        <div className='flex flex-col gap-2 items-start'>
           {message}
         </div>
         <div className='inline-flex w-[210px] grow-1'>
-          <button
-            className='btn btn-link btn-sm btn-primary font-light text-opacity-60 text-xs'
+          <SuppressButton
             onClick={() => {
-              localStorage.setItem(STORAGE_KEY, '1')
-              setOpen(false)
+              setShowAlert(false)
+              Cookies.set(STORAGE_KEY, '1', { strict: true, expires: 30 })
             }}
-          >
-            Don't show this again
-          </button>
-          <button
-            className='btn btn-circle btn-outline btn-sm'
-            onClick={() => {
-              sessionStorage.setItem(STORAGE_KEY, '1')
-              setOpen(false)
-            }}
-          >
-            <XMarkIcon className='w-4 h-4' />
-          </button>
+          />
         </div>
       </div>
       )

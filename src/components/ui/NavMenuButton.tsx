@@ -1,5 +1,6 @@
 'use client'
 import React from 'react'
+import clz from 'classnames'
 import { Button, ButtonVariant } from './BaseButton'
 
 interface NavMenuButtonProps {
@@ -24,13 +25,11 @@ export interface NavMenuItemProps {
 
 export const NavMenuItem: React.FC<NavMenuItemProps> = ({ label, to, type, onClick }) => {
   return (
-    <li>
-      <a
-        href={(onClick != null) ? undefined : to ?? '#'}
-        onClick={onClick}
-        className={type}
-      >{label}
-      </a>
-    </li>
+    <a
+      href={(onClick != null) ? undefined : to ?? '#'}
+      onClick={onClick}
+      className={clz('text-sm hover:underline tracking-tight', type)}
+    >{label}
+    </a>
   )
 }

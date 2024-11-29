@@ -12,7 +12,7 @@ export const MobileHeader: React.FC = () => {
   const { status } = useSession()
   const nav = status === 'authenticated' ? <AuthenticatedProfileNavButton /> : <LoginButton />
   return (
-    <header className='flex lg:hidden items-center justify-between gap-6'>
+    <header className='flex lg:hidden items-center justify-between gap-6 py-2'>
       <Logo />
       <XSearchMinimal />
       {nav}
