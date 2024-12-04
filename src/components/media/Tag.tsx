@@ -6,7 +6,7 @@ import clx from 'classnames'
 import { EntityTag, TagTargetType } from '../../js/types'
 import { OnDeleteCallback } from './TagList'
 import { MouseEventHandler } from 'react'
-import { getAreaPageFriendlyUrl } from '@/js/utils'
+import { getAreaPageFriendlyUrl, getClimbPageFriendlyUrl } from '@/js/utils'
 
 interface PhotoTagProps {
   mediaId: string
@@ -68,7 +68,7 @@ export const resolver = (props: EntityTag): [string, string] | [null, null] => {
   const { targetId: id, climbName, areaName, type } = props
   switch (type) {
     case TagTargetType.climb: {
-      return [`/climb/${id}`, climbName ?? '']
+      return [getClimbPageFriendlyUrl(id, climbName ?? ''), climbName ?? '']
     }
     case TagTargetType.area: {
       return [getAreaPageFriendlyUrl(id, areaName), areaName]

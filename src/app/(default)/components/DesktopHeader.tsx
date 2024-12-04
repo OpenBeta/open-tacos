@@ -115,6 +115,7 @@ const QuickLinks: React.FC = () => {
         <Link
           key={href}
           href={href}
+          prefetch={false}
           className='text-xs font-semibold text-primary/80 flex items-center whitespace-nowrap hover:underline hover:decoration-1 gap-1.5'
         >
           {icon}{label}
