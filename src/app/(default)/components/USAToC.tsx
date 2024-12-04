@@ -11,7 +11,7 @@ export const USAToC: React.FC = async () => {
   return (
     <SectionContainer
       header={
-        <Link href={getAreaPageFriendlyUrl('1db1e8ba-a40e-587c-88a4-64f5ea814b8e', 'usa')} className='flex flex-row items-center gap-2'>
+        <Link prefetch={false} href={getAreaPageFriendlyUrl('1db1e8ba-a40e-587c-88a4-64f5ea814b8e', 'usa')} className='flex flex-row items-center gap-2'>
           <h2>USA</h2><ArrowRightCircleIcon className='w-4 h-4' />
         </Link>
       }
@@ -21,7 +21,7 @@ export const USAToC: React.FC = async () => {
           const { name, uuid, totalClimbs, areas } = state
           return (
             <div key={name} className='mb-10 break-inside-avoid-column break-inside-avoid'>
-              <Link href={getAreaPageFriendlyUrl(uuid, name)} className='flex items-end justify-between'>
+              <Link prefetch={false} href={getAreaPageFriendlyUrl(uuid, name)} className='flex items-end justify-between'>
                 <span className=' font-semibold'>{name}</span>
                 <span className='text-xs text-base-content/80'>
                   {new Intl.NumberFormat().format(totalClimbs)}

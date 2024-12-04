@@ -25,7 +25,7 @@ const CountryCard: React.FC<{ country: ToCCountry }> = ({ country }) => {
   const { areaName, uuid, children } = country
   return (
     <div className='mb-10 break-inside-avoid-column'>
-      <Link href={getAreaPageFriendlyUrl(uuid, areaName)}>
+      <Link prefetch={false} href={getAreaPageFriendlyUrl(uuid, areaName)}>
         <span className=' font-semibold'>{areaName}</span>
       </Link>
       <hr className='mb-2 border-1 border-base-content/60' />
