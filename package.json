@@ -59,7 +59,7 @@
     "react": "^18.2.0",
     "react-content-loader": "^6.2.0",
     "react-dom": "^18.2.0",
-    "react-dropzone": "^14.2.1",
+    "react-dropzone": "^14.3.5",
     "react-hook-form": "^7.34.2",
     "react-hotkeys-hook": "^3.4.7",
     "react-infinite-scroll-component": "^6.1.0",
