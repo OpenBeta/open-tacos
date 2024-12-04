@@ -23,7 +23,6 @@ import { PageWithCatchAllUuidProps, PageSlugType } from '@/js/types/pages'
  * Page cache settings
  */
 export const revalidate = 3600 // 1 hr
-export const fetchCache = 'force-no-store' // opt out of Nextjs version of 'fetch'
 
 /**
  * Area/crag page
