@@ -10,7 +10,8 @@ import { ControlledTooltip } from '@/components/ui/Tooltip'
  */
 export const SharePageURLButton: React.FC<{ path: string, name: string }> = ({ path, name }) => {
   const slug = getFriendlySlug(name)
-  const baseUrl = process.env.VERCEL_URL != null ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
+  const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL != null ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'http://localhost:3000'
+  console.log(process.env.NEXT_PUBLIC_VERCEL_URL)
   const optionalSlug = slug !== '' ? `/${slug}` : ''
   const url = `${baseUrl}${path}${optionalSlug}`
 
