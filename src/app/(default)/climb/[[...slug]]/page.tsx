@@ -40,6 +40,9 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
     id, name, type, ancestors, pathTokens, parent
   } = climb
 
+  console.log('parent', parent.uuid);
+  
+
   const correctSlug = getFriendlySlug(name)
 
   if (correctSlug !== userProvidedSlug) {
@@ -66,7 +69,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
                   ? <UploadPhotoCTA />
                   : <PhotoMontage photoList={photoList} />
         }
-      pageActions={<AreaAndClimbPageActions name={name} uuid={id} targetType={TagTargetType.climb} />}
+      pageActions={<AreaAndClimbPageActions name={name} uuid={id} targetType={TagTargetType.climb} parentUuid={parent.uuid} />}
       breadcrumbs={
         <StickyHeaderContainer>
           <AreaCrumbs pathTokens={pathTokens} ancestors={ancestors} />

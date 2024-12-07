@@ -55,6 +55,7 @@ export const QUERY_CLIMB_BY_ID = gql`
         climbId
       }
       parent {
+        uuid,
         areaName
         gradeContext
         metadata {
