@@ -11,7 +11,7 @@ export const CragDrawerContent: React.FC<CragFeatureProperties> = ({ id, areaNam
   const friendlyUrl = getAreaPageFriendlyUrl(id, areaName)
   const editUrl = `/editArea/${id}/general`
   const pathname = `${usePathname()}${window.location.search}`
-  const isAreaPage = pathname.startsWith('/area/')
+  const isMapPage = pathname.startsWith('/maps?')
 
   return (
     <>
@@ -19,8 +19,8 @@ export const CragDrawerContent: React.FC<CragFeatureProperties> = ({ id, areaNam
         media={<MiniCarousel mediaList={media} />}
         heading={<Link href={friendlyUrl}>{areaName}</Link>}
         subheading={<Subheading id={id} totalClimbs={climbs.length} />}
-        cta={<Link className='btn btn-primary btn-outline btn-sm no-animation' href={editUrl}>Edit area</Link>}
-        share={!isAreaPage && <SharePageURLButton path={pathname} name='' />}
+        cta={<Link className='btn btn-primary btn-outline no-animation' href={editUrl}>Edit area</Link>}
+        share={isMapPage && <SharePageURLButton path={pathname} name='' />}
       >
         <section className='text-sm'>
           {description == null || description.trim() === ''
