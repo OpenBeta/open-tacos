@@ -11,6 +11,7 @@ export const CragDrawerContent: React.FC<CragFeatureProperties> = ({ id, areaNam
   const friendlyUrl = getAreaPageFriendlyUrl(id, areaName)
   const editUrl = `/editArea/${id}/general`
   const pathname = `${usePathname()}${window.location.search}`
+  const isAreaPage = pathname.startsWith('/area/')
 
   return (
     <>
@@ -19,7 +20,7 @@ export const CragDrawerContent: React.FC<CragFeatureProperties> = ({ id, areaNam
         heading={<Link href={friendlyUrl}>{areaName}</Link>}
         subheading={<Subheading id={id} totalClimbs={climbs.length} />}
         cta={<Link className='btn btn-primary btn-outline btn-sm no-animation' href={editUrl}>Edit area</Link>}
-        share={<SharePageURLButton path={pathname} name='' />}
+        share={!isAreaPage && <SharePageURLButton path={pathname} name='' />}
       >
         <section className='text-sm'>
           {description == null || description.trim() === ''
