@@ -40,9 +40,6 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
     id, name, type, ancestors, pathTokens, parent
   } = climb
 
-  console.log('parent', parent.uuid);
-  
-
   const correctSlug = getFriendlySlug(name)
 
   if (correctSlug !== userProvidedSlug) {
