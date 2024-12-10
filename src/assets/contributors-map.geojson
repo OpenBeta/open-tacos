@@ -210,6 +210,22 @@
           42.49094
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "David",
+        "githubId": "DavidWeisberg1",
+        "favoriteCrag": "64819304-d475-5c52-9b15-0a379192edaf" 
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -85.40108,
+          35.07379
+          
+        ]
+      }
     }
   ]
 }
