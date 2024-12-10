@@ -64,7 +64,7 @@ module.exports = {
       },
       {
         source: '/partner-with-us',
-        destination: '/Become-OpenBeta-Partner-in-Climb-dec-2023.pdf',
+        destination: '/Become-OpenBeta-Partner-Dec-2024.pdf',
         permanent: false
       }
     ]
