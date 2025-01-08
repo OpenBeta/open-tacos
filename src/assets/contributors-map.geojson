@@ -1,231 +1,197 @@
 {
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "Yun",
-        "githubId": "actuallyyun",
-        "favoriteCrag": "8fe4fa78-fda9-5742-b807-00b2c31d7bcd"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.905152180850496,
-          41.26613040056221
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "Viet",
-        "githubId": "vnugent",
-        "favoriteCrag": "efcc68af-ad61-5df6-b21a-b754b65e97d9"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.892151,
-          39.659768
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "Bader",
-        "githubId": "baderk",
-        "favoriteCrag": "becfb41f-3278-59c6-a376-2d23d97c220d"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -115.465404,
-          36.037803
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "Scott",
-        "githubId": "scooterh4",
-        "favoriteCrag": "4cb01c90-8df7-5158-be07-ba1c83ee3c0c"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -115.1566,
-          51.047
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "German",
-        "githubId": "gom1",
-        "favoriteCrag": "58a4c1de-fc5b-5e0c-89ad-ab28ac59e4fe"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -118.2422725993683,
-          34.05295703301907
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "Joey",
-        "githubId": "marinojoey",
-        "favoriteCrag": "8af5df63-9dd1-5fb2-9ef1-c3c3860494f5"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -105.324479,
-          39.737812
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "Jason",
-        "githubId": "con-ji",
-        "favoriteCrag": "63a84574-0db2-5bec-975f-1d14f57aabe4"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -118.113606,
-          34.052724
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "Julian",
-        "githubId": "jcallin",
-        "favoriteCrag": "a291d1d8-8f03-5991-bd12-b6d9de7bd0b5"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -106.45581804700856,
-          35.200139741452986
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "Calvin",
-        "githubId": "calvincheng919",
-        "favoriteCrag": "f3c655b6-9c95-597f-aaa6-fd7d8a4865ec"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -121.31531,
-          44.05817299999998
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "Blake",
-        "githubId": "btmccord",
-        "favoriteCrag": "ccf26565-71c6-59ff-8c42-0564bfa96ef8"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -111.65141214144266,
-          35.198478054480816
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "Melissa",
-        "githubId": "melissapthai",
-        "favoriteCrag": "8aa15dd0-878e-5a34-ad5d-bd1f96f2e17e"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -105.28787643505346,
-          39.98884394309755
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "Aimee",
-        "githubId": "aimeekang",
-        "favoriteCrag": "2c8c115a-0a69-5b68-9bd7-3af66dd4eb44"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -108.73960,
-          42.59040
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "Adam",
-        "githubId": "adamgilg",
-        "favoriteCrag": "a354b580-870b-5444-9f11-2c0e78995841"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -123.15394,
-          49.67997
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "Yan",
-        "githubId": "yryap",
-        "favoriteCrag": "75437da6-74af-53b8-8a96-e6633f515859" 
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -71.88538,
-          42.49094
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "firstName": "David",
-        "githubId": "DavidWeisberg1",
-        "favoriteCrag": "64819304-d475-5c52-9b15-0a379192edaf" 
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -85.40108,
-          35.07379
-          
-        ]
-      }
-    }
-  ]
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Yun",
+				"githubId": "actuallyyun",
+				"favoriteCrag": "8fe4fa78-fda9-5742-b807-00b2c31d7bcd"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [0.905152180850496, 41.26613040056221]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Viet",
+				"githubId": "vnugent",
+				"favoriteCrag": "efcc68af-ad61-5df6-b21a-b754b65e97d9"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-0.892151, 39.659768]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Bader",
+				"githubId": "baderk",
+				"favoriteCrag": "becfb41f-3278-59c6-a376-2d23d97c220d"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-115.465404, 36.037803]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Scott",
+				"githubId": "scooterh4",
+				"favoriteCrag": "4cb01c90-8df7-5158-be07-ba1c83ee3c0c"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-115.1566, 51.047]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "German",
+				"githubId": "gom1",
+				"favoriteCrag": "58a4c1de-fc5b-5e0c-89ad-ab28ac59e4fe"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-118.2422725993683, 34.05295703301907]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Joey",
+				"githubId": "marinojoey",
+				"favoriteCrag": "8af5df63-9dd1-5fb2-9ef1-c3c3860494f5"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-105.324479, 39.737812]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Jason",
+				"githubId": "con-ji",
+				"favoriteCrag": "63a84574-0db2-5bec-975f-1d14f57aabe4"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-118.113606, 34.052724]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Julian",
+				"githubId": "jcallin",
+				"favoriteCrag": "a291d1d8-8f03-5991-bd12-b6d9de7bd0b5"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-106.45581804700856, 35.200139741452986]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Calvin",
+				"githubId": "calvincheng919",
+				"favoriteCrag": "f3c655b6-9c95-597f-aaa6-fd7d8a4865ec"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-121.31531, 44.05817299999998]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Blake",
+				"githubId": "btmccord",
+				"favoriteCrag": "ccf26565-71c6-59ff-8c42-0564bfa96ef8"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-111.65141214144266, 35.198478054480816]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Melissa",
+				"githubId": "melissapthai",
+				"favoriteCrag": "8aa15dd0-878e-5a34-ad5d-bd1f96f2e17e"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-105.28787643505346, 39.98884394309755]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Aimee",
+				"githubId": "aimeekang",
+				"favoriteCrag": "2c8c115a-0a69-5b68-9bd7-3af66dd4eb44"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-108.7396, 42.5904]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Adam",
+				"githubId": "adamgilg",
+				"favoriteCrag": "a354b580-870b-5444-9f11-2c0e78995841"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-123.15394, 49.67997]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Yan",
+				"githubId": "yryap",
+				"favoriteCrag": "75437da6-74af-53b8-8a96-e6633f515859"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-71.88538, 42.49094]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "David",
+				"githubId": "DavidWeisberg1",
+				"favoriteCrag": "64819304-d475-5c52-9b15-0a379192edaf"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-85.40108, 35.07379]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"firstName": "Michael",
+				"githubId": "mikeschen",
+				"favoriteCrag": "a6aebb1a-6568-55b6-92be-23d7138f50d4"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-112.074, 33.4484]
+			}
+		}
+	]
 }
