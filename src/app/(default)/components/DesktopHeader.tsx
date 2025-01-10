@@ -1,4 +1,6 @@
 'use client'
+import Link from 'next/link'
+import React from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { MapTrifold, Pulse, LineSegments, Planet } from '@phosphor-icons/react/dist/ssr'
 
@@ -7,8 +9,7 @@ import { XSearchMinimal } from '@/components/search/XSearch'
 import { NavMenuItem, NavMenuItemProps } from '@/components/ui/NavMenuButton'
 import GitHubStars from '@/components/GitHubStars'
 import AuthenticatedProfileNavButton from '../../../components/AuthenticatedProfileNavButton'
-import Link from 'next/link'
-import React from 'react'
+import googlePlay from '@/public/GetItOnGooglePlay_Badge_Web_color_English.png'
 
 export const DesktopHeader: React.FC = () => {
   const navListDefault: NavMenuItemProps[] = [
@@ -62,7 +63,12 @@ export const DesktopHeader: React.FC = () => {
             <XSearchMinimal />
             <div className='text-base-300/50 font-thin text-xl'>|</div>
             <Link href='/maps' className='text-sm flex items-center whitespace-nowrap hover:underline hover:decoration-1 font-semibold gap-2'><MapTrifold size={18} />Maps</Link>
-            <MobileLink size={40} />
+            <MobileLink
+              link='https://play.google.com/store/apps/details?id=io.openbeta'
+              description='Get it on Google Play'
+              image={googlePlay}
+              width={135}
+            />
           </div>
           <div>
             <SignupOrLogin />

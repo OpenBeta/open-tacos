@@ -3,7 +3,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 import OpenBetaLogo from '@/assets/brand/openbeta-logo'
-import googlePlay from '@/public/GetItOnGooglePlay_Badge_Web_color_English.png'
 import { DesktopHeader } from './components/DesktopHeader'
 import { MobileHeader } from './components/MobileHeader'
 
@@ -36,16 +35,25 @@ export const Logo: React.FC<{ size?: LogoSize, className?: string, withText?: bo
   )
 }
 
+interface MobileLinkProps {
+  link: string
+  image: string
+  description: string
+  width: number
+  className?: string
+}
+
 /**
  * Reusable mobile link component
  */
-export const MobileLink: React.FC<{ size: number, className?: string }> = ({ size, className }) => {
+export const MobileLink: React.FC<MobileLinkProps> = ({ link, image, description, width, className }) => {
   return (
-    <Link href='https://play.google.com/store/apps/details?id=io.openbeta' rel='noopener noreferrer' target='_blank' passHref className={className}>
+    <Link href={link} rel='noopener noreferrer' target='_blank' passHref className={className}>
       <Image
-        src={googlePlay}
-        alt='Get it on Google Play'
-        height={size}
+        src={image}
+        alt={description}
+        width={width}
+        fill
       />
     </Link>
   )

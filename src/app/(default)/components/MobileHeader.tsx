@@ -4,6 +4,7 @@ import { Logo, MobileLink } from '../header'
 import { XSearchMinimal } from '@/components/search/XSearch'
 import { LoginButton, More } from '@/components/MobileAppBar'
 import AuthenticatedProfileNavButton from '../../../components/AuthenticatedProfileNavButton'
+import googlePlay from '@/public/GetItOnGooglePlay_Badge_Web_color_English.png'
 
 /**
  * Main header for mobile
@@ -20,7 +21,13 @@ export const MobileHeader: React.FC = () => {
         <More />
       </div>
       <div className='flex lg:hidden'>
-        <MobileLink size={40} className='mr-2' />
+        <MobileLink
+          link='https://play.google.com/store/apps/details?id=io.openbeta'
+          description='Get it on Google Play'
+          image={googlePlay}
+          width={135}
+          className='mr-2'
+        />
       </div>
     </header>
   )
