@@ -67,7 +67,7 @@ export const DesktopHeader: React.FC = () => {
               link='https://play.google.com/store/apps/details?id=io.openbeta'
               description='Get it on Google Play'
               image={googlePlay}
-              width={135}
+              width={130}
             />
           </div>
           <div>

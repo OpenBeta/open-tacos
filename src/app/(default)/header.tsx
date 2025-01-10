@@ -53,7 +53,7 @@ export const MobileLink: React.FC<MobileLinkProps> = ({ link, image, description
         src={image}
         alt={description}
         width={width}
-        fill
+        priority
       />
     </Link>
   )
