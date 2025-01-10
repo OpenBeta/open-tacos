@@ -41,14 +41,12 @@ export const Logo: React.FC<{ size?: LogoSize, className?: string, withText?: bo
  */
 export const MobileLink: React.FC<{ size: number, className?: string }> = ({ size, className }) => {
   return (
-    <Link href='https://play.google.com/store/apps/details?id=io.openbeta' rel='noopener noreferrer' target='_blank' passHref>
-      <div className={className}>
-        <Image
-          src={googlePlay}
-          alt='Get it on Google Play'
-          height={size}
-        />
-      </div>
+    <Link href='https://play.google.com/store/apps/details?id=io.openbeta' rel='noopener noreferrer' target='_blank' passHref className={className}>
+      <Image
+        src={googlePlay}
+        alt='Get it on Google Play'
+        height={size}
+      />
     </Link>
   )
 }
