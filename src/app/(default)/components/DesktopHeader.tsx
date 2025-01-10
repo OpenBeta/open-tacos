@@ -2,7 +2,7 @@
 import { signIn, useSession } from 'next-auth/react'
 import { MapTrifold, Pulse, LineSegments, Planet } from '@phosphor-icons/react/dist/ssr'
 
-import { Logo } from '../header'
+import { Logo, MobileLink } from '../header'
 import { XSearchMinimal } from '@/components/search/XSearch'
 import { NavMenuItem, NavMenuItemProps } from '@/components/ui/NavMenuButton'
 import GitHubStars from '@/components/GitHubStars'
@@ -50,7 +50,7 @@ export const DesktopHeader: React.FC = () => {
       />)
   )
 
-  topLevelNav.push(<GitHubStars />)
+  topLevelNav.push(<GitHubStars key='github-stars' />)
 
   return (
     <header className='hidden lg:block'>
@@ -62,6 +62,7 @@ export const DesktopHeader: React.FC = () => {
             <XSearchMinimal />
             <div className='text-base-300/50 font-thin text-xl'>|</div>
             <Link href='/maps' className='text-sm flex items-center whitespace-nowrap hover:underline hover:decoration-1 font-semibold gap-2'><MapTrifold size={18} />Maps</Link>
+            <MobileLink size={40} />
           </div>
           <div>
             <SignupOrLogin />
