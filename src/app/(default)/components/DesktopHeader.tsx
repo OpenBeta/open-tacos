@@ -9,7 +9,7 @@ import { XSearchMinimal } from '@/components/search/XSearch'
 import { NavMenuItem, NavMenuItemProps } from '@/components/ui/NavMenuButton'
 import GitHubStars from '@/components/GitHubStars'
 import AuthenticatedProfileNavButton from '../../../components/AuthenticatedProfileNavButton'
-import googlePlay from '@/public/GetItOnGooglePlay_Badge_Web_color_English.png'
+import googlePlay from '@/public/GetItOnGooglePlay_Badge_Web_color.png'
 
 export const DesktopHeader: React.FC = () => {
   const navListDefault: NavMenuItemProps[] = [
@@ -67,7 +67,6 @@ export const DesktopHeader: React.FC = () => {
               link='https://play.google.com/store/apps/details?id=io.openbeta'
               description='Get it on Google Play'
               image={googlePlay}
-              width={130}
             />
           </div>
           <div>

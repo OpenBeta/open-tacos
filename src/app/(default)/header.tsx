@@ -39,21 +39,24 @@ interface MobileLinkProps {
   link: string
   image: string
   description: string
-  width: number
   className?: string
 }
 
 /**
  * Reusable mobile link component
  */
-export const MobileLink: React.FC<MobileLinkProps> = ({ link, image, description, width, className }) => {
+export const MobileLink: React.FC<MobileLinkProps> = ({ link, image, description, className }) => {
   return (
     <Link href={link} rel='noopener noreferrer' target='_blank' passHref className={className}>
       <Image
         src={image}
         alt={description}
-        width={width}
+        width={165}
+        height={50}
         priority
+        style={{
+          maxWidth: 'none'
+        }}
       />
     </Link>
   )
