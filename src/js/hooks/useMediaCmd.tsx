@@ -65,6 +65,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
           after
         }
       })
+      console.log('fetchMoreMediaForward 🎆', res.data?.getUserMediaPagination.mediaConnection)
       return res.data?.getUserMediaPagination.mediaConnection ?? null
     } catch {
       return null
