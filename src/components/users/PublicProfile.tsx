@@ -6,7 +6,7 @@ import EditProfileButton from './EditProfileButton'
 import ImportFromMtnProj from './ImportFromMtnProj'
 import APIKeyCopy from './APIKeyCopy'
 import usePermissions from '../../js/hooks/auth/usePermissions'
-
+import { useUserGalleryStore } from '../../js/stores/useUserGalleryStore'
 interface PublicProfileProps {
   userProfile: UserPublicProfile
   onClick?: () => void
@@ -15,7 +15,13 @@ interface PublicProfileProps {
 export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX.Element {
   const { isAuthorized } = usePermissions({ currentUserUuid: userProfile?.userUuid })
 
+  const mediaConnection = useUserGalleryStore((state) => state.mediaConnection)
+
+  const imageList = mediaConnection.edges.map(edge => edge.node)
+  console.log('UserGallery 🪙', imageList)
+
   const { displayName, username, bio, website, avatar } = userProfile
+  console.log('PublicProfile ⏱️', userProfile)
   let websiteWithScheme: string | null = null
   if (website != null) {
     websiteWithScheme = website.startsWith('http') ? website : `//${website}`
@@ -23,7 +29,7 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
   return (
     <section className='mx-auto max-w-screen-sm px-4 md:px-0 md:grid md:grid-cols-3'>
       <div className='hidden md:block pr-5'>
-        <img className='grayscale  object-scale-down w-24 h-24 rounded-full' src={avatar} />
+        <img className='object-scale-down w-24 h-24 rounded-full' src={imageList.length > 0 ? 'https://stg-media.openbeta.io' + imageList[0].mediaUrl : avatar} />
       </div>
       <div className='md:col-span-2 text-medium text-primary '>
         <div className='flex flex-row items-center gap-x-2 max-w-xs'>
