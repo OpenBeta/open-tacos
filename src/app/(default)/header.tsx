@@ -51,8 +51,8 @@ export const MobileLink: React.FC<MobileLinkProps> = ({ link, image, description
       <Image
         src={image}
         alt={description}
-        width={135}
-        height={40}
+        width={125}
+        height={37}
         priority
         style={{
           maxWidth: 'none'
