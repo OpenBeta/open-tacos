@@ -778,6 +778,16 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "mikeschen",
+      "name": "Michael Schennum",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9831452?v=4",
+      "profile": "https://github.com/mikeschen",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
