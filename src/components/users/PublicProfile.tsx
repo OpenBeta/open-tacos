@@ -7,7 +7,7 @@ import EditProfileButton from './EditProfileButton'
 import ImportFromMtnProj from './ImportFromMtnProj'
 import APIKeyCopy from './APIKeyCopy'
 import usePermissions from '../../js/hooks/auth/usePermissions'
-import { ProfilePhotoUploader } from '../media/BaseUploader'
+import { BaseProfilePhotoUploader } from '../media/BaseUploader'
 import { DefaultLoader } from '../../js/sirv/util'
 
 interface PublicProfileProps {
@@ -110,9 +110,9 @@ export const ProfileImage = ({ avatar }: { avatar: string }): JSX.Element => {
       aria-label='Profile photo section'
     >
       <div className='relative inline-block'>
-        <ProfilePhotoUploader className='absolute bottom-1 right-1  bg-gray-800 bg-opacity-75 p-2 rounded-full transition-opacity duration-200 hover:bg-opacity-100'>
+        <BaseProfilePhotoUploader className='absolute bottom-1 right-1  bg-gray-800 bg-opacity-75 p-2 rounded-full transition-opacity duration-200 hover:bg-opacity-100'>
           <PencilIcon className='w-4 h-4 text-white' />
-        </ProfilePhotoUploader>
+        </BaseProfilePhotoUploader>
         <img
           className='object-cover w-24 h-24 rounded-full'
           src={DefaultLoader({ src: avatar, width: 200 })}
