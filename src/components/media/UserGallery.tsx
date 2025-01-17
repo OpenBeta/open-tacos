@@ -91,7 +91,6 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
   }, [userPublicPage.media.mediaConnection])
 
   const imageList = mediaConnection.edges.map(edge => edge.node)
-  console.log('UserGallery ⭕️', imageList)
 
   useEffect(() => {
     if (initialPostId != null) {

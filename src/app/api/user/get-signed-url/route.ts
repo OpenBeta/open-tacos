@@ -16,7 +16,6 @@ export interface MediaPreSignedProps {
  * Usage: `/api/user/get-signed-url?filename=image001.jpg`
  * See https://cloud.google.com/storage/docs/access-control/signed-urls
  */
-
 const getHanlder = async (req: NextRequest): Promise<any> => {
   try {
     const fullFilename = prepareFilenameFromRequest(req)
