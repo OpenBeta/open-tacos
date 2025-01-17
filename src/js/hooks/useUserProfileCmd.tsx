@@ -16,7 +16,7 @@ export interface UpdateUsernameInput {
   avatar?: string
 }
 
-type UpdateUserPublicProfileInput = { userUuid: string } & Pick<UserPublicProfile, 'displayName' | 'bio' | 'website'>
+type UpdateUserPublicProfileInput = { userUuid: string, avatarUrl?: string } & Pick<UserPublicProfile, 'displayName' | 'bio' | 'website' | 'avatar'>
 
 type GetUsernameById = (input: GetUsernameByIdInput) => Promise<Username | null>
 
@@ -37,6 +37,7 @@ interface ReturnType {
   getUserPublicPage: GetUserPublicPage
   getUserPublicProfileByUuid: GetUserPublicProfileByUuid
   updatePublicProfileCmd: UpdatePublicProfileCmd
+  updatePublicProfilePhotoCmd: UpdatePublicProfileCmd
 }
 
 interface UseUserProfileCmdProps {
@@ -147,6 +148,29 @@ export default function useUserProfileCmd ({ accessToken = '' }: UseUserProfileC
       return false
     }
   }
+
+  const updatePublicProfilePhotoCmd: UpdatePublicProfileCmd = async ({ userUuid, avatarUrl }: UpdateUserPublicProfileInput) => {
+    try {
+      const res = await graphqlClient.mutate<{ updateUserProfile?: boolean }, UpdateUserPublicProfileInput>({
+        mutation: MUTATION_UPDATE_PROFILE,
+        variables: {
+          userUuid,
+          avatar: avatarUrl
+        },
+        context: {
+          headers: {
+            authorization: `Bearer ${accessToken}`
+          }
+        },
+        fetchPolicy: 'no-cache'
+      })
+      return res.data?.updateUserProfile ?? false
+    } catch (e: any) {
+      console.error(e)
+      return false
+    }
+  }
+
   // const updatePublicProfile = async (userUuid: string): Promise<any | null> => {
   //   const res = await graphqlClient.mutate<GetUserPublicProfileByUuidReturn, { userUuid: string }>({
   //     query: QUERY_GET_USER_PUBLIC_PROFILE_BY_UUID,
@@ -158,5 +182,5 @@ export default function useUserProfileCmd ({ accessToken = '' }: UseUserProfileC
   //   return res.data.getUserPublicProfileByUuid
   // }
 
-  return { getUsernameById, updateUsername, doesUsernameExist, getUserPublicPage, getUserPublicProfileByUuid, updatePublicProfileCmd }
+  return { getUsernameById, updateUsername, doesUsernameExist, getUserPublicPage, getUserPublicProfileByUuid, updatePublicProfileCmd, updatePublicProfilePhotoCmd }
 }

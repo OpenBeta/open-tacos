@@ -15,6 +15,7 @@ import { invalidateAreaPageCache, legacyInvalidateClimbPageCache } from '../util
 interface UsePhotoUploaderProps {
   tagType?: TagTargetType
   uuid?: string
+  onUploadComplete?: (url: string) => void
 }
 interface PhotoUploaderReturnType {
   getInputProps: <T extends DropzoneInputProps>(props?: T) => T
@@ -40,7 +41,7 @@ async function readFile (file: File): Promise<ProgressEvent<FileReader>> {
  * is all encapsulated here, as well as some other api shorthand.
  * { onUploaded }: UsePhotoUploaderProps
  * */
-export default function usePhotoUploader ({ tagType, uuid }: UsePhotoUploaderProps): PhotoUploaderReturnType {
+export default function usePhotoUploader ({ tagType, uuid, onUploadComplete }: UsePhotoUploaderProps): PhotoUploaderReturnType {
   const router = useRouter()
   const setUploading = useUserGalleryStore(store => store.setUploading)
   const isUploading = useUserGalleryStore(store => store.uploading)
@@ -96,6 +97,7 @@ export default function usePhotoUploader ({ tagType, uuid }: UsePhotoUploaderPro
       } else {
         if (tagType === 1 && uuid != null) await invalidateAreaPageCache(uuid)
         if (tagType === 0 && uuid != null) await legacyInvalidateClimbPageCache(uuid)
+        onUploadComplete?.(url)
         router.refresh() // Ask NextJS to update page props
       }
     } catch (e) {

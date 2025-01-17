@@ -11,6 +11,11 @@ jest.mock('next-auth/react', () => ({
   useSession: mockedUseSession
 }))
 
+jest.mock('../../media/BaseUploader.tsx', () => ({
+  __esModule: true,
+  ProfilePhotoUploader: () => <button />
+}))
+
 // Mock import ticks button beacause we only care whether the button is there
 // and to avoid mocking GQL dependency.
 const ImportFromMtnProjMock = jest.fn()
@@ -27,7 +32,7 @@ const userProfile: Required<UserPublicProfile> = {
   userUuid: uuidv4().toString(),
   displayName: 'cat blue',
   username: 'cool_nick_2022',
-  avatar: 'https://example.com/myavatar.jpg',
+  avatar: 'myavatar.jpg',
   bio: 'totem eatsum',
   website: 'https://example.com'
 }
