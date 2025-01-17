@@ -32,7 +32,7 @@ const userProfile: Required<UserPublicProfile> = {
   userUuid: uuidv4().toString(),
   displayName: 'cat blue',
   username: 'cool_nick_2022',
-  avatar: 'myavatar.jpg',
+  avatar: 'https://example.com/myavatar.jpg',
   bio: 'totem eatsum',
   website: 'https://example.com'
 }
