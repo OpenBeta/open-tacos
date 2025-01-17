@@ -6,6 +6,7 @@ import { useSession, signIn } from 'next-auth/react'
 import usePhotoUploader from '../../js/hooks/usePhotoUploader'
 import { usePathname } from 'next/navigation'
 import { TagTargetType } from '@/js/types'
+import useUserProfileCmd from '../../js/hooks/useUserProfileCmd'
 
 interface BaseUploaderProps {
   className: string
@@ -32,6 +33,57 @@ export const BaseUploader: React.FC<BaseUploaderProps> = ({ tagType, uuid, class
       <input {...getInputProps()} />
       {children}
     </div>
+  )
+}
+
+/**
+ * Basic profile photo uploader component that handles authentication without dropzone
+ */
+export const ProfilePhotoUploader: React.FC<BaseUploaderProps> = ({
+  uuid,
+  className = '',
+  children
+}) => {
+  const session = useSession()
+
+  const { updatePublicProfilePhotoCmd } = useUserProfileCmd({ accessToken: session?.data?.accessToken as string })
+
+  const { getInputProps, openFileDialog } = usePhotoUploader({
+    uuid,
+    onUploadComplete: (url) => {
+      void (async () => {
+        const userUuid = session.data?.user.metadata.uuid ?? ''
+        if (userUuid !== '') {
+          await updatePublicProfilePhotoCmd({ userUuid, avatarUrl: url }).catch(console.error)
+        }
+      })()
+    }
+  })
+
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+    if (session.status !== 'authenticated') {
+      event.stopPropagation()
+      void signIn('auth0')
+      return
+    }
+
+    openFileDialog()
+  }
+
+  return (
+    <button
+      onClick={handleClick}
+      className={className}
+      aria-label='Edit photo'
+      type='button'
+    >
+      <input
+        aria-label='Upload profile photo'
+        tabIndex={-1}
+        {...getInputProps()}
+      />
+      {children}
+    </button>
   )
 }
 

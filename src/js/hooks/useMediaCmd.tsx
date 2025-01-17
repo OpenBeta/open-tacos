@@ -83,6 +83,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
    * @param id media object Id
    * @returns MediaWithTags object.  `null` if not found.
    */
+
   const getMediaById: GetMediaByIdCmd = async (id) => {
     try {
       const res = await getMediaByIdGGL({ variables: { id } })
