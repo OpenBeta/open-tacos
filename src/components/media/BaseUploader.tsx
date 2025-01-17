@@ -39,7 +39,7 @@ export const BaseUploader: React.FC<BaseUploaderProps> = ({ tagType, uuid, class
 /**
  * Basic profile photo uploader component that handles authentication without dropzone
  */
-export const ProfilePhotoUploader: React.FC<BaseUploaderProps> = ({
+export const BaseProfilePhotoUploader: React.FC<BaseUploaderProps> = ({
   uuid,
   className = '',
   children

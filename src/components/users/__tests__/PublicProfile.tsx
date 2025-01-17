@@ -13,7 +13,7 @@ jest.mock('next-auth/react', () => ({
 
 jest.mock('../../media/BaseUploader.tsx', () => ({
   __esModule: true,
-  ProfilePhotoUploader: () => <button />
+  BaseProfilePhotoUploader: () => <button />
 }))
 
 // Mock import ticks button beacause we only care whether the button is there
