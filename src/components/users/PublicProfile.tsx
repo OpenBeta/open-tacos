@@ -9,6 +9,7 @@ import APIKeyCopy from './APIKeyCopy'
 import usePermissions from '../../js/hooks/auth/usePermissions'
 import { ProfilePhotoUploader } from '../media/BaseUploader'
 import { DefaultLoader } from '../../js/sirv/util'
+
 interface PublicProfileProps {
   userProfile: UserPublicProfile
   onClick?: () => void
@@ -18,7 +19,6 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
   const { isAuthorized } = usePermissions({ currentUserUuid: userProfile?.userUuid })
 
   const { displayName, username, bio, website, avatar } = userProfile
-
   let websiteWithScheme: string | null = null
   if (website != null) {
     websiteWithScheme = website.startsWith('http') ? website : `//${website}`
