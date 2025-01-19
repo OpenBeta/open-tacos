@@ -51,12 +51,10 @@ export const BaseProfilePhotoUploader: React.FC<BaseUploaderProps> = ({
   const { getInputProps, openFileDialog } = usePhotoUploader({
     uuid,
     onUploadComplete: (url) => {
-      void (async () => {
-        const userUuid = session.data?.user.metadata.uuid ?? ''
-        if (userUuid !== '') {
-          await updatePublicProfilePhotoCmd({ userUuid, avatarUrl: url }).catch(console.error)
-        }
-      })()
+      const userUuid = session.data?.user.metadata.uuid ?? ''
+      if (userUuid !== '') {
+        updatePublicProfilePhotoCmd({ userUuid, avatarUrl: url }).catch(console.error)
+      }
     }
   })
 
