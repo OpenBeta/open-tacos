@@ -240,6 +240,21 @@
           33.4484
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": { 
+        "firstName": "Aaron",
+        "githubId": "glassbead0",
+        "favoriteCrag": "3a78382f-105b-5e34-bc57-75bfccff73d5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.003132,
+          39.7243542
+        ]
+      }
     }
   ]
 }
