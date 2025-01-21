@@ -9,7 +9,7 @@ import { PencilIcon } from '@heroicons/react/24/solid'
 import { Input, TextArea } from '../../ui/form'
 import useUserProfileCmd from '../../../js/hooks/useUserProfileCmd'
 import { BaseProfilePhotoUploader } from '../../media/BaseUploader'
-import { DefaultLoader } from '../../../js/sirv/util'
+import { getProfilePhotoSrc } from '../PublicProfile'
 
 const validationSchema = z
   .object({
@@ -101,7 +101,7 @@ export const UpdateProfileForm: React.FC = () => {
 
       <h2 className=''>Edit Profile</h2>
 
-      <ProfileImage avatar={avatar ?? ''} />
+      {avatar != null && avatar !== '' && <ProfileImage avatar={avatar ?? ''} key={avatar} />}
 
       <FormProvider {...form}>
         {/* eslint-disable-next-line */}
@@ -149,14 +149,10 @@ export const ProfileImage = ({ avatar }: { avatar: string }): JSX.Element => {
       aria-label='Profile photo section'
     >
       <div className='relative inline-block'>
-        <BaseProfilePhotoUploader className='absolute bottom-1 right-1  bg-gray-800 bg-opacity-75 p-2 rounded-full transition-opacity duration-200 hover:bg-opacity-100'>
+        <BaseProfilePhotoUploader className='absolute bottom-1 right-1  bg-gray-800 bg-opacity-75 p-2 rounded-full transition-opacity duration-200 hover:bg-opacity-100 z-10'>
           <PencilIcon className='w-4 h-4 text-white' />
         </BaseProfilePhotoUploader>
-        <img
-          className='object-cover w-24 h-24 rounded-full'
-          src={DefaultLoader({ src: avatar, width: 200 })}
-          alt='Profile Photo'
-        />
+        {getProfilePhotoSrc(avatar)}
       </div>
     </div>
   )
