@@ -11,11 +11,12 @@ import { MediaFormat, TagTargetType } from '../types'
 import { NewEmbeddedEntityTag } from '../graphql/gql/media'
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
 import { invalidateAreaPageCache, legacyInvalidateClimbPageCache } from '../utils'
+import useUserProfileCmd from './useUserProfileCmd'
 
 interface UsePhotoUploaderProps {
   tagType?: TagTargetType
   uuid?: string
-  onUploadComplete?: (url: string) => void
+  isProfilePhoto?: boolean
 }
 interface PhotoUploaderReturnType {
   getInputProps: <T extends DropzoneInputProps>(props?: T) => T
@@ -41,12 +42,13 @@ async function readFile (file: File): Promise<ProgressEvent<FileReader>> {
  * is all encapsulated here, as well as some other api shorthand.
  * { onUploaded }: UsePhotoUploaderProps
  * */
-export default function usePhotoUploader ({ tagType, uuid, onUploadComplete }: UsePhotoUploaderProps): PhotoUploaderReturnType {
+export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = false }: UsePhotoUploaderProps): PhotoUploaderReturnType {
   const router = useRouter()
   const setUploading = useUserGalleryStore(store => store.setUploading)
   const isUploading = useUserGalleryStore(store => store.uploading)
   const { data: sessionData, status: sessionStatus } = useSession()
   const { addMediaObjectsCmd } = useMediaCmd()
+  const { updatePublicProfileCmd } = useUserProfileCmd({ accessToken: sessionData?.accessToken as string })
 
   const ref = useRef({
     hasErrors: false
@@ -78,27 +80,29 @@ export default function usePhotoUploader ({ tagType, uuid, onUploadComplete }: U
     }
     try {
       const url = await uploadPhoto(name, imageData)
-
-      const res = await addMediaObjectsCmd([{
-        userUuid,
-        mediaUrl: url,
-        format: mineTypeToEnum(type),
-        width,
-        height,
-        size,
-        ...entityTag != null && { entityTag }
-      }], sessionData?.accessToken)
-
-      // if upload is successful but we can't update the database,
-      // then delete the upload
-      if (res == null) {
-        ref.current.hasErrors = true
-        await deleteMediaFromStorage(url)
+      if (isProfilePhoto) {
+        updatePublicProfileCmd({ userUuid, avatar: url }).catch(console.error)
       } else {
-        if (tagType === 1 && uuid != null) await invalidateAreaPageCache(uuid)
-        if (tagType === 0 && uuid != null) await legacyInvalidateClimbPageCache(uuid)
-        onUploadComplete?.(url)
-        router.refresh() // Ask NextJS to update page props
+        const res = await addMediaObjectsCmd([{
+          userUuid,
+          mediaUrl: url,
+          format: mineTypeToEnum(type),
+          width,
+          height,
+          size,
+          ...entityTag != null && { entityTag }
+        }], sessionData?.accessToken)
+
+        // if upload is successful but we can't update the database,
+        // then delete the upload
+        if (res == null) {
+          ref.current.hasErrors = true
+          await deleteMediaFromStorage(url)
+        } else {
+          if (tagType === 1 && uuid != null) await invalidateAreaPageCache(uuid)
+          if (tagType === 0 && uuid != null) await legacyInvalidateClimbPageCache(uuid)
+          router.refresh() // Ask NextJS to update page props
+        }
       }
     } catch (e) {
       ref.current.hasErrors = true

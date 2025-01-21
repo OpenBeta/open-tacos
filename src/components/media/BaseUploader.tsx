@@ -6,7 +6,6 @@ import { useSession, signIn } from 'next-auth/react'
 import usePhotoUploader from '../../js/hooks/usePhotoUploader'
 import { usePathname } from 'next/navigation'
 import { TagTargetType } from '@/js/types'
-import useUserProfileCmd from '../../js/hooks/useUserProfileCmd'
 
 interface BaseUploaderProps {
   className: string
@@ -46,17 +45,7 @@ export const BaseProfilePhotoUploader: React.FC<BaseUploaderProps> = ({
 }) => {
   const session = useSession()
 
-  const { updatePublicProfilePhotoCmd } = useUserProfileCmd({ accessToken: session?.data?.accessToken as string })
-
-  const { getInputProps, openFileDialog } = usePhotoUploader({
-    uuid,
-    onUploadComplete: (url) => {
-      const userUuid = session.data?.user.metadata.uuid ?? ''
-      if (userUuid !== '') {
-        updatePublicProfilePhotoCmd({ userUuid, avatarUrl: url }).catch(console.error)
-      }
-    }
-  })
+  const { getInputProps, openFileDialog } = usePhotoUploader({ uuid, isProfilePhoto: true })
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     if (session.status !== 'authenticated') {

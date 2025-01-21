@@ -1,12 +1,15 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession, signIn } from 'next-auth/react'
 import { toast } from 'react-toastify'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { PencilIcon } from '@heroicons/react/24/solid'
 
 import { Input, TextArea } from '../../ui/form'
 import useUserProfileCmd from '../../../js/hooks/useUserProfileCmd'
+import { BaseProfilePhotoUploader } from '../../media/BaseUploader'
+import { DefaultLoader } from '../../../js/sirv/util'
 
 const validationSchema = z
   .object({
@@ -43,13 +46,16 @@ export const UpdateProfileForm: React.FC = () => {
 
   const userUuid = session.data?.user.metadata.uuid
 
+  const [avatar, setAvatar] = useState<string | null>(null)
+
   useEffect(() => {
     if (userUuid != null) {
       const doAsync = async (): Promise<void> => {
         const profile = await getUserPublicProfileByUuid(userUuid)
         if (profile != null) {
-          const { displayName, bio, website } = profile
+          const { displayName, bio, website, avatar } = profile
           reset({ displayName, bio, website })
+          setAvatar(avatar ?? null)
         }
       }
       void doAsync()
@@ -89,14 +95,17 @@ export const UpdateProfileForm: React.FC = () => {
   }, [isDirty])
 
   const shouldDisableSumit = !isValid || isSubmitting || !isDirty || userUuid == null
+
   return (
     <div className='w-full lg:max-w-md'>
 
       <h2 className=''>Edit Profile</h2>
 
+      <ProfileImage avatar={avatar ?? ''} />
+
       <FormProvider {...form}>
         {/* eslint-disable-next-line */}
-        <form onSubmit={handleSubmit(submitHandler)} className='mt-10 flex flex-col'>
+        <form onSubmit={handleSubmit(submitHandler)} className='mt-1 flex flex-col'>
           <Input
             name='displayName'
             label='Display name'
@@ -129,6 +138,26 @@ export const UpdateProfileForm: React.FC = () => {
           </button>
         </form>
       </FormProvider>
+    </div>
+  )
+}
+
+export const ProfileImage = ({ avatar }: { avatar: string }): JSX.Element => {
+  return (
+    <div
+      className='hidden md:block pr-5 relative'
+      aria-label='Profile photo section'
+    >
+      <div className='relative inline-block'>
+        <BaseProfilePhotoUploader className='absolute bottom-1 right-1  bg-gray-800 bg-opacity-75 p-2 rounded-full transition-opacity duration-200 hover:bg-opacity-100'>
+          <PencilIcon className='w-4 h-4 text-white' />
+        </BaseProfilePhotoUploader>
+        <img
+          className='object-cover w-24 h-24 rounded-full'
+          src={DefaultLoader({ src: avatar, width: 200 })}
+          alt='Profile Photo'
+        />
+      </div>
     </div>
   )
 }

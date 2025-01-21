@@ -37,7 +37,6 @@ interface ReturnType {
   getUserPublicPage: GetUserPublicPage
   getUserPublicProfileByUuid: GetUserPublicProfileByUuid
   updatePublicProfileCmd: UpdatePublicProfileCmd
-  updatePublicProfilePhotoCmd: UpdatePublicProfileCmd
 }
 
 interface UseUserProfileCmdProps {
@@ -122,40 +121,19 @@ export default function useUserProfileCmd ({ accessToken = '' }: UseUserProfileC
     return res.data.getUserPublicProfileByUuid
   }
 
-  const updatePublicProfileCmd: UpdatePublicProfileCmd = async ({ userUuid, displayName, bio, website }: UpdateUserPublicProfileInput) => {
+  const updatePublicProfileCmd: UpdatePublicProfileCmd = async ({ userUuid, displayName, bio, website, avatar }: UpdateUserPublicProfileInput) => {
     const trimmedInput: UpdateUserPublicProfileInput = {
       userUuid,
       ...(displayName != null && { displayName }),
       ...(bio != null && { bio }),
-      ...(website != null && { website })
+      ...(website != null && { website }),
+      ...(avatar != null && { avatar })
     }
     try {
       const res = await graphqlClient.mutate<{ updateUserProfile?: boolean }, UpdateUserPublicProfileInput>({
         mutation: MUTATION_UPDATE_PROFILE,
         variables: {
           ...trimmedInput
-        },
-        context: {
-          headers: {
-            authorization: `Bearer ${accessToken}`
-          }
-        },
-        fetchPolicy: 'no-cache'
-      })
-      return res.data?.updateUserProfile ?? false
-    } catch (e: any) {
-      console.error(e)
-      return false
-    }
-  }
-
-  const updatePublicProfilePhotoCmd: UpdatePublicProfileCmd = async ({ userUuid, avatarUrl }: UpdateUserPublicProfileInput) => {
-    try {
-      const res = await graphqlClient.mutate<{ updateUserProfile?: boolean }, UpdateUserPublicProfileInput>({
-        mutation: MUTATION_UPDATE_PROFILE,
-        variables: {
-          userUuid,
-          avatar: avatarUrl
         },
         context: {
           headers: {
@@ -182,5 +160,5 @@ export default function useUserProfileCmd ({ accessToken = '' }: UseUserProfileC
   //   return res.data.getUserPublicProfileByUuid
   // }
 
-  return { getUsernameById, updateUsername, doesUsernameExist, getUserPublicPage, getUserPublicProfileByUuid, updatePublicProfileCmd, updatePublicProfilePhotoCmd }
+  return { getUsernameById, updateUsername, doesUsernameExist, getUserPublicPage, getUserPublicProfileByUuid, updatePublicProfileCmd }
 }
