@@ -66,7 +66,6 @@ export const BaseProfilePhotoUploader: React.FC<BaseUploaderProps> = ({
     >
       <input
         aria-label='Upload profile photo'
-        tabIndex={-1}
         {...getInputProps()}
       />
       {children}
