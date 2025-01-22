@@ -108,7 +108,7 @@ export const UpdateProfileForm: React.FC = () => {
 
       <FormProvider {...form}>
         {/* eslint-disable-next-line */}
-        <form onSubmit={handleSubmit(submitHandler)} className='mt-1 flex flex-col'>
+        <form onSubmit={handleSubmit(submitHandler)} className='flex flex-col'>
           <Input
             name='displayName'
             label='Display name'
@@ -147,16 +147,11 @@ export const UpdateProfileForm: React.FC = () => {
 
 export const EditProfileImage = ({ avatar }: { avatar: string }): JSX.Element => {
   return (
-    <div
-      className='hidden md:block pr-5 relative'
-      aria-label='Profile photo section'
-    >
-      <div className='relative inline-block'>
-        <BaseProfilePhotoUploader className='absolute bottom-1 right-1  bg-gray-800 bg-opacity-75 p-2 rounded-full transition-opacity duration-200 hover:bg-opacity-100 z-10'>
-          <PencilIcon className='w-4 h-4 text-white' />
-        </BaseProfilePhotoUploader>
-        <ProfileImage avatar={avatar} />
-      </div>
+    <div className='relative inline-block'>
+      <BaseProfilePhotoUploader className='absolute bottom-1 right-1  bg-gray-800 bg-opacity-75 p-2 rounded-full transition-opacity duration-200 hover:bg-opacity-100 z-10'>
+        <PencilIcon className='w-4 h-4 text-white' />
+      </BaseProfilePhotoUploader>
+      <ProfileImage avatar={avatar} />
     </div>
   )
 }
