@@ -99,6 +99,7 @@ export const UpdateProfileForm: React.FC = () => {
   }, [isDirty])
 
   const shouldDisableSumit = !isValid || isSubmitting || !isDirty || userUuid == null
+
   return (
     <div className='w-full lg:max-w-md'>
 
