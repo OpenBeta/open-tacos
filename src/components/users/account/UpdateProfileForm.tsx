@@ -104,7 +104,7 @@ export const UpdateProfileForm: React.FC = () => {
 
       <h2 className=''>Edit Profile</h2>
 
-      {avatar != null && <EditProfileImage avatar={avatar} key={avatar} />}
+      {avatar !== null && avatar !== '' && <EditProfileImage avatar={avatar} key={avatar} />}
 
       <FormProvider {...form}>
         {/* eslint-disable-next-line */}
@@ -155,7 +155,7 @@ export const EditProfileImage = ({ avatar }: { avatar: string }): JSX.Element =>
         <BaseProfilePhotoUploader className='absolute bottom-1 right-1  bg-gray-800 bg-opacity-75 p-2 rounded-full transition-opacity duration-200 hover:bg-opacity-100 z-10'>
           <PencilIcon className='w-4 h-4 text-white' />
         </BaseProfilePhotoUploader>
-        {avatar != null && <ProfileImage avatar={avatar} />}
+        <ProfileImage avatar={avatar} />
       </div>
     </div>
   )

@@ -23,7 +23,7 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
   }
   return (
     <section className='mx-auto max-w-screen-sm px-4 md:px-0 md:grid md:grid-cols-3'>
-      {avatar != null && <ProfileImage avatar={avatar} />}
+      {avatar != null && avatar !== '' && <ProfileImage avatar={avatar} />}
       <div className='md:col-span-2 text-medium text-primary '>
         <div className='flex flex-row items-center gap-x-2 max-w-xs'>
           <div className='md:text-2xl font-bold mr-4 truncate'>
