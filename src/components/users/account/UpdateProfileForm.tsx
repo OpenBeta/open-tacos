@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession, signIn } from 'next-auth/react'
 import { toast } from 'react-toastify'
@@ -9,7 +9,8 @@ import { PencilIcon } from '@heroicons/react/24/solid'
 import { Input, TextArea } from '../../ui/form'
 import useUserProfileCmd from '../../../js/hooks/useUserProfileCmd'
 import { BaseProfilePhotoUploader } from '../../media/BaseUploader'
-import { getProfilePhotoSrc } from '../PublicProfile'
+import { ProfileImage } from '../PublicProfile'
+import { useUserGalleryStore } from '../../../js/stores/useUserGalleryStore'
 
 const validationSchema = z
   .object({
@@ -46,7 +47,8 @@ export const UpdateProfileForm: React.FC = () => {
 
   const userUuid = session.data?.user.metadata.uuid
 
-  const [avatar, setAvatar] = useState<string | null>(null)
+  const setAvatarUrl = useUserGalleryStore(store => store.setAvatarUrl)
+  const avatar = useUserGalleryStore(store => store.avatarUrl)
 
   useEffect(() => {
     if (userUuid != null) {
@@ -55,7 +57,9 @@ export const UpdateProfileForm: React.FC = () => {
         if (profile != null) {
           const { displayName, bio, website, avatar } = profile
           reset({ displayName, bio, website })
-          setAvatar(avatar ?? null)
+          if (avatar != null) {
+            setAvatarUrl(avatar)
+          }
         }
       }
       void doAsync()
@@ -101,7 +105,7 @@ export const UpdateProfileForm: React.FC = () => {
 
       <h2 className=''>Edit Profile</h2>
 
-      {avatar != null && avatar !== '' && <ProfileImage avatar={avatar ?? ''} key={avatar} />}
+      {avatar != null && <EditProfileImage avatar={avatar} key={avatar} />}
 
       <FormProvider {...form}>
         {/* eslint-disable-next-line */}
@@ -142,7 +146,7 @@ export const UpdateProfileForm: React.FC = () => {
   )
 }
 
-export const ProfileImage = ({ avatar }: { avatar: string }): JSX.Element => {
+export const EditProfileImage = ({ avatar }: { avatar: string }): JSX.Element => {
   return (
     <div
       className='hidden md:block pr-5 relative'
@@ -152,7 +156,7 @@ export const ProfileImage = ({ avatar }: { avatar: string }): JSX.Element => {
         <BaseProfilePhotoUploader className='absolute bottom-1 right-1  bg-gray-800 bg-opacity-75 p-2 rounded-full transition-opacity duration-200 hover:bg-opacity-100 z-10'>
           <PencilIcon className='w-4 h-4 text-white' />
         </BaseProfilePhotoUploader>
-        {getProfilePhotoSrc(avatar)}
+        {avatar != null && <ProfileImage avatar={avatar} />}
       </div>
     </div>
   )

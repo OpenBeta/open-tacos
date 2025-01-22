@@ -44,6 +44,7 @@ async function readFile (file: File): Promise<ProgressEvent<FileReader>> {
  * */
 export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = false }: UsePhotoUploaderProps): PhotoUploaderReturnType {
   const router = useRouter()
+  const setAvatarUrl = useUserGalleryStore(store => store.setAvatarUrl)
   const setUploading = useUserGalleryStore(store => store.setUploading)
   const isUploading = useUserGalleryStore(store => store.uploading)
   const { data: sessionData, status: sessionStatus } = useSession()
@@ -82,6 +83,7 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
       const url = await uploadPhoto(name, imageData)
       if (isProfilePhoto) {
         updatePublicProfileCmd({ userUuid, avatar: url }).catch(console.error)
+        setAvatarUrl(url)
       } else {
         const res = await addMediaObjectsCmd([{
           userUuid,

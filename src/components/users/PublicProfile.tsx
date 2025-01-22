@@ -23,7 +23,7 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
   }
   return (
     <section className='mx-auto max-w-screen-sm px-4 md:px-0 md:grid md:grid-cols-3'>
-      {avatar != null && avatar !== '' && getProfilePhotoSrc(avatar)}
+      {avatar != null && <ProfileImage avatar={avatar} />}
       <div className='md:col-span-2 text-medium text-primary '>
         <div className='flex flex-row items-center gap-x-2 max-w-xs'>
           <div className='md:text-2xl font-bold mr-4 truncate'>
@@ -66,25 +66,17 @@ const prettifyUrl = (url: string): string => {
   return url.replace(/^(https?:)?\/\//g, '').replace(/\/$/g, '')
 }
 
-export const getProfilePhotoSrc = (avatar: string): JSX.Element | null => {
-  // returns generic auth0 avatar assigned when user is created, if no profile pic is uploaded
-  if (avatar.includes('gravatar')) {
-    return (
-      <img
-        className='grayscale object-scale-down w-24 h-24 rounded-full'
-        src={avatar}
-        alt='Profile Photo'
-      />
-    )
-  } else {
-    return (
-      <img
-        className='object-cover w-24 h-24 rounded-full'
-        src={DefaultLoader({ src: avatar, width: 200 })}
-        alt='Profile Photo'
-      />
-    )
-  }
+export const ProfileImage = ({ avatar }: { avatar: string }): JSX.Element => {
+  // returns auth0 avatar assigned when user is created, if no profile pic is uploaded
+  const avatarSrc = avatar.includes('gravatar') ? avatar : DefaultLoader({ src: avatar, width: 200 })
+
+  return (
+    <img
+      className='object-cover w-24 h-24 rounded-full'
+      src={avatarSrc}
+      alt='Profile Photo'
+    />
+  )
 }
 
 export const TinyProfile = ({ userProfile, onClick }: PublicProfileProps): any => {
