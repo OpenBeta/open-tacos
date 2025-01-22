@@ -16,7 +16,7 @@ export interface UpdateUsernameInput {
   avatar?: string
 }
 
-type UpdateUserPublicProfileInput = { userUuid: string, avatarUrl?: string } & Pick<UserPublicProfile, 'displayName' | 'bio' | 'website' | 'avatar'>
+type UpdateUserPublicProfileInput = { userUuid: string } & Pick<UserPublicProfile, 'displayName' | 'bio' | 'website' | 'avatar'>
 
 type GetUsernameById = (input: GetUsernameByIdInput) => Promise<Username | null>
 
@@ -148,7 +148,6 @@ export default function useUserProfileCmd ({ accessToken = '' }: UseUserProfileC
       return false
     }
   }
-
   // const updatePublicProfile = async (userUuid: string): Promise<any | null> => {
   //   const res = await graphqlClient.mutate<GetUserPublicProfileByUuidReturn, { userUuid: string }>({
   //     query: QUERY_GET_USER_PUBLIC_PROFILE_BY_UUID,

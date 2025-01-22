@@ -44,7 +44,7 @@ export const useUserGalleryStore = create<UserGalleryStore>()(devtools((set, get
   ...DEFAUL_STATES,
 
   /**
-   * Updates the avatar when editing profile.
+   * Updates the current avatar when editing profile.
    * @param avatarUrlState
    */
   setAvatarUrl: (avatarUrlState) => set((state) => ({
