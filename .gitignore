@@ -80,5 +80,8 @@ content
 *.pem
 .vscode/launch.json
 
+# for anyone using asdf
+.tool-versions
+
 .lighthouseci
 .idea/

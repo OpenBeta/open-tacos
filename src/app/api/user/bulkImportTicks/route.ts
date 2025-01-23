@@ -13,8 +13,8 @@ export interface Tick {
   notes: string
   climbId: string
   userId: string | undefined
-  style: string | null
-  attemptType: string | null
+  style: string | undefined
+  attemptType: string | undefined
   dateClimbed: Date
   grade: string
   source: string
@@ -61,7 +61,7 @@ interface MPTick {
 async function getMPTicks (profileUrl: string): Promise<MPTick[]> {
   const mpClient: AxiosInstance = axios.create({
     baseURL: 'https://www.mountainproject.com/user',
-    timeout: 60000
+    timeout: 180000
   })
   const res = await mpClient.get(`${profileUrl}/tick-export`)
   if (res.status === 200) {
@@ -78,6 +78,33 @@ async function getMPTicks (profileUrl: string): Promise<MPTick[]> {
   return []
 }
 
+// See [Tick Logic](https://github.com/OpenBeta/openbeta-graphql/blob/develop/documentation/tick_logic.md) for info on all the logic in this file.
+function trueBoulderTick (style: string, leadStyle: string, routeType: string): boolean {
+  return routeType.includes('Boulder') && ((leadStyle ?? '') === '') && ['Flash', 'Send', 'Attempt'].includes(style)
+}
+
+function convertMPattemptType (style: string, leadStyle: string, routeType: string): string | undefined {
+  if (trueBoulderTick(style, leadStyle, routeType)) {
+    return style === '' ? undefined : style
+  } else {
+    switch (leadStyle) {
+      case '':
+        return undefined
+      case 'Fell/Hung':
+        return 'Attempt'
+      default:
+        return leadStyle
+    }
+  }
+}
+
+function convertMPTickStyle (style: string, leadStyle: string, routeType: string): string | undefined {
+  if (trueBoulderTick(style, leadStyle, routeType)) {
+    return 'Boulder'
+  } else {
+    return style === '' ? undefined : style
+  }
+}
 const postHandler = async (req: NextRequest): Promise<any> => {
   const uuid = req.headers.get(PREDEFINED_HEADERS.user_uuid)
   const auth0Userid = req.headers.get(PREDEFINED_HEADERS.auth0_id)
@@ -99,8 +126,8 @@ const postHandler = async (req: NextRequest): Promise<any> => {
       notes: tick.Notes,
       climbId: tick.mp_id,
       userId: uuid,
-      style: tick.Style === '' ? null : tick.Style,
-      attemptType: tick['Lead Style'] === '' ? null : tick['Lead Style'],
+      style: convertMPTickStyle(tick.Style, tick['Lead Style'], tick['Route Type']),
+      attemptType: convertMPattemptType(tick.Style, tick['Lead Style'], tick['Route Type']),
       dateClimbed: new Date(Date.parse(`${tick.Date}T00:00:00`)), // Date.parse without timezone specified converts date to user's present timezone.
       grade: tick.Rating,
       source: 'MP'
