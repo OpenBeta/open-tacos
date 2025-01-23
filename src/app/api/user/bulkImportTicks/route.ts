@@ -13,8 +13,8 @@ export interface Tick {
   notes: string
   climbId: string
   userId: string | undefined
-  style: string
-  attemptType: string
+  style: string | null
+  attemptType: string | null
   dateClimbed: Date
   grade: string
   source: string
@@ -99,8 +99,8 @@ const postHandler = async (req: NextRequest): Promise<any> => {
       notes: tick.Notes,
       climbId: tick.mp_id,
       userId: uuid,
-      style: tick.Style === '' ? 'N/A' : tick.Style,
-      attemptType: tick.Style === '' ? 'N/A' : tick.Style,
+      style: tick.Style === '' ? null : tick.Style,
+      attemptType: tick['Lead Style'] === '' ? null : tick['Lead Style'],
       dateClimbed: new Date(Date.parse(`${tick.Date}T00:00:00`)), // Date.parse without timezone specified converts date to user's present timezone.
       grade: tick.Rating,
       source: 'MP'
