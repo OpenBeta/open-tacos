@@ -11,9 +11,10 @@ interface Props {
   dateClimbed: number
   notes: string
   style: string
+  attemptType: string
 }
 
-export default function TickCard ({ tickId, ticks, setTicks, dateClimbed, notes, style }: Props): JSX.Element {
+export default function TickCard ({ tickId, ticks, setTicks, dateClimbed, notes, style, attemptType }: Props): JSX.Element {
   const [deleteTick] = useMutation(
     MUTATION_REMOVE_TICK_BY_ID, {
       client: graphqlClient,
@@ -37,7 +38,10 @@ export default function TickCard ({ tickId, ticks, setTicks, dateClimbed, notes,
         <p className='text-sm text-gray-500 mb-0'>{notes}</p>
       </div>
       <div className='flex flex-row'>
-        <p className='text-sm text-gray-500 pr-5'>{style}</p>
+        <div className='flex flex-col'>
+          <p className='text-sm text-gray-500 pr-5'>{style}</p>
+          <p className='text-sm text-gray-500 pr-5'>{attemptType}</p>
+        </div>
         <AlertDialogue
           onConfirm={() => { void remove() }}
           hideTitle

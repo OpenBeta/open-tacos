@@ -7,6 +7,7 @@ import { graphqlClient } from '../../js/graphql/Client'
 import { MUTATION_ADD_TICK } from '../../js/graphql/gql/fragments'
 import ComboBox from '../ui/ComboBox'
 import * as Yup from 'yup'
+import { InformationCircleIcon } from '@heroicons/react/20/solid'
 
 // validation schema for ticks
 const TickSchema = Yup.object().shape({
@@ -19,10 +20,8 @@ const TickSchema = Yup.object().shape({
     .required('Something went wrong fetching the climb Id, please try again'),
   userId: Yup.string()
     .required('Something went wrong fetching your user Id, please try again'),
-  style: Yup.string()
-    .required('Please choose an ascent style'),
-  attemptType: Yup.string()
-    .required('Please choose an ascent type'),
+  style: Yup.string(),
+  attemptType: Yup.string(),
   dateClimbed: Yup.date()
     .required('Please include a date')
     .max(new Date(), 'Please include a date in the past'),
@@ -34,19 +33,45 @@ const TickSchema = Yup.object().shape({
  * Feel free to add any you think are valuable for our users
  */
 const styles = [
-  { id: 1, name: 'Solo' },
+  { id: 1, name: 'Lead' },
   { id: 2, name: 'TR' },
   { id: 3, name: 'Follow' },
-  { id: 4, name: 'Lead' },
-  { id: 5, name: 'Boulder' }
+  { id: 4, name: 'Solo' },
+  { id: 5, name: 'Boulder' },
+  { id: 6, name: '\u00A0' }
 ]
 
-const attemptTypes = [
+const allAttemptTypes = [
   { id: 1, name: 'Onsight' },
   { id: 2, name: 'Flash' },
   { id: 3, name: 'Redpoint' },
-  { id: 4, name: 'Pinkpoint' }
+  { id: 4, name: 'Pinkpoint' },
+  { id: 5, name: 'Send' },
+  { id: 6, name: 'Attempt' },
+  { id: 7, name: 'Frenchfree' }
 ]
+
+// Small info icon with a link to the Wikipedia glossary of climbing terms
+const climbingGlossaryLink = 'https://en.wikipedia.org/wiki/Glossary_of_climbing_terms#'
+
+// Dynamically offer relevant options depending on the style chosen. This is fairly open to allow multiple options, with some restrictions based on common climber nomenclature.
+// Note that both style and attemptType can be empty. This code is likley coupled with the db validation logic on the backend, and a future improvement could be to decouple these.
+function attemptTypes ({ styleName }: { styleName: string }): Array<{ id: number, name: string }> {
+  const emptyOption = { id: 0, name: '\u00A0' }
+  switch (styleName) {
+    case 'Lead':
+      return [...allAttemptTypes.filter(type => ['Onsight', 'Flash', 'Redpoint', 'Pinkpoint', 'Attempt', 'Frenchfree'].includes(type.name)), emptyOption]
+    case 'Solo':
+      return [...allAttemptTypes.filter(type => ['Onsight', 'Flash', 'Redpoint', 'Attempt'].includes(type.name)), emptyOption]
+    case 'TR':
+    case 'Follow':
+      return [...allAttemptTypes.filter(type => ['Send', 'Attempt', 'Frenchfree'].includes(type.name)), emptyOption]
+    case 'Boulder':
+      return [...allAttemptTypes.filter(type => ['Flash', 'Send', 'Attempt'].includes(type.name)), emptyOption]
+    default:
+      return [emptyOption]
+  }
+}
 
 interface Props {
   open: boolean
@@ -60,8 +85,8 @@ interface Props {
 }
 
 export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, climbId, name, grade }: Props): JSX.Element {
-  const [style, setStyle] = useState(styles[1])
-  const [attemptType, setAttemptType] = useState(attemptTypes[1])
+  const [style, setStyle] = useState(styles[0])
+  const [attemptType, setAttemptType] = useState(attemptTypes({ styleName: styles[0].name })[0])
   const [dateClimbed, setDateClimbed] = useState<string>(new Date().toLocaleDateString('fr-CA')) // Default is today, use fr-CA to get YYYY-MM-DD format.
   const [notes, setNotes] = useState<string>('')
   const [errors, setErrors] = useState<string[]>()
@@ -78,9 +103,15 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
    */
   function resetInputs (): void {
     setDateClimbed(new Date().toLocaleDateString('fr-CA'))
-    setAttemptType(attemptTypes[1])
+    setAttemptType(attemptTypes({ styleName: styles[0].name })[0])
     setNotes('')
-    setStyle(styles[1])
+    setStyle(styles[0])
+  }
+
+  function handleStyleChange (newStyle: { id: number, name: string }): void {
+    setStyle(newStyle)
+    const newAttemptTypes = attemptTypes({ styleName: newStyle.name })
+    setAttemptType(newAttemptTypes[0])
   }
 
   async function submitTick (): Promise<void> {
@@ -121,7 +152,8 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
       .catch((error) => {
         const gqlErrs = error.graphQLErrors ?? []
         if (gqlErrs.length > 0) {
-          switch (gqlErrs[0].extensions.exception.code) {
+          const code = gqlErrs[0].extensions.exception?.code
+          switch (code) {
             case 11000:
             case 11001:
               setErrors(['Error, duplicate tick found'])
@@ -137,7 +169,7 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as='div' className='relative z-10' onClose={() => setOpen(false)}>
+      <Dialog as='div' className='relative z-50' onClose={() => setOpen(false)}>
         <Transition.Child
           as={Fragment}
           enter='ease-out duration-300'
@@ -150,7 +182,7 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
           <div className='fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity' />
         </Transition.Child>
 
-        <div className='fixed z-10 inset-0 overflow-y-auto'>
+        <div className='fixed z-50 inset-0 overflow-y-auto'>
           <div className='flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0'>
             <Transition.Child
               as={Fragment}
@@ -177,15 +209,23 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
                       className='py-2 px-3 border border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
                     />
                   </div>
-                  <ComboBox options={styles} value={style} onChange={setStyle} label='Style' />
-                  <ComboBox options={attemptTypes} value={attemptType} onChange={setAttemptType} label='Attempt Type' />
+                  <ComboBox options={styles} value={style} onChange={handleStyleChange} label='Style' />
+                  <div className='flex items-center'>
+                    <label htmlFor='attemptType' className='block text-sm font-medium text-gray-700'>
+                      Attempt Type
+                    </label>
+                    <a href={climbingGlossaryLink} target='_blank' rel='noopener noreferrer' className='ml-2 text-gray-500 hover:text-gray-700' title='climbing terminology'>
+                      <InformationCircleIcon className='h-5 w-5' />
+                    </a>
+                  </div>
+                  <ComboBox options={attemptTypes({ styleName: style.name })} value={attemptType} onChange={setAttemptType} label='' />
                   <div>
                     <label htmlFor='comment' className='block text-sm font-medium text-gray-700 mt-2'>
                       Notes
                     </label>
                     <div className='mt-1'>
                       <textarea
-                        rows={4}
+                        rows={6}
                         name='comment'
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
