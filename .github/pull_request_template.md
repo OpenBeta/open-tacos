@@ -35,7 +35,7 @@ Issue #
 
 
 ### Notes
-<!--Anything in particular you want the reviwer pay attention to? This could be things that you are not sure about, or possible risks of your change.-->
+<!--Anything in particular you want the reviewer pay attention to? This could be things that you are not sure about, or possible risks of your change.-->
 
 
 
