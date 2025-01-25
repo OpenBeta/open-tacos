@@ -1,5 +1,4 @@
 'use client'
-// import React, { useState } from 'react'
 import { ArrowsVertical } from '@phosphor-icons/react/dist/ssr'
 
 import TickButton from '@/components/users/TickButton'
@@ -12,7 +11,6 @@ import { removeTypenameFromDisciplines } from '@/js/utils'
 
 export const ClimbData: React.FC<ClimbType & Pick<AreaType, 'gradeContext'> & { isBoulder: boolean }> = (props) => {
   const { id, name, type, safety, length, grades, fa: legacyFA, authorMetadata, gradeContext, isBoulder } = props
-  // const [editMode, _setEditMode] = useState(false)
   const sanitizedDisciplines = removeTypenameFromDisciplines(type)
 
   const gradeStr = new Grade(
@@ -52,9 +50,9 @@ export const ClimbData: React.FC<ClimbType & Pick<AreaType, 'gradeContext'> & { 
           </div>
         )}
 
-        {/* TODO: Hike the TickButton in editMode */}
+        {/* TODO: Hide the TickButton in editMode */}
         <div className='mt-8'>
-          <TickButton climbId={id} name={name} grade={gradeStr} />
+          <TickButton climbId={id} name={name} grade={gradeStr} climbType={sanitizedDisciplines} />
         </div>
       </div>
     </>

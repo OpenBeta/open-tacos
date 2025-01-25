@@ -11,6 +11,7 @@ interface Props {
   areaId?: string
   name?: string
   grade?: string
+  climbType: object
 }
 
 const IsTicked: React.FC<any> = ({ loading, onClick }) => {
@@ -25,7 +26,7 @@ const IsTicked: React.FC<any> = ({ loading, onClick }) => {
   )
 }
 
-export default function TickButton ({ climbId, areaId, name, grade }: Props): JSX.Element | null {
+export default function TickButton ({ climbId, areaId, name, grade, climbType }: Props): JSX.Element | null {
   const [loading, setLoading] = useState(false)
   const [isTicked, setIsTicked] = useState<boolean>(false)
   const [viewTicks, setViewTicks] = useState<boolean>(false)
@@ -79,7 +80,7 @@ export default function TickButton ({ climbId, areaId, name, grade }: Props): JS
             : 'Tick this climb'}
         </button>}
       {isTicked && <IsTicked loading={loading} onClick={() => setViewTicks(true)} />}
-      <TickForm open={open} setTicks={setTicks} ticks={ticks} setOpen={setOpen} isTicked={setIsTicked} climbId={climbId} name={name} grade={grade} />
+      <TickForm open={open} setTicks={setTicks} ticks={ticks} setOpen={setOpen} isTicked={setIsTicked} climbId={climbId} name={name} grade={grade} climbType={climbType} />
       <TicksModal open={viewTicks} setOpen={setViewTicks} climbName={name} ticks={ticks} setTicks={setTicks} setOpenForm={setOpen} />
     </>
   )

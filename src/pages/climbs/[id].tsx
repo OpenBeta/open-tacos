@@ -440,7 +440,7 @@ const ClimbData: React.FC<{
 
         {!editMode && (
           <div className='mt-8'>
-            <TickButton climbId={climbId} name={name} grade={gradesObj.toString()} />
+            <TickButton climbId={climbId} name={name} grade={gradesObj.toString()} climbType={{}} />
           </div>
         )}
       </div>

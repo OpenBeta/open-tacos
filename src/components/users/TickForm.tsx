@@ -28,17 +28,18 @@ const TickSchema = Yup.object().shape({
   grade: Yup.string()
     .required('Something went wrong fetching the climbs grade, please try again')
 })
+
 /**
  * Options for the dropdown comboboxes
- * Feel free to add any you think are valuable for our users
- */
-const styles = [
+ * The logic here can get quite complicated. There is a hierarchy of "Climb type" -> "Style" -> "Attempt Type"
+ **/
+const allStyles = [
   { id: 1, name: 'Lead' },
-  { id: 2, name: 'TR' },
-  { id: 3, name: 'Follow' },
+  { id: 2, name: 'Follow' },
+  { id: 3, name: 'TR' },
   { id: 4, name: 'Solo' },
   { id: 5, name: 'Boulder' },
-  { id: 6, name: '\u00A0' }
+  { id: 6, name: 'Aid' }
 ]
 
 const allAttemptTypes = [
@@ -51,12 +52,27 @@ const allAttemptTypes = [
   { id: 7, name: 'Frenchfree' }
 ]
 
-// Small info icon with a link to the Wikipedia glossary of climbing terms
-const climbingGlossaryLink = 'https://en.wikipedia.org/wiki/Glossary_of_climbing_terms#'
+function hasKey (climbType: object, myList: string[]): boolean { return Object.keys(climbType).some(key => myList.includes(key)) }
 
-// Dynamically offer relevant options depending on the style chosen. This is fairly open to allow multiple options, with some restrictions based on common climber nomenclature.
-// Note that both style and attemptType can be empty. This code is likley coupled with the db validation logic on the backend, and a future improvement could be to decouple these.
-function attemptTypes ({ styleName }: { styleName: string }): Array<{ id: number, name: string }> {
+function leadable (climbType: object): boolean { return hasKey(climbType, ['trad', 'sport', 'snow', 'ice', 'mixed', 'alpine']) }
+function topropeable (climbType: object): boolean { return hasKey(climbType, ['tr']) || (leadable(climbType)) }
+function aidable (climbType: object): boolean { return hasKey(climbType, ['aid']) }
+function soloable (climbType: object): boolean { return hasKey(climbType, ['deepwatersolo']) || leadable(climbType) || aidable(climbType) || topropeable(climbType) }
+function boulderable (climbType: object): boolean { return hasKey(climbType, ['bouldering']) }
+
+function stylesForClimbType (climbType: object): Array<{ id: number, name: string }> {
+  let styles: Array<{ id: number, name: string }> = []
+  if (leadable(climbType)) { styles.push(...allStyles.filter(style => ['Lead', 'Follow'].includes(style.name))) }
+  if (topropeable(climbType)) { styles.push(...allStyles.filter(style => ['TR'].includes(style.name))) }
+  if (soloable(climbType)) { styles.push(...allStyles.filter(style => ['Solo'].includes(style.name))) }
+  if (boulderable(climbType)) { styles.push(...allStyles.filter(style => ['Boulder'].includes(style.name))) }
+  if (aidable(climbType)) { styles.push(...allStyles.filter(style => ['Aid'].includes(style.name))) }
+  if (styles.length === 0) { styles = [...allStyles] } // If a climb doesn't have a type, anything goes
+  styles.push({ id: 0, name: '\u00A0' })
+  return styles
+}
+
+function attemptTypesForStyle (styleName: string): Array<{ id: number, name: string }> {
   const emptyOption = { id: 0, name: '\u00A0' }
   switch (styleName) {
     case 'Lead':
@@ -68,6 +84,8 @@ function attemptTypes ({ styleName }: { styleName: string }): Array<{ id: number
       return [...allAttemptTypes.filter(type => ['Send', 'Attempt', 'Frenchfree'].includes(type.name)), emptyOption]
     case 'Boulder':
       return [...allAttemptTypes.filter(type => ['Flash', 'Send', 'Attempt'].includes(type.name)), emptyOption]
+    case 'Aid':
+      return [...allAttemptTypes.filter(type => ['Send', 'Attempt'].includes(type.name)), emptyOption]
     default:
       return [emptyOption]
   }
@@ -82,15 +100,20 @@ interface Props {
   climbId: string
   name?: string
   grade?: string
+  climbType: object
 }
 
-export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, climbId, name, grade }: Props): JSX.Element {
+export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, climbId, name, grade, climbType }: Props): JSX.Element {
+  const styles = stylesForClimbType(climbType)
   const [style, setStyle] = useState(styles[0])
-  const [attemptType, setAttemptType] = useState(attemptTypes({ styleName: styles[0].name })[0])
+
+  const [attemptTypes, setAttemptTypes] = useState(attemptTypesForStyle(style.name))
+  const [attemptType, setAttemptType] = useState(attemptTypes[0])
   const [dateClimbed, setDateClimbed] = useState<string>(new Date().toLocaleDateString('fr-CA')) // Default is today, use fr-CA to get YYYY-MM-DD format.
   const [notes, setNotes] = useState<string>('')
   const [errors, setErrors] = useState<string[]>()
   const session = useSession()
+  const climbingGlossaryLink = 'https://en.wikipedia.org/wiki/Glossary_of_climbing_terms#'
   const [addTick] = useMutation(
     MUTATION_ADD_TICK, {
       client: graphqlClient,
@@ -103,14 +126,17 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
    */
   function resetInputs (): void {
     setDateClimbed(new Date().toLocaleDateString('fr-CA'))
-    setAttemptType(attemptTypes({ styleName: styles[0].name })[0])
+    const newAttemptTypes = attemptTypesForStyle(styles[0].name)
+    setAttemptTypes(newAttemptTypes)
+    setAttemptType(newAttemptTypes[0])
     setNotes('')
     setStyle(styles[0])
   }
 
   function handleStyleChange (newStyle: { id: number, name: string }): void {
     setStyle(newStyle)
-    const newAttemptTypes = attemptTypes({ styleName: newStyle.name })
+    const newAttemptTypes = attemptTypesForStyle(newStyle.name)
+    setAttemptTypes(newAttemptTypes)
     setAttemptType(newAttemptTypes[0])
   }
 
@@ -218,7 +244,7 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
                       <InformationCircleIcon className='h-5 w-5' />
                     </a>
                   </div>
-                  <ComboBox options={attemptTypes({ styleName: style.name })} value={attemptType} onChange={setAttemptType} label='' />
+                  <ComboBox options={attemptTypesForStyle(style.name)} value={attemptType} onChange={setAttemptType} label='' />
                   <div>
                     <label htmlFor='comment' className='block text-sm font-medium text-gray-700 mt-2'>
                       Notes
