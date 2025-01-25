@@ -4,7 +4,7 @@ import { useSession, signIn } from 'next-auth/react'
 import { toast } from 'react-toastify'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { PencilIcon } from '@heroicons/react/24/solid'
+import { Pencil } from '@phosphor-icons/react/dist/ssr'
 
 import { Input, TextArea } from '../../ui/form'
 import useUserProfileCmd from '../../../js/hooks/useUserProfileCmd'
@@ -149,7 +149,7 @@ export const EditProfileImage = ({ avatar }: { avatar: string }): JSX.Element =>
   return (
     <div className='relative inline-block'>
       <BaseProfilePhotoUploader className='absolute bottom-1 right-1  bg-gray-800 bg-opacity-75 p-2 rounded-full transition-opacity duration-200 hover:bg-opacity-100 z-10'>
-        <PencilIcon className='w-4 h-4 text-white' />
+        <Pencil color='#FFFFFF' />
       </BaseProfilePhotoUploader>
       <ProfileImage avatar={avatar} />
     </div>
