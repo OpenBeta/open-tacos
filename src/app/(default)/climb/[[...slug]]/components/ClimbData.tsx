@@ -1,4 +1,3 @@
-'use client'
 import { ArrowsVertical } from '@phosphor-icons/react/dist/ssr'
 
 import TickButton from '@/components/users/TickButton'

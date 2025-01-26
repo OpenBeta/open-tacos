@@ -2,12 +2,13 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useMutation } from '@apollo/client'
 import { useSession } from 'next-auth/react'
-import { TickType } from '../../js/types'
-import { graphqlClient } from '../../js/graphql/Client'
-import { MUTATION_ADD_TICK } from '../../js/graphql/gql/fragments'
+import { TickType } from '@/js/types'
+import Tooltip from '../ui/Tooltip'
+import { graphqlClient } from '@/js/graphql/Client'
+import { MUTATION_ADD_TICK } from '@/js/graphql/gql/fragments'
 import ComboBox from '../ui/ComboBox'
 import * as Yup from 'yup'
-import { InformationCircleIcon } from '@heroicons/react/20/solid'
+import { Info } from '@phosphor-icons/react/dist/ssr'
 
 // validation schema for ticks
 const TickSchema = Yup.object().shape({
@@ -26,12 +27,11 @@ const TickSchema = Yup.object().shape({
     .required('Please include a date')
     .max(new Date(), 'Please include a date in the past'),
   grade: Yup.string()
-    .required('Something went wrong fetching the climbs grade, please try again')
 })
 
 /**
  * Options for the dropdown comboboxes
- * The logic here can get quite complicated. There is a hierarchy of "Climb type" -> "Style" -> "Attempt Type"
+ * Tick validation logic is complicated. see [tick_logic.md](https://github.com/OpenBeta/openbeta-graphql/blob/develop/documentation/tick_logic.md).
  **/
 const allStyles = [
   { id: 1, name: 'Lead' },
@@ -54,36 +54,36 @@ const allAttemptTypes = [
 
 function hasKey (climbType: object, myList: string[]): boolean { return Object.keys(climbType).some(key => myList.includes(key)) }
 
-function leadable (climbType: object): boolean { return hasKey(climbType, ['trad', 'sport', 'snow', 'ice', 'mixed', 'alpine']) }
-function topropeable (climbType: object): boolean { return hasKey(climbType, ['tr']) || (leadable(climbType)) }
-function aidable (climbType: object): boolean { return hasKey(climbType, ['aid']) }
-function soloable (climbType: object): boolean { return hasKey(climbType, ['deepwatersolo']) || leadable(climbType) || aidable(climbType) || topropeable(climbType) }
-function boulderable (climbType: object): boolean { return hasKey(climbType, ['bouldering']) }
-
 function stylesForClimbType (climbType: object): Array<{ id: number, name: string }> {
+  const leadable = hasKey(climbType, ['trad', 'sport', 'snow', 'ice', 'mixed', 'alpine'])
+  const topropeable = hasKey(climbType, ['tr']) || (leadable)
+  const aidable = hasKey(climbType, ['aid'])
+  const boulderable = hasKey(climbType, ['bouldering'])
+  const soloable = hasKey(climbType, ['deepwatersolo']) || leadable || aidable || (topropeable && !boulderable)
+
   let styles: Array<{ id: number, name: string }> = []
-  if (leadable(climbType)) { styles.push(...allStyles.filter(style => ['Lead', 'Follow'].includes(style.name))) }
-  if (topropeable(climbType)) { styles.push(...allStyles.filter(style => ['TR'].includes(style.name))) }
-  if (soloable(climbType)) { styles.push(...allStyles.filter(style => ['Solo'].includes(style.name))) }
-  if (boulderable(climbType)) { styles.push(...allStyles.filter(style => ['Boulder'].includes(style.name))) }
-  if (aidable(climbType)) { styles.push(...allStyles.filter(style => ['Aid'].includes(style.name))) }
+
+  if (leadable) { styles.push(...allStyles.filter(style => ['Lead', 'Follow'].includes(style.name))) }
+  if (boulderable) { styles.push(...allStyles.filter(style => ['Boulder'].includes(style.name))) }
+  if (topropeable) { styles.push(...allStyles.filter(style => ['TR'].includes(style.name))) }
+  if (aidable) { styles.push(...allStyles.filter(style => ['Aid'].includes(style.name))) }
+  if (soloable) { styles.push(...allStyles.filter(style => ['Solo'].includes(style.name))) }
   if (styles.length === 0) { styles = [...allStyles] } // If a climb doesn't have a type, anything goes
-  styles.push({ id: 0, name: '\u00A0' })
+  styles.push({ id: 10, name: '\u00A0' })
   return styles
 }
 
 function attemptTypesForStyle (styleName: string): Array<{ id: number, name: string }> {
-  const emptyOption = { id: 0, name: '\u00A0' }
+  const emptyOption = { id: 10, name: '\u00A0' }
   switch (styleName) {
     case 'Lead':
       return [...allAttemptTypes.filter(type => ['Onsight', 'Flash', 'Redpoint', 'Pinkpoint', 'Attempt', 'Frenchfree'].includes(type.name)), emptyOption]
     case 'Solo':
       return [...allAttemptTypes.filter(type => ['Onsight', 'Flash', 'Redpoint', 'Attempt'].includes(type.name)), emptyOption]
-    case 'TR':
-    case 'Follow':
-      return [...allAttemptTypes.filter(type => ['Send', 'Attempt', 'Frenchfree'].includes(type.name)), emptyOption]
     case 'Boulder':
       return [...allAttemptTypes.filter(type => ['Flash', 'Send', 'Attempt'].includes(type.name)), emptyOption]
+    case 'TR':
+    case 'Follow':
     case 'Aid':
       return [...allAttemptTypes.filter(type => ['Send', 'Attempt'].includes(type.name)), emptyOption]
     default:
@@ -147,8 +147,8 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
       notes,
       climbId,
       userId: session.data?.user.metadata.uuid,
-      style: style.name,
-      attemptType: attemptType.name,
+      style: style.name === '\u00A0' ? undefined : style.name,
+      attemptType: attemptType.name === '\u00A0' ? undefined : attemptType.name,
       dateClimbed: new Date(Date.parse(`${dateClimbed}T00:00:00`)), // Date.parse without timezone converts dateClimbed into local timezone.
       grade,
       source: 'OB' // source manually set as Open Beta
@@ -240,8 +240,10 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
                     <label htmlFor='attemptType' className='block text-sm font-medium text-gray-700'>
                       Attempt Type
                     </label>
-                    <a href={climbingGlossaryLink} target='_blank' rel='noopener noreferrer' className='ml-2 text-gray-500 hover:text-gray-700' title='climbing terminology'>
-                      <InformationCircleIcon className='h-5 w-5' />
+                    <a href={climbingGlossaryLink} target='_blank' rel='noreferrer' className='ml-2 mt-1'>
+                      <Tooltip content='Glossary of Climbing Terms' trigger='hover'>
+                        <Info className='h-5 w-5' />
+                      </Tooltip>
                     </a>
                   </div>
                   <ComboBox options={attemptTypesForStyle(style.name)} value={attemptType} onChange={setAttemptType} label='' />

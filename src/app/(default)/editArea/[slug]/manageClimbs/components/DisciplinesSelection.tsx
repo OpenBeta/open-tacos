@@ -71,6 +71,7 @@ export const DisciplinesSelection: React.FC<FieldArrayInputProps> = ({ formConte
             <Checkbox label='Mixed' index={index} discipline='mixed' formContext={formContext} />
             <Checkbox label='Ice' index={index} discipline='ice' formContext={formContext} />
             <Checkbox label='Snow' index={index} discipline='snow' formContext={formContext} />
+            <Checkbox label='Alpine' index={index} discipline='alpine' formContext={formContext} />
           </div>
 
           <div className='self-end'>
