@@ -84,27 +84,27 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
       if (isProfilePhoto) {
         updatePublicProfileCmd({ userUuid, avatar: url }).catch(console.error)
         setAvatarUrl(url)
-      } else {
-        const res = await addMediaObjectsCmd([{
-          userUuid,
-          mediaUrl: url,
-          format: mineTypeToEnum(type),
-          width,
-          height,
-          size,
-          ...entityTag != null && { entityTag }
-        }], sessionData?.accessToken)
+      }
+      const res = await addMediaObjectsCmd([{
+        userUuid,
+        mediaUrl: url,
+        format: mineTypeToEnum(type),
+        width,
+        height,
+        size,
+        ...entityTag != null && { entityTag }
+      }], sessionData?.accessToken)
 
-        // if upload is successful but we can't update the database,
-        // then delete the upload
-        if (res == null) {
-          ref.current.hasErrors = true
-          await deleteMediaFromStorage(url)
-        } else {
-          if (tagType === 1 && uuid != null) await invalidateAreaPageCache(uuid)
-          if (tagType === 0 && uuid != null) await legacyInvalidateClimbPageCache(uuid)
-          router.refresh() // Ask NextJS to update page props
-        }
+      // if upload is successful but we can't update the database,
+      // then delete the upload
+      if (res == null) {
+        ref.current.hasErrors = true
+        await deleteMediaFromStorage(url)
+      } else if (!isProfilePhoto) {
+        // update User Gallery
+        if (tagType === 1 && uuid != null) await invalidateAreaPageCache(uuid)
+        if (tagType === 0 && uuid != null) await legacyInvalidateClimbPageCache(uuid)
+        router.refresh() // Ask NextJS to update page props
       }
     } catch (e) {
       ref.current.hasErrors = true

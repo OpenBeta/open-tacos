@@ -1,5 +1,6 @@
-import { MouseEventHandler } from 'react'
+import { MouseEventHandler, useState } from 'react'
 import Link from 'next/link'
+import { UserCircle } from '@phosphor-icons/react/dist/ssr'
 
 import { UserPublicProfile } from '../../js/types/User'
 import EditProfileButton from './EditProfileButton'
@@ -71,13 +72,21 @@ const prettifyUrl = (url: string): string => {
 export const ProfileImage = ({ avatar }: { avatar: string }): JSX.Element => {
   // returns auth0 avatar assigned when user is created, if no profile pic is uploaded
   const avatarSrc = avatar.includes('gravatar') ? avatar : DefaultLoader({ src: avatar, width: 200 })
+  const [imageNotFound, setImageNotFound] = useState(false)
 
   return (
-    <img
-      className='object-cover w-24 h-24 rounded-full'
-      src={avatarSrc}
-      alt='Profile Photo'
-    />
+    <>
+      {imageNotFound
+        ? <UserCircle size={32} weight='fill' className='w-24 h-24 rounded-full text-gray-500' />
+        : (
+          <img
+            className='object-cover w-24 h-24 rounded-full'
+            src={avatarSrc}
+            alt='Profile Photo'
+            onError={() => setImageNotFound(true)}
+          />
+          )}
+    </>
   )
 }
 
