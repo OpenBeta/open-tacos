@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { withUserAuth } from '@/js/auth/withUserAuth'
 import { deleteMediaFromBucket } from '@/js/media/storageClient'
-import { prepareFilenameFromRequest } from '../get-signed-url/route'
+import { getBucketPathFromRequest } from '../get-signed-url/route'
 
 /**
  * Endpoint for removing a media object from remote cloud storage
  */
 const postHandler = async (req: NextRequest): Promise<any> => {
   try {
-    const filename = prepareFilenameFromRequest(req)
+    const filename = getBucketPathFromRequest(req)
     if (filename == null) {
       return NextResponse.json({ status: 400 })
     }
