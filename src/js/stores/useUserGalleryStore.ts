@@ -20,7 +20,7 @@ export interface UserGalleryStore extends UserGalleryState {
   reset: (nextConnection: MediaConnection) => void
 }
 
-const DEFAUL_STATES: UserGalleryState = {
+const DEFAULT_STATES: UserGalleryState = {
   mediaConnection: {
     edges: [],
     pageInfo: {
@@ -41,7 +41,7 @@ const OPTIONS = {
  * Data store for UserGallery.
  */
 export const useUserGalleryStore = create<UserGalleryStore>()(devtools((set, get) => ({
-  ...DEFAUL_STATES,
+  ...DEFAULT_STATES,
 
   /**
    * Updates the current avatar when editing profile.

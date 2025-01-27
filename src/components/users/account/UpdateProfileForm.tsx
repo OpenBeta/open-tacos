@@ -98,7 +98,7 @@ export const UpdateProfileForm: React.FC = () => {
     return () => window.removeEventListener('beforeunload', event)
   }, [isDirty])
 
-  const shouldDisableSumit = !isValid || isSubmitting || !isDirty || userUuid == null
+  const shouldDisableSubmit = !isValid || isSubmitting || !isDirty || userUuid == null
   return (
     <div className='w-full lg:max-w-md'>
 
@@ -135,7 +135,7 @@ export const UpdateProfileForm: React.FC = () => {
 
           <button
             type='submit'
-            disabled={shouldDisableSumit}
+            disabled={shouldDisableSubmit}
             className='mt-8 btn btn-primary btn-solid'
           >Save
           </button>

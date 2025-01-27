@@ -148,16 +148,6 @@ export default function useUserProfileCmd ({ accessToken = '' }: UseUserProfileC
       return false
     }
   }
-  // const updatePublicProfile = async (userUuid: string): Promise<any | null> => {
-  //   const res = await graphqlClient.mutate<GetUserPublicProfileByUuidReturn, { userUuid: string }>({
-  //     query: QUERY_GET_USER_PUBLIC_PROFILE_BY_UUID,
-  //     variables: {
-  //       userUuid
-  //     },
-  //     fetchPolicy: 'no-cache'
-  //   })
-  //   return res.data.getUserPublicProfileByUuid
-  // }
 
   return { getUsernameById, updateUsername, doesUsernameExist, getUserPublicPage, getUserPublicProfileByUuid, updatePublicProfileCmd }
 }
