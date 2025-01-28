@@ -144,7 +144,14 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
     // also the queue is handled sequentially, with callbacks individually
     // for each file uploads... so it interops nicely with existing function
     maxFiles: 40,
-    accept: { 'image/*': [] },
+    accept: {
+      'image/jpeg': [],
+      'image/jpg': [],
+      'image/gif': [],
+      'image/png': [],
+      'image/webp': [],
+      'image/avif': []
+    },
     useFsAccessApi: false,
     noClick: isUploading
   })
