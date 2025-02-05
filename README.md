@@ -244,6 +244,9 @@ Thanks goes to these wonderful people:
       <td align="center" valign="top" width="14.28%"><a href="https://www.nodebb.org"><img src="https://avatars.githubusercontent.com/u/923011?v=4?s=100" width="100px;" alt="Julian Lam"/><br /><sub><b>Julian Lam</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=julianlam" title="Code">💻</a> <a href="#ideas-julianlam" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mikeschen"><img src="https://avatars.githubusercontent.com/u/9831452?v=4?s=100" width="100px;" alt="Michael Schennum"/><br /><sub><b>Michael Schennum</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=mikeschen" title="Code">💻</a> <a href="#ideas-mikeschen" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/glassbead0"><img src="https://avatars.githubusercontent.com/u/6528806?v=4?s=100" width="100px;" alt="Aaron Glasenapp"/><br /><sub><b>Aaron Glasenapp</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=glassbead0" title="Code">💻</a> <a href="#ideas-glassbead0" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
   </tbody>
 </table>
 
