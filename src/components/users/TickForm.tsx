@@ -10,6 +10,11 @@ import ComboBox from '../ui/ComboBox'
 import * as Yup from 'yup'
 import { Info } from '@phosphor-icons/react/dist/ssr'
 
+const climbingGlossaryLink = 'https://en.wikipedia.org/wiki/Glossary_of_climbing_terms#'
+const CustomTooltip: React.FC<any> = () => {
+  return (<p>A Glossary of Climbing Terms<br />can be found <a href={climbingGlossaryLink} target='_blank' rel='noreferrer' className='ml-2 mt-1 text-blue-500 underline'>Here</a></p>)
+}
+
 // validation schema for ticks
 const TickSchema = Yup.object().shape({
   name: Yup.string()
@@ -113,7 +118,6 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
   const [notes, setNotes] = useState<string>('')
   const [errors, setErrors] = useState<string[]>()
   const session = useSession()
-  const climbingGlossaryLink = 'https://en.wikipedia.org/wiki/Glossary_of_climbing_terms#'
   const [addTick] = useMutation(
     MUTATION_ADD_TICK, {
       client: graphqlClient,
@@ -240,11 +244,9 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
                     <label htmlFor='attemptType' className='block text-sm font-medium text-gray-700'>
                       Attempt Type
                     </label>
-                    <a href={climbingGlossaryLink} target='_blank' rel='noreferrer' className='ml-2 mt-1'>
-                      <Tooltip content='Glossary of Climbing Terms' trigger='hover'>
-                        <Info className='h-5 w-5' />
-                      </Tooltip>
-                    </a>
+                    <Tooltip content={<CustomTooltip />}>
+                      <Info className='h-5 w-5' />
+                    </Tooltip>
                   </div>
                   <ComboBox options={attemptTypesForStyle(style.name)} value={attemptType} onChange={setAttemptType} label='' />
                   <div>

@@ -1,30 +1,22 @@
 import * as Popover from '@radix-ui/react-popover'
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 
 interface Props {
   content: string | ReactNode
   enabled?: boolean
   children: JSX.Element | JSX.Element [] | null
   className?: string
-  trigger?: 'click' | 'hover'
 }
 
 /**
  * A Tooltip that activates on mouse click or touch.
  * @param enabled false to disable tooltip but still render the trigger element
  * @param children Trigger element
- * @param trigger 'click' to activate on click, 'hover' to activate on hover. defaults to click
  */
-export default function Tooltip ({ content, enabled = true, className = '', children, trigger = 'click' }: Props): JSX.Element {
-  const [open, setOpen] = useState(false)
-  const handleMouseEnter = (): void => { if (trigger === 'hover') { setOpen(true) } }
-  const handleMouseLeave = (): void => { if (trigger === 'hover') { setOpen(false) } }
-
+export default function Tooltip ({ content, enabled = true, className = '', children }: Props): JSX.Element {
   return (
-    <Popover.Root open={trigger === 'hover' ? open : undefined} onOpenChange={setOpen}>
-      <Popover.Trigger className={className} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-        {children}
-      </Popover.Trigger>
+    <Popover.Root>
+      <Popover.Trigger className={className}>{children}</Popover.Trigger>
       {enabled &&
         <Content>
           {content}
