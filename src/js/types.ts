@@ -162,6 +162,7 @@ export interface AreaType {
   density: number
   content: {
     description: string
+    areaLocation: string
   }
   children: AreaType[]
   climbs: Climb[]
@@ -173,6 +174,7 @@ export interface AreaType {
 export interface AreaUpdatableFieldsType {
   areaName?: string
   description?: string
+  areaLocation?: string
   isDestination?: boolean
   isLeaf?: boolean
   isBoulder?: boolean

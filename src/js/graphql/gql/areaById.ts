@@ -43,12 +43,12 @@ export const QUERY_AREA_BY_ID = gql`
         leaf
         isBoulder
         lat
-        lng 
+        lng
         leftRightIndex
         polygon
         bbox
       }
-      pathTokens  
+      pathTokens
       ancestors
       organizations {
         orgId
@@ -113,6 +113,7 @@ export const QUERY_AREA_BY_ID = gql`
       }
       content {
         description
+        areaLocation
       }
       authorMetadata {
         ... AuthorMetadataFields
@@ -142,10 +143,10 @@ query AreaByID($uuid: ID) {
       leaf
       isBoulder
       lat
-      lng 
+      lng
       leftRightIndex
     }
-    pathTokens  
+    pathTokens
     ancestors
     totalClimbs
     climbs {
@@ -189,7 +190,8 @@ query AreaByID($uuid: ID) {
       }
     }
     content {
-      description 
-    } 
+      description
+      areaLocation
+    }
   }
 }`

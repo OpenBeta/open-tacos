@@ -7,6 +7,8 @@ import { MiniCarousel } from '../CardGallery'
 import { SharePageURLButton } from '@/app/(default)/components/SharePageURLButton'
 import { usePathname } from 'next/navigation'
 
+// TODO: mike add areaDescription
+
 export const CragDrawerContent: React.FC<CragFeatureProperties> = ({ id, areaName, climbs, content: { description }, media }) => {
   const friendlyUrl = getAreaPageFriendlyUrl(id, areaName)
   const editUrl = `/editArea/${id}/general`

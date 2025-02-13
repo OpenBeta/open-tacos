@@ -48,8 +48,8 @@ export interface DeleteOneAreaInputType {
 export type DeleteOneAreaReturnType = Pick<AreaType, 'uuid' | 'areaName'>
 
 export const MUTATION_UPDATE_AREA = gql`
-mutation ($uuid: String!, $areaName: String, $isDestination: Boolean, $isLeaf: Boolean, $isBoulder: Boolean, $shortCode: String, $lat: Float, $lng: Float, $description: String) {
-    updateArea(input: { 
+mutation ($uuid: String!, $areaName: String, $isDestination: Boolean, $isLeaf: Boolean, $isBoulder: Boolean, $shortCode: String, $lat: Float, $lng: Float, $description: String, $areaLocation: String) {
+    updateArea(input: {
       uuid: $uuid,
       areaName: $areaName,
       isDestination: $isDestination,
@@ -58,7 +58,8 @@ mutation ($uuid: String!, $areaName: String, $isDestination: Boolean, $isLeaf: B
       shortCode: $shortCode,
       lat: $lat,
       lng: $lng,
-      description: $description
+      description: $description,
+      areaLocation: $areaLocation
     }) {
       areaName
       uuid
@@ -116,6 +117,7 @@ export const FRAGMENT_CHANGE_HISTORY = gql`
           uuid
           areaContent: content {
             description
+            areaLocation
           }
           metadata {
             areaId
@@ -206,7 +208,7 @@ export interface UpdateAreaProps extends AreaUpdatableFieldsType {
   uuid: string
 }
 
-export type UpdateOneAreaInputType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'lat' | 'lng' | 'isLeaf' | 'isBoulder'>> & { uuid: string }>
+export type UpdateOneAreaInputType = Partial<Required<Pick<AreaUpdatableFieldsType, 'areaName' | 'description' | 'areaLocation' | 'lat' | 'lng' | 'isLeaf' | 'isBoulder'>> & { uuid: string }>
 
 export type UpdateAreaApiReturnType = Pick<AreaType, 'areaName' | 'uuid'>
 

@@ -40,8 +40,10 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
 
   const photoList = area?.media ?? []
   const { uuid, pathTokens, ancestors, areaName, content, authorMetadata, metadata, organizations } = area
-  const { description } = content
-  const { lat, lng } = metadata
+  console.log('🚀 ~ Page ~ area:!!!', area)
+  const { description, areaLocation } = content
+  console.log('🚀 ~ Page ~ content:', content)
+  const { lat, lng, leaf } = metadata
 
   const correctSlug = getFriendlySlug(areaName)
 
@@ -71,9 +73,22 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
         />
       }
       summary={{
-        left: <AreaData areaName={areaName} lat={lat} lng={lng} authorMetadata={authorMetadata} />,
+        left: (
+          <AreaData
+            areaName={areaName}
+            lat={lat}
+            lng={lng}
+            authorMetadata={authorMetadata}
+          />
+        ),
         right: (
-          <DescriptionSection uuid={uuid} description={description} organizations={organizations} />
+          <DescriptionSection
+            uuid={uuid}
+            description={description}
+            organizations={organizations}
+            areaLocation={areaLocation}
+            leaf={leaf}
+          />
         )
       }}
     >
@@ -99,8 +114,19 @@ const EditDescriptionCTA: React.FC<{ uuid: string }> = ({ uuid }) => (
   </div>
 )
 
-const DescriptionSection: React.FC<{ uuid: string, description: string, organizations: OrganizationType[] }> = ({
-  uuid, description, organizations
+const EditAreaLocationCTA: React.FC<{ uuid: string }> = ({ uuid }) => (
+  <div role='alert' className='alert'>
+    <Lightbulb size={24} />
+    <div className='text-sm'>No information available.  Be the first to&nbsp;
+      <Link href={`/editArea/${uuid}/general#areaLocation`} target='_new' className='link-dotted inline-flex items-center gap-1'>
+        add a location<ArrowRight size={16} />
+      </Link>
+    </div>
+  </div>
+)
+
+const DescriptionSection: React.FC<{ uuid: string, description: string, organizations: OrganizationType[], areaLocation: string, leaf: Boolean }> = ({
+  uuid, description, organizations, areaLocation, leaf
 }) => {
   return (
     <>
@@ -123,7 +149,39 @@ const DescriptionSection: React.FC<{ uuid: string, description: string, organiza
 
       <hr className='border-1 mt-8 mb-4' />
 
+      {/* Only show location info if it is a crag or boulder */}
+      {leaf === true &&
+        <AreaLocationSection uuid={uuid} areaLocation={areaLocation} />}
+
+      <hr className='border-1 mt-8 mb-4' />
+
       <LCOBanner orgs={organizations} />
+    </>
+  )
+}
+
+const AreaLocationSection: React.FC<{ uuid: string, areaLocation?: string }> = ({
+  uuid, areaLocation = ''
+}) => {
+  return (
+    <>
+      <div className='flex items-center gap-2'>
+        <h3 className='font-bold'>Location</h3>
+        <span className='text-xs inline-block align-baseline'>
+          [
+          <Link
+            href={`/editArea/${uuid}/general#areaLocation`}
+            target='_new'
+            className='hover:underline'
+          >
+            Edit
+          </Link>
+          ]
+        </span>
+      </div>
+
+      {(areaLocation == null || areaLocation.trim() === '') && <EditAreaLocationCTA uuid={uuid} />}
+      <Markdown className='wiki-content'>{areaLocation}</Markdown>
     </>
   )
 }

@@ -30,6 +30,8 @@ import { DialogContent, DialogTrigger, MobileDialog } from '../ui/MobileDialog'
 import RecentChangeHistory from '../edit/RecentChangeHistory'
 import { isEmpty } from 'underscore'
 
+// TODO: mike add approach and update BEfor AreEditableFieldsInput
+
 export type AreaSummaryType = Pick<AreaType, 'uuid' | 'areaName' | 'climbs' | 'children' | 'totalClimbs'> & { metadata: Pick<AreaType['metadata'], 'leaf' | 'isBoulder' | 'isDestination'> }
 
 export interface EditableClimbType {

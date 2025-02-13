@@ -7,6 +7,7 @@ import { ArrowCircleRight } from '@phosphor-icons/react/dist/ssr'
 import { AreaPageDataProps, getArea } from '@/js/graphql/getArea'
 import { AreaNameForm } from './components/AreaNameForm'
 import { AreaDescriptionForm } from './components/AreaDescriptionForm'
+import { AreaLocationForm } from './components/AreaLocationForm'
 import { AreaLatLngForm } from './components/AreaLatLngForm'
 import { AddAreaForm } from './components/AddAreaForm'
 import { AreaListForm } from './components/AreaList'
@@ -45,7 +46,7 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
   const { area } = pageDataForEdit
   const {
     areaName, uuid, ancestors, pathTokens, children,
-    content: { description },
+    content: { description, areaLocation },
     metadata: { lat, lng, leaf }
   } = area
 
@@ -60,6 +61,11 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
       <SectionContainer id='description'>
         <AreaDescriptionForm initialValue={description} uuid={uuid} />
       </SectionContainer>
+
+      {leaf &&
+        <SectionContainer id='areaLocation'>
+          <AreaLocationForm initialValue={areaLocation} uuid={uuid} />
+        </SectionContainer>}
 
       <SectionContainer id='location'>
         <AreaLatLngForm initLat={lat} initLng={lng} uuid={uuid} isLeaf={leaf} areaName={areaName} />

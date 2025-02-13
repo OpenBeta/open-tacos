@@ -11,6 +11,8 @@ import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 
 export const LATLNG_PATTERN = /^\s*(?<lat>[-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?))\s*,\s*(?<lng>[-+]?(?:180(?:\.0+)?|(?:1[0-7]\d|[1-9]?\d)(?:\.\d+)?))\s*$/
 
+// TODO: mike add areaDescription
+
 export const AREA_NAME_FORM_VALIDATION_RULES: RulesType = {
   required: 'A name is required.',
   minLength: {
@@ -34,6 +36,13 @@ export const AREA_LATLNG_FORM_VALIDATION_RULES: RulesType = {
 }
 
 export const AREA_DESCRIPTION_FORM_VALIDATION_RULES: RulesType = {
+  maxLength: {
+    value: 10000,
+    message: 'Maximum 10,000 characters.'
+  }
+}
+
+export const AREA_LOCATION_FORM_VALIDATION_RULES: RulesType = {
   maxLength: {
     value: 10000,
     message: 'Maximum 10,000 characters.'
