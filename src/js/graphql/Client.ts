@@ -6,8 +6,7 @@ const httpLinkPro = new HttpLink({
   uri,
   // Prevent Next.js fetch caching
   fetchOptions: {
-    cache: 'no-store',
-    next: { revalidate: 0 }
+    cache: 'no-store'
   }
 })
 const errorLink = onError(({ graphQLErrors, networkError, ...rest }) => {
