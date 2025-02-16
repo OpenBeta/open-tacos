@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import * as Auth0 from 'auth0'
 import { auth0Client, isNullOrEmpty } from '@/js/auth/mobile'
 import { withMobileAuth } from '@/js/auth/withMobileAuth'
-import { errorHandler } from '../login/route'
+import { errorHandler } from '../login/errorHandler'
 
 /**
  * Mobile refresh token handler

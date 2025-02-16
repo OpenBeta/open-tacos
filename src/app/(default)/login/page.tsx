@@ -1,9 +1,13 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useSearchParams, redirect } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 
 export default function Page (): any {
+  return <Suspense><Login /></Suspense>
+}
+
+function Login (): any {
   const { status } = useSession()
   const searchParams = useSearchParams()
   useEffect(() => {
@@ -15,5 +19,9 @@ export default function Page (): any {
       void signIn('auth0')
     }
   }, [status])
-  return <div className='h-screen w-screen'><div className='m-6 text-sm'>Please wait...</div></div>
+  return (
+    <div className='h-screen w-screen'>
+      <div className='m-6 text-sm'>Please wait...</div>
+    </div>
+  )
 }

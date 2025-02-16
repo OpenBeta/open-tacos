@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { withUserAuth } from '@/js/auth/withUserAuth'
 import { deleteMediaFromBucket } from '@/js/media/storageClient'
-import { getBucketPathFromRequest } from '../get-signed-url/route'
+import { getBucketPathFromRequest } from '../get-signed-url/utils'
 
 /**
  * Endpoint for removing a media object from remote cloud storage

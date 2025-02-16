@@ -50,8 +50,8 @@
     "maplibre-gl": "^4.3.2",
     "nanoid": "^4.0.0",
     "nanoid-dictionary": "^4.3.0",
-    "next": "^13.5.6",
-    "next-auth": "^4.22.1",
+    "next": "14.2.24",
+    "next-auth": "^4.24.11",
     "nprogress": "^0.2.0",
     "paper": "^0.12.17",
     "paperjs-offset": "^1.0.8",
@@ -97,9 +97,13 @@
     "develop": "next dev",
     "start": "next start",
     "test": "jest",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "preview": "opennextjs-cloudflare && wrangler dev",
+    "deploy": "opennextjs-cloudflare && wrangler deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^0.5.1",
     "@svgr/webpack": "^6.5.1",
     "@tailwindcss/typography": "^0.5.4",
     "@testing-library/dom": "^9.3.3",
@@ -126,7 +130,8 @@
     "resize-observer-polyfill": "^1.5.1",
     "tailwindcss": "^3.1.8",
     "ts-standard": "^12.0.2",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "wrangler": "^3.109.1"
   },
   "repository": {
     "type": "git",
@@ -149,6 +154,6 @@
     }
   },
   "engines": {
-    "node": "18"
+    "node": "20"
   }
 }
