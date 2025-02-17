@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-// import { geolocation } from '@vercel/edge'
+import { geolocation } from '@vercel/edge'
 
-// export const runtime = 'edge'
+export const runtime = 'edge'
 
 /**
  * Return latitude and longitude of the visitor. Only works when deploying on Vercel.
  * Endpoint: `/api/geo`
  */
 export async function GET (request: NextRequest): Promise<any> {
-  // const geo = geolocation(request)
-  const geo = { latitude: null, longitude: null }
+  const geo = geolocation(request)
   const longitude = geo?.longitude
   const latitude = geo?.latitude
   if (longitude != null && latitude != null) {

@@ -1,7 +1,6 @@
 import axios from 'axios'
 import type { NextAuthOptions } from 'next-auth'
 import Auth0Provider from 'next-auth/providers/auth0'
-import { encode, decode } from './webcrypto'
 
 import { AUTH_CONFIG_SERVER } from '../../../../Config'
 import { IUserMetadata, UserRole } from '../../../../js/types/User'
@@ -19,10 +18,6 @@ if (process.env.NODE_ENV === 'production' && clientSecret.length === 0) {
 }
 
 export const authOptions: NextAuthOptions = {
-  jwt: {
-    encode,
-    decode
-  },
   providers: [
     Auth0Provider({
       clientId,

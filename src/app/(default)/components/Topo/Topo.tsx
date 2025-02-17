@@ -1,4 +1,3 @@
-'use client'
 import { useCallback, useEffect } from 'react'
 import { RouteInfo, clearProject, drawTopo, initPaper, zoomViaWheel } from './paperFunctions'
 
