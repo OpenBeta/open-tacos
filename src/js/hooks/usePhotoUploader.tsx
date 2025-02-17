@@ -10,7 +10,7 @@ import useMediaCmd from './useMediaCmd'
 import { MediaFormat, TagTargetType } from '../types'
 import { NewEmbeddedEntityTag } from '../graphql/gql/media'
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
-import { invalidateAreaPageCache } from '../utils'
+import { invalidateAreaPageCache, invalidateClimbPageCache } from '../utils'
 import { legacyInvalidateClimbPageCache } from '../legacyInvalidateClimbPageCache'
 import useUserProfileCmd from './useUserProfileCmd'
 
@@ -104,7 +104,10 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
       } else if (!isProfilePhoto) {
         // update User Gallery
         if (tagType === 1 && uuid != null) await invalidateAreaPageCache(uuid)
-        if (tagType === 0 && uuid != null) await legacyInvalidateClimbPageCache(uuid)
+        if (tagType === 0 && uuid != null) {
+          await invalidateClimbPageCache(uuid)
+          await legacyInvalidateClimbPageCache(uuid)
+        }
         router.refresh() // Ask NextJS to update page props
       }
     } catch (e) {

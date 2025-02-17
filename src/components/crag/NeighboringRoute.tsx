@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { CaretCircleLeft, CaretCircleRight } from '@phosphor-icons/react/dist/ssr'
+import { CaretCircleLeft } from '@phosphor-icons/react/dist/ssr/CaretCircleLeft'
+import { CaretCircleRight } from '@phosphor-icons/react/dist/ssr/CaretCircleRight'
 import clx from 'classnames'
 
 import Grade from '@/js/grades/Grade'
