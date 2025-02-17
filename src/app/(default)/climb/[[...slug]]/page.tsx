@@ -6,7 +6,7 @@ import PhotoMontage, { UploadPhotoCTA } from '@/components/media/PhotoMontage'
 import { StickyHeaderContainer } from '../../components/ui/StickyHeaderContainer'
 import { parseUuidAsFirstParam, climbLeftRightIndexComparator, getFriendlySlug, getClimbPageFriendlyUrl } from '@/js/utils'
 import { PageWithCatchAllUuidProps } from '@/js/types/pages'
-import { getClimbById } from '@/js/graphql/api'
+import { getClimbByIdRSC } from '@/js/graphql/getClimbRSC'
 import { ClimbData } from './components/ClimbData'
 import { ContentBlock } from './components/ContentBlock'
 import { Summary } from '../../components/ui/Summary'
@@ -19,15 +19,14 @@ import { PageAlert } from './components/PageAlert'
 /**
  * Page cache settings
  */
-export const revalidate = 300 // 5 mins
-export const fetchCache = 'force-no-store' // opt out of Nextjs version of 'fetch'
+export const revalidate = 2592000 // 30 days
 
 /**
  * Climb page
  */
 export default async function Page ({ params }: PageWithCatchAllUuidProps): Promise<any> {
   const climbId = parseUuidAsFirstParam({ params })
-  const climb = await getClimbById(climbId)
+  const climb = await getClimbByIdRSC(climbId)
   if (climb == null) {
     notFound()
   }

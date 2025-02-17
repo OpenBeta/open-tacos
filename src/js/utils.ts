@@ -299,6 +299,14 @@ export const invalidateAreaPageCache = async (uuid: string): Promise<void> => {
   }
 }
 
+export const invalidateClimbPageCache = async (uuid: string): Promise<void> => {
+  try {
+    await fetch(`/api/invalidateClimbPageCache?uuid=${uuid}`)
+  } catch (e) {
+    console.log('Error invalidating climb page cache', e)
+  }
+}
+
 export const legacyInvalidateClimbPageCache = async (uuid: string): Promise<void> => {
   try {
     await fetch(`/api/revalidate?c=${uuid}`)
