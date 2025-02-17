@@ -10,6 +10,7 @@ import {
 } from '../graphql/gql/contribs'
 import { QUERY_AREA_FOR_EDIT } from '../../js/graphql/gql/areaById'
 import { AreaType } from '../../js/types'
+import { invalidateAreaPageCache } from '../utils'
 
 type UpdateOneAreaCmdType = (input: UpdateOneAreaInputType) => Promise<void>
 type AddOneAreCmdType = ({ name, parentUuid }: AddAreaProps) => Promise<void>
@@ -67,7 +68,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
       client: graphqlClient,
       onCompleted: (data) => {
         toast.info('Area updated successfully ✔️')
-        void updateAreaPageCache(data.updateArea.uuid)
+        void invalidateAreaPageCache(data.updateArea.uuid)
         if (onUpdateCompleted != null) onUpdateCompleted(data)
       },
       onError: (error) => {
@@ -95,7 +96,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     MUTATION_UPDATE_AREAS_SORTING_ORDER, {
       client: graphqlClient,
       onCompleted: (data) => {
-        void updateAreaPageCache(areaId)
+        void invalidateAreaPageCache(areaId)
         toast.info('Areas sorting order updated successfully.')
       },
       onError: (error) => {
@@ -105,7 +106,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   )
 
   const updateAreasSortingOrderCmd: UpdateAreasSortingOrderCmdType = async (input: AreaSortingInput[]) => {
-    if (input?.length < 1 ?? 0) {
+    if (input.length < 1) {
       toast.info('Nothing to update')
       return
     }
@@ -128,8 +129,8 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
         }
         toast.info('Area added 🔥')
 
-        void updateAreaPageCache(areaId) // parent page
-        void updateAreaPageCache(data.addArea.uuid) // new page
+        void invalidateAreaPageCache(areaId) // parent page
+        void invalidateAreaPageCache(data.addArea.uuid) // new page
       },
       onError: (error) => {
         toast.error(`Unexpected error: ${error.message}`)
@@ -160,7 +161,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
     MUTATION_REMOVE_AREA, {
       client: graphqlClient,
       onCompleted: (data) => {
-        void updateAreaPageCache(areaId) // update parent page
+        void invalidateAreaPageCache(areaId) // update parent page
 
         if (onDeleteCompleted != null) {
           onDeleteCompleted(data)
@@ -194,8 +195,4 @@ export const refreshPage = async (url: string): Promise<void> => {
   try {
     await fetch(url)
   } catch {}
-}
-
-export const updateAreaPageCache = async (uuid: string): Promise<void> => {
-  await fetch(`/api/updateAreaPage?uuid=${uuid}`)
 }

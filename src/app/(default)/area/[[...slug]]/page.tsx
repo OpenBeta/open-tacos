@@ -5,7 +5,7 @@ import { MapPinLine, Lightbulb, ArrowRight } from '@phosphor-icons/react/dist/ss
 import Markdown from 'react-markdown'
 
 import PhotoMontage, { UploadPhotoCTA } from '@/components/media/PhotoMontage'
-import { getArea } from '@/js/graphql/getArea'
+import { getAreaRSC } from '@/js/graphql/getAreaRSC'
 import { StickyHeaderContainer } from '@/app/(default)/components/ui/StickyHeaderContainer'
 import { AreaCrumbs } from '@/components/breadcrumbs/AreaCrumbs'
 import { ArticleLastUpdate } from '@/components/edit/ArticleLastUpdate'
@@ -22,14 +22,14 @@ import { PageWithCatchAllUuidProps, PageSlugType } from '@/js/types/pages'
 /**
  * Page cache settings
  */
-export const revalidate = 3600 // 1 hr
+export const revalidate = 2592000 // 30 days
 
 /**
  * Area/crag page
  */
 export default async function Page ({ params }: PageWithCatchAllUuidProps): Promise<any> {
   const areaUuid = parseUuidAsFirstParam({ params })
-  const pageData = await getArea(areaUuid)
+  const pageData = await getAreaRSC(areaUuid)
   if (pageData == null || pageData.area == null) {
     notFound()
   }
@@ -182,7 +182,7 @@ export function generateStaticParams (): PageSlugType[] {
 // Page metadata
 export async function generateMetadata ({ params }: PageWithCatchAllUuidProps): Promise<Metadata> {
   const areaUuid = parseUuidAsFirstParam({ params })
-  const area = await getArea(areaUuid, 'cache-first')
+  const area = await getAreaRSC(areaUuid, 'cache-first')
 
   if (area == null || area.area == null) {
     return {}

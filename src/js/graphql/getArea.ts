@@ -20,6 +20,9 @@ export const getArea = async (uuid: string, fetchPolicy: FetchPolicy = 'no-cache
       variables: {
         uuid
       },
+      context: {
+        dynamicTag: `areaId=${uuid}`
+      },
       fetchPolicy
     })
     return rs.data

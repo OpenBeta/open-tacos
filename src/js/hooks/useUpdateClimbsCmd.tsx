@@ -3,7 +3,8 @@ import { GraphQLError } from 'graphql'
 import { toast } from 'react-toastify'
 import { graphqlClient } from '../graphql/Client'
 import { MUTATION_UPDATE_CLIMBS, MUTATION_DELETE_CLIMBS, UpdateClimbsInput, DeleteManyClimbsInputType } from '../graphql/gql/contribs'
-import { refreshPage, updateAreaPageCache } from './useUpdateAreasCmd'
+import { refreshPage } from './useUpdateAreasCmd'
+import { invalidateAreaPageCache } from '../utils'
 
 type UpdateClimbCmdType = (input: UpdateClimbsInput) => Promise<void>
 type DeleteClimbsCmdType = (idList: string[]) => Promise<number>
@@ -45,7 +46,7 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
         })
 
         // Rebuild the parent area page
-        void updateAreaPageCache(parentId)
+        void invalidateAreaPageCache(parentId)
 
         toast('Climbs updated ✨')
 
@@ -87,7 +88,7 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
     MUTATION_DELETE_CLIMBS, {
       client: graphqlClient,
       onCompleted: (data) => {
-        void updateAreaPageCache(parentId)
+        void invalidateAreaPageCache(parentId)
         toast('Climbs deleted ✔️')
         if (onDeleteCompleted != null) {
           onDeleteCompleted(data)
