@@ -7,7 +7,8 @@ import { MediaWithTags, EntityTag, MediaConnection, TagTargetType } from '../typ
 import { AddNewMediaObjectsArgs, AddMediaObjectsReturn, MUTATION_ADD_MEDIA_OBJECTS, NewMediaObjectInput, DeleteOneMediaObjectArgs, DeleteOneMediaObjectReturn, MUTATION_DELETE_ONE_MEDIA_OBJECT, NewEmbeddedEntityTag } from '../graphql/gql/media'
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
 import { deleteMediaFromStorage } from '../userApi/media'
-import { invalidateAreaPageCache, legacyInvalidateClimbPageCache } from '../utils'
+import { invalidateAreaPageCache } from '../utils'
+import { legacyInvalidateClimbPageCache } from '../legacyInvalidateClimbPageCache'
 
 export interface UseMediaCmdReturn {
   addEntityTagCmd: AddEntityTagCmd

@@ -307,14 +307,6 @@ export const invalidateClimbPageCache = async (uuid: string): Promise<void> => {
   }
 }
 
-export const legacyInvalidateClimbPageCache = async (uuid: string): Promise<void> => {
-  try {
-    await fetch(`/api/revalidate?c=${uuid}`)
-  } catch (e) {
-    console.log('Invalidating climb page cache', e)
-  }
-}
-
 /**
  * Comparator for sorting climbs by leftRightIndex.
  */

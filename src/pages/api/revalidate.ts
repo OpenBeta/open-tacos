@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next'
-import { validate as isValid } from 'uuid'
 import withAuth from './withAuth'
 import { checkUsername } from '../../js/utils'
 
@@ -10,7 +9,6 @@ import { checkUsername } from '../../js/utils'
 const handler: NextApiHandler = async (req: NextApiRequest, res) => {
   try {
     await profileHandler(req, res)
-    await areaAndClimbHandler(req, res)
     await otherPagesHandler(req, res)
     res.end()
   } catch (e) {
@@ -26,28 +24,6 @@ const profileHandler = async (req: NextApiRequest, res: NextApiResponse): Promis
   const username = req.query?.u as string
   if (checkUsername(username)) {
     await res.revalidate(`/u/${encodeURIComponent(username)}`)
-    res.json({ revalidated: true })
-  }
-}
-
-/**
- * Send a fetch('/api/revalidate?a=<areaID>') to regenerate the area page
- */
-const areaAndClimbHandler = async (req: NextApiRequest, res: NextApiResponse): Promise<any> => {
-  if (!res.writable) return
-  const areaUuid = req.query?.a as string
-  const sectorUuid = req.query?.s as string
-  const climbUuid = req.query?.c as string
-  if (isValid(areaUuid)) {
-    await res.revalidate(`/areas/${areaUuid}`)
-    res.json({ revalidated: true })
-  }
-  if (isValid(sectorUuid)) {
-    await res.revalidate(`/crag/${sectorUuid}`)
-    res.json({ revalidated: true })
-  }
-  if (isValid(climbUuid)) {
-    await res.revalidate(`/climbs/${climbUuid}`)
     res.json({ revalidated: true })
   }
 }

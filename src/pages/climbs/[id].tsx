@@ -506,7 +506,7 @@ export const getStaticProps: GetStaticProps<ClimbPageProps, { id: string }> = as
       rightClimb,
       parentArea
     },
-    revalidate: 30
+    revalidate: 2592000
   }
 }
 

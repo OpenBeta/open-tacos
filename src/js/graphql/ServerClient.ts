@@ -1,5 +1,5 @@
 import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client'
-import { registerApolloClient } from '@apollo/experimental-nextjs-app-support/rsc'
+import { registerApolloClient } from '@apollo/experimental-nextjs-app-support'
 import { dynamicTagsLink } from './dynamicTagsLink'
 
 const uri: string = process.env.NEXT_PUBLIC_API_SERVER ?? ''

@@ -1,6 +1,5 @@
 import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
-import { dynamicTagsLink } from './dynamicTagsLink'
 
 const uri: string = process.env.NEXT_PUBLIC_API_SERVER ?? ''
 const httpLinkPro = new HttpLink({ uri })
@@ -31,7 +30,7 @@ const errorLink = onError(({ graphQLErrors, networkError, ...rest }) => {
 })
 
 export const graphqlClient = new ApolloClient({
-  link: from([dynamicTagsLink, errorLink, httpLinkPro]),
+  link: from([errorLink, httpLinkPro]),
   cache: new InMemoryCache({
     addTypename: true,
     typePolicies: {
