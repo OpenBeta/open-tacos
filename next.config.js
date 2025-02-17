@@ -9,8 +9,8 @@ module.exports = {
   webpack (config, { isServer }) { // required by @svgr/webpack lib
     const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.('.svg'))
 
-    // config.externals = [...config.externals, isServer ? { canvas: 'commonjs canvas', jsdom: 'jsdom', paper: 'paper' } : {}]
-    config.externals = [...config.externals, { canvas: 'commonjs canvas' }]
+    config.externals = [...config.externals, isServer ? { canvas: 'canvas', jsdom: 'jsdom', paper: 'paper' } : {}]
+
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: fileLoaderRule.issuer,
