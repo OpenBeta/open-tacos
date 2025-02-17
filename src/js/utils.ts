@@ -293,7 +293,7 @@ export const getClimbPageFriendlyUrl = (uuid: string, climbName: string): string
  */
 export const invalidateAreaPageCache = async (uuid: string): Promise<void> => {
   try {
-    await fetch(`/api/updateAreaPage?uuid=${uuid}`)
+    await fetch(`/api/invalidateAreaPageCache?uuid=${uuid}`)
   } catch (e) {
     console.log('Error invalidating area page cache', e)
   }

@@ -102,12 +102,25 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
         ref.current.hasErrors = true
         await deleteMediaFromStorage(url)
       } else if (!isProfilePhoto) {
-        // update User Gallery
-        if (tagType === 1 && uuid != null) await invalidateAreaPageCache(uuid)
+        // Update page gallery
         if (tagType === 0 && uuid != null) {
           await invalidateClimbPageCache(uuid)
           await legacyInvalidateClimbPageCache(uuid)
         }
+
+        // Invalidate all ancestors so that respective page gallery is updated
+        // Response object should have 1 element with 1 tag
+        if (res.length === 1) {
+          const media = res[0]
+          await Promise.all(media.entityTags.map(async tag => {
+            const areaIDs = tag.ancestors.split(',')
+            areaIDs.map(async id => {
+              void invalidateAreaPageCache(id)
+            })
+            return await Promise.resolve()
+          }))
+        }
+
         router.refresh() // Ask NextJS to update page props
       }
     } catch (e) {
