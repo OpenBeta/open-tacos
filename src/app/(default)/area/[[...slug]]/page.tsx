@@ -40,9 +40,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
 
   const photoList = area?.media ?? []
   const { uuid, pathTokens, ancestors, areaName, content, authorMetadata, metadata, organizations } = area
-  console.log('🚀 ~ Page ~ area:!!!', area)
   const { description, areaLocation } = content
-  console.log('🚀 ~ Page ~ content:', content)
   const { lat, lng, leaf } = metadata
 
   const correctSlug = getFriendlySlug(areaName)

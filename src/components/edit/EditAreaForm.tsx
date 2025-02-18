@@ -11,8 +11,6 @@ import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 
 export const LATLNG_PATTERN = /^\s*(?<lat>[-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?))\s*,\s*(?<lng>[-+]?(?:180(?:\.0+)?|(?:1[0-7]\d|[1-9]?\d)(?:\.\d+)?))\s*$/
 
-// TODO: mike add areaDescription
-
 export const AREA_NAME_FORM_VALIDATION_RULES: RulesType = {
   required: 'A name is required.',
   minLength: {
