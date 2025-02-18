@@ -10,8 +10,6 @@ import useMediaCmd, { invalidateAncestorPagesWithEntity } from './useMediaCmd'
 import { MediaFormat, TagTargetType } from '../types'
 import { NewEmbeddedEntityTag } from '../graphql/gql/media'
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
-import { invalidateAreaPageCache, invalidateClimbPageCache } from '../utils'
-import { legacyInvalidateClimbPageCache } from '../legacyInvalidateClimbPageCache'
 import useUserProfileCmd from './useUserProfileCmd'
 
 interface UsePhotoUploaderProps {
