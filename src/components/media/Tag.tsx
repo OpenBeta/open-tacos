@@ -42,7 +42,7 @@ export default function Tag ({ mediaId, tag, onDelete, size = 'md', showDelete =
           <button
             onClick={(e) => {
               e.preventDefault()
-              void onDelete({ mediaId, tagId: tag.id, entityId: tag.targetId, entityType: tag.type })
+              void onDelete({ mediaId, tagId: tag.id, entityId: tag.targetId, entityType: tag.type, ancestorList: tag.ancestors.split(',') })
             }}
             title='Delete tag'
           >

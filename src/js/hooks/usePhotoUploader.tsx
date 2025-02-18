@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import { useSession } from 'next-auth/react'
 
 import { uploadPhoto, deleteMediaFromStorage } from '../userApi/media'
-import useMediaCmd from './useMediaCmd'
+import useMediaCmd, { invalidateAncestorPagesWithEntity } from './useMediaCmd'
 import { MediaFormat, TagTargetType } from '../types'
 import { NewEmbeddedEntityTag } from '../graphql/gql/media'
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
@@ -93,35 +93,21 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
         width,
         height,
         size,
-        ...entityTag != null && { entityTag }
+        ...entityTag != null && { entityTag } // entityTag != null means uploading from a climb or area page
       }], sessionData?.accessToken)
 
       // if upload is successful but we can't update the database,
       // then delete the upload
-      if (res == null) {
+      if (res == null || res.length !== 1) {
         ref.current.hasErrors = true
         await deleteMediaFromStorage(url)
-      } else if (!isProfilePhoto) {
-        // Update page gallery
-        if (tagType === 0 && uuid != null) {
-          await invalidateClimbPageCache(uuid)
-          await legacyInvalidateClimbPageCache(uuid)
-        }
-
-        // Invalidate all ancestors so that respective page gallery is updated
-        // Response object should have 1 element with 1 tag
-        if (res.length === 1) {
-          const media = res[0]
-          await Promise.all(media.entityTags.map(async tag => {
-            const areaIDs = tag.ancestors.split(',')
-            areaIDs.map(async id => {
-              void invalidateAreaPageCache(id)
-            })
-            return await Promise.resolve()
-          }))
-        }
-
-        router.refresh() // Ask NextJS to update page props
+      } else if (!isProfilePhoto && res[0].entityTags?.length === 1) {
+        // Newly uploaded photo from climb or area page should only has 1 entity tag.
+        // We need to invalidate the current and all ancestor pages.
+        const media = res[0]
+        const { targetId, type, ancestors } = media.entityTags[0]
+        await invalidateAncestorPagesWithEntity({ entityId: targetId, entityType: type, ancestorList: ancestors.split(',') })
+        router.refresh() // Ask NextJS to update current page props
       }
     } catch (e) {
       ref.current.hasErrors = true

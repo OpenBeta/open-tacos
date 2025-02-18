@@ -7,7 +7,7 @@ import { MediaWithTags, EntityTag, MediaConnection, TagTargetType } from '../typ
 import { AddNewMediaObjectsArgs, AddMediaObjectsReturn, MUTATION_ADD_MEDIA_OBJECTS, NewMediaObjectInput, DeleteOneMediaObjectArgs, DeleteOneMediaObjectReturn, MUTATION_DELETE_ONE_MEDIA_OBJECT, NewEmbeddedEntityTag } from '../graphql/gql/media'
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
 import { deleteMediaFromStorage } from '../userApi/media'
-import { invalidateAreaPageCache } from '../utils'
+import { invalidateAreaPageCache, invalidateClimbPageCache } from '../utils'
 import { legacyInvalidateClimbPageCache } from '../legacyInvalidateClimbPageCache'
 
 export interface UseMediaCmdReturn {
@@ -27,6 +27,7 @@ interface FetchMoreMediaForwardProps {
 export interface RemoveEntityTagProps extends RemoveEntityTagMutationProps {
   entityId: string
   entityType: TagTargetType
+  ancestorList: string[]
 }
 
 type FetchMoreMediaForwardCmd = (args: FetchMoreMediaForwardProps) => Promise<MediaConnection | null>
@@ -53,7 +54,8 @@ export default function useMediaCmd (): UseMediaCmdReturn {
     QUERY_USER_MEDIA, {
       client: graphqlClient,
       errorPolicy: 'none',
-      onError: error => toast.error(error.message)
+      onError: error => toast.error(error.message),
+      fetchPolicy: 'network-only'
     }
   )
 
@@ -194,8 +196,11 @@ export default function useMediaCmd (): UseMediaCmdReturn {
 
       if (mediaRes != null) {
         updateOneMediaUserGallery(mediaRes)
-        await invalidatePageWithEntity({ entityId, entityType })
       }
+
+      const ancestorList = res.data?.addEntityTag.ancestors.split(',') ?? []
+      await invalidateAncestorPagesWithEntity({ entityId, entityType, ancestorList })
+
       return [res.data?.addEntityTag ?? null, mediaRes]
     } catch {
       return [null, null]
@@ -215,7 +220,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
   /**
    * Remove an entity tag from a media
    */
-  const removeEntityTagCmd: RemoveEntityTagCmd = async ({ mediaId, tagId, entityId, entityType }, jwtToken) => {
+  const removeEntityTagCmd: RemoveEntityTagCmd = async ({ mediaId, tagId, entityId, entityType, ancestorList }, jwtToken) => {
     try {
       const res = await removeEntityTagGQL({
         variables: {
@@ -232,9 +237,11 @@ export default function useMediaCmd (): UseMediaCmdReturn {
       const mediaRes = await getMediaById(mediaId)
 
       if (mediaRes != null) {
+        // update local cache for gallery infinite scroll component
         updateOneMediaUserGallery(mediaRes)
-        await invalidatePageWithEntity({ entityId, entityType })
       }
+
+      await invalidateAncestorPagesWithEntity({ entityId, entityType, ancestorList })
 
       return [res.data?.removeEntityTag ?? false, mediaRes]
     } catch {
@@ -252,18 +259,27 @@ export default function useMediaCmd (): UseMediaCmdReturn {
   }
 }
 
+interface InvalidateAncestorPages {
+  entityType: TagTargetType
+  entityId: string
+  ancestorList: string[]
+}
+
 /**
- * Request Nextjs to re-generate props for target page when adding or removing a tag.
+ * Request Nextjs to invalidate ancestor pages
  */
-const invalidatePageWithEntity = async ({ entityId, entityType }: NewEmbeddedEntityTag): Promise<void> => {
-  switch (entityType) {
-    case TagTargetType.climb:
-      await legacyInvalidateClimbPageCache(entityId)
-      break
-    case TagTargetType.area:
-      await invalidateAreaPageCache(entityId)
-      break
+export const invalidateAncestorPagesWithEntity = async ({ entityId, entityType, ancestorList }: InvalidateAncestorPages): Promise<void> => {
+  // If tagging a climb then invalidate climb page cache
+  if (entityType === TagTargetType.climb) {
+    await invalidateClimbPageCache(entityId)
+    await legacyInvalidateClimbPageCache(entityId)
   }
+
+  // Also invalidate all ancestor pages
+  await Promise.all(ancestorList.map(async uuid => {
+    await invalidateAreaPageCache(uuid)
+    return await Promise.resolve()
+  }))
 }
 
 const apolloClientContext = (jwtToken?: string): DefaultContext => {
