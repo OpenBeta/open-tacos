@@ -15,7 +15,10 @@ export const getMediaForFeedSC = async (maxUsers: number, maxFiles: number): Pro
         maxUsers,
         maxFiles
       },
-      fetchPolicy: 'cache-first'
+      fetchPolicy: 'no-cache',
+      context: {
+        dynamicTag: 'home-feed'
+      }
     })
 
     if (Array.isArray(rs.data?.getMediaForFeed)) {

@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 
 /**
- * Endpoint: /api/updateAreaPage
+ * Endpoint: /api/invalidateAreaPageCache
  */
 export async function GET (request: NextRequest): Promise<any> {
   const uuid = request.nextUrl.searchParams.get('uuid') as string

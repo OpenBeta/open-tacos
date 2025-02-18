@@ -7,7 +7,7 @@ import { MediaWithTags, EntityTag, MediaConnection, TagTargetType } from '../typ
 import { AddNewMediaObjectsArgs, AddMediaObjectsReturn, MUTATION_ADD_MEDIA_OBJECTS, NewMediaObjectInput, DeleteOneMediaObjectArgs, DeleteOneMediaObjectReturn, MUTATION_DELETE_ONE_MEDIA_OBJECT } from '../graphql/gql/media'
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
 import { deleteMediaFromStorage } from '../userApi/media'
-import { invalidateAreaPageCache, invalidateClimbPageCache } from '../utils'
+import { invalidateAreaPageCache, invalidateClimbPageCache, invalidateHomePageCache } from '../utils'
 import { legacyInvalidateClimbPageCache } from '../legacyInvalidateClimbPageCache'
 
 export interface UseMediaCmdReturn {
@@ -280,6 +280,8 @@ export const invalidateAncestorPagesWithEntity = async ({ entityId, entityType, 
     await invalidateAreaPageCache(uuid)
     return await Promise.resolve()
   }))
+
+  await invalidateHomePageCache()
 }
 
 const apolloClientContext = (jwtToken?: string): DefaultContext => {
