@@ -2,10 +2,10 @@ import React, { ReactNode } from 'react'
 import Link from 'next/link'
 import clz from 'classnames'
 
-import { getSummaryReport } from '../../../js/graphql/opencollective'
-import { getTagsLeaderboard } from '../../../js/graphql/pulse'
-import { FinancialReportType, TagsByUserType, TagsLeaderboardType } from '../../../js/types'
-import BackerCard from '../../../components/ui/BackerCard'
+import { getSummaryReport } from '@/js/graphql/opencollective'
+import { getTagsLeaderboard } from '@/js/graphql/pulse'
+import { FinancialReportType, TagsByUserType, TagsLeaderboardType } from '@/js/types'
+import BackerCard from '@/components/ui/BackerCard'
 
 export default async function Page (): Promise<JSX.Element> {
   const donationSummary: FinancialReportType = await getSummaryReport()
@@ -13,12 +13,12 @@ export default async function Page (): Promise<JSX.Element> {
 
   return (
     <>
-      <div className='default-page-margins grid grid-cols-1 lg:grid-cols-2 sm:mx-auto'>
+      <div className='default-page-margins grid grid-cols-1 lg:grid-cols-3 gap-4'>
         <div>
           <TagsSummary tagsLeaderboard={tagsLeaderboard} />
           <TagsLeaderboard tagsLeaderboard={tagsLeaderboard} />
         </div>
-        <div>
+        <div className='lg:col-span-2'>
           <FinancialReport donationSummary={donationSummary} />
         </div>
       </div>
@@ -28,7 +28,7 @@ export default async function Page (): Promise<JSX.Element> {
 
 const TagsSummary = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => {
   return (
-    <Box className='mt-4 max-w-md'>
+    <Box className='mt-4'>
       <div className='stat'>
         <div className='stat-title font-bold'>Photos with tags</div>
         <div className='stat-value'>
@@ -44,7 +44,7 @@ interface TagsLeaderboardProps {
 }
 const TagsLeaderboard = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => {
   return (
-    <Box className='max-w-md'>
+    <Box className='mt-4'>
       <h2>Tags Leaderboard</h2>
       <div className='grid grid-cols-6 gap-2 items-center'>
         {tagsLeaderboard.allTime.byUsers.map(LeaderboardRow)}
@@ -86,7 +86,7 @@ const FinancialReport: React.FC<FinancialReportProps> = ({ donationSummary }) =>
   const { totalRaised, donors } = donationSummary
 
   return (
-    <Box className='text-center mt-4'>
+    <Box className='text-center mb-4 lg:mt-4'>
       <h2>Donations</h2>
       <p className='my-4 text-sm'>This platform is supported by climbers like you.  Thanks to our financial backers we've raised ${totalRaised}.</p>
       <div className='flex gap-2 xl:gap-4 flex-wrap items-center justify-center'>
@@ -103,7 +103,7 @@ const Box: React.FC<{ className?: string, children: ReactNode }> = ({ className,
   return (
     <section
       className={clz(
-        'break-inside-avoid-column break-inside-avoid relative block border-4 p-4 mb-4 border-black rounded-box',
+        'break-inside-avoid-column break-inside-avoid relative block border-4 p-4 border-black rounded-box',
         className
       )}
     >
