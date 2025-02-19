@@ -1,48 +1,34 @@
 import React, { ReactNode } from 'react'
-import { NextPage, GetStaticProps } from 'next'
 import Link from 'next/link'
-import Layout from '../components/layout'
-import SeoTags from '../components/SeoTags'
 import clz from 'classnames'
 
-import { getSummaryReport } from '../js/graphql/opencollective'
-import { getTagsLeaderboard } from '../js/graphql/pulse'
-import { FinancialReportType, TagsByUserType, TagsLeaderboardType } from '../js/types'
-import BackerCard from '../components/ui/BackerCard'
+import { getSummaryReport } from '../../../js/graphql/opencollective'
+import { getTagsLeaderboard } from '../../../js/graphql/pulse'
+import { FinancialReportType, TagsByUserType, TagsLeaderboardType } from '../../../js/types'
+import BackerCard from '../../../components/ui/BackerCard'
 
-interface HomePageType {
-  donationSummary: FinancialReportType
-  tagsLeaderboard: TagsLeaderboardType
-}
+export default async function Page (): Promise<JSX.Element> {
+  const donationSummary: FinancialReportType = await getSummaryReport()
+  const tagsLeaderboard: TagsLeaderboardType = await getTagsLeaderboard()
 
-/**
- *  Display key metrics and statistics
- */
-const Page: NextPage<HomePageType> = ({ donationSummary, tagsLeaderboard }) => {
   return (
     <>
-      <SeoTags
-        title='OpenBeta pulse'
-        description='Stats and activities'
-      />
-      <Layout
-        contentContainerClass='content-default bg-gradient-to-br from-cyan-600 to-sky-400 py-6'
-        showFilterBar={false}
-        showFooter
-      >
-        <div className='lg:columns-2 sm:mx-auto sm:block flex flex-col items-center'>
+      <div className='default-page-margins grid grid-cols-1 lg:grid-cols-2 sm:mx-auto'>
+        <div>
           <TagsSummary tagsLeaderboard={tagsLeaderboard} />
           <TagsLeaderboard tagsLeaderboard={tagsLeaderboard} />
+        </div>
+        <div>
           <FinancialReport donationSummary={donationSummary} />
         </div>
-      </Layout>
+      </div>
     </>
   )
 }
 
 const TagsSummary = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => {
   return (
-    <Box className='bg-purple-400 mt-0 stats shadow p-0'>
+    <Box className='mt-4 max-w-md'>
       <div className='stat'>
         <div className='stat-title font-bold'>Photos with tags</div>
         <div className='stat-value'>
@@ -58,9 +44,9 @@ interface TagsLeaderboardProps {
 }
 const TagsLeaderboard = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => {
   return (
-    <Box className='bg-purple-700'>
+    <Box className='max-w-md'>
       <h2>Tags Leaderboard</h2>
-      <div className='mt-4 grid grid-cols-6 gap-2 items-center'>
+      <div className='grid grid-cols-6 gap-2 items-center'>
         {tagsLeaderboard.allTime.byUsers.map(LeaderboardRow)}
       </div>
     </Box>
@@ -100,9 +86,9 @@ const FinancialReport: React.FC<FinancialReportProps> = ({ donationSummary }) =>
   const { totalRaised, donors } = donationSummary
 
   return (
-    <Box className='bg-accent bg-opacity-90 text-center'>
+    <Box className='text-center mt-4'>
       <h2>Donations</h2>
-      <p className='mt-4 text-sm'>This platform is supported by climbers like you.  Thanks to our financial backers we've raised ${totalRaised}.</p>
+      <p className='my-4 text-sm'>This platform is supported by climbers like you.  Thanks to our financial backers we've raised ${totalRaised}.</p>
       <div className='flex gap-2 xl:gap-4 flex-wrap items-center justify-center'>
         {donors.map(({ account }) =>
           <BackerCard key={account.id} name={account.name} imageUrl={account.imageUrl} />
@@ -113,24 +99,15 @@ const FinancialReport: React.FC<FinancialReportProps> = ({ donationSummary }) =>
   )
 }
 
-const Box: React.FC<{ className: string, children: ReactNode }> = ({ className, children }) => {
+const Box: React.FC<{ className?: string, children: ReactNode }> = ({ className, children }) => {
   return (
-    <section className={clz('break-inside-avoid-column break-inside-avoid relative block max-w-md  border-4 p-4 mb-4 border-black rounded-box', className)}>
+    <section
+      className={clz(
+        'break-inside-avoid-column break-inside-avoid relative block border-4 p-4 mb-4 border-black rounded-box',
+        className
+      )}
+    >
       {children}
     </section>
   )
 }
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const openCollectiveReport = await getSummaryReport()
-  const leaderboard = await getTagsLeaderboard()
-  return {
-    props: {
-      donationSummary: openCollectiveReport,
-      tagsLeaderboard: leaderboard
-    },
-    revalidate: 60
-  }
-}
-
-export default Page

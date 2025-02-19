@@ -11,7 +11,7 @@ interface SEOProps {
 
 const siteMetadata = {
   title: 'OpenBeta',
-  description: 'Share your climbing adventure photos and contribute to the climbing route cataog.',
+  description: 'Share your climbing adventure photos and contribute to the climbing route catalog.',
   author: 'hello@openbeta.io',
   keywords: 'rock climbing wiki, climbing api, climbing beta, climbing guidebooks, openbeta, open data'
 }
