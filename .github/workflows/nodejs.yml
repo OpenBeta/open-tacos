@@ -52,6 +52,7 @@ jobs:
   docker:
     runs-on: ubuntu-22.04
     needs: build
+    environment: production
     steps:
       - name: 'Checkout Project'
         uses: 'actions/checkout@v3'
