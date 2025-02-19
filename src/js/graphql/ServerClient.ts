@@ -2,11 +2,15 @@ import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client'
 import { registerApolloClient } from '@apollo/experimental-nextjs-app-support'
 import { dynamicTagsLink } from './dynamicTagsLink'
 
-const uri: string = process.env.NEXT_PUBLIC_API_SERVER ?? ''
+const uri: string = process.env.OPENBETA_API_SERVER ?? ''
 
 if (uri === '' || uri == null) {
-  throw new Error('NEXT_PUBLIC_API_SERVER is not set')
+  throw new Error('OPENBETA_API_SERVER is not set')
 }
+
+console.log('#######################################################################')
+console.log(' API Server', uri)
+console.log('#######################################################################')
 
 const httpLink = new HttpLink({ uri })
 

@@ -214,27 +214,6 @@ const AreaData: React.FC<{ areaName: string, lat: number, lng: number, authorMet
   )
 }
 
-/**
- * List of area pages to prebuild
- */
-export function generateStaticParams (): PageSlugType[] {
-  const list = [
-    { slug: ['bea6bf11-de53-5046-a5b4-b89217b7e9bc'] }, // Red Rock
-    { slug: ['78da26bc-cd94-5ac8-8e1c-815f7f30a28b'] }, // Red River Gorge
-    { slug: ['1db1e8ba-a40e-587c-88a4-64f5ea814b8e'] }, // USA
-    { slug: ['ab48aed5-2e8d-54bb-b099-6140fe1f098f'] }, // Colorado
-    { slug: ['decc1251-4a67-52b9-b23f-3243e10e93d0'] }, // Boulder
-    { slug: ['f166e672-4a52-56d3-94f1-14c876feb670'] }, // Indian Creek
-    { slug: ['5f0ed4d8-ebb0-5e78-ae15-ba7f1b3b5c51'] }, // Wasatch range
-    { slug: ['b1166235-3328-5537-b5ed-92f406ea8495'] }, // Lander
-    { slug: ['9abad566-2113-587e-95a5-b3abcfaa28ac'] } // Ten Sleep
-  ]
-  if (process.env.VERCEL_ENV !== 'production') {
-    return list.slice(0, 1)
-  }
-  return list
-}
-
 // Page metadata
 export async function generateMetadata ({ params }: PageWithCatchAllUuidProps): Promise<Metadata> {
   const areaUuid = parseUuidAsFirstParam({ params })

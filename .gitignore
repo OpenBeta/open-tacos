@@ -77,6 +77,8 @@ content
 # Env files  - do not check in .env.local!!!
 .env.local 
 .env.test.local
+.env.*
+
 *.pem
 .vscode/launch.json
 

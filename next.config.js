@@ -1,4 +1,5 @@
 module.exports = {
+  output: 'standalone',
   images: {
     loader: 'custom',
     loaderFile: './src/image-loader.js'
