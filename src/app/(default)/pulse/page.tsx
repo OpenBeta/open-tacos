@@ -7,6 +7,9 @@ import { getTagsLeaderboard } from '@/js/graphql/pulse'
 import { FinancialReportType, TagsByUserType, TagsLeaderboardType } from '@/js/types'
 import BackerCard from '@/components/ui/BackerCard'
 
+/**
+ *  Display key metrics and statistics
+ */
 export default async function Page (): Promise<JSX.Element> {
   const donationSummary: FinancialReportType = await getSummaryReport()
   const tagsLeaderboard: TagsLeaderboardType = await getTagsLeaderboard()
@@ -28,7 +31,7 @@ export default async function Page (): Promise<JSX.Element> {
 
 const TagsSummary = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => {
   return (
-    <Box className='mt-4'>
+    <Box className='mt-4 stats'>
       <div className='stat'>
         <div className='stat-title font-bold'>Photos with tags</div>
         <div className='stat-value'>
