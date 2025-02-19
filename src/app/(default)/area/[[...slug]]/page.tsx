@@ -18,7 +18,7 @@ import { ClimbListSection } from './sections/ClimbListSection'
 import { CLIENT_CONFIG } from '@/js/configs/clientConfig'
 import { PageBanner as LCOBanner } from '@/components/lco/PageBanner'
 import { AuthorMetadata, OrganizationType, TagTargetType } from '@/js/types'
-import { PageWithCatchAllUuidProps, PageSlugType } from '@/js/types/pages'
+import { PageWithCatchAllUuidProps } from '@/js/types/pages'
 /**
  * Page cache settings
  */
