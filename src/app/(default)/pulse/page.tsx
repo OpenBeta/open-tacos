@@ -47,7 +47,7 @@ interface TagsLeaderboardProps {
 }
 const TagsLeaderboard = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => {
   return (
-    <Box className='mt-4'>
+    <Box className='mt-4 lg:mb-4'>
       <h2>Tags Leaderboard</h2>
       <div className='grid grid-cols-6 gap-2 items-center'>
         {tagsLeaderboard.allTime.byUsers.map(LeaderboardRow)}
