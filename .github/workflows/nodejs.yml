@@ -53,11 +53,13 @@ jobs:
     runs-on: ubuntu-22.04
     needs: build
     environment: production
+
+    # Expose NEXT_PUBLIC_ vars only.  Pass server-side vars Docker build directly.
     env:
-      NEXT_PUBLIC_MAPBOX_API_KEY=${{ secrets.NEXT_PUBLIC_MAPBOX_API_KEY }}
-      NEXT_PUBLIC_CDN_URL=${{ secrets.NEXT_PUBLIC_CDN_URL }}
-      NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
-      NEXT_PUBLIC_API_SERVER=${{ secrets.NEXT_PUBLIC_API_SERVER }}
+      NEXT_PUBLIC_MAPBOX_API_KEY: ${{ secrets.NEXT_PUBLIC_MAPBOX_API_KEY }}
+      NEXT_PUBLIC_CDN_URL: ${{ secrets.NEXT_PUBLIC_CDN_URL }}
+      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+      NEXT_PUBLIC_API_SERVER: ${{ secrets.NEXT_PUBLIC_API_SERVER }}
     steps:
       - name: 'Checkout Project'
         uses: 'actions/checkout@v4'
@@ -118,6 +120,6 @@ jobs:
             GC_BUCKET_CLIENT_EMAIL=${{ secrets.GC_BUCKET_CLIENT_EMAIL }}
             GC_BUCKET_PRIVATE_KEY=${{ secrets.GC_BUCKET_PRIVATE_KEY }}
             GC_BUCKET_NAME=${{ secrets.GC_BUCKET_NAME }}
-            NEXT_TELEMETRY_DISABLED: 1
-            NEXT_PUBLIC_DEVTOOLS_ENABLED: 0
+            NEXT_TELEMETRY_DISABLED=1
+            NEXT_PUBLIC_DEVTOOLS_ENABLED=0
             OPENBETA_API_SERVER=${{ secrets.NEXT_PUBLIC_API_SERVER }}
