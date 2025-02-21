@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react'
+import Image from 'next/image'
 
 import { LightBulbIcon } from '@heroicons/react/24/outline'
 import ContentLoader from 'react-content-loader'
@@ -19,7 +20,6 @@ interface SlideViewerProps {
   imageList: MediaWithTags[]
   userinfo: JSX.Element
   auth: WithPermission
-  baseUrl: string
   onNavigate: (newIndex: number) => void
 }
 
@@ -33,7 +33,6 @@ export default function SlideViewer ({
   imageList,
   userinfo,
   auth,
-  baseUrl,
   onNavigate
 }: SlideViewerProps): JSX.Element {
   const currentImage = imageList[initialIndex]
@@ -88,9 +87,11 @@ export const SingleViewer = ({ loaded, media, userinfo, auth, keyboardTip = true
     <>
       <div className='block relative overflow-hidden min-w-[350px] min-h-[300px]'>
         {loaded && media?.mediaUrl != null
-          ? (<img
+          ? (<Image
               src={DefaultLoader({ src: media.mediaUrl, width: 1200 })}
+              alt='media image'
               width={1200}
+              height={700} // You can adjust this to fit the aspect ratio you're aiming for
               sizes='100vw'
               className='bg-gray-100 w-auto h-[100%] max-h-[700px]'
              />)

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import type UserGalleryType from '../UserGallery'
+import type UserGalleryType from '../UserGalleryLegacy'
 import { userMedia } from './data'
 import { UserPublicPage } from '../../../js/types/User'
 import { UseMediaCmdReturn } from '../../../js/hooks/useMediaCmd'
@@ -54,7 +54,7 @@ let UserGallery: typeof UserGalleryType
 describe('Image gallery', () => {
   beforeAll(async () => {
     // why async import?  see https://github.com/facebook/jest/issues/10025#issuecomment-716789840
-    const module = await import('../UserGallery')
+    const module = await import('../UserGalleryLegacy')
     UserGallery = module.default
   })
 

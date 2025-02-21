@@ -1,20 +1,21 @@
+'use client'
 import React, { useCallback, useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { basename } from 'path'
 import clx from 'classnames'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
-import UserMedia from './UserMedia'
-import MobileMediaCard from './MobileMediaCard'
-import UploadCTA from './UploadCTA'
-import SlideViewer from './slideshow/SlideViewer'
-import { TinyProfile } from '../users/PublicProfile'
-import { UserPublicPage } from '../../js/types/User'
-import { useResponsive } from '../../js/hooks'
-import TagList from './TagList'
-import usePermissions from '../../js/hooks/auth/usePermissions'
-import useMediaCmd from '../../js/hooks/useMediaCmd'
-import { useUserGalleryStore } from '../../js/stores/useUserGalleryStore'
+import UserMedia from '@/components/media/UserMedia'
+import MobileMediaCard from '@/components/media/MobileMediaCard'
+import UploadCTA from '@/components/media/UploadCTA'
+import SlideViewer from '@/components/media/slideshow/SlideViewer'
+import { TinyProfile } from '@/components/users/PublicProfile'
+import { UserPublicPage } from '@/js/types/User'
+import { useResponsive } from '@/js/hooks'
+import TagList from '@/components/media/TagList'
+import usePermissions from '@/js/hooks/auth/usePermissions'
+import useMediaCmd from '@/js/hooks/useMediaCmd'
+import { useUserGalleryStore } from '@/js/stores/useUserGalleryStore'
 
 export interface UserGalleryProps {
   uid: string
@@ -45,6 +46,8 @@ export interface UserGalleryProps {
  */
 export default function UserGallery ({ uid, postId: initialPostId, userPublicPage }: UserGalleryProps): JSX.Element | null {
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const userProfile = userPublicPage.profile
 
   const { fetchMoreMediaForward } = useMediaCmd()
@@ -58,26 +61,26 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
 
   const baseUrl = `/u/${uid}`
 
-  const isBase = useCallback((url: string) => {
-    return baseUrl === url
-  }, [baseUrl])
+  // const isBase = useCallback((url: string) => {
+  //   return baseUrl === url
+  // }, [baseUrl])
 
-  router.beforePopState((e) => {
-    if (isBase(e.as)) {
-      setSlideNumber(-1)
-      return true
-    }
+  // router.beforePopState((e) => {
+  //   if (isBase(e.as)) {
+  //     setSlideNumber(-1)
+  //     return true
+  //   }
 
-    return true
-  })
+  //   return true
+  // })
 
   const mediaConnection = useUserGalleryStore((state) => state.mediaConnection)
   const resetData = useUserGalleryStore((state) => state.reset)
   const appendMore = useUserGalleryStore((state) => state.append)
 
   /**
-   * Initialize image data store
-   */
+  * Initialize image data store
+  */
   useEffect(() => {
     if (isAuthorized) {
       void fetchMoreMediaForward({
@@ -99,12 +102,11 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
       if (found !== -1) {
         setSlideNumber(found)
       }
-      return
     }
 
     // Handle browser forward/back button
-    if (router.asPath.length > baseUrl.length && selectedMediaId === -1) {
-      const newPostId = basename(router.asPath)
+    if (pathname.length > baseUrl.length && selectedMediaId === -1) {
+      const newPostId = basename(pathname)
       const found = imageList?.findIndex(entry => basename(entry.mediaUrl) === newPostId)
       if (found !== -1) {
         setSlideNumber(found)
@@ -125,11 +127,13 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
   const navigateHandler = (newIndex: number): void => {
     const currentImage = imageList[newIndex]
     const pathname = `${baseUrl}/${basename(currentImage.mediaUrl)}`
+    const params = new URLSearchParams(searchParams)
+    params.set('gallery', 'true')
 
     if (selectedMediaId === -1 && newIndex !== selectedMediaId) {
-      void router.push({ pathname, query: { gallery: true } }, pathname, { shallow: true })
+      void router.push(`${pathname}?${params.toString()}`, { scroll: false })
     } else {
-      void router.replace({ pathname, query: { gallery: true } }, pathname, { shallow: true })
+      void router.replace(`${pathname}?${params.toString()}`, { scroll: false })
     }
 
     setSlideNumber(newIndex)
@@ -194,13 +198,9 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
                   isAuthorized={isAuthorized}
                 />
                 <div
-                  className={
-                      clx(
-                        !isAuthorized && entityTags.length === 0
-                          ? 'hidden'
-                          : 'absolute inset-x-0 bottom-0 p-2 flex items-center bg-base-100 bg-opacity-60'
-                      )
-                      }
+                  className={clx(
+                    !isAuthorized && entityTags.length === 0 ? 'hidden' : 'absolute inset-x-0 bottom-0 p-2 flex items-center bg-base-100 bg-opacity-60'
+                  )}
                 >
                   <TagList
                     key={key}
@@ -227,7 +227,6 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
                     />}
           onClose={slideViewerCloseHandler}
           auth={authz}
-          baseUrl={baseUrl}
           onNavigate={navigateHandler}
         />}
     </>

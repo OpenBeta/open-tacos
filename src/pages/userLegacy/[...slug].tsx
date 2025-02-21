@@ -6,7 +6,7 @@ import Layout from '../../components/layout'
 import SeoTags from '../../components/SeoTags'
 import PublicProfile from '../../components/users/PublicProfile'
 import { useUserProfileSeo } from '../../js/hooks/seo'
-import type { UserGalleryProps } from '../../components/media/UserGallery'
+import type { UserGalleryProps } from '../../components/media/UserGalleryLegacy'
 import useUserProfileCmd from '../../js/hooks/useUserProfileCmd'
 import { UserPublicPage } from '../../js/types/User'
 import usePermissions from '../../js/hooks/auth/usePermissions'
@@ -145,6 +145,6 @@ export const getStaticProps: GetStaticProps<UserHomeProps, { slug: string[] }> =
 
 const DynamicComponent = dynamic<UserGalleryProps>(
   async () =>
-    await import('../../components/media/UserGallery').then(
+    await import('../../components/media/UserGalleryLegacy').then(
       module => module.default), { ssr: false }
 )
