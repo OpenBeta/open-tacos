@@ -1,6 +1,8 @@
 import { MouseEventHandler, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { UserCircle } from '@phosphor-icons/react/dist/ssr'
+import clsx from 'clsx'
 
 import { UserPublicProfile } from '../../js/types/User'
 import EditProfileButton from './EditProfileButton'
@@ -70,7 +72,7 @@ const prettifyUrl = (url: string): string => {
   return url.replace(/^(https?:)?\/\//g, '').replace(/\/$/g, '')
 }
 
-export const ProfileImage = ({ avatar }: { avatar: string }): JSX.Element => {
+export const ProfileImage = ({ avatar, className = 'w-24 h-24' }: { avatar: string, className?: string }): JSX.Element => {
   // returns auth0 avatar assigned when user is created, if no profile pic is uploaded
   const avatarSrc = avatar.includes('gravatar') ? avatar : DefaultLoader({ src: avatar, width: 200 })
   const [imageNotFound, setImageNotFound] = useState(false)
@@ -78,12 +80,14 @@ export const ProfileImage = ({ avatar }: { avatar: string }): JSX.Element => {
   return (
     <>
       {imageNotFound
-        ? <UserCircle size={32} weight='fill' className='w-24 h-24 rounded-full text-gray-500' />
+        ? <UserCircle size={32} weight='fill' className={clsx('rounded-full text-gray-500', className)} />
         : (
-          <img
-            className='object-cover w-24 h-24 rounded-full'
+          <Image
+            className={clsx('object-cover rounded-full', className)}
             src={avatarSrc}
             alt='Profile Photo'
+            width={96}
+            height={96}
             onError={() => setImageNotFound(true)}
           />
           )}
@@ -103,8 +107,8 @@ export const TinyProfile = ({ userProfile, onClick }: PublicProfileProps): any =
   return (
     <Link as={`/u/${username}`} href='/u/[uid]' onClick={onClickHandler}>
       <section className='flex items-center space-x-2.5'>
-        <div className='grayscale'>
-          <img className='rounded-full' src={avatar} width={32} height={32} />
+        <div>
+          {avatar != null && avatar !== '' && <ProfileImage avatar={avatar} className='w-8 h-8' />}
         </div>
         <div className={ProfileATagStyle}>
           {username}
