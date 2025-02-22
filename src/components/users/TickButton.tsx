@@ -35,8 +35,10 @@ export default function TickButton ({ climbId, areaId, name, grade, climbType }:
   const session = useSession()
 
   useEffect(() => {
-    getTicks()
-  }, [])
+    if (session.status === 'authenticated') {
+      getTicks()
+    }
+  }, [session.status])
 
   function getTicks (): void {
     const userId = session.data?.user.metadata.uuid ?? ''
