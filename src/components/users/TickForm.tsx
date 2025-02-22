@@ -54,7 +54,8 @@ const allAttemptTypes = [
   { id: 4, name: 'Pinkpoint' },
   { id: 5, name: 'Send' },
   { id: 6, name: 'Attempt' },
-  { id: 7, name: 'Frenchfree' }
+  { id: 7, name: 'Frenchfree' },
+  { id: 8, name: 'Repeat' }
 ]
 
 function hasKey (climbType: object, myList: string[]): boolean { return Object.keys(climbType).some(key => myList.includes(key)) }
@@ -82,11 +83,11 @@ function attemptTypesForStyle (styleName: string): Array<{ id: number, name: str
   const emptyOption = { id: 10, name: '\u00A0' }
   switch (styleName) {
     case 'Lead':
-      return [...allAttemptTypes.filter(type => ['Onsight', 'Flash', 'Redpoint', 'Pinkpoint', 'Attempt', 'Frenchfree'].includes(type.name)), emptyOption]
+      return [...allAttemptTypes.filter(type => ['Onsight', 'Flash', 'Redpoint', 'Pinkpoint', 'Attempt', 'Frenchfree', 'Repeat'].includes(type.name)), emptyOption]
     case 'Solo':
-      return [...allAttemptTypes.filter(type => ['Onsight', 'Flash', 'Redpoint', 'Attempt'].includes(type.name)), emptyOption]
+      return [...allAttemptTypes.filter(type => ['Onsight', 'Flash', 'Redpoint', 'Attempt', 'Repeat'].includes(type.name)), emptyOption]
     case 'Boulder':
-      return [...allAttemptTypes.filter(type => ['Flash', 'Send', 'Attempt'].includes(type.name)), emptyOption]
+      return [...allAttemptTypes.filter(type => ['Flash', 'Send', 'Attempt', 'Repeat'].includes(type.name)), emptyOption]
     case 'TR':
     case 'Follow':
     case 'Aid':
