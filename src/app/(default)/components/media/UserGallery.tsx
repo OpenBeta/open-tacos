@@ -37,9 +37,6 @@ export interface UserGalleryProps {
  * 1. Component will start with the most recent 6 (see A.1 above)
  * 2. When the user scrolls down, fetch the next 6 (cache hit)
  *
- * Simplifying component Todos:
- *  - simplify back button logic with Next Layout in v13
- *
  * See also:
  * - GQL pagination: https://graphql.org/learn/pagination/
  * - Apollo queries & caching: https://www.apollographql.com/docs/react/data/queries
@@ -61,18 +58,22 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
 
   const baseUrl = `/u/${uid}`
 
-  // const isBase = useCallback((url: string) => {
-  //   return baseUrl === url
-  // }, [baseUrl])
+  const isBase = useCallback((url: string) => {
+    return baseUrl === url
+  }, [baseUrl])
 
-  // router.beforePopState((e) => {
-  //   if (isBase(e.as)) {
-  //     setSlideNumber(-1)
-  //     return true
-  //   }
+  useEffect(() => {
+    const handlePopState = (): void => {
+      if (isBase(pathname)) {
+        setSlideNumber(-1)
+      }
+    }
 
-  //   return true
-  // })
+    window.addEventListener('popstate', handlePopState)
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [isBase, pathname])
 
   const mediaConnection = useUserGalleryStore((state) => state.mediaConnection)
   const resetData = useUserGalleryStore((state) => state.reset)
@@ -120,20 +121,20 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
   }, [imageList])
 
   const slideViewerCloseHandler = useCallback(() => {
-    router.back()
+    router.push(baseUrl)
     setSlideNumber(-1)
   }, [])
 
   const navigateHandler = (newIndex: number): void => {
     const currentImage = imageList[newIndex]
     const pathname = `${baseUrl}/${basename(currentImage.mediaUrl)}`
-    const params = new URLSearchParams(searchParams)
+    const params = new URLSearchParams(searchParams.toString())
     params.set('gallery', 'true')
 
     if (selectedMediaId === -1 && newIndex !== selectedMediaId) {
-      void router.push(`${pathname}?${params.toString()}`, { scroll: false })
+      window.history.pushState({}, '', `${pathname}?${params.toString()}`)
     } else {
-      void router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+      window.history.replaceState({}, '', `${pathname}?${params.toString()}`)
     }
 
     setSlideNumber(newIndex)

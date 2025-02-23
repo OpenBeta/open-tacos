@@ -53,6 +53,7 @@ const PhotoGalleryModal = ({
                   <button
                     onClick={() => setShowImage('')}
                     className='bg-white hover:bg-gray-500 bg-opacity-50 rounded-full  duration-300 ease-in-out p-2'
+                    title='Close'
                   >
                     <XMarkIcon className='w-6 h-6' />
                   </button>
