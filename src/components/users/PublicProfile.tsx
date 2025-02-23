@@ -1,6 +1,5 @@
 import { MouseEventHandler, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { UserCircle } from '@phosphor-icons/react/dist/ssr'
 import clsx from 'clsx'
 
@@ -82,12 +81,10 @@ export const ProfileImage = ({ avatar, className = 'w-24 h-24' }: { avatar: stri
       {imageNotFound
         ? <UserCircle size={32} weight='fill' className={clsx('rounded-full text-gray-500', className)} />
         : (
-          <Image
+          <img
             className={clsx('object-cover rounded-full', className)}
             src={avatarSrc}
             alt='Profile Photo'
-            width={96}
-            height={96}
             onError={() => setImageNotFound(true)}
           />
           )}
