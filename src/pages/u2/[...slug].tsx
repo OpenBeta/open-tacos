@@ -38,7 +38,6 @@ const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
             <section className='max-w-lg mx-auto w-full px-4 py-8'>
               <h2>{username}</h2>
               <div className='py-4 flex items-center gap-6'>
-                here!!!!!
                 <ImportFromMtnProj username={username} />
                 <a className='btn btn-xs md:btn-sm btn-outline' href={`/u/${username}`}>Classic Profile</a>
               </div>
