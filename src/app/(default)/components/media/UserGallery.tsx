@@ -129,14 +129,14 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
 
   const navigateHandler = (newIndex: number): void => {
     const currentImage = imageList[newIndex]
-    const pathname = `${baseUrl}/${basename(currentImage.mediaUrl)}`
+    const imagePathname = `${baseUrl}/${basename(currentImage.mediaUrl)}`
     const params = new URLSearchParams(searchParams.toString())
     params.set('gallery', 'true')
 
     if (selectedMediaId === -1 && newIndex !== selectedMediaId) {
-      window.history.pushState({}, '', `${pathname}?${params.toString()}`)
+      window.history.pushState({}, '', `${imagePathname}?${params.toString()}`)
     } else {
-      window.history.replaceState({}, '', `${pathname}?${params.toString()}`)
+      window.history.replaceState({}, '', `${imagePathname}?${params.toString()}`)
     }
 
     setSlideNumber(newIndex)
