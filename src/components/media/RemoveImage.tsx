@@ -1,8 +1,7 @@
 import { useSession } from 'next-auth/react'
-
+import Image from 'next/image'
 import { MediaWithTags } from '../../js/types'
 import AlertDialogue from '../ui/micro/AlertDialogue'
-import { DefaultLoader } from '../../js/sirv/util'
 import useMediaCmd from '../../js/hooks/useMediaCmd'
 
 interface RemoveImageProps {
@@ -25,7 +24,7 @@ export default function RemoveImage ({ imageInfo }: RemoveImageProps): JSX.Eleme
       onConfirm={remove}
       hideTitle
       button={(
-        <button>
+        <button title='Remove Image'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             className='h-10 w-10 md:w-8 md:h-8 md:marker:w-8 text-rose-100 bg-rose-500 ring-rose-500 hover:bg-rose-600
@@ -41,11 +40,12 @@ export default function RemoveImage ({ imageInfo }: RemoveImageProps): JSX.Eleme
     >
       <div className='flex items-center justify-center p-4'>
         <div className='rounded-xl overflow-hidden shadow'>
-          <img
-            src={DefaultLoader({ src: imageInfo.mediaUrl, width: 200 })}
-            width={1200}
-            sizes='100vw'
-            className='bg-gray-100 w-auto h-[100%] max-h-[700px]'
+          <Image
+            src={imageInfo.mediaUrl}
+            alt='User Photo'
+            width={200}
+            height={200}
+            className='bg-gray-100 w-[200px] h-auto'
           />
         </div>
       </div>

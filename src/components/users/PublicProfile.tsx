@@ -1,5 +1,7 @@
+'use client'
 import { MouseEventHandler, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { UserCircle } from '@phosphor-icons/react/dist/ssr'
 import clsx from 'clsx'
 
@@ -8,7 +10,6 @@ import EditProfileButton from './EditProfileButton'
 import ImportFromMtnProj from './ImportFromMtnProj'
 import APIKeyCopy from './APIKeyCopy'
 import usePermissions from '../../js/hooks/auth/usePermissions'
-import { DefaultLoader } from '../../js/sirv/util'
 
 interface PublicProfileProps {
   userProfile: UserPublicProfile
@@ -72,8 +73,6 @@ const prettifyUrl = (url: string): string => {
 }
 
 export const ProfileImage = ({ avatar, className = 'w-24 h-24' }: { avatar: string, className?: string }): JSX.Element => {
-  // returns auth0 avatar assigned when user is created, if no profile pic is uploaded
-  const avatarSrc = avatar.includes('gravatar') ? avatar : DefaultLoader({ src: avatar, width: 200 })
   const [imageNotFound, setImageNotFound] = useState(false)
 
   return (
@@ -81,11 +80,13 @@ export const ProfileImage = ({ avatar, className = 'w-24 h-24' }: { avatar: stri
       {imageNotFound
         ? <UserCircle size={32} weight='fill' className={clsx('rounded-full text-gray-500', className)} />
         : (
-          <img
+          <Image
             className={clsx('object-cover rounded-full', className)}
-            src={avatarSrc}
+            src={avatar}
             alt='Profile Photo'
-            onError={() => setImageNotFound(true)}
+            width={100}
+            height={100}
+            onError={(e) => setImageNotFound(true)}
           />
           )}
     </>

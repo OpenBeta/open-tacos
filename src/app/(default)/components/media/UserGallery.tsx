@@ -16,6 +16,7 @@ import TagList from '@/components/media/TagList'
 import usePermissions from '@/js/hooks/auth/usePermissions'
 import useMediaCmd from '@/js/hooks/useMediaCmd'
 import { useUserGalleryStore } from '@/js/stores/useUserGalleryStore'
+import { relayMediaConnectionToMediaArray } from '@/js/utils'
 
 export interface UserGalleryProps {
   uid: string
@@ -44,6 +45,7 @@ export interface UserGalleryProps {
 export default function UserGallery ({ uid, postId: initialPostId, userPublicPage }: UserGalleryProps): JSX.Element | null {
   const router = useRouter()
   const pathname = usePathname()
+  console.log('🚀 ~ UserGallery ~ pathname:', pathname)
   const searchParams = useSearchParams()
   const userProfile = userPublicPage.profile
 
@@ -55,6 +57,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
 
   const authz = usePermissions({ currentUserUuid: userProfile.userUuid })
   const { isAuthorized } = authz
+  const mediaList = relayMediaConnectionToMediaArray(userPublicPage?.media?.mediaConnection)
 
   const baseUrl = `/u/${uid}`
 
@@ -166,6 +169,25 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
 
   return (
     <>
+      {isAuthorized && (
+        <div className='flex justify-center mt-8 text-secondary text-sm whitespace-normal px-4 lg:px-0'>
+          <div className='border rounded-md px-6 py-2 shadow'>
+            <ul className='list-disc'>
+              <li>
+                Please upload 3 photos to complete your profile{' '}
+                {mediaList?.length >= 3 && <span>&#10004;</span>}
+              </li>
+              <li>Upload only your own photos</li>
+              <li>
+                Keep it <b>Safe For Work</b> and climbing-related
+              </li>
+            </ul>
+          </div>
+        </div>
+      )}
+
+      <hr className='mt-8' />
+
       <InfiniteScroll
         dataLength={mediaConnection.edges.length}
         next={fetchMoreData}
@@ -230,6 +252,12 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
           auth={authz}
           onNavigate={navigateHandler}
         />}
+
+      {!isAuthorized && (
+        <div className='mt-4 w-full mx-auto text-xs text-base-content text-center'>
+          All photos are copyrighted by their respective owners. All Rights Reserved.
+        </div>
+      )}
     </>
   )
 }

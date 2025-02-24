@@ -76,7 +76,6 @@ export const userMedia: UserMedia = {
       endCursor: '1234'
     }
   }
-
 }
 
 it.skip('Test data', () => {})

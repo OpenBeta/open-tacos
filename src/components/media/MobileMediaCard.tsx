@@ -1,10 +1,10 @@
+import Image from 'next/image'
 import Card from '../ui/Card/Card'
 import TagList, { MobilePopupTagList } from './TagList'
-import { MobileLoader } from '../../js/sirv/util'
 import { MediaWithTags } from '../../js/types'
 import { getUploadDateSummary } from '../../js/utils'
 
-const MOBILE_IMAGE_MAX_WIDITH = 914
+const MOBILE_IMAGE_MAX = 914
 
 export interface MobileMediaCardProps {
   header?: JSX.Element
@@ -23,13 +23,13 @@ export default function MobileMediaCard ({ header, isAuthorized = false, isAuthe
   return (
     <Card
       header={header}
-      image={<img
-        src={MobileLoader({
-          src: mediaUrl,
-          width: MOBILE_IMAGE_MAX_WIDITH
-        })}
-        width={MOBILE_IMAGE_MAX_WIDITH}
+      image={<Image
+        src={mediaUrl}
+        alt='mobile user gallery photo'
+        width={MOBILE_IMAGE_MAX}
+        height={MOBILE_IMAGE_MAX}
         sizes='100vw'
+        className='w-full h-auto'
              />}
       imageActions={
         <section className='flex items-center justify-between'>
