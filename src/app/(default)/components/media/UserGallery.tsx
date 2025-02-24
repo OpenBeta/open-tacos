@@ -45,7 +45,6 @@ export interface UserGalleryProps {
 export default function UserGallery ({ uid, postId: initialPostId, userPublicPage }: UserGalleryProps): JSX.Element | null {
   const router = useRouter()
   const pathname = usePathname()
-  console.log('🚀 ~ UserGallery ~ pathname:', pathname)
   const searchParams = useSearchParams()
   const userProfile = userPublicPage.profile
 

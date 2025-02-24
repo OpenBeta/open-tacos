@@ -11,5 +11,13 @@ export function useRouter (): any {
   }
 }
 
+export function usePathname (): any {
+  return '/'
+}
+
+export function useSearchParams (): any {
+  return new URLSearchParams()
+}
+
 export const pushFn = jest.fn()
 export const replaceFn = jest.fn()
