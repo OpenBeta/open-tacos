@@ -28,6 +28,7 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
   return (
     <section className='mx-auto max-w-screen-sm px-4 md:px-0 md:grid md:grid-cols-3'>
       <div className='hidden md:block pr-5'>
+        <h5>profile : {avatar}</h5>
         {avatar != null && avatar !== '' && <ProfileImage avatar={avatar} />}
       </div>
       <div className='md:col-span-2 text-medium text-primary '>

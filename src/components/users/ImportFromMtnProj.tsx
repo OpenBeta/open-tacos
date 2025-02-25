@@ -51,7 +51,7 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
           toast.info(
             <>
               {count} ticks have been imported! 🎉 <br />
-              Redirecting in a few seconds...`
+              Redirecting in a few seconds...
             </>
           )
 
