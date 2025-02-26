@@ -44,7 +44,7 @@ export const AreaItem: React.FC<{
   // undefined array can mean we forget to include the field in GQL so let's make it not editable
   const canDelete = (children?.length ?? 1) === 0 && (climbs?.length ?? 1) === 0
 
-  const url = editMode ? `/editArea/${uuid}` : `/area/${uuid}/${getFriendlySlug(areaName)}`
+  const url = editMode ? `/editArea/${uuid}/general` : `/area/${uuid}/${getFriendlySlug(areaName)}`
   return (
     <div className='break-inside-avoid-column break-inside-avoid pb-8'>
       <Link href={url} className='block hover:outline hover:outline-1 hover:rounded-box'>
@@ -89,7 +89,7 @@ const Actions: React.FC<{
 }> = ({ uuid, parentUuid, areaName, canDelete = false }) => {
   return (
     <div className='flex items-center divide-x'>
-      <Link className='px-4' href={`/editArea/${uuid}`}>
+      <Link className='px-4' href={`/editArea/${uuid}/general`}>
         <button className='btn btn-link btn-primary btn-sm text-secondary font-semibold'>Edit</button>
       </Link>
       <Link className='px-4' href={`/area/${uuid}`} target='_new'>

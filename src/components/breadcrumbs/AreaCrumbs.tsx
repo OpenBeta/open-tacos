@@ -57,5 +57,5 @@ const AreaItem = forwardRef<any, AreaItemProps>((props, ref) => {
 })
 
 export const makeUrl = (editMode: boolean, uuid: string, path: string): string => {
-  return editMode ? `/editArea/${uuid}` : getAreaPageFriendlyUrl(uuid, path)
+  return editMode ? `/editArea/${uuid}/general` : getAreaPageFriendlyUrl(uuid, path)
 }

@@ -18,7 +18,7 @@ export const AreaAndClimbPageActions: React.FC<{ uuid: string, name: string, tar
   let navigateUuid = ''
   switch (targetType) {
     case TagTargetType.area:
-      url = `/editArea/${uuid}`
+      url = `/editArea/${uuid}/general`
       sharePath = `/area/${uuid}`
       navigateUuid = uuid
       break
@@ -31,7 +31,7 @@ export const AreaAndClimbPageActions: React.FC<{ uuid: string, name: string, tar
   }
   return (
     <ul className='flex items-center justify-between gap-2'>
-      <Link href={url} target='_new' className={clz('btn no-animation shadow-md', enableEdit ? 'btn-solid btn-accent' : 'btn-disabled')}>
+      <Link href={url} className={clz('btn no-animation shadow-md', enableEdit ? 'btn-solid btn-accent' : 'btn-disabled')}>
         <PencilSimple size={20} weight='duotone' /> {editLabel}
       </Link>
 
