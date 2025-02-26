@@ -109,6 +109,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
       if (found !== -1) {
         setSlideNumber(found)
       }
+      return
     }
 
     // Handle browser forward/back button
