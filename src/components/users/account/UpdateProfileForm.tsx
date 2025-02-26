@@ -48,7 +48,7 @@ export const UpdateProfileForm: React.FC = () => {
   const userUuid = session.data?.user.metadata.uuid
 
   const setAvatarUrl = useUserGalleryStore(store => store.setAvatarUrl)
-  const avatar = useUserGalleryStore(store => store.avatarUrl)
+  const avatarUrl = useUserGalleryStore(store => store.avatarUrl)
 
   useEffect(() => {
     if (userUuid != null) {
@@ -104,7 +104,7 @@ export const UpdateProfileForm: React.FC = () => {
 
       <h2 className=''>Edit Profile</h2>
 
-      {avatar !== null && avatar !== '' && <EditProfileImage avatar={avatar} key={avatar} />}
+      {avatarUrl !== null && avatarUrl !== '' && <EditProfileImage avatar={avatarUrl} key={avatarUrl} />}
 
       <FormProvider {...form}>
         {/* eslint-disable-next-line */}

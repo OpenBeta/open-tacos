@@ -1,15 +1,17 @@
 'use client'
-import { MouseEventHandler, useState } from 'react'
+import { MouseEventHandler, useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { UserCircle } from '@phosphor-icons/react/dist/ssr'
 import clsx from 'clsx'
+import { useSession } from 'next-auth/react'
 
 import { UserPublicProfile } from '../../js/types/User'
 import EditProfileButton from './EditProfileButton'
 import ImportFromMtnProj from './ImportFromMtnProj'
 import APIKeyCopy from './APIKeyCopy'
 import usePermissions from '../../js/hooks/auth/usePermissions'
+import useUserProfileCmd from '../../js/hooks/useUserProfileCmd'
 
 interface PublicProfileProps {
   userProfile: UserPublicProfile
@@ -17,9 +19,31 @@ interface PublicProfileProps {
 }
 
 export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX.Element {
-  const { isAuthorized } = usePermissions({ currentUserUuid: userProfile?.userUuid })
+  const session = useSession()
+  const userUuid = userProfile?.userUuid
+  const { isAuthorized } = usePermissions({ currentUserUuid: userUuid })
 
-  const { displayName, username, bio, website, avatar } = userProfile
+  const { getUserPublicProfileByUuid } = useUserProfileCmd({ accessToken: session?.data?.accessToken as string })
+
+  const [profile, setProfile] = useState<{ username?: string, displayName?: string, bio?: string, website?: string, avatar?: string } | null>(null)
+
+  const { username = '', displayName = '', bio = '', website = '', avatar = '' } = profile ?? {}
+
+  useEffect(() => {
+    if (session.status === 'loading') return
+
+    if (userProfile?.userUuid != null) {
+      const doAsync = async (): Promise<void> => {
+        const fetchedProfile = await getUserPublicProfileByUuid(userProfile.userUuid)
+        if (fetchedProfile != null) {
+          const { username, displayName, bio, website, avatar } = fetchedProfile
+          setProfile({ username, displayName, bio, website, avatar })
+        }
+      }
+      void doAsync()
+    }
+  }, [session])
+
   let websiteWithScheme: string | null = null
   if (website != null) {
     websiteWithScheme = website.startsWith('http') ? website : `//${website}`
@@ -28,7 +52,6 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
   return (
     <section className='mx-auto max-w-screen-sm px-4 md:px-0 md:grid md:grid-cols-3'>
       <div className='hidden md:block pr-5'>
-        <h5>profile : {avatar}</h5>
         {avatar != null && avatar !== '' && <ProfileImage avatar={avatar} />}
       </div>
       <div className='md:col-span-2 text-medium text-primary '>

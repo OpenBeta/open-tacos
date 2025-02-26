@@ -1,5 +1,5 @@
 import ''
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { v4 as uuidv4 } from 'uuid'
 
 import type PublicProfileType from '../PublicProfile'
@@ -16,7 +16,7 @@ jest.mock('../../media/BaseUploader.tsx', () => ({
   BaseProfilePhotoUploader: () => <button />
 }))
 
-// Mock import ticks button beacause we only care whether the button is there
+// Mock import ticks button because we only care whether the button is there
 // and to avoid mocking GQL dependency.
 const ImportFromMtnProjMock = jest.fn()
 jest.mock('../ImportFromMtnProj', () => {
@@ -36,6 +36,19 @@ const userProfile: Required<UserPublicProfile> = {
   bio: 'totem eatsum',
   website: 'https://example.com'
 }
+
+jest.mock('../../../js/hooks/useUserProfileCmd', () => ({
+  __esModule: true,
+  default: jest.fn(() => ({
+    getUserPublicProfileByUuid: jest.fn().mockResolvedValue({
+      username: userProfile.username,
+      displayName: userProfile.displayName,
+      bio: userProfile.bio,
+      website: userProfile.website,
+      avatar: userProfile.avatar
+    })
+  }))
+}))
 
 const mockAuth0UserMetadata = {
   user: {
@@ -64,11 +77,14 @@ test('Profile detail when the user is logged in.', async () => {
 
   expect(mockedUseSession).toBeCalled()
 
-  expect(screen.getByRole('link', { name: /edit/i })).toHaveAttribute('href', '/account/editProfile')
+  expect(await screen.findByRole('link', { name: /edit/i })).toHaveAttribute('href', '/account/editProfile')
 
-  expect(screen.queryByText(userProfile.displayName)).not.toBeNull()
-  expect(screen.queryByText(userProfile.username)).not.toBeNull()
-  expect(screen.queryByText(userProfile.bio)).not.toBeNull()
+  await waitFor(() => {
+    expect(screen.queryByText(userProfile.displayName)).not.toBeNull()
+    expect(screen.queryByText(userProfile.username)).not.toBeNull()
+    expect(screen.queryByText(userProfile.bio)).not.toBeNull()
+  })
+
   expect(screen.getByRole('link', { name: /example\.com/ })).toHaveAttribute('href', userProfile.website)
 })
 
@@ -81,5 +97,8 @@ test('Username edit link is not present when the user is logged out.', async () 
 
   expect(mockedUseSession).toBeCalled()
   expect(screen.queryByRole('link', { name: /edit/i })).toBeNull()
-  expect(screen.queryByText(userProfile.username)).not.toBeNull()
+
+  await waitFor(() => {
+    expect(screen.queryByText(userProfile.username)).not.toBeNull()
+  })
 })
