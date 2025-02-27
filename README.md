@@ -246,6 +246,7 @@ Thanks goes to these wonderful people:
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/glassbead0"><img src="https://avatars.githubusercontent.com/u/6528806?v=4?s=100" width="100px;" alt="Aaron Glasenapp"/><br /><sub><b>Aaron Glasenapp</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=glassbead0" title="Code">💻</a> <a href="#ideas-glassbead0" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/greghart"><img src="https://avatars.githubusercontent.com/u/3514280?v=4?s=100" width="100px;" alt="Greg Hart"/><br /><sub><b>Greg Hart</b></sub></a><br /><a href="https://github.com/OpenBeta/open-tacos/commits?author=greghart" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
