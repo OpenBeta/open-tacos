@@ -54,24 +54,39 @@ jobs:
     needs: build
     environment: production
 
-    # Expose NEXT_PUBLIC_ vars only.  Pass server-side vars Docker build directly.
+    # Expose NEXT_PUBLIC_ vars only
     env:
       NEXT_PUBLIC_MAPBOX_API_KEY: ${{ secrets.NEXT_PUBLIC_MAPBOX_API_KEY }}
       NEXT_PUBLIC_CDN_URL: ${{ secrets.NEXT_PUBLIC_CDN_URL }}
       NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
       NEXT_PUBLIC_API_SERVER: ${{ secrets.NEXT_PUBLIC_API_SERVER }}
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_PUBLIC_DEVTOOLS_ENABLED: 0
+
     steps:
       - name: 'Checkout Project'
         uses: 'actions/checkout@v4'
         with:
           fetch-depth: 1
 
-      # Next.js build inlines NEXT_PUBLIC_ vars so we can't simply overriding them
-      # with ordinary env vars
       - name: Create .env.production from secrets
         run: |
-          touch .env.production
-          echo "# Auto-generated .env.production file" > .env.production
+          cat <<EOF > .env.production
+            AUTH0_CLIENT_SECRET=${{ secrets.AUTH0_CLIENT_SECRET }}
+            AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}
+            AUTH0_CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}
+            AUTH0_MGMT_CLIENT_ID=${{ secrets.AUTH0_MGMT_CLIENT_ID }}
+            AUTH0_MGMT_CLIENT_AUDIENCE=${{ secrets.AUTH0_MGMT_CLIENT_AUDIENCE }}
+            AUTH0_MGMT_CLIENT_SECRET=${{ secrets.AUTH0_MGMT_CLIENT_SECRET }}
+            MOBILE_AUTH_SECRET=${{ secrets.MOBILE_AUTH_SECRET }}
+            GC_BUCKET_CLIENT_EMAIL=${{ secrets.GC_BUCKET_CLIENT_EMAIL }}
+            GC_BUCKET_PRIVATE_KEY=${{ secrets.GC_BUCKET_PRIVATE_KEY }}
+            GC_BUCKET_NAME=${{ secrets.GC_BUCKET_NAME }}
+            OPENBETA_API_SERVER=${{ secrets.NEXT_PUBLIC_API_SERVER }}
+          EOF
+
+      - name: Append NEXT_PUBLIC_ vars to .env.production
+        run: |
           for var in $(printenv | grep '^NEXT_PUBLIC_' | cut -d= -f1); do
             echo "$var='${!var}'" >> .env.production
           done
@@ -109,17 +124,4 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
-          build-args: |
-            AUTH0_CLIENT_SECRET=${{ secrets.AUTH0_CLIENT_SECRET }}
-            AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}
-            AUTH0_CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}
-            AUTH0_MGMT_CLIENT_ID=${{ secrets.AUTH0_MGMT_CLIENT_ID }}
-            AUTH0_MGMT_CLIENT_AUDIENCE=${{ secrets.AUTH0_MGMT_CLIENT_AUDIENCE }}
-            AUTH0_MGMT_CLIENT_SECRET=${{ secrets.AUTH0_MGMT_CLIENT_SECRET }}
-            MOBILE_AUTH_SECRET=${{ secrets.MOBILE_AUTH_SECRET }}
-            GC_BUCKET_CLIENT_EMAIL=${{ secrets.GC_BUCKET_CLIENT_EMAIL }}
-            GC_BUCKET_PRIVATE_KEY=${{ secrets.GC_BUCKET_PRIVATE_KEY }}
-            GC_BUCKET_NAME=${{ secrets.GC_BUCKET_NAME }}
-            NEXT_TELEMETRY_DISABLED=1
-            NEXT_PUBLIC_DEVTOOLS_ENABLED=0
-            OPENBETA_API_SERVER=${{ secrets.NEXT_PUBLIC_API_SERVER }}
+
