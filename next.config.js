@@ -22,6 +22,28 @@ module.exports = {
     fileLoaderRule.exclude = /\.svg$/i
     return config
   },
+  async headers () {
+    return [
+      {
+        source: '/area/:uuid/:name',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=600'
+          }
+        ]
+      },
+      {
+        source: '/climb/:uuid/:name',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=600'
+          }
+        ]
+      }
+    ]
+  },
   async rewrites () {
     return [
       { // A hack to pass ?gallery=true to getStaticProps()
