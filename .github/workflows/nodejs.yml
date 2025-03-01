@@ -54,8 +54,8 @@ jobs:
     needs: build
     environment: production
 
-    # Expose NEXT_PUBLIC_ vars only
     env:
+      # Expose NEXT_PUBLIC_ vars only
       NEXT_PUBLIC_MAPBOX_API_KEY: ${{ secrets.NEXT_PUBLIC_MAPBOX_API_KEY }}
       NEXT_PUBLIC_CDN_URL: ${{ secrets.NEXT_PUBLIC_CDN_URL }}
       NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
@@ -72,6 +72,7 @@ jobs:
       - name: Create .env.production from secrets
         run: |
           cat <<EOF > .env.production
+            NEXTAUTH_URL=$${{ secrets.CANONICAL_URL }}
             AUTH0_CLIENT_SECRET=${{ secrets.AUTH0_CLIENT_SECRET }}
             AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}
             AUTH0_CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}
