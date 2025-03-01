@@ -22,8 +22,8 @@ const getHandler = async (req: NextRequest): Promise<any> => {
     if (usernameInfo?.username == null) {
       return NextResponse.rewrite(url)
     } else {
-      const baseUrl = process.env?.NEXT_PUBLIC_BASE_URL ?? req.nextUrl.origin
-      url.pathname = `${baseUrl}/u/${usernameInfo.username}`
+      url.pathname = `/u/${usernameInfo.username}`
+      url.basePath = process.env?.NEXT_PUBLIC_BASE_URL ?? req.nextUrl.origin
       return NextResponse.redirect(url)
     }
   } catch (e) {
