@@ -16,7 +16,7 @@ const getHandler = async (req: NextRequest): Promise<any> => {
   console.log('### ----------- Headers --------------- ###', req.headers)
   console.log('### Original Req.nextUrl', req.nextUrl)
   const url = req.nextUrl.clone()
-  url.pathname = '/'
+  // url.pathname = '/'
 
   try {
     const { getUsernameById } = useUserProfileCmd({ accessToken })
@@ -24,10 +24,11 @@ const getHandler = async (req: NextRequest): Promise<any> => {
     if (usernameInfo?.username == null) {
       return NextResponse.rewrite(url)
     } else {
-      url.pathname = `/u/${usernameInfo.username}`
+      const origin = process.env?.NEXT_PUBLIC_BASE_URL ?? req.nextUrl.origin
+      const url = `${origin}/u/${usernameInfo.username}`
       // url.basePath = process.env?.NEXT_PUBLIC_BASE_URL ?? req.nextUrl.origin
       console.log('### Redirect', url)
-      return NextResponse.redirect(url)
+      return Response.redirect(url, 302)
     }
   } catch (e) {
     return NextResponse.rewrite(url)
