@@ -73,6 +73,7 @@ jobs:
       - name: Create .env.production from secrets
         run: |
           cat <<EOF > .env.production
+            HOSTNAME=${{ secrets.NEXT_PUBLIC_BASE_URL }}
             NEXTAUTH_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}
             AUTH0_CLIENT_SECRET=${{ secrets.AUTH0_CLIENT_SECRET }}
             AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}
