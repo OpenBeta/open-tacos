@@ -1,13 +1,10 @@
 import { Suspense } from 'react'
+import Gallery from '../components/media/Gallery'
 
-export default function Page (): any {
-  return <Suspense><Gallery /></Suspense>
-}
-
-function Gallery (): any {
+export default function Page (): JSX.Element {
   return (
-    <div className='h-screen w-screen'>
-      <div className='m-6 text-sm'>Please wait...</div>
-    </div>
+    <Suspense>
+      <Gallery />
+    </Suspense>
   )
 }
