@@ -13,6 +13,8 @@ const getHandler = async (req: NextRequest): Promise<any> => {
     return NextResponse.json({ status: 500 })
   }
 
+  console.log('### ----------- Headers --------------- ###', req.headers)
+  console.log('### Original Req.nextUrl', req.nextUrl)
   const url = req.nextUrl.clone()
   url.pathname = '/'
 
@@ -23,7 +25,8 @@ const getHandler = async (req: NextRequest): Promise<any> => {
       return NextResponse.rewrite(url)
     } else {
       url.pathname = `/u/${usernameInfo.username}`
-      url.basePath = process.env?.NEXT_PUBLIC_BASE_URL ?? req.nextUrl.origin
+      // url.basePath = process.env?.NEXT_PUBLIC_BASE_URL ?? req.nextUrl.origin
+      console.log('### Redirect', url)
       return NextResponse.redirect(url)
     }
   } catch (e) {
