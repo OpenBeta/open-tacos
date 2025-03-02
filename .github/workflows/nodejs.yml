@@ -59,7 +59,6 @@ jobs:
       NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
       NEXT_PUBLIC_MAPBOX_API_KEY: ${{ secrets.NEXT_PUBLIC_MAPBOX_API_KEY }}
       NEXT_PUBLIC_CDN_URL: ${{ secrets.NEXT_PUBLIC_CDN_URL }}
-      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
       NEXT_PUBLIC_API_SERVER: ${{ secrets.NEXT_PUBLIC_API_SERVER }}
       NEXT_TELEMETRY_DISABLED: 1
       NEXT_PUBLIC_DEVTOOLS_ENABLED: 0
@@ -73,8 +72,8 @@ jobs:
       - name: Create .env.production from secrets
         run: |
           cat <<EOF > .env.production
-            HOSTNAME=${{ secrets.NEXT_PUBLIC_BASE_URL }}
             NEXTAUTH_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}
+            NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
             AUTH0_CLIENT_SECRET=${{ secrets.AUTH0_CLIENT_SECRET }}
             AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}
             AUTH0_CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}
