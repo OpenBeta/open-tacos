@@ -94,5 +94,6 @@ module.exports = {
   },
   experimental: {
     optimizePackageImports: ['@phosphor-icons/react']
-  }
+  },
+  cacheHandler: process.env.NODE_ENV === 'production' ? './cache-handler.mjs' : undefined
 }
