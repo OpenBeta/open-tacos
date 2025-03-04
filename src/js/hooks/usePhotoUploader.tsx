@@ -117,8 +117,8 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
     return await new Promise((resolve, reject) => {
       void new Compressor(file, {
         quality: 0.6,
-        success: (compressedFile) => resolve(compressedFile),
-        error: (err) => reject(err)
+        success: (compressedFile: File) => resolve(compressedFile),
+        error: (err: Error) => reject(err)
       })
     })
   }
@@ -130,13 +130,16 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
     ref.current.hasErrors = false
     const processFile = async (file: File): Promise<void> => {
       try {
-        if (file.size > 11534336) {
+        if (file.size < 11534336) { // less than 11 MB, doesn't need to be compressed
+          const content = await readFile(file)
+          await onload(content, file)
+        } else if (file.size > 11534336 && file.size < 31457280) {
+          // greater than 11 MB and less than 30 MB, undergoes auto compression
           const compressedFile = await compressImage(file)
           const content = await readFile(compressedFile)
           await onload(content, compressedFile)
-        } else {
-          const content = await readFile(file)
-          await onload(content, file)
+        } else { // file size greater than 30 MB
+          ref.current.hasErrors = true
         }
       } catch (error) {
         console.error('Upload error:', error)
