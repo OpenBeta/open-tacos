@@ -14,7 +14,6 @@ export const FullScreenMap: React.FC<FullScreenMapProps> = ({ center: initialCen
   const [zoom, setZoom] = useState<number | undefined>(undefined)
   const [areaId, setAreaId] = useState<string | undefined>(undefined)
   const [isInitialized, setIsInitialized] = useState(false)
-  const DEFAULT_CENTER: [number, number] = [0, 0]
   const DEFAULT_ZOOM = 2
 
   const router = useRouter()
