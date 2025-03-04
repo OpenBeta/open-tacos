@@ -1,0 +1,87 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"  # Only trigger on semver tags like v1.2.3
+
+jobs:
+  # build docker image and push to registry
+  docker:
+    runs-on: ubuntu-22.04
+    needs: build
+    environment: production
+
+    env:
+      # Expose NEXT_PUBLIC_ vars only
+      NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
+      NEXT_PUBLIC_MAPBOX_API_KEY: ${{ secrets.NEXT_PUBLIC_MAPBOX_API_KEY }}
+      NEXT_PUBLIC_CDN_URL: ${{ secrets.NEXT_PUBLIC_CDN_URL }}
+      NEXT_PUBLIC_API_SERVER: ${{ secrets.NEXT_PUBLIC_API_SERVER }}
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_PUBLIC_DEVTOOLS_ENABLED: 0
+
+    steps:
+      - name: 'Checkout Project'
+        uses: 'actions/checkout@v4'
+        with:
+          fetch-depth: 1
+
+      - name: Create .env.production from secrets
+        run: |
+          cat <<EOF > .env.production
+            NEXTAUTH_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}
+            NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+            AUTH0_CLIENT_SECRET=${{ secrets.AUTH0_CLIENT_SECRET }}
+            AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}
+            AUTH0_CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}
+            AUTH0_MGMT_CLIENT_ID=${{ secrets.AUTH0_MGMT_CLIENT_ID }}
+            AUTH0_MGMT_CLIENT_AUDIENCE=${{ secrets.AUTH0_MGMT_CLIENT_AUDIENCE }}
+            AUTH0_MGMT_CLIENT_SECRET=${{ secrets.AUTH0_MGMT_CLIENT_SECRET }}
+            MOBILE_AUTH_SECRET=${{ secrets.MOBILE_AUTH_SECRET }}
+            GC_BUCKET_CLIENT_EMAIL=${{ secrets.GC_BUCKET_CLIENT_EMAIL }}
+            GC_BUCKET_PRIVATE_KEY=${{ secrets.GC_BUCKET_PRIVATE_KEY }}
+            GC_BUCKET_NAME=${{ secrets.GC_BUCKET_NAME }}
+            OPENBETA_API_SERVER=${{ secrets.NEXT_PUBLIC_API_SERVER }}
+          EOF
+
+      - name: Append NEXT_PUBLIC_ vars to .env.production
+        run: |
+          for var in $(printenv | grep '^NEXT_PUBLIC_' | cut -d= -f1); do
+            echo "$var='${!var}'" >> .env.production
+          done
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        if: github.event_name != 'pull_request'
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+      - name: Pull Docker image
+        run: |
+          docker pull vnguyen/open-tacos:latest || true
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            vnguyen/open-tacos
+          tags: |
+            type=semver,pattern={{raw}}
+            type=raw,value=latest
+
+      - name: Build docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./
+          file: ./Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            vnguyen/open-tacos:latest
+            ${{ steps.meta.outputs.tags }}
