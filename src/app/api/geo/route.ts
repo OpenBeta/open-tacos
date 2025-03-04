@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { geolocation } from '@vercel/edge'
+import { headers } from 'next/headers'
+// import { geolocation } from '@vercel/edge'
 
 export const runtime = 'edge'
 
@@ -8,7 +9,10 @@ export const runtime = 'edge'
  * Endpoint: `/api/geo`
  */
 export async function GET (request: NextRequest): Promise<any> {
-  const geo = geolocation(request)
+  const headersList = headers()
+  console.log('## headerList', headersList)
+  // const geo = geolocation(request)
+  const geo = { longitude: '0', latitude: '0' }
   const longitude = geo?.longitude
   const latitude = geo?.latitude
   if (longitude != null && latitude != null) {

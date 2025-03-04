@@ -114,11 +114,12 @@ export const FullScreenMap: React.FC = () => {
 }
 
 const getVisitorLocation = async (): Promise<{ longitude: number, latitude: number } | undefined> => {
-  try {
-    const res = await fetch('/api/geo')
-    return await res.json()
-  } catch (err) {
-    console.log('ERROR', err)
-    return undefined
-  }
+  return undefined
+  // try {
+  //   const res = await fetch('/api/geo')
+  //   return await res.json()
+  // } catch (err) {
+  //   console.log('ERROR', err)
+  //   return undefined
+  // }
 }

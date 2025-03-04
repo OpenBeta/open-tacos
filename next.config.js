@@ -25,20 +25,20 @@ module.exports = {
   async headers () {
     return [
       {
-        source: '/area/:uuid/:name',
+        source: '/area/:id*',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=86400, stale-while-revalidate=600'
+            value: 'public, max-age=2592000, stale-while-revalidate=600'
           }
         ]
       },
       {
-        source: '/climb/:uuid/:name',
+        source: '/climb/:id*',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=86400, stale-while-revalidate=600'
+            value: 'public, max-age=2592000, stale-while-revalidate=600'
           }
         ]
       }
@@ -95,5 +95,4 @@ module.exports = {
   experimental: {
     optimizePackageImports: ['@phosphor-icons/react']
   }
-  // cacheHandler: process.env.NODE_ENV === 'production' ? './cache-handler.mjs' : undefined
 }
