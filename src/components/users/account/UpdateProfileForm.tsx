@@ -76,7 +76,7 @@ export const UpdateProfileForm: React.FC = () => {
     const successful = await updatePublicProfileCmd({ userUuid, displayName, bio, website })
     if (successful) {
       reset({ displayName, bio, website })
-      toast.info('Username updated')
+      toast.info('Profile updated')
     } else {
       toast.error('Unexpected error.  Please try again.')
     }
