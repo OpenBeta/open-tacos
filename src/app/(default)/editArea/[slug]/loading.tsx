@@ -1,4 +1,4 @@
-import { SectionContainer } from './components/EditAreaContainers'
+import { SectionContainer } from '../../components/AreaAndClimbPage/EditAreaContainers'
 
 /**
  * Loading skeleton

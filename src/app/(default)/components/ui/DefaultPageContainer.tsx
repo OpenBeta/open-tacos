@@ -1,6 +1,6 @@
 import { GallerySkeleton } from '@/components/media/PhotoMontage'
 import React from 'react'
-import { AreaPageActionsSkeleton } from '../AreaAndClimbPageActions'
+import { AreaPageActionsSkeleton } from '../AreaAndClimbPage/AreaAndClimbPageActions'
 import { Summary } from './Summary'
 
 /**

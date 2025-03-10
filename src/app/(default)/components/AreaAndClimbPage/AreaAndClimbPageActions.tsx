@@ -25,8 +25,8 @@ export const AreaAndClimbPageActions: React.FC<{ uuid: string, name: string, tar
     case TagTargetType.climb:
       url = `/editClimb/${uuid}`
       sharePath = `/climb/${uuid}`
-      enableEdit = false
-      editLabel = 'Edit (TBD)'
+      enableEdit = true
+      editLabel = 'Edit'
       navigateUuid = parentUuid ?? ''
   }
   return (

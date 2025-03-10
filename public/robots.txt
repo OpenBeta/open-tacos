@@ -12,4 +12,5 @@ Disallow: /api/
 Disallow: /auth/
 Disallow: /basecamp/
 Disallow: /editArea/
+Disallow: /editClimb/
 Sitemap: https://openbeta.io/sitemap.xml
