@@ -2,9 +2,19 @@ import { notFound, redirect } from 'next/navigation'
 import { validate } from 'uuid'
 import { Metadata } from 'next'
 import { FetchPolicy } from '@apollo/client'
+import { Climb } from '@/js/types'
+import { ArrowUUpLeft, Sidebar } from '@phosphor-icons/react/dist/ssr'
 
-import { AreaPageDataProps, getArea } from '@/js/graphql/getArea'
+// import { getPageDataForEdit } from './page'
+import { AreaCrumbs } from '@/components/breadcrumbs/AreaCrumbs'
+import { getClimbPageFriendlyUrl } from '@/js/utils'
+import { getClimbByIdRSC } from '@/js/graphql/getClimbRSC'
 import { PageContainer, SectionContainer } from '../../components/AreaAndClimbPage/EditAreaContainers'
+import { SidebarNav } from './components/SidebarNav'
+import { ClimbNameForm } from './components/ClimbNameForm'
+import { ClimbDescriptionForm } from './components/ClimbDescriptionForm'
+import { ClimbLocationForm } from './components/ClimbLocationForm'
+import { ClimbProtectionForm } from './components/ClimbProtectionForm'
 
 // Opt out of caching for all data requests in the route segment
 export const dynamic = 'force-dynamic'
@@ -12,14 +22,14 @@ export const fetchCache = 'force-no-store' // opt out of Nextjs version of 'fetc
 
 // Page metadata
 export async function generateMetadata ({ params }: DashboardPageProps): Promise<Metadata> {
-  // const pageDataForEdit = await getPageDataForEdit(params.slug, 'cache-first')
-  // if (pageDataForEdit == null || pageDataForEdit.area == null) {
-  //   return {}
-  // }
+  const pageDataForEdit = await getPageDataForEdit(params.slug, 'cache-first')
+  if (pageDataForEdit == null) {
+    return {}
+  }
 
-  // const { area: { areaName } } = pageDataForEdit
+  const { name } = pageDataForEdit
   return {
-    title: 'Editing climb climbnamehere'
+    title: `Editing climb ${String(name)}`
   }
 }
 
@@ -41,43 +51,73 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
   //   content: { description, areaLocation },
   //   metadata: { lat, lng, leaf }
   // } = area
+  const pageDataForEdit = await getPageDataForEdit(params.slug)
+  console.log('🚀 ~ generateMetadata ~ pageDataForEdit:', pageDataForEdit)
+  if (pageDataForEdit == null) {
+    notFound()
+  }
+
+  const {
+    id, name, content, type, ancestors, pathTokens, parent
+  } = pageDataForEdit
+  console.log('🚀 ~ AreaEditPage ~ parent:', pageDataForEdit)
 
   return (
-    <PageContainer>
-      <SectionContainer id='general'>
-        climb name form here
-      </SectionContainer>
+    <div className='relative w-full h-full'>
+      <div className='px-12 pt-8 pb-4'>
+        <div className='text-3xl tracking-tight font-semibold'>Edit climb</div>
 
-      <SectionContainer id='description'>
-        descrip here
-      </SectionContainer>
+        <div className='text-sm flex justify-end'>
+          <a
+            href={getClimbPageFriendlyUrl(id, name)}
+            className='flex items-center gap-2 hover:underline'
+          >
+            Return to public version <ArrowUUpLeft size={18} />
+          </a>
+        </div>
+      </div>
 
-      <SectionContainer id='areaLocation'>
-        localtion here
-      </SectionContainer>
+      <div className='bg-base-200'>
+        <div className='z-20 sticky top-0 py-2 px-6 bg-base-200 w-full border-t border-b'>
+          <AreaCrumbs pathTokens={pathTokens} ancestors={ancestors} editMode />
+        </div>
+        <div className='flex bg-base-200 flex-col lg:flex-row py-12'>
+          <SidebarNav />
+          <main className='relative h-full w-full px-2 lg:px-16'>
+            <PageContainer>
+              <SectionContainer id='general'>
+                <ClimbNameForm initialValue={name} uuid={id} parentId={parent.uuid} />
+              </SectionContainer>
 
-      <SectionContainer id='location'>
-        lat and long here?
-      </SectionContainer>
+              <SectionContainer id='description'>
+                <ClimbDescriptionForm initialValue={content?.description} uuid={id} parentId={parent.uuid} />
+              </SectionContainer>
 
-      <SectionContainer id='areaType'>
-        Climb type form
-      </SectionContainer>
+              <SectionContainer id='location'>
+                <ClimbLocationForm initialValue={content?.location} uuid={id} parentId={parent.uuid} />
+              </SectionContainer>
 
-    </PageContainer>
+              <SectionContainer id='protection'>
+                <ClimbProtectionForm initialValue={content?.protection} uuid={id} parentId={parent.uuid} />
+              </SectionContainer>
+            </PageContainer>
+          </main>
+        </div>
+      </div>
+    </div>
   )
 }
 
-// export const getPageDataForEdit = async (pageSlug: string, fetchPolicy?: FetchPolicy): Promise<AreaPageDataProps> => {
-//   if (pageSlug == null) notFound()
+const getPageDataForEdit = async (pageSlug: string, fetchPolicy?: FetchPolicy): Promise<Climb | null> => {
+  if (pageSlug == null) notFound()
 
-//   if (!validate(pageSlug)) {
-//     notFound()
-//   }
+  if (!validate(pageSlug)) {
+    notFound()
+  }
 
-//   const pageData = await getArea(pageSlug, fetchPolicy)
-//   if (pageData == null || pageData.area == null) {
-//     notFound()
-//   }
-//   return pageData
-// }
+  const pageData = await getClimbByIdRSC(pageSlug, fetchPolicy)
+  if (pageData == null) {
+    notFound()
+  }
+  return pageData
+}

@@ -15,7 +15,6 @@ import { LazyAreaMap } from '@/components/maps/AreaMap'
 import { ClimbType, TagTargetType } from '@/js/types'
 import { NeighboringRoutesNav } from '@/components/crag/NeighboringRoute'
 import { AreaAndClimbPageActions } from '../../components/AreaAndClimbPage/AreaAndClimbPageActions'
-import { PageAlert } from './components/PageAlert'
 /**
  * Page cache settings
  */
@@ -59,7 +58,6 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
 
   return (
     <DefaultPageContainer
-      heroAlert={<PageAlert id={id} />}
       photoGallery={
                 photoList.length === 0
                   ? <UploadPhotoCTA />
