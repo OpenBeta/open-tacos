@@ -14,7 +14,7 @@ import { SiblingClimbs } from './components/SiblingClimbs'
 import { LazyAreaMap } from '@/components/maps/AreaMap'
 import { ClimbType, TagTargetType } from '@/js/types'
 import { NeighboringRoutesNav } from '@/components/crag/NeighboringRoute'
-import { AreaAndClimbPageActions } from '../../components/AreaAndClimbPage/AreaAndClimbPageActions'
+import { AreaAndClimbPageActions } from '../../components/AreaAndClimb/AreaAndClimbPageActions'
 /**
  * Page cache settings
  */

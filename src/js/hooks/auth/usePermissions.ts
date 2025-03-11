@@ -12,9 +12,6 @@ interface PermissionsProps {
  */
 export default function usePermissions ({ currentUserUuid }: PermissionsProps): WithPermission {
   const { status, data } = useSession()
-  console.log('Session status:', status)
-  console.log('Session data:', data)
-  console.log('Current User UUID:', currentUserUuid)
 
   const isAuthorized = status === 'authenticated' &&
     data != null &&
