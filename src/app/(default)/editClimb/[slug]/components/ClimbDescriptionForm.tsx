@@ -2,7 +2,7 @@
 import { useSession } from 'next-auth/react'
 
 import { SingleEntryForm } from '@/app/(default)/editArea/[slug]/components/SingleEntryForm'
-import { AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '@/components/edit/EditAreaForm'
+import { CLIMB_DESCRIPTION_FORM_VALIDATION_RULES } from '../validation'
 import useUpdateClimbsCmd from '@/js/hooks/useUpdateClimbsCmd'
 import { MarkdownTextArea } from '@/components/ui/form/MarkdownTextArea'
 
@@ -32,7 +32,7 @@ export const ClimbDescriptionForm: React.FC<{ initialValue: string, uuid: string
         initialValue={initialValue}
         name='description'
         label='Describe this climb to the best of your knowledge.  Do not copy descriptions from guidebooks.'
-        rules={AREA_DESCRIPTION_FORM_VALIDATION_RULES}
+        rules={CLIMB_DESCRIPTION_FORM_VALIDATION_RULES}
       />
     </SingleEntryForm>
   )

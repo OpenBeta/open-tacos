@@ -5,11 +5,10 @@ import { ValidationValueMessage } from 'react-hook-form'
 import { SingleEntryForm } from '@/app/(default)/editArea/[slug]/components/SingleEntryForm'
 import { DashboardInput } from '@/components/ui/form/Input'
 import useUpdateClimbsCmd from '@/js/hooks/useUpdateClimbsCmd'
-import { AREA_NAME_FORM_VALIDATION_RULES } from '@/components/edit/EditAreaForm'
+import { CLIMB_NAME_FORM_VALIDATION_RULES } from '../validation'
 
 export const ClimbNameForm: React.FC<{ initialValue: string, uuid: string, parentId: string }> = ({ uuid, initialValue, parentId }) => {
   const session = useSession({ required: true })
-  console.log('sesh', session)
 
   const { updateClimbCmd } = useUpdateClimbsCmd({
     parentId,
@@ -17,7 +16,7 @@ export const ClimbNameForm: React.FC<{ initialValue: string, uuid: string, paren
   }
   )
 
-  const maxLengthValidation = AREA_NAME_FORM_VALIDATION_RULES.maxLength as ValidationValueMessage
+  const maxLengthValidation = CLIMB_NAME_FORM_VALIDATION_RULES.maxLength as ValidationValueMessage
 
   return (
     <SingleEntryForm<{ climbName: string }>
@@ -35,7 +34,7 @@ export const ClimbNameForm: React.FC<{ initialValue: string, uuid: string, paren
       <DashboardInput
         name='climbName'
         label='This is the name of the climb.'
-        registerOptions={AREA_NAME_FORM_VALIDATION_RULES}
+        registerOptions={CLIMB_NAME_FORM_VALIDATION_RULES}
         className='w-full'
       />
     </SingleEntryForm>

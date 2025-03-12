@@ -9,6 +9,8 @@ import { ArrowUUpLeft, Sidebar } from '@phosphor-icons/react/dist/ssr'
 import { AreaCrumbs } from '@/components/breadcrumbs/AreaCrumbs'
 import { getClimbPageFriendlyUrl } from '@/js/utils'
 import { getClimbByIdRSC } from '@/js/graphql/getClimbRSC'
+import Grade from '@/js/grades/Grade'
+
 import { PageContainer, SectionContainer } from '../../components/AreaAndClimb/EditAreaContainers'
 import { SidebarNav } from './components/SidebarNav'
 import { ClimbNameForm } from './components/ClimbNameForm'
@@ -52,13 +54,12 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
   //   metadata: { lat, lng, leaf }
   // } = area
   const pageDataForEdit = await getPageDataForEdit(params.slug)
-  console.log('🚀 ~ generateMetadata ~ pageDataForEdit:', pageDataForEdit)
   if (pageDataForEdit == null) {
     notFound()
   }
 
   const {
-    id, name, content, type, ancestors, pathTokens, parent
+    id, name, content, ancestors, pathTokens, parent
   } = pageDataForEdit
   console.log('🚀 ~ AreaEditPage ~ parent:', pageDataForEdit)
 
@@ -82,7 +83,7 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
           <AreaCrumbs pathTokens={pathTokens} ancestors={ancestors} editMode />
         </div>
         <div className='flex bg-base-200 flex-col lg:flex-row py-12'>
-          <SidebarNav />
+          <SidebarNav uuid={id} pageDataForEdit={pageDataForEdit} parentId={parent.uuid} />
           <main className='relative h-full w-full px-2 lg:px-16'>
             <PageContainer>
               <SectionContainer id='general'>

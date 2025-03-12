@@ -15,6 +15,7 @@ export const TradSportGradeInput: React.FC<BaseGradeInput> = ({ gradeObj }) => {
 
   useEffect(() => {
     const tokens = disciplineTypeToDisplay(currentDisciplines)
+    console.log('🚀 ~ useEffect ~ currentDisciplines:', currentDisciplines)
     if (tokens.length === 0) {
       setError('disciplines', { type: 'custom', message: 'Please set at least 1 discipline' })
     } else {
@@ -42,8 +43,8 @@ export const TradSportGradeInput: React.FC<BaseGradeInput> = ({ gradeObj }) => {
           <span className='label-text font-semibold'>Disciplines</span>
           <Tooltip content='A crag can only have rope climbs. Please create a separate boulder to add problems.'>
             <div className='flex items-center gap-2 text-xs'>
-              <span className='link-dotted hidden sm:inline-block text-info'>How to add boulder problems?</span
-              ><QuestionMarkCircleIcon className='text-info w-5 h-5' />
+              <span className='link-dotted hidden sm:inline-block text-info'>How to add boulder problems?</span>
+              <QuestionMarkCircleIcon className='text-info w-5 h-5' />
             </div>
           </Tooltip>
         </label>
