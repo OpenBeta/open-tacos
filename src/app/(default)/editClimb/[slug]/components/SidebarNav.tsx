@@ -68,20 +68,18 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ uuid, pageDataForEdit, a
       {/* eslint-disable-next-line */}
       <form onSubmit={handleSubmit(submitHandler)}>
         <nav className='px-6'>
+          {isBouldering && <BoulderingGradeInput gradeObj={gradesObj} />}
+          {!isBouldering && <TradSportGradeInput gradeObj={gradesObj} />}
+          <div className='flex items-center space-x-2 w-full' />
+          <TotalLengthInput />
           <div className='mt-6'>
-            {isBouldering && <BoulderingGradeInput gradeObj={gradesObj} />}
-            {!isBouldering && <TradSportGradeInput gradeObj={gradesObj} />}
-            <div className='flex items-center space-x-2 w-full' />
-            <TotalLengthInput />
-            <div className='mt-6'>
               <LegacyFAInput />
             </div>
-            {(authorMetadata.createdAt != null || authorMetadata.updatedAt != null) && (
+          {(authorMetadata.createdAt != null || authorMetadata.updatedAt != null) && (
               <div className='mt-8  border-t border-b'>
                 <ArticleLastUpdate {...authorMetadata} />
               </div>
             )}
-          </div>
           <div className='mt-6'>
             <SubmitButton
               isSubmitting={isSubmitting}

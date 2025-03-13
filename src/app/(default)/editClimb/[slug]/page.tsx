@@ -42,17 +42,6 @@ export interface DashboardPageProps {
 }
 
 export default async function AreaEditPage ({ params }: DashboardPageProps): Promise<any> {
-  // const pageDataForEdit = await getPageDataForEdit(params.slug)
-  // if (pageDataForEdit == null || pageDataForEdit.area == null) {
-  //   notFound()
-  // }
-
-  // const { area } = pageDataForEdit
-  // const {
-  //   areaName, uuid, ancestors, pathTokens, children,
-  //   content: { description, areaLocation },
-  //   metadata: { lat, lng, leaf }
-  // } = area
   const pageDataForEdit = await getPageDataForEdit(params.slug)
   if (pageDataForEdit == null) {
     notFound()

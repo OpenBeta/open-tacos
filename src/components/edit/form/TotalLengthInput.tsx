@@ -28,6 +28,7 @@ export const TotalLengthInput: React.FC = () => {
       placeholder='Example: 42'
       registerOptions={CLIMB_LENGTH_FORM_VALIDATION_RULES}
       type='number'
+      affixClassname='bg-gray-200'
     />
   )
 }
