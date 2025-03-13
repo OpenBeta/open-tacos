@@ -184,6 +184,7 @@ const Body = ({ climb, leftClimb, rightClimb, parentArea }: ClimbPageProps): JSX
       parentId: ancestors[ancestors.length - 1],
       changes: [{ id, ...onlyDirtyFields }]
     }
+    console.log('🚀 ~ submitHandler ~ input:', input)
 
     await updateClimbCmd(input)
     setCache({ ...formData })
