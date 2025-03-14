@@ -17,6 +17,7 @@ import usePermissions from '@/js/hooks/auth/usePermissions'
 import useMediaCmd from '@/js/hooks/useMediaCmd'
 import { useUserGalleryStore } from '@/js/stores/useUserGalleryStore'
 import { relayMediaConnectionToMediaArray } from '@/js/utils'
+import { useSession } from 'next-auth/react'
 
 export interface UserGalleryProps {
   uid: string
@@ -46,6 +47,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const { status: sessionStatus } = useSession()
   const userProfile = userPublicPage.profile
 
   const { fetchMoreMediaForward } = useMediaCmd()
@@ -85,6 +87,8 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
   * Initialize image data store
   */
   useEffect(() => {
+    if (sessionStatus === 'loading') return // Wait for session data to load
+
     if (isAuthorized) {
       void fetchMoreMediaForward({
         userUuid: userPublicPage.profile.userUuid
@@ -94,7 +98,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
     } else {
       resetData(userPublicPage.media.mediaConnection)
     }
-  }, [userPublicPage.media.mediaConnection])
+  }, [userPublicPage.media.mediaConnection, sessionStatus])
 
   const imageList = mediaConnection.edges.map(edge => edge.node)
 
@@ -105,6 +109,7 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
       if (found !== -1) {
         setSlideNumber(found)
       }
+      return
     }
 
     // Handle browser forward/back button
@@ -166,6 +171,10 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
     ? [...Array(3 - mediaConnection.edges.length).keys()]
     : []
 
+  if (sessionStatus === 'loading') {
+    return <div>Loading...</div>
+  }
+
   return (
     <>
       {isAuthorized && (
@@ -212,7 +221,6 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
 
             return (
               <div className='relative' key={key}>
-                <h4>Media URL {mediaUrl}</h4>
                 <UserMedia
                   uid={uid}
                   index={index}
