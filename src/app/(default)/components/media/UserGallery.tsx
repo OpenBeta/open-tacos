@@ -89,7 +89,6 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
       void fetchMoreMediaForward({
         userUuid: userPublicPage.profile.userUuid
       }).then(nextMediaConnection => {
-        console.log('🚀 ~ useEffect ~ nextMediaConnection:', nextMediaConnection)
         if (nextMediaConnection != null) resetData(nextMediaConnection)
       })
     } else {

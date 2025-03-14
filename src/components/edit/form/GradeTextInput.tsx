@@ -15,7 +15,6 @@ export const TradSportGradeInput: React.FC<BaseGradeInput> = ({ gradeObj }) => {
 
   useEffect(() => {
     const tokens = disciplineTypeToDisplay(currentDisciplines)
-    console.log('🚀 ~ useEffect ~ currentDisciplines:', currentDisciplines)
     if (tokens.length === 0) {
       setError('disciplines', { type: 'custom', message: 'Please set at least 1 discipline' })
     } else {
