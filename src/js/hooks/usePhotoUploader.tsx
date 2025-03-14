@@ -113,7 +113,7 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
     }
   }
 
-  const compressImage = async (file: File): Promise<File | Blob> => {
+  const compressImage = async (file: File | Blob): Promise<File | Blob> => {
     return await new Promise((resolve, reject) => {
       void new Compressor(file, {
         quality: 0.6,
@@ -128,20 +128,26 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
 
     setUploading(true)
     ref.current.hasErrors = false
-    const processFile = async (file: File): Promise<void> => {
+    const SIZE_LIMIT = 11 * 1024 * 1024 // 11 MB
+    const COMPRESSION_THRESHOLD = 30 * 1024 * 1024 // 30 MB
+
+    const processFile = async (file: File | Blob): Promise<void> => {
       try {
-        if (file.size < 11534336) { // less than 11 MB, doesn't need to be compressed
-          const content = await readFile(file)
-          await onload(content, file)
-        } else if (file.size > 11534336 && file.size < 31457280) {
-          // greater than 11 MB and less than 30 MB, undergoes auto compression
-          const compressedFile = await compressImage(file)
-          const content = await readFile(compressedFile)
-          await onload(content, compressedFile)
-        } else { // file size greater than 30 MB
+        let processedFile = file
+
+        if (file.size >= SIZE_LIMIT && file.size < COMPRESSION_THRESHOLD) {
+          processedFile = await compressImage(file)
+        } else if (file.size >= COMPRESSION_THRESHOLD) {
+          toast.warn('¡Ay, caramba! one of your photos is too cruxy (please reduce the size to 30MB or under)')
           ref.current.hasErrors = true
+          return
         }
+
+        const content = await readFile(processedFile)
+
+        await onload(content, processedFile)
       } catch (error) {
+        ref.current.hasErrors = true
         console.error('Upload error:', error)
       }
     }
