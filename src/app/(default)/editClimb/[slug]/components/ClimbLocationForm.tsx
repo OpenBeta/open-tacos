@@ -30,7 +30,7 @@ export const ClimbLocationForm: React.FC<{ initialValue: string, uuid: string, p
     >
       <MarkdownTextArea
         initialValue={initialValue}
-        name='areaLocation'
+        name='location'
         label='Describe this location to the best of your knowledge.  Do not copy beta from guidebooks.'
         rules={CLIMB_LOCATION_FORM_VALIDATION_RULES}
       />

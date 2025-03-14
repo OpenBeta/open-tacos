@@ -14,7 +14,7 @@ import { ClimbDisciplineRecord, ClimbType } from '@/js/types'
 interface SidebarNavProps {
   uuid: string
   pageDataForEdit: ClimbType
-  alwaysEnableSubmit: boolean
+  alwaysEnableSubmit?: boolean
   parentId: string
 }
 

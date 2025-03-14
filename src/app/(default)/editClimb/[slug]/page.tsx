@@ -1,15 +1,13 @@
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import { validate } from 'uuid'
 import { Metadata } from 'next'
 import { FetchPolicy } from '@apollo/client'
 import { Climb } from '@/js/types'
-import { ArrowUUpLeft, Sidebar } from '@phosphor-icons/react/dist/ssr'
+import { ArrowUUpLeft } from '@phosphor-icons/react/dist/ssr'
 
-// import { getPageDataForEdit } from './page'
 import { AreaCrumbs } from '@/components/breadcrumbs/AreaCrumbs'
 import { getClimbPageFriendlyUrl } from '@/js/utils'
 import { getClimbByIdRSC } from '@/js/graphql/getClimbRSC'
-import Grade from '@/js/grades/Grade'
 
 import { PageContainer, SectionContainer } from '../../components/AreaAndClimb/EditAreaContainers'
 import { SidebarNav } from './components/SidebarNav'
@@ -41,7 +39,7 @@ export interface DashboardPageProps {
   }
 }
 
-export default async function AreaEditPage ({ params }: DashboardPageProps): Promise<any> {
+export default async function ClimbEditPage ({ params }: DashboardPageProps): Promise<any> {
   const pageDataForEdit = await getPageDataForEdit(params.slug)
   if (pageDataForEdit == null) {
     notFound()
@@ -50,7 +48,6 @@ export default async function AreaEditPage ({ params }: DashboardPageProps): Pro
   const {
     id, name, content, ancestors, pathTokens, parent
   } = pageDataForEdit
-  console.log('🚀 ~ AreaEditPage ~ parent:', pageDataForEdit)
 
   return (
     <div className='relative w-full h-full'>
