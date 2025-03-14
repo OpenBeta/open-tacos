@@ -2,7 +2,7 @@
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
-import { SingleEntryForm } from '@/app/(default)/editArea/[slug]/components/SingleEntryForm'
+import { SingleEntryForm } from '@/app/(default)/components/AreaAndClimb/SingleEntryForm'
 import useUpdateClimbsCmd from '@/js/hooks/useUpdateClimbsCmd'
 import { DynamicClimbInputList } from './DynamicClimbInputList'
 import { GradeContexts } from '@/js/grades/Grade'

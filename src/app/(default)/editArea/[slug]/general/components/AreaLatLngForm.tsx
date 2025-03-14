@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import { MobileDialog, DialogContent, DialogTrigger } from '@/components/ui/MobileDialog'
 
-import { SingleEntryForm } from '@/app/(default)/editArea/[slug]/components/SingleEntryForm'
+import { SingleEntryForm } from '@/app/(default)/components/AreaAndClimb/SingleEntryForm'
 import { AREA_LATLNG_FORM_VALIDATION_RULES } from '@/components/edit/EditAreaForm'
 import { DashboardInput } from '@/components/ui/form/Input'
 import useUpdateAreasCmd from '@/js/hooks/useUpdateAreasCmd'

@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { WarningOctagon } from '@phosphor-icons/react/dist/ssr'
 
-import { SingleEntryForm } from '@/app/(default)/editArea/[slug]/components/SingleEntryForm'
+import { SingleEntryForm } from '@/app/(default)/components/AreaAndClimb/SingleEntryForm'
 import { DashboardInput } from '@/components/ui/form/Input'
 import useUpdateAreasCmd from '@/js/hooks/useUpdateAreasCmd'
 import { AreaType } from '@/js/types'

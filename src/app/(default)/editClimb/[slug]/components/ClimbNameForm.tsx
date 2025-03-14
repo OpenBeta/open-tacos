@@ -2,7 +2,7 @@
 import { useSession } from 'next-auth/react'
 import { ValidationValueMessage } from 'react-hook-form'
 
-import { SingleEntryForm } from '@/app/(default)/editArea/[slug]/components/SingleEntryForm'
+import { SingleEntryForm } from '@/app/(default)/components/AreaAndClimb/SingleEntryForm'
 import { DashboardInput } from '@/components/ui/form/Input'
 import useUpdateClimbsCmd from '@/js/hooks/useUpdateClimbsCmd'
 import { CLIMB_NAME_FORM_VALIDATION_RULES } from '../validation'

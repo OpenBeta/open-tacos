@@ -1,7 +1,7 @@
 'use client'
 import { useSession } from 'next-auth/react'
 
-import { SingleEntryForm } from '@/app/(default)/editArea/[slug]/components/SingleEntryForm'
+import { SingleEntryForm } from '@/app/(default)/components/AreaAndClimb/SingleEntryForm'
 import { AREA_DESCRIPTION_FORM_VALIDATION_RULES } from '@/components/edit/EditAreaForm'
 import useUpdateAreasCmd from '@/js/hooks/useUpdateAreasCmd'
 import { MarkdownTextArea } from '@/components/ui/form/MarkdownTextArea'
