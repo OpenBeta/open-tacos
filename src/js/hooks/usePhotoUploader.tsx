@@ -135,12 +135,13 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
       try {
         let processedFile = file
 
-        if (file.size >= SIZE_LIMIT && file.size < COMPRESSION_THRESHOLD) {
-          processedFile = await compressImage(file)
-        } else if (file.size >= COMPRESSION_THRESHOLD) {
+        if (file.size >= COMPRESSION_THRESHOLD) {
           toast.warn('¡Ay, caramba! one of your photos is too cruxy (please reduce the size to 30MB or under)')
           ref.current.hasErrors = true
           return
+        }
+        if (file.size >= SIZE_LIMIT) {
+          processedFile = await compressImage(file)
         }
 
         const content = await readFile(processedFile)
