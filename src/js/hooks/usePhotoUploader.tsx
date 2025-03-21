@@ -116,7 +116,7 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
   const compressImage = async (file: File | Blob): Promise<File | Blob> => {
     return await new Promise((resolve, reject) => {
       void new Compressor(file, {
-        quality: 0.6,
+        quality: 0.9,
         success: (compressedFile: File) => resolve(compressedFile),
         error: (err: Error) => reject(err)
       })
