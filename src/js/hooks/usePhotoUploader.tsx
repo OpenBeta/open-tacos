@@ -124,7 +124,10 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
   }
 
   const onDrop = async (files: File[], rejections: FileRejection[]): Promise<void> => {
-    if (rejections.length > 0) { console.warn('Rejected files: ', rejections) }
+    if (rejections.length > 0) { 
+      console.warn('Rejected files: ', rejections)
+      toast.error(`Some files were rejected: ${rejections.map(r => r.file.name).join(', ')}`)
+    }
 
     setUploading(true)
     ref.current.hasErrors = false
@@ -134,9 +137,10 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
     const processFile = async (file: File | Blob): Promise<void> => {
       try {
         let processedFile = file
+        const fileName = file instanceof File ? file.name : 'unknown file'
 
         if (file.size >= COMPRESSION_THRESHOLD) {
-          toast.warn('¡Ay, caramba! one of your photos is too cruxy (please reduce the size to 30MB or under)')
+          toast.warn(`File ${fileName} is too large (${Math.round(file.size / 1024 / 1024)}MB). Maximum size is 30MB.`)
           ref.current.hasErrors = true
           return
         }
@@ -145,22 +149,29 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
         }
 
         const content = await readFile(processedFile)
-
         await onload(content, processedFile)
       } catch (error) {
         ref.current.hasErrors = true
-        console.error('Upload error:', error)
+        const fileName = file instanceof File ? file.name : 'unknown file'
+        console.error(`Error uploading ${fileName}:`, error)
+        toast.error(`Failed to upload ${fileName}`)
       }
     }
 
-    await Promise.all(files.map(async file => await processFile(file)))
-
-    setUploading(false)
+    try {
+      // Process all files in parallel
+      await Promise.all(files.map(file => processFile(file)))
+    } catch (error) {
+      console.error('Error during batch upload:', error)
+      ref.current.hasErrors = true
+    } finally {
+      setUploading(false)
+    }
 
     if (ref.current.hasErrors) {
-      toast.error('Error uploading photos.  Please try again.')
+      toast.error('Some photos failed to upload. Please try again.')
     } else {
-      toast.success('Uploaded!')
+      toast.success(`Successfully uploaded ${files.length} photo${files.length > 1 ? 's' : ''}!`)
       ref.current.hasErrors = false
     }
   }
