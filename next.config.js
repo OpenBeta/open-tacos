@@ -2,7 +2,8 @@ module.exports = {
   output: 'standalone',
   images: {
     loader: 'custom',
-    loaderFile: './src/image-loader.js'
+    loaderFile: './src/media/image-loader.js',
+    unoptimized: true
   },
   typescript: {
     ignoreBuildErrors: false

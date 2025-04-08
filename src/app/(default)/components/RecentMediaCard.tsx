@@ -9,7 +9,7 @@ import { getUploadDateSummary } from '../../../js/utils'
 import { PostHeader } from './Post'
 import { resolver as urlResolver } from '../../../components/media/Tag'
 import { ATagWrapper } from '../../../components/Utils'
-
+import imageLoader from '@/js/media/image-loader'
 const MOBILE_IMAGE_MAX_WIDITH = 600
 
 interface RecentImageCardProps {
@@ -42,6 +42,7 @@ export const RecentImageCard = ({
               height={MOBILE_IMAGE_MAX_WIDITH / imageRatio}
               sizes={`${MOBILE_IMAGE_MAX_WIDITH}px`}
               onLoad={() => setLoaded(true)}
+              loader={imageLoader}
               alt=''
             />
             <div
