@@ -15,10 +15,6 @@ import { LazyAreaMap } from '@/components/maps/AreaMap'
 import { ClimbType, TagTargetType } from '@/js/types'
 import { NeighboringRoutesNav } from '@/components/crag/NeighboringRoute'
 import { AreaAndClimbPageActions } from '../../components/AreaAndClimb/AreaAndClimbPageActions'
-/**
- * Page cache settings
- */
-export const revalidate = 2592000 // 30 days
 
 /**
  * Climb page
