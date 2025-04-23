@@ -13,4 +13,3 @@ cmd = "yarn start"
 [variables]
 NODE_ENV = 'production'
 DEPLOYMENT_ENV = 'railway'
-NODE_OPTIONS = "--max-old-space-size=512"
