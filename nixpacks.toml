@@ -11,6 +11,7 @@ cmds = ["yarn build"]
 cmd = "yarn start"
 
 [variables]
+NIXPACKS_NODE_VERSION = "20"
 NODE_ENV = 'production'
 DEPLOYMENT_ENV = 'railway'
 NODE_OPTIONS = "--max-old-space-size=512"
