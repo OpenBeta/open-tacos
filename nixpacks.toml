@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs =  ["nodejs_20", "yarn_1_22_22"]
+nixPkgs =  ["nodejs_20"]
 
 [phases.install]
 cmds = ["yarn install --no-progress --silence"]
