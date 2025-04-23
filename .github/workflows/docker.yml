@@ -78,7 +78,7 @@ jobs:
       - name: Build docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./
+          context: ./docker
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: ${{ github.event_name != 'pull_request' }}

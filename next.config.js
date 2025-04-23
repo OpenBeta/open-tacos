@@ -1,5 +1,5 @@
 module.exports = {
-  // output: 'standalone',
+  output: process.env.DEPLOYMENT_ENV === 'kubernetes' ? 'standalone' : undefined,
   images: {
     loader: 'custom',
     loaderFile: './src/image-loader.js'
@@ -95,6 +95,6 @@ module.exports = {
   experimental: {
     optimizePackageImports: ['@phosphor-icons/react']
   },
-  cacheHandler: process.env.NODE_ENV === 'production' ? require.resolve('./cache-handler.mjs') : undefined,
-  cacheMaxMemorySize: 0 // disable default in-memory caching
+  cacheHandler: process.env.DEPLOYMENT_ENV === 'kubernetes' ? require.resolve('./cache-handler.mjs') : undefined,
+  cacheMaxMemorySize: process.env.DEPLOYMENT_ENV === 'kubernetes' ? 0 : 512 // disable default caching because we have Redis in kubernetes deployment
 }
