@@ -1,12 +1,12 @@
 [build]
 builder = "NIXPACKS"
-nixpacksPlan = {"providers":["...","node"]}
+nixpacksPlan = { providers = ["...", "node"] }
 nixpacksConfigPath = "nixpacks.toml"
 
 [deploy]
 runtime = "V2"
 numReplicas = 1
-limitOverride = {"containers":{"cpu":2,"memoryBytes":1000000000}}
+limitOverride = { containers = { cpu = 2, memoryBytes = 1000000000}}
 sleepApplication = false
 multiRegionConfig = {"us-east4-eqdc4a":{"numReplicas":1}}
 restartPolicyType = "ON_FAILURE"
