@@ -12,8 +12,7 @@ multiRegionConfig = {"us-east4-eqdc4a" = {"numReplicas" = 1}}
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 5
 
-
-[deploy.previews]  # or [deploy.pr] depending on the platform
+[environments.pr.deploy]
+sleepApplication = true
 numReplicas = 1
 limitOverride = { containers = { cpu = 1, memoryBytes = 500000000 } }
-sleepApplication = true
