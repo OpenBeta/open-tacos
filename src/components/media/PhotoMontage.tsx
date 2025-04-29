@@ -46,7 +46,6 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
 
   if (isMobile) {
     const firstMedia = shuffledList[0]
-    console.log('🚀 ~ firstMedia:', firstMedia)
     return (
       <div className='block relative w-full h-60 fadeinEffect'>
         {showPhotoGalleryModal ? photoGalleryModal : undefined}
@@ -78,7 +77,6 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
           {showPhotoGalleryModal ? photoGalleryModal : undefined}
           {shuffledList.slice(0, 2).map((media) => {
             const { mediaUrl } = media
-            console.log('🚀 ~ {shuffledList.slice ~ media: 🐭', media)
             return (
               <div
                 key={mediaUrl}
@@ -117,7 +115,6 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
    * Show the first 5
    */
   const first = shuffledList[0]
-  console.log('first!', first)
   const theRest = shuffledList.slice(1, 5)
   return (
     <div className='relative'>
@@ -141,7 +138,6 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
         </div>
         {theRest.map((media) => {
           const { mediaUrl } = media
-          console.log('🚀 ~ {theRest.map ~ media:', media)
           return (
             <div
               key={mediaUrl}
