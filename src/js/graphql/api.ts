@@ -1,11 +1,10 @@
-import { gql, FetchPolicy } from '@apollo/client'
+import { gql } from '@apollo/client'
 
-import { AreaType, ClimbType, TickType, CountrySummaryType, MediaWithTags } from '../types'
+import { AreaType, TickType, CountrySummaryType, MediaWithTags } from '../types'
 import { graphqlClient } from './Client'
 
 import { CORE_CRAG_FIELDS, QUERY_TICKS_BY_USER_AND_CLIMB, QUERY_TICKS_BY_USER, QUERY_ALL_COUNTRIES } from './gql/fragments'
 import { QUERY_USER_MEDIA } from './gql/users'
-import { QUERY_CLIMB_BY_ID } from './gql/climbById'
 
 interface CragsDetailsNearType {
   data: AreaType[] // Should use Omit or Pick
@@ -52,7 +51,7 @@ const CRAGS_NEAR = gql`
   query CragsNear($placeId: String, $lng: Float, $lat: Float, $minDistance: Int, $maxDistance: Int, $includeCrags: Boolean) {
   cragsNear(placeId: $placeId, lnglat: {lat: $lat, lng: $lng}, minDistance: $minDistance, maxDistance: $maxDistance, includeCrags: $includeCrags) {
       count
-      _id 
+      _id
       placeId
       crags {
         ...CoreCragFields
@@ -149,19 +148,4 @@ export const getUserMedia = async (userUuid: string, maxFiles = 1000): Promise<M
     fetchPolicy: 'no-cache'
   })
   return res.data.getUserMedia
-}
-
-/**
- * Get climb by id
- * @param id climb id as string in uuid v4 format
- */
-export const getClimbById = async (id: string, fetchPolicy: FetchPolicy = 'no-cache'): Promise<ClimbType> => {
-  const res = await graphqlClient.query<{ climb: ClimbType }, { id: string }>({
-    query: QUERY_CLIMB_BY_ID,
-    variables: {
-      id
-    },
-    fetchPolicy
-  }).catch(e => { throw new Error(e) })
-  return res.data.climb
 }

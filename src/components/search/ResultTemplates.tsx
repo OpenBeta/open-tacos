@@ -3,7 +3,6 @@ import { NextRouter } from 'next/router'
 
 import RouteCard from '../ui/RouteCard'
 import { TypesenseDocumentType } from '../../js/types'
-import { disciplineArrayToObj } from '../../js/utils'
 
 interface ClimbTemplateType extends TypesenseDocumentType {
   router: NextRouter
@@ -51,7 +50,7 @@ const ClimbTemplate = (props: ClimbTemplateType): JSX.Element => {
     <div className='py-2' onClick={() => { void router.push(url) }}>
       <RouteCard
         routeName={climbName}
-        type={disciplineArrayToObj(disciplines)}
+        type={disciplines}
         yds={grade}
         safety={safety}
         fa={fa}

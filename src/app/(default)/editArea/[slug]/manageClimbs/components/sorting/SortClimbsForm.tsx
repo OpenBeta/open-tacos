@@ -15,7 +15,7 @@ import { SortableContext, rectSortingStrategy, sortableKeyboardCoordinates, arra
 import clx from 'classnames'
 import { DotsSixVertical } from '@phosphor-icons/react/dist/ssr'
 
-import { SingleEntryForm } from '@/app/(default)/editArea/[slug]/components/SingleEntryForm'
+import { SingleEntryForm } from '@/app/(default)/components/AreaAndClimb/SingleEntryForm'
 import { ClimbType } from '@/js/types'
 import { climbLeftRightIndexComparator } from '@/js/utils'
 import { SortableClimbItem } from './SortableClimbItem'

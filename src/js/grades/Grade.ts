@@ -125,8 +125,9 @@ export default class Grade {
   }
 
   toString (): string | undefined {
-    if (this.isBouldering()) return this.toStringBouldering()
-    if (this.isTradSportTr()) return this.toStringTradSportAid()
+    if (this.isBouldering()) return this.toStringVScale()
+    if (this.isYDS()) return this.toStringYDS()
+    if (this.isIce()) return this.toStringWI()
     return undefined
   }
 
@@ -134,17 +135,27 @@ export default class Grade {
     return this.isBoulder || (this.disciplines?.bouldering ?? false)
   }
 
-  isTradSportTr (): boolean {
-    return (this.disciplines?.sport ?? false) || (this.disciplines?.trad ?? false) || (this.disciplines?.tr ?? false) || (this.disciplines?.aid ?? false)
+  isYDS (): boolean {
+    return (this.disciplines?.sport ?? false) || (this.disciplines?.trad ?? false) || (this.disciplines?.tr ?? false) || (this.disciplines?.aid ?? false) || (this.disciplines?.deepwatersolo ?? false) || (this.disciplines?.snow ?? false)
   }
 
-  toStringBouldering (): string | undefined {
+  isIce (): boolean {
+    return (this.disciplines?.ice ?? false)
+  }
+
+  toStringWI (): string | undefined {
+    const key = this.gradescales.ice
+    // @ts-expect-error
+    return this.values?.[key] ?? undefined
+  }
+
+  toStringVScale (): string | undefined {
     const key: string = this.gradescales.bouldering
     // @ts-expect-error
     return this.values?.[key] ?? undefined
   }
 
-  toStringTradSportAid (): string | undefined {
+  toStringYDS (): string | undefined {
     const key = this.gradescales.sport
     // @ts-expect-error
     return this.values?.[key] ?? undefined

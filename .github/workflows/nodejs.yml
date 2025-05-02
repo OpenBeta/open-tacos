@@ -19,7 +19,7 @@ jobs:
 
   build:
     name: Test build
-    runs-on: 'ubuntu-latest'
+    runs-on: ubuntu-22.04
     environment: "Preview"
     needs: pre_job
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
@@ -30,7 +30,7 @@ jobs:
           node-version: '20'
 
       - name: 'Checkout Project'
-        uses: 'actions/checkout@v2'
+        uses: 'actions/checkout@v4'
         with:
           fetch-depth: 1
 

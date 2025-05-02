@@ -255,6 +255,21 @@
           39.7243542
         ]
       }
+    }, 
+    {
+      "type": "Feature",
+      "properties": { 
+        "firstName": "Quinault",
+        "githubId": "quinaltdelete",
+        "favoriteCrag": "f9eeab04-e846-526b-911f-efd7ae2124dc"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -118.570223,
+          37.314980 
+        ]
+      }
     }
   ]
 }

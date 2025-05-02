@@ -126,18 +126,19 @@ function debouncePromise (fn: Function, time: number): any {
 export const debounced = debouncePromise(async (items: object[]): Promise<object[]> => await Promise.resolve(items), 300)
 
 /**
- * Convert array of disciplines ['trad', 'sport'] => {trad: true, sport: true}
- * @param types
- * @returns ClimbDisciplineRecord
+ * Convert record of climbing disciplines to an array
+ * @param {ClimbDisciplineRecord} types
+ * @returns {ClimbDiscipline[]}
  */
-export const disciplineArrayToObj = (types: ClimbDiscipline[]): Partial<ClimbDisciplineRecord> => {
-  // use Array.reduce() because ts-jest doesn't support for..of
-  const z: Partial<ClimbDisciplineRecord> = types.reduce((acc, curr) => {
-    // @ts-expect-error
-    acc[curr] = true
-    return acc
-  }, {})
-  return z
+export function getDisciplineList (type: Partial<ClimbDisciplineRecord>): ClimbDiscipline[] {
+  const set: ClimbDiscipline[] = []
+  for (const discipline of Object.keys(type) as ClimbDiscipline[]) {
+    // stricter assertion so we don't include __typename
+    if (type[discipline] === true) {
+      set.push(discipline)
+    }
+  }
+  return set
 }
 
 const regUsername = /^[a-zA-Z0-9]+([_\\.-]?[a-zA-Z0-9])*$/i

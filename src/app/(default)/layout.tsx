@@ -22,24 +22,20 @@ export const metadata: Metadata = {
 /**
  * Global layout for the site
  */
-export default function RootLayout ({
+export default function DefaultLayout ({
   children
 }: {
   children: React.ReactNode
 }): any {
   return (
-    <html lang='en' className='scroll-smooth'>
-      <body className='relative'>
-        <NextAuthProvider>
-          <Header />
-          <div>
-            {children}
-          </div>
-        </NextAuthProvider>
-        <PageFooter />
-        <ReactToastifyProvider />
-        <BlockingAlertUploadingInProgress />
-      </body>
-    </html>
+    <NextAuthProvider>
+      <Header />
+      <div>
+        {children}
+      </div>
+      <PageFooter />
+      <ReactToastifyProvider />
+      <BlockingAlertUploadingInProgress />
+    </NextAuthProvider>
   )
 }

@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { DashboardPageProps, getPageDataForEdit } from '../general/page'
-import { PageContainer, SectionContainer } from '../components/EditAreaContainers'
+import { PageContainer, SectionContainer } from '../../../components/AreaAndClimb/EditAreaContainers'
 import { SortAreasForm } from './components/sorting/SortAreasForm'
 
 // Opt out of caching for all data requests in the route segment

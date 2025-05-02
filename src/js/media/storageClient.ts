@@ -6,7 +6,7 @@ import { Storage, GetSignedUrlConfig } from '@google-cloud/storage'
 const storage = new Storage({
   credentials: {
     type: 'service_account',
-    private_key: process.env.GC_BUCKET_PRIVATE_KEY ?? '',
+    private_key: Buffer.from(process.env.GC_BUCKET_PRIVATE_KEY ?? '', 'base64').toString('utf-8'),
     client_email: process.env.GC_BUCKET_CLIENT_EMAIL ?? ''
   }
 })

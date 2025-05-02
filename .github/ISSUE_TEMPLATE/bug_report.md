@@ -1,12 +1,3 @@
----
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: ''
-
----
-
 ## Steps to Reproduce
 <!--- Provide a link to the page or an unambiguous set of steps to -->
 <!--- reproduce this bug. Include screen shots if they help. -->

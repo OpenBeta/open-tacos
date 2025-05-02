@@ -102,7 +102,7 @@ A slightly deemphasized dotted underline for a tag in order to not competing wit
 
 @layer utilities {
   .dialog-center {
-    @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-box !important; 
+    @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-box !important;
   }
 
   .dialog-default {
@@ -145,7 +145,7 @@ A slightly deemphasized dotted underline for a tag in order to not competing wit
 }
 
 /**
-  * Force mapbox-gl/maplibre library to use our font otherwise components inside the map 
+  * Force mapbox-gl/maplibre library to use our font otherwise components inside the map
   * will use their font and look out of place.
   */
 .mapboxgl-map {

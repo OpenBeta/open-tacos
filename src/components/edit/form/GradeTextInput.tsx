@@ -42,26 +42,26 @@ export const TradSportGradeInput: React.FC<BaseGradeInput> = ({ gradeObj }) => {
           <span className='label-text font-semibold'>Disciplines</span>
           <Tooltip content='A crag can only have rope climbs. Please create a separate boulder to add problems.'>
             <div className='flex items-center gap-2 text-xs'>
-              <span className='link-dotted hidden sm:inline-block text-info'>How to add boulder problems?</span
-              ><QuestionMarkCircleIcon className='text-info w-5 h-5' />
+              <span className='link-dotted hidden sm:inline-block text-info'>How to add boulder problems?</span>
+              <QuestionMarkCircleIcon className='text-info w-5 h-5' />
             </div>
           </Tooltip>
         </label>
         <div className='columns-2 mt-4'>
           <label className='input-group mb-6'>
-            <span className='bg-default uppercase text-sm w-20 '>Sport</span>
+            <span className='bg-gray-200 uppercase text-sm w-20 '>Sport</span>
             <input type='checkbox' className='checkbox' {...register('disciplines.sport')} />
           </label>
           <label className='input-group mb-6'>
-            <span className='bg-default uppercase text-sm w-20'>Trad</span>
+            <span className='bg-gray-200 uppercase text-sm w-20'>Trad</span>
             <input type='checkbox' className='checkbox' {...register('disciplines.trad')} />
           </label>
           <label className='input-group mb-6'>
-            <span className='bg-default uppercase text-sm w-20'>Aid</span>
+            <span className='bg-gray-200 uppercase text-sm w-20'>Aid</span>
             <input type='checkbox' className='checkbox' {...register('disciplines.aid')} />
           </label>
           <label className='input-group'>
-            <span className='bg-default uppercase text-sm w-20'>TR</span>
+            <span className='bg-gray-200 uppercase text-sm w-20'>TR</span>
             <input type='checkbox' className='checkbox' {...register('disciplines.tr')} />
           </label>
         </div>
@@ -96,7 +96,7 @@ export const BoulderingGradeInput: React.FC<BaseGradeInput> = ({ gradeObj }) => 
           </Tooltip>
         </label>
         <label className='input-group mt-4'>
-          <span className='bg-default uppercase text-sm'>Bouldering</span>
+          <span className='bg-gray-200 uppercase text-sm'>Bouldering</span>
           <input type='checkbox' checked className='checkbox' disabled />
         </label>
       </div>

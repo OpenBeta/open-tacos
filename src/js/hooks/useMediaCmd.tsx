@@ -8,7 +8,6 @@ import { AddNewMediaObjectsArgs, AddMediaObjectsReturn, MUTATION_ADD_MEDIA_OBJEC
 import { useUserGalleryStore } from '../stores/useUserGalleryStore'
 import { deleteMediaFromStorage } from '../userApi/media'
 import { invalidateAreaPageCache, invalidateClimbPageCache, invalidateHomePageCache } from '../utils'
-import { legacyInvalidateClimbPageCache } from '../legacyInvalidateClimbPageCache'
 
 export interface UseMediaCmdReturn {
   addEntityTagCmd: AddEntityTagCmd
@@ -272,7 +271,6 @@ export const invalidateAncestorPagesWithEntity = async ({ entityId, entityType, 
   // If tagging a climb then invalidate climb page cache
   if (entityType === TagTargetType.climb) {
     await invalidateClimbPageCache(entityId)
-    await legacyInvalidateClimbPageCache(entityId)
   }
 
   // Also invalidate all ancestor pages

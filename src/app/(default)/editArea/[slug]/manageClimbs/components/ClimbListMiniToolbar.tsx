@@ -1,35 +1,35 @@
 'use client'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { Trash } from '@phosphor-icons/react/dist/ssr'
-import useUpdateClimbsCmd from '@/js/hooks/useUpdateClimbsCmd'
-import Confirmation from '@/components/ui/micro/AlertDialogue'
+
+import { MobileDialog, DialogContent, DialogTrigger } from '@/components/ui/MobileDialog'
+import DeleteAreaAndClimbForm from '@/components/edit/DeleteAreaAndClimbForm'
 
 export const ClimbListMiniToolbar: React.FC<{ parentAreaId: string, climbId: string, climbName: string }> = ({ parentAreaId, climbId, climbName }) => {
-  const session = useSession({ required: true })
-  const router = useRouter()
-  const { deleteClimbsCmd } = useUpdateClimbsCmd({ parentId: parentAreaId, accessToken: session.data?.accessToken ?? '' })
-  const onConfirm = (): void => {
-    deleteClimbsCmd([climbId]).then((count) => {
-      router.refresh()
-    }).catch((error) => {
-      console.error(error)
-    })
+  const [isOpen, setOpen] = useState(false)
+  const onSuccessHandler = (): void => {
+    setOpen(false)
   }
+
   return (
     <div className='flex justify-end mb-2 py-1'>
-      <Confirmation
-        title='Please confirm'
-        confirmText='Delete'
-        button={
-          <button className='btn btn-xs btn-glass'>
-            <Trash size={16} /> Delete
-          </button>
-        }
-        onConfirm={onConfirm}
-      >
-        You're about to delete climb "<i>{climbName}"</i>. <strong>This cannot be undone.</strong>
-      </Confirmation>
+      <MobileDialog modal open={isOpen} onOpenChange={setOpen}>
+        <DialogTrigger
+          className='btn btn-xs btn-glass'
+          type='button'
+        >
+          <Trash size={16} />Delete
+        </DialogTrigger>
+        <DialogContent title='Delete climb'>
+          <DeleteAreaAndClimbForm
+            name={climbName}
+            uuid={climbId}
+            parentUuid={parentAreaId}
+            isClimb
+            onSuccess={onSuccessHandler}
+          />
+        </DialogContent>
+      </MobileDialog>
     </div>
   )
 }

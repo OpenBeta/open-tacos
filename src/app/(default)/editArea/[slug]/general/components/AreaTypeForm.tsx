@@ -2,7 +2,7 @@
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
-import { SingleEntryForm } from '@/app/(default)/editArea/[slug]/components/SingleEntryForm'
+import { SingleEntryForm } from '@/app/(default)/components/AreaAndClimb/SingleEntryForm'
 import useUpdateAreasCmd from '@/js/hooks/useUpdateAreasCmd'
 import { AreaType } from '@/js/types'
 import { AreaDesignationRadioGroup, areaDesignationToDb, areaDesignationToForm, AreaTypeFormProp } from '@/components/edit/form/AreaDesignationRadioGroup'

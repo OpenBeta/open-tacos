@@ -96,7 +96,7 @@ export const UsernameChangeForm: React.FC = () => {
     } catch (e) {
       console.error(e)
       reset()
-      toast.error('Unexpected error.  Please try again.')
+      toast.error(e instanceof Error ? e.message : 'Unexpected error.  Please try again.')
     }
   }
 

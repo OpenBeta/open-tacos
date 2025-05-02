@@ -10,8 +10,8 @@ export default function RootLayout ({
   children: React.ReactNode
 }): any {
   return (
-    <html lang='en'>
-      <body>
+    <html lang='en' className='scroll-smooth'>
+      <body className='relative'>
         {children}
       </body>
     </html>

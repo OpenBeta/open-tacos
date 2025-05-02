@@ -1,0 +1,8 @@
+node_modules
+*.png
+*.node_modules
+.next
+.husky
+.vscode
+.git
+.github

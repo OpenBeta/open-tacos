@@ -1,0 +1,15 @@
+[phases.setup]
+nixPkgs =  ["nodejs_20"]
+
+[phases.install]
+cmds = ["yarn install --no-progress --silence"]
+
+[phases.build]
+cmds = ["yarn build"]
+
+[start]
+cmd = "yarn start"
+
+[variables]
+NODE_ENV = 'production'
+DEPLOYMENT_ENV = 'railway'

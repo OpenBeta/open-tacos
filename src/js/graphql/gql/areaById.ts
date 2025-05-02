@@ -2,10 +2,11 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_AUTHOR_METADATA } from './contribs'
 import { FRAGMENT_MEDIA_WITH_TAGS } from './tags'
-import { FRAGMENT_CLIMB_DISCIPLINES } from './climbById'
+import { FRAGMENT_CLIMB_DISCIPLINES, FRAGMENT_CLIMB_TYPES } from './climbById'
 
 export const QUERY_AREA_BY_ID = gql`
   ${FRAGMENT_CLIMB_DISCIPLINES}
+  ${FRAGMENT_CLIMB_TYPES}
   ${FRAGMENT_MEDIA_WITH_TAGS}
   ${FRAGMENT_AUTHOR_METADATA}
   query ($uuid: ID) {
@@ -74,13 +75,7 @@ export const QUERY_AREA_BY_ID = gql`
         }
         safety
         type {
-          trad
-          tr
-          sport
-          mixed
-          bouldering
-          alpine
-          aid
+          ...ClimbTypeFields
         }
         metadata {
           climbId
@@ -158,13 +153,7 @@ query AreaByID($uuid: ID) {
       }
       safety
       type {
-        trad
-        tr
-        sport
-        mixed
-        bouldering
-        alpine
-        aid
+        ...ClimbTypeFields
       }
       metadata {
         climbId

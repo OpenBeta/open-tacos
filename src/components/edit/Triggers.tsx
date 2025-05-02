@@ -1,16 +1,24 @@
 'use client'
 import { useState, useCallback } from 'react'
+import { GraphQLError } from 'graphql'
 import { Trash } from '@phosphor-icons/react/dist/ssr'
 import { PlusIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
 import { MobileDialog, DialogContent, DialogTrigger } from '../ui/MobileDialog'
-import DeleteAreaForm, { DeleteAreaProps } from './DeleteAreaForm'
+import DeleteAreaAndClimbForm from './DeleteAreaAndClimbForm'
 import AddAreaForm, { AddAreaFormProps } from './AddChildAreaForm'
 import { toast } from 'react-toastify'
 import Tooltip from '../ui/Tooltip'
 
-export type DeleteAreaTriggerProps = DeleteAreaProps & {
+interface DeleteAreaTriggerProps {
+  parentUuid: string
+  areaUuid: string
+  areaName: string
+  returnToParentPageAfterDelete?: boolean
+  onSuccess?: () => void
+  onError?: (error: GraphQLError) => void
   disabled?: boolean
-  children?: JSX.Element }
+  children?: JSX.Element
+}
 
 /**
  * A high level component that triggers the Delete Area dialog.  You can pass an optional nested component to customize the look and feel of the trigger button.
@@ -38,9 +46,9 @@ export const DeleteAreaTrigger = ({ areaName, areaUuid, parentUuid, disabled = f
         ? <DeleteAreaTriggerButtonDefault disabled={disabled} />
         : children}
       <DialogContent title='Delete area'>
-        <DeleteAreaForm
-          areaName={areaName}
-          areaUuid={areaUuid}
+        <DeleteAreaAndClimbForm
+          name={areaName}
+          uuid={areaUuid}
           parentUuid={parentUuid}
           onSuccess={onSuccessHandler}
           returnToParentPageAfterDelete={returnToParentPageAfterDelete}

@@ -1,4 +1,5 @@
 module.exports = {
+  output: process.env.DEPLOYMENT_ENV === 'kubernetes' ? 'standalone' : undefined,
   images: {
     loader: 'custom',
     loaderFile: './src/image-loader.js'
@@ -20,6 +21,28 @@ module.exports = {
     })
     fileLoaderRule.exclude = /\.svg$/i
     return config
+  },
+  async headers () {
+    return [
+      {
+        source: '/area/:id*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=2592000, stale-while-revalidate=600'
+          }
+        ]
+      },
+      {
+        source: '/climb/:id*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=2592000, stale-while-revalidate=600'
+          }
+        ]
+      }
+    ]
   },
   async rewrites () {
     return [
@@ -71,5 +94,7 @@ module.exports = {
   },
   experimental: {
     optimizePackageImports: ['@phosphor-icons/react']
-  }
+  },
+  cacheHandler: process.env.DEPLOYMENT_ENV === 'kubernetes' ? require.resolve('./cache-handler.mjs') : undefined,
+  cacheMaxMemorySize: process.env.DEPLOYMENT_ENV === 'kubernetes' ? 0 : 512 // disable default caching because we have Redis in kubernetes deployment
 }

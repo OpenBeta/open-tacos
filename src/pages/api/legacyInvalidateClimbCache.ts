@@ -10,7 +10,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res) => {
   if (!res.writable) return
   const climbUuid = req.query?.c as string
   if (isValid(climbUuid)) {
-    await res.revalidate(`/climbs/${climbUuid}`)
+    await res.revalidate(`/climb/${climbUuid}`)
     res.json({ revalidated: true })
   }
 }

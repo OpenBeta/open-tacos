@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { DashboardPageProps, getPageDataForEdit } from '../general/page'
 import { TopoEditor } from './components/TopoEditor'
-import { PageContainer } from '../components/EditAreaContainers'
+import { PageContainer } from '../../../components/AreaAndClimb/EditAreaContainers'
 import { notFound } from 'next/navigation'
 
 // Opt out of caching for all data requests in the route segment

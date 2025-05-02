@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { DashboardPageProps, getPageDataForEdit } from '../general/page'
-import { PageContainer, SectionContainer } from '../components/EditAreaContainers'
+import { PageContainer, SectionContainer } from '../../../components/AreaAndClimb/EditAreaContainers'
 import { AddClimbsForm } from './components/AddClimbsForm'
 import { ClimbListSection } from '@/app/(default)/area/[[...slug]]/sections/ClimbListSection'
 import { SortClimbsForm } from './components/sorting/SortClimbsForm'

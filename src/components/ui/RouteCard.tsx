@@ -3,11 +3,11 @@ import Card from './Card'
 import RouteTypeChips from './RouteTypeChips'
 import RouteGradeChip from './RouteGradeChip'
 import { MiniCrumbs } from './BreadCrumbs'
-import { ClimbDisciplineRecord, SafetyType } from '../../js/types'
+import { ClimbDiscipline, SafetyType } from '../../js/types'
 
 interface RouteCardProps {
   routeName: string
-  type: Partial<ClimbDisciplineRecord>
+  type: ClimbDiscipline[]
   safety?: SafetyType
   yds: string
   fa?: string
@@ -30,7 +30,7 @@ function RouteCard ({ routeName, type, safety, yds, fa = '', pathTokens }: Route
         {safety != null && <RouteGradeChip gradeStr={yds} safety={safety} />}
       </div>
       <div className='mt-4 flex justify-between items-center'>
-        <RouteTypeChips type={type} />
+        <RouteTypeChips types={type} />
       </div>
     </Card>
   )

@@ -14,10 +14,27 @@ export const FRAGMENT_CLIMB_DISCIPLINES = gql`
     vscale
     yds
     uiaa
+    wi
   }`
+
+export const FRAGMENT_CLIMB_TYPES = gql`
+  fragment ClimbTypeFields on ClimbType {
+    trad
+    sport
+    bouldering
+    deepwatersolo
+    alpine
+    snow
+    ice
+    mixed
+    aid
+    tr
+  }
+`
 
 export const QUERY_CLIMB_BY_ID = gql`
   ${FRAGMENT_CLIMB_DISCIPLINES}
+  ${FRAGMENT_CLIMB_TYPES}
   ${FRAGMENT_MEDIA_WITH_TAGS}
   ${FRAGMENT_AUTHOR_METADATA}
   query ClimbByUUID($id: ID) {
@@ -33,13 +50,7 @@ export const QUERY_CLIMB_BY_ID = gql`
       }
       safety
       type {
-        sport
-        bouldering
-        alpine
-        tr
-        trad
-        mixed
-        aid
+        ...ClimbTypeFields
       }
       media {
         ... MediaWithTagsFields
@@ -71,13 +82,7 @@ export const QUERY_CLIMB_BY_ID = gql`
           }
           safety
           type {
-            sport
-            bouldering
-            alpine
-            tr
-            trad
-            mixed
-            aid
+            ...ClimbTypeFields
           }
           metadata {
             leftRightIndex

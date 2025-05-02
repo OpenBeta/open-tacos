@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useDropzone, DropzoneInputProps, FileRejection } from 'react-dropzone'
 import { toast } from 'react-toastify'
 import { useSession } from 'next-auth/react'
+import Compressor from 'compressorjs'
 
 import { uploadPhoto, deleteMediaFromStorage } from '../userApi/media'
 import useMediaCmd, { invalidateAncestorPagesWithEntity } from './useMediaCmd'
@@ -23,7 +24,7 @@ interface PhotoUploaderReturnType {
   openFileDialog: () => void
 }
 
-async function readFile (file: File): Promise<ProgressEvent<FileReader>> {
+async function readFile (file: File | Blob): Promise<ProgressEvent<FileReader>> {
   return await new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onabort = () => reject(new Error('file reading was aborted'))
@@ -56,7 +57,7 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
 
   /** When a file is loaded by the browser (as in, loaded from the local filesystem,
    * not loaded from a webserver) we can begin to upload the bytedata to the provider */
-  const onload = async (event: ProgressEvent<FileReader>, file: File): Promise<void> => {
+  const onload = async (event: ProgressEvent<FileReader>, file: File | Blob): Promise<void> => {
     if (event.target === null || event.target.result === null) return // guard this
 
     const userUuid = sessionData?.user.metadata.uuid
@@ -112,20 +113,47 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
     }
   }
 
+  const compressImage = async (file: File | Blob): Promise<File | Blob> => {
+    return await new Promise((resolve, reject) => {
+      void new Compressor(file, {
+        quality: 0.9,
+        success: (compressedFile: File) => resolve(compressedFile),
+        error: (err: Error) => reject(err)
+      })
+    })
+  }
+
   const onDrop = async (files: File[], rejections: FileRejection[]): Promise<void> => {
     if (rejections.length > 0) { console.warn('Rejected files: ', rejections) }
 
     setUploading(true)
     ref.current.hasErrors = false
-    await Promise.all(files.map(async file => {
-      if (file.size > 11534336) {
-        toast.warn('¡Ay, caramba! one of your photos is too cruxy (please reduce the size to 11MB or under)')
-        return true
+    const SIZE_LIMIT = 11 * 1024 * 1024 // 11 MB
+    const COMPRESSION_THRESHOLD = 30 * 1024 * 1024 // 30 MB
+
+    const processFile = async (file: File | Blob): Promise<void> => {
+      try {
+        let processedFile = file
+
+        if (file.size >= COMPRESSION_THRESHOLD) {
+          toast.warn('¡Ay, caramba! one of your photos is too cruxy (please reduce the size to 30MB or under)')
+          ref.current.hasErrors = true
+          return
+        }
+        if (file.size >= SIZE_LIMIT) {
+          processedFile = await compressImage(file)
+        }
+
+        const content = await readFile(processedFile)
+
+        await onload(content, processedFile)
+      } catch (error) {
+        ref.current.hasErrors = true
+        console.error('Upload error:', error)
       }
-      const content = await readFile(file)
-      await onload(content, file)
-      return true
-    }))
+    }
+
+    await Promise.all(files.map(async file => await processFile(file)))
 
     setUploading(false)
 

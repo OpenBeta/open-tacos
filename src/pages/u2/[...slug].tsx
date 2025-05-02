@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { NextPage, GetStaticProps } from 'next'
 import dynamic from 'next/dynamic'
@@ -14,6 +14,8 @@ interface TicksIndexPageProps {
   ticks: TickType[]
 }
 
+const INITIAL_COUNT = 20
+
 /**
  * Why create a separate /u2/<userid> ?
  * - The current `/u/<userid/<imageid>` page is a big of a mess due to the way Next handles nested route.
@@ -23,6 +25,7 @@ interface TicksIndexPageProps {
  */
 const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
   const { isFallback } = useRouter()
+  const [showAll, setShowAll] = useState(false)
 
   return (
     <Layout
@@ -35,7 +38,7 @@ const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
           <>
             {ticks?.length !== 0 && <ChartsSection tickList={ticks} />}
 
-            <section className='max-w-lg mx-auto w-full px-4 py-8'>
+            <section className='mx-16 py-4'>
               <h2>{username}</h2>
               <div className='py-4 flex items-center gap-6'>
                 <ImportFromMtnProj username={username} />
@@ -43,10 +46,36 @@ const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
               </div>
 
               <h3 className='py-4'>Log book</h3>
-              <div>
-                {ticks?.map(Tick)}
-                {ticks?.length === 0 && <div>No ticks</div>}
-              </div>
+              {ticks?.length > 0
+                ? (
+                  <div className='overflow-x-auto'>
+                    <table className='w-full border-collapse border border-gray-300'>
+                      <thead>
+                        <tr className='bg-gray-100'>
+                          <th className='border p-2 text-left'>Climb</th>
+                          <th className='border p-2 text-left hidden sm:table-cell'>Grade</th>
+                          <th className='border p-2 text-left hidden sm:table-cell'>Date Climbed</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {sortTicks(ticks, showAll).map((tick) => (
+                          <Tick key={tick._id} {...tick} />
+                        ))}
+                      </tbody>
+                    </table>
+
+                    {INITIAL_COUNT < ticks.length && (
+                      <div className='flex justify-center mt-4'>
+                        <button className='btn btn-primary' onClick={() => setShowAll(!showAll)}>
+                          {showAll ? 'Show Less' : 'Show All'}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  )
+                : (
+                  <div>No ticks</div>
+                  )}
             </section>
           </>)}
     </Layout>
@@ -55,17 +84,39 @@ const Index: NextPage<TicksIndexPageProps> = ({ username, ticks }) => {
 
 export default Index
 
+const sortTicks = (ticks: TickType[], showAll: boolean): TickType[] => {
+  const sortedTicks = [...ticks].sort((a, b) => b.dateClimbed - a.dateClimbed)
+  return showAll ? sortedTicks : sortedTicks.slice(0, INITIAL_COUNT)
+}
+
 const Tick = (tick: TickType): JSX.Element => {
-  const { _id, name, climbId, dateClimbed } = tick
+  const { _id, name, climbId, dateClimbed, grade } = tick
   return (
-    <div className='grid grid-cols-2 gap-x-4' key={_id}>
-      <div>
+    <tr key={_id} className='border-b even:bg-gray-50 sm:table-row block w-full sm:w-auto'>
+
+      {/* Desktop View */}
+      <td className='border p-2 hidden sm:table-cell'>
         <Link href={`/climb/${climbId}`} className='hover:underline'>
           {name}
         </Link>
-      </div>
-      <div className='text-base-300'>{new Date(dateClimbed).toLocaleDateString()}</div>
-    </div>
+      </td>
+      <td className='border p-2 hidden sm:table-cell'>{grade}</td>
+      <td className='border p-2 text-gray-500 hidden sm:table-cell'>
+        {new Date(dateClimbed).toLocaleDateString()}
+      </td>
+
+      {/* Mobile View */}
+      <td className='p-2 sm:hidden block w-full border'>
+        <div className='flex flex-col gap-1'>
+          <Link href={`/climb/${climbId}`} className='hover:underline font-semibold'>
+            {name}
+          </Link>
+          <span className='text-sm text-gray-600'>Grade: {grade}</span>
+          <span className='text-sm text-gray-500'>Date: {new Date(dateClimbed).toLocaleDateString()}</span>
+        </div>
+      </td>
+
+    </tr>
   )
 }
 

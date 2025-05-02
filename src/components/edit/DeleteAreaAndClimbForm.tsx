@@ -2,16 +2,18 @@
 import { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
-import clx from 'classnames'
 import { GraphQLError } from 'graphql'
 import { signIn, useSession } from 'next-auth/react'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 import Input from '../ui/form/Input'
-export interface DeleteAreaProps {
+import useUpdateClimbsCmd from '@/js/hooks/useUpdateClimbsCmd'
+
+interface DeleteFormProps {
   parentUuid: string
-  areaUuid: string
-  areaName: string
+  uuid: string
+  name: string
   returnToParentPageAfterDelete?: boolean
+  isClimb?: boolean
   onSuccess?: () => void
   onError?: (error: GraphQLError) => void
 }
@@ -19,16 +21,15 @@ export interface DeleteAreaProps {
 interface HtmlFormProps {
   confirmation: string
 }
-
 /**
- * Delete area dialog.  Users must be authenticated.
- * @param areaUuid ID of deleting area
- * @param areaName Name of deleting area
+ * Delete area/climb dialog.  Users must be authenticated.
+ * @param uuid ID of deleting area/climb
+ * @param name Name of deleting area/climb
  * @param parentUuid ID of parent area (for redirection and revalidating SSG page purpose)
  * @param returnToParentPageAfterDelete true to be redirected to parent area page
  * @param onSuccess Optional callback
  */
-export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, returnToParentPageAfterDelete = false, onSuccess }: DeleteAreaProps): JSX.Element {
+export default function DeleteAreaAndClimbForm ({ uuid, name, parentUuid, returnToParentPageAfterDelete = false, isClimb = false, onSuccess }: DeleteFormProps): JSX.Element {
   const session = useSession()
   const router = useRouter()
 
@@ -48,6 +49,12 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
     }
   }
 
+  const { deleteClimbsCmd } = useUpdateClimbsCmd({
+    parentId: parentUuid,
+    accessToken: session.data?.accessToken as string ?? '',
+    onDeleteCompleted: onSuccessHandler
+  })
+
   const { deleteOneAreaCmd } = useUpdateAreasCmd({
     areaId: parentUuid,
     accessToken: session?.data?.accessToken as string ?? '',
@@ -64,7 +71,15 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
   const { handleSubmit, setFocus, formState: { isSubmitting } } = form
 
   const submitHandler = async (): Promise<void> => {
-    await deleteOneAreaCmd({ uuid: areaUuid })
+    try {
+      if (isClimb) {
+        await deleteClimbsCmd([uuid])
+      } else {
+        await deleteOneAreaCmd({ uuid })
+      }
+    } catch (error) {
+      console.error('Error deleting climb/area:', error)
+    }
   }
 
   if (session.status !== 'authenticated') {
@@ -81,7 +96,7 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
     <FormProvider {...form}>
       {/* eslint-disable-next-line */}
       <form onSubmit={handleSubmit(submitHandler)} className='dialog-form-default'>
-        <div>You're about to delete '<span className='font-semibold'>{areaName}</span>'.  Type <b>DELETE</b> to confirm.</div>
+        <div>You're about to delete '<span className='font-semibold'>{name}</span>'.  Type <b>DELETE</b> to confirm.</div>
         <Input
           label=''
           name='confirmation'
@@ -98,13 +113,10 @@ export default function DeleteAreaForm ({ areaUuid, areaName, parentUuid, return
           className='input input-primary input-bordered input-md'
         />
         <button
-          className={
-            clx('mt-4 btn btn-primary w-full',
-              isSubmitting ? 'loading btn-disabled' : ''
-            )
-          }
+          className='mt-4 btn btn-primary w-full'
+          disabled={isSubmitting}
           type='submit'
-        >Delete
+        >{isSubmitting ? 'Deleting...' : 'Delete'}
         </button>
       </form>
     </FormProvider>

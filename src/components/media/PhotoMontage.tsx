@@ -27,13 +27,19 @@ export interface PhotoMontageProps {
 const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Element | null => {
   const { isMobile } = useResponsive()
   const [showPhotoGalleryModal, setShowPhotoGalleryModal] = useState<boolean>(false)
+  const [userName, setUserName] = useState<string | null>(null)
   useEffect(() => {
     void userMediaStore.set.setPhotoList(initialList)
   }, [initialList])
 
   const shuffledList = initialList
 
-  const photoGalleryModal = <PhotoGalleryModal setShowPhotoGalleryModal={setShowPhotoGalleryModal} />
+  const handleModal = (userName: string, toggleModal: boolean): void => {
+    setUserName(userName)
+    setShowPhotoGalleryModal(toggleModal)
+  }
+
+  const photoGalleryModal = <PhotoGalleryModal userName={userName} setShowPhotoGalleryModal={setShowPhotoGalleryModal} />
   const [hover, setHover] = useState(false)
 
   if (shuffledList == null || shuffledList?.length === 0) { return null }
@@ -48,7 +54,7 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
           fill
           sizes='25vw'
           priority
-          onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)}
+          onClick={() => handleModal(firstMedia.username ?? '', !showPhotoGalleryModal)}
           alt=''
           style={{ objectFit: 'cover' }}
         />
@@ -85,7 +91,7 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
                   fill
                   sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
                   src={mediaUrl}
-                  onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)}
+                  onClick={() => handleModal(media.username ?? '', !showPhotoGalleryModal)}
                   alt=''
                   style={{ objectFit: 'cover' }}
                 />
@@ -124,7 +130,7 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
             fill
             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
             src={first.mediaUrl}
-            onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)}
+            onClick={() => handleModal(first.username ?? '', !showPhotoGalleryModal)}
             alt=''
             style={{ objectFit: 'cover' }}
           />
@@ -142,7 +148,7 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
                 fill
                 sizes='15vw'
                 src={mediaUrl}
-                onClick={() => setShowPhotoGalleryModal(!showPhotoGalleryModal)}
+                onClick={() => handleModal(media.username ?? '', !showPhotoGalleryModal)}
                 alt=''
                 style={{ objectFit: 'cover' }}
               />

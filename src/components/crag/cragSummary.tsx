@@ -18,7 +18,7 @@ import useUpdateClimbsCmd from '../../js/hooks/useUpdateClimbsCmd'
 import useUpdateAreasCmd from '../../js/hooks/useUpdateAreasCmd'
 import { DeleteAreaTrigger } from '../edit/Triggers'
 import { AreaCRUD } from '../edit/AreaCRUD'
-import { StickyHeader, Skeleton as HeaderSkeleton } from './StickyHeader'
+import { StickyHeader } from './StickyHeader'
 import { InplaceTextInput, InplaceEditor } from '../editor'
 import EditModeToggle from '../editor/EditModeToggle'
 import { FormSaveActionProps } from '../../components/editor/FormSaveAction'
@@ -527,29 +527,6 @@ const extractDirtyClimbs = (
   )
   return updateList
 }
-
-/**
- * Area/climb main skeleton
- */
-export const Skeleton: React.FC = () => (
-  <div>
-    <HeaderSkeleton />
-    <div className='mt-4 text-right'>
-      <EditModeToggle onChange={() => {}} showSkeleton />
-    </div>
-    <div className='area-climb-page-summary'>
-      <div className='area-climb-page-summary-left'>
-        <h1 className='text-4xl md:text-5xl rounded-box bg-base-200/10 w-72'>
-          &nbsp;
-        </h1>
-      </div>
-      <div className='area-climb-page-summary-right'>
-        <h3 className='rounded-box bg-base-200/10 w-48'>&nbsp;</h3>
-        <div className='mt-4 rounded-box bg-base-200/10 w-full h-80' />
-      </div>
-    </div>
-  </div>
-)
 
 export const ClientSideFormSaveAction = dynamic<FormSaveActionProps>(
   async () =>
