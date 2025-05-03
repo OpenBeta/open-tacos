@@ -16,21 +16,32 @@ export const AreaAndClimbPageActions: React.FC<{ uuid: string, name: string, tar
   let enableEdit = true
   let editLabel = 'Edit'
   let navigateUuid = ''
+  let targetSlug = ''
   switch (targetType) {
     case TagTargetType.area:
+      targetSlug = 'area'
       url = `/editArea/${uuid}/general`
       sharePath = `/area/${uuid}`
       navigateUuid = uuid
       break
     case TagTargetType.climb:
+      targetSlug = 'climb'
       url = `/editClimb/${uuid}`
       sharePath = `/climb/${uuid}`
       enableEdit = true
       editLabel = 'Edit'
       navigateUuid = parentUuid ?? ''
   }
+
   return (
     <ul className='flex items-center justify-between gap-2'>
+      <Link
+        href={`/gallery/${navigateUuid}?type=${targetSlug}`}
+        className='btn btn-primary'
+      >
+        SSR Gallery (in progress)
+      </Link>
+
       <Link href={url} className={clz('btn no-animation shadow-md', enableEdit ? 'btn-solid btn-accent' : 'btn-disabled')}>
         <PencilSimple size={20} weight='duotone' /> {editLabel}
       </Link>
