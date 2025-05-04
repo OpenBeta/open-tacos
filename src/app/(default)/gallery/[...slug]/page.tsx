@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -9,7 +10,6 @@ import {
 import { PageWithCatchAllUuidProps } from '@/js/types/pages'
 import { getAreaRSC } from '@/js/graphql/getAreaRSC'
 import { getClimbByIdRSC } from '@/js/graphql/getClimbRSC'
-import { CLIENT_CONFIG } from '@/js/configs/clientConfig'
 import { UploadPhotoCTA } from '@/components/media/PhotoMontage'
 
 interface GalleryPageProps extends PageWithCatchAllUuidProps {
@@ -58,7 +58,7 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
     // If type param is 'area', fetch only AREA
     if (entityTypeParam === 'area') {
       const areaData = await getAreaRSC(id)
-      if ((areaData?.area) != null) {
+      if (areaData?.area != null) {
         galleryData = formatAreaData(areaData.area)
       } else {
         // If explicitly asked for area and not found, call notFound() directly
@@ -85,11 +85,12 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
       }
     }
   } catch (error) {
+    console.error(`Gallery data fetch failed for ID ${id}:`, error)
     notFound()
   }
 
   // if no galleryData, show notFound
-  if (galleryData == null) {
+  if (galleryData === null) {
     notFound()
   }
 
@@ -116,16 +117,20 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
           : (
             <div className='mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
               {photoList.map((photo, index) => {
-                const imageUrl = `${CLIENT_CONFIG.CDN_BASE_URL}${photo.mediaUrl}?w=400&q=75`
+                const imageUrl = `${photo.mediaUrl}`
                 const imageAltText = `Photo ${index + 1} for ${entityName} (${entityType})`
 
                 return (
-                  <div key={photo.mediaUrl !== '' ? photo.mediaUrl : index} className='aspect-square bg-gray-100 rounded-lg overflow-hidden'>
-                    <img
+                  <div
+                    key={photo.mediaUrl !== '' ? photo.mediaUrl : index}
+                    className='relative aspect-square bg-gray-100 rounded-lg overflow-hidden'
+                  >
+                    <Image
                       src={imageUrl}
                       alt={imageAltText}
-                      className='w-full h-full object-cover transition-transform duration-300 ease-in-out hover:scale-105'
-                      loading='lazy'
+                      fill
+                      sizes='(min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw'
+                      className='object-cover transition-transform duration-300 ease-in-out hover:scale-105'
                     />
                   </div>
                 )
@@ -138,6 +143,7 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
 }
 
 function LoadingGridState (): JSX.Element {
+  // Loading state remains the same
   return (
     <div className='container mx-auto px-4 py-8'>
       <div className='animate-pulse'>
