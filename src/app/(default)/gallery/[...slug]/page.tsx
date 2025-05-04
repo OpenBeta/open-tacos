@@ -24,6 +24,25 @@ interface EntityGalleryData {
   type: 'area' | 'climb'
 }
 
+type AreaData = NonNullable<Awaited<ReturnType<typeof getAreaRSC>>['area']>
+type ClimbData = NonNullable<Awaited<ReturnType<typeof getClimbByIdRSC>>>
+
+const formatAreaData = (area: AreaData): EntityGalleryData => ({
+  type: 'area',
+  id: area.uuid,
+  name: area.areaName,
+  photos: area.media ?? [],
+  pageUrl: getAreaPageFriendlyUrl(area.uuid, area.areaName)
+})
+
+const formatClimbData = (climb: ClimbData): EntityGalleryData => ({
+  type: 'climb',
+  id: climb.id,
+  name: climb.name,
+  photos: climb.media ?? [],
+  pageUrl: getClimbPageFriendlyUrl(climb.id, climb.name)
+})
+
 export default async function GalleryPage ({ params, searchParams }: GalleryPageProps): Promise<JSX.Element> {
   const id = parseUuidAsFirstParam({ params })
   const entityTypeParam = searchParams?.type as 'area' | 'climb' | undefined
@@ -40,13 +59,7 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
     if (entityTypeParam === 'area') {
       const areaData = await getAreaRSC(id)
       if ((areaData?.area) != null) {
-        galleryData = {
-          type: 'area',
-          id: areaData.area.uuid,
-          name: areaData.area.areaName,
-          photos: areaData.area.media ?? [],
-          pageUrl: getAreaPageFriendlyUrl(areaData.area.uuid, areaData.area.areaName)
-        }
+        galleryData = formatAreaData(areaData.area)
       } else {
         // If explicitly asked for area and not found, call notFound() directly
         notFound()
@@ -55,13 +68,7 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
       // If type param is 'climb', fetch only CLIMB
       const climbData = await getClimbByIdRSC(id)
       if (climbData != null) {
-        galleryData = {
-          type: 'climb',
-          id: climbData.id,
-          name: climbData.name,
-          photos: climbData.media ?? [],
-          pageUrl: getClimbPageFriendlyUrl(climbData.id, climbData.name)
-        }
+        galleryData = formatClimbData(climbData)
       } else {
         notFound()
       }
@@ -69,23 +76,11 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
       // If no type param or invalid, try to fetch both AREA and CLIMB
       const areaData = await getAreaRSC(id)
       if (areaData?.area != null) {
-        galleryData = {
-          type: 'area',
-          id: areaData.area.uuid,
-          name: areaData.area.areaName,
-          photos: areaData.area.media ?? [],
-          pageUrl: getAreaPageFriendlyUrl(areaData.area.uuid, areaData.area.areaName)
-        }
+        galleryData = formatAreaData(areaData.area)
       } else {
         const climbData = await getClimbByIdRSC(id)
         if (climbData != null) {
-          galleryData = {
-            type: 'climb',
-            id: climbData.id,
-            name: climbData.name,
-            photos: climbData.media ?? [],
-            pageUrl: getClimbPageFriendlyUrl(climbData.id, climbData.name)
-          }
+          galleryData = formatClimbData(climbData)
         }
       }
     }
