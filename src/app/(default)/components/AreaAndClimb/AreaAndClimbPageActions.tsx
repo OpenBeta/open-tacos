@@ -36,7 +36,7 @@ export const AreaAndClimbPageActions: React.FC<{ uuid: string, name: string, tar
   return (
     <ul className='flex items-center justify-between gap-2'>
       <Link
-        href={`/gallery/${navigateUuid}?type=${targetSlug}`}
+        href={`/gallery/${uuid}?type=${targetSlug}`}
         className='btn btn-primary'
       >
         SSR Gallery (in progress)
