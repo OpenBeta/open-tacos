@@ -1,20 +1,39 @@
-## Steps to Reproduce
-<!--- Provide a link to the page or an unambiguous set of steps to -->
-<!--- reproduce this bug. Include screen shots if they help. -->
-1.
-2.
-3.
+---
+name: 🐞 Bug Report
+about: Report something that isn’t working right
+title: "[Bug] "
+labels: bug
+---
 
-## Screenshots
+## 🐛 What happened?
+Describe the problem in simple terms.
 
-## Expected Behavior
-<!--- Tell us what should happen -->
+---
 
-## Current Behavior
-<!--- Tell us what happens instead of the expected behavior -->
+## ✅ What did you expect to happen?
+What should have happened instead?
 
-## Browser & version
-<---  Example: Firefox 102.7.0esr  -->
+---
 
-## Operating system
-<--- Example:  MacOS 13.2.1 -->
+## 📸 Screenshots (if any)
+Upload images or videos here to show the problem.
+
+---
+
+## 🪜 Steps to Reproduce
+Help us reproduce the bug:
+
+1. Go to...
+2. Click on...
+3. See the error
+
+---
+
+## 🌐 Device or Browser (optional)
+E.g., Chrome 124, iPhone 13, etc.
+
+---
+
+## ✅ Checklist
+
+- [ ] I searched for existing issues
