@@ -49,7 +49,7 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
     : getClimbPageFriendlyUrl(entityData.id, entityData.name)
 
   return (
-    <div className='container mx-auto min-h-screen px-4 py-8 flex flex-col items-center'>
+    <div className='container mx-auto h-full px-4 py-8 flex flex-col items-center'>
       <div className='w-full max-w-5xl'>
         <div className='mb-4 flex justify-between items-center'>
           <Link href={galleryListUrl} className='text-blue-600 hover:underline'>
