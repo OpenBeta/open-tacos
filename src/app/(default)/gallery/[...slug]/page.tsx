@@ -16,10 +16,17 @@ interface GalleryPageProps extends PageWithCatchAllUuidProps {
   searchParams?: { [key: string]: string | string[] | undefined }
 }
 
+// --- Define the structure for individual photo data ---
+interface PhotoData {
+  id: string
+  mediaUrl: string
+  [key: string]: any
+}
+
 interface EntityGalleryData {
   id: string
   name: string
-  photos: Array<{ mediaUrl: string, [key: string]: any }>
+  photos: PhotoData[]
   pageUrl: string
   type: 'area' | 'climb'
 }
@@ -27,27 +34,42 @@ interface EntityGalleryData {
 type AreaData = NonNullable<Awaited<ReturnType<typeof getAreaRSC>>['area']>
 type ClimbData = NonNullable<Awaited<ReturnType<typeof getClimbByIdRSC>>>
 
-const formatAreaData = (area: AreaData): EntityGalleryData => ({
-  type: 'area',
-  id: area.uuid,
-  name: area.areaName,
-  photos: area.media ?? [],
-  pageUrl: getAreaPageFriendlyUrl(area.uuid, area.areaName)
-})
+const formatAreaData = (area: AreaData): EntityGalleryData => {
+  const photos = (area.media ?? []).map(p => ({
+    ...p,
+    id: p.id,
+    mediaUrl: p.mediaUrl
+  }))
 
-const formatClimbData = (climb: ClimbData): EntityGalleryData => ({
-  type: 'climb',
-  id: climb.id,
-  name: climb.name,
-  photos: climb.media ?? [],
-  pageUrl: getClimbPageFriendlyUrl(climb.id, climb.name)
-})
+  return {
+    type: 'area',
+    id: area.uuid,
+    name: area.areaName,
+    photos,
+    pageUrl: getAreaPageFriendlyUrl(area.uuid, area.areaName)
+  }
+}
+
+const formatClimbData = (climb: ClimbData): EntityGalleryData => {
+  const photos = (climb.media ?? []).map(p => ({
+    ...p,
+    id: p.id,
+    mediaUrl: p.mediaUrl
+  }))
+
+  return {
+    type: 'climb',
+    id: climb.id,
+    name: climb.name,
+    photos,
+    pageUrl: getClimbPageFriendlyUrl(climb.id, climb.name)
+  }
+}
 
 export default async function GalleryPage ({ params, searchParams }: GalleryPageProps): Promise<JSX.Element> {
   const id = parseUuidAsFirstParam({ params })
   const entityTypeParam = searchParams?.type as 'area' | 'climb' | undefined
 
-  // if no id is found, show notFound
   if (id === '') {
     notFound()
   }
@@ -61,7 +83,6 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
       if (areaData?.area != null) {
         galleryData = formatAreaData(areaData.area)
       } else {
-        // If explicitly asked for area and not found, call notFound() directly
         notFound()
       }
     } else if (entityTypeParam === 'climb') {
@@ -88,7 +109,6 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
     console.error(`Gallery data fetch failed for ID ${id}:`, error)
     notFound()
   }
-
   // if no galleryData, show notFound
   if (galleryData === null) {
     notFound()
@@ -117,22 +137,23 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
           : (
             <div className='mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
               {photoList.map((photo, index) => {
-                const imageUrl = `${photo.mediaUrl}`
-                const imageAltText = `Photo ${index + 1} for ${entityName} (${entityType})`
+                const imageAltText = `Photo ${index + 1} for ${entityName} (${entityType}) - ID: ${photo.id}`
 
                 return (
-                  <div
-                    key={photo.mediaUrl !== '' ? photo.mediaUrl : index}
-                    className='relative aspect-square bg-gray-100 rounded-lg overflow-hidden'
+                  <Link
+                    key={photo.id}
+                    href={`/gallery/p/${id}/${photo.id}?type=${entityType}`}
+                    className='relative aspect-square block bg-gray-100 rounded-lg overflow-hidden group'
                   >
                     <Image
-                      src={imageUrl}
+                      src={photo.mediaUrl}
                       alt={imageAltText}
                       fill
                       sizes='(min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw'
-                      className='object-cover transition-transform duration-300 ease-in-out hover:scale-105'
+                      className='object-cover transition-transform duration-300 ease-in-out group-hover:scale-105'
+                      priority={index < 4}
                     />
-                  </div>
+                  </Link>
                 )
               })}
             </div>
