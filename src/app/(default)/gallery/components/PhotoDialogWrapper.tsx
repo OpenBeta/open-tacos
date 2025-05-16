@@ -40,7 +40,7 @@ export default function PhotoDialogWrapper ({
         return
       }
       const newPhoto = images[newIndex]
-      if (newPhoto && newPhoto.id) {
+      if (newPhoto?.id !== undefined) {
         const newUrl = `/gallery/p/${uuid}/${newPhoto.id}?type=${type}`
         router.push(newUrl)
       } else {

@@ -39,7 +39,7 @@ export async function getEntityDataForPhotoDisplay (
   entityId: string,
   entityType: 'area' | 'climb'
 ): Promise<EntityGalleryData | null> {
-  if (!entityId || !entityType) {
+  if (entityId === undefined || (entityType !== 'area' && entityType !== 'climb')) {
     console.error('getEntityDataForPhotoDisplay: entityId or entityType is missing.')
     return null
   }
@@ -54,7 +54,7 @@ export async function getEntityDataForPhotoDisplay (
       }
     } else if (entityType === 'climb') {
       const climbData = await getClimbByIdRSC(entityId)
-      if (climbData) {
+      if (climbData != null) {
         galleryData = formatClimbData(climbData)
       }
     }

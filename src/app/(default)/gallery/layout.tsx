@@ -6,7 +6,7 @@ export default function GalleryLayout ({
 }: {
   children: React.ReactNode
   modal: React.ReactNode
-}) {
+}): JSX.Element {
   return (
     <>
       {children}

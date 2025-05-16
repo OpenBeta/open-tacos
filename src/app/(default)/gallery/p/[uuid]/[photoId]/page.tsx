@@ -15,18 +15,18 @@ interface PhotoPageProps {
 }
 
 // Server component to display a single photo as a fallback for the modal
-export default async function PhotoPage ({ params, searchParams }: PhotoPageProps) {
+export default async function PhotoPage ({ params, searchParams }: PhotoPageProps): Promise<JSX.Element> {
   const { uuid, photoId: currentPhotoId } = params
   const entityType = searchParams?.type
 
-  if (!uuid || !currentPhotoId || !entityType) {
+  if (uuid === undefined || currentPhotoId === undefined || (entityType !== 'area' && entityType !== 'climb')) {
     console.error('PhotoParamsPage: Missing critical parameters.', { params, searchParams })
     notFound()
   }
 
   const entityData = await getEntityDataForPhotoDisplay(uuid, entityType)
 
-  if ((entityData == null) || !entityData.photos || entityData.photos.length === 0) {
+  if ((entityData == null) || entityData.photos == null || entityData.photos.length === 0) {
     console.warn(`PhotoParamsPage: No photos found for entity ${uuid} (type: ${entityType}).`)
     notFound()
   }
@@ -65,7 +65,7 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
 
         {/* Basic Image Display */}
         <div className='relative w-full aspect-[3/2] bg-gray-200 rounded-lg overflow-hidden mb-4'>
-          {currentPhoto.mediaUrl && (
+          {currentPhoto.mediaUrl !== undefined && (
             <Image
               src={currentPhoto.mediaUrl}
               alt={`Photo ${currentIndex + 1} for ${entityData.name}`}
@@ -78,27 +78,31 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
 
         {/* Basic Next/Previous Navigation */}
         <div className='flex justify-between items-center'>
-          {(prevPhoto != null) ? (
-            <Link
-              href={`/gallery/p/${uuid}/${prevPhoto.id}?type=${entityType}`}
-              className='px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-800'
-            >
-              &larr; Previous
-            </Link>
-          ) : (
-            <div className='px-4 py-2 invisible'>Previous</div> // Placeholder for spacing
-          )}
+          {(prevPhoto != null)
+            ? (
+              <Link
+                href={`/gallery/p/${uuid}/${prevPhoto.id}?type=${entityType}`}
+                className='px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-800'
+              >
+                &larr; Previous
+              </Link>
+              )
+            : (
+              <div className='px-4 py-2 invisible'>Previous</div> // Placeholder for spacing
+              )}
 
-          {(nextPhoto != null) ? (
-            <Link
-              href={`/gallery/p/${uuid}/${nextPhoto.id}?type=${entityType}`}
-              className='px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-800'
-            >
-              Next &rarr;
-            </Link>
-          ) : (
-            <div className='px-4 py-2 invisible'>Next</div> // Placeholder for spacing
-          )}
+          {(nextPhoto != null)
+            ? (
+              <Link
+                href={`/gallery/p/${uuid}/${nextPhoto.id}?type=${entityType}`}
+                className='px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-800'
+              >
+                Next &rarr;
+              </Link>
+              )
+            : (
+              <div className='px-4 py-2 invisible'>Next</div> // Placeholder for spacing
+              )}
         </div>
       </div>
     </div>
@@ -106,14 +110,14 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
 }
 
 // Update metadata to use uuid and entityData
-export async function generateMetadata ({ params, searchParams }: PhotoPageProps) {
+export async function generateMetadata ({ params, searchParams }: PhotoPageProps): Promise<{ title: string, description?: string }> {
   const { uuid, photoId } = params
   const entityType = searchParams?.type
 
-  if (!uuid || !photoId || !entityType) return { title: 'Photo' }
+  if (uuid === undefined || photoId === undefined || (entityType !== 'area' && entityType !== 'climb')) return { title: 'Photo' }
 
   const entityData = await getEntityDataForPhotoDisplay(uuid, entityType)
-  if ((entityData == null) || !entityData.photos) return { title: `Gallery - ${entityData?.name || uuid}` }
+  if ((entityData == null) || entityData.photos == null || entityData.photos.length === 0) return { title: `Gallery - ${entityData?.name !== undefined ? entityData.name : uuid}` }
 
   const currentPhoto = entityData.photos.find(p => p.id === photoId)
   const photoTitle = (currentPhoto != null) ? `Photo of ${entityData.name}` : `${entityData.name} Gallery`

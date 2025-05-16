@@ -19,7 +19,7 @@ export default async function PhotoModal ({
   const { uuid, photoId: currentPhotoId } = params
   const type = searchParams.type
 
-  if (!uuid || !currentPhotoId || !type) {
+  if (uuid === '' || currentPhotoId === '' || (type !== 'area' && type !== 'climb')) {
     console.error(
       'PhotoModal: Missing uuid, currentPhotoId, or type from searchParams.',
       { params, searchParams }
@@ -29,7 +29,7 @@ export default async function PhotoModal ({
 
   const entityData = await getEntityDataForPhotoDisplay(uuid, type)
 
-  if ((entityData == null) || !entityData.photos || entityData.photos.length === 0) {
+  if ((entityData == null) || entityData.photos == null || entityData.photos.length === 0) {
     console.warn(
       `PhotoModal: No photos found for entity ${uuid} (type: ${type}).`
     )
