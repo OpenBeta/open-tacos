@@ -57,7 +57,6 @@ export default function DesktopModal ({
             </Dialog.Description>
           </div>
 
-          {/* Close Button (Top Right of the modal) */}
           <Dialog.Close asChild ref={dialogCloseRef}>
             <Button
               ariaLabel='Close dialog'

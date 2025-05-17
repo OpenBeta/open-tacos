@@ -10,13 +10,11 @@ import {
 import { PageWithCatchAllUuidProps } from '@/js/types/pages'
 import { getAreaRSC } from '@/js/graphql/getAreaRSC'
 import { getClimbByIdRSC } from '@/js/graphql/getClimbRSC'
-import { UploadPhotoCTA } from '@/components/media/PhotoMontage'
 
 interface GalleryPageProps extends PageWithCatchAllUuidProps {
   searchParams?: { [key: string]: string | string[] | undefined }
 }
 
-// --- Define the structure for individual photo data ---
 interface PhotoData {
   id: string
   mediaUrl: string
@@ -130,8 +128,7 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
           ? (
             <div className='mt-8 p-4 bg-gray-100 rounded-lg text-center text-gray-600'>
               <p>No photos have been uploaded for this {entityType} yet.</p>
-              <UploadPhotoCTA />
-              <p className='mt-2'><Link href={`/upload?${entityType}Id=${id}`} className='btn btn-primary'>Upload Photos</Link></p>
+              <p><strong>TODO: Add a CTA to upload photos</strong></p>
             </div>
             )
           : (
@@ -164,7 +161,6 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
 }
 
 function LoadingGridState (): JSX.Element {
-  // Loading state remains the same
   return (
     <div className='container mx-auto px-4 py-8'>
       <div className='animate-pulse'>

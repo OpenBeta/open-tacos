@@ -88,7 +88,7 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
               </Link>
               )
             : (
-              <div className='px-4 py-2 invisible'>Previous</div> // Placeholder for spacing
+              <div className='px-4 py-2 invisible'>Previous</div>
               )}
 
           {(nextPhoto != null)
@@ -101,7 +101,7 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
               </Link>
               )
             : (
-              <div className='px-4 py-2 invisible'>Next</div> // Placeholder for spacing
+              <div className='px-4 py-2 invisible'>Next</div>
               )}
         </div>
       </div>
@@ -109,7 +109,6 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
   )
 }
 
-// Update metadata to use uuid and entityData
 export async function generateMetadata ({ params, searchParams }: PhotoPageProps): Promise<{ title: string, description?: string }> {
   const { uuid, photoId } = params
   const entityType = searchParams?.type
@@ -125,6 +124,5 @@ export async function generateMetadata ({ params, searchParams }: PhotoPageProps
   return {
     title: `${photoTitle} (ID: ${photoId.substring(0, 8)})`,
     description: `View photo for ${entityData.name} (${entityType})`
-    // Add OpenGraph images etc. if desired
   }
 }
