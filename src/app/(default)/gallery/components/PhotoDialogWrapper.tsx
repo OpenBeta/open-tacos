@@ -1,41 +1,54 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import SlideViewer from './SlideViewer'
 import { MediaWithTags } from '@/js/types'
+import { WithPermission } from '@/js/types/User'
 
 interface PhotoDialogWrapperProps {
   images: MediaWithTags[]
   currentIndex: number
   uuid: string
   type: 'area' | 'climb'
+  entityName?: string
+  userinfoData: { name?: string }
+  authData: WithPermission
 }
 
 export default function PhotoDialogWrapper ({
   images,
   currentIndex,
   uuid,
-  type
+  type,
+  entityName,
+  userinfoData,
+  authData
 }: PhotoDialogWrapperProps): JSX.Element | null {
-  const [curIndex, setCurIndex] = useState(currentIndex)
+  const userinfoElement = (userinfoData?.name != null && userinfoData.name !== '') ? <span>Uploaded by: {userinfoData.name}</span> : <></>
+  const dialogTitleForSlideViewer = (entityName != null && entityName !== '') ? entityName : undefined
 
-  useEffect(() => {
-    if (currentIndex !== curIndex) {
-      setCurIndex(currentIndex)
-    }
-  }, [currentIndex, curIndex])
+  if (images == null || images.length === 0) {
+    return (
+      <SlideViewer
+        initialIndex={-1}
+        imageList={[]}
+        userinfo={userinfoElement}
+        auth={authData}
+        galleryType={type}
+        dialogTitle={dialogTitleForSlideViewer != null ? dialogTitleForSlideViewer : 'Gallery Error'}
+        uuid={uuid}
+      />
+    )
+  }
 
   return (
     <SlideViewer
-      initialIndex={curIndex}
+      initialIndex={currentIndex}
       imageList={images}
-      userinfo={<></>} // Placeholder for user info component
-      auth={{
-        isAuthorized: false,
-        isAuthenticated: false
-      }} // Placeholder for auth component
+      userinfo={userinfoElement}
+      auth={authData}
       galleryType={type}
-      dialogTitle={`Photo ${curIndex + 1} of ${images.length}`}
+      dialogTitle={dialogTitleForSlideViewer}
       uuid={uuid}
     />
   )

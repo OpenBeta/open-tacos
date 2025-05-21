@@ -1,19 +1,17 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { MediaWithTags } from '@/js/types'
 import { WithPermission } from '@/js/types/User'
-
 import DesktopModal from './DesktopModal'
 import SharedModal from './Modal'
 import { InfoContainer } from './InfoContainer'
-import AddTagCta from '@/components/media/slideshow/AddTagCta'
 import { RhsContainer } from './RhsContainer'
+import AddTagCta from '@/components/media/slideshow/AddTagCta'
 
 interface SlideViewerProps {
-  // isOpen: boolean
   initialIndex: number
   imageList: MediaWithTags[]
   userinfo: JSX.Element
@@ -24,29 +22,35 @@ interface SlideViewerProps {
 }
 
 export default function SlideViewer ({
-  // isOpen,
   initialIndex,
   imageList,
   userinfo,
   auth,
   galleryType,
-  dialogTitle = 'Image Gallery',
+  dialogTitle,
   uuid
 }: SlideViewerProps): JSX.Element | null {
   const router = useRouter()
-  const [isOpen, setIsOpen] = React.useState(true)
-  const currentImage = imageList?.[initialIndex] ?? null
-  const hotkeysEnabled = isOpen && currentImage != null
+  const [isModalOpen, setIsModalOpen] = useState(true)
+  const currentImage = (imageList != null && imageList.length > 0 && initialIndex >= 0 && initialIndex < imageList.length)
+    ? imageList[initialIndex]
+    : null
+  const hotkeysEnabled = isModalOpen && currentImage != null
 
   const internalNavigate = (newIndex: number): void => {
-    if (newIndex >= 0 && newIndex < imageList.length) {
+    if (imageList != null && newIndex >= 0 && newIndex < imageList.length) {
       const newPhoto = imageList[newIndex]
-      router.replace(`/gallery/p/${uuid}/${newPhoto.id}?type=${galleryType}`)
+      if (newPhoto?.id != null && newPhoto.id !== '') {
+        router.push(`/gallery/p/${uuid}/${newPhoto.id}?type=${galleryType}`)
+      }
     }
   }
 
-  const internalOnClose = (): void => {
-    router.back()
+  const handleModalOpenChange = (open: boolean): void => {
+    setIsModalOpen(open)
+    if (!open) {
+      router.back()
+    }
   }
 
   useHotkeys('left', () => {
@@ -56,66 +60,69 @@ export default function SlideViewer ({
   }, { enabled: hotkeysEnabled }, [initialIndex, internalNavigate, hotkeysEnabled, currentImage])
 
   useHotkeys('right', () => {
-    if (currentImage != null && initialIndex < imageList.length - 1) {
+    if (currentImage != null && imageList != null && initialIndex < imageList.length - 1) {
       internalNavigate(initialIndex + 1)
     }
-  }, { enabled: hotkeysEnabled }, [initialIndex, imageList?.length, internalNavigate, hotkeysEnabled, currentImage])
+  }, { enabled: hotkeysEnabled }, [initialIndex, imageList, internalNavigate, hotkeysEnabled, currentImage])
 
-  if (!isOpen) {
+  if (!isModalOpen) {
     return null
+  }
+
+  if (imageList == null || imageList.length === 0) {
+    return (
+      <DesktopModal
+        isOpen={isModalOpen}
+        onOpenChange={handleModalOpenChange}
+        dialogTitle='Error'
+        mediaContainer={<div className='flex items-center justify-center h-full text-neutral-content/50'>No images available.</div>}
+        rhsContainer={<div>Please select a gallery.</div>}
+      />
+    )
   }
 
   const mediaContainerContent = currentImage != null
     ? (
       <SharedModal
         index={initialIndex}
-        closeModal={internalOnClose}
+        closeModal={() => handleModalOpenChange(false)}
         images={imageList}
         changePhotoId={internalNavigate}
-        navigation={false}
+        navigation
       />
       )
     : (
       <div className='flex items-center justify-center h-full text-neutral-content/50'>
-        {imageList != null && imageList.length > 0 ? 'Invalid image index.' : 'No images to display.'}
+        Image not found or invalid index.
       </div>
       )
 
-  const controlContainerContent = imageList != null && imageList.length > 1
+  // const controlContainerContent = (imageList.length > 1) ? ( // imageList confirmed non-null & non-empty
+  //   <div className='flex gap-2'>
+  //     <button className='btn btn-primary btn-sm' onClick={() => internalNavigate(initialIndex - 1)} disabled={initialIndex <= 0}>Prev</button>
+  //     <button className='btn btn-primary btn-sm' onClick={() => internalNavigate(initialIndex + 1)} disabled={initialIndex >= imageList.length - 1}>Next</button>
+  //   </div>
+  // ) : null'
+
+  const effectiveDialogTitle = (currentImage != null && imageList.length > 0)
+    ? `${(dialogTitle != null && dialogTitle !== '') ? dialogTitle : 'Gallery'}: Image ${initialIndex + 1} of ${imageList.length}`
+    : ((dialogTitle != null && dialogTitle !== '') ? dialogTitle : 'Gallery')
+
+  const rhsFooterContent = (currentImage?.entityTags != null)
     ? (
-      <div className='flex gap-2'>
-        <button
-          className='btn btn-primary btn-sm'
-          onClick={() => internalNavigate(initialIndex - 1)}
-          disabled={initialIndex <= 0}
-        >
-          Previous
-        </button>
-        <button
-          className='btn btn-primary btn-sm'
-          onClick={() => internalNavigate(initialIndex + 1)}
-          disabled={initialIndex >= imageList.length - 1}
-        >
-          Next
-        </button>
-      </div>
+      <AddTagCta tagCount={currentImage.entityTags.length} auth={auth} />
       )
     : null
 
-  const effectiveDialogTitle = currentImage !== null && imageList.length > 1
-    ? `${dialogTitle}: Image ${initialIndex + 1} of ${imageList.length}`
-    : dialogTitle
-
   return (
     <DesktopModal
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-      onClose={internalOnClose}
+      isOpen={isModalOpen}
+      onOpenChange={handleModalOpenChange}
       dialogTitle={effectiveDialogTitle}
       mediaContainer={mediaContainerContent}
       rhsContainer={
         <RhsContainer
-          loaded
+          loaded={currentImage != null}
           userinfo={userinfo}
           content={
             <InfoContainer
@@ -123,14 +130,10 @@ export default function SlideViewer ({
               auth={auth}
             />
           }
-          footer={
-            <>
-              <AddTagCta tagCount={currentImage.entityTags.length} auth={auth} />
-            </>
-          }
+          footer={rhsFooterContent}
         />
-}
-      controlContainer={controlContainerContent}
+      }
+      // controlContainer={controlContainerContent}
     />
   )
 }

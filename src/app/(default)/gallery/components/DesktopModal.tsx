@@ -7,11 +7,10 @@ import { Button, ButtonVariant } from '@/components/ui/BaseButton'
 
 interface DesktopModalProps {
   isOpen: boolean
-  setIsOpen: (isOpen: boolean) => void
+  onOpenChange: (open: boolean) => void
   mediaContainer: JSX.Element | null
   rhsContainer: ReactElement
   controlContainer?: JSX.Element | null
-  onClose?: () => void
   dialogTitle?: string
 }
 
@@ -21,32 +20,29 @@ interface DesktopModalProps {
  */
 export default function DesktopModal ({
   isOpen,
-  setIsOpen,
+  onOpenChange,
   mediaContainer,
   rhsContainer,
   controlContainer = null,
   dialogTitle = 'Gallery Viewer'
 }: DesktopModalProps): JSX.Element {
-  const dialogCloseRef = React.useRef<HTMLButtonElement>(null)
   return (
     <Dialog.Root
       open={isOpen}
+      onOpenChange={onOpenChange}
     >
       <Dialog.Portal>
         <Dialog.Overlay
           className='fixed inset-0 z-40 bg-black/70 backdrop-blur-sm data-[state=open]:animate-overlayShow'
         />
         <Dialog.Content
-          onPointerDownOutside={() => {
-            setIsOpen(!isOpen)
-          }}
-          className='fixed left-1/2 top-1/2 z-50 flex h-[90vh] w-[95vw] max-w-screen-2xl -translate-x-1/2 -translate-y-1/2
-                     items-stretch bg-neutral text-neutral-content shadow-lg data-[state=open]:animate-contentShow
-                     focus:outline-none sm:rounded-lg overflow-hidden'
+          onEscapeKeyDown={() => onOpenChange(false)}
+          onPointerDownOutside={() => onOpenChange(false)}
+          className='fixed left-1/2 top-1/2 z-50 flex h-[90vh] w-[95vw] max-w-screen-2xl -translate-x-1/2 -translate-y-1/2 items-stretch bg-neutral text-neutral-content shadow-lg data-[state=open]:animate-contentShow focus:outline-none sm:rounded-lg overflow-hidden'
         >
           <Dialog.Title className='sr-only'>{dialogTitle}</Dialog.Title>
 
-          <div className='flex h-full w-full flex-col lg:flex-row'> {/* Stack on mobile, row on lg */}
+          <div className='flex h-full w-full flex-col lg:flex-row'>
             <div className='relative flex-grow bg-black flex items-center justify-center overflow-hidden p-2 lg:p-0'>
               {mediaContainer}
             </div>
@@ -57,7 +53,7 @@ export default function DesktopModal ({
             </Dialog.Description>
           </div>
 
-          <Dialog.Close asChild ref={dialogCloseRef}>
+          <Dialog.Close asChild>
             <Button
               ariaLabel='Close dialog'
               label={<XMarkIcon className='h-5 w-5' />}
@@ -65,7 +61,7 @@ export default function DesktopModal ({
             />
           </Dialog.Close>
 
-          {(controlContainer != null) && (
+          {controlContainer != null && (
             <div className='absolute bottom-4 left-1/2 z-10 -translate-x-1/2 flex justify-center'>
               {controlContainer}
             </div>

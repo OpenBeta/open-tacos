@@ -39,6 +39,8 @@ export default async function PhotoModal ({
         currentIndex={-1}
         uuid={uuid}
         type={type}
+        userinfoData={{ name: '' }}
+        authData={{ isAuthorized: false, isAuthenticated: false }}
       />
     )
   }
@@ -56,6 +58,8 @@ export default async function PhotoModal ({
         currentIndex={-1}
         uuid={uuid}
         type={type}
+        userinfoData={{ name: '' }}
+        authData={{ isAuthorized: false, isAuthenticated: false }}
       />
     )
   }
@@ -66,6 +70,8 @@ export default async function PhotoModal ({
       currentIndex={currentIndex}
       uuid={uuid}
       type={type}
+      userinfoData={{ name: '' }}
+      authData={{ isAuthorized: false, isAuthenticated: false }}
     />
   )
 }

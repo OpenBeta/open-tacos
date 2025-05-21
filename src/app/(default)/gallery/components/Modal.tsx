@@ -71,6 +71,7 @@ export default function SharedModal ({
     if (emblaApi != null && emblaApi.selectedScrollSnap() !== index) {
       console.log(`SharedModal: Index prop changed to ${index}, Embla at ${emblaApi.selectedScrollSnap()}. Scrolling Embla.`)
       emblaApi.scrollTo(index, true)
+      changePhotoId(index)
     }
   }, [index, emblaApi])
 
@@ -104,7 +105,7 @@ export default function SharedModal ({
           {images.map((image, i) => (
             <div className='embla__slide flex-[0_0_100%] min-w-0 relative flex justify-center items-center' key={image.id}>
               <Image
-                src={fullSizeImageUrl}
+                src={image.mediaUrl}
                 fill
                 style={{ objectFit: 'contain' }}
                 priority={i === index}
