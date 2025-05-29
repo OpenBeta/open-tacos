@@ -11,7 +11,7 @@ import {
   PrevButton as EmblaPrevButton,
   NextButton as EmblaNextButton
 } from '@/js/hooks/useGalleryNavigation'
-import { DownloadIcon, ShareIcon } from '@phosphor-icons/react'
+import { Download, Share } from '@phosphor-icons/react'
 
 export interface ImageCarouselProps {
   index: number
@@ -127,14 +127,14 @@ export default function ImageCarousel ({
               downloadPhoto(fullSizeImageUrl, currentImage.id)
             }}
           >
-            <DownloadIcon size={24} weight='bold' />
+            <Download size={24} weight='bold' />
           </Link>
           <Link
             href={`/share/${currentImage.id}`}
             className='btn btn-ghost btn-square'
             aria-label='Share image'
           >
-            <ShareIcon size={24} weight='bold' />
+            <Share size={24} weight='bold' />
           </Link>
           <button
             className='btn btn-ghost btn-square'
