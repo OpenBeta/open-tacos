@@ -139,7 +139,7 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
                 return (
                   <Link
                     key={photo.id}
-                    href={`/gallery/p/${id}/${photo.id}?type=${entityType}`}
+                    href={`/gallery/${id}/${photo.id}?type=${entityType}`}
                     className='relative aspect-square block bg-gray-100 rounded-lg overflow-hidden group'
                   >
                     <Image

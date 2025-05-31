@@ -38,7 +38,7 @@ export default function UserMedia ({
     }
   }, [])
 
-  const shareableUrl = `/p/${uid}/${basename(mediaUrl)}`
+  const shareableUrl = `/${uid}/${basename(mediaUrl)}`
 
   const canRemoveImage = entityTags.length === 0 && isAuthorized
   return (

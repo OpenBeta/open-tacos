@@ -61,7 +61,7 @@ export const useGalleryNavigation = ({
     if (newPhoto?.id != null && newPhoto.id !== '' && newPhoto.mediaUrl != null) {
       const newSearchParams = new URLSearchParams(currentWindowSearchParams.toString())
       newSearchParams.set('type', galleryType)
-      const newPhotoPath = `/gallery/p/${uuid}/${newPhoto.id}`
+      const newPhotoPath = `/gallery/${uuid}/${newPhoto.id}`
       const finalUrl = `${newPhotoPath}?${newSearchParams.toString()}`
 
       // Update URL without page reload

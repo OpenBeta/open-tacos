@@ -81,7 +81,7 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
           {(prevPhoto != null)
             ? (
               <Link
-                href={`/gallery/p/${uuid}/${prevPhoto.id}?type=${entityType}`}
+                href={`/gallery/${uuid}/${prevPhoto.id}?type=${entityType}`}
                 className='px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-800'
               >
                 &larr; Previous
@@ -94,7 +94,7 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
           {(nextPhoto != null)
             ? (
               <Link
-                href={`/gallery/p/${uuid}/${nextPhoto.id}?type=${entityType}`}
+                href={`/gallery/${uuid}/${nextPhoto.id}?type=${entityType}`}
                 className='px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-800'
               >
                 Next &rarr;

@@ -29,7 +29,7 @@ export default async function UserHomePage ({ params }: { params: { slug: string
   }
 
   if (postId != null && params.slug?.[2] !== 'gallery') {
-    redirect(`/p/${uid}/${postId}`)
+    redirect(`/${uid}/${postId}`)
   }
 
   let userPublicPage: UserPublicPage
