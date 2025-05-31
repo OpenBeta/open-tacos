@@ -3,6 +3,7 @@ import TagList from '@/components/media/TagList'
 import { LightBulbIcon } from '@heroicons/react/24/outline'
 import { MediaWithTags } from '@/js/types'
 import { WithPermission } from '@/js/types/User'
+import { useResponsive } from '@/js/hooks'
 
 interface InfoContainerProps {
   currentImage: MediaWithTags | null
@@ -12,6 +13,7 @@ interface InfoContainerProps {
 }
 
 export const InfoContainer = ({ currentImage, auth, keyboardTip = true, onClose }: InfoContainerProps): ReactElement | null => {
+  const { isMobile } = useResponsive()
   if (currentImage == null) return null
 
   const { entityTags } = currentImage
@@ -38,7 +40,7 @@ export const InfoContainer = ({ currentImage, auth, keyboardTip = true, onClose 
         </div>}
 
       <div className='flex-1' />
-      {keyboardTip &&
+      {!isMobile && keyboardTip &&
         <div className='mb-2 flex flex-col gap-4 text-sm text-base-300 font-semibold'>
           <div> Keyboard shortcuts:</div>
           <div className='flex flex-col gap-2'>
