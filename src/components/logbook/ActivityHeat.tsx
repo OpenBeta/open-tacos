@@ -6,7 +6,7 @@ import classNames from 'classnames'
 
 import { ChartsSectionProps } from './ChartsSection'
 import { TickType } from '../../js/types'
-import { ScatterPointItem } from 'recharts/types/cartesian/Scatter'
+import { ScatterCustomizedShape, ScatterPointItem } from 'recharts/types/cartesian/Scatter'
 
 interface DataProps {
   /**
@@ -172,7 +172,7 @@ const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
 
             <ZAxis dataKey='z' />
             <Tooltip content={renderToolTip} cursor />
-            <Scatter data={data} shape={renderSquare} />
+            <Scatter data={data} shape={renderSquare as ScatterCustomizedShape} />
           </ScatterChart>
         </div>
       </div>

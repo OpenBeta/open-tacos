@@ -121,7 +121,7 @@ export const ResultContainer = (children: ReactNode[]): ReactNode => {
           >Address
           </button>}
       </section>
-      {children?.length === 0 ?? true
+      {children?.length === 0
         ? (
           <section className='alert flex-col'>
             <div className='text-base-300 text-sm'>Can't find what you're looking for?</div>

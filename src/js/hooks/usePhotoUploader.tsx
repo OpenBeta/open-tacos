@@ -69,7 +69,21 @@ export default function usePhotoUploader ({ tagType, uuid, isProfilePhoto = fals
     const imageData = event.target.result as ArrayBuffer
 
     const { width, height } = await getImageDimensions(imageData)
-    const { name, type, size } = file
+
+    let name: string
+    let type: string
+    let size: number
+
+    // Type guard to check if `file` is a File
+    if (file instanceof File) {
+      name = file.name
+      type = file.type
+      size = file.size
+    } else {
+      name = 'unknown'
+      type = file.type
+      size = file.size
+    }
 
     let entityTag: NewEmbeddedEntityTag | undefined
 

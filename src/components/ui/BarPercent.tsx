@@ -1,6 +1,13 @@
 import React from 'react'
 
-function BarPercent ({ percents = [], colors = [], styles = '' }) {
+interface Props {
+  percents?: number[]
+  colors?: string[]
+  styles?: string
+
+}
+
+function BarPercent ({ percents = [], colors = [], styles = '' }: Props): JSX.Element {
   return (
     <div>
       <div className={`h-2 w-100 flex ${styles}`}>
