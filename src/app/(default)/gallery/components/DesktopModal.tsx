@@ -1,9 +1,7 @@
 'use client'
 
 import * as Dialog from '@radix-ui/react-dialog'
-import { XMarkIcon } from '@heroicons/react/24/outline'
 import React, { ReactElement } from 'react'
-import { Button, ButtonVariant } from '@/components/ui/BaseButton'
 
 interface DesktopModalProps {
   isOpen: boolean
@@ -52,14 +50,6 @@ export default function DesktopModal ({
               </div>
             </Dialog.Description>
           </div>
-
-          <Dialog.Close asChild>
-            <Button
-              ariaLabel='Close dialog'
-              label={<XMarkIcon className='h-5 w-5' />}
-              variant={ButtonVariant.ROUNDED_ICON_SOLID}
-            />
-          </Dialog.Close>
 
           {controlContainer != null && (
             <div className='absolute bottom-4 left-1/2 z-10 -translate-x-1/2 flex justify-center'>
