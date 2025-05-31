@@ -153,7 +153,7 @@ export default function ImageCarousel ({
       {/* Thumbnails */}
       {navigation && images.length > 1 && (
         <div className='absolute bottom-0 left-0 right-0 z-10 w-full overflow-hidden bg-gradient-to-b from-black/0 to-black/60 pb-4 pt-4'>
-          <div className='mx-auto flex h-16 items-center justify-start gap-2 overflow-x-auto px-4 scroll-smooth scrollbar-hide'>
+          <div className='mx-auto flex h-16 items-center justify-center gap-2 overflow-x-auto px-4 scroll-smooth scrollbar-hide'>
             {images.map((image, i) => {
               const isActive = i === index
               return (
