@@ -20,6 +20,7 @@ interface SlideViewerProps {
   galleryType: 'area' | 'climb' | 'user'
   dialogTitle?: string
   uuid: string
+  baseUrl: string
 }
 
 export default function SlideViewer ({
@@ -29,7 +30,8 @@ export default function SlideViewer ({
   auth,
   galleryType,
   dialogTitle,
-  uuid
+  uuid,
+  baseUrl
 }: SlideViewerProps): JSX.Element | null {
   const router = useRouter()
   const [isModalOpen, setIsModalOpen] = useState(true)
@@ -62,7 +64,7 @@ export default function SlideViewer ({
   const handleModalOpenChange = (open: boolean): void => {
     setIsModalOpen(open)
     if (!open) {
-      router.back()
+      router.push(baseUrl)
     }
   }
 

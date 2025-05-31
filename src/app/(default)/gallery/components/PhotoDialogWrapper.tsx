@@ -26,6 +26,7 @@ export default function PhotoDialogWrapper ({
 }: PhotoDialogWrapperProps): JSX.Element | null {
   const userinfoElement = (userinfoData?.name != null && userinfoData.name !== '') ? <span>Uploaded by: {userinfoData.name}</span> : <></>
   const dialogTitleForSlideViewer = (entityName != null && entityName !== '') ? entityName : undefined
+  const baseUrl = `/gallery/${uuid}?type=${type}`
 
   if (images == null || images.length === 0) {
     return (
@@ -37,6 +38,7 @@ export default function PhotoDialogWrapper ({
         galleryType={type}
         dialogTitle={dialogTitleForSlideViewer != null ? dialogTitleForSlideViewer : 'Gallery Error'}
         uuid={uuid}
+        baseUrl={baseUrl}
       />
     )
   }
@@ -50,6 +52,7 @@ export default function PhotoDialogWrapper ({
       galleryType={type}
       dialogTitle={dialogTitleForSlideViewer}
       uuid={uuid}
+      baseUrl={baseUrl}
     />
   )
 }

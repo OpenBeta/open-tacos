@@ -6,6 +6,10 @@ import { userMedia } from '@/components/media/__tests__/data'
 import { UserPublicPage } from '@/js/types/User'
 import { UseMediaCmdReturn } from '@/js/hooks/useMediaCmd'
 
+if (typeof window !== 'undefined' && typeof window.HTMLElement !== 'undefined') {
+  window.HTMLElement.prototype.scrollIntoView = jest.fn()
+}
+
 jest.mock('next/navigation', () => require('../../../../../../__mocks__/next/router'))
 
 jest.mock('../../../../../js/hooks/useResponsive')

@@ -8,7 +8,6 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import UserMedia from '@/components/media/UserMedia'
 import MobileMediaCard from '@/components/media/MobileMediaCard'
 import UploadCTA from '@/components/media/UploadCTA'
-import SlideViewer from '@/components/media/slideshow/SlideViewer'
 import { TinyProfile } from '@/components/users/PublicProfile'
 import { UserPublicPage } from '@/js/types/User'
 import { useResponsive } from '@/js/hooks'
@@ -18,6 +17,7 @@ import useMediaCmd from '@/js/hooks/useMediaCmd'
 import { useUserGalleryStore } from '@/js/stores/useUserGalleryStore'
 import { relayMediaConnectionToMediaArray } from '@/js/utils'
 import { useSession } from 'next-auth/react'
+import SlideViewer from '../../gallery/components/SlideViewer'
 
 export interface UserGalleryProps {
   uid: string
@@ -250,15 +250,15 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
 
       {!isMobile && selectedMediaId >= 0 &&
         <SlideViewer
-          isOpen={selectedMediaId >= 0}
+          baseUrl={baseUrl}
+          uuid={userProfile.userUuid}
           initialIndex={selectedMediaId}
           imageList={imageList ?? []}
+          galleryType='user'
           userinfo={<TinyProfile
             userProfile={userProfile} onClick={slideViewerCloseHandler}
                     />}
-          onClose={slideViewerCloseHandler}
           auth={authz}
-          onNavigate={navigateHandler}
         />}
 
       {!isAuthorized && (
