@@ -20,7 +20,6 @@ interface SlideViewerProps {
   galleryType: 'area' | 'climb' | 'user'
   dialogTitle?: string
   uuid: string
-  baseUrl: string
 }
 
 export default function SlideViewer ({
@@ -30,11 +29,9 @@ export default function SlideViewer ({
   auth,
   galleryType,
   dialogTitle,
-  uuid,
-  baseUrl
-}: SlideViewerProps): JSX.Element | null {
+  uuid
+}: SlideViewerProps): JSX.Element {
   const router = useRouter()
-  const [isModalOpen, setIsModalOpen] = useState(true)
   const [emblaApi, setEmblaApi] = useState<EmblaCarouselType | undefined>(undefined)
 
   const {
@@ -50,7 +47,7 @@ export default function SlideViewer ({
     galleryType,
     uuid,
     emblaApi,
-    hotkeysEnabled: isModalOpen
+    hotkeysEnabled: true
   })
 
   // Callback to receive emblaApi from ImageCarousel
@@ -58,25 +55,17 @@ export default function SlideViewer ({
     setEmblaApi(api)
   }, [])
 
-  // Update currentImage based on the hook's activeIndex
   const currentImage = imageList?.[activeIndex]
 
-  const handleModalOpenChange = (open: boolean): void => {
-    setIsModalOpen(open)
-    if (!open) {
-      router.push(baseUrl)
-    }
-  }
-
-  if (!isModalOpen) {
-    return null
+  const handleClose = (): void => {
+    router.back()
   }
 
   const mediaContainerContent = currentImage != null
     ? (
       <ImageCarousel
         index={activeIndex}
-        closeModal={() => handleModalOpenChange(false)}
+        closeModal={handleClose}
         images={imageList}
         navigation
         onApiInit={handleEmblaApiInit}
@@ -105,8 +94,13 @@ export default function SlideViewer ({
 
   return (
     <DesktopModal
-      isOpen={isModalOpen}
-      onOpenChange={handleModalOpenChange}
+      isOpen
+      onOpenChange={(open) => {
+        // If closing the modal, navigate back
+        if (!open) {
+          handleClose()
+        }
+      }}
       dialogTitle={effectiveDialogTitle}
       mediaContainer={mediaContainerContent}
       rhsContainer={

@@ -141,6 +141,7 @@ export default async function GalleryPage ({ params, searchParams }: GalleryPage
                     key={photo.id}
                     href={`/gallery/${id}/${photo.id}?type=${entityType}`}
                     className='relative aspect-square block bg-gray-100 rounded-lg overflow-hidden group'
+                    prefetch={false}
                   >
                     <Image
                       src={photo.mediaUrl}

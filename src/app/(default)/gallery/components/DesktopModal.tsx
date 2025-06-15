@@ -34,8 +34,6 @@ export default function DesktopModal ({
           className='fixed inset-0 z-40 bg-black/70 backdrop-blur-sm data-[state=open]:animate-overlayShow'
         />
         <Dialog.Content
-          onEscapeKeyDown={() => onOpenChange(false)}
-          onPointerDownOutside={() => onOpenChange(false)}
           className='fixed left-1/2 top-1/2 z-50 flex h-[90vh] w-[95vw] max-w-screen-2xl -translate-x-1/2 -translate-y-1/2 items-stretch bg-neutral text-neutral-content shadow-lg data-[state=open]:animate-contentShow focus:outline-none sm:rounded-lg overflow-hidden'
         >
           <Dialog.Title className='sr-only'>{dialogTitle}</Dialog.Title>
