@@ -250,7 +250,6 @@ export default function UserGallery ({ uid, postId: initialPostId, userPublicPag
 
       {!isMobile && selectedMediaId >= 0 &&
         <SlideViewer
-          baseUrl={baseUrl}
           uuid={userProfile.userUuid}
           initialIndex={selectedMediaId}
           imageList={imageList ?? []}
