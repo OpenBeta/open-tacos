@@ -66,8 +66,13 @@ module.exports = {
         permanent: true
       },
       {
-        source: '/areas/:uuid',
-        destination: '/area/:uuid/',
+        source: '/areas/:uuid*',
+        destination: '/area/:uuid*',
+        permanent: true
+      },
+      {
+        source: '/climbs/:uuid*',
+        destination: '/climb/:uuid*',
         permanent: true
       },
       {

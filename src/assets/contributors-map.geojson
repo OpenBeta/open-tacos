@@ -270,6 +270,21 @@
           37.314980 
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Nick",
+        "githubId": "nicholasmcnamra",
+        "favoriteCrag": "00f930b1-4f9e-5257-85c6-219621bf7bec"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.24195,
+          -80.84290
+        ]
+      }
     }
   ]
 }
