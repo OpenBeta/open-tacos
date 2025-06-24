@@ -18,7 +18,7 @@ export default async function Home (): Promise<any> {
   const history = await getChangeHistoryServerSide()
   return (
     <>
-      <div className='default-page-margins flex flex-col justify-center w-fit'>
+      <div className='default-page-margins flex flex-col justify-center'>
         <LandingHero />
       </div>
       <div className='default-page-margins flex flex-col gap-y-16 mb-16'>
