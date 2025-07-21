@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import { LandingHero } from './components/LandingHero'
+import { TestAreaBanner } from './components/TestAreaBanner'
 import { getChangeHistoryServerSide } from '@/js/graphql/contribAPI'
 import { LatestContributions, LatestContributionsSkeleton } from './components/LatestContributions'
 import { FinancialContributors } from './components/FinancialContributors'
@@ -21,6 +22,11 @@ export default async function Home (): Promise<any> {
       <div className='default-page-margins flex flex-col justify-center w-fit'>
         <LandingHero />
       </div>
+
+      <div className='default-page-margins flex flex-col justify-center w-fit'>
+        <TestAreaBanner />
+      </div>
+      
       <div className='default-page-margins flex flex-col gap-y-16 mb-16'>
         <RecentTags />
         <div className='lg:grid lg:grid-cols-3 gap-x-2'>
