@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import Card from '../ui/Card/Card'
+import MediaCard from '../ui/MediaCard'
 import TagList, { MobilePopupTagList } from './TagList'
 import { MediaWithTags } from '../../js/types'
 import { getUploadDateSummary } from '../../js/utils'
@@ -21,7 +21,7 @@ export default function MobileMediaCard ({ header, isAuthorized = false, isAuthe
   const { mediaUrl, entityTags, uploadTime } = mediaWithTags
   const tagCount = entityTags.length
   return (
-    <Card
+    <MediaCard
       header={header}
       image={<Image
         src={mediaUrl}

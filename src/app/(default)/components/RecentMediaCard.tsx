@@ -1,16 +1,15 @@
 'use client'
+
 import { useState } from 'react'
 import Image from 'next/image'
 import clx from 'classnames'
-import Card from '../../../components/ui/Card/Card'
+import MediaCard from '../../../components/ui/MediaCard'
 import TagList from '../../../components/media/TagList'
 import { MediaWithTags } from '../../../js/types'
 import { getUploadDateSummary } from '../../../js/utils'
 import { PostHeader } from './Post'
 import { resolver as urlResolver } from '../../../components/media/Tag'
 import { ATagWrapper } from '../../../components/Utils'
-
-const MOBILE_IMAGE_MAX_WIDITH = 600
 
 interface RecentImageCardProps {
   header?: JSX.Element
@@ -26,51 +25,49 @@ export const RecentImageCard = ({
   bordered = false
 }: RecentImageCardProps): JSX.Element => {
   const [loaded, setLoaded] = useState(false)
-  const { mediaUrl, width, height, entityTags, username } = mediaWithTags
+  const { mediaUrl, entityTags, username } = mediaWithTags
   const [firstUrl] = urlResolver(entityTags[0])
-  const imageRatio = width / height
+
   return (
-    <Card
+    <MediaCard
       bordered={bordered}
       header={<PostHeader username={username} />}
       image={
-        <div className='relative block w-full h-full'>
+        <div className='relative w-full h-full'>
           <ATagWrapper href={firstUrl}>
             <Image
               src={mediaUrl}
-              width={MOBILE_IMAGE_MAX_WIDITH}
-              height={MOBILE_IMAGE_MAX_WIDITH / imageRatio}
-              sizes={`${MOBILE_IMAGE_MAX_WIDITH}px`}
+              alt={`${entityTags[0]?.climbName ?? 'Climbing route'} photo by ${username ?? 'unknown user'}${
+                (entityTags[0]?.areaName?.length ?? 0) > 0 ? ` at ${entityTags[0].areaName}` : ''
+              }`}
+              fill
+              sizes='(max-width: 768px) 100vw, 600px'
+              className='object-cover px-4'
               onLoad={() => setLoaded(true)}
-              alt=''
             />
             <div
               className={clx(
-                'absolute top-0 left-0 w-full h-full',
+                'absolute top-0 left-0 w-full h-full transition-colors duration-300',
                 loaded
                   ? 'bg-transparent'
                   : 'bg-gray-50 bg-opacity-60 border animate-pulse'
               )}
-            >
-              {loaded}
-            </div>
+            />
           </ATagWrapper>
         </div>
       }
       body={
-        <>
-          <section className='flex flex-col gap-y-4 justify-between'>
-            <TagList
-              mediaWithTags={mediaWithTags}
-              showActions={false}
-              isAuthorized={false}
-              isAuthenticated={false}
-            />
-            <span className='uppercase text-xs text-base-200'>
-              {getUploadDateSummary(mediaWithTags.uploadTime)}
-            </span>
-          </section>
-        </>
+        <section className='flex flex-col gap-y-4 justify-between'>
+          <TagList
+            mediaWithTags={mediaWithTags}
+            showActions={false}
+            isAuthorized={false}
+            isAuthenticated={false}
+          />
+          <span className='uppercase text-xs text-base-200'>
+            {getUploadDateSummary(mediaWithTags.uploadTime)}
+          </span>
+        </section>
       }
     />
   )

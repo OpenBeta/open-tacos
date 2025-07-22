@@ -23,16 +23,12 @@ export const RecentTags: React.FC = async () => {
 
     <SectionContainer header={<h2>Latest Photos</h2>}>
       <div className='overflow-hidden bg-base-200/20'>
-        <div className='py-8 grid grid-flow-col auto-cols-max gap-x-4 overflow-x-auto'>
+        <div className='py-4 grid grid-flow-col overflow-x-auto'>
           {
             recentMediaWithTags.map(media => {
               const { mediaUrl } = media
               return (
-                <div
-                  key={mediaUrl} className='w-64 first:pl-6 2xl:first:ml-16 last:mr-16'
-                >
-                  <RecentImageCard mediaWithTags={media} bordered />
-                </div>
+                <RecentImageCard key={mediaUrl} mediaWithTags={media} bordered />
               )
             }
             )

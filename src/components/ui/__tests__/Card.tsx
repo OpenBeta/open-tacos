@@ -1,7 +1,7 @@
 import React from 'react'
 import ''
 import { render, screen } from '@testing-library/react'
-import Card from '../Card/Card'
+import MediaCard from '../MediaCard'
 import Image from 'next/image'
 
 test('Card renders a header and a body', async () => {
@@ -9,7 +9,7 @@ test('Card renders a header and a body', async () => {
   const imageURL = 'https://openbeta-dev.sirv.com/u/b9f8ab3b-e6e5-4467-9adb-65d91c7ebe7c/6wFDRfFJD9.jpeg'
 
   render(
-    <Card
+    <MediaCard
       image={
         <Image
           src={imageURL}

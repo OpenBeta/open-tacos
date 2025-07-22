@@ -22,15 +22,15 @@ export default async function Home (): Promise<any> {
       <div className='default-page-margins flex flex-col justify-center w-fit'>
         <LandingHero />
       </div>
-
-      <div className='default-page-margins flex flex-col justify-center w-fit'>
+      
+       <div className='default-page-margins flex flex-col justify-center w-fit'>
         <TestAreaBanner />
       </div>
       
-      <div className='default-page-margins flex flex-col gap-y-16 mb-16'>
+      <div className='default-page-margins flex flex-col gap-y-12 mb-16'>
         <RecentTags />
         <div className='lg:grid lg:grid-cols-3 gap-x-2'>
-          <div className='mt-8 lg:mt-0 lg:overflow-y-auto lg:h-[450px] w-full border-2 rounded-box'>
+          <div className='lg:overflow-y-auto lg:h-[450px] w-full border-2 rounded-box'>
             <Suspense fallback={<LatestContributionsSkeleton />}>
               <LatestContributions />
             </Suspense>
