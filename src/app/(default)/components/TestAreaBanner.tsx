@@ -11,7 +11,7 @@ export const TestAreaBanner: React.FC = () => {
         <p className="text-sm">
           Try using our{' '}
           <a
-            href="/areas/18c5dd5c-8186-50b6-8a60-ae2948c548d1"
+            href="/areas/18c5dd5c-8186-50b6-8a60-ae2948c548d1/test-area"
             className="text-blue-600 underline"
           >
             Test Area
