@@ -11,13 +11,7 @@ export default function MapsRootLayout ({
 }: {
   children: React.ReactNode
 }): any {
-  return (
-    <html lang='en'>
-      <body className='relative'>
-        {children}
-      </body>
-    </html>
-  )
+  return children
 }
 
 export const metadata: Metadata = {

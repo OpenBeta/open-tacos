@@ -5,6 +5,8 @@ import { CameraInfo, GlobalMap } from '@/components/maps/GlobalMap'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { MapLayerMouseEvent } from 'maplibre-gl'
 import { useUrlParams } from '@/js/hooks/useUrlParams'
+import { lineString, Position } from '@turf/helpers'
+import lineToPolygon from '@turf/line-to-polygon'
 
 interface FullScreenMapProps {
   center?: [number, number]
@@ -15,10 +17,12 @@ export const FullScreenMap: React.FC<FullScreenMapProps> = ({ center: initialCen
   const [zoom, setZoom] = useState<number | undefined>(undefined)
   const [areaId, setAreaId] = useState<string | undefined>(undefined)
   const [isInitialized, setIsInitialized] = useState(false)
+  const [polygon, setPolygon] = useState<Position[] | null>(null)
   const DEFAULT_ZOOM = 2
 
   const router = useRouter()
   const urlParams = useUrlParams()
+  const searchParams = useSearchParams()
 
   // Handle initial state setup only once
   useEffect(() => {
@@ -60,8 +64,15 @@ export const FullScreenMap: React.FC<FullScreenMapProps> = ({ center: initialCen
     }, [urlParams, router]
   )
 
-  const searchParams = useSearchParams()
-  const locationParamsRaw = searchParams.get('bbox')
+  useEffect(() => {
+    const polygonParam = searchParams.get('polygon')
+    if (polygonParam !== null && polygonParam !== '') {
+      setPolygon(JSON.parse(decodeURIComponent(polygonParam)))
+    }
+  }, [searchParams])
+  const boundary = Array.isArray(polygon) ? lineToPolygon(lineString(polygon), { properties: { name: 'Imported Polygon' } }) : null
+
+  const locationParamsRaw = useSearchParams().get('bbox')
   const locationParams: [number, number, number, number] | undefined =
     locationParamsRaw != null && locationParamsRaw !== ''
       ? (locationParamsRaw.split(',').map(Number) as [number, number, number, number])
@@ -97,10 +108,10 @@ export const FullScreenMap: React.FC<FullScreenMapProps> = ({ center: initialCen
       onCameraMovement={handleCameraMovement}
       handleOnClick={handleMapClick}
     >
-      {/* {boundary != null &&
+      {boundary != null &&
         <Source id='child-areas-polygon' type='geojson' data={boundary}>
           <Layer {...areaPolygonStyle} />
-        </Source>} */}
+        </Source>}
     </GlobalMap>
   )
 }

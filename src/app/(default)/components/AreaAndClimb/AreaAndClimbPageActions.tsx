@@ -34,7 +34,13 @@ export const AreaAndClimbPageActions: React.FC<{ uuid: string, name: string, tar
   const mapHref = useMemo(() => {
     const bbox = area?.metadata?.bbox
     const bboxStr = Array.isArray(bbox) ? bbox.join(',') : bbox ?? ''
-    return `/maps?areaId=${navigateUuid}&bbox=${bboxStr}`
+    const polygon = area?.metadata?.polygon
+    const polygonParam = polygon != null ? encodeURIComponent(JSON.stringify(polygon)) : ''
+    let href = `/maps?areaId=${navigateUuid}&bbox=${bboxStr}`
+    if (polygonParam !== '') {
+      href += `&polygon=${polygonParam}`
+    }
+    return href
   }, [navigateUuid, area])
 
   return (
