@@ -63,7 +63,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
                   ? <UploadPhotoCTA />
                   : <PhotoMontage photoList={photoList} />
         }
-      pageActions={<AreaAndClimbPageActions name={name} uuid={id} targetType={TagTargetType.climb} parentUuid={parent.uuid} />}
+      pageActions={<AreaAndClimbPageActions name={name} uuid={id} targetType={TagTargetType.climb} parentUuid={parent.uuid} area={climb.parent} />}
       breadcrumbs={
         <StickyHeaderContainer>
           <AreaCrumbs pathTokens={pathTokens} ancestors={ancestors} />

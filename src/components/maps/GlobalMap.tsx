@@ -1,7 +1,8 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
 import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, ViewStateChangeEvent, GeolocateControl } from 'react-map-gl/maplibre'
-import maplibregl, { MapLibreEvent } from 'maplibre-gl'
+import * as maplibregl from 'maplibre-gl'
+import { MapLibreEvent } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
 import { MAP_STYLES, type MapStyles } from './MapSelector'
 import { Drawer } from './TileHandlers/Drawer'
@@ -41,7 +42,7 @@ interface GlobalMapProps {
   initialZoom?: number
   initialViewState?: {
     bounds: maplibregl.LngLatBoundsLike
-    fitBoundsOptions: maplibregl.FitBoundsOptions
+    fitBoundsOptions?: maplibregl.FitBoundsOptions
   }
   onCameraMovement?: (camera: CameraInfo) => void
   children?: React.ReactNode

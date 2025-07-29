@@ -1,7 +1,8 @@
 'use client'
+import { Source, Layer, LineLayer } from 'react-map-gl'
 import { useCallback, useEffect, useState } from 'react'
 import { CameraInfo, GlobalMap } from '@/components/maps/GlobalMap'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { MapLayerMouseEvent } from 'maplibre-gl'
 import { useUrlParams } from '@/js/hooks/useUrlParams'
 
@@ -59,14 +60,47 @@ export const FullScreenMap: React.FC<FullScreenMapProps> = ({ center: initialCen
     }, [urlParams, router]
   )
 
+  const searchParams = useSearchParams()
+  const locationParamsRaw = searchParams.get('bbox')
+  const locationParams: [number, number, number, number] | undefined =
+    locationParamsRaw != null && locationParamsRaw !== ''
+      ? (locationParamsRaw.split(',').map(Number) as [number, number, number, number])
+      : undefined
+
+  const fitBoundOpts: maplibregl.FitBoundsOptions = { padding: { top: 45, left: 45, bottom: 45, right: 45 }, duration: 0, maxZoom: 12 }
+
+  const areaPolygonStyle: LineLayer = {
+    id: 'polygon',
+    type: 'line',
+    paint: {
+      'line-opacity': ['step', ['zoom'], 0.85, 10, 0.5],
+      'line-width': ['step', ['zoom'], 4, 8, 6],
+      'line-color': 'rgb(219,39,119)',
+      'line-blur': 4
+    }
+  }
+
   return (
     <GlobalMap
       showFullscreenControl={false}
       initialAreaId={areaId}
       initialCenter={center}
+      initialViewState={
+        locationParams !== undefined && locationParams !== null
+          ? {
+              bounds: locationParams,
+              fitBoundsOptions: fitBoundOpts
+            }
+          : undefined
+      }
       initialZoom={zoom}
       onCameraMovement={handleCameraMovement}
       handleOnClick={handleMapClick}
-    />
+    >
+      {/* {boundary != null &&
+        <Source id='child-areas-polygon' type='geojson' data={boundary}>
+          <Layer {...areaPolygonStyle} />
+        </Source>} */}
+    </GlobalMap>
   )
 }
