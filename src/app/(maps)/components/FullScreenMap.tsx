@@ -8,12 +8,8 @@ import { useUrlParams } from '@/js/hooks/useUrlParams'
 import { lineString, Position } from '@turf/helpers'
 import lineToPolygon from '@turf/line-to-polygon'
 
-interface FullScreenMapProps {
-  center?: [number, number]
-}
-
-export const FullScreenMap: React.FC<FullScreenMapProps> = ({ center: initialCenter }) => {
-  const [center, setCenter] = useState<[number, number] | undefined>(initialCenter)
+export const FullScreenMap: React.FC = () => {
+  const [center, setCenter] = useState<[number, number] | undefined>(undefined)
   const [zoom, setZoom] = useState<number | undefined>(undefined)
   const [areaId, setAreaId] = useState<string | undefined>(undefined)
   const [isInitialized, setIsInitialized] = useState(false)
