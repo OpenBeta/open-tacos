@@ -14,7 +14,6 @@ import { MapToolbar } from './MapToolbar'
 import { SelectedFeature } from './AreaActiveMarker'
 import { useRouter } from 'next/navigation'
 import { useUrlParams } from '@/js/hooks/useUrlParams'
-
 export interface CameraInfo {
   center: {
     lng: number
@@ -22,19 +21,16 @@ export interface CameraInfo {
   }
   zoom: number
 }
-
 interface FeatureState {
   selected?: boolean
   hover?: boolean
 }
-
 export interface DataLayersDisplayState {
   areaBoundaries: boolean
   organizations: boolean
   heatmap: boolean
   crags: boolean
 }
-
 interface GlobalMapProps {
   showFullscreenControl?: boolean
   initialCenter?: [number, number]
@@ -47,13 +43,20 @@ interface GlobalMapProps {
   children?: React.ReactNode
   handleOnClick?: (e: MapLayerMouseEvent) => void
   initialAreaId?: string
+  onLoad?: () => void
+  onError?: (error?: any) => void
 }
-
-/**
- * Global map
- */
 export const GlobalMap: React.FC<GlobalMapProps> = ({
-  showFullscreenControl = true, initialCenter, initialZoom, initialViewState, onCameraMovement, children, handleOnClick, initialAreaId
+  showFullscreenControl = true,
+  initialCenter,
+  initialZoom,
+  initialViewState,
+  onCameraMovement,
+  children,
+  handleOnClick,
+  initialAreaId,
+  onLoad: onLoadProp,
+  onError
 }) => {
   const [clickInfo, setClickInfo] = useState<ActiveFeature | null>(null)
   const [hoverInfo, setHoverInfo] = useState<ActiveFeature | null>(null)
@@ -69,42 +72,43 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   })
   const router = useRouter()
   const urlParams = useUrlParams()
-
   const setActiveFeatureVisual = (feature: ActiveFeature | null, fState: FeatureState): void => {
     if (feature == null || mapInstance == null) return
-    mapInstance.setFeatureState({
-      source: 'areas',
-      sourceLayer: 'areas',
-      id: feature.data.id
-    }, fState)
-  }
-
-  const onMoveEnd = useCallback((e: ViewStateChangeEvent) => {
-    if ((mapInstance == null) || e.viewState == null || (onCameraMovement === undefined)) return
-    onCameraMovement({
-      center: {
-        lat: e.viewState.latitude,
-        lng: e.viewState.longitude
+    mapInstance.setFeatureState(
+      {
+        source: 'areas',
+        sourceLayer: 'areas',
+        id: feature.data.id
       },
-      zoom: e.viewState.zoom
-    })
-  }, [mapInstance, onCameraMovement])
-
-  const onLoad = useCallback((e: MapLibreEvent) => {
-    if (e.target == null) return
-    setMapInstance(e.target)
-
-    // Only apply jumpTo if initial values are defined
-    if (initialCenter != null && initialZoom != null) {
-      e.target.jumpTo({ center: initialCenter, zoom: initialZoom ?? 6 })
-    } else if (initialViewState != null) {
-      e.target.fitBounds(initialViewState.bounds, initialViewState.fitBoundsOptions)
-    }
-  }, [initialCenter, initialZoom, initialViewState])
-
-  /**
-   * Handle click event on the map. Place a marker on the map and activate the side drawer.
-   */
+      fState
+    )
+  }
+  const onMoveEnd = useCallback(
+    (e: ViewStateChangeEvent) => {
+      if (mapInstance == null || e.viewState == null || onCameraMovement === undefined) return
+      onCameraMovement({
+        center: {
+          lat: e.viewState.latitude,
+          lng: e.viewState.longitude
+        },
+        zoom: e.viewState.zoom
+      })
+    },
+    [mapInstance, onCameraMovement]
+  )
+  const onLoad = useCallback(
+    (e: MapLibreEvent) => {
+      if (e.target == null) return
+      setMapInstance(e.target)
+      if (initialCenter != null && initialZoom != null) {
+        e.target.jumpTo({ center: initialCenter, zoom: initialZoom ?? 6 })
+      } else if (initialViewState != null) {
+        e.target.fitBounds(initialViewState.bounds, initialViewState.fitBoundsOptions)
+      }
+      if (typeof onLoadProp === 'function') onLoadProp()
+    },
+    [initialCenter, initialZoom, initialViewState, onLoadProp]
+  )
   const onClick = (event: MapLayerMouseEvent): void => {
     if (mapInstance == null) return
     const feature = event?.features?.[0]
@@ -121,16 +125,11 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
       })
     }
   }
-
-  /**
-   * Handle click event on the popover. Behave as if the user clicked on a feature on the map.
-   */
   const onHoverCardClick = (feature: ActiveFeature): void => {
     const areaId = feature.data?.id
-    if (areaId === '') {
+    if (typeof areaId !== 'string' || areaId === '') {
       return
     }
-
     const { camera } = urlParams.fromUrl()
     const url = urlParams.toUrl({ camera: camera ?? null, areaId })
     router.replace(url, { scroll: false })
@@ -143,18 +142,15 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
       return feature
     })
   }
-
-  /**
-   * Handle mouseover event on the map. Show the popover with the area info.
-   */
   const onHover = (event: MapLayerMouseEvent): void => {
-    const obLayerId = event.features?.findIndex((f) =>
-      f.layer.id === 'crag-markers' ||
-      f.layer.id === 'crag-name-labels' ||
-      f.layer.id === 'area-boundaries' ||
-      f.layer.id === 'area-background'
-    ) ?? -1
-
+    const obLayerId =
+      event.features?.findIndex(
+        f =>
+          f.layer.id === 'crag-markers' ||
+          f.layer.id === 'crag-name-labels' ||
+          f.layer.id === 'area-boundaries' ||
+          f.layer.id === 'area-background'
+      ) ?? -1
     if (obLayerId !== -1) {
       setCursor('pointer')
       const feature = event.features?.[obLayerId]
@@ -173,50 +169,59 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
       setCursor('default')
     }
   }
-
   const updateMapLayer = (key: keyof MapStyles): void => {
     const style = MAP_STYLES[key]
     setMapStyle(style.style)
   }
-
-  const findAreaById = useCallback((map: maplibregl.Map, areaId: string) => {
-    const features = map.querySourceFeatures('crags', {
-      sourceLayer: 'crags',
-      filter: ['==', ['get', 'id'], areaId]
-    })
-    return features[0] // return first feature because it could be duplicated by the tileset
-  }, [])
-
+  const findAreaById = useCallback(
+    (map: maplibregl.Map, areaId: string) => {
+      const features = map.querySourceFeatures('crags', {
+        sourceLayer: 'crags',
+        filter: ['==', ['get', 'id'], areaId]
+      })
+      return features[0]
+    },
+    []
+  )
   useEffect(() => {
     if (mapInstance == null) return
-
     if (!isSourceLoaded) {
-      mapInstance.on('sourcedata', (e) => {
+      const onSourceData = (e: maplibregl.MapSourceDataEvent): void => {
         if (e.sourceId === 'crags' && e.isSourceLoaded) {
           setIsSourceLoaded(true)
+          mapInstance.off('sourcedata', onSourceData)
         }
-      })
+      }
+      mapInstance.on('sourcedata', onSourceData)
+      return () => {
+        mapInstance.off('sourcedata', onSourceData)
+      }
     }
-
-    if (isSourceLoaded && initialAreaId !== undefined) {
+    if (isSourceLoaded && typeof initialAreaId === 'string' && initialAreaId !== '') {
       const feature = findAreaById(mapInstance, initialAreaId)
       if (feature != null) {
         setClickInfo(prev => {
           setActiveFeatureVisual(prev, { selected: false, hover: false })
 
-          const activeFeature = tileToFeature('crag-name-labels', { x: 0, y: 0 }, feature.geometry, feature.properties as TileProps, mapInstance)
+          const activeFeature = tileToFeature(
+            'crag-name-labels',
+            { x: 0, y: 0 },
+            feature.geometry,
+            feature.properties as TileProps,
+            mapInstance
+          )
           setActiveFeatureVisual(activeFeature, { selected: true, hover: false })
           return activeFeature
         })
       }
     }
   }, [mapInstance, isSourceLoaded, initialAreaId, findAreaById])
-
   return (
     <div className='relative w-full h-full'>
       <Map
         id='global-map'
         onLoad={onLoad}
+        // onError={onError} // Implement if desired and supported
         onDragStart={() => setCursor('move')}
         onMoveEnd={onMoveEnd}
         onDragEnd={() => setCursor('default')}
@@ -241,23 +246,18 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         <OBCustomLayers layersState={dataLayersDisplayState} />
         {showFullscreenControl && <FullscreenControl />}
         <NavigationControl showCompass={false} position='bottom-right' />
-        <GeolocateControl
-          position='bottom-right'
-          positionOptions={{ enableHighAccuracy: true }}
-          trackUserLocation
-        />
+        <GeolocateControl position='bottom-right' positionOptions={{ enableHighAccuracy: true }} trackUserLocation />
         {clickInfo != null && <SelectedFeature feature={clickInfo} />}
         <Drawer feature={clickInfo} />
-        {hoverInfo != null && (
-          <HoverCard {...hoverInfo} onClick={onHoverCardClick} />
-        )}
+        {hoverInfo != null && <HoverCard {...hoverInfo} onClick={onHoverCardClick} />}
         {children}
       </Map>
     </div>
   )
 }
-
-export const LazyGlobalMap = dynamic<GlobalMapProps>(async () => await import('./GlobalMap').then(
-  module => module.GlobalMap), {
-  ssr: false
-})
+export const LazyGlobalMap = dynamic<GlobalMapProps>(
+  async () => await import('./GlobalMap').then(module => module.GlobalMap),
+  {
+    ssr: false
+  }
+)
