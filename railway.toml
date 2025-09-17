@@ -6,7 +6,7 @@ nixpacksConfigPath = "nixpacks.toml"
 [deploy]
 runtime = "V2"
 numReplicas = 1
-limitOverride = { containers = { cpu = 2, memoryBytes = 1000000000}}
+limitOverride = { containers = { cpu = 2, memoryBytes = 2000000000}}
 sleepApplication = false
 multiRegionConfig = {"us-east4-eqdc4a" = {"numReplicas" = 1}}
 restartPolicyType = "ON_FAILURE"
@@ -15,7 +15,7 @@ restartPolicyMaxRetries = 5
 [environments.pr.deploy]
 sleepApplication = true
 numReplicas = 1
-limitOverride = { containers = { cpu = 1, memoryBytes = 500000000 } }
+limitOverride = { containers = { cpu = 1, memoryBytes = 1000000000 } }
 
 [environments.production.deploy]
 multiRegionConfig = {"us-east4-eqdc4a" = {"numReplicas" = 2}}
