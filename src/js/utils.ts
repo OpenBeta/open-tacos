@@ -336,7 +336,7 @@ export const climbLeftRightIndexComparator = (a: ClimbType, b: ClimbType): numbe
 export interface SortableAreaType { metadata: Pick<AreaMetadataType, 'leftRightIndex' | 'areaId'> }
 
 export const areaLeftRightIndexComparator = (a: SortableAreaType, b: SortableAreaType): number => {
-  const aIndex = a.metadata.leftRightIndex ?? -1
+  const aIndex = a.metadata..leftRightIndex ?? -1
   const bIndex = b.metadata.leftRightIndex ?? -1
   if (aIndex < bIndex) return -1
   else if (aIndex > bIndex) return 1
@@ -356,4 +356,9 @@ export const parseUuidAsFirstParam = ({ params }: PageWithCatchAllUuidProps): st
     notFound()
   }
   return uuid
+}
+
+export const decodeAmpersand = (s: string): string => {
+  if (s == null) return '';
+  return s.replace(/&amp;/g, '&');
 }
