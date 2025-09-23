@@ -336,7 +336,7 @@ export const climbLeftRightIndexComparator = (a: ClimbType, b: ClimbType): numbe
 export interface SortableAreaType { metadata: Pick<AreaMetadataType, 'leftRightIndex' | 'areaId'> }
 
 export const areaLeftRightIndexComparator = (a: SortableAreaType, b: SortableAreaType): number => {
-  const aIndex = a.metadata..leftRightIndex ?? -1
+  const aIndex = a.metadata.leftRightIndex ?? -1
   const bIndex = b.metadata.leftRightIndex ?? -1
   if (aIndex < bIndex) return -1
   else if (aIndex > bIndex) return 1
@@ -359,6 +359,22 @@ export const parseUuidAsFirstParam = ({ params }: PageWithCatchAllUuidProps): st
 }
 
 export const decodeAmpersand = (s: string): string => {
-  if (s == null) return '';
-  return s.replace(/&amp;/g, '&');
+  if (s == null) return ''
+  return s.replace(/&amp;/g, '&')
+}
+
+export const safeDecode = (s: string): string => {
+  if (s == null) return ''
+  if (typeof window !== 'undefined') {
+    const txt = document.createElement('textarea')
+    txt.innerHTML = s
+    return txt.value
+  }
+  // Basic SSR-safe decoding for common entities
+  return s
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
 }
