@@ -9,7 +9,7 @@ import { getAreaRSC } from '@/js/graphql/getAreaRSC'
 import { StickyHeaderContainer } from '@/app/(default)/components/ui/StickyHeaderContainer'
 import { AreaCrumbs } from '@/components/breadcrumbs/AreaCrumbs'
 import { ArticleLastUpdate } from '@/components/edit/ArticleLastUpdate'
-import { getMapHref, getFriendlySlug, getAreaPageFriendlyUrl, sanitizeName, parseUuidAsFirstParam } from '@/js/utils'
+import { getMapHref, getFriendlySlug, getAreaPageFriendlyUrl, sanitizeName, parseUuidAsFirstParam, safeDecode } from '@/js/utils'
 import { LazyAreaMap } from '@/components/maps/AreaMap'
 import { DefaultPageContainer } from '@/app/(default)/components/ui/DefaultPageContainer'
 import { AreaAndClimbPageActions } from '../../components/AreaAndClimb/AreaAndClimbPageActions'
@@ -56,7 +56,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
           ? <UploadPhotoCTA />
           : <PhotoMontage photoList={photoList} />
       }
-      pageActions={<AreaAndClimbPageActions name={areaName} uuid={uuid} targetType={TagTargetType.area} parentUuid={uuid} area={area} />}
+      pageActions={<AreaAndClimbPageActions name={safeDecode(areaName)} uuid={uuid} targetType={TagTargetType.area} parentUuid={uuid} area={area} />}
       breadcrumbs={
         <StickyHeaderContainer>
           <AreaCrumbs pathTokens={pathTokens} ancestors={ancestors} />
@@ -73,7 +73,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
       summary={{
         left: (
           <AreaData
-            areaName={areaName}
+            areaName={safeDecode(areaName)}
             lat={lat}
             lng={lng}
             authorMetadata={authorMetadata}
@@ -231,7 +231,7 @@ export async function generateMetadata ({ params }: PageWithCatchAllUuidProps): 
     wall = sanitizeName(pathTokens[pathTokens.length - 2]) + ' • '
   }
 
-  const name = sanitizeName(areaName)
+  const name = sanitizeName(safeDecode(areaName))
 
   const previewImage = media.length > 0 ? `${CLIENT_CONFIG.CDN_BASE_URL}${media[0].mediaUrl}?w=1200&q=75` : null
 

@@ -6,7 +6,7 @@ import RouteTypeChips from '@/components/ui/RouteTypeChips'
 import { ArticleLastUpdate } from '@/components/edit/ArticleLastUpdate'
 import { ClimbType, AreaType } from '@/js/types'
 import Grade from '@/js/grades/Grade'
-import { removeTypenameFromDisciplines, getDisciplineList } from '@/js/utils'
+import { removeTypenameFromDisciplines, getDisciplineList, safeDecode } from '@/js/utils'
 
 export const ClimbData: React.FC<ClimbType & Pick<AreaType, 'gradeContext'> & { isBoulder: boolean }> = (props) => {
   const { id, name, type, safety, length, grades, fa: legacyFA, authorMetadata, gradeContext, isBoulder } = props
@@ -21,7 +21,7 @@ export const ClimbData: React.FC<ClimbType & Pick<AreaType, 'gradeContext'> & { 
   return (
     <>
       <h1 className='text-4xl md:text-5xl mr-10'>
-        {name}
+        {safeDecode(name)}
       </h1>
       <div className='mt-6'>
         <div className='flex items-center space-x-2 w-full'>

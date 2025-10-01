@@ -1,7 +1,7 @@
 import clx from 'classnames'
 import { AreaMetadataType, ClimbDisciplineRecord, ClimbType } from '@/js/types'
 import { disciplineTypeToDisplay } from '@/js/grades/util'
-import { removeTypenameFromDisciplines, climbLeftRightIndexComparator, getClimbPageFriendlyUrl } from '@/js/utils'
+import { removeTypenameFromDisciplines, climbLeftRightIndexComparator, getClimbPageFriendlyUrl, safeDecode } from '@/js/utils'
 import Grade, { GradeContexts } from '@/js/grades/Grade'
 import { ClimbListMiniToolbar } from '../../../manageClimbs/components/ClimbListMiniToolbar'
 
@@ -53,7 +53,7 @@ export const ClimbRow: React.FC<ClimbType & { index: number, gradeContext: Grade
             <ListBullet index={index} disciplines={disciplines} />
             <div className='w-full'>
               <div className='flex justify-between'>
-                <div className={clx('text-base font-semibold uppercase tracking-tight', isThisRoute ? '' : 'hover:underline')}>{name}</div>
+                <div className={clx('text-base font-semibold uppercase tracking-tight', isThisRoute ? '' : 'hover:underline')}>{safeDecode(name)}</div>
                 <div>{gradeStr}</div>
               </div>
               <div><DisciplinesInfo disciplines={disciplines} /></div>
@@ -62,7 +62,7 @@ export const ClimbRow: React.FC<ClimbType & { index: number, gradeContext: Grade
         </LinkWrapper>
       </div>
       {editMode &&
-        <ClimbListMiniToolbar climbId={id} parentAreaId={areaMetadata.areaId} climbName={name} />}
+        <ClimbListMiniToolbar climbId={id} parentAreaId={areaMetadata.areaId} climbName={safeDecode(name)} />}
     </li>
   )
 }
