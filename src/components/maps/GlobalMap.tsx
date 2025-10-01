@@ -15,6 +15,9 @@ import { MapToolbar } from './MapToolbar'
 import { SelectedFeature } from './AreaActiveMarker'
 import { useRouter } from 'next/navigation'
 import { useUrlParams } from '@/js/hooks/useUrlParams'
+import Spinner from '@/components/ui/Spinner'
+import { Button } from '@/components/ui/Button'
+import { toast } from 'react-toastify'
 
 export interface CameraInfo {
   center: {
@@ -68,6 +71,10 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
     heatmap: false,
     crags: true
   })
+
+  const [isLoading, setIsLoading] = useState(true)
+  const [hasError, setHasError] = useState(false)
+
   const router = useRouter()
   const urlParams = useUrlParams()
 
@@ -95,13 +102,48 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
     if (e.target == null) return
     setMapInstance(e.target)
 
-    // Only apply jumpTo if initial values are defined
+    setIsLoading(false)
+    setHasError(false)
+
     if (initialCenter != null && initialZoom != null) {
       e.target.jumpTo({ center: initialCenter, zoom: initialZoom ?? 6 })
     } else if (initialViewState != null) {
       e.target.fitBounds(initialViewState.bounds, initialViewState.fitBoundsOptions)
     }
   }, [initialCenter, initialZoom, initialViewState])
+
+  useEffect(() => {
+    if (!isLoading) return
+    const timeout = setTimeout(() => {
+      setHasError(true)
+      setIsLoading(false)
+      toast.error('Map load timeout')
+    }, 10000)
+    return () => clearTimeout(timeout)
+  }, [isLoading])
+
+  useEffect(() => {
+    if (!mapInstance) return
+    const handleError = (err: any) => {
+      console.error('Map error:', err)
+      setHasError(true)
+      setIsLoading(false)
+      toast.error('Failed to load map')
+    }
+    mapInstance.on('error', handleError)
+    return () => {
+      mapInstance.off('error', handleError)
+    }
+  }, [mapInstance])
+
+  const handleReload = () => {
+    setIsLoading(true)
+    setHasError(false)
+    if (mapInstance) {
+      mapInstance.remove()
+      setMapInstance(null)
+    }
+  }
 
   /**
    * Handle click event on the map. Place a marker on the map and activate the side drawer.
@@ -215,7 +257,34 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
 
   return (
     <div className='relative w-full h-full'>
-      <Map
+      {hasError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/20 ">
+          <div className="flex flex-col items-center justify-center bg-white rounded-xl shadow-lg border border-red-200 w-80 h-72 p-6">
+            <svg
+              className="w-12 h-12 text-red-600 mb-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-12.728 12.728M5.636 5.636l12.728 12.728" />
+            </svg>
+            <p className="text-red-700 font-semibold text-lg mb-2 text-center">
+              Error loading map
+            </p>
+            <p className="text-gray-600 text-sm mb-6 text-center">
+              Please try reloading the map.
+            </p>
+            <Button 
+              label="Reboot" 
+              onClick={handleReload} 
+              className="btn-secondary px-6 py-2"
+            />
+          </div>
+        </div>
+      )}
+
+      {!hasError &&<Map
         id='global-map'
         onLoad={onLoad}
         onDragStart={() => setCursor('move')}
@@ -235,7 +304,16 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         cooperativeGestures={showFullscreenControl}
         interactiveLayerIds={['crag-markers', 'crag-name-labels', 'area-boundaries', 'organizations']}
       >
-        <MapToolbar layerState={dataLayersDisplayState} onChange={setDataLayersDisplayState} />
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-50">
+          <Spinner/>
+          <p className="ml-3">Loading map...</p>
+        </div>
+      )}
+        <MapToolbar 
+          layerState={dataLayersDisplayState} 
+          onChange={setDataLayersDisplayState}s
+        />
         <MapLayersSelector emit={updateMapLayer} />
         <ScaleControl unit='imperial' style={{ marginBottom: 10 }} position='bottom-left' />
         <ScaleControl unit='metric' style={{ marginBottom: 0 }} position='bottom-left' />
@@ -253,7 +331,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
           <HoverCard {...hoverInfo} onClick={onHoverCardClick} />
         )}
         {children}
-      </Map>
+      </Map>}
     </div>
   )
 }
