@@ -104,7 +104,8 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
 
     setIsLoading(false)
     setHasError(false)
-
+    
+    // Only apply jumpTo if initial values are defined
     if (initialCenter != null && initialZoom != null) {
       e.target.jumpTo({ center: initialCenter, zoom: initialZoom ?? 6 })
     } else if (initialViewState != null) {
@@ -310,10 +311,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
           <p className="ml-3">Loading map...</p>
         </div>
       )}
-        <MapToolbar 
-          layerState={dataLayersDisplayState} 
-          onChange={setDataLayersDisplayState}s
-        />
+        <MapToolbar layerState={dataLayersDisplayState} onChange={setDataLayersDisplayState} />
         <MapLayersSelector emit={updateMapLayer} />
         <ScaleControl unit='imperial' style={{ marginBottom: 10 }} position='bottom-left' />
         <ScaleControl unit='metric' style={{ marginBottom: 0 }} position='bottom-left' />
