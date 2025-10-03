@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEventHandler, ChangeEvent, useState } from 'react'
 import { DataLayersDisplayState } from './GlobalMap'
 import { ActiveFeature } from './TileTypes'
 
@@ -74,13 +74,15 @@ export const MapToolbar: React.FC<MapToolbarProps> = ({ layerState, onChange, cr
   )
 }
 
-const Checkbox: React.FC<{ value: boolean, label: string, onChange: any }> = ({ value, onChange, label }) => (
-  <li>
-    <div className='form-control'>
-      <label className='cursor-pointer label gap-2'>
-        <input type='checkbox' checked={value} className='checkbox' onChange={onChange} />
-        <span className='label-text'>{label}</span>
-      </label>
-    </div>
-  </li>
-)
+const Checkbox: React.FC<{ value: boolean, label: string, onChange: ChangeEventHandler<HTMLInputElement> }> = ({ value, onChange, label }) => {
+  return (
+    <li>
+      <div className='form-control'>
+        <label className='cursor-pointer label gap-2'>
+          <input type='checkbox' checked={value} className='checkbox' onChange={onChange} />
+          <span className='label-text'>{label}</span>
+        </label>
+      </div>
+    </li>
+  )
+}
