@@ -29,7 +29,7 @@ export const FullScreenMap: React.FC = () => {
     if (urlAreaId != null) {
       setAreaId(urlAreaId)
     }
-    
+
     // If camera params exist in URL, use them
     if (camera != null) {
       setCenter([camera.center.lng, camera.center.lat])
@@ -57,8 +57,7 @@ export const FullScreenMap: React.FC = () => {
       const { camera } = urlParams.fromUrl()
       const url = urlParams.toUrl({ camera: camera ?? null, areaId })
       router.replace(url, { scroll: false })
-    },
-    [urlParams, router]
+    }, [urlParams, router]
   )
 
   useEffect(() => {
@@ -67,10 +66,7 @@ export const FullScreenMap: React.FC = () => {
       setPolygon(JSON.parse(decodeURIComponent(polygonParam)))
     }
   }, [searchParams])
-
-  const boundary = Array.isArray(polygon)
-    ? lineToPolygon(lineString(polygon), { properties: { name: 'Imported Polygon' } })
-    : null
+  const boundary = Array.isArray(polygon) ? lineToPolygon(lineString(polygon), { properties: { name: 'Imported Polygon' } }) : null
 
   const locationParamsRaw = useSearchParams().get('bbox')
   const locationParams: [number, number, number, number] | undefined =
@@ -78,11 +74,7 @@ export const FullScreenMap: React.FC = () => {
       ? (locationParamsRaw.split(',').map(Number) as [number, number, number, number])
       : undefined
 
-  const fitBoundOpts: maplibregl.FitBoundsOptions = {
-    padding: { top: 45, left: 45, bottom: 45, right: 45 },
-    duration: 0,
-    maxZoom: 12
-  }
+  const fitBoundOpts: maplibregl.FitBoundsOptions = { padding: { top: 45, left: 45, bottom: 45, right: 45 }, duration: 0, maxZoom: 12 }
 
   const areaPolygonStyle: LineLayer = {
     id: 'polygon',
@@ -112,11 +104,10 @@ export const FullScreenMap: React.FC = () => {
       onCameraMovement={handleCameraMovement}
       handleOnClick={handleMapClick}
     >
-      {boundary != null && (
-        <Source id="child-areas-polygon" type="geojson" data={boundary}>
+      {boundary != null &&
+        <Source id='child-areas-polygon' type='geojson' data={boundary}>
           <Layer {...areaPolygonStyle} />
-        </Source>
-      )}
+        </Source>}
     </GlobalMap>
   )
 }
