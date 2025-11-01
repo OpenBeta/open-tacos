@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useMemo } from 'react'
-import { PencilSimple, MapTrifold } from '@phosphor-icons/react/dist/ssr'
+import { PencilSimple, MapTrifold, Image } from '@phosphor-icons/react/dist/ssr'
 import clz from 'classnames'
 
 import { SharePageURLButton } from '@/app/(default)/components/SharePageURLButton'
@@ -43,8 +43,16 @@ export const AreaAndClimbPageActions: React.FC<{ uuid: string, name: string, tar
     return href
   }, [navigateUuid, area])
 
+  const targetSlug = targetType === TagTargetType.area ? 'area' : 'climb'
+
   return (
     <div className='flex items-center justify-between gap-2'>
+      <Link
+        href={`/gallery/${uuid}?type=${targetSlug}`}
+        className='btn btn-ghost'
+      >
+        <Image size={20} /> Gallery
+      </Link>
       <Link href={url} className={clz('btn no-animation shadow-md', enableEdit ? 'btn-solid btn-accent' : 'btn-disabled')}>
         <PencilSimple size={20} weight='duotone' /> {editLabel}
       </Link>

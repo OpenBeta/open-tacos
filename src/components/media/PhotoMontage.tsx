@@ -1,19 +1,20 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import clx from 'classnames'
 import { SquaresFour } from '@phosphor-icons/react/dist/ssr'
 
 import PhotoFooter from './PhotoFooter'
 import { MediaWithTags } from '../../js/types'
 import useResponsive from '../../js/hooks/useResponsive'
-import PhotoGalleryModal from './PhotoGalleryModal'
-import { userMediaStore } from '../../js/stores/media'
 import { UploadPhotoTextOnlyButton } from './PhotoUploadButtons'
 import HikingIllustration from '@/assets/icons/hiking'
 
 export interface PhotoMontageProps {
   photoList: MediaWithTags[]
+  entityUuid?: string
+  entityType?: 'area' | 'climb'
 }
 
 /**
@@ -24,23 +25,10 @@ export interface PhotoMontageProps {
  *
  * @see https://nextjs.org/docs/api-reference/next/image
  */
-const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Element | null => {
+const PhotoMontage = ({ photoList: initialList, entityUuid, entityType = 'area' }: PhotoMontageProps): JSX.Element | null => {
   const { isMobile } = useResponsive()
-  const [showPhotoGalleryModal, setShowPhotoGalleryModal] = useState<boolean>(false)
-  const [userName, setUserName] = useState<string | null>(null)
-  useEffect(() => {
-    void userMediaStore.set.setPhotoList(initialList)
-  }, [initialList])
-
-  const shuffledList = initialList
-
-  const handleModal = (userName: string, toggleModal: boolean): void => {
-    setUserName(userName)
-    setShowPhotoGalleryModal(toggleModal)
-  }
-
-  const photoGalleryModal = <PhotoGalleryModal userName={userName} setShowPhotoGalleryModal={setShowPhotoGalleryModal} />
   const [hover, setHover] = useState(false)
+  const shuffledList = initialList
 
   if (shuffledList == null || shuffledList?.length === 0) { return null }
 
@@ -48,17 +36,17 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
     const firstMedia = shuffledList[0]
     return (
       <div className='block relative w-full h-60 fadeinEffect'>
-        {showPhotoGalleryModal ? photoGalleryModal : undefined}
-        <Image
-          src={firstMedia.mediaUrl}
-          fill
-          sizes='25vw'
-          priority
-          onClick={() => handleModal(firstMedia.username ?? '', !showPhotoGalleryModal)}
-          alt=''
-          style={{ objectFit: 'cover' }}
-        />
-        <PhotoFooter mediaWithTags={firstMedia} hover />
+        <Link href={`/gallery/${entityUuid ?? ''}?type=${entityType}&photoId=${firstMedia.id}`} className='block w-full h-full'>
+          <Image
+            src={firstMedia.mediaUrl}
+            fill
+            sizes='25vw'
+            priority
+            alt=''
+            style={{ objectFit: 'cover' }}
+          />
+          <PhotoFooter mediaWithTags={firstMedia} hover />
+        </Link>
       </div>
     )
   }
@@ -74,12 +62,12 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          {showPhotoGalleryModal ? photoGalleryModal : undefined}
           {shuffledList.slice(0, 2).map((media) => {
-            const { mediaUrl } = media
+            const { mediaUrl, id } = media
             return (
-              <div
+              <Link
                 key={mediaUrl}
+                href={`/gallery/${entityUuid ?? ''}?type=${entityType}&photoId=${id}`}
                 className={
                 clx(
                   'block relative hover:cursor-pointer',
@@ -91,12 +79,11 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
                   fill
                   sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
                   src={mediaUrl}
-                  onClick={() => handleModal(media.username ?? '', !showPhotoGalleryModal)}
                   alt=''
                   style={{ objectFit: 'cover' }}
                 />
                 <PhotoFooter mediaWithTags={media} hover={hover} />
-              </div>
+              </Link>
             )
           })}
           {shuffledList.length === 1 &&
@@ -106,7 +93,7 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
         </div>
         {shuffledList.length === 1
           ? (<div className='absolute bottom-8 right-8 z-50'><UploadPhotoTextOnlyButton /></div>)
-          : (<OpenGalleryButton count={shuffledList.length} onClick={() => setShowPhotoGalleryModal(true)} />)}
+          : (<OpenGalleryButton count={shuffledList.length} entityUuid={entityUuid} entityType={entityType} />)}
       </div>
     )
   }
@@ -123,24 +110,23 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
-        {showPhotoGalleryModal ? photoGalleryModal : undefined}
-        <div className='block relative col-start-1 col-span-2 row-span-2 col-end-3'>
+        <Link href={`/gallery/${entityUuid ?? ''}?type=${entityType}&photoId=${first.id}`} className='block relative col-start-1 col-span-2 row-span-2 col-end-3'>
           <Image
             priority
             fill
             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
             src={first.mediaUrl}
-            onClick={() => handleModal(first.username ?? '', !showPhotoGalleryModal)}
             alt=''
             style={{ objectFit: 'cover' }}
           />
           <PhotoFooter mediaWithTags={first} hover={hover} />
-        </div>
+        </Link>
         {theRest.map((media) => {
-          const { mediaUrl } = media
+          const { mediaUrl, id } = media
           return (
-            <div
+            <Link
               key={mediaUrl}
+              href={`/gallery/${entityUuid ?? ''}?type=${entityType}&photoId=${id}`}
               className='block relative'
             >
               <Image
@@ -148,26 +134,41 @@ const PhotoMontage = ({ photoList: initialList }: PhotoMontageProps): JSX.Elemen
                 fill
                 sizes='15vw'
                 src={mediaUrl}
-                onClick={() => handleModal(media.username ?? '', !showPhotoGalleryModal)}
                 alt=''
                 style={{ objectFit: 'cover' }}
               />
               <PhotoFooter mediaWithTags={media} hover={hover} />
-            </div>
+            </Link>
           )
         })}
       </div>
-      <OpenGalleryButton count={shuffledList.length} onClick={() => setShowPhotoGalleryModal(true)} />
+      <OpenGalleryButton count={shuffledList.length} entityUuid={entityUuid} entityType={entityType} />
     </div>
   )
 }
 
-const OpenGalleryButton: React.FC<{ count: number, onClick: () => void }> = ({ count, onClick }) => (
-  <div className='absolute right-8 top-[70%] drop-shadow-md'>
-    <button className='btn btn-sm btn-outline bg-base-200/60' onClick={() => onClick()}>
-      <SquaresFour size={16} />See {count} photos in gallery
-    </button>
-  </div>)
+const OpenGalleryButton: React.FC<{ count: number, entityUuid?: string, entityType?: 'area' | 'climb' }> = ({ count, entityUuid, entityType = 'area' }) => {
+  if (entityUuid == null) {
+    return (
+      <div className='absolute right-8 top-[70%] drop-shadow-md'>
+        <button className='btn btn-sm btn-outline bg-base-200/60' disabled>
+          <SquaresFour size={16} />See {count} photos in gallery
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <div className='absolute right-8 top-[70%] drop-shadow-md'>
+      <Link
+        href={`/gallery/${entityUuid}?type=${entityType}`}
+        className='btn btn-sm btn-outline bg-base-200/60'
+      >
+        <SquaresFour size={16} />See {count} photos in gallery
+      </Link>
+    </div>
+  )
+}
 
 /**
  * Show this upload call-to-action when a page has no photos
