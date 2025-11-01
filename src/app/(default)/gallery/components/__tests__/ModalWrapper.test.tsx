@@ -21,24 +21,27 @@ describe('<ModalWrapper />', () => {
     window.location = { href: '' } as any
   })
 
-  it('renders children inside modal', () => {
+  it('renders image and sidebar containers', () => {
     render(
-      <ModalWrapper>
-        <div>Test Content</div>
-      </ModalWrapper>
+      <ModalWrapper
+        imageContainer={<div>Image Content</div>}
+        sidebarContainer={<div>Sidebar Content</div>}
+      />
     )
 
-    expect(screen.getByText('Test Content')).toBeInTheDocument()
+    expect(screen.getByText('Image Content')).toBeInTheDocument()
+    expect(screen.getByText('Sidebar Content')).toBeInTheDocument()
   })
 
   it('renders backdrop and modal structure', () => {
     const { container } = render(
-      <ModalWrapper>
-        <div>Test</div>
-      </ModalWrapper>
+      <ModalWrapper
+        imageContainer={<div>Image</div>}
+        sidebarContainer={<div>Sidebar</div>}
+      />
     )
 
-    const backdrop = container.querySelector('[class*=\'bg-black\']')
+    const backdrop = container.querySelector('[class*=\'bg-base-900\']')
     const modal = container.querySelector('[class*=\'shadow-2xl\']')
 
     expect(backdrop).toBeInTheDocument()
@@ -47,9 +50,10 @@ describe('<ModalWrapper />', () => {
 
   it('has close button', () => {
     render(
-      <ModalWrapper>
-        <div>Test</div>
-      </ModalWrapper>
+      <ModalWrapper
+        imageContainer={<div>Image</div>}
+        sidebarContainer={<div>Sidebar</div>}
+      />
     )
 
     const closeButton = screen.getByRole('button', { name: /Close modal/i })
@@ -58,9 +62,10 @@ describe('<ModalWrapper />', () => {
 
   it('closes modal when X button clicked', () => {
     render(
-      <ModalWrapper>
-        <div>Test</div>
-      </ModalWrapper>
+      <ModalWrapper
+        imageContainer={<div>Image</div>}
+        sidebarContainer={<div>Sidebar</div>}
+      />
     )
 
     const closeButton = screen.getByRole('button', { name: /Close modal/i })
@@ -71,55 +76,43 @@ describe('<ModalWrapper />', () => {
 
   it('closes modal when backdrop clicked', () => {
     const { container } = render(
-      <ModalWrapper>
-        <div>Test</div>
-      </ModalWrapper>
+      <ModalWrapper
+        imageContainer={<div>Image</div>}
+        sidebarContainer={<div>Sidebar</div>}
+      />
     )
 
-    const backdrop = container.querySelector('[class*="bg-black"]') as HTMLElement
+    const backdrop = container.querySelector('[class*="bg-base-900"]') as HTMLElement
     fireEvent.click(backdrop)
 
     expect(window.location.href).toBe('/gallery/test-uuid-123?type=area')
   })
 
-  it('does not close modal when content clicked', () => {
+  it('does not close modal when sidebar clicked', () => {
     render(
-      <ModalWrapper>
-        <div data-testid='modal-content'>Test Content</div>
-      </ModalWrapper>
+      <ModalWrapper
+        imageContainer={<div>Image</div>}
+        sidebarContainer={<div data-testid='sidebar-content'>Sidebar</div>}
+      />
     )
 
-    const content = screen.getByTestId('modal-content')
+    const content = screen.getByTestId('sidebar-content')
     fireEvent.click(content)
 
     expect(window.location.href).toBe('')
   })
 
-  it('handles climb type in URL', () => {
-    render(
-      <ModalWrapper>
-        <div>Test</div>
-      </ModalWrapper>
-    )
-
-    const closeButton = screen.getByRole('button', { name: /Close modal/i })
-    fireEvent.click(closeButton)
-
-    // Verify it constructs URL with the area type (default)
-    expect(window.location.href).toContain('type=area')
-  })
-
   it('defaults to area type when not specified', () => {
     render(
-      <ModalWrapper>
-        <div>Test</div>
-      </ModalWrapper>
+      <ModalWrapper
+        imageContainer={<div>Image</div>}
+        sidebarContainer={<div>Sidebar</div>}
+      />
     )
 
     const closeButton = screen.getByRole('button', { name: /Close modal/i })
     fireEvent.click(closeButton)
 
-    // Verify URL is constructed correctly with default area type
     expect(window.location.href).toBe('/gallery/test-uuid-123?type=area')
   })
 })

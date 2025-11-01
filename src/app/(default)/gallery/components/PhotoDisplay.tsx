@@ -1,7 +1,5 @@
 'use client'
-import { useState } from 'react'
 import Image from 'next/image'
-import PhotoFooter from '@/components/media/PhotoFooter'
 import { MediaWithTags } from '@/js/types'
 
 interface PhotoDisplayProps {
@@ -17,14 +15,8 @@ export default function PhotoDisplay ({
   currentIndex,
   totalPhotos
 }: PhotoDisplayProps): JSX.Element {
-  const [hover, setHover] = useState(false)
-
   return (
-    <div
-      className='relative w-full aspect-[3/2] bg-base-200 rounded-lg overflow-hidden mb-4'
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
+    <div className='relative w-full h-full bg-base-200 overflow-hidden flex items-center justify-center'>
       {photo.mediaUrl !== undefined && (
         <Image
           src={photo.mediaUrl}
@@ -34,7 +26,6 @@ export default function PhotoDisplay ({
           priority
         />
       )}
-      <PhotoFooter mediaWithTags={photo} hover={hover} />
     </div>
   )
 }

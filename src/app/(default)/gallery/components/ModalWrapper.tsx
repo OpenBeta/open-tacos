@@ -1,14 +1,15 @@
 'use client'
 
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 interface ModalWrapperProps {
-  children: ReactNode
+  imageContainer: ReactNode
+  sidebarContainer: ReactNode
 }
 
-export default function ModalWrapper ({ children }: ModalWrapperProps): JSX.Element {
+export default function ModalWrapper ({ imageContainer, sidebarContainer }: ModalWrapperProps): JSX.Element {
   const params = useParams()
   const searchParams = useSearchParams()
 
@@ -16,6 +17,13 @@ export default function ModalWrapper ({ children }: ModalWrapperProps): JSX.Elem
   const typeParam = searchParams.get('type')
   const entityType = (typeParam === 'area' || typeParam === 'climb') ? typeParam : 'area'
   const galleryUrl = `/gallery/${uuid}?type=${entityType}`
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [])
 
   const handleClose = (): void => {
     window.location.href = galleryUrl
@@ -29,13 +37,13 @@ export default function ModalWrapper ({ children }: ModalWrapperProps): JSX.Elem
     <>
       {/* Backdrop */}
       <div
-        className='fixed inset-0 bg-black/50 z-40'
+        className='fixed inset-0 bg-base-900/50 z-40'
         onClick={handleClose}
       />
 
-      {/* Modal */}
+      {/* Modal - Contained with left/right layout */}
       <div className='fixed inset-0 z-50 flex items-center justify-center p-4' onClick={handleClose}>
-        <div className='relative bg-base-100 rounded-lg max-h-[90vh] max-w-4xl w-full overflow-auto shadow-2xl' onClick={handleModalClick}>
+        <div className='relative bg-base-100 max-h-[95vh] h-[95vh] w-full max-w-7xl shadow-2xl overflow-hidden rounded-xl' onClick={handleModalClick}>
           {/* Close button */}
           <button
             onClick={handleClose}
@@ -45,9 +53,17 @@ export default function ModalWrapper ({ children }: ModalWrapperProps): JSX.Elem
             <XMarkIcon className='w-6 h-6' />
           </button>
 
-          {/* Content */}
-          <div className='p-6'>
-            {children}
+          {/* Content - Split layout */}
+          <div className='flex h-full'>
+            {/* Left side - Image */}
+            <div className='flex-1 bg-base-200 flex items-center justify-center relative'>
+              {imageContainer}
+            </div>
+
+            {/* Right side - Sidebar */}
+            <div className='w-80 bg-base-100 overflow-y-auto border-l border-base-300'>
+              {sidebarContainer}
+            </div>
           </div>
         </div>
       </div>

@@ -23,36 +23,28 @@ export default function PhotoNavButtons ({
   basePath
 }: PhotoNavButtonsProps): JSX.Element {
   return (
-    <div className='flex justify-between items-center gap-4 pt-4 border-t border-base-300'>
+    <div className='flex flex-col gap-3 pt-4 border-t border-base-300'>
       {(prevPhoto != null)
         ? (
           <Link
             href={`${basePath}/${prevPhoto.id}?type=${entityType}`}
-            className='px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity'
+            className='w-full px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity text-center'
           >
             ← Previous
           </Link>
           )
-        : (
-          <div />
-          )}
-
-      <span className='text-sm text-base-content/60'>
-        Photo {currentIndex + 1} of {totalPhotos}
-      </span>
+        : null}
 
       {(nextPhoto != null)
         ? (
           <Link
             href={`${basePath}/${nextPhoto.id}?type=${entityType}`}
-            className='px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity'
+            className='w-full px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity text-center'
           >
             Next →
           </Link>
           )
-        : (
-          <div />
-          )}
+        : null}
     </div>
   )
 }

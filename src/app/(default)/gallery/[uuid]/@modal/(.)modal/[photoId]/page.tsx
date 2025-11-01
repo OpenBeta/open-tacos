@@ -15,18 +15,21 @@ export default async function Modal ({ params, searchParams }: GalleryPageProps)
 
   const { entityData, photos, currentPhoto, currentIndex, prevPhoto, nextPhoto } = photoData
 
+  const { imageContent, sidebarContent } = ModalContent({
+    entityData,
+    currentPhoto,
+    currentIndex,
+    photos,
+    prevPhoto,
+    nextPhoto,
+    uuid,
+    entityType
+  })
+
   return (
-    <ModalWrapper>
-      <ModalContent
-        entityData={entityData}
-        currentPhoto={currentPhoto}
-        currentIndex={currentIndex}
-        photos={photos}
-        prevPhoto={prevPhoto}
-        nextPhoto={nextPhoto}
-        uuid={uuid}
-        entityType={entityType}
-      />
-    </ModalWrapper>
+    <ModalWrapper
+      imageContainer={imageContent}
+      sidebarContainer={sidebarContent}
+    />
   )
 }
