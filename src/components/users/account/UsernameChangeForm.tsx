@@ -174,7 +174,7 @@ export const UsernameChangeForm: React.FC = () => {
             unitLabel='https://openbeta.io/u/'
             unitLabelPlacement='left'
             affixClassname='font-light bg-base-100 pl-1 pr-1 hidden md:inline-flex lg:text-lg'
-            className='pl-1 text-lg focus:ring-1 border-base-200 font-medium'
+            className='pl-1 text-lg font-medium'
             spellCheck={false}
             labelAlt={<TooltipComponent />}
             placeholder='coolbean2023'
