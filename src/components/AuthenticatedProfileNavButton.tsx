@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { UserCircle, HandHeart, UserCircleIcon, ChatCircleDotsIcon, GearIcon, ChartBarIcon, GiftIcon } from '@phosphor-icons/react/dist/ssr'
+import { UserCircleIcon, HandHeartIcon, ChatCircleDotsIcon, GearIcon, ChartBarIcon, GiftIcon } from '@phosphor-icons/react/dist/ssr'
 
 import { DropdownMenu, DropdownTrigger, DropdownContent, DropdownItem, DropdownSeparator } from '@/components/ui/DropdownMenu'
 import GitHubIcon from '@/assets/icons/github.inline.svg'
@@ -31,7 +31,7 @@ export default function AuthenticatedProfileNavButton ({ isMobile = true }: Prof
         <DropdownMenu>
           <DropdownTrigger asChild>
             <button className='btn btn-primary btn-solid no-animation border-2 shadow-md'>
-              <UserCircle size={24} weight='fill' className='text-accent' />
+              <UserCircleIcon size={24} weight='fill' className='text-accent' />
               Profile
             </button>
           </DropdownTrigger>
@@ -82,7 +82,7 @@ export default function AuthenticatedProfileNavButton ({ isMobile = true }: Prof
             />
 
             <DropdownItem
-              icon={<HandHeart />}
+              icon={<HandHeartIcon />}
               text='Become a Partner'
               className='font-semibold'
               onSelect={() => { void router.push('/partner-with-us') }}
@@ -112,7 +112,7 @@ export default function AuthenticatedProfileNavButton ({ isMobile = true }: Prof
       disabled={status === 'loading'}
       onClick={() => { void signIn('auth0') }}
     >
-      <UserCircle size={24} weight='fill' />Login
+      <UserCircleIcon size={24} weight='fill' />Login
     </button>
   )
 }
