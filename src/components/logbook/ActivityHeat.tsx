@@ -1,4 +1,4 @@
-import { useState, useMemo, ReactElement } from 'react'
+import { useState, useMemo } from 'react'
 import { XAxis, YAxis, ZAxis, Tooltip, ScatterChart, Scatter } from 'recharts'
 import { groupBy } from 'underscore'
 import { getWeek, format, eachYearOfInterval, eachWeekOfInterval, addDays } from 'date-fns'
@@ -89,8 +89,8 @@ const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
     return acc.concat(week)
   }, [])
 
-  const renderSquare = (props: ScatterPointProps): ReactElement<SVGElement> => {
-    const { cx, cy, xAxis, yAxis, z } = props
+  const renderSquare = (props: unknown): JSX.Element => {
+    const { cx, cy, xAxis, yAxis, z } = props as ScatterPointProps
     return (
       <rect
         x={cx - xAxis.bandSize / 2 + 2}
