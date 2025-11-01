@@ -34,7 +34,7 @@ export default function PhotoFooter ({
 const PhotographerLink = ({ uid }: { uid: string }): JSX.Element => (
   <Link href={urlResolver(3, uid, '') ?? '#'} passHref>
     <span className='absolute bottom-2 right-2 rounded-full bg-gray-100 bg-opacity-70 hover:bg-opacity-100 hover:ring p-1'>
-      <UserCircleIcon className='text-black w-6 h-6' />
+      <UserCircleIcon className='text-ob-dark w-6 h-6' />
     </span>
   </Link>
 )
@@ -57,11 +57,11 @@ const AllTagsLink: React.FC<{ entityTags: EntityTag[] }> = ({ entityTags }) => {
         aria-label={`Show ${entityTags.length} tags`}
         title={`Show ${entityTags.length} tags`}
       >
-        <TagIcon className='text-black w-4 h-4' />
+        <TagIcon className='text-ob-dark w-4 h-4' />
       </button>
 
       {showTags && (
-        <div className='absolute bottom-full left-0 mb-2 p-3 bg-white rounded-lg shadow-lg border w-40 z-50'>
+        <div className='absolute bottom-full left-0 mb-2 p-3 bg-base-100 rounded-lg shadow-lg border w-40 z-50'>
           <div className='text-sm font-semibold mb-2'>Tags:</div>
           <ul className='space-y-1'>
             {entityTags.map((tag, index) => {

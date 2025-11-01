@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import PhotoDisplay from '@/app/(default)/gallery/components/PhotoDisplay'
+import PhotoNavButtons from '@/app/(default)/gallery/components/PhotoNavButtons'
 import ThumbnailStrip from '@/app/(default)/gallery/components/ThumbnailStrip'
-import { fetchGalleryData } from '@/app/(default)/gallery/util/galleryUtils'
+import { usePhotoData } from '@/app/(default)/gallery/hooks/usePhotoData'
 
 interface PhotoPageProps {
   params: Promise<{
@@ -18,26 +19,13 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
   const { uuid, photoId } = await params
   const { type: entityType = 'area' } = await searchParams
 
-  if (photoId === undefined || uuid === undefined || (entityType !== 'area' && entityType !== 'climb')) {
+  const photoData = await usePhotoData(uuid, photoId, entityType)
+
+  if (photoData == null) {
     notFound()
   }
 
-  const entityData = await fetchGalleryData(uuid, entityType)
-
-  if ((entityData == null) || entityData.mediaList == null || entityData.mediaList.length === 0) {
-    notFound()
-  }
-
-  const photos = entityData.mediaList
-  const currentIndex = photos.findIndex((p) => p.id === photoId)
-
-  if (currentIndex === -1) {
-    notFound()
-  }
-
-  const currentPhoto = photos[currentIndex]
-  const prevPhoto = currentIndex > 0 ? photos[currentIndex - 1] : null
-  const nextPhoto = currentIndex < photos.length - 1 ? photos[currentIndex + 1] : null
+  const { entityData, photos, currentPhoto, currentIndex, prevPhoto, nextPhoto } = photoData
 
   return (
     <div className='min-h-screen bg-base-100 py-8 px-4 sm:px-6 lg:px-8'>
@@ -53,7 +41,7 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
         </div>
 
         {/* Modal-like container */}
-        <div className='bg-white rounded-lg shadow-2xl overflow-auto'>
+        <div className='bg-base-100 rounded-lg shadow-2xl overflow-auto'>
           <div className='p-6 flex flex-col gap-4'>
             {/* Header with title */}
             <div className='pb-4 border-b'>
@@ -79,37 +67,15 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
             />
 
             {/* Navigation Buttons */}
-            <div className='flex justify-between items-center gap-4 pt-4 border-t border-base-300'>
-              {(prevPhoto != null)
-                ? (
-                  <Link
-                    href={`/gallery/${uuid}?type=${entityType}&photoId=${prevPhoto.id}`}
-                    className='px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity'
-                  >
-                    ← Previous
-                  </Link>
-                  )
-                : (
-                  <div />
-                  )}
-
-              <span className='text-sm text-base-content/60'>
-                Photo {currentIndex + 1} of {photos.length}
-              </span>
-
-              {(nextPhoto != null)
-                ? (
-                  <Link
-                    href={`/gallery/${uuid}?type=${entityType}&photoId=${nextPhoto.id}`}
-                    className='px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity'
-                  >
-                    Next →
-                  </Link>
-                  )
-                : (
-                  <div />
-                  )}
-            </div>
+            <PhotoNavButtons
+              prevPhoto={prevPhoto}
+              nextPhoto={nextPhoto}
+              currentIndex={currentIndex}
+              totalPhotos={photos.length}
+              uuid={uuid}
+              entityType={entityType}
+              basePath={`/gallery/${uuid}`}
+            />
           </div>
         </div>
       </div>

@@ -35,7 +35,7 @@ export default function ModalWrapper ({ children }: ModalWrapperProps): JSX.Elem
 
       {/* Modal */}
       <div className='fixed inset-0 z-50 flex items-center justify-center p-4' onClick={handleClose}>
-        <div className='relative bg-white rounded-lg max-h-[90vh] max-w-4xl w-full overflow-auto shadow-2xl' onClick={handleModalClick}>
+        <div className='relative bg-base-100 rounded-lg max-h-[90vh] max-w-4xl w-full overflow-auto shadow-2xl' onClick={handleModalClick}>
           {/* Close button */}
           <button
             onClick={handleClose}
