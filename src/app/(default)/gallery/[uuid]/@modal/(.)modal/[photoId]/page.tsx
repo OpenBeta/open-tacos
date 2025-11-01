@@ -49,9 +49,12 @@ export default async function Modal ({ params, searchParams }: ModalPageProps): 
       <div className='flex flex-col gap-4'>
         {/* Header with title */}
         <div className='pb-4 border-b'>
-          <h2 className='text-xl font-bold'>
-            {entityData.name}
-          </h2>
+          <Link
+            href={`/${entityData.type}/${entityData.uuid}/${entityData.slug}`}
+            className='text-2xl font-bold text-ob-primary hover:opacity-90 hover:underline transition-opacity'
+          >
+            ←  Back to {entityData.name}
+          </Link>
         </div>
 
         {/* Photo Display with Tags */}
@@ -71,12 +74,12 @@ export default async function Modal ({ params, searchParams }: ModalPageProps): 
         />
 
         {/* Navigation Buttons */}
-        <div className='flex justify-between items-center gap-4 pt-4 border-t'>
+        <div className='flex justify-between items-center gap-4 pt-4 border-t border-base-300'>
           {(prevPhoto != null)
             ? (
               <Link
                 href={`/gallery/${uuid}/modal/${prevPhoto.id}?type=${entityType}`}
-                className='px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-800 transition-colors'
+                className='px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity'
               >
                 ← Previous
               </Link>
@@ -85,7 +88,7 @@ export default async function Modal ({ params, searchParams }: ModalPageProps): 
               <div />
               )}
 
-          <span className='text-sm text-gray-600'>
+          <span className='text-sm text-base-content/60'>
             Photo {currentIndex + 1} of {photos.length}
           </span>
 
@@ -93,7 +96,7 @@ export default async function Modal ({ params, searchParams }: ModalPageProps): 
             ? (
               <Link
                 href={`/gallery/${uuid}/modal/${nextPhoto.id}?type=${entityType}`}
-                className='px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-800 transition-colors'
+                className='px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity'
               >
                 Next →
               </Link>

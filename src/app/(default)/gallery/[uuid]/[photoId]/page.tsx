@@ -46,7 +46,7 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
         <div className='mb-6'>
           <Link
             href={`/gallery/${uuid}?type=${entityType}`}
-            className='text-blue-600 hover:underline text-sm'
+            className='text-ob-primary hover:opacity-80 text-sm'
           >
             ← Back to Gallery
           </Link>
@@ -79,12 +79,12 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
             />
 
             {/* Navigation Buttons */}
-            <div className='flex justify-between items-center gap-4 pt-4 border-t'>
+            <div className='flex justify-between items-center gap-4 pt-4 border-t border-base-300'>
               {(prevPhoto != null)
                 ? (
                   <Link
                     href={`/gallery/${uuid}?type=${entityType}&photoId=${prevPhoto.id}`}
-                    className='px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-800 transition-colors'
+                    className='px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity'
                   >
                     ← Previous
                   </Link>
@@ -93,7 +93,7 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
                   <div />
                   )}
 
-              <span className='text-sm text-gray-600'>
+              <span className='text-sm text-base-content/60'>
                 Photo {currentIndex + 1} of {photos.length}
               </span>
 
@@ -101,7 +101,7 @@ export default async function PhotoPage ({ params, searchParams }: PhotoPageProp
                 ? (
                   <Link
                     href={`/gallery/${uuid}?type=${entityType}&photoId=${nextPhoto.id}`}
-                    className='px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-800 transition-colors'
+                    className='px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity'
                   >
                     Next →
                   </Link>

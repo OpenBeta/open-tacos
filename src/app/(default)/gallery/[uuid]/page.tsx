@@ -77,7 +77,7 @@ export default async function GalleryPage ({
           <div className='mb-6'>
             <Link
               href={`/${type}/${uuid}/${gallery.slug}`}
-              className='text-blue-600 hover:underline text-sm'
+              className='text-ob-primary hover:opacity-80 text-sm'
             >
               ← Back to {gallery.name}
             </Link>

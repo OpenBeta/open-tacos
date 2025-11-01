@@ -47,8 +47,8 @@ export default function ThumbnailStrip ({
             href={`/gallery/${uuid}/modal/${photo.id}?type=${entityType}`}
             className={`flex-shrink-0 transition-all rounded-lg overflow-hidden border-2 ${
               idx === currentIndex
-                ? 'border-blue-500 ring-2 ring-blue-400'
-                : 'border-gray-300 hover:border-gray-400'
+                ? 'border-ob-primary ring-2 ring-ob-primary ring-opacity-40'
+                : 'border-base-300 hover:border-ob-primary'
             }`}
           >
             <Image

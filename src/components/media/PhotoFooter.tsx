@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Transition } from '@headlessui/react'
 import { UserCircleIcon, TagIcon } from '@heroicons/react/24/outline'
-import { urlResolver } from '../../js/utils'
+import { urlResolver, getAreaPageFriendlyUrl } from '../../js/utils'
 import { EntityTag, MediaWithTags } from '../../js/types'
 
 interface PhotoFooterProps {
@@ -61,14 +61,36 @@ const AllTagsLink: React.FC<{ entityTags: EntityTag[] }> = ({ entityTags }) => {
       </button>
 
       {showTags && (
-        <div className='absolute bottom-full left-0 mb-2 p-3 bg-white rounded-lg shadow-lg border w-40'>
+        <div className='absolute bottom-full left-0 mb-2 p-3 bg-white rounded-lg shadow-lg border w-40 z-50'>
           <div className='text-sm font-semibold mb-2'>Tags:</div>
           <ul className='space-y-1'>
-            {entityTags.map((tag, index) => (
-              <li key={index} className='text-xs'>
-                {tag.climbName ?? tag.areaName ?? 'Untitled'}
-              </li>
-            ))}
+            {entityTags.map((tag, index) => {
+              const tagName = tag.climbName ?? tag.areaName ?? 'Untitled'
+              const tagUrl = tag.type === 0
+                ? `/climb/${tag.targetId}`
+                : tag.type === 1
+                  ? getAreaPageFriendlyUrl(tag.targetId, tag.areaName)
+                  : null
+
+              if (tagUrl == null) {
+                return (
+                  <li key={index} className='text-xs'>
+                    {tagName}
+                  </li>
+                )
+              }
+
+              return (
+                <li key={index} className='text-xs'>
+                  <Link
+                    href={tagUrl}
+                    className='text-ob-primary hover:opacity-80 hover:underline'
+                  >
+                    {tagName}
+                  </Link>
+                </li>
+              )
+            })}
           </ul>
         </div>
       )}

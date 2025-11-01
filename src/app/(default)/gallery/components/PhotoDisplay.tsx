@@ -21,7 +21,7 @@ export default function PhotoDisplay ({
 
   return (
     <div
-      className='relative w-full aspect-[3/2] bg-gray-200 rounded-lg overflow-hidden mb-4'
+      className='relative w-full aspect-[3/2] bg-base-200 rounded-lg overflow-hidden mb-4'
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
