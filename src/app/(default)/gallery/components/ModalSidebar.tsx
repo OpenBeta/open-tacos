@@ -1,11 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowDownTrayIcon } from '@heroicons/react/24/outline'
+import { ArrowDownTrayIcon, CameraIcon } from '@heroicons/react/24/outline'
 import TagList from '@/components/media/TagList'
 import PhotoNavButtons from '@/app/(default)/gallery/components/PhotoNavButtons'
+import { BaseUploader } from '@/components/media/BaseUploader'
 import { downloadPhoto } from '@/app/(default)/gallery/util/downloadPhoto'
-import type { MediaWithTags } from '@/js/types'
+import type { MediaWithTags, TagTargetType } from '@/js/types'
 import type { GalleryData } from '@/app/(default)/gallery/util/galleryUtils'
 
 interface ModalSidebarProps {
@@ -61,7 +62,7 @@ export default function ModalSidebar ({
           <p>
             Uploaded by{' '}
             <Link
-              href={`/user/${currentPhoto.username}`}
+              href={`/u/${currentPhoto.username}`}
               className='text-ob-primary hover:opacity-90 hover:underline transition-opacity'
             >
               {currentPhoto.username}
@@ -95,6 +96,18 @@ export default function ModalSidebar ({
             entityType={entityType}
             basePath={`/gallery/${uuid}/modal`}
           />
+        </div>
+
+        {/* Upload CTA - below nav buttons */}
+        <div className='w-full mt-4 pt-4 border-t border-base-300'>
+          <BaseUploader
+            className='flex flex-col items-center justify-center p-4 border-2 border-dashed border-base-content/30 rounded-lg hover:border-base-content/50 hover:bg-base-200/30 transition-colors cursor-pointer'
+            tagType={(entityType === 'climb' ? 0 : 1) as TagTargetType}
+            uuid={uuid}
+          >
+            <CameraIcon className='w-6 h-6 text-base-content/60 mb-2' />
+            <span className='text-xs text-base-content/60'>Share a photo</span>
+          </BaseUploader>
         </div>
       </div>
     </div>
