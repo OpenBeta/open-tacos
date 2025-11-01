@@ -47,10 +47,10 @@ export default function ModalWrapper ({ imageContainer, sidebarContainer }: Moda
           {/* Close button */}
           <button
             onClick={handleClose}
-            className='absolute top-4 right-4 z-10 p-2 hover:bg-base-200 rounded-full transition-colors'
+            className='absolute top-3 right-4 z-10 p-2 hover:bg-base-200 rounded-full transition-colors flex items-center justify-center'
             aria-label='Close modal'
           >
-            <XMarkIcon className='w-6 h-6' />
+            <XMarkIcon className='w-5 h-5' />
           </button>
 
           {/* Content - Split layout */}

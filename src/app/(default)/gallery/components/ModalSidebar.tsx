@@ -1,8 +1,10 @@
 'use client'
 
 import Link from 'next/link'
+import { ArrowDownTrayIcon } from '@heroicons/react/24/outline'
 import TagList from '@/components/media/TagList'
 import PhotoNavButtons from '@/app/(default)/gallery/components/PhotoNavButtons'
+import { downloadPhoto } from '@/app/(default)/gallery/util/downloadPhoto'
 import type { MediaWithTags } from '@/js/types'
 import type { GalleryData } from '@/app/(default)/gallery/util/galleryUtils'
 
@@ -27,6 +29,12 @@ export default function ModalSidebar ({
   uuid,
   entityType
 }: ModalSidebarProps): JSX.Element {
+  const handleDownload = (): void => {
+    if (currentPhoto.mediaUrl === undefined) return
+    const fileName = `photo-${currentIndex + 1}.jpg`
+    void downloadPhoto(currentPhoto.mediaUrl, fileName)
+  }
+
   return (
     <div className='flex flex-col h-full p-4 space-y-4'>
       {/* Entity link - Back to area/climb */}
@@ -64,9 +72,17 @@ export default function ModalSidebar ({
 
       {/* Navigation buttons - at bottom */}
       <div className='flex-1 flex flex-col items-end justify-end'>
-        {/* Photo counter - above buttons */}
-        <div className='text-xs text-base-content/60 mb-3 w-full text-center'>
-          Photo {currentIndex + 1} of {totalPhotos}
+        {/* Photo counter with download button */}
+        <div className='text-sm text-base-content/60 mb-3 w-full flex items-center justify-between'>
+          <span>Photo {currentIndex + 1} of {totalPhotos}</span>
+          <button
+            onClick={handleDownload}
+            className='w-8 h-8 flex items-center justify-center text-base-content/60 hover:text-base-content hover:bg-base-200 rounded transition-colors'
+            title='Download photo'
+            aria-label='Download photo'
+          >
+            <ArrowDownTrayIcon className='w-5 h-5' />
+          </button>
         </div>
 
         <div className='w-full'>

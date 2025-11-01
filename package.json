@@ -37,7 +37,7 @@
     "csvtojson": "^2.0.10",
     "daisyui": "^3.9.4",
     "date-fns": "^2.28.0",
-    "embla-carousel-react": "^8.0.0",
+    "embla-carousel-react": "^8.6.0",
     "encoding": "^0.1.13",
     "file-saver": "^2.0.5",
     "fuse.js": "^6.6.2",

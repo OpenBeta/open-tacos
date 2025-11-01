@@ -3,16 +3,21 @@
  */
 export async function downloadPhoto (photoUrl: string, fileName: string): Promise<void> {
   try {
-    const response = await fetch(photoUrl)
-    const blob = await response.blob()
-    const url = window.URL.createObjectURL(blob)
+    // If URL is relative, convert to CDN URL
+    let fullUrl = photoUrl
+    if (!photoUrl.startsWith('http')) {
+      const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL ?? 'https://stg-media.openbeta.io'
+      const mediaPath = photoUrl.replace(/^\/p\//, '/u/')
+      fullUrl = cdnUrl + mediaPath
+    }
+
     const link = document.createElement('a')
-    link.href = url
+    link.href = fullUrl
     link.download = fileName
+    link.target = '_blank'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
-    window.URL.revokeObjectURL(url)
   } catch (error) {
     console.error('Failed to download photo:', error)
   }
