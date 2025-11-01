@@ -1,21 +1,9 @@
-import Link from 'next/link'
 import ModalWrapper from '@/app/(default)/gallery/components/ModalWrapper'
-import PhotoDisplay from '@/app/(default)/gallery/components/PhotoDisplay'
-import PhotoNavButtons from '@/app/(default)/gallery/components/PhotoNavButtons'
-import ThumbnailStrip from '@/app/(default)/gallery/components/ThumbnailStrip'
+import ModalContent from '@/app/(default)/gallery/components/ModalContent'
 import { usePhotoData } from '@/app/(default)/gallery/hooks/usePhotoData'
+import type { GalleryPageProps } from '@/app/(default)/gallery/types'
 
-interface ModalPageProps {
-  params: Promise<{
-    uuid: string
-    photoId: string
-  }>
-  searchParams: Promise<{
-    type?: 'area' | 'climb'
-  }>
-}
-
-export default async function Modal ({ params, searchParams }: ModalPageProps): Promise<JSX.Element | null> {
+export default async function Modal ({ params, searchParams }: GalleryPageProps): Promise<JSX.Element | null> {
   const { uuid, photoId } = await params
   const { type: entityType = 'area' } = await searchParams
 
@@ -29,44 +17,16 @@ export default async function Modal ({ params, searchParams }: ModalPageProps): 
 
   return (
     <ModalWrapper>
-      <div className='flex flex-col gap-4'>
-        {/* Header with title */}
-        <div className='pb-4 border-b'>
-          <Link
-            href={`/${entityData.type ?? ''}/${entityData.uuid ?? ''}/${entityData.slug ?? ''}`}
-            className='text-2xl font-bold text-ob-primary hover:opacity-90 hover:underline transition-opacity'
-          >
-            ←  Back to {entityData.name}
-          </Link>
-        </div>
-
-        {/* Photo Display with Tags */}
-        <PhotoDisplay
-          photo={currentPhoto}
-          name={entityData.name}
-          currentIndex={currentIndex}
-          totalPhotos={photos.length}
-        />
-
-        {/* Thumbnail Strip */}
-        <ThumbnailStrip
-          photos={photos}
-          currentIndex={currentIndex}
-          uuid={uuid}
-          entityType={entityType}
-        />
-
-        {/* Navigation Buttons */}
-        <PhotoNavButtons
-          prevPhoto={prevPhoto}
-          nextPhoto={nextPhoto}
-          currentIndex={currentIndex}
-          totalPhotos={photos.length}
-          uuid={uuid}
-          entityType={entityType}
-          basePath={`/gallery/${uuid}/modal`}
-        />
-      </div>
+      <ModalContent
+        entityData={entityData}
+        currentPhoto={currentPhoto}
+        currentIndex={currentIndex}
+        photos={photos}
+        prevPhoto={prevPhoto}
+        nextPhoto={nextPhoto}
+        uuid={uuid}
+        entityType={entityType}
+      />
     </ModalWrapper>
   )
 }

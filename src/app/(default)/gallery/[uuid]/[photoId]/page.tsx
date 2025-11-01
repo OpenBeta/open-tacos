@@ -4,18 +4,9 @@ import PhotoDisplay from '@/app/(default)/gallery/components/PhotoDisplay'
 import PhotoNavButtons from '@/app/(default)/gallery/components/PhotoNavButtons'
 import ThumbnailStrip from '@/app/(default)/gallery/components/ThumbnailStrip'
 import { usePhotoData } from '@/app/(default)/gallery/hooks/usePhotoData'
+import type { GalleryPageProps } from '@/app/(default)/gallery/types'
 
-interface PhotoPageProps {
-  params: Promise<{
-    uuid: string
-    photoId: string
-  }>
-  searchParams: Promise<{
-    type?: 'area' | 'climb'
-  }>
-}
-
-export default async function PhotoPage ({ params, searchParams }: PhotoPageProps): Promise<JSX.Element> {
+export default async function PhotoPage ({ params, searchParams }: GalleryPageProps): Promise<JSX.Element> {
   const { uuid, photoId } = await params
   const { type: entityType = 'area' } = await searchParams
 
