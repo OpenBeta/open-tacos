@@ -64,10 +64,10 @@ export const UsernameChangeForm: React.FC = () => {
   const session = useSession()
   const router = useRouter()
 
-  const { getUsernameById, updateUsername, doesUsernameExist } = useUserProfileCmd({ accessToken: session?.data?.accessToken as string })
+  const { getUsernameById, updateUsername, doesUsernameExist } = useUserProfileCmd({ accessToken: session?.data?.accessToken })
 
   const [isNewUser, setNewUser] = useState(false)
-  const [initials, setInitials] = useState<any>()
+  const [initials, setInitials] = useState<Username | undefined>()
 
   const userUuid = session.data?.user.metadata.uuid
   const email = session.data?.user.email
@@ -105,23 +105,28 @@ export const UsernameChangeForm: React.FC = () => {
 
   useEffect(() => {
     if (session.status === 'unauthenticated') {
-      void signIn('auth0') // send users to Auth0 login screen
+      signIn('auth0').catch(() => {})
     }
   }, [session.status])
 
   useEffect(() => {
     if (isValidating && isDirty) {
-      void doesUsernameExist(username).then(value => {
-        if (value === 'error') {
+      doesUsernameExist(username)
+        .then(value => {
+          if (value === 'error') {
+            setError('username', { type: 'custom', message: 'Unexpected error.  Please notify support@openbeta.io' })
+            return
+          }
+          if (value) {
+            setError('username', { type: 'custom', message: 'Username already exists' })
+          } else {
+            clearErrors('username')
+          }
+        })
+        .catch((error) => {
+          console.error('Error checking username availability:', error)
           setError('username', { type: 'custom', message: 'Unexpected error.  Please notify support@openbeta.io' })
-          return
-        }
-        if (value) {
-          setError('username', { type: 'custom', message: 'Username already exists' })
-        } else {
-          clearErrors('username')
-        }
-      })
+        })
     }
   }, [isValidating, isDirty])
 
@@ -130,18 +135,23 @@ export const UsernameChangeForm: React.FC = () => {
     // Auth0 session data is refreshed every time we switch browser tabs.
     // Perform additional checks to prevent excessive API calls.
     if (uuid != null && uuid !== initials?.userUuid) {
-      void getUsernameById({ userUuid: uuid }).then(value => {
-        if (value == null) {
-          setNewUser(true)
-        } else {
-          setInitials({
-            userUuid: uuid,
-            username: value.username,
-            lastUpdated: value.lastUpdated
-          })
-          reset({ username: value.username })
-        }
-      })
+      getUsernameById({ userUuid: uuid })
+        .then(value => {
+          if (value == null) {
+            setNewUser(true)
+          } else {
+            setInitials({
+              userUuid: uuid,
+              username: value.username,
+              lastUpdated: value.lastUpdated
+            })
+            reset({ username: value.username })
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching username:', error)
+          toast.error('Failed to load username. Please refresh the page.')
+        })
     }
   }, [session.data?.user.metadata.uuid])
 

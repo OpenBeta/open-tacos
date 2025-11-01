@@ -44,7 +44,7 @@ export const UpdateProfileForm: React.FC = () => {
   })
   const { handleSubmit, reset, formState: { isValid, isDirty, isSubmitting } } = form
 
-  const { getUserPublicProfileByUuid, updatePublicProfileCmd } = useUserProfileCmd({ accessToken: session?.data?.accessToken as string })
+  const { getUserPublicProfileByUuid, updatePublicProfileCmd } = useUserProfileCmd({ accessToken: session?.data?.accessToken })
 
   const userUuid = session.data?.user.metadata.uuid
 
@@ -54,13 +54,18 @@ export const UpdateProfileForm: React.FC = () => {
   useEffect(() => {
     if (userUuid != null) {
       const doAsync = async (): Promise<void> => {
-        const profile = await getUserPublicProfileByUuid(userUuid)
-        if (profile != null) {
-          const { displayName, bio, website, avatar } = profile
-          reset({ displayName, bio, website })
-          if (avatar != null) {
-            setAvatarUrl(avatar)
+        try {
+          const profile = await getUserPublicProfileByUuid(userUuid)
+          if (profile != null) {
+            const { displayName, bio, website, avatar } = profile
+            reset({ displayName, bio, website })
+            if (avatar != null) {
+              setAvatarUrl(avatar)
+            }
           }
+        } catch (error) {
+          console.error('Error fetching user profile:', error)
+          toast.error('Failed to load profile. Please refresh the page.')
         }
       }
       void doAsync()
@@ -85,7 +90,7 @@ export const UpdateProfileForm: React.FC = () => {
 
   useEffect(() => {
     if (session.status === 'unauthenticated') {
-      void signIn('auth0') // send users to Auth0 login screen
+      signIn('auth0').catch(() => {})
     }
   }, [session.status])
 
