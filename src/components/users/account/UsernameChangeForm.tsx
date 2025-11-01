@@ -7,10 +7,10 @@ import { QuestionIcon } from '@phosphor-icons/react/dist/ssr'
 import { toast } from 'react-toastify'
 import { formatDistanceToNowStrict } from 'date-fns'
 
-import { Input } from '../../ui/form'
-import { RulesType, Username } from '../../../js/types'
-import useUserProfileCmd from '../../../js/hooks/useUserProfileCmd'
-import Tooltip from '../../ui/Tooltip'
+import { Input } from '@/components/ui/form'
+import { RulesType, Username } from '@/js/types'
+import useUserProfileCmd from '@/js/hooks/useUserProfileCmd'
+import Tooltip from '@/components/ui/Tooltip'
 
 const specialWords = /openbeta|0penbeta|admin|adm1n|null|undefined/i
 const validUsername = /^[a-zA-Z0-9]+([_\\.-]?[a-zA-Z0-9])*$/i

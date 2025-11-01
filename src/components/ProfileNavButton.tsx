@@ -3,8 +3,8 @@ import { useRouter } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { UserCircleIcon, ChatCircleDotsIcon, GearIcon, ChartBarIcon, GiftIcon } from '@phosphor-icons/react/dist/ssr'
 
-import { DropdownMenu, DropdownTrigger, DropdownContent, DropdownItem, DropdownSeparator } from './ui/DropdownMenu'
-import GitHubIcon from '../assets/icons/github.inline.svg'
+import { DropdownMenu, DropdownTrigger, DropdownContent, DropdownItem, DropdownSeparator } from '@/components/ui/DropdownMenu'
+import GitHubIcon from '@/assets/icons/github.inline.svg'
 
 interface ProfileNavButtonProps {
   isMobile?: boolean

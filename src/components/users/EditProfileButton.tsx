@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import forOwnerOnly from '../../js/auth/forOwnerOnly'
+import forOwnerOnly from '@/js/auth/forOwnerOnly'
 
 function EditProfileButton (): JSX.Element {
   return (

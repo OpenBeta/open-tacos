@@ -7,11 +7,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr'
 
-import { Input, TextArea } from '../../ui/form'
-import useUserProfileCmd from '../../../js/hooks/useUserProfileCmd'
-import { BaseProfilePhotoUploader } from '../../media/BaseUploader'
-import { ProfileImage } from '../PublicProfile'
-import { useUserGalleryStore } from '../../../js/stores/useUserGalleryStore'
+import { Input, TextArea } from '@/components/ui/form'
+import useUserProfileCmd from '@/js/hooks/useUserProfileCmd'
+import { BaseProfilePhotoUploader } from '@/components/media/BaseUploader'
+import { ProfileImage } from '@/components/users/PublicProfile'
+import { useUserGalleryStore } from '@/js/stores/useUserGalleryStore'
 
 const validationSchema = z
   .object({
