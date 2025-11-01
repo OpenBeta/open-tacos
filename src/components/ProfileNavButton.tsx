@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
-import { UserCircleIcon, ChatBubbleOvalLeftEllipsisIcon, Cog6ToothIcon, ChartBarIcon, GiftIcon } from '@heroicons/react/24/outline'
+import { UserCircleIcon, ChatCircleDotsIcon, GearIcon, ChartBarIcon, GiftIcon } from '@phosphor-icons/react/dist/ssr'
 
 import { DropdownMenu, DropdownTrigger, DropdownContent, DropdownItem, DropdownSeparator } from './ui/DropdownMenu'
 import GitHubIcon from '../assets/icons/github.inline.svg'
@@ -53,9 +53,9 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
             <DropdownSeparator />
 
             <DropdownItem
-              icon={<Cog6ToothIcon className='w-4 h-4' />}
+              icon={<GearIcon className='w-4 h-4' />}
               text='Account settings'
-              onSelect={() => { void router.push('/account/editProfile') }}
+              onSelect={() => { void router.push('/account/edit-profile') }}
             />
 
             <DropdownItem
@@ -87,7 +87,7 @@ export default function ProfileNavButton ({ isMobile = true }: ProfileNavButtonP
               onSelect={() => { void router.push('https://github.com/OpenBeta/open-tacos') }}
             />
             <DropdownItem
-              icon={<ChatBubbleOvalLeftEllipsisIcon className='w-4 h-4' />}
+              icon={<ChatCircleDotsIcon className='w-4 h-4' />}
               text='Discord community'
               onSelect={() => { void router.push('https://discord.gg/ptpnWWNkJx') }}
             />

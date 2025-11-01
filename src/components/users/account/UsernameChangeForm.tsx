@@ -1,8 +1,9 @@
+'use client'
 import { useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession, signIn } from 'next-auth/react'
-import { useRouter } from 'next/router'
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/navigation'
+import { QuestionIcon } from '@phosphor-icons/react/dist/ssr'
 import { toast } from 'react-toastify'
 import { formatDistanceToNowStrict } from 'date-fns'
 
@@ -106,7 +107,7 @@ export const UsernameChangeForm: React.FC = () => {
     if (session.status === 'unauthenticated') {
       void signIn('auth0') // send users to Auth0 login screen
     }
-  })
+  }, [session.status])
 
   useEffect(() => {
     if (isValidating && isDirty) {
@@ -142,20 +143,20 @@ export const UsernameChangeForm: React.FC = () => {
         }
       })
     }
-  }, [session.data?.user])
+  }, [session.data?.user.metadata.uuid])
 
   const shouldDisableSumit = !isValid || isSubmitting || !isDirty || userUuid == null || isSubmitSuccessful
   return (
     <div className='w-full lg:max-w-md'>
       {isNewUser
-        ? (<h2>Create a username</h2>)
+        ? (<h2 className='text-2xl font-bold mb-8'>Create a username</h2>)
         : (
           <>
-            <h2>Change username</h2>
+            <h2 className='text-2xl font-bold mb-8'>Change username</h2>
           </>)}
       <FormProvider {...form}>
         {/* eslint-disable-next-line */}
-        <form onSubmit={handleSubmit(submitHandler)} className='mt-10 flex flex-col gap-y-6'>
+        <form onSubmit={handleSubmit(submitHandler)} className='flex flex-col gap-y-6'>
           {initials != null && <CurrentUsername {...initials} />}
           <Input
             name='username'
@@ -173,8 +174,8 @@ export const UsernameChangeForm: React.FC = () => {
           <button
             type='submit'
             disabled={shouldDisableSumit}
-            className='mt-10 btn btn-primary btn-solid btn-block md:btn-wide'
-          >Save
+            className='mt-6 btn btn-primary btn-solid btn-block md:btn-wide'
+          >Save changes
           </button>
         </form>
       </FormProvider>
@@ -195,7 +196,7 @@ const TooltipComponent: React.FC = () => (
       </div>
     }
   >
-    <QuestionMarkCircleIcon className='text-info w-5 h-5' />
+    <QuestionIcon className='text-info w-5 h-5' />
   </Tooltip>
 )
 
@@ -203,7 +204,9 @@ const CurrentUsername: React.FC<Username> = ({ lastUpdated, username }) => (
   <div className='form-control'>
     <div className='label'>
       <span className='label-text font-semibold'>Current username</span>
-      {lastUpdated != null && <span className='label-text text-base-300/60 italic'>Updated {formatDistanceToNowStrict(lastUpdated, { addSuffix: true })}</span>}
+      {lastUpdated != null && <span className='label-text-alt text-base-300'>Updated {formatDistanceToNowStrict(lastUpdated, { addSuffix: true })}</span>}
     </div>
-    <div className='pl-1 font-light'>{username}</div>
+    <div className='input input-bordered bg-base-200 cursor-not-allowed font-medium text-base-content/70'>
+      {username}
+    </div>
   </div>)

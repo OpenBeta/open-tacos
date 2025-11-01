@@ -1,10 +1,11 @@
+'use client'
 import { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession, signIn } from 'next-auth/react'
 import { toast } from 'react-toastify'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Pencil } from '@phosphor-icons/react/dist/ssr'
+import { PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr'
 
 import { Input, TextArea } from '../../ui/form'
 import useUserProfileCmd from '../../../js/hooks/useUserProfileCmd'
@@ -64,7 +65,7 @@ export const UpdateProfileForm: React.FC = () => {
       }
       void doAsync()
     }
-  }, [session])
+  }, [userUuid])
 
   const submitHandler = async ({ displayName, bio, website }: ValidationSchema): Promise<void> => {
     if (userUuid == null) {
@@ -86,7 +87,7 @@ export const UpdateProfileForm: React.FC = () => {
     if (session.status === 'unauthenticated') {
       void signIn('auth0') // send users to Auth0 login screen
     }
-  }, [session])
+  }, [session.status])
 
   useEffect(() => {
     const event = (e: Event): void => {
@@ -102,13 +103,13 @@ export const UpdateProfileForm: React.FC = () => {
   return (
     <div className='w-full lg:max-w-md'>
 
-      <h2 className=''>Edit Profile</h2>
+      <h2 className='text-2xl font-bold mb-8'>Edit Profile</h2>
 
       {avatarUrl !== null && avatarUrl !== '' && <EditProfileImage avatar={avatarUrl} key={avatarUrl} />}
 
       <FormProvider {...form}>
         {/* eslint-disable-next-line */}
-        <form onSubmit={handleSubmit(submitHandler)} className='flex flex-col'>
+        <form onSubmit={handleSubmit(submitHandler)} className='flex flex-col gap-y-4'>
           <Input
             name='displayName'
             label='Display name'
@@ -136,8 +137,8 @@ export const UpdateProfileForm: React.FC = () => {
           <button
             type='submit'
             disabled={shouldDisableSubmit}
-            className='mt-8 btn btn-primary btn-solid'
-          >Save
+            className='mt-6 btn btn-primary btn-solid btn-block md:btn-wide'
+          >Save changes
           </button>
         </form>
       </FormProvider>
@@ -147,9 +148,9 @@ export const UpdateProfileForm: React.FC = () => {
 
 export const EditProfileImage = ({ avatar }: { avatar: string }): JSX.Element => {
   return (
-    <div className='relative inline-block'>
-      <BaseProfilePhotoUploader className='absolute bottom-1 right-1  bg-gray-800 bg-opacity-75 p-2 rounded-full transition-opacity duration-200 hover:bg-opacity-100 z-10'>
-        <Pencil color='#FFFFFF' />
+    <div className='relative inline-block mb-6'>
+      <BaseProfilePhotoUploader className='absolute bottom-1 right-1 bg-gray-800 bg-opacity-75 p-2 rounded-full transition-opacity duration-200 hover:bg-opacity-100 hover:scale-110 z-10 cursor-pointer'>
+        <PencilSimpleIcon color='#FFFFFF' size={20} />
       </BaseProfilePhotoUploader>
       <ProfileImage avatar={avatar} />
     </div>
