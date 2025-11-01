@@ -2,8 +2,8 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Transition } from '@headlessui/react'
 import { UserCircleIcon, TagIcon } from '@heroicons/react/24/outline'
-import { urlResolver, getAreaPageFriendlyUrl } from '../../js/utils'
-import { EntityTag, MediaWithTags } from '../../js/types'
+import { urlResolver, getAreaPageFriendlyUrl } from '@/js/utils'
+import { EntityTag, MediaWithTags } from '@/js/types'
 
 interface PhotoFooterProps {
   mediaWithTags: MediaWithTags
