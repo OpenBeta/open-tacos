@@ -68,7 +68,7 @@
     "react-responsive": "^9.0.0-beta.6",
     "react-toastify": "^9.1.1",
     "react-use": "^17.4.0",
-    "recharts": "^2.7.2",
+    "recharts": "^3.3.0",
     "sharp": "^0.33.5",
     "simple-statistics": "^7.8.3",
     "slugify": "^1.6.6",

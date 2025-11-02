@@ -20,6 +20,16 @@ exports[`renders correctly 1`] = `
         "width": "100%",
       }
     }
-  />
+  >
+    <div
+      style={
+        {
+          "height": 0,
+          "overflow": "visible",
+          "width": 0,
+        }
+      }
+    />
+  </div>
 </div>
 `;
