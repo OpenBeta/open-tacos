@@ -2,23 +2,21 @@ import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import ModalWrapper from '../ModalWrapper'
 
+const mockBack = jest.fn()
+
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
   useParams: jest.fn(() => ({
     uuid: 'test-uuid-123'
   })),
-  useSearchParams: jest.fn(() => ({
-    get: jest.fn((key) => {
-      if (key === 'type') return 'area'
-      return null
-    })
+  useRouter: jest.fn(() => ({
+    back: mockBack
   }))
 }))
 
 describe('<ModalWrapper />', () => {
   beforeEach(() => {
-    delete (window as any).location
-    window.location = { href: '' } as any
+    mockBack.mockClear()
   })
 
   it('renders image and sidebar containers', () => {
@@ -71,7 +69,7 @@ describe('<ModalWrapper />', () => {
     const closeButton = screen.getByRole('button', { name: /Close modal/i })
     fireEvent.click(closeButton)
 
-    expect(window.location.href).toBe('/gallery/test-uuid-123?type=area')
+    expect(mockBack).toHaveBeenCalled()
   })
 
   it('closes modal when backdrop clicked', () => {
@@ -85,7 +83,7 @@ describe('<ModalWrapper />', () => {
     const backdrop = container.querySelector('[class*="bg-base-900"]') as HTMLElement
     fireEvent.click(backdrop)
 
-    expect(window.location.href).toBe('/gallery/test-uuid-123?type=area')
+    expect(mockBack).toHaveBeenCalled()
   })
 
   it('does not close modal when sidebar clicked', () => {
@@ -99,7 +97,7 @@ describe('<ModalWrapper />', () => {
     const content = screen.getByTestId('sidebar-content')
     fireEvent.click(content)
 
-    expect(window.location.href).toBe('')
+    expect(mockBack).not.toHaveBeenCalled()
   })
 
   it('defaults to area type when not specified', () => {
@@ -113,6 +111,6 @@ describe('<ModalWrapper />', () => {
     const closeButton = screen.getByRole('button', { name: /Close modal/i })
     fireEvent.click(closeButton)
 
-    expect(window.location.href).toBe('/gallery/test-uuid-123?type=area')
+    expect(mockBack).toHaveBeenCalled()
   })
 })

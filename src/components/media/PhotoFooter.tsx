@@ -61,9 +61,13 @@ const AllTagsLink: React.FC<{ entityTags: EntityTag[] }> = ({ entityTags }) => {
       </button>
 
       {showTags && (
-        <div className='absolute bottom-full left-0 mb-2 p-3 bg-base-100 rounded-lg shadow-lg border w-40 z-50'>
+        <div
+          className='absolute bottom-full left-0 mb-2 p-3 bg-base-100 rounded-lg shadow-lg border w-40 z-50'
+          role='dialog'
+          aria-label='Photo tags'
+        >
           <div className='text-sm font-semibold mb-2'>Tags:</div>
-          <ul className='space-y-1'>
+          <ul className='space-y-1' role='list'>
             {entityTags.map((tag, index) => {
               const tagName = tag.climbName ?? tag.areaName ?? 'Untitled'
               const tagUrl = tag.type === 0

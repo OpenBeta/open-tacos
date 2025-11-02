@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode, useEffect } from 'react'
-import { useParams, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 interface ModalWrapperProps {
@@ -10,13 +10,7 @@ interface ModalWrapperProps {
 }
 
 export default function ModalWrapper ({ imageContainer, sidebarContainer }: ModalWrapperProps): JSX.Element {
-  const params = useParams()
-  const searchParams = useSearchParams()
-
-  const uuid = params.uuid as string
-  const typeParam = searchParams.get('type')
-  const entityType = (typeParam === 'area' || typeParam === 'climb') ? typeParam : 'area'
-  const galleryUrl = `/gallery/${uuid}?type=${entityType}`
+  const router = useRouter()
 
   useEffect(() => {
     document.body.style.overflow = 'hidden'
@@ -26,7 +20,7 @@ export default function ModalWrapper ({ imageContainer, sidebarContainer }: Moda
   }, [])
 
   const handleClose = (): void => {
-    window.location.href = galleryUrl
+    router.back()
   }
 
   const handleModalClick = (e: React.MouseEvent): void => {

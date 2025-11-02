@@ -6,7 +6,10 @@ export async function downloadPhoto (photoUrl: string, fileName: string): Promis
     // If URL is relative, convert to CDN URL
     let fullUrl = photoUrl
     if (!photoUrl.startsWith('http')) {
-      const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL ?? 'https://stg-media.openbeta.io'
+      const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL
+      if (cdnUrl == null || cdnUrl === '') {
+        throw new Error('NEXT_PUBLIC_CDN_URL is not configured. Cannot download photo.')
+      }
       const mediaPath = photoUrl.replace(/^\/p\//, '/u/')
       fullUrl = cdnUrl + mediaPath
     }

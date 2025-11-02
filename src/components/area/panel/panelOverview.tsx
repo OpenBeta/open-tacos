@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ListItemEntity } from './listItem'
 import { BarChart, Bar, Cell, XAxis, Tooltip, ResponsiveContainer } from 'recharts'
-import { CategoricalChartState } from 'recharts/types/chart/types'
+import { CategoricalChartState } from 'recharts/types/chart/generateCategoricalChart'
 
 const CustomTooltip: React.FC<any> = (data: { label: string, payload: any[] }) => {
   let tags: Array<[string, number]> = []

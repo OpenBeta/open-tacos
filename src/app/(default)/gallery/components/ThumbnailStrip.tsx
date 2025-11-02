@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { MediaWithTags } from '@/js/types'
 
 interface ThumbnailStripProps {
@@ -17,18 +17,25 @@ export default function ThumbnailStrip ({
   uuid,
   entityType
 }: ThumbnailStripProps): JSX.Element {
+  const router = useRouter()
+
+  const handleThumbnailClick = (photoId: string): void => {
+    router.replace(`/gallery/${uuid}/modal/${photoId}?type=${entityType}`)
+  }
+
   return (
     <div className='mt-4'>
       <div className='flex gap-2 overflow-x-auto pb-2'>
         {photos.map((photo, idx) => (
-          <Link
+          <button
             key={photo.id}
-            href={`/gallery/${uuid}/modal/${photo.id}?type=${entityType}`}
+            onClick={() => handleThumbnailClick(photo.id)}
             className={`flex-shrink-0 transition-all rounded-lg overflow-hidden border-2 cursor-pointer ${
               idx === currentIndex
                 ? 'border-ob-primary ring-2 ring-ob-primary ring-opacity-40'
                 : 'border-base-300 hover:border-ob-primary'
             }`}
+            aria-label={`View photo ${idx + 1}`}
           >
             <Image
               src={photo.mediaUrl ?? ''}
@@ -38,7 +45,7 @@ export default function ThumbnailStrip ({
               className='object-cover w-20 h-20 pointer-events-none select-none'
               draggable={false}
             />
-          </Link>
+          </button>
         ))}
       </div>
     </div>

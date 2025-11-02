@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import type { MediaWithTags } from '@/js/types'
 
 interface PhotoNavButtonsProps {
@@ -22,27 +22,35 @@ export default function PhotoNavButtons ({
   entityType,
   basePath
 }: PhotoNavButtonsProps): JSX.Element {
+  const router = useRouter()
+
+  const handleNavigation = (photoId: string): void => {
+    router.replace(`${basePath}/${photoId}?type=${entityType}`)
+  }
+
   return (
     <div className='flex flex-col gap-3 pt-4 border-t border-base-300'>
       {(prevPhoto != null)
         ? (
-          <Link
-            href={`${basePath}/${prevPhoto.id}?type=${entityType}`}
+          <button
+            onClick={() => handleNavigation(prevPhoto.id)}
             className='w-full px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity text-center'
+            aria-label={`View previous photo (${currentIndex} of ${totalPhotos})`}
           >
             ← Previous
-          </Link>
+          </button>
           )
         : null}
 
       {(nextPhoto != null)
         ? (
-          <Link
-            href={`${basePath}/${nextPhoto.id}?type=${entityType}`}
+          <button
+            onClick={() => handleNavigation(nextPhoto.id)}
             className='w-full px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity text-center'
+            aria-label={`View next photo (${currentIndex + 2} of ${totalPhotos})`}
           >
             Next →
-          </Link>
+          </button>
           )
         : null}
     </div>
