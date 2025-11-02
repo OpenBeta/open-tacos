@@ -44,7 +44,8 @@ export const UpdateProfileForm: React.FC = () => {
   })
   const { handleSubmit, reset, formState: { isValid, isDirty, isSubmitting } } = form
 
-  const { getUserPublicProfileByUuid, updatePublicProfileCmd } = useUserProfileCmd({ accessToken: session?.data?.accessToken })
+  const accessToken = typeof session?.data?.accessToken === 'string' ? session.data.accessToken : undefined
+  const { getUserPublicProfileByUuid, updatePublicProfileCmd } = useUserProfileCmd({ accessToken })
 
   const userUuid = session.data?.user.metadata.uuid
 
@@ -90,7 +91,10 @@ export const UpdateProfileForm: React.FC = () => {
 
   useEffect(() => {
     if (session.status === 'unauthenticated') {
-      signIn('auth0').catch(() => {})
+      signIn('auth0').catch((error) => {
+        console.error('Failed to sign in:', error)
+        toast.error('Sign in failed. Please try again.')
+      })
     }
   }, [session.status])
 

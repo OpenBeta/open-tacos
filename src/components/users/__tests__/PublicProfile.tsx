@@ -11,7 +11,7 @@ jest.mock('next-auth/react', () => ({
   useSession: mockedUseSession
 }))
 
-jest.mock('@/components/media/BaseUploader.tsx', () => ({
+jest.mock('../../media/BaseUploader.tsx', () => ({
   __esModule: true,
   BaseProfilePhotoUploader: () => <button />
 }))
@@ -19,7 +19,7 @@ jest.mock('@/components/media/BaseUploader.tsx', () => ({
 // Mock import ticks button because we only care whether the button is there
 // and to avoid mocking GQL dependency.
 const ImportFromMtnProjMock = jest.fn()
-jest.mock('@/components/users/ImportFromMtnProj', () => {
+jest.mock('../ImportFromMtnProj', () => {
   return {
     __esModule: true,
     default: ImportFromMtnProjMock
@@ -37,7 +37,7 @@ const userProfile: Required<UserPublicProfile> = {
   website: 'https://example.com'
 }
 
-jest.mock('@/js/hooks/useUserProfileCmd', () => ({
+jest.mock('../../../js/hooks/useUserProfileCmd', () => ({
   __esModule: true,
   default: jest.fn(() => ({
     getUserPublicProfileByUuid: jest.fn().mockResolvedValue({
@@ -61,7 +61,7 @@ const mockAuth0UserMetadata = {
 let PublicProfile: typeof PublicProfileType
 beforeAll(async () => {
   // why async import?  see https://github.com/facebook/jest/issues/10025#issuecomment-716789840
-  const module = await import('@/components/users/PublicProfile')
+  const module = await import('../PublicProfile')
   PublicProfile = module.default
 })
 

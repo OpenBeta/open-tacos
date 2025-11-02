@@ -64,7 +64,8 @@ export const UsernameChangeForm: React.FC = () => {
   const session = useSession()
   const router = useRouter()
 
-  const { getUsernameById, updateUsername, doesUsernameExist } = useUserProfileCmd({ accessToken: session?.data?.accessToken })
+  const accessToken = typeof session?.data?.accessToken === 'string' ? session.data.accessToken : undefined
+  const { getUsernameById, updateUsername, doesUsernameExist } = useUserProfileCmd({ accessToken })
 
   const [isNewUser, setNewUser] = useState(false)
   const [initials, setInitials] = useState<Username | undefined>()
@@ -105,7 +106,10 @@ export const UsernameChangeForm: React.FC = () => {
 
   useEffect(() => {
     if (session.status === 'unauthenticated') {
-      signIn('auth0').catch(() => {})
+      signIn('auth0').catch((error) => {
+        console.error('Failed to sign in:', error)
+        toast.error('Sign in failed. Please try again.')
+      })
     }
   }, [session.status])
 
