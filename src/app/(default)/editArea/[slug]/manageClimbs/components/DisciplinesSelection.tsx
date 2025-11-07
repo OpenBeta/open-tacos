@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { UseFormReturn, useWatch } from 'react-hook-form'
+import { UseFormReturn, useWatch, FieldPath } from 'react-hook-form'
 import clx from 'classnames'
 import { getScale } from '@openbeta/sandbag'
 
@@ -22,30 +22,33 @@ interface FieldArrayInputProps {
  * When the climb name is not empty, at least one discipline must be selected.
  */
 export const DisciplinesSelection: React.FC<FieldArrayInputProps> = ({ formContext, index, gradeContext }) => {
-  const { setValue, setError, clearErrors, formState: { errors } } = formContext
-  const fieldName = `${CLIMB_ARRAY_FIELD_NAME}[${index}].disciplines`
+  const { setValue, setError, clearErrors, formState: { errors }, control } = formContext
 
-  const disciplines: Partial<ClimbDisciplineRecord> = useWatch({ name: fieldName })
-  const climbName: string = useWatch({ name: `${CLIMB_ARRAY_FIELD_NAME}[${index}].name` })
+  const disciplines = useWatch({
+    control,
+    name: `${CLIMB_ARRAY_FIELD_NAME}.${index}.disciplines` as FieldPath<AddClimbsFormData>
+  }) as Partial<ClimbDisciplineRecord>
 
-  const numberOfCheckedDisciplines = Object.values(disciplines).filter(el => el).length
+  const climbName = useWatch({
+    control,
+    name: `${CLIMB_ARRAY_FIELD_NAME}.${index}.name` as FieldPath<AddClimbsFormData>
+  }) as string
+
+  const numberOfCheckedDisciplines = Object.values(disciplines ?? {}).filter(el => el).length
 
   useEffect(() => {
     if (disciplines != null) {
       const hasDiscipline = Object.values(disciplines).some(el => el)
       if (hasDiscipline) {
-        // @ts-expect-error
-        clearErrors(fieldName)
+        clearErrors(`${CLIMB_ARRAY_FIELD_NAME}.${index}.disciplines` as FieldPath<AddClimbsFormData>)
       } else if (climbName != null && climbName.trim() !== '') {
-        // @ts-expect-error
-        setError(fieldName, { type: 'custom', message: 'Please select at least one discipline.' })
+        setError(`${CLIMB_ARRAY_FIELD_NAME}.${index}.disciplines` as FieldPath<AddClimbsFormData>, { type: 'custom', message: 'Please select at least one discipline.' })
       }
     }
-  }, [disciplines, climbName])
+  }, [disciplines, climbName, index, setError, clearErrors])
 
   const clearAll = (): void => {
-    // @ts-expect-error
-    setValue(fieldName, defaultDisciplines())
+    setValue(`${CLIMB_ARRAY_FIELD_NAME}.${index}.disciplines` as FieldPath<AddClimbsFormData>, defaultDisciplines())
   }
 
   const hasError = (errors?.climbList?.[index]?.disciplines ?? null) != null && (climbName?.trim() ?? '') !== ''
@@ -96,18 +99,18 @@ export const DisciplinesSelection: React.FC<FieldArrayInputProps> = ({ formConte
  * Checkbox for each discipline
  */
 const Checkbox: React.FC<{ label: string, discipline: keyof ClimbDisciplineRecord } & Omit<FieldArrayInputProps, 'gradeContext'>> = ({ label, index, discipline, formContext }) => {
-  const { register, watch } = formContext
-  const fieldName = `${CLIMB_ARRAY_FIELD_NAME}[${index}].disciplines.${discipline}` as keyof ClimbDisciplineRecord
+  const { register, control } = formContext
 
-  // @ts-expect-error
-  const checked = watch(fieldName) as boolean
+  const checked = useWatch({
+    control,
+    name: `${CLIMB_ARRAY_FIELD_NAME}.${index}.disciplines.${discipline}` as FieldPath<AddClimbsFormData>
+  }) as boolean
 
   return (
     <label className={clx('cursor-pointer rounded-btn border px-2.5 py-1.5 flex items-center gap-2', checked ? 'border-base-content/80' : '')}>
       <input
         type='checkbox' className='checkbox'
-        // @ts-expect-error
-        {...register(fieldName)}
+        {...register(`${CLIMB_ARRAY_FIELD_NAME}.${index}.disciplines.${discipline}` as FieldPath<AddClimbsFormData>)}
       />
       <span className='uppercase text-sm select-none'>{label}</span>
     </label>
@@ -121,17 +124,19 @@ const GradeInput: React.FC<FieldArrayInputProps> = ({ formContext, index, gradeC
   const [validationRules, setValidationRules] = useState<RulesType | undefined>()
   const [gradeScale, setGradeScale] = useState<ReturnType<typeof getScale>>()
 
-  const { watch, formState: { errors } } = formContext
+  const { control, formState: { errors } } = formContext
 
-  const fieldName = `${CLIMB_ARRAY_FIELD_NAME}[${index}].grade`
-  // @ts-expect-error
-  const disciplines = watch(`${CLIMB_ARRAY_FIELD_NAME}[${index}].disciplines`) as ClimbDisciplineRecord
+  const fieldName = `${CLIMB_ARRAY_FIELD_NAME}.${index}.grade` as FieldPath<AddClimbsFormData>
+  const disciplines = useWatch({
+    control,
+    name: `${CLIMB_ARRAY_FIELD_NAME}.${index}.disciplines` as FieldPath<AddClimbsFormData>
+  }) as ClimbDisciplineRecord
 
   useEffect(() => {
     const rules = getGradeValationRules(gradeContext, disciplines)
     setValidationRules(rules?.rules)
     setGradeScale(rules?.scale)
-  }, [JSON.stringify(disciplines)])
+  }, [gradeContext, disciplines])
 
   const disciplinesError = errors?.climbList?.[index]?.grade?.message as string
 
@@ -147,8 +152,7 @@ const GradeInput: React.FC<FieldArrayInputProps> = ({ formContext, index, gradeC
       </label>
       <BaseInput
         name={fieldName}
-        // @ts-expect-error
-        formContext={formContext}
+        formContext={formContext as unknown as UseFormReturn}
         registerOptions={validationRules}
       />
       <label className='label'>

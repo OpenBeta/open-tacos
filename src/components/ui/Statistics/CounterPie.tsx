@@ -27,6 +27,7 @@ const CounterPie = ({ total, forYou }: CounterPieProps): JSX.Element => {
           isAnimationActive={false}
         >
           <Cell key='total' fill='#D1D5DB' />
+          <Cell key='forYou' fill='#8BB191B3' />
         </Pie>
         <g>
           <text x='50%' y='50%' fontSize='1.25rem' textAnchor='middle' alignmentBaseline='middle' fill='#000000'>

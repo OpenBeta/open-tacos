@@ -1,0 +1,58 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
+import type { MediaWithTags } from '@/js/types'
+
+interface PhotoNavButtonsProps {
+  prevPhoto: MediaWithTags | null
+  nextPhoto: MediaWithTags | null
+  currentIndex: number
+  totalPhotos: number
+  uuid: string
+  entityType: 'area' | 'climb'
+  basePath: string // e.g., '/gallery/{uuid}' or '/gallery/{uuid}/modal'
+}
+
+export default function PhotoNavButtons ({
+  prevPhoto,
+  nextPhoto,
+  currentIndex,
+  totalPhotos,
+  uuid,
+  entityType,
+  basePath
+}: PhotoNavButtonsProps): JSX.Element {
+  const router = useRouter()
+
+  const handleNavigation = (photoId: string): void => {
+    router.replace(`${basePath}/${photoId}?type=${entityType}`)
+  }
+
+  return (
+    <div className='flex flex-col gap-3 pt-4 border-t border-base-300'>
+      {(prevPhoto != null)
+        ? (
+          <button
+            onClick={() => handleNavigation(prevPhoto.id)}
+            className='w-full px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity text-center'
+            aria-label={`View previous photo (${currentIndex} of ${totalPhotos})`}
+          >
+            ← Previous
+          </button>
+          )
+        : null}
+
+      {(nextPhoto != null)
+        ? (
+          <button
+            onClick={() => handleNavigation(nextPhoto.id)}
+            className='w-full px-4 py-2 bg-ob-primary text-white rounded hover:opacity-80 transition-opacity text-center'
+            aria-label={`View next photo (${currentIndex + 2} of ${totalPhotos})`}
+          >
+            Next →
+          </button>
+          )
+        : null}
+    </div>
+  )
+}

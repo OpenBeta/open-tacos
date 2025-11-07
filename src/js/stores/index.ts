@@ -250,16 +250,16 @@ export const cragFiltersStore = createStore('filters')(INITIAL_STATE, {
 
       const { trad, sport, boulder, tr } = get
 
-      if (trad() && ((byDiscipline?.trad?.total ?? 0) > 0 ?? false) &&
+      if (trad() && (byDiscipline?.trad?.total ?? 0) > 0 &&
       get.withinFreeRange(byDiscipline?.trad?.bands)) return true
 
-      if (sport() && ((byDiscipline?.sport?.total ?? 0) > 0 ?? false) &&
+      if (sport() && (byDiscipline?.sport?.total ?? 0) > 0 &&
       get.withinFreeRange(byDiscipline?.sport?.bands)) return true
 
-      if (boulder() && ((byDiscipline?.boulder?.total ?? 0) > 0 ?? false) &&
+      if (boulder() && (byDiscipline?.boulder?.total ?? 0) > 0 &&
         get.withinBoulderRange(byDiscipline?.boulder?.bands)) return true
 
-      if (tr() && ((byDiscipline?.tr?.total ?? 0) > 0 ?? false) &&
+      if (tr() && (byDiscipline?.tr?.total ?? 0) > 0 &&
       get.withinFreeRange(byDiscipline?.tr?.bands)) return true
 
       return false
@@ -271,22 +271,22 @@ export const cragFiltersStore = createStore('filters')(INITIAL_STATE, {
       let total = 0
       const { trad, sport, boulder, tr } = get
 
-      if (trad() && ((byDiscipline?.trad?.total ?? 0) > 0 ?? false) &&
+      if (trad() && (byDiscipline?.trad?.total ?? 0) > 0 &&
       get.withinFreeRange(byDiscipline?.trad?.bands)) {
         total += get.withinTradRangeCount(byDiscipline?.trad?.bands)
       }
 
-      if (sport() && ((byDiscipline?.sport?.total ?? 0) > 0 ?? false) &&
+      if (sport() && (byDiscipline?.sport?.total ?? 0) > 0 &&
       get.withinFreeRange(byDiscipline?.sport?.bands)) {
         total += get.withinSportRangeCount(byDiscipline?.sport?.bands)
       }
 
-      if (boulder() && ((byDiscipline?.boulder?.total ?? 0) > 0 ?? false) &&
+      if (boulder() && (byDiscipline?.boulder?.total ?? 0) > 0 &&
         get.withinBoulderRange(byDiscipline?.boulder?.bands)) {
         total += get.withinBoulderRangeCount(byDiscipline?.boulder?.bands)
       }
 
-      if (tr() && ((byDiscipline?.tr?.total ?? 0) > 0 ?? false) &&
+      if (tr() && (byDiscipline?.tr?.total ?? 0) > 0 &&
       get.withinFreeRange(byDiscipline?.tr?.bands)) {
         total += get.withinTrRangeCount(byDiscipline?.tr?.bands)
       }

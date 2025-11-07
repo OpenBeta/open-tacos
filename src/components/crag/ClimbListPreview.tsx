@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useController, useWatch } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { indexBy, Dictionary } from 'underscore'
 import clx from 'classnames'
 
@@ -16,9 +16,9 @@ interface Props {
  * Rendering the climb table.  The list is coming from react-hook-form context.
  */
 export const ClimbListPreview = ({ editable }: Props): JSX.Element => {
-  const { formState: { defaultValues, dirtyFields } } = useController<SummaryHTMLFormProps>({ name: 'climbList' })
+  const { watch, formState: { defaultValues, dirtyFields } } = useFormContext<SummaryHTMLFormProps>()
 
-  const watchList: EditableClimbType[] = useWatch({ name: 'climbList' })
+  const watchList = watch('climbList')
   const defaultList = (defaultValues?.climbList ?? []) as EditableClimbType[]
   const dirtyFieldsClimbList = dirtyFields?.climbList
   const toBeDeleted = findDeletedCandidates(defaultList, watchList)
