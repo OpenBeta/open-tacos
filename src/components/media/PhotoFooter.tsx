@@ -1,5 +1,6 @@
-import Link from 'next/link'
+'use client'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Transition } from '@headlessui/react'
 import { UserCircleIcon, TagIcon } from '@heroicons/react/24/outline'
 import { urlResolver, getAreaPageFriendlyUrl } from '@/js/utils'
@@ -31,22 +32,45 @@ export default function PhotoFooter ({
   )
 }
 
-const PhotographerLink = ({ uid }: { uid: string }): JSX.Element => (
-  <Link href={urlResolver(3, uid, '') ?? '#'} passHref>
-    <span className='absolute bottom-2 right-2 rounded-full bg-gray-100 bg-opacity-70 hover:bg-opacity-100 hover:ring p-1'>
+const PhotographerLink = ({ uid }: { uid: string }): JSX.Element => {
+  const router = useRouter()
+
+  const handleClick = (e: React.MouseEvent): void => {
+    e.preventDefault()
+    e.stopPropagation()
+    const url = urlResolver(3, uid, '')
+    if (url != null) {
+      router.push(url)
+    }
+  }
+
+  return (
+    <button
+      onClick={handleClick}
+      className='absolute bottom-2 right-2 rounded-full bg-gray-100 bg-opacity-70 hover:bg-opacity-100 hover:ring p-1'
+      aria-label={`View ${uid}'s profile`}
+    >
       <UserCircleIcon className='text-ob-dark w-6 h-6' />
-    </span>
-  </Link>
-)
+    </button>
+  )
+}
 
 /**
  * A component that shows all tags when clicked
  */
 const AllTagsLink: React.FC<{ entityTags: EntityTag[] }> = ({ entityTags }) => {
+  const router = useRouter()
   const [showTags, setShowTags] = useState(false)
 
-  const handleClick = (): void => {
+  const handleClick = (e: React.MouseEvent): void => {
+    e.stopPropagation()
     setShowTags(!showTags)
+  }
+
+  const handleTagClick = (e: React.MouseEvent, url: string): void => {
+    e.preventDefault()
+    e.stopPropagation()
+    router.push(url)
   }
 
   return (
@@ -86,12 +110,12 @@ const AllTagsLink: React.FC<{ entityTags: EntityTag[] }> = ({ entityTags }) => {
 
               return (
                 <li key={index} className='text-xs'>
-                  <Link
-                    href={tagUrl}
-                    className='text-ob-primary hover:opacity-80 hover:underline'
+                  <button
+                    onClick={(e) => handleTagClick(e, tagUrl)}
+                    className='text-ob-primary hover:opacity-80 hover:underline text-left'
                   >
                     {tagName}
-                  </Link>
+                  </button>
                 </li>
               )
             })}

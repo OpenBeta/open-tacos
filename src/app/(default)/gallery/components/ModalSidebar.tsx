@@ -86,7 +86,8 @@ export default function ModalSidebar ({
           </button>
         </div>
 
-        <div className='w-full'>
+        {/* Navigation buttons - hidden on mobile (arrows handle navigation) */}
+        <div className='hidden sm:block w-full'>
           <PhotoNavButtons
             prevPhoto={prevPhoto}
             nextPhoto={nextPhoto}

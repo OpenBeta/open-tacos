@@ -41,8 +41,8 @@ export default function ModalContent ({
         totalPhotos={photos.length}
       />
 
-      {/* Thumbnail strip overlay at bottom */}
-      <div className='absolute bottom-0 left-0 right-0 bg-black/60 px-4 py-2'>
+      {/* Thumbnail strip overlay at bottom - hidden on mobile */}
+      <div className='hidden sm:block absolute bottom-0 left-0 right-0 bg-black/60 px-4 py-2'>
         <ThumbnailStrip
           photos={photos}
           currentIndex={currentIndex}

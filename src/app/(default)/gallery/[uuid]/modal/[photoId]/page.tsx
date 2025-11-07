@@ -90,6 +90,13 @@ export default async function Modal ({ params, searchParams }: GalleryPageProps)
       <ModalWrapper
         imageContainer={imageContent}
         sidebarContainer={sidebarContent}
+        prevPhoto={prevPhoto}
+        nextPhoto={nextPhoto}
+        currentIndex={currentIndex}
+        totalPhotos={photos.length}
+        uuid={uuid}
+        entityType={entityType}
+        basePath={`/gallery/${uuid}/modal`}
       />
     </>
   )

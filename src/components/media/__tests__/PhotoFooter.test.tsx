@@ -3,6 +3,15 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import PhotoFooter from '../PhotoFooter'
 import { MediaWithTags, MediaFormat } from '@/js/types'
 
+const mockPush = jest.fn()
+
+// Mock next/navigation
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(() => ({
+    push: mockPush
+  }))
+}))
+
 const mockMedia: MediaWithTags = {
   id: 'photo-1',
   username: 'testuser',
@@ -16,6 +25,10 @@ const mockMedia: MediaWithTags = {
 }
 
 describe('<PhotoFooter />', () => {
+  beforeEach(() => {
+    mockPush.mockClear()
+  })
+
   it('renders without crashing when no tags', () => {
     render(<PhotoFooter mediaWithTags={mockMedia} hover={false} />)
   })
@@ -63,7 +76,7 @@ describe('<PhotoFooter />', () => {
     expect(tagsHeading).toBeInTheDocument()
   })
 
-  it('renders climb tag as link to climb page', () => {
+  it('renders climb tag as button that navigates to climb page', () => {
     const mediaWithTags: MediaWithTags = {
       ...mockMedia,
       entityTags: [
@@ -82,11 +95,13 @@ describe('<PhotoFooter />', () => {
     const tagButton = screen.getByRole('button', { name: /Show 1 tags/i })
     fireEvent.click(tagButton)
 
-    const link = screen.getByRole('link', { name: /Test Climb/ })
-    expect(link).toHaveAttribute('href', '/climb/climb-uuid-123')
+    const tagLink = screen.getByRole('button', { name: /Test Climb/ })
+    expect(tagLink).toBeInTheDocument()
+    fireEvent.click(tagLink)
+    expect(mockPush).toHaveBeenCalledWith('/climb/climb-uuid-123')
   })
 
-  it('renders area tag as link to area page', () => {
+  it('renders area tag as button that navigates to area page', () => {
     const mediaWithTags: MediaWithTags = {
       ...mockMedia,
       entityTags: [
@@ -104,8 +119,11 @@ describe('<PhotoFooter />', () => {
     const tagButton = screen.getByRole('button', { name: /Show 1 tags/i })
     fireEvent.click(tagButton)
 
-    const link = screen.getByRole('link', { name: /Test Area/ })
-    expect(link).toHaveAttribute('href', expect.stringContaining('/area/area-uuid-456'))
+    const tagLink = screen.getByRole('button', { name: /Test Area/ })
+    expect(tagLink).toBeInTheDocument()
+    fireEvent.click(tagLink)
+    expect(mockPush).toHaveBeenCalled()
+    expect(mockPush.mock.calls[0][0]).toContain('/area/area-uuid-456')
   })
 
   it('renders unsupported tag type as plain text', () => {
@@ -131,14 +149,16 @@ describe('<PhotoFooter />', () => {
     expect(textElement.tagName).not.toBe('A')
   })
 
-  it('displays photographer link when username exists', () => {
+  it('displays photographer button when username exists', () => {
     const mediaWithTags: MediaWithTags = {
       ...mockMedia,
       username: 'photographer-123'
     }
 
-    const { container } = render(<PhotoFooter mediaWithTags={mediaWithTags} hover />)
-    const photoLink = container.querySelector('a[href="/u/photographer-123"]')
-    expect(photoLink).toBeInTheDocument()
+    render(<PhotoFooter mediaWithTags={mediaWithTags} hover />)
+    const photoButton = screen.getByRole('button', { name: /View photographer-123's profile/ })
+    expect(photoButton).toBeInTheDocument()
+    fireEvent.click(photoButton)
+    expect(mockPush).toHaveBeenCalledWith('/u/photographer-123')
   })
 })

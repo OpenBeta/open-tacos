@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useMemo } from 'react'
-import { PencilSimple, MapTrifold, Image } from '@phosphor-icons/react/dist/ssr'
+import { PencilSimpleIcon, MapTrifoldIcon } from '@phosphor-icons/react/dist/ssr'
 import clz from 'classnames'
 
 import { SharePageURLButton } from '@/app/(default)/components/SharePageURLButton'
@@ -43,25 +43,17 @@ export const AreaAndClimbPageActions: React.FC<{ uuid: string, name: string, tar
     return href
   }, [navigateUuid, area])
 
-  const targetSlug = targetType === TagTargetType.area ? 'area' : 'climb'
-
   return (
-    <div className='flex items-center justify-between gap-2'>
-      <Link
-        href={`/gallery/${uuid}?type=${targetSlug}`}
-        className='btn btn-ghost'
-      >
-        <Image size={20} /> Gallery
-      </Link>
+    <div className='flex items-center justify-between gap-2 flex-wrap'>
       <Link href={url} className={clz('btn no-animation shadow-md', enableEdit ? 'btn-solid btn-accent' : 'btn-disabled')}>
-        <PencilSimple size={20} weight='duotone' /> {editLabel}
+        <PencilSimpleIcon size={20} weight='duotone' /> {editLabel}
       </Link>
       <UploadPhotoButton />
       <Link
         href={mapHref}
         className='btn no-animation'
       >
-        <MapTrifold size={20} className='hidden md:inline' /> Map
+        <MapTrifoldIcon size={20} className='hidden md:inline' /> Map
       </Link>
       <SharePageURLButton path={sharePath} name={name} />
     </div>

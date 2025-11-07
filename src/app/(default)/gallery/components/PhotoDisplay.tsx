@@ -22,6 +22,7 @@ export default function PhotoDisplay ({
           src={photo.mediaUrl}
           alt={`Photo ${currentIndex + 1} of ${totalPhotos} for ${name}`}
           fill
+          sizes='(max-width: 640px) 100vw, 70vw'
           className='object-contain'
           priority
         />

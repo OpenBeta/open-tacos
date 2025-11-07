@@ -109,6 +109,7 @@ export default async function GalleryPage ({
                     fill
                     className='object-cover group-hover:scale-105 transition-transform'
                     sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+                    priority={index < 4}
                   />
                   {mediaTitle != null && (
                     <div className='absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end'>

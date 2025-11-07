@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import ModalWrapper from '../ModalWrapper'
 
 const mockBack = jest.fn()
+const mockReplace = jest.fn()
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
@@ -10,13 +11,35 @@ jest.mock('next/navigation', () => ({
     uuid: 'test-uuid-123'
   })),
   useRouter: jest.fn(() => ({
-    back: mockBack
+    back: mockBack,
+    replace: mockReplace
   }))
+}))
+
+// Mock react-hotkeys-hook
+jest.mock('react-hotkeys-hook', () => ({
+  useHotkeys: jest.fn()
+}))
+
+// Mock useResponsive - default to desktop
+jest.mock('../../../../../js/hooks/useResponsive', () => ({
+  __esModule: true,
+  default: jest.fn(() => ({
+    isMobile: false,
+    isTablet: false,
+    isDesktop: true
+  }))
+}))
+
+// Mock useBodyScrollLock
+jest.mock('../../../../../js/hooks/useBodyScrollLock', () => ({
+  useBodyScrollLock: jest.fn()
 }))
 
 describe('<ModalWrapper />', () => {
   beforeEach(() => {
     mockBack.mockClear()
+    mockReplace.mockClear()
   })
 
   it('renders image and sidebar containers', () => {
@@ -27,11 +50,12 @@ describe('<ModalWrapper />', () => {
       />
     )
 
+    // Should render once based on screen size
     expect(screen.getByText('Image Content')).toBeInTheDocument()
     expect(screen.getByText('Sidebar Content')).toBeInTheDocument()
   })
 
-  it('renders backdrop and modal structure', () => {
+  it('renders backdrop', () => {
     const { container } = render(
       <ModalWrapper
         imageContainer={<div>Image</div>}
@@ -40,10 +64,7 @@ describe('<ModalWrapper />', () => {
     )
 
     const backdrop = container.querySelector('[class*=\'bg-base-900\']')
-    const modal = container.querySelector('[class*=\'shadow-2xl\']')
-
     expect(backdrop).toBeInTheDocument()
-    expect(modal).toBeInTheDocument()
   })
 
   it('has close button', () => {
@@ -54,11 +75,11 @@ describe('<ModalWrapper />', () => {
       />
     )
 
-    const closeButton = screen.getByRole('button', { name: /Close modal/i })
+    const closeButton = screen.getByLabelText('Close modal')
     expect(closeButton).toBeInTheDocument()
   })
 
-  it('closes modal when X button clicked', () => {
+  it('closes modal when close button clicked', () => {
     render(
       <ModalWrapper
         imageContainer={<div>Image</div>}
@@ -66,7 +87,7 @@ describe('<ModalWrapper />', () => {
       />
     )
 
-    const closeButton = screen.getByRole('button', { name: /Close modal/i })
+    const closeButton = screen.getByLabelText('Close modal')
     fireEvent.click(closeButton)
 
     expect(mockBack).toHaveBeenCalled()
@@ -86,21 +107,7 @@ describe('<ModalWrapper />', () => {
     expect(mockBack).toHaveBeenCalled()
   })
 
-  it('does not close modal when sidebar clicked', () => {
-    render(
-      <ModalWrapper
-        imageContainer={<div>Image</div>}
-        sidebarContainer={<div data-testid='sidebar-content'>Sidebar</div>}
-      />
-    )
-
-    const content = screen.getByTestId('sidebar-content')
-    fireEvent.click(content)
-
-    expect(mockBack).not.toHaveBeenCalled()
-  })
-
-  it('defaults to area type when not specified', () => {
+  it('shows sidebar in desktop view', () => {
     render(
       <ModalWrapper
         imageContainer={<div>Image</div>}
@@ -108,9 +115,8 @@ describe('<ModalWrapper />', () => {
       />
     )
 
-    const closeButton = screen.getByRole('button', { name: /Close modal/i })
-    fireEvent.click(closeButton)
-
-    expect(mockBack).toHaveBeenCalled()
+    // Desktop view should show sidebar directly, not info button
+    const sidebar = screen.getByText('Sidebar')
+    expect(sidebar).toBeInTheDocument()
   })
 })

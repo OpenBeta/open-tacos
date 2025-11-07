@@ -35,18 +35,28 @@ const PhotoMontage = ({ photoList: initialList, entityUuid, entityType = 'area' 
   if (isMobile) {
     const firstMedia = shuffledList[0]
     return (
-      <div className='block relative w-full h-60 fadeinEffect'>
-        <Link href={`/gallery/${entityUuid ?? ''}?type=${entityType}&photoId=${firstMedia.id}`} className='block w-full h-full'>
-          <Image
-            src={firstMedia.mediaUrl}
-            fill
-            sizes='25vw'
-            priority
-            alt=''
-            style={{ objectFit: 'cover' }}
-          />
-          <PhotoFooter mediaWithTags={firstMedia} hover />
-        </Link>
+      <div className='space-y-3'>
+        <div className='block relative w-full h-60 fadeinEffect'>
+          <Link href={`/gallery/${entityUuid ?? ''}?type=${entityType}&photoId=${firstMedia.id}`} className='block relative w-full h-full'>
+            <Image
+              src={firstMedia.mediaUrl}
+              fill
+              sizes='25vw'
+              priority
+              alt=''
+              style={{ objectFit: 'cover' }}
+            />
+            <PhotoFooter mediaWithTags={firstMedia} hover />
+          </Link>
+        </div>
+        {shuffledList.length > 1 && entityUuid != null && (
+          <Link
+            href={`/gallery/${entityUuid}?type=${entityType}`}
+            className='btn btn-sm btn-outline w-full'
+          >
+            <SquaresFour size={16} />See all {shuffledList.length} photos
+          </Link>
+        )}
       </div>
     )
   }
