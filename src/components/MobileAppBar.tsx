@@ -3,14 +3,14 @@ import { MouseEventHandler } from 'react'
 import Link from 'next/link'
 import { Popover } from '@headlessui/react'
 import { List, House as HouseIcon } from '@phosphor-icons/react/dist/ssr'
-import MobileNavBar from './ui/MobileNavBar'
-import OpenBetaLogo from '../assets/brand/openbeta-logo.svg'
+import MobileNavBar from '@/components/ui/MobileNavBar'
+import OpenBetaLogo from '@/assets/brand/openbeta-logo.svg'
 
-import MobileFilterBar from './finder/filters/MobileFilterBar'
-import { Button, ButtonVariant } from './ui/BaseButton'
+import MobileFilterBar from '@/components/finder/filters/MobileFilterBar'
+import { Button, ButtonVariant } from '@/components/ui/BaseButton'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import ProfileNavButton from './ProfileNavButton'
-import { XSearchMobile } from './search/XSearch'
+import ProfileNavButton from '@/components/ProfileNavButton'
+import { XSearchMobile } from '@/components/search/XSearch'
 
 interface HeaderProps {
   includeFilters: boolean
@@ -76,7 +76,7 @@ export const More = (): JSX.Element => {
             ? (
               <>
                 <a className='btn btn-ghost no-animation btn-block' href='/api/user/me?preview=1'><span className='pl-10'>Dashboard</span> <sup className='ml-2 badge badge-sm badge-primary'>Beta</sup></a>
-                <a className='btn btn-ghost no-animation btn-block' href='/account/editProfile'>Account settings</a>
+                <a className='btn btn-ghost no-animation btn-block' href='/account/edit-profile'>Account settings</a>
                 <a className='btn btn-ghost no-animation btn-block' href='/' onClick={logoutHandler}>Logout</a>
               </>)
             : <a className='btn btn-accent no-animation btn-block' href='/' onClick={signInHandler}>Login</a>}

@@ -1,15 +1,16 @@
+'use client'
 import { useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useSession, signIn } from 'next-auth/react'
-import { useRouter } from 'next/router'
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/navigation'
+import { QuestionIcon } from '@phosphor-icons/react/dist/ssr'
 import { toast } from 'react-toastify'
 import { formatDistanceToNowStrict } from 'date-fns'
 
-import { Input } from '../../ui/form'
-import { RulesType, Username } from '../../../js/types'
-import useUserProfileCmd from '../../../js/hooks/useUserProfileCmd'
-import Tooltip from '../../ui/Tooltip'
+import { Input } from '@/components/ui/form'
+import { RulesType, Username } from '@/js/types'
+import useUserProfileCmd from '@/js/hooks/useUserProfileCmd'
+import Tooltip from '@/components/ui/Tooltip'
 
 const specialWords = /openbeta|0penbeta|admin|adm1n|null|undefined/i
 const validUsername = /^[a-zA-Z0-9]+([_\\.-]?[a-zA-Z0-9])*$/i
@@ -63,10 +64,11 @@ export const UsernameChangeForm: React.FC = () => {
   const session = useSession()
   const router = useRouter()
 
-  const { getUsernameById, updateUsername, doesUsernameExist } = useUserProfileCmd({ accessToken: session?.data?.accessToken as string })
+  const accessToken = typeof session?.data?.accessToken === 'string' ? session.data.accessToken : undefined
+  const { getUsernameById, updateUsername, doesUsernameExist } = useUserProfileCmd({ accessToken })
 
   const [isNewUser, setNewUser] = useState(false)
-  const [initials, setInitials] = useState<any>()
+  const [initials, setInitials] = useState<Username | undefined>()
 
   const userUuid = session.data?.user.metadata.uuid
   const email = session.data?.user.email
@@ -104,23 +106,31 @@ export const UsernameChangeForm: React.FC = () => {
 
   useEffect(() => {
     if (session.status === 'unauthenticated') {
-      void signIn('auth0') // send users to Auth0 login screen
+      signIn('auth0').catch((error) => {
+        console.error('Failed to sign in:', error)
+        toast.error('Sign in failed. Please try again.')
+      })
     }
-  })
+  }, [session.status])
 
   useEffect(() => {
     if (isValidating && isDirty) {
-      void doesUsernameExist(username).then(value => {
-        if (value === 'error') {
+      doesUsernameExist(username)
+        .then(value => {
+          if (value === 'error') {
+            setError('username', { type: 'custom', message: 'Unexpected error.  Please notify support@openbeta.io' })
+            return
+          }
+          if (value) {
+            setError('username', { type: 'custom', message: 'Username already exists' })
+          } else {
+            clearErrors('username')
+          }
+        })
+        .catch((error) => {
+          console.error('Error checking username availability:', error)
           setError('username', { type: 'custom', message: 'Unexpected error.  Please notify support@openbeta.io' })
-          return
-        }
-        if (value) {
-          setError('username', { type: 'custom', message: 'Username already exists' })
-        } else {
-          clearErrors('username')
-        }
-      })
+        })
     }
   }, [isValidating, isDirty])
 
@@ -129,33 +139,38 @@ export const UsernameChangeForm: React.FC = () => {
     // Auth0 session data is refreshed every time we switch browser tabs.
     // Perform additional checks to prevent excessive API calls.
     if (uuid != null && uuid !== initials?.userUuid) {
-      void getUsernameById({ userUuid: uuid }).then(value => {
-        if (value == null) {
-          setNewUser(true)
-        } else {
-          setInitials({
-            userUuid: uuid,
-            username: value.username,
-            lastUpdated: value.lastUpdated
-          })
-          reset({ username: value.username })
-        }
-      })
+      getUsernameById({ userUuid: uuid })
+        .then(value => {
+          if (value == null) {
+            setNewUser(true)
+          } else {
+            setInitials({
+              userUuid: uuid,
+              username: value.username,
+              lastUpdated: value.lastUpdated
+            })
+            reset({ username: value.username })
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching username:', error)
+          toast.error('Failed to load username. Please refresh the page.')
+        })
     }
-  }, [session.data?.user])
+  }, [session.data?.user.metadata.uuid])
 
   const shouldDisableSumit = !isValid || isSubmitting || !isDirty || userUuid == null || isSubmitSuccessful
   return (
     <div className='w-full lg:max-w-md'>
       {isNewUser
-        ? (<h2>Create a username</h2>)
+        ? (<h2 className='text-2xl font-bold mb-8'>Create a username</h2>)
         : (
           <>
-            <h2>Change username</h2>
+            <h2 className='text-2xl font-bold mb-8'>Change username</h2>
           </>)}
       <FormProvider {...form}>
         {/* eslint-disable-next-line */}
-        <form onSubmit={handleSubmit(submitHandler)} className='mt-10 flex flex-col gap-y-6'>
+        <form onSubmit={handleSubmit(submitHandler)} className='flex flex-col gap-y-6'>
           {initials != null && <CurrentUsername {...initials} />}
           <Input
             name='username'
@@ -163,7 +178,7 @@ export const UsernameChangeForm: React.FC = () => {
             unitLabel='https://openbeta.io/u/'
             unitLabelPlacement='left'
             affixClassname='font-light bg-base-100 pl-1 pr-1 hidden md:inline-flex lg:text-lg'
-            className='pl-1 text-lg focus:ring-1 border-base-200 font-medium'
+            className='pl-1 text-lg font-medium'
             spellCheck={false}
             labelAlt={<TooltipComponent />}
             placeholder='coolbean2023'
@@ -173,8 +188,8 @@ export const UsernameChangeForm: React.FC = () => {
           <button
             type='submit'
             disabled={shouldDisableSumit}
-            className='mt-10 btn btn-primary btn-solid btn-block md:btn-wide'
-          >Save
+            className='mt-6 btn btn-primary btn-solid btn-block md:btn-wide'
+          >Save changes
           </button>
         </form>
       </FormProvider>
@@ -195,7 +210,7 @@ const TooltipComponent: React.FC = () => (
       </div>
     }
   >
-    <QuestionMarkCircleIcon className='text-info w-5 h-5' />
+    <QuestionIcon className='text-info w-5 h-5' />
   </Tooltip>
 )
 
@@ -203,7 +218,9 @@ const CurrentUsername: React.FC<Username> = ({ lastUpdated, username }) => (
   <div className='form-control'>
     <div className='label'>
       <span className='label-text font-semibold'>Current username</span>
-      {lastUpdated != null && <span className='label-text text-base-300/60 italic'>Updated {formatDistanceToNowStrict(lastUpdated, { addSuffix: true })}</span>}
+      {lastUpdated != null && <span className='label-text-alt text-base-300'>Updated {formatDistanceToNowStrict(lastUpdated, { addSuffix: true })}</span>}
     </div>
-    <div className='pl-1 font-light'>{username}</div>
+    <div className='input input-bordered bg-base-200 cursor-not-allowed font-medium text-base-content/70'>
+      {username}
+    </div>
   </div>)

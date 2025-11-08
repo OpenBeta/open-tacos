@@ -2,8 +2,8 @@ import ''
 import { render, screen, waitFor } from '@testing-library/react'
 import { v4 as uuidv4 } from 'uuid'
 
-import type PublicProfileType from '../PublicProfile'
-import { UserPublicProfile } from '../../../js/types/User'
+import type PublicProfileType from '@/components/users/PublicProfile'
+import { UserPublicProfile } from '@/js/types/User'
 
 const mockedUseSession = jest.fn()
 
@@ -77,7 +77,7 @@ test('Profile detail when the user is logged in.', async () => {
 
   expect(mockedUseSession).toBeCalled()
 
-  expect(await screen.findByRole('link', { name: /edit/i })).toHaveAttribute('href', '/account/editProfile')
+  expect(await screen.findByRole('link', { name: /edit/i })).toHaveAttribute('href', '/account/edit-profile')
 
   await waitFor(() => {
     expect(screen.queryByText(userProfile.displayName)).not.toBeNull()

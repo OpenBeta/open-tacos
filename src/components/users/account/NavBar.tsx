@@ -1,6 +1,7 @@
-import { useRouter } from 'next/router'
+'use client'
+import { usePathname } from 'next/navigation'
 import clx from 'classnames'
-import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr'
 import { signOut } from 'next-auth/react'
 import { MouseEventHandler } from 'react'
 
@@ -11,16 +12,16 @@ interface NavItem {
 
 const Links: NavItem[] = [
   {
-    path: '/account/editProfile',
+    path: '/account/edit-profile',
     label: 'Profile'
   },
   {
-    path: '/account/changeUsername',
+    path: '/account/change-username',
     label: 'Username'
   }
 ]
 export const NavBar: React.FC = () => {
-  const router = useRouter()
+  const pathname = usePathname()
   return (
     <div className='py-8'>
       <div className='mr-4'>
@@ -28,7 +29,7 @@ export const NavBar: React.FC = () => {
       </div>
       <div className='lg:ml-4 mt-12 flex flex-col gap-2 max-w-xs'>
         <div className='font-semibold text-base-content/70 text-sm'>ACCOUNT SETTINGS</div>
-        {Links.map(({ path, label }) => (<MenuItem key={path} path={path} label={label} pagePath={router.asPath} />))}
+        {Links.map(({ path, label }) => (<MenuItem key={path} path={path} label={label} pagePath={pathname} />))}
         <hr className='border-base-300' />
 
         <MenuItem
