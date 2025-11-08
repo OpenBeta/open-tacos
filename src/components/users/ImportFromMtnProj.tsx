@@ -1,7 +1,9 @@
+'use client'
 import { useState } from 'react'
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
 import { FolderArrowDownIcon } from '@heroicons/react/24/outline'
 import { signIn, useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import clx from 'classnames'
 
@@ -24,6 +26,7 @@ const pattern = /^https:\/\/www.mountainproject.com\/user\/\d{9}\/[a-zA-Z-]*/
 export function ImportFromMtnProj ({ username }: Props): JSX.Element {
   const [mpUID, setMPUID] = useState('')
   const session = useSession()
+  const router = useRouter()
   const [show, setShow] = useState<boolean>(false)
   const [showInput, setShowInput] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -56,7 +59,7 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
           )
 
           setTimeout(() => {
-            window.history.pushState({}, '', `/u2/${username}`)
+            router.push(`/u/${username}/ticks`)
           }, 2000)
           setShow(false)
         } else {

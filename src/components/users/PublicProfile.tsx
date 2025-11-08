@@ -75,7 +75,7 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
           </div>}
         <div className='mt-2 flex items-center gap-2'>
           {username != null &&
-            <Link href={`/u2/${username}`} className='text-xs'>
+            <Link href={`/u/${username}/ticks`} className='text-xs'>
 
               <div className='btn btn-outline btn-xs md:btn-sm'> View ticks</div>
 
