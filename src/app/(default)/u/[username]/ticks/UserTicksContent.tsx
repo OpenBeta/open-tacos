@@ -247,10 +247,10 @@ function TickCard ({ tick }: { tick: TickType }): React.JSX.Element {
 }
 
 function TickRow ({ tick }: { tick: TickType }): React.JSX.Element {
-  const { _id, name, climbId, dateClimbed, grade, style, attemptType } = tick
+  const { name, climbId, dateClimbed, grade, style, attemptType } = tick
 
   return (
-    <tr key={_id} className='hover'>
+    <tr className='hover'>
       <td>
         <Link href={`/climb/${climbId}`} className='link link-hover font-medium'>
           {name}

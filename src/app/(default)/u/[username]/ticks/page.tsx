@@ -24,10 +24,6 @@ export async function generateMetadata ({ params }: PageProps): Promise<Metadata
 export default async function UserTicksPage ({ params }: PageProps): Promise<React.JSX.Element> {
   const { username } = await getParams(params)
 
-  if (username == null) {
-    notFound()
-  }
-
   let ticks: TickType[] = []
   try {
     ticks = await getTicksByUser({ username })
