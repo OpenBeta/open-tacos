@@ -54,7 +54,7 @@ export default async function Page ({ params }: PageWithCatchAllUuidProps): Prom
       photoGallery={
         photoList.length === 0
           ? <UploadPhotoCTA />
-          : <PhotoMontage photoList={photoList} />
+          : <PhotoMontage photoList={photoList} entityUuid={uuid} entityType='area' />
       }
       pageActions={<AreaAndClimbPageActions name={areaName} uuid={uuid} targetType={TagTargetType.area} parentUuid={uuid} area={area} />}
       breadcrumbs={
