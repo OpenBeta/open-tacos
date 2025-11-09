@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import { TickType } from '@/js/types'
 import ImportFromMtnProj from '@/components/users/ImportFromMtnProj'
 import { ChartsSectionProps } from '@/components/logbook/ChartsSection'
-import { CalendarIcon, TrophyIcon, ListBulletsIcon, RowsIcon } from '@phosphor-icons/react/dist/ssr'
+import { CalendarIcon, TrophyIcon, ListBulletsIcon, RowsIcon } from '@phosphor-icons/react'
 
 interface UserTicksContentProps {
   username: string
