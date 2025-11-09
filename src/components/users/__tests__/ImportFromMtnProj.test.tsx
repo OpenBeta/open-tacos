@@ -8,8 +8,8 @@ jest.mock('next-auth/react', () => ({
   useSession: jest.fn(() => ({ status: 'authenticated' }))
 }))
 
-jest.mock('next/router', () => ({
-  useRouter: jest.fn(() => ({ replace: jest.fn() }))
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(() => ({ replace: jest.fn(), push: jest.fn() }))
 }))
 
 jest.mock('../../../js/graphql/Client', () => ({

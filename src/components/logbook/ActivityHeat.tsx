@@ -91,12 +91,17 @@ const ActivityHeat: React.FC<ChartsSectionProps> = ({ tickList }) => {
 
   const renderSquare = (props: unknown): JSX.Element => {
     const { cx, cy, xAxis, yAxis, z } = props as ScatterPointProps
+
+    // Guard against undefined xAxis/yAxis - use fallback values
+    const bandSizeX = xAxis?.bandSize ?? 20
+    const bandSizeY = yAxis?.bandSize ?? 20
+
     return (
       <rect
-        x={cx - xAxis.bandSize / 2 + 2}
-        y={cy - yAxis.bandSize / 2 + 2}
-        width={xAxis.bandSize - 4}
-        height={yAxis.bandSize - 4}
+        x={cx - bandSizeX / 2 + 2}
+        y={cy - bandSizeY / 2 + 2}
+        width={bandSizeX - 4}
+        height={bandSizeY - 4}
         fill={intensityFn(z)}
         fillOpacity={1}
         rx='3'

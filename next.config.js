@@ -81,6 +81,11 @@ module.exports = {
         permanent: true
       },
       {
+        source: '/u2/:username',
+        destination: '/u/:username/ticks',
+        permanent: true
+      },
+      {
         source: '/blog',
         destination: 'https://openbeta.substack.com/',
         permanent: false
