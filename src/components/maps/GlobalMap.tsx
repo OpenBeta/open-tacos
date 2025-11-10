@@ -2,17 +2,18 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Map, FullscreenControl, ScaleControl, NavigationControl, MapLayerMouseEvent, ViewStateChangeEvent, GeolocateControl } from 'react-map-gl/maplibre'
 import * as maplibregl from 'maplibre-gl'
+import type { StyleSpecification } from 'maplibre-gl'
 import { MapLibreEvent } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
-import { MAP_STYLES, type MapStyles } from './MapSelector'
-import { Drawer } from './TileHandlers/Drawer'
-import { HoverCard } from './TileHandlers/HoverCard'
-import { OBCustomLayers } from './OBCustomLayers'
-import { tileToFeature } from './utils'
-import { ActiveFeature, TileProps } from './TileTypes'
-import MapLayersSelector from './MapLayersSelector'
-import { MapToolbar } from './MapToolbar'
-import { SelectedFeature } from './AreaActiveMarker'
+import { MAP_STYLES, type MapStyles } from '@/components/maps/MapSelector'
+import { Drawer } from '@/components/maps/TileHandlers/Drawer'
+import { HoverCard } from '@/components/maps/TileHandlers/HoverCard'
+import { OBCustomLayers } from '@/components/maps/OBCustomLayers'
+import { tileToFeature } from '@/components/maps/utils'
+import { ActiveFeature, TileProps } from '@/components/maps/TileTypes'
+import MapLayersSelector from '@/components/maps/MapLayersSelector'
+import { MapToolbar } from '@/components/maps/MapToolbar'
+import { SelectedFeature } from '@/components/maps/AreaActiveMarker'
 import { useRouter } from 'next/navigation'
 import { useUrlParams } from '@/js/hooks/useUrlParams'
 
@@ -60,7 +61,8 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   const [hoverInfo, setHoverInfo] = useState<ActiveFeature | null>(null)
   const [mapInstance, setMapInstance] = useState<maplibregl.Map | null>(null)
   const [cursor, setCursor] = useState<string>('default')
-  const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.light.style)
+  const [mapStyle, setMapStyle] = useState<string | StyleSpecification>(MAP_STYLES.light.style)
+  const [currentMapType, setCurrentMapType] = useState<keyof MapStyles>('light')
   const [isSourceLoaded, setIsSourceLoaded] = useState(false)
   const [dataLayersDisplayState, setDataLayersDisplayState] = useState<DataLayersDisplayState>({
     areaBoundaries: false,
@@ -178,6 +180,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
   const updateMapLayer = (key: keyof MapStyles): void => {
     const style = MAP_STYLES[key]
     setMapStyle(style.style)
+    setCurrentMapType(key)
   }
 
   const findAreaById = useCallback((map: maplibregl.Map, areaId: string) => {
@@ -239,7 +242,7 @@ export const GlobalMap: React.FC<GlobalMapProps> = ({
         <MapLayersSelector emit={updateMapLayer} />
         <ScaleControl unit='imperial' style={{ marginBottom: 10 }} position='bottom-left' />
         <ScaleControl unit='metric' style={{ marginBottom: 0 }} position='bottom-left' />
-        <OBCustomLayers layersState={dataLayersDisplayState} />
+        <OBCustomLayers layersState={dataLayersDisplayState} mapType={currentMapType} />
         {showFullscreenControl && <FullscreenControl />}
         <NavigationControl showCompass={false} position='bottom-right' />
         <GeolocateControl

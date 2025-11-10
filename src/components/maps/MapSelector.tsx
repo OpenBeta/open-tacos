@@ -1,37 +1,43 @@
-const MAPTILER_KEY = process.env.NEXT_PUBLIC_MAPTILER_API_KEY !== undefined ? process.env.NEXT_PUBLIC_MAPTILER_API_KEY : 'key'
-export const MAP_STYLES: MapStyles = {
+import type { StyleSpecification } from 'maplibre-gl'
+import darkMatterStyle from '@/components/maps/styles/dark-matter.json'
+
+const satelliteStyle: StyleSpecification = {
+  version: 8,
+  glyphs: 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf',
+  sources: {
+    satellite: {
+      type: 'raster',
+      tiles: [
+        'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/GoogleMapsCompatible/{z}/{y}/{x}.jpg'
+      ],
+      tileSize: 256,
+      attribution: '<a target="_blank" href="https://s2maps.eu">Sentinel-2 cloudless - https://s2maps.eu</a> by <a href="https://eox.at/">EOX IT Services GmbH</a>'
+    }
+  },
+  layers: [{
+    id: 'satellite',
+    type: 'raster',
+    source: 'satellite'
+  }]
+}
+
+export const MAP_STYLES = {
   outdoor: {
-    style: `https://api.maptiler.com/maps/outdoor-v2/style.json?key=${MAPTILER_KEY}`,
-    imgUrl: 'https://docs.maptiler.com/sdk-js/api/map-styles/img/style-outdoor-v2.jpeg'
+    style: 'https://tiles.openfreemap.org/styles/liberty',
+    imgUrl: '/images/map-thumbnails/outdoor.webp'
   },
   light: {
-    style: `https://api.maptiler.com/maps/dataviz/style.json?key=${MAPTILER_KEY}`,
-    imgUrl: 'https://docs.maptiler.com/sdk-js/api/map-styles/img/style-bright-v2-pastel.jpeg'
+    style: 'https://tiles.openfreemap.org/styles/positron',
+    imgUrl: '/images/map-thumbnails/light.webp'
   },
   dark: {
-    style: `https://api.maptiler.com/maps/dataviz-dark/style.json?key=${MAPTILER_KEY}`,
-    imgUrl: 'https://docs.maptiler.com/sdk-js/api/map-styles/img/style-dataviz-dark.jpeg'
+    style: darkMatterStyle as StyleSpecification,
+    imgUrl: '/images/map-thumbnails/dark.webp'
   },
   satellite: {
-    style: `https://api.maptiler.com/maps/satellite/style.json?key=${MAPTILER_KEY}`,
-    imgUrl: 'https://docs.maptiler.com/sdk-js/api/map-styles/img/style-satellite.jpeg'
+    style: satelliteStyle,
+    imgUrl: '/images/map-thumbnails/satellite.webp'
   }
 }
-export interface MapStyles {
-  outdoor: {
-    style: string
-    imgUrl: string
-  }
-  light: {
-    style: string
-    imgUrl: string
-  }
-  dark: {
-    style: string
-    imgUrl: string
-  }
-  satellite: {
-    style: string
-    imgUrl: string
-  }
-}
+
+export type MapStyles = typeof MAP_STYLES
