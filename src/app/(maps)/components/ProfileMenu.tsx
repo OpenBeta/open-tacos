@@ -9,7 +9,7 @@ export const ProfileMenu: React.FC = () => {
     <SessionProvider>
       <div className='absolute right-4 top-4 z-40'>
         <nav className='flex items-center gap-2'>
-          <Link className='btn glass' href='/'><House size={18} />Home</Link>
+          <Link className='btn bg-base-200 hover:bg-base-300' href='/'><House size={18} />Home</Link>
           <AuthenticatedProfileNavButton isMobile={false} />
         </nav>
       </div>

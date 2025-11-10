@@ -1,6 +1,7 @@
 'use client'
 import React, { useCallback, useState, useRef, useEffect } from 'react'
 import { Map, ScaleControl, NavigationControl, Marker, GeolocateControl, GeolocateResultEvent, MapLayerMouseEvent, MapEvent } from 'react-map-gl/maplibre'
+import type { StyleSpecification } from 'maplibre-gl'
 import dynamic from 'next/dynamic'
 import { useDebouncedCallback } from 'use-debounce'
 import { MAP_STYLES, type MapStyles } from '@/components/maps/MapSelector'
@@ -34,7 +35,7 @@ export const CoordinatePickerMap: React.FC<CoordinatePickerMapProps> = ({ onCoor
   })
   const { initialCoordinate, newSelectedCoordinate } = coord
   const { isMobile } = useResponsive()
-  const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES.light.style)
+  const [mapStyle, setMapStyle] = useState<string | StyleSpecification>(MAP_STYLES.light.style)
   const triggerButtonRef = useRef<HTMLButtonElement>(null)
   const { watch, setValue } = useFormContext()
 

@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { lineString } from '@turf/helpers'
 import lineToPolygon from '@turf/line-to-polygon'
 
-import { AreaMetadataType, AreaType } from '../../js/types'
+import { AreaMetadataType, AreaType } from '@/js/types'
 import { GlobalMap } from './GlobalMap'
 
 type ChildArea = Pick<AreaType, 'uuid' | 'areaName'> & { metadata: Pick<AreaMetadataType, 'lat' | 'lng' | 'leaf' | 'bbox' | 'polygon'> }

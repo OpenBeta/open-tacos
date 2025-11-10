@@ -1,16 +1,22 @@
 import { Source, Layer } from 'react-map-gl'
-import { DataLayersDisplayState } from './GlobalMap'
+import { DataLayersDisplayState } from '@/components/maps/GlobalMap'
+import { type MapStyles } from '@/components/maps/MapSelector'
 
 interface OBCustomLayersProps {
   layersState: DataLayersDisplayState
+  mapType: keyof MapStyles
 }
 /**
  * OpenBeta custom map tiles.
  * - Crags: crag markers and labels
  * - Areas: polygon boundaries for areas
  */
-export const OBCustomLayers: React.FC<OBCustomLayersProps> = ({ layersState }) => {
+export const OBCustomLayers: React.FC<OBCustomLayersProps> = ({ layersState, mapType }) => {
   const { areaBoundaries, crags } = layersState
+
+  // Use high-contrast white text on dark/satellite maps
+  const isDarkMap = mapType === 'dark' || mapType === 'satellite'
+
   return (
     <>
       <Source
@@ -72,29 +78,71 @@ export const OBCustomLayers: React.FC<OBCustomLayersProps> = ({ layersState }) =
         attribution='© OpenBeta contributors'
       >
         <Layer
+          id='crag-markers' // can be any unique id. Must match the id in ReactMapGL.interactiveLayerIds
+          type='circle'
+          source-layer='crags' // layer name in the vector tileset
+          paint={{
+            'circle-radius': ['interpolate', ['linear'], ['zoom'], 6, 3, 18, 8],
+            'circle-color': ['match', ['string', ['get', 'media']], ['[]'], '#0c4a6e', '#881337'],
+            'circle-stroke-width': 1,
+            'circle-stroke-color': '#ffffff'
+          }}
+          layout={{
+            visibility: crags ? 'visible' : 'none'
+          }}
+        />
+        <Layer
           id='crag-name-labels' // can be any unique id. Must match the id in ReactMapGL.interactiveLayerIds
           type='symbol'
           source-layer='crags' // layer name in the vector tileset
           layout={{
-            'icon-anchor': 'center',
-            'text-field': ['get', 'name'],
-            'text-size': { stops: [[8, 10], [12, 12]] },
-            'text-font': ['Segoe UI', 'Roboto', 'Ubuntu', 'Helvetica Neue', 'Oxygen', 'Cantarell', 'sans-serif'],
+            'text-field': ['coalesce', ['get', 'name'], ['get', 'areaName']],
+            'text-size': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              8,
+              ['case',
+                ['<', ['length', ['get', 'ancestors']], 120], 19,
+                ['<', ['length', ['get', 'ancestors']], 200], 16,
+                ['<', ['length', ['get', 'ancestors']], 300], 14,
+                11
+              ],
+              12,
+              ['case',
+                ['<', ['length', ['get', 'ancestors']], 120], 21,
+                ['<', ['length', ['get', 'ancestors']], 200], 20,
+                ['<', ['length', ['get', 'ancestors']], 300], 16,
+                14
+              ]
+            ],
+            'text-font': ['Noto Sans Regular'],
             'text-variable-anchor': ['bottom', 'top', 'left', 'right'],
             'text-radial-offset': ['interpolate', ['linear'], ['zoom'], 16, 0.5],
             'text-optional': true,
-            'symbol-sort-key': ['match', ['string', ['get', 'media']], ['[]'], 1, 0],
-            'icon-image': 'circle-dot',
-            'icon-size': ['interpolate', ['linear'], ['zoom'], 6, 0.5, 18, 1],
+            'symbol-sort-key': ['length', ['get', 'ancestors']],
             visibility: crags ? 'visible' : 'none'
           }}
-          paint={{
-            'icon-color': ['match', ['string', ['get', 'media']], ['[]'], '#0c4a6e', '#881337'],
-            'text-halo-blur': 1,
-            'text-halo-width': 2,
-            'text-color': ['match', ['string', ['get', 'media']], ['[]'], '#0c4a6e', '#881337'],
-            'text-halo-color': '#f3f4f6'
-          }}
+          paint={isDarkMap
+            ? {
+                'text-halo-blur': 0.5,
+                'text-halo-width': 2,
+                'text-color': '#ffffff',
+                'text-halo-color': '#1a1a1a'
+              }
+            : mapType === 'light'
+              ? {
+                  'text-halo-blur': 0.5,
+                  'text-halo-width': 2.5,
+                  'text-color': ['match', ['string', ['get', 'media']], ['[]'], '#1e40af', '#be123c'],
+                  'text-halo-color': '#ffffff'
+                }
+              : {
+                  'text-halo-blur': 0.5,
+                  'text-halo-width': 2,
+                  'text-color': ['match', ['string', ['get', 'media']], ['[]'], '#0c4a6e', '#881337'],
+                  'text-halo-color': '#ffffff'
+                }}
         />
       </Source>
     </>

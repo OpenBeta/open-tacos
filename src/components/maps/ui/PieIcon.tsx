@@ -1,4 +1,4 @@
-import { COLOR_PALETTE_1 } from '../../colors'
+import { COLOR_PALETTE_1 } from '@/components/colors'
 
 export function getSingleAreaIcon (): string {
   return (

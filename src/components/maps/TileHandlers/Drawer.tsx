@@ -2,9 +2,9 @@ import { ReactNode } from 'react'
 import * as Popover from '@radix-ui/react-popover'
 
 import { Card } from '@/components/core/Card'
-import { ActiveFeature, CragFeatureProperties, CragGroupFeatureProps } from '../TileTypes'
-import { CragDrawerContent } from './CragContent'
-import { AreaDrawerContent } from './AreaContent'
+import { ActiveFeature, CragFeatureProperties, CragGroupFeatureProps } from '@/components/maps/TileTypes'
+import { CragDrawerContent } from '@/components/maps/TileHandlers/CragContent'
+import { AreaDrawerContent } from '@/components/maps/TileHandlers/AreaContent'
 
 /**
  * Side drawer panel

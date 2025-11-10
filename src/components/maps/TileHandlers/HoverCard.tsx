@@ -1,7 +1,7 @@
 import * as Popover from '@radix-ui/react-popover'
-import { Card } from '../../core/Card'
-import { ActiveFeature, CragFeatureProperties, CragGroupFeatureProps } from '../TileTypes'
-import { MiniCarousel } from '../CardGallery'
+import { Card } from '@/components/core/Card'
+import { ActiveFeature, CragFeatureProperties, CragGroupFeatureProps } from '@/components/maps/TileTypes'
+import { MiniCarousel } from '@/components/maps/CardGallery'
 import { AreaHoverCardContent } from './AreaContent'
 import { CragHoverCardContent } from './CragContent'
 

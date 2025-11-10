@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import { CragFeatureProperties, SimpleClimbType } from '../TileTypes'
+import { CragFeatureProperties, SimpleClimbType } from '@/components/maps/TileTypes'
 import { getAreaPageFriendlyUrl } from '@/js/utils'
 import { EntityIcon } from '@/app/(default)/editArea/[slug]/general/components/AreaItem'
 import { BaseDrawerContent } from './Drawer'
-import { MiniCarousel } from '../CardGallery'
+import { MiniCarousel } from '@/components/maps/CardGallery'
 import { SharePageURLButton } from '@/app/(default)/components/SharePageURLButton'
 import { usePathname } from 'next/navigation'
 

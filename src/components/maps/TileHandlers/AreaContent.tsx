@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import { CragGroupFeatureProps, SubArea } from '../TileTypes'
+import { CragGroupFeatureProps, SubArea } from '@/components/maps/TileTypes'
 import { getAreaPageFriendlyUrl } from '@/js/utils'
 import { EntityIcon } from '@/app/(default)/editArea/[slug]/general/components/AreaItem'
 import { BaseDrawerContent } from './Drawer'
-import { MiniCarousel } from '../CardGallery'
+import { MiniCarousel } from '@/components/maps/CardGallery'
 
 export const CUSTOM_CLASS = 'max-h-screen lg:w-[420px] rounded-none'
 

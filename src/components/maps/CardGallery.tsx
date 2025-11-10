@@ -2,8 +2,8 @@ import useEmblaCarousel from 'embla-carousel-react'
 import Image from 'next/image'
 import clx from 'classnames'
 
-import { usePrevNextButtons, PrevButton, NextButton } from '../carousel/useNextPrevButtons'
-import { MediaWithTagsInMapTile } from './TileTypes'
+import { usePrevNextButtons, PrevButton, NextButton } from '@/components/carousel/useNextPrevButtons'
+import { MediaWithTagsInMapTile } from '@/components/maps/TileTypes'
 
 export const CardGallery: React.FC<{ media: MediaWithTagsInMapTile[] }> = () => {
   return (
