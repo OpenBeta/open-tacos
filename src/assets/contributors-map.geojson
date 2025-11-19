@@ -344,6 +344,21 @@
           -73.13183477801395
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Xavier",
+        "githubId": "XavierReese",
+        "favoriteCrag": "f89cbfdd-035f-5dc7-8d30-38e5840291fd"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+            41.700214866889596, 
+            -86.2377105870322
+        ]
+      }
     }
   ]
 }
