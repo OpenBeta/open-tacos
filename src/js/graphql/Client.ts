@@ -32,7 +32,6 @@ const errorLink = onError(({ graphQLErrors, networkError, ...rest }) => {
 export const graphqlClient = new ApolloClient({
   link: from([errorLink, httpLinkPro]),
   cache: new InMemoryCache({
-    addTypename: true,
     typePolicies: {
       CragsNear: {
         keyFields: ['placeId', '_id']
