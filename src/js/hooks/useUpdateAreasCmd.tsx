@@ -66,42 +66,45 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
   const [updateAreaApi] = useMutation<{ updateArea: UpdateAreaApiReturnType }, UpdateOneAreaInputType>(
     MUTATION_UPDATE_AREA, {
       client: graphqlClient,
-      onCompleted: (data) => {
-        toast.info('Area updated successfully ✔️')
-        void invalidateAreaPageCache(data.updateArea.uuid)
-        if (onUpdateCompleted != null) onUpdateCompleted(data)
-      },
-      onError: (error) => {
-        toast.error(`Unexpected error: ${error.message}`)
-        if (onUpdateError != null) onUpdateError(error)
-      }
+      errorPolicy: 'none'
     }
   )
 
   const updateOneAreaCmd: UpdateOneAreaCmdType = async (input: UpdateOneAreaInputType) => {
-    await updateAreaApi({
-      variables: {
-        ...input,
-        uuid: areaId
-      },
-      context: {
-        headers: {
-          authorization: `Bearer ${accessToken}`
+    try {
+      const res = await updateAreaApi({
+        variables: {
+          ...input,
+          uuid: areaId
+        },
+        context: {
+          headers: {
+            authorization: `Bearer ${accessToken}`
+          }
         }
+      })
+
+      if (res.errors != null) {
+        toast.error(`Unexpected error: ${res.errors[0]?.message ?? 'Unknown error'}`)
+        if (onUpdateError != null) onUpdateError(res.errors)
+        return
       }
-    })
+
+      if (res.data != null) {
+        toast.info('Area updated successfully ✔️')
+        void invalidateAreaPageCache(res.data.updateArea.uuid)
+        if (onUpdateCompleted != null) onUpdateCompleted(res.data)
+      }
+    } catch (error) {
+      toast.error(`Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      if (onUpdateError != null) onUpdateError(error)
+    }
   }
 
   const [updateAreasSortingOrder] = useMutation<{ updateAreaSortingOrder: any }, { input: AreaSortingInput[] }>(
     MUTATION_UPDATE_AREAS_SORTING_ORDER, {
       client: graphqlClient,
-      onCompleted: (data) => {
-        void invalidateAreaPageCache(areaId)
-        toast.info('Areas sorting order updated successfully.')
-      },
-      onError: (error) => {
-        toast.error(`Unexpected error: ${error.message}`)
-      }
+      errorPolicy: 'none'
     }
   )
 
@@ -110,82 +113,114 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
       toast.info('Nothing to update')
       return
     }
-    await updateAreasSortingOrder({
-      variables: { input },
-      context: {
-        headers: {
-          authorization: `Bearer ${accessToken}`
+    try {
+      const res = await updateAreasSortingOrder({
+        variables: { input },
+        context: {
+          headers: {
+            authorization: `Bearer ${accessToken}`
+          }
         }
+      })
+
+      if (res.errors != null) {
+        toast.error(`Unexpected error: ${res.errors[0]?.message ?? 'Unknown error'}`)
+        return
       }
-    })
+
+      void invalidateAreaPageCache(areaId)
+      toast.info('Areas sorting order updated successfully.')
+    } catch (error) {
+      toast.error(`Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    }
   }
 
   const [addArea] = useMutation<{ addArea: AddAreaReturnType }, AddAreaProps>(
     MUTATION_ADD_AREA, {
       client: graphqlClient,
-      onCompleted: (data) => {
-        if (onAddCompleted != null) {
-          void onAddCompleted(data.addArea)
-        }
-        toast.info('Area added 🔥')
-
-        void invalidateAreaPageCache(areaId) // parent page
-        void invalidateAreaPageCache(data.addArea.uuid) // new page
-      },
-      onError: (error) => {
-        toast.error(`Unexpected error: ${error.message}`)
-        if (onAddError != null) {
-          onAddError(error)
-        }
-      }
+      errorPolicy: 'none'
     }
   )
 
   const addOneAreaCmd: AddOneAreCmdType = async ({ name, parentUuid, isBoulder, isLeaf }: AddAreaProps) => {
-    await addArea({
-      variables: {
-        name,
-        parentUuid,
-        ...(isBoulder != null && { isBoulder }),
-        ...(isLeaf != null && { isLeaf })
-      },
-      context: {
-        headers: {
-          authorization: `Bearer ${accessToken}`
+    try {
+      const res = await addArea({
+        variables: {
+          name,
+          parentUuid,
+          ...(isBoulder != null && { isBoulder }),
+          ...(isLeaf != null && { isLeaf })
+        },
+        context: {
+          headers: {
+            authorization: `Bearer ${accessToken}`
+          }
         }
+      })
+
+      if (res.errors != null) {
+        toast.error(`Unexpected error: ${res.errors[0]?.message ?? 'Unknown error'}`)
+        if (onAddError != null) {
+          onAddError(res.errors)
+        }
+        return
       }
-    })
+
+      if (res.data != null) {
+        if (onAddCompleted != null) {
+          void onAddCompleted(res.data.addArea)
+        }
+        toast.info('Area added 🔥')
+
+        void invalidateAreaPageCache(areaId) // parent page
+        void invalidateAreaPageCache(res.data.addArea.uuid) // new page
+      }
+    } catch (error) {
+      toast.error(`Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      if (onAddError != null) {
+        onAddError(error)
+      }
+    }
   }
 
   const [deleteOneArea] = useMutation<{ deleteOneArea: DeleteOneAreaReturnType }, DeleteOneAreaInputType>(
     MUTATION_REMOVE_AREA, {
       client: graphqlClient,
-      onCompleted: (data) => {
-        void invalidateAreaPageCache(areaId) // update parent page
-
-        if (onDeleteCompleted != null) {
-          onDeleteCompleted(data)
-        }
-      },
-      onError: (error) => {
-        toast.error(`Unexpected error: ${error.message}`)
-        if (onDeleteError != null) {
-          onDeleteError(error)
-        }
-      },
+      errorPolicy: 'none',
       fetchPolicy: 'no-cache'
     }
   )
 
   const deleteOneAreaCmd: DeleteOneAreaCmdType = async ({ uuid }) => {
-    await deleteOneArea({
-      variables: { uuid },
-      context: {
-        headers: {
-          authorization: `Bearer ${accessToken}`
+    try {
+      const res = await deleteOneArea({
+        variables: { uuid },
+        context: {
+          headers: {
+            authorization: `Bearer ${accessToken}`
+          }
         }
+      })
+
+      if (res.errors != null) {
+        toast.error(`Unexpected error: ${res.errors[0]?.message ?? 'Unknown error'}`)
+        if (onDeleteError != null) {
+          onDeleteError(res.errors)
+        }
+        return
       }
-    })
+
+      void invalidateAreaPageCache(areaId) // update parent page
+
+      if (onDeleteCompleted != null) {
+        onDeleteCompleted(res.data)
+      }
+    } catch (error) {
+      toast.error(`Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      if (onDeleteError != null) {
+        onDeleteError(error)
+      }
+    }
   }
 
   return { updateOneAreaCmd, addOneAreaCmd, deleteOneAreaCmd, getAreaByIdCmd, updateAreasSortingOrderCmd }
