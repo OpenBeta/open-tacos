@@ -1,16 +1,10 @@
 'use client'
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession, signIn } from 'next-auth/react'
 import { EnvelopeIcon, ArrowSmallRightIcon } from '@heroicons/react/24/outline'
 import { useRouter, useSearchParams } from 'next/navigation'
 import axios from 'axios'
-import useSWR from 'swr'
-
-interface TokenHelperType {
-  auth0UserId: string
-}
-
-const fetcher = async (url: string): Promise<TokenHelperType> => (await axios.get(url)).data
+import { toast } from 'react-toastify'
 
 export function VerifyEmailPendingContent (): React.JSX.Element {
   const session = useSession()
@@ -19,27 +13,23 @@ export function VerifyEmailPendingContent (): React.JSX.Element {
   const searchParams = useSearchParams()
   const token = searchParams.get('session_token')
 
-  // Memoize URL to avoid recalculation on every render
-  const url = useMemo(
-    () => `/api/user/emailVerification?token=${token ?? ''}`,
-    [token]
-  )
-
-  const { error } = useSWR<TokenHelperType>(token != null ? url : null, fetcher, { refreshInterval: 0 })
-
-  // Memoize handler
-  const onClickHandler = useCallback(async (): Promise<void> => {
-    if (error == null) {
-      setSending(true)
-      try {
-        await axios.post(url)
-        // Keep button disabled for 3s to prevent spam
-        await new Promise(resolve => setTimeout(resolve, 3000))
-      } finally {
-        setSending(false)
-      }
+  const onClickHandler = async (): Promise<void> => {
+    if (token == null) {
+      toast.error('Session expired. Please try logging in again.')
+      return
     }
-  }, [error, url])
+    setSending(true)
+    try {
+      await axios.post(`/api/user/emailVerification?token=${token}`)
+      toast.success('Verification email sent! Check your inbox.')
+      // Keep button disabled for 3s to prevent spam
+      await new Promise(resolve => setTimeout(resolve, 3000))
+    } catch {
+      toast.error('Failed to send verification email. Please try logging in again.')
+    } finally {
+      setSending(false)
+    }
+  }
 
   // Redirect if already authenticated (e.g., verified in another tab)
   useEffect(() => {
@@ -56,13 +46,13 @@ export function VerifyEmailPendingContent (): React.JSX.Element {
           <hr className='w-full py-1 border-base-300' />
           <div className='text-center'>Look for a verification email in your inbox. <strong>Don't forget to check your spam folder </strong>🙂</div>
           <div className='mt-4 flex flex-col gap-4 items-center w-full'>
-            {error == null &&
-              <button
-                disabled={sending}
-                className='btn btn-outline' onClick={() => { void onClickHandler() }}
-              >
-                Resend verification email
-              </button>}
+            <button
+              disabled={sending}
+              className='btn btn-outline'
+              onClick={() => { void onClickHandler() }}
+            >
+              {sending ? 'Sending...' : 'Resend verification email'}
+            </button>
             <button className='btn btn-ghost btn-sm text-sm text-base-300' onClick={() => { void signIn('auth0') }}>
               Already verified? Login <ArrowSmallRightIcon className='ml-2 w-5 h-5' />
             </button>
