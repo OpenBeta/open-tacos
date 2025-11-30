@@ -120,7 +120,7 @@ const UserTable = (): JSX.Element => {
         </div>
       </div>
       {error == null && userPage == null && <div>loading...</div>}
-      {error != null && <div>{error}</div>}
+      {error != null && <div className='text-error'>Error loading users. Please check your permissions.</div>}
       <table className='table-auto text-left text-sm'>
         <thead>
           <tr className=''>

@@ -1,16 +1,16 @@
-import React from 'react'
-import { NextPage } from 'next'
-import dynamic from 'next/dynamic'
+'use client'
 
-import Layout from '../../components/layout'
-import SeoTags from '../../components/SeoTags'
-import { LinkButton } from '../../components/ui/Button'
+import nextDynamic from 'next/dynamic'
+import Layout from '@/components/layout'
+import SeoTags from '@/components/SeoTags'
+import { LinkButton } from '@/components/ui/Button'
 
-interface UserHomeProps {
-  users: any[]
-}
+const DynamicUsers = nextDynamic(
+  async () => await import('@/components/basecamp/Users'),
+  { ssr: false }
+)
 
-const Users: NextPage<UserHomeProps> = () => {
+export default function UsersPage (): JSX.Element {
   return (
     <>
       <SeoTags
@@ -42,12 +42,5 @@ const Users: NextPage<UserHomeProps> = () => {
         </div>
       </Layout>
     </>
-
   )
 }
-
-export default Users
-
-const DynamicUsers = dynamic(async () => await import('../../components/basecamp/Users'), {
-  ssr: false
-})
