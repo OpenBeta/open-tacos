@@ -25,7 +25,8 @@ export async function GET (req: NextRequest): Promise<NextResponse> {
   try {
     await verify(req)
     return new NextResponse(null, { status: 200 })
-  } catch {
+  } catch (e) {
+    console.error('/api/user/emailVerification GET error:', e)
     return new NextResponse(null, { status: 503 })
   }
 }
@@ -36,7 +37,8 @@ export async function POST (req: NextRequest): Promise<NextResponse> {
     const auth0UserId = token.payload.sub
     await sendEmailVerification(auth0UserId)
     return new NextResponse(null, { status: 200 })
-  } catch {
+  } catch (e) {
+    console.error('/api/user/emailVerification POST error:', e)
     return new NextResponse(null, { status: 503 })
   }
 }
