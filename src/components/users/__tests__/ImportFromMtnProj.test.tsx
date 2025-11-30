@@ -27,7 +27,7 @@ jest.mock('react-toastify', () => ({
 describe('<ImportFromMtnProj />', () => {
   it('renders without crashing', () => {
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <ImportFromMtnProj username='testuser' />
       </MockedProvider>
     )
@@ -35,7 +35,7 @@ describe('<ImportFromMtnProj />', () => {
 
   it('renders modal on button click', async () => {
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <ImportFromMtnProj username='testuser' />
       </MockedProvider>
     )
