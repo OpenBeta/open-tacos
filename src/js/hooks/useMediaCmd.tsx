@@ -53,7 +53,6 @@ export default function useMediaCmd (): UseMediaCmdReturn {
     QUERY_USER_MEDIA, {
       client: graphqlClient,
       errorPolicy: 'none',
-      onError: error => toast.error(error.message),
       fetchPolicy: 'network-only'
     }
   )
@@ -67,6 +66,10 @@ export default function useMediaCmd (): UseMediaCmdReturn {
           after
         }
       })
+      if (res.error != null) {
+        toast.error(res.error.message)
+        return null
+      }
       return res.data?.getUserMediaPagination.mediaConnection ?? null
     } catch {
       return null
@@ -75,8 +78,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
 
   const [getMediaByIdGGL] = useLazyQuery<{ media: MediaWithTags }, { id: string }>(QUERY_MEDIA_BY_ID, {
     client: graphqlClient,
-    fetchPolicy: 'network-only',
-    onError: () => toast.error('Unexpected error.  Please try again.')
+    fetchPolicy: 'network-only'
   })
 
   /**
@@ -87,6 +89,10 @@ export default function useMediaCmd (): UseMediaCmdReturn {
   const getMediaById: GetMediaByIdCmd = async (id) => {
     try {
       const res = await getMediaByIdGGL({ variables: { id } })
+      if (res.error != null) {
+        toast.error('Unexpected error. Please try again.')
+        return null
+      }
       return res.data?.media ?? null
     } catch {
       return null
@@ -96,32 +102,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
   const [addMediaObjects] = useMutation<AddMediaObjectsReturn, AddNewMediaObjectsArgs>(
     MUTATION_ADD_MEDIA_OBJECTS, {
       client: graphqlClient,
-      errorPolicy: 'none',
-      onError: console.error,
-      onCompleted: (data) => {
-        /**
-         * Now update the data store to trigger UserGallery re-rendering.
-         */
-        data.addMediaObjects.forEach(media => {
-          void getMediaById(media.id)
-          addNewMediaToUserGallery({
-            edges: [
-              {
-                node: media,
-                /**
-                 * We don't care about setting cursor because newer images are added to the front
-                 * of the list.
-                 */
-                cursor: ''
-              }
-            ],
-            pageInfo: {
-              hasNextPage: true,
-              endCursor: '' // not supported
-            }
-          })
-        })
-      }
+      errorPolicy: 'none'
     }
   )
 
@@ -132,14 +113,35 @@ export default function useMediaCmd (): UseMediaCmdReturn {
       },
       context: apolloClientContext(jwtToken)
     })
+    if (res.errors != null) {
+      console.error(res.errors)
+      return null
+    }
+    if (res.data != null) {
+      // Update the data store to trigger UserGallery re-rendering
+      res.data.addMediaObjects.forEach(media => {
+        void getMediaById(media.id)
+        addNewMediaToUserGallery({
+          edges: [
+            {
+              node: media,
+              cursor: ''
+            }
+          ],
+          pageInfo: {
+            hasNextPage: true,
+            endCursor: ''
+          }
+        })
+      })
+    }
     return res.data?.addMediaObjects ?? null
   }
 
   const [deleteOneMediaObject] = useMutation<DeleteOneMediaObjectReturn, DeleteOneMediaObjectArgs>(
     MUTATION_DELETE_ONE_MEDIA_OBJECT, {
       client: graphqlClient,
-      errorPolicy: 'none',
-      onError: console.error
+      errorPolicy: 'none'
     })
 
   /**
@@ -171,11 +173,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
   const [addEntityTagGQL] = useMutation<AddEntityTagMutationReturn, AddEntityTagProps>(
     MUTATION_ADD_ENTITY_TAG, {
       client: graphqlClient,
-      errorPolicy: 'none',
-      onError: error => toast.error(error.message),
-      onCompleted: () => {
-        toast.success('Tag added 🎉')
-      }
+      errorPolicy: 'none'
     }
   )
 
@@ -189,6 +187,13 @@ export default function useMediaCmd (): UseMediaCmdReturn {
         variables: args,
         context: apolloClientContext(jwtToken)
       })
+
+      if (res.errors != null) {
+        toast.error(res.errors[0]?.message ?? 'Unexpected error')
+        return [null, null]
+      }
+
+      toast.success('Tag added 🎉')
 
       // refetch the media object to update local cache
       const mediaRes = await getMediaById(mediaId)
@@ -208,11 +213,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
 
   const [removeEntityTagGQL] = useMutation<RemoveEntityTagMutationReturn, RemoveEntityTagMutationProps>(
     MUTATION_REMOVE_ENTITY_TAG, {
-      client: graphqlClient,
-      onCompleted: () => toast.success('Tag removed.'),
-      onError: () => {
-        toast.error(<span>Error deleting tag.  <button className='btn btn-xs' onClick={() => window.location.reload()}>Refresh page</button> the browser</span>)
-      }
+      client: graphqlClient
     }
   )
 
@@ -230,8 +231,12 @@ export default function useMediaCmd (): UseMediaCmdReturn {
       })
 
       if (res.errors != null) {
-        throw new Error('Unexpected API error.')
+        toast.error(<span>Error deleting tag. <button className='btn btn-xs' onClick={() => window.location.reload()}>Refresh page</button></span>)
+        return [false, null]
       }
+
+      toast.success('Tag removed.')
+
       // refetch the media object to update local cache
       const mediaRes = await getMediaById(mediaId)
 
@@ -244,6 +249,7 @@ export default function useMediaCmd (): UseMediaCmdReturn {
 
       return [res.data?.removeEntityTag ?? false, mediaRes]
     } catch {
+      toast.error(<span>Error deleting tag. <button className='btn btn-xs' onClick={() => window.location.reload()}>Refresh page</button></span>)
       return [false, null]
     }
   }
