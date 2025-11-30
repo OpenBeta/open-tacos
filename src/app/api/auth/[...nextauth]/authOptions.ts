@@ -2,8 +2,8 @@ import axios from 'axios'
 import type { NextAuthOptions } from 'next-auth'
 import Auth0Provider from 'next-auth/providers/auth0'
 
-import { AUTH_CONFIG_SERVER } from '../../../../Config'
-import { IUserMetadata, UserRole } from '../../../../js/types/User'
+import { AUTH_CONFIG_SERVER } from '@/Config'
+import { IUserMetadata, UserRole } from '@/js/types/User'
 import { initializeUserInDB } from '@/js/auth/initializeUserInDb'
 
 const CustomClaimsNS = 'https://tacos.openbeta.io/'
