@@ -45,7 +45,7 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
   const [addOrganization] = useMutation<{ addOrganization: OrganizationType }, { input: AddOrganizationProps }>(
     MUTATION_ADD_ORGANIZATION, {
       client: graphqlClient,
-      onError: (error) => toast.error(`Unexpected error: ${error.message}`),
+      errorPolicy: 'none',
       refetchQueries: [{
         query: QUERY_ORGANIZATIONS,
         variables: {
@@ -58,7 +58,7 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
   const [updateOrganization] = useMutation<{ updateOrganization: OrganizationType }, { input: UpdateOrganizationProps }>(
     MUTATION_UPDATE_ORGANIZATION, {
       client: graphqlClient,
-      onError: (error) => toast.error(`Unexpected error: ${error.message}`),
+      errorPolicy: 'none',
       refetchQueries: [{
         query: QUERY_ORGANIZATIONS,
         variables: {
@@ -119,34 +119,46 @@ export default function OrganizationForm ({ existingOrg, onClose }: Organization
       ...(dirtyFields?.hardwareReportLink === true && { hardwareReportLink }),
       ...(dirtyFields?.description === true && { description })
     }
-    if (existingOrg == null) {
-      const input: AddOrganizationProps = {
-        orgType,
-        ...dirtyEditableFields
-      }
-      await addOrganization({
-        variables: { input },
-        context: {
-          headers: {
-            authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
-          }
+    try {
+      if (existingOrg == null) {
+        const input: AddOrganizationProps = {
+          orgType,
+          ...dirtyEditableFields
         }
-      })
-    } else {
-      const input: UpdateOrganizationProps = {
-        orgId: existingOrg.orgId,
-        ...dirtyEditableFields
-      }
-      await updateOrganization({
-        variables: { input },
-        context: {
-          headers: {
-            authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
+        const res = await addOrganization({
+          variables: { input },
+          context: {
+            headers: {
+              authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
+            }
           }
+        })
+        if (res.errors != null) {
+          toast.error(`Unexpected error: ${res.errors[0]?.message ?? 'Unknown error'}`)
+          return
         }
-      })
+      } else {
+        const input: UpdateOrganizationProps = {
+          orgId: existingOrg.orgId,
+          ...dirtyEditableFields
+        }
+        const res = await updateOrganization({
+          variables: { input },
+          context: {
+            headers: {
+              authorization: `Bearer ${session?.data?.accessToken as string ?? ''}`
+            }
+          }
+        })
+        if (res.errors != null) {
+          toast.error(`Unexpected error: ${res.errors[0]?.message ?? 'Unknown error'}`)
+          return
+        }
+      }
+      onClose()
+    } catch (error) {
+      toast.error(`Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
-    onClose()
   }
 
   return (

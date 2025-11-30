@@ -34,10 +34,38 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
   const [updateClimbsApi] = useMutation<{ updateClimbs: string[] }, { input: UpdateClimbsInput }>(
     MUTATION_UPDATE_CLIMBS, {
       client: graphqlClient,
+      errorPolicy: 'none'
+    }
+  )
 
-      onCompleted: (returnValue) => {
+  const updateClimbCmd: UpdateClimbCmdType = async (input) => {
+    if (input.changes.length === 0) {
+      toast('Nothing to submit.  Please check your input.')
+      return
+    }
+    try {
+      const res = await updateClimbsApi({
+        variables: {
+          input
+        },
+        context: {
+          headers: {
+            authorization: `Bearer ${accessToken ?? ''}`
+          }
+        }
+      })
+
+      if (res.errors != null) {
+        toast.error(`Climb update error: ${res.errors[0]?.message ?? 'Unknown error'}`)
+        if (onUpdateError != null) {
+          onUpdateError(res.errors)
+        }
+        return
+      }
+
+      if (res.data != null) {
         // Trigger Next to build newly create climb pages
-        const { updateClimbs } = returnValue
+        const { updateClimbs } = res.data
         const idList = Array.isArray(updateClimbs) ? updateClimbs : []
 
         idList.forEach(climbId => {
@@ -50,34 +78,15 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
         toast('Climbs updated ✨')
 
         if (onUpdateCompleted != null) {
-          onUpdateCompleted(returnValue)
-        }
-      },
-
-      onError: (error) => {
-        toast.error(`Climb update error: ${error.message}`)
-        if (onUpdateError != null) {
-          onUpdateError(error)
+          onUpdateCompleted(res.data)
         }
       }
-    }
-  )
-
-  const updateClimbCmd: UpdateClimbCmdType = async (input) => {
-    if (input.changes.length === 0) {
-      toast('Nothing to submit.  Please check your input.')
-      return
-    }
-    await updateClimbsApi({
-      variables: {
-        input
-      },
-      context: {
-        headers: {
-          authorization: `Bearer ${accessToken ?? ''}`
-        }
+    } catch (error) {
+      toast.error(`Climb update error: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      if (onUpdateError != null) {
+        onUpdateError(error)
       }
-    })
+    }
   }
 
   /**
@@ -86,41 +95,55 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
   const [deleteClimbsApi] = useMutation<{ deleteClimbsApi: number }, { input: DeleteManyClimbsInputType }>(
     MUTATION_DELETE_CLIMBS, {
       client: graphqlClient,
-      onCompleted: (data) => {
-        void invalidateAreaPageCache(parentId)
-        toast('Climbs deleted ✔️')
-        if (onDeleteCompleted != null) {
-          onDeleteCompleted(data)
-        }
-      },
-      onError: (error) => {
-        toast.error(`Climb delete error: ${error.message}`)
-        if (onDeleteError != null) {
-          onDeleteError(error)
-        }
-      }
+      errorPolicy: 'none'
     }
   )
 
   const deleteClimbsCmd: DeleteClimbsCmdType = async (idList) => {
-    const rs = await deleteClimbsApi({
-      variables: {
-        input: {
-          parentId,
-          idList
+    try {
+      const rs = await deleteClimbsApi({
+        variables: {
+          input: {
+            parentId,
+            idList
+          }
+        },
+        context: {
+          headers: {
+            authorization: `Bearer ${accessToken ?? ''}`
+          }
         }
-      },
-      context: {
-        headers: {
-          authorization: `Bearer ${accessToken ?? ''}`
-        }
-      }
-    })
+      })
 
-    if (rs.data == null) {
+      if (rs.errors != null) {
+        toast.error(`Climb delete error: ${rs.errors[0]?.message ?? 'Unknown error'}`)
+        if (onDeleteError != null) {
+          onDeleteError(rs.errors)
+        }
+        throw new GraphQLError('Error running deleteClimbsApi()')
+      }
+
+      if (rs.data == null) {
+        throw new GraphQLError('Error running deleteClimbsApi()')
+      }
+
+      void invalidateAreaPageCache(parentId)
+      toast('Climbs deleted ✔️')
+      if (onDeleteCompleted != null) {
+        onDeleteCompleted(rs.data)
+      }
+
+      return rs.data.deleteClimbsApi
+    } catch (error) {
+      if (error instanceof GraphQLError) {
+        throw error
+      }
+      toast.error(`Climb delete error: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      if (onDeleteError != null) {
+        onDeleteError(error)
+      }
       throw new GraphQLError('Error running deleteClimbsApi()')
     }
-    return rs.data.deleteClimbsApi
   }
 
   return { updateClimbCmd, deleteClimbsCmd }
