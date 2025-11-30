@@ -3,19 +3,19 @@
  * However, it does not actually log out of auth0. Therefore, after logging out and then in the user will automatically be logged in again.
  * The default user experience here could be ok for providers such as facebook/google/etc but we want users to be able to log in with another account.
  */
-import { NextApiHandler } from 'next'
+import { NextRequest, NextResponse } from 'next/server'
 
 const auth0Domain = process.env.AUTH0_DOMAIN ?? ''
 const auth0ClientId = process.env.AUTH0_CLIENT_ID ?? ''
 
-const handler: NextApiHandler = (req, res): void => {
+export async function GET (req: NextRequest): Promise<NextResponse> {
   const clientIdParam = `client_id=${auth0ClientId}`
-  if (req.headers.referer == null) {
-    res.redirect(`${auth0Domain}/v2/logout?${clientIdParam}`)
+  const referer = req.headers.get('referer')
+
+  if (referer == null) {
+    return NextResponse.redirect(`${auth0Domain}/v2/logout?${clientIdParam}`)
   } else {
-    const returnTo = new URL(req.headers.referer).origin
-    res.redirect(`${auth0Domain}/v2/logout?returnTo=${encodeURIComponent(returnTo)}&${clientIdParam}`)
+    const returnTo = new URL(referer).origin
+    return NextResponse.redirect(`${auth0Domain}/v2/logout?returnTo=${encodeURIComponent(returnTo)}&${clientIdParam}`)
   }
 }
-
-export default handler
