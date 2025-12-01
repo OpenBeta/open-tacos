@@ -1,5 +1,4 @@
 import { CacheHandler } from '@neshca/cache-handler'
-import createLruHandler from '@neshca/cache-handler/local-lru'
 import createRedisHandler from '@neshca/cache-handler/redis-strings'
 import { createClient } from 'redis'
 
@@ -46,10 +45,8 @@ CacheHandler.onCreation(async () => {
     }
   }
 
-  const localHandler = createLruHandler()
-
   return {
-    handlers: [redisHandler, localHandler]
+    handlers: [redisHandler].filter(Boolean)
   }
 })
 
