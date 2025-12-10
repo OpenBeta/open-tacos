@@ -10,7 +10,7 @@ import { Volunteers } from './components/Volunteers'
 import { RecentContributionsMap } from './components/recent/RecentContributionsMap'
 import { ChangesetType } from '@/js/types'
 
-export const revalidate = 3600 // 1 hour
+export const dynamic = 'force-dynamic' // Don't block builds on API failures
 
 /**
  * Root home page
