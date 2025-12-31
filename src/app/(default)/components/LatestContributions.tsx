@@ -2,19 +2,21 @@ import { ReactNode } from 'react'
 import Link from 'next/link'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
-import { getChangeHistoryServerSide } from '@/js/graphql/contribAPI'
-import { ChangesetCard } from '@/components/edit/RecentChangeHistory'
+// Temporarily disabled to test build - this fetches 6MB of data
+// import { getChangeHistoryServerSide } from '@/js/graphql/contribAPI'
+// import { ChangesetCard } from '@/components/edit/RecentChangeHistory'
 
 /**
  * Show most recent contributions
  */
 export const LatestContributions: React.FC = async () => {
-  const history = await getChangeHistoryServerSide()
+  // Temporarily disabled - fetches 6MB history just to show 10 items
+  // const history = await getChangeHistoryServerSide()
   return (
     <Container>
-      {history.splice(0, 10).map(changetset =>
-        <ChangesetCard key={changetset.id} changeset={changetset} />
-      )}
+      <div className='text-center text-base-content/60 py-8'>
+        Latest contributions temporarily disabled
+      </div>
     </Container>
   )
 }
