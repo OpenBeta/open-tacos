@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_MEDIA_WITH_TAGS } from './gql/tags'
 import { getClient } from './ServerClient'
 
 import { AreaType } from '../types'
@@ -10,7 +9,6 @@ import { AreaType } from '../types'
  * - Get high density areas in the US
  */
 const query = gql`
-  ${FRAGMENT_MEDIA_WITH_TAGS}
   query UsaAreas( $filter: Filter) {
     area(uuid: "1db1e8ba-a40e-587c-88a4-64f5ea814b8e") {
       totalClimbs
@@ -58,9 +56,6 @@ const query = gql`
         lat
         lng
         areaId
-      }
-      media {
-         ... MediaWithTagsFields
       }
     }
   }`
