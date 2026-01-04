@@ -14,9 +14,8 @@ test('Card renders a header and a body', async () => {
         <Image
           src={imageURL}
           alt=''
-          objectFit='cover'
-          objectPosition='center'
-          layout='fill'
+          fill
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
         />
       }
       header='Some Header Content'

@@ -27,7 +27,7 @@ export default function ResponsiveImage ({ mediaUrl, isHero = true, isSquare = f
         fill
         sizes={sizes}
         priority={isHero}
-        onLoadingComplete={() => setLoading(false)}
+        onLoad={() => setLoading(false)}
         style={{
           objectFit: isSquare ? 'cover' : 'contain'
         }}
