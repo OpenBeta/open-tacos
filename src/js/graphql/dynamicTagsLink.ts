@@ -10,9 +10,10 @@ export const dynamicTagsLink = new ApolloLink((operation, forward) => {
 
   // If dynamicTag exists, update the operation context
   if (dynamicTag != null) {
-    operation.setContext(({ headers = {} }) => ({
+    operation.setContext(({ headers = {}, fetchOptions = {} }) => ({
       headers,
       fetchOptions: {
+        ...fetchOptions,
         next: {
           tags: [dynamicTag]
         }
