@@ -16,7 +16,10 @@ console.log('###################################################################
 console.log(' API Server', uri)
 console.log('#######################################################################')
 
-const httpLink = new HttpLink({ uri })
+const httpLink = new HttpLink({
+  uri,
+  fetchOptions: { cache: 'no-store' }
+})
 
 // Create a fresh timeout signal for each request
 const timeoutLink = new ApolloLink((operation, forward) => {
