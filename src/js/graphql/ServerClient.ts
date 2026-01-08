@@ -16,17 +16,11 @@ console.log('###################################################################
 console.log(' API Server', uri)
 console.log('#######################################################################')
 
-const httpLink = new HttpLink({ uri })
-
-// Create a fresh timeout signal for each request
-const timeoutLink = new ApolloLink((operation, forward) => {
-  operation.setContext(({ fetchOptions = {} }) => ({
-    fetchOptions: {
-      ...fetchOptions,
-      signal: AbortSignal.timeout(30000)
-    }
-  }))
-  return forward(operation)
+const httpLink = new HttpLink({
+  uri,
+  fetchOptions: {
+    signal: AbortSignal.timeout(30000) // 30 second timeout
+  }
 })
 
 /**
@@ -36,7 +30,7 @@ const timeoutLink = new ApolloLink((operation, forward) => {
 export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: ApolloLink.from([timeoutLink, dynamicTagsLink, httpLink])
+    link: ApolloLink.from([dynamicTagsLink, httpLink])
   })
 })
 
@@ -47,6 +41,6 @@ export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
 export function getGlobalClient (): ApolloClient<any> {
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: ApolloLink.from([timeoutLink, dynamicTagsLink, httpLink])
+    link: ApolloLink.from([dynamicTagsLink, httpLink])
   })
 }
