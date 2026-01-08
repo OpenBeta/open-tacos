@@ -1,9 +1,5 @@
-import { ApolloLink, HttpLink } from '@apollo/client'
-import {
-  registerApolloClient,
-  ApolloClient,
-  InMemoryCache
-} from '@apollo/client-integration-nextjs'
+import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client'
+import { registerApolloClient } from '@apollo/experimental-nextjs-app-support'
 import { dynamicTagsLink } from './dynamicTagsLink'
 
 const uri: string = process.env.OPENBETA_API_SERVER ?? ''
@@ -16,42 +12,14 @@ console.log('###################################################################
 console.log(' API Server', uri)
 console.log('#######################################################################')
 
-const httpLink = new HttpLink({
-  uri,
-  fetchOptions: { cache: 'no-store' }
-})
-
-// Create a fresh timeout signal for each request
-const timeoutLink = new ApolloLink((operation, forward) => {
-  operation.setContext(({ fetchOptions = {} }) => ({
-    fetchOptions: {
-      ...fetchOptions,
-      signal: AbortSignal.timeout(30000)
-    }
-  }))
-  return forward(operation)
-})
+const httpLink = new HttpLink({ uri })
 
 /**
- * Apollo client for React Server Components.
- * Uses registerApolloClient to share one client instance per request.
+ * Apollo client to be used in React Server Components.
  */
-export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
+export const { getClient } = registerApolloClient(() => {
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: ApolloLink.from([timeoutLink, dynamicTagsLink, httpLink]),
-    devtools: { enabled: false }
+    link: from([dynamicTagsLink, httpLink])
   })
 })
-
-/**
- * Apollo client for non-RSC contexts (API routes, auth callbacks).
- * Creates a fresh client per call.
- */
-export function getGlobalClient (): ApolloClient<any> {
-  return new ApolloClient({
-    cache: new InMemoryCache(),
-    link: ApolloLink.from([timeoutLink, dynamicTagsLink, httpLink]),
-    devtools: { enabled: false }
-  })
-}

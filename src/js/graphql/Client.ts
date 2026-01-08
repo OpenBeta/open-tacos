@@ -69,16 +69,14 @@ export const graphqlClient = new ApolloClient({
       }
     }
   }),
-  ssrMode: false, // We relies on NextJS for SSR data management
-  devtools: { enabled: false }
+  ssrMode: false // We relies on NextJS for SSR data management
 })
 
 const httpLink = new HttpLink({ uri: 'https://stg-api.openbeta.io' })
 
 export const stagingGraphQLClient = new ApolloClient({
   link: from([errorLink, httpLink]),
-  cache: new InMemoryCache(),
-  devtools: { enabled: false }
+  cache: new InMemoryCache()
 })
 
 let openCollectiveUri: string = process.env.OPEN_COLLECTIVE_API_URI ?? ''
@@ -94,6 +92,5 @@ export const openCollectiveClient = new ApolloClient({
     fetchOptions: {
       next: { revalidate: 3600 }
     }
-  }),
-  devtools: { enabled: false }
+  })
 })
