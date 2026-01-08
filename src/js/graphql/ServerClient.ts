@@ -36,8 +36,7 @@ const timeoutLink = new ApolloLink((operation, forward) => {
 export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: ApolloLink.from([timeoutLink, dynamicTagsLink, httpLink]),
-    devtools: { enabled: false }
+    link: ApolloLink.from([timeoutLink, dynamicTagsLink, httpLink])
   })
 })
 
@@ -48,7 +47,6 @@ export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
 export function getGlobalClient (): ApolloClient<any> {
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: ApolloLink.from([timeoutLink, dynamicTagsLink, httpLink]),
-    devtools: { enabled: false }
+    link: ApolloLink.from([timeoutLink, dynamicTagsLink, httpLink])
   })
 }
