@@ -5,17 +5,17 @@ import dynamic from 'next/dynamic'
 import { TickType } from '@/js/types'
 import ImportFromMtnProj from '@/components/users/ImportFromMtnProj'
 import { ChartsSectionProps } from '@/components/logbook/ChartsSection'
-import { CalendarIcon, TrophyIcon, ListBulletsIcon, RowsIcon } from '@phosphor-icons/react'
+import { CalendarIcon, TrophyIcon, ListBulletsIcon, RowsIcon, CaretLeft, CaretRight } from '@phosphor-icons/react'
 
 interface UserTicksContentProps {
   username: string
   ticks: TickType[]
 }
 
-const INITIAL_COUNT = 20
+const PAGE_SIZE = 20
 
 export function UserTicksContent ({ username, ticks }: UserTicksContentProps): React.JSX.Element {
-  const [showAll, setShowAll] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
   const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards')
   const [filterStyle, setFilterStyle] = useState<string>('all')
   const [filterAttemptType, setFilterAttemptType] = useState<string>('all')
@@ -50,7 +50,19 @@ export function UserTicksContent ({ username, ticks }: UserTicksContentProps): R
     return filtered.sort((a, b) => b.dateClimbed - a.dateClimbed)
   }, [ticks, filterStyle, filterAttemptType])
 
-  const displayedTicks = showAll ? filteredTicks : filteredTicks.slice(0, INITIAL_COUNT)
+  const totalPages = Math.ceil(filteredTicks.length / PAGE_SIZE)
+  const startIndex = (currentPage - 1) * PAGE_SIZE
+  const displayedTicks = filteredTicks.slice(startIndex, startIndex + PAGE_SIZE)
+
+  // Reset to page 1 when filters change
+  const handleFilterChange = (type: 'style' | 'attemptType', value: string): void => {
+    if (type === 'style') {
+      setFilterStyle(value)
+    } else {
+      setFilterAttemptType(value)
+    }
+    setCurrentPage(1)
+  }
 
   return (
     <>
@@ -93,7 +105,7 @@ export function UserTicksContent ({ username, ticks }: UserTicksContentProps): R
                 <select
                   className='select select-sm select-bordered'
                   value={filterStyle}
-                  onChange={(e) => setFilterStyle(e.target.value)}
+                  onChange={(e) => handleFilterChange('style', e.target.value)}
                 >
                   <option value='all'>All styles</option>
                   {stats.styles.map(style => (
@@ -106,7 +118,7 @@ export function UserTicksContent ({ username, ticks }: UserTicksContentProps): R
                 <select
                   className='select select-sm select-bordered'
                   value={filterAttemptType}
-                  onChange={(e) => setFilterAttemptType(e.target.value)}
+                  onChange={(e) => handleFilterChange('attemptType', e.target.value)}
                 >
                   <option value='all'>All types</option>
                   {stats.attemptTypes.map(type => (
@@ -121,6 +133,7 @@ export function UserTicksContent ({ username, ticks }: UserTicksContentProps): R
                   onClick={() => {
                     setFilterStyle('all')
                     setFilterAttemptType('all')
+                    setCurrentPage(1)
                   }}
                 >
                   Clear filters
@@ -161,12 +174,12 @@ export function UserTicksContent ({ username, ticks }: UserTicksContentProps): R
                 ? <CardsView ticks={displayedTicks} />
                 : <TableView ticks={displayedTicks} />}
 
-              {INITIAL_COUNT < filteredTicks.length && (
-                <div className='flex justify-center mt-8'>
-                  <button className='btn btn-primary' onClick={() => setShowAll(!showAll)}>
-                    {showAll ? 'Show Less' : `Show All (${filteredTicks.length})`}
-                  </button>
-                </div>
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
               )}
             </>
             )
@@ -269,6 +282,89 @@ function TickRow ({ tick }: { tick: TickType }): React.JSX.Element {
         {new Date(dateClimbed).toLocaleDateString()}
       </td>
     </tr>
+  )
+}
+
+interface PaginationProps {
+  currentPage: number
+  totalPages: number
+  onPageChange: (page: number) => void
+}
+
+function Pagination ({ currentPage, totalPages, onPageChange }: PaginationProps): React.JSX.Element {
+  const getPageNumbers = (): Array<number | string> => {
+    const pages: Array<number | string> = []
+    const showEllipsisStart = currentPage > 3
+    const showEllipsisEnd = currentPage < totalPages - 2
+
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i)
+      }
+    } else {
+      pages.push(1)
+
+      if (showEllipsisStart) {
+        pages.push('...')
+      }
+
+      const start = Math.max(2, currentPage - 1)
+      const end = Math.min(totalPages - 1, currentPage + 1)
+
+      for (let i = start; i <= end; i++) {
+        if (!pages.includes(i)) {
+          pages.push(i)
+        }
+      }
+
+      if (showEllipsisEnd) {
+        pages.push('...')
+      }
+
+      if (!pages.includes(totalPages)) {
+        pages.push(totalPages)
+      }
+    }
+
+    return pages
+  }
+
+  return (
+    <div className='flex justify-center items-center gap-2 mt-8'>
+      <button
+        className='btn btn-sm btn-outline'
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        <CaretLeft className='w-4 h-4' />
+      </button>
+
+      <div className='flex gap-1'>
+        {getPageNumbers().map((page, index) => (
+          typeof page === 'number'
+            ? (
+              <button
+                key={page}
+                className={`btn btn-sm ${currentPage === page ? 'btn-primary' : 'btn-outline'}`}
+                onClick={() => onPageChange(page)}
+              >
+                {page}
+              </button>
+              )
+            : (
+              <span key={`ellipsis-${index}`} className='px-2 py-1'>...</span>
+              )
+        ))}
+      </div>
+
+      <button
+        className='btn btn-sm btn-outline'
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
+        <CaretRight className='w-4 h-4' />
+      </button>
+    </div>
   )
 }
 

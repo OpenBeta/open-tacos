@@ -130,8 +130,8 @@ query userTicksByClimbId($userId: String, $climbId: String) {
 `
 
 export const QUERY_TICKS_BY_USER = gql`
-query userTicks($userId: MUUID, $username: String) {
-  userTicks(userId: $userId, username: $username) {
+query userTicks($userId: MUUID, $username: String, $limit: Int, $offset: Int) {
+  userTicks(userId: $userId, username: $username, limit: $limit, offset: $offset) {
     _id
     name
     notes
