@@ -106,21 +106,43 @@ export interface TickUserSelectors {
   userId?: string
   username?: string
 }
-export const getTicksByUser = async (selectors: TickUserSelectors): Promise<TickType[]> => {
-  try {
-    const res = await graphqlClient.query<{ userTicks: TickType[] }>({
-      query: QUERY_TICKS_BY_USER,
-      variables: selectors,
-      fetchPolicy: 'no-cache'
-    })
 
-    if (Array.isArray(res.data?.userTicks)) {
-      return res.data.userTicks
+const TICKS_PAGE_SIZE = 500
+
+export const getTicksByUser = async (selectors: TickUserSelectors): Promise<TickType[]> => {
+  const allTicks: TickType[] = []
+  let offset = 0
+
+  try {
+    while (true) {
+      const res = await graphqlClient.query<{ userTicks: TickType[] }>({
+        query: QUERY_TICKS_BY_USER,
+        variables: {
+          ...selectors,
+          limit: TICKS_PAGE_SIZE,
+          offset
+        },
+        fetchPolicy: 'no-cache'
+      })
+
+      const ticks = res.data?.userTicks
+      if (!Array.isArray(ticks) || ticks.length === 0) {
+        break
+      }
+
+      allTicks.push(...ticks)
+
+      if (ticks.length < TICKS_PAGE_SIZE) {
+        break // Last page
+      }
+
+      offset += TICKS_PAGE_SIZE
     }
   } catch (e) {
-    console.error('Error fetching ticks by user and climb id', e)
+    console.error('Error fetching ticks by user', e)
   }
-  return []
+
+  return allTicks
 }
 
 export const getAllCountries = async (): Promise<CountrySummaryType[]> => {
