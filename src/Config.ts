@@ -12,7 +12,6 @@ interface AUTH_CONFIG_SERVER_TYPE {
   issuer: string
   clientId: string
   clientSecret: string
-  mobileClientId: string
   mgmtClientId: string
   mgmtClientSecret: string
   mgmtClientAudience: string
@@ -26,7 +25,6 @@ if (typeof window === 'undefined') {
     issuer: checkAndPrintWarning('AUTH0_DOMAIN', process.env.AUTH0_DOMAIN),
     clientId: checkAndPrintWarning('AUTH0_CLIENT_ID', process.env.AUTH0_CLIENT_ID),
     clientSecret: checkAndPrintWarning('AUTH0_CLIENT_SECRET', process.env.AUTH0_CLIENT_SECRET),
-    mobileClientId: checkAndPrintWarning('AUTH0_MOBILE_CLIENT_ID', process.env.AUTH0_MOBILE_CLIENT_ID),
     mgmtClientId: checkAndPrintWarning('AUTH0_MGMT_CLIENT_ID', process.env.AUTH0_MGMT_CLIENT_ID),
     mgmtClientSecret: checkAndPrintWarning('AUTH0_MGMT_CLIENT_SECRET', process.env.AUTH0_MGMT_CLIENT_SECRET),
     mgmtClientAudience: checkAndPrintWarning('AUTH0_MGMT_CLIENT_AUDIENCE', process.env.AUTH0_MGMT_CLIENT_AUDIENCE),
