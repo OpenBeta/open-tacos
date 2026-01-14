@@ -4,18 +4,13 @@ import { AUTH_CONFIG_SERVER } from '../../Config'
 
 if (AUTH_CONFIG_SERVER == null) throw new Error('AUTH_CONFIG_SERVER not defined')
 
-const mobileAuthSecret = process.env.MOBILE_AUTH_SECRET
-if (mobileAuthSecret == null) {
-  console.warn('Mobile auth secret not found')
-}
+const { clientId, clientSecret, issuer } = AUTH_CONFIG_SERVER
 
-const { mobileClientId, issuer } = AUTH_CONFIG_SERVER
-
-// Set up Auth0 client for mobile with client secret for ROPG flow
+// Set up Auth0 client for mobile ROPG using web app credentials (confidential client)
 export const auth0Client = new Auth0.AuthenticationClient({
   domain: issuer.replace('https://', ''),
-  clientId: mobileClientId,
-  clientSecret: mobileAuthSecret
+  clientId,
+  clientSecret
 })
 
 export const isNullOrEmpty = (str: string | null | undefined): boolean => {
