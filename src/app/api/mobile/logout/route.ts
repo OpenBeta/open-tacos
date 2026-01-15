@@ -21,7 +21,7 @@ async function verifyAccessToken (request: NextRequest): Promise<boolean> {
   try {
     await jwtVerify(token, JWKS, {
       issuer: issuer + '/',
-      audience: 'https://api.openbeta.io/'
+      audience: 'https://api.openbeta.io'
     })
     return true
   } catch {
