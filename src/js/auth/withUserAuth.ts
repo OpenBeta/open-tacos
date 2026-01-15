@@ -41,8 +41,8 @@ export const withUserAuth = (handler: Next13APIHandler): Next13APIHandler => {
         const { payload } = await jwtVerify(token, JWKS, {
           issuer: issuer + '/',
           audience: [
-            'https://api.openbeta.io/', // Access token (web)
-            clientId // ID token (mobile client ID)
+            'https://api.openbeta.io', // Access token (no trailing slash)
+            clientId // ID token
           ]
         })
 
