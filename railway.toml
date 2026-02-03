@@ -9,8 +9,7 @@ numReplicas = 1
 limitOverride = { containers = { cpu = 2, memoryBytes = 2000000000}}
 sleepApplication = false
 multiRegionConfig = {"us-east4-eqdc4a" = {"numReplicas" = 1}}
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 5
+restartPolicyType = "ALWAYS"
 
 [environments.pr.deploy]
 sleepApplication = true
