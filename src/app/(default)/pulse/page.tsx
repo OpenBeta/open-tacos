@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react'
 import Link from 'next/link'
 import clz from 'classnames'
-
 import { getSummaryReport } from '@/js/graphql/opencollective'
 import { getTagsLeaderboard } from '@/js/graphql/pulse'
 import { FinancialReportType, TagsByUserType, TagsLeaderboardType } from '@/js/types'
@@ -15,50 +14,37 @@ export default async function Page (): Promise<JSX.Element> {
   const tagsLeaderboard: TagsLeaderboardType = await getTagsLeaderboard()
 
   return (
-    <>
-      <div className='default-page-margins grid grid-cols-1 lg:grid-cols-3 gap-4'>
-        <div>
-          <TagsSummary tagsLeaderboard={tagsLeaderboard} />
-          <TagsLeaderboard tagsLeaderboard={tagsLeaderboard} />
-        </div>
-        <div className='lg:col-span-2'>
-          <FinancialReport donationSummary={donationSummary} />
-        </div>
+    <div className='default-page-margins grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch'>
+      <div className='flex flex-col h-[600px] lg:h-0 lg:min-h-full'>
+        <TagsSummary tagsLeaderboard={tagsLeaderboard} />
+        <TagsLeaderboard tagsLeaderboard={tagsLeaderboard} />
       </div>
-    </>
+      <div className='lg:col-span-2'>
+        <FinancialReport donationSummary={donationSummary} />
+      </div>
+    </div>
   )
 }
-
-const TagsSummary = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => {
-  return (
-    <Box className='mt-4 stats'>
-      <div className='stat'>
-        <div className='stat-title font-bold'>Photos with tags</div>
-        <div className='stat-value'>
-          {tagsLeaderboard.allTime.totalMediaWithTags}
-        </div>
-        <div className='stat-desc whitespace-normal'>Tags help others learn more about the climbing areas.</div>
-      </div>
-    </Box>
-  )
-}
-interface TagsLeaderboardProps {
-  tagsLeaderboard: TagsLeaderboardType
-}
-const TagsLeaderboard = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => {
-  return (
-    <Box className='mt-4 lg:mb-4'>
-      <h2>Tags Leaderboard</h2>
-      <div className='grid grid-cols-6 gap-2 items-center'>
-        {tagsLeaderboard.allTime.byUsers.map(LeaderboardRow)}
-      </div>
-    </Box>
-  )
-}
-
+const TagsSummary = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => (
+  <Box className='mt-4 stats'>
+    <div className='stat'>
+      <div className='stat-title font-bold'>Photos with tags</div>
+      <div className='stat-value'>{tagsLeaderboard.allTime.totalMediaWithTags}</div>
+      <div className='stat-desc whitespace-normal'>Tags help others learn more about the climbing areas.</div>
+    </div>
+  </Box>
+)
+interface TagsLeaderboardProps { tagsLeaderboard: TagsLeaderboardType }
+const TagsLeaderboard = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => (
+  <Box className='mt-4 lg:mb-4 flex-1 flex flex-col min-h-0'>
+    <h2>Tags Leaderboard</h2>
+    <div className='grid grid-cols-6 gap-2 items-center overflow-y-auto pr-4 h-full content-start'>
+      {tagsLeaderboard.allTime.byUsers.map(LeaderboardRow)}
+    </div>
+  </Box>
+)
 const LeaderboardRow = (value: TagsByUserType, index: number): JSX.Element => {
   const url = `/u/${value?.username ?? ''}`
-
   return (
     <React.Fragment key={value.userUuid}>
       <div className='text-left align-middle text-sm'>
@@ -80,37 +66,21 @@ const LeaderboardRow = (value: TagsByUserType, index: number): JSX.Element => {
     </React.Fragment>
   )
 }
-
-interface FinancialReportProps {
-  donationSummary: FinancialReportType
-}
-
+interface FinancialReportProps { donationSummary: FinancialReportType }
 const FinancialReport: React.FC<FinancialReportProps> = ({ donationSummary }) => {
   const { totalRaised, donors } = donationSummary
-
   return (
     <Box className='text-center mb-4 lg:mt-4'>
       <h2>Donations</h2>
-      <p className='my-4 text-sm'>This platform is supported by climbers like you.  Thanks to our financial backers we've raised ${totalRaised}.</p>
+      <p className='my-4 text-sm'>This platform is supported by climbers like you. Thanks to our financial backers we've raised ${totalRaised}.</p>
       <div className='flex gap-2 xl:gap-4 flex-wrap items-center justify-center'>
-        {donors.map(({ account }) =>
-          <BackerCard key={account.id} name={account.name} imageUrl={account.imageUrl} />
-        )}
+        {donors.map(({ account }) => <BackerCard key={account.id} name={account.name} imageUrl={account.imageUrl} />)}
       </div>
     </Box>
-
   )
 }
-
-const Box: React.FC<{ className?: string, children: ReactNode }> = ({ className, children }) => {
-  return (
-    <section
-      className={clz(
-        'break-inside-avoid-column break-inside-avoid relative block border-4 p-4 border-black rounded-box',
-        className
-      )}
-    >
-      {children}
-    </section>
-  )
-}
+const Box: React.FC<{ className?: string, children: ReactNode }> = ({ className, children }) => (
+  <section className={clz('break-inside-avoid-column break-inside-avoid relative block border-4 p-4 border-black rounded-box', className)}>
+    {children}
+  </section>
+)
