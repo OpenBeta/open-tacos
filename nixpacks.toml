@@ -2,7 +2,10 @@
 nixPkgs =  ["nodejs_20"]
 
 [phases.install]
-cmds = ["yarn install --no-progress --silence"]
+cmds = [
+  "corepack enable",
+  "yarn install --no-progress --silence"
+]
 
 [phases.build]
 cmds = ["yarn build"]
