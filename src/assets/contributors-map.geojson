@@ -359,6 +359,21 @@
             -86.2377105870322
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Tyler",
+        "githubId": "tckeelin",
+        "favoriteCrag": "738d655d-3f62-502f-8b70-cb40baee5fa7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.34708091746781,
+	  -111.67840561252082
+        ]
+      }
     }
   ]
 }
