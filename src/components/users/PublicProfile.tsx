@@ -26,6 +26,7 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
   const { getUserPublicProfileByUuid } = useUserProfileCmd({ accessToken: session?.data?.accessToken as string })
 
   const [profile, setProfile] = useState<{ username?: string, displayName?: string, bio?: string, website?: string, avatar?: string } | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   const { username = '', displayName = '', bio = '', website = '', avatar = '' } = profile ?? {}
 
@@ -34,10 +35,15 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
 
     if (userProfile?.userUuid != null) {
       const doAsync = async (): Promise<void> => {
-        const fetchedProfile = await getUserPublicProfileByUuid(userProfile.userUuid)
-        if (fetchedProfile != null) {
-          const { username, displayName, bio, website, avatar } = fetchedProfile
-          setProfile({ username, displayName, bio, website, avatar })
+        setIsLoading(true)
+        try {
+          const fetchedProfile = await getUserPublicProfileByUuid(userProfile.userUuid)
+          if (fetchedProfile != null) {
+            const { username, displayName, bio, website, avatar } = fetchedProfile
+            setProfile({ username, displayName, bio, website, avatar })
+          }
+        } finally {
+          setIsLoading(false)
         }
       }
       void doAsync()
@@ -47,6 +53,15 @@ export default function PublicProfile ({ userProfile }: PublicProfileProps): JSX
   let websiteWithScheme: string | null = null
   if (website != null) {
     websiteWithScheme = website.startsWith('http') ? website : `//${website}`
+  }
+
+  if (isLoading) {
+    return (
+      <div className='flex flex-col items-center justify-center p-12 w-full col-span-3'>
+        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-ob-secondary' />
+        <span className='ml-2 mt-2 text-sm text-primary font-medium'>Loading profile...</span>
+      </div>
+    )
   }
 
   return (
