@@ -112,9 +112,10 @@ interface Props {
 export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, climbId, name, grade, climbType }: Props): JSX.Element {
   const styles = stylesForClimbType(climbType)
   const [style, setStyle] = useState(styles[0])
-
   const [attemptTypes, setAttemptTypes] = useState(attemptTypesForStyle(style.name))
-  const [attemptType, setAttemptType] = useState(attemptTypes[0])
+  const defaultAttemptType =
+  style.name === 'Boulder' ? attemptTypes.find(t => t.name === 'Send') ?? attemptTypes[0] : attemptTypes[0]
+  const [attemptType, setAttemptType] = useState(defaultAttemptType)
   const [dateClimbed, setDateClimbed] = useState<string>(new Date().toLocaleDateString('fr-CA')) // Default is today, use fr-CA to get YYYY-MM-DD format.
   const [notes, setNotes] = useState<string>('')
   const [errors, setErrors] = useState<string[]>()
@@ -142,7 +143,8 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
     setStyle(newStyle)
     const newAttemptTypes = attemptTypesForStyle(newStyle.name)
     setAttemptTypes(newAttemptTypes)
-    setAttemptType(newAttemptTypes[0])
+    const defaultAttemptType = newStyle.name === 'Boulder' ? newAttemptTypes.find(t => t.name === 'Send') ?? newAttemptTypes[0] : newAttemptTypes[0]
+    setAttemptType(defaultAttemptType)
   }
 
   async function submitTick (): Promise<void> {
