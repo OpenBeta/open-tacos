@@ -14,7 +14,10 @@ export const getSummaryReport = async (): Promise<FinancialReportType> => {
     }
   })
 
-  const donors = ocResponse.data.account.members.nodes
+  // Filter out members with a null account before uniq() dereferences account.id
+  const donors = ocResponse.data.account.members.nodes.filter(
+    (donor) => donor.account != null
+  )
   const totalRaised = ocResponse.data.account.stats.totalNetAmountReceived.value
 
   // Using the underscore library to get unique donors, based on their id
