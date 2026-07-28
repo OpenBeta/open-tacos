@@ -3,6 +3,7 @@
   "description": "Open source climbing route catalog",
   "version": "1.0.0",
   "author": "OpenBeta <hello@openbeta.io>",
+  "packageManager": "yarn@1.22.22",
   "dependencies": {
     "@algolia/autocomplete-js": "1.7.1",
     "@algolia/autocomplete-theme-classic": "1.7.1",

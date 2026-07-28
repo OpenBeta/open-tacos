@@ -47,3 +47,26 @@ jobs:
       - name: Build project
         run: yarn build
         if: ${{ github.event_name != 'pull_request' }}
+
+  nixpacks_build:
+    name: Validate Railway/Nixpacks build
+    runs-on: ubuntu-22.04
+    environment: "Preview"
+    needs: pre_job
+    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+    env:
+      NIXPACKS_VERSION: '1.41.0'
+    steps:
+      - name: 'Checkout Project'
+        uses: 'actions/checkout@v4'
+        with:
+          fetch-depth: 1
+
+      - name: Install Nixpacks
+        run: curl -sSL https://nixpacks.com/install.sh | NIXPACKS_VERSION=$NIXPACKS_VERSION bash -s -- --yes
+
+      - name: Verify Nixpacks version
+        run: nixpacks --version
+
+      - name: Build with Nixpacks
+        run: nixpacks build . --name open-tacos-ci
