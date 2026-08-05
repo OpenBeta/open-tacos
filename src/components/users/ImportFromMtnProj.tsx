@@ -4,11 +4,11 @@ import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
 import { FolderArrowDownIcon } from '@heroicons/react/24/outline'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { toast } from 'react-toastify'
 import clx from 'classnames'
 
 import { INPUT_DEFAULT_CSS } from '../ui/form/TextArea'
-import Spinner from '../ui/Spinner'
 import { LeanAlert } from '../ui/micro/AlertDialogue'
 
 interface Props {
@@ -31,6 +31,7 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
   const [showInput, setShowInput] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<string[]>([])
+  const [importedCount, setImportedCount] = useState<number | null>(null)
 
   // this function is for when the component is rendered as a button and sends the user straight to the input form
   function straightToInput (): void {
@@ -51,6 +52,7 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
         const { count } = await bulkImportProxy(mpUID)
 
         if (count > 0) {
+          setImportedCount(count)
           toast.info(
             <>
               {count} ticks have been imported! 🎉 <br />
@@ -60,8 +62,9 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
 
           setTimeout(() => {
             router.push(`/u/${username}/ticks`)
-          }, 2000)
-          setShow(false)
+            setShow(false)
+            setImportedCount(null)
+          }, 4000)
         } else {
           setErrors(['Sorry, no ticks were found for that user. Please check your Mountain Project ID and try again.'])
           toast.error('Sorry, no ticks were found for that user. Please check your Mountain Project ID and try again.')
@@ -76,7 +79,6 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
       // handle errors
       setErrors(['Please input a valid Mountain Project ID'])
     }
-    setLoading(false)
   }
 
   return (
@@ -85,62 +87,126 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
 
       {show && (
         <LeanAlert
-          icon={<FolderArrowDownIcon className='h-6 w-6 text-gray-400' aria-hidden='true' />}
-          title={showInput ? 'Input your Mountain Project profile link' : 'Import your ticks from Mountain Project'}
-          description={!showInput ? "Don't lose your progress, bring it over to Open Beta." : null}
-          closeOnEsc
+          icon={
+            loading
+              ? null
+              : (
+                  importedCount !== null
+                    ? (
+                      <FolderArrowDownIcon className='h-6 w-6 text-green-500' aria-hidden='true' />
+                      )
+                    : (
+                      <FolderArrowDownIcon className='h-6 w-6 text-gray-400' aria-hidden='true' />
+                      )
+                )
+          }
+          title={
+            loading
+              ? 'Importing ticks...'
+              : (importedCount !== null
+                  ? 'Import Complete!'
+                  : (showInput ? 'Input your Mountain Project profile link' : 'Import your ticks from Mountain Project'))
+          }
+          description={
+            loading || importedCount !== null
+              ? null
+              : (!showInput ? "Don't lose your progress, bring it over to Open Beta." : null)
+          }
+          closeOnEsc={!loading}
           stackChildren
         >
-          {(errors != null) && errors.length > 0 && errors.map((err, i) => <p className='mt-2 text-ob-primary' key={i}>{err}</p>)}
+          {loading
+            ? (
+              <div className='flex flex-col items-center justify-center p-4 w-full'>
+                <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-ob-secondary' />
+                <span className='mt-2 text-sm text-primary font-medium'>Fetching ticks from Mountain Project...</span>
+              </div>
+              )
+            : importedCount !== null
+              ? (
+                <div className='flex flex-col items-center justify-center p-4 w-full'>
+                  <p className='text-lg font-semibold text-green-600 dark:text-green-400'>
+                    {importedCount} ticks have been imported! 🎉
+                  </p>
+                  <p className='mt-2 text-sm text-gray-500'>
+                    Redirecting you to your ticks page in a few seconds...
+                  </p>
+                  <div className='mt-4 flex flex-col space-y-2 w-full'>
+                    <Link
+                      href={`/u/${username}/ticks`}
+                      className='btn btn-primary w-full'
+                      onClick={() => {
+                        setShow(false)
+                        setImportedCount(null)
+                      }}
+                    >
+                      Go to my ticks now
+                    </Link>
+                    <AlertDialogPrimitive.Cancel
+                      asChild onClick={() => {
+                        setShow(false)
+                        setImportedCount(null)
+                        setErrors([])
+                      }}
+                    >
+                      <button className='btn btn-outline w-full'>Close</button>
+                    </AlertDialogPrimitive.Cancel>
+                  </div>
+                </div>
+                )
+              : (
+                <>
+                  {(errors != null) && errors.length > 0 && errors.map((err, i) => <p className='mt-2 text-ob-primary' key={i}>{err}</p>)}
 
-          {showInput && (
-            <div className='mt-1 relative rounded-md shadow-sm'>
-              <input
-                type='text'
-                name='website'
-                id='website'
-                value={mpUID}
-                onChange={(e) => setMPUID(e.target.value)}
-                className={clx(INPUT_DEFAULT_CSS, 'w-full')}
-                placeholder='https://www.mountainproject.com/user/123456789/username'
-                disabled={loading}
-              />
-            </div>
-          )}
+                  {showInput && (
+                    <div className='mt-1 relative rounded-md shadow-sm'>
+                      <input
+                        type='text'
+                        name='website'
+                        id='website'
+                        value={mpUID}
+                        onChange={(e) => setMPUID(e.target.value)}
+                        className={clx(INPUT_DEFAULT_CSS, 'w-full')}
+                        placeholder='https://www.mountainproject.com/user/123456789/username'
+                        disabled={loading}
+                      />
+                    </div>
+                  )}
 
-          <div className='mt-3 flex space-x-7 justify-center'>
-            {!showInput && (
-              <button
-                type='button'
-                onClick={() => setShowInput(true)}
-                className='text-center p-2 border-2 rounded-xl border-ob-primary transition
-                text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
-                hover:text-white w-32 font-bold'
-              >
-                {loading ? 'Working...' : 'Show me how'}
-              </button>
-            )}
+                  <div className='mt-3 flex space-x-7 justify-center'>
+                    {!showInput && (
+                      <button
+                        type='button'
+                        onClick={() => setShowInput(true)}
+                        className='text-center p-2 border-2 rounded-xl border-ob-primary transition
+                    text-ob-primary hover:bg-ob-primary hover:ring hover:ring-ob-primary ring-offset-2
+                    hover:text-white w-32 font-bold'
+                      >
+                        Show me how
+                      </button>
+                    )}
 
-            {showInput && (
-              <button
-                type='button'
-                onClick={() => { void getTicks() }}
-                className='btn btn-primary'
-                disabled={loading}
-              >
-                {loading ? <Spinner /> : 'Get my ticks!'}
-              </button>
-            )}
+                    {showInput && (
+                      <button
+                        type='button'
+                        onClick={() => { void getTicks() }}
+                        className='btn btn-primary'
+                      >
+                        Get my ticks!
+                      </button>
+                    )}
 
-            <AlertDialogPrimitive.Cancel
-              asChild onClick={() => {
-                setShow(false)
-                setErrors([])
-              }}
-            >
-              <button className='btn btn-outline' disabled={loading}>Cancel</button>
-            </AlertDialogPrimitive.Cancel>
-          </div>
+                    <AlertDialogPrimitive.Cancel
+                      asChild onClick={() => {
+                        setShow(false)
+                        setErrors([])
+                      }}
+                    >
+                      <button className='btn btn-outline'>Cancel</button>
+                    </AlertDialogPrimitive.Cancel>
+                  </div>
+                </>
+                )}
         </LeanAlert>
       )}
     </>

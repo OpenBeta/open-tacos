@@ -82,4 +82,36 @@ describe('<ImportFromMtnProj />', () => {
 
     expect(inputField.value).toBe('https://www.mountainproject.com/user/123456789/sampleuser')
   })
+
+  it('shows loading spinner and then success screen on valid submission', async () => {
+    const mockFetch = jest.fn().mockImplementation(async () =>
+      await Promise.resolve({
+        json: async () => await Promise.resolve({ count: 42 })
+      })
+    )
+    global.fetch = mockFetch
+
+    render(<ImportFromMtnProj username='testuser' />)
+
+    // Open the modal
+    const openModalButton = screen.getByText('Import ticks')
+    fireEvent.click(openModalButton)
+
+    // Type in a valid link
+    const inputField = await screen.findByPlaceholderText('https://www.mountainproject.com/user/123456789/username')
+    fireEvent.change(inputField, { target: { value: 'https://www.mountainproject.com/user/123456789/sampleuser' } })
+
+    // Click on Get my ticks
+    const getTicksButton = screen.getByText('Get my ticks!')
+    fireEvent.click(getTicksButton)
+
+    // Expect loading state
+    expect(screen.getByText('Fetching ticks from Mountain Project...')).toBeInTheDocument()
+
+    // Expect success screen
+    await waitFor(() => {
+      expect(screen.getByText('42 ticks have been imported! 🎉')).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Go to my ticks now' })).toHaveAttribute('href', '/u/testuser/ticks')
+    })
+  })
 })
