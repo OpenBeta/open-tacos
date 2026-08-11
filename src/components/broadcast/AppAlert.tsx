@@ -1,6 +1,6 @@
 'use client'
 import Cookies from 'js-cookie'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { SuppressButton } from './SuppressButton'
 
 export interface AppAlertProps {
@@ -16,7 +16,7 @@ export const AppAlert: React.FC<AppAlertProps> = ({
   message,
   cookieStorageKey
 }) => {
-  const [showAlert, setShowAlert] = useState(false)
+  const [showAlert, setShowAlert] = useState(true)
 
   useEffect(() => {
     const suppressed = Cookies.get(cookieStorageKey)
