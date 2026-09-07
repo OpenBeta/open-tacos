@@ -1,19 +1,14 @@
 'use client'
-import { useSession } from 'next-auth/react'
-
-import { SingleEntryForm } from '@/app/(default)/components/AreaAndClimb/SingleEntryForm'
 import { CLIMB_DESCRIPTION_FORM_VALIDATION_RULES } from '../validation'
 import useUpdateClimbsCmd from '@/js/hooks/useUpdateClimbsCmd'
 import { MarkdownTextArea } from '@/components/ui/form/MarkdownTextArea'
+import { SingleEntryForm } from '@/app/(default)/components/AreaAndClimb/SingleEntryForm'
 
-export const ClimbDescriptionForm: React.FC<{ initialValue: string, uuid: string, parentId: string }> = ({ initialValue, uuid, parentId }) => {
-  const session = useSession({ required: true })
-  const { updateClimbCmd } = useUpdateClimbsCmd(
-    {
-      parentId,
-      accessToken: session?.data?.accessToken as string
-    }
-  )
+export const ClimbDescriptionForm: React.FC<{ initialValue: string, uuid: string, parentId: string, accessToken: string }> = ({ initialValue, uuid, parentId, accessToken }) => {
+  const { updateClimbCmd } = useUpdateClimbsCmd({
+    parentId,
+    accessToken
+  })
 
   return (
     <SingleEntryForm<{ description: string }>

@@ -1,5 +1,4 @@
 'use client'
-import { useSession } from 'next-auth/react'
 import { ValidationValueMessage } from 'react-hook-form'
 
 import { SingleEntryForm } from '@/app/(default)/components/AreaAndClimb/SingleEntryForm'
@@ -7,14 +6,11 @@ import { DashboardInput } from '@/components/ui/form/Input'
 import useUpdateClimbsCmd from '@/js/hooks/useUpdateClimbsCmd'
 import { CLIMB_NAME_FORM_VALIDATION_RULES } from '../validation'
 
-export const ClimbNameForm: React.FC<{ initialValue: string, uuid: string, parentId: string }> = ({ uuid, initialValue, parentId }) => {
-  const session = useSession({ required: true })
-
+export const ClimbNameForm: React.FC<{ initialValue: string, uuid: string, parentId: string, accessToken: string }> = ({ uuid, initialValue, parentId, accessToken }) => {
   const { updateClimbCmd } = useUpdateClimbsCmd({
     parentId,
-    accessToken: session?.data?.accessToken as string
-  }
-  )
+    accessToken
+  })
 
   const maxLengthValidation = CLIMB_NAME_FORM_VALIDATION_RULES.maxLength as ValidationValueMessage
 

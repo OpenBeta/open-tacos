@@ -15,6 +15,7 @@ import { ClimbNameForm } from './components/ClimbNameForm'
 import { ClimbDescriptionForm } from './components/ClimbDescriptionForm'
 import { ClimbLocationForm } from './components/ClimbLocationForm'
 import { ClimbProtectionForm } from './components/ClimbProtectionForm'
+import { useSession } from 'next-auth/react'
 
 // Opt out of caching for all data requests in the route segment
 export const dynamic = 'force-dynamic'
@@ -49,6 +50,10 @@ export default async function ClimbEditPage ({ params }: DashboardPageProps): Pr
     id, name, content, ancestors, pathTokens, parent
   } = pageDataForEdit
 
+  // Get session once at page level and share across all forms
+  const session = useSession({ required: true })
+  const accessToken = session?.data?.accessToken as string
+
   return (
     <div className='relative w-full h-full'>
       <div className='px-12 pt-8 pb-4'>
@@ -73,19 +78,19 @@ export default async function ClimbEditPage ({ params }: DashboardPageProps): Pr
           <main className='relative h-full w-full px-2 lg:px-16'>
             <PageContainer>
               <SectionContainer id='general'>
-                <ClimbNameForm initialValue={name} uuid={id} parentId={parent.uuid} />
+                <ClimbNameForm initialValue={name} uuid={id} parentId={parent.uuid} accessToken={accessToken} />
               </SectionContainer>
 
               <SectionContainer id='description'>
-                <ClimbDescriptionForm initialValue={content?.description} uuid={id} parentId={parent.uuid} />
+                <ClimbDescriptionForm initialValue={content?.description} uuid={id} parentId={parent.uuid} accessToken={accessToken} />
               </SectionContainer>
 
               <SectionContainer id='location'>
-                <ClimbLocationForm initialValue={content?.location} uuid={id} parentId={parent.uuid} />
+                <ClimbLocationForm initialValue={content?.location} uuid={id} parentId={parent.uuid} accessToken={accessToken} />
               </SectionContainer>
 
               <SectionContainer id='protection'>
-                <ClimbProtectionForm initialValue={content?.protection} uuid={id} parentId={parent.uuid} />
+                <ClimbProtectionForm initialValue={content?.protection} uuid={id} parentId={parent.uuid} accessToken={accessToken} />
               </SectionContainer>
             </PageContainer>
           </main>
