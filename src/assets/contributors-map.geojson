@@ -359,6 +359,21 @@
             -86.2377105870322
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Alexandre",
+        "githubId": "alexandrenl974",
+        "favoriteCrag": "2af73b5f-8ea8-5a7c-987d-05cb0a6ec823"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          47.21908597727732, 
+          -1.5575912903891895
+        ]
+      }
     }
   ]
 }
