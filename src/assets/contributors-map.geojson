@@ -359,6 +359,21 @@
             -86.2377105870322
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "firstName": "Damien",
+        "githubId": "dkowalski1906",
+        "favoriteCrag": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+            47.217920169220406, 
+            -1.5599947792945918
+        ]
+      }
     }
   ]
 }
