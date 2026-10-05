@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import { graphqlClient } from '../graphql/Client'
 import { MUTATION_UPDATE_CLIMBS, MUTATION_DELETE_CLIMBS, UpdateClimbsInput, DeleteManyClimbsInputType } from '../graphql/gql/contribs'
 import { invalidateAreaPageCache, invalidateClimbPageCache } from '../utils'
+import { getFreshAccessToken } from '../auth/getFreshAccessToken'
 
 type UpdateClimbCmdType = (input: UpdateClimbsInput) => Promise<void>
 type DeleteClimbsCmdType = (idList: string[]) => Promise<number>
@@ -44,13 +45,14 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
       return
     }
     try {
+      const token = await getFreshAccessToken(accessToken)
       const res = await updateClimbsApi({
         variables: {
           input
         },
         context: {
           headers: {
-            authorization: `Bearer ${accessToken ?? ''}`
+            authorization: `Bearer ${token}`
           }
         }
       })
@@ -101,6 +103,7 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
 
   const deleteClimbsCmd: DeleteClimbsCmdType = async (idList) => {
     try {
+      const token = await getFreshAccessToken(accessToken)
       const rs = await deleteClimbsApi({
         variables: {
           input: {
@@ -110,7 +113,7 @@ export default function useUpdateClimbsCmd ({ parentId, accessToken = '', onUpda
         },
         context: {
           headers: {
-            authorization: `Bearer ${accessToken ?? ''}`
+            authorization: `Bearer ${token}`
           }
         }
       })
