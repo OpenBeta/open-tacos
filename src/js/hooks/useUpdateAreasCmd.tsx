@@ -11,6 +11,7 @@ import {
 import { QUERY_AREA_FOR_EDIT } from '../../js/graphql/gql/areaById'
 import { AreaType } from '../../js/types'
 import { invalidateAreaPageCache } from '../utils'
+import { getFreshAccessToken } from '../auth/getFreshAccessToken'
 
 type UpdateOneAreaCmdType = (input: UpdateOneAreaInputType) => Promise<void>
 type AddOneAreCmdType = ({ name, parentUuid }: AddAreaProps) => Promise<void>
@@ -72,6 +73,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
 
   const updateOneAreaCmd: UpdateOneAreaCmdType = async (input: UpdateOneAreaInputType) => {
     try {
+      const token = await getFreshAccessToken(accessToken)
       const res = await updateAreaApi({
         variables: {
           ...input,
@@ -79,7 +81,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
         },
         context: {
           headers: {
-            authorization: `Bearer ${accessToken}`
+            authorization: `Bearer ${token}`
           }
         }
       })
@@ -114,11 +116,12 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
       return
     }
     try {
+      const token = await getFreshAccessToken(accessToken)
       const res = await updateAreasSortingOrder({
         variables: { input },
         context: {
           headers: {
-            authorization: `Bearer ${accessToken}`
+            authorization: `Bearer ${token}`
           }
         }
       })
@@ -144,6 +147,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
 
   const addOneAreaCmd: AddOneAreCmdType = async ({ name, parentUuid, isBoulder, isLeaf }: AddAreaProps) => {
     try {
+      const token = await getFreshAccessToken(accessToken)
       const res = await addArea({
         variables: {
           name,
@@ -153,7 +157,7 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
         },
         context: {
           headers: {
-            authorization: `Bearer ${accessToken}`
+            authorization: `Bearer ${token}`
           }
         }
       })
@@ -193,11 +197,12 @@ export default function useUpdateAreasCmd ({ areaId, accessToken = '', ...props 
 
   const deleteOneAreaCmd: DeleteOneAreaCmdType = async ({ uuid }) => {
     try {
+      const token = await getFreshAccessToken(accessToken)
       const res = await deleteOneArea({
         variables: { uuid },
         context: {
           headers: {
-            authorization: `Bearer ${accessToken}`
+            authorization: `Bearer ${token}`
           }
         }
       })
