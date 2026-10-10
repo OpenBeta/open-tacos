@@ -11,8 +11,8 @@ export const PageFooter: React.FC = () => {
       </aside>
       <nav>
         <header className='footer-title'>Get involved</header>
-        <a className='link link-hover' href='https://collective.openbeta.io/get-involved'>How to get involved</a>
-        <a className='link link-hover' href='https://docs.openbeta.io/how-to-contribute/overview'>Dev onboarding</a>
+        <a className='link link-hover' href='https://docs.openbeta.io/how-to-contribute/general-onboarding'>How to get involved</a>
+        <a className='link link-hover' href='https://docs.openbeta.io/how-to-contribute/dev-onboarding'>Dev onboarding</a>
       </nav>
       <nav>
         <header className='footer-title'>Social</header>
