@@ -18,16 +18,16 @@ const validationSchema = z
     displayName: z
       .string()
       .max(30, { message: 'You can\'t enter more than 30 characters.' })
-      .optional().or(z.literal('')),
+      .optional().nullish().or(z.literal('')),
     bio: z
       .string()
       .max(80, { message: 'You can\'t enter more than 100 characters.' })
       .refine((text) => (text?.split(/\r\n|\r|\n/)?.length ?? 0) <= 3, { message: 'You can\'t enter more than 3 lines' })
-      .optional().or(z.literal('')),
+      .optional().nullish().or(z.literal('')),
     website: z
       .string()
       .url('Please provide a valid web address.')
-      .optional().or(z.literal(''))
+      .optional().nullish().or(z.literal(''))
   })
 
 type ValidationSchema = z.infer<typeof validationSchema>
@@ -80,9 +80,18 @@ export const UpdateProfileForm: React.FC = () => {
       return
     }
 
-    const successful = await updatePublicProfileCmd({ userUuid, displayName, bio, website })
+    const successful = await updatePublicProfileCmd({
+      userUuid,
+      displayName: displayName ?? undefined,
+      bio: bio ?? undefined,
+      website: website ?? undefined
+    })
     if (successful) {
-      reset({ displayName, bio, website })
+      reset({
+        displayName: displayName ?? '',
+        bio: bio ?? '',
+        website: website ?? ''
+      })
       toast.info('Profile updated')
     } else {
       toast.error('Unexpected error.  Please try again.')
