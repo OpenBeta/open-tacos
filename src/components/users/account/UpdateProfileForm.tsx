@@ -23,11 +23,11 @@ const validationSchema = z
       .string()
       .max(80, { message: 'You can\'t enter more than 100 characters.' })
       .refine((text) => (text?.split(/\r\n|\r|\n/)?.length ?? 0) <= 3, { message: 'You can\'t enter more than 3 lines' })
-      .optional().nullish().or(z.literal('')),
+      .nullish().or(z.literal('')),
     website: z
       .string()
       .url('Please provide a valid web address.')
-      .optional().nullish().or(z.literal(''))
+      .nullish().or(z.literal(''))
   })
 
 type ValidationSchema = z.infer<typeof validationSchema>
