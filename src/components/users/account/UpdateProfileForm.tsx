@@ -18,7 +18,7 @@ const validationSchema = z
     displayName: z
       .string()
       .max(30, { message: 'You can\'t enter more than 30 characters.' })
-      .optional().nullish().or(z.literal('')),
+      .nullish().or(z.literal('')),
     bio: z
       .string()
       .max(80, { message: 'You can\'t enter more than 100 characters.' })
