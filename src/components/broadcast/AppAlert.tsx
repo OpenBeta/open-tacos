@@ -16,7 +16,9 @@ export const AppAlert: React.FC<AppAlertProps> = ({
   message,
   cookieStorageKey
 }) => {
-  const [showAlert, setShowAlert] = useState(false)
+  // Initialize to true so first-time visitors have the alert rendered immediately on
+  // initial paint, eliminating Cumulative Layout Shift (CLS) when useEffect runs.
+  const [showAlert, setShowAlert] = useState(true)
 
   useEffect(() => {
     const suppressed = Cookies.get(cookieStorageKey)

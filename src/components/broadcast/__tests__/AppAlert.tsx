@@ -71,4 +71,40 @@ describe('AppAlert', () => {
     // verify cookie was set
     expect(cookieSetter).toHaveBeenCalledWith('test', '1', { strict: true, expires: 30 })
   })
+
+  it('renders alert immediately on initial mount for first-time visitors to prevent layout shift', () => {
+    cookieGetter.mockReturnValue(undefined)
+
+    render(
+      <AppAlertComponent
+        cookieStorageKey='test-initial-render'
+        message={
+          <div>
+            welcome banner
+          </div>
+        }
+      />
+    )
+
+    // Alert should be immediately in document without pop-in
+    expect(screen.getByText('welcome banner')).toBeInTheDocument()
+  })
+
+  it('hides alert when suppression cookie is present', () => {
+    cookieGetter.mockReturnValue('1')
+
+    render(
+      <AppAlertComponent
+        cookieStorageKey='test-suppressed'
+        message={
+          <div>
+            suppressed banner
+          </div>
+        }
+      />
+    )
+
+    // Alert should not be visible when user has previously suppressed it
+    expect(screen.queryByText('suppressed banner')).not.toBeInTheDocument()
+  })
 })
