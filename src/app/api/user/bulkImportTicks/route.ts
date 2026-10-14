@@ -7,6 +7,7 @@ import { updateUser } from '@/js/auth/ManagementClient'
 import { graphqlClient } from '@/js/graphql/Client'
 import { MUTATION_IMPORT_TICKS } from '@/js/graphql/gql/fragments'
 import { withUserAuth, PREDEFINED_HEADERS } from '@/js/auth/withUserAuth'
+import { parseMPDate } from './utils'
 
 export interface Tick {
   name: string
@@ -124,6 +125,13 @@ const postHandler = async (req: NextRequest): Promise<any> => {
   const ret = await getMPTicks(profileUrl)
 
   for (const tick of ret) {
+    const dateClimbed = parseMPDate(tick.Date)
+    if (dateClimbed == null) {
+      // Skip rows with an unrecognised or impossible date (e.g. '2026-02-31').
+      // This mirrors the existing behaviour for rows with an unresolvable route URL.
+      console.warn(`bulkImportTicks: skipping tick "${tick.Route}" – unrecognised date "${tick.Date}"`)
+      continue
+    }
     const newTick: Tick = {
       name: tick.Route,
       notes: tick.Notes,
@@ -131,7 +139,7 @@ const postHandler = async (req: NextRequest): Promise<any> => {
       userId: uuid,
       style: convertMPTickStyle(tick.Style, tick['Lead Style'], tick['Route Type']),
       attemptType: convertMPattemptType(tick.Style, tick['Lead Style'], tick['Route Type']),
-      dateClimbed: new Date(Date.parse(`${tick.Date}T00:00:00`)), // Date.parse without timezone specified converts date to user's present timezone.
+      dateClimbed,
       grade: tick.Rating,
       source: 'MP'
     }
