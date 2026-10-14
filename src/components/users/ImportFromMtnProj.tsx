@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
+import * as AlertDialogPrimitive froim '@radix-ui/react-alert-dialog'
 import { FolderArrowDownIcon } from '@heroicons/react/24/outline'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -25,6 +25,7 @@ const pattern = /^https:\/\/www.mountainproject.com\/user\/\d{9}\/[a-zA-Z-]*/
  */
 export function ImportFromMtnProj ({ username }: Props): JSX.Element {
   const [mpUID, setMPUID] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const session = useSession()
   const router = useRouter()
   const [show, setShow] = useState<boolean>(false)
@@ -81,7 +82,9 @@ export function ImportFromMtnProj ({ username }: Props): JSX.Element {
 
   return (
     <>
-      <button onClick={straightToInput} className='btn btn-xs md:btn-sm btn-primary'>Import ticks</button>
+      <button onClick={straightToInput} disabled={isLoading} className='btn btn-xs md:btn-sm btn-primary'>
+  {isLoading ? <Spinner /> : 'Import ticks'}
+</button>
 
       {show && (
         <LeanAlert
