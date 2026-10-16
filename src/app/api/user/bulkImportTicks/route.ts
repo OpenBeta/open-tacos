@@ -7,6 +7,7 @@ import { updateUser } from '@/js/auth/ManagementClient'
 import { graphqlClient } from '@/js/graphql/Client'
 import { MUTATION_IMPORT_TICKS } from '@/js/graphql/gql/fragments'
 import { withUserAuth, PREDEFINED_HEADERS } from '@/js/auth/withUserAuth'
+import { parseMpTickDate } from '@/js/utils/date'
 
 export interface Tick {
   name: string
@@ -131,7 +132,7 @@ const postHandler = async (req: NextRequest): Promise<any> => {
       userId: uuid,
       style: convertMPTickStyle(tick.Style, tick['Lead Style'], tick['Route Type']),
       attemptType: convertMPattemptType(tick.Style, tick['Lead Style'], tick['Route Type']),
-      dateClimbed: new Date(Date.parse(`${tick.Date}T00:00:00`)), // Date.parse without timezone specified converts date to user's present timezone.
+      dateClimbed: parseMpTickDate(tick.Date), // Anchor the calendar date to 12:00 UTC so it isn't shifted a day earlier in timezones behind UTC (#1456).
       grade: tick.Rating,
       source: 'MP'
     }
