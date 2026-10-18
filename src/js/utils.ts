@@ -103,7 +103,7 @@ export const computeClimbingPercentsAndColors = (climbs: ClimbType[]): PercentAn
  * @param {String} s
  */
 export const sanitizeName = (s: string): string =>
-  s.replace(/^(\(.{1,3}\) *)|((\d?[1-9]|[1-9]0)[:])|[a-zA-Z]{1,2}\./, '')
+  s?.replace(/^(?:(?:\(.{1,3}\)\s*)|(?:(?:\d?[1-9]|[1-9]0):\s*)|(?:[a-z]{1,2}\.\s+)|(?:[A-Z]\.\s+))/, '') ?? ''
 
 export const getSlug = (areaID: string, isLeaf: boolean, childAreasCount: number = -1): string => {
   const type = isLeaf || childAreasCount === 0 ? 'crag' : 'areas'

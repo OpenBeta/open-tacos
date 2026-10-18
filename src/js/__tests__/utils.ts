@@ -1,5 +1,5 @@
 import { ClimbDisciplineRecord } from '../types'
-import { checkUsername, checkWebsiteUrl, removeTypenameFromDisciplines } from '../utils'
+import { checkUsername, checkWebsiteUrl, removeTypenameFromDisciplines, sanitizeName } from '../utils'
 
 it('Valid usernames', () => {
   expect(checkUsername('cool-user')).toBeTruthy()
@@ -60,4 +60,49 @@ it('removes __typename from disciplines obj', () => {
   })
 })
 
+
+describe('sanitizeName', () => {
+  it('strips leading parenthetical index markers and removes trailing spaces', () => {
+    expect(sanitizeName('(6) North Face')).toEqual('North Face')
+    expect(sanitizeName('(6)   North Face')).toEqual('North Face')
+    expect(sanitizeName('(aa) South Face')).toEqual('South Face')
+    expect(sanitizeName('(12) East Ridge')).toEqual('East Ridge')
+  })
+
+  it('strips leading numeric colon markers without leaving leading whitespace', () => {
+    expect(sanitizeName('1: The Great Roof')).toEqual('The Great Roof')
+    expect(sanitizeName('12: The Arête')).toEqual('The Arête')
+    expect(sanitizeName('10: Direct')).toEqual('Direct')
+  })
+
+  it('strips leading list letter prefixes with period and whitespace', () => {
+    expect(sanitizeName('a. Direct Finish')).toEqual('Direct Finish')
+    expect(sanitizeName('b. Crack Climb')).toEqual('Crack Climb')
+    expect(sanitizeName('aa. Left Variation')).toEqual('Left Variation')
+    expect(sanitizeName('A. First Ascent Route')).toEqual('First Ascent Route')
+    expect(sanitizeName('B. Alternate Start')).toEqual('Alternate Start')
+  })
+
+  it('preserves location abbreviations and mid-string colons or abbreviations', () => {
+    expect(sanitizeName('Mt. Rainier')).toEqual('Mt. Rainier')
+    expect(sanitizeName('Mount St. Helens')).toEqual('Mount St. Helens')
+    expect(sanitizeName('St. George')).toEqual('St. George')
+    expect(sanitizeName('Ft. Collins')).toEqual('Ft. Collins')
+    expect(sanitizeName('Pt. Reyes')).toEqual('Pt. Reyes')
+    expect(sanitizeName('Route 12:00')).toEqual('Route 12:00')
+    expect(sanitizeName('Climb at 3:30')).toEqual('Climb at 3:30')
+    expect(sanitizeName('Boulder 1: The First')).toEqual('Boulder 1: The First')
+    expect(sanitizeName('1-6-9 Boulder')).toEqual('1-6-9 Boulder')
+    expect(sanitizeName('A.K.A. The Beast')).toEqual('A.K.A. The Beast')
+    expect(sanitizeName('Normal Route')).toEqual('Normal Route')
+  })
+
+  it('handles empty or nullish strings safely', () => {
+    expect(sanitizeName('')).toEqual('')
+    expect(sanitizeName(null as unknown as string)).toEqual('')
+    expect(sanitizeName(undefined as unknown as string)).toEqual('')
+  })
+})
+
 export {}
+
