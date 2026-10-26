@@ -99,12 +99,37 @@ The application is now available at http://localhost:3000
 
 Some parts of the code such as user profiles, page edit and photo upload require additional API keys.  Without them you'll see a bunch of errors in the log.  If you want to work on those tasks, email viet at openbeta.io for API keys.  See https://github.com/OpenBeta/open-tacos/issues/389 for more info.
 
-### Full stack dev
+### Full stack development
 
-By default, your local dev environment connects to our staging GraphQL API server.  To connect your environment to the Graph API server running locally:
-```
-yarn dev-local
-```
+By default, your local dev environment connects to our staging GraphQL API server (`https://stg-api.openbeta.io`). If you want to develop full-stack features or run both the frontend and backend locally:
+
+1. **Clone the backend repository:**
+   Clone [openbeta-graphql](https://github.com/OpenBeta/openbeta-graphql) alongside this repository:
+   ```bash
+   git clone git@github.com:OpenBeta/openbeta-graphql.git
+   cd openbeta-graphql
+   yarn install
+   ```
+
+2. **Run MongoDB:**
+   The backend GraphQL server requires a running MongoDB database. You can start a local instance using Docker:
+   ```bash
+   docker run -d -p 27017:27017 --name openbeta-mongo mongo:latest
+   ```
+
+3. **Start the local GraphQL server:**
+   In your `openbeta-graphql` directory:
+   ```bash
+   yarn start
+   ```
+   The Apollo GraphQL server will be available at `http://localhost:4000/graphql`.
+
+4. **Connect Open-Tacos to your local backend:**
+   In this repository (`open-tacos`), run:
+   ```bash
+   yarn dev-local
+   ```
+   This automatically points `NEXT_PUBLIC_API_SERVER` to `http://localhost:4000` and starts the Next.js dev server on `http://localhost:3000`.
 ### Typescript version warning
 You might get build errors or be prompted to downgrade your version of TypeScript. This is due to the linter ```ts-standard``` using an older version of TypeScript.  You can ignore the warning message.
 
