@@ -25,14 +25,14 @@ export function UserTicksContent ({ username, ticks }: UserTicksContentProps): R
 
     const uniqueStyles = new Set(ticks.map(t => t.style).filter(Boolean))
     const uniqueAttemptTypes = new Set(ticks.map(t => t.attemptType).filter(Boolean))
-    const sortedByDate = [...ticks].sort((a, b) => b.dateClimbed - a.dateClimbed)
+    const sortedByDate = [...ticks].sort((a, b) => (b.dateClimbed ?? 0) - (a.dateClimbed ?? 0))
     const latestTick = sortedByDate[0]
 
     return {
       total: ticks.length,
       styles: Array.from(uniqueStyles),
       attemptTypes: Array.from(uniqueAttemptTypes),
-      latestDate: latestTick != null ? new Date(latestTick.dateClimbed).toLocaleDateString() : null
+      latestDate: latestTick?.dateClimbed != null && !isNaN(new Date(latestTick.dateClimbed).getTime()) ? new Date(latestTick.dateClimbed).toLocaleDateString() : null
     }
   }, [ticks])
 
@@ -47,7 +47,7 @@ export function UserTicksContent ({ username, ticks }: UserTicksContentProps): R
       filtered = filtered.filter(t => t.attemptType === filterAttemptType)
     }
 
-    return filtered.sort((a, b) => b.dateClimbed - a.dateClimbed)
+    return filtered.sort((a, b) => (b.dateClimbed ?? 0) - (a.dateClimbed ?? 0))
   }, [ticks, filterStyle, filterAttemptType])
 
   const totalPages = Math.ceil(filteredTicks.length / PAGE_SIZE)
@@ -252,7 +252,7 @@ function TickCard ({ tick }: { tick: TickType }): React.JSX.Element {
 
         <div className='text-xs text-base-content/60 flex items-center gap-1'>
           <CalendarIcon className='w-3.5 h-3.5' />
-          {new Date(dateClimbed).toLocaleDateString()}
+          {dateClimbed != null && !isNaN(new Date(dateClimbed).getTime()) ? new Date(dateClimbed).toLocaleDateString() : 'No date'}
         </div>
       </div>
     </Link>
@@ -279,7 +279,7 @@ function TickRow ({ tick }: { tick: TickType }): React.JSX.Element {
         {attemptType != null && attemptType !== '' && <div className='badge badge-success badge-outline badge-sm'>{attemptType}</div>}
       </td>
       <td className='text-sm text-base-content/70'>
-        {new Date(dateClimbed).toLocaleDateString()}
+        {dateClimbed != null && !isNaN(new Date(dateClimbed).getTime()) ? new Date(dateClimbed).toLocaleDateString() : 'No date'}
       </td>
     </tr>
   )

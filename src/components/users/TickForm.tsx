@@ -16,7 +16,7 @@ const CustomTooltip: React.FC<any> = () => {
 }
 
 // validation schema for ticks
-const TickSchema = Yup.object().shape({
+export const TickSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Minimum 2 characters')
     .required('Something went wrong, please try again'),
@@ -29,7 +29,9 @@ const TickSchema = Yup.object().shape({
   style: Yup.string(),
   attemptType: Yup.string(),
   dateClimbed: Yup.date()
-    .required('Please include a date')
+    .nullable()
+    .notRequired()
+    .transform((curr, orig) => orig === '' ? null : curr)
     .max(new Date(), 'Please include a date in the past'),
   grade: Yup.string()
 })
@@ -228,7 +230,7 @@ export default function TickForm ({ open, setOpen, setTicks, ticks, isTicked, cl
                 <div>
                   {(errors != null) && errors.length > 0 && errors.map((err, i) => <p className='mt-2 text-ob-primary' key={i}>{err}</p>)}
                   <label htmlFor='date' className='block text-sm font-medium text-gray-700'>
-                    Date Climbed
+                    Date Climbed <span className='text-xs text-gray-400'>(optional)</span>
                   </label>
                   <div className='mt-1'>
                     <input
