@@ -1,11 +1,11 @@
 import React, { ReactNode } from 'react'
-import Link from 'next/link'
 import clz from 'classnames'
 
 import { getSummaryReport } from '@/js/graphql/opencollective'
 import { getTagsLeaderboard } from '@/js/graphql/pulse'
-import { FinancialReportType, TagsByUserType, TagsLeaderboardType } from '@/js/types'
+import { FinancialReportType, TagsLeaderboardType } from '@/js/types'
 import BackerCard from '@/components/ui/BackerCard'
+import TagsLeaderboard from './TagsLeaderboard'
 
 /**
  *  Display key metrics and statistics
@@ -44,41 +44,6 @@ const TagsSummary = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => 
 }
 interface TagsLeaderboardProps {
   tagsLeaderboard: TagsLeaderboardType
-}
-const TagsLeaderboard = ({ tagsLeaderboard }: TagsLeaderboardProps): JSX.Element => {
-  return (
-    <Box className='mt-4 lg:mb-4'>
-      <h2>Tags Leaderboard</h2>
-      <div className='grid grid-cols-6 gap-2 items-center'>
-        {tagsLeaderboard.allTime.byUsers.map(LeaderboardRow)}
-      </div>
-    </Box>
-  )
-}
-
-const LeaderboardRow = (value: TagsByUserType, index: number): JSX.Element => {
-  const url = `/u/${value?.username ?? ''}`
-
-  return (
-    <React.Fragment key={value.userUuid}>
-      <div className='text-left align-middle text-sm'>
-        <span className={
-          clz(
-            'p-1 rounded',
-            index <= 2 ? 'bg-pink-500' : '') // a naive ranking highlight.  It can't handle ties.
-          }
-        >
-          {index + 1}
-        </span>
-      </div>
-      <div className='text-left col-span-4 uppercase thick-link'>
-        {value?.username == null ? 'unknown' : <Link href={url} legacyBehavior>{value.username}</Link>}
-      </div>
-      <div className='text-right font-bold text-sm'>
-        {value.total}
-      </div>
-    </React.Fragment>
-  )
 }
 
 interface FinancialReportProps {
