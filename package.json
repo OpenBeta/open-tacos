@@ -50,6 +50,8 @@
     "lexical": "^0.7.5",
     "mapbox-gl": "^2.7.0",
     "maplibre-gl": "^4.3.2",
+    "mdast-util-gfm-autolink-literal": "2.0.1",
+    "micromark-extension-gfm-autolink-literal": "2.1.0",
     "nanoid": "^4.0.0",
     "nanoid-dictionary": "^4.3.0",
     "next": "^14.2.35",

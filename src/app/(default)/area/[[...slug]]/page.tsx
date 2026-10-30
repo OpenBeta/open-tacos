@@ -2,7 +2,7 @@ import { notFound, permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import { MapPinLine, Lightbulb, ArrowRight } from '@phosphor-icons/react/dist/ssr'
-import Markdown from 'react-markdown'
+import { WikiMarkdown } from '@/components/ui/WikiMarkdown'
 
 import PhotoMontage, { UploadPhotoCTA } from '@/components/media/PhotoMontage'
 import { getAreaRSC } from '@/js/graphql/getAreaRSC'
@@ -143,7 +143,7 @@ const DescriptionSection: React.FC<{ uuid: string, description: string, organiza
         </span>
       </div>
       {(description == null || description.trim() === '') && <EditDescriptionCTA uuid={uuid} />}
-      <Markdown className='wiki-content'>{description}</Markdown>
+      <WikiMarkdown>{description}</WikiMarkdown>
 
       <hr className='border-1 mt-8 mb-4' />
 
@@ -179,7 +179,7 @@ const AreaLocationSection: React.FC<{ uuid: string, areaLocation?: string }> = (
       </div>
 
       {(areaLocation == null || areaLocation.trim() === '') && <EditAreaLocationCTA uuid={uuid} />}
-      <Markdown className='wiki-content'>{areaLocation}</Markdown>
+      <WikiMarkdown>{areaLocation}</WikiMarkdown>
     </>
   )
 }
