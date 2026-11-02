@@ -25,7 +25,7 @@ This project and everyone participating in it is governed by the [OpenBeta of Co
 
 We have a Discord chat server where the community chimes in with helpful advice if you have questions.
 
-- [Join the Discord chat server](https://discord.gg/ptpnWWNkJx)
+- [Join the Discord chat server](https://discord.com/invite/a6vuuTQxS8)
   - Even though Discord is a chat service, sometimes it takes several hours for community members to respond &mdash; please be patient!
   - Assign yourself role(s) according the type of climbing often do, eg: bouldering, sport, etc.
   - Under **OpenBeta category**, use the `#general` channel for general questions or discussion about contributing to the project.
