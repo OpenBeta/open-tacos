@@ -14,7 +14,7 @@
 
 <p align="center">
   We're building a <i>free</i> and <i>open source</i> rock climbing catalog.
-</p
+</p>
 
 <p align="center">
   <h2 align="center">
@@ -85,7 +85,7 @@ git checkout develop
 yarn install
 ```
 
-4.  Run the app
+3.  Run the app
 
 ```
 yarn dev
@@ -109,14 +109,14 @@ yarn dev-local
 You might get build errors or be prompted to downgrade your version of TypeScript. This is due to the linter ```ts-standard``` using an older version of TypeScript.  You can ignore the warning message.
 
 ### Commit your work-in-progress
-To commit without passing pre-build tests because you're doing a simple/unrelated change or simply wish to save your work-in-progres, run commit with the `--no-verify` flag.  Example:
+To commit without passing pre-build tests because you're doing a simple/unrelated change or simply wish to save your work-in-progress, run commit with the `--no-verify` flag.  Example:
 
 ```
 git commit --no-verify -am "saving my work before going climbing"
 ```
 
 ### Linting errors
-You might get linting errors when run ```yarn lint```. To fix this, if you use VS Code, please make sure you have ```StandardJS``` extension installed and enabled.
+You might get linting errors when running ```yarn lint```. To fix this, if you use VS Code, please make sure you have the ```StandardJS``` extension installed and enabled.
 
 ## How to contribute
 

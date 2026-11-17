@@ -17,9 +17,9 @@ The following is a set of guidelines for contributing to Open-Tacos and related 
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by the [OpenBeta of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+This project and everyone participating in it is governed by the [OpenBeta Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
-## I don't want to read this whole thing I just have a question!!!
+## I don't want to read this whole thing, I just have a question!!!
 
 > **Note:** Please don't file an issue to ask a question. You'll get faster results by using the resources below.
 
@@ -27,7 +27,7 @@ We have a Discord chat server where the community chimes in with helpful advice 
 
 - [Join the Discord chat server](https://discord.gg/ptpnWWNkJx)
   - Even though Discord is a chat service, sometimes it takes several hours for community members to respond &mdash; please be patient!
-  - Assign yourself role(s) according the type of climbing often do, eg: bouldering, sport, etc.
+  - Assign yourself role(s) according to the type of climbing you often do, e.g., bouldering, sport, etc.
   - Under **OpenBeta category**, use the `#general` channel for general questions or discussion about contributing to the project.
   - Use the `#openbeta-dev` channel for technical discussion about our on-going projects.
   - Under **Community category**, use the `#general` channel for discussion with other community members.
