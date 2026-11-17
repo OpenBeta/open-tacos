@@ -101,9 +101,19 @@ export interface StateDataProps {
   areas: AreaType[]
 }
 
-export const getUSATableOfContent = async (): Promise<Map<string, StateDataProps>> => {
-  const highDensityList = await getPopularAreasInUSA()
+/** Default maximum number of child areas to include per state in USA table of contents */
+export const DEFAULT_MAX_AREAS_PER_STATE = 5
 
+/**
+ * Build USA Table of Content map with an optional limit on child areas per state
+ *
+ * @param highDensityList - Data containing USA children states and high density areas
+ * @param maxAreasPerState - Maximum number of child areas to include per state (default: 5)
+ */
+export const buildUSATableOfContent = (
+  highDensityList: USAToCProps,
+  maxAreasPerState: number = DEFAULT_MAX_AREAS_PER_STATE
+): Map<string, StateDataProps> => {
   const stateMap = new Map<string, StateDataProps>()
 
   for (const state of highDensityList.area.children) {
@@ -126,8 +136,17 @@ export const getUSATableOfContent = async (): Promise<Map<string, StateDataProps
     const stateData = stateMap.get(state.toLowerCase())
     if (stateData != null) {
       stateData.uuid = ancestors[1]
-      stateData.areas.push(area)
+      if (maxAreasPerState <= 0 || stateData.areas.length < maxAreasPerState) {
+        stateData.areas.push(area)
+      }
     }
   }
   return stateMap
+}
+
+export const getUSATableOfContent = async (
+  maxAreasPerState: number = DEFAULT_MAX_AREAS_PER_STATE
+): Promise<Map<string, StateDataProps>> => {
+  const highDensityList = await getPopularAreasInUSA()
+  return buildUSATableOfContent(highDensityList, maxAreasPerState)
 }
