@@ -14,6 +14,8 @@ interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
   placeholder?: string
   open?: boolean
   onCancel?: () => void
+  /** Called when the search panel opens */
+  onOpen?: () => void
   detached?: boolean
   resultContainer?: (children: ReactNode[]) => ReactNode
 }
@@ -21,7 +23,7 @@ interface AutocompleteProps extends Partial<AutocompleteOptions<any>> {
  * Autocomplete widget based on Algolia Autocomplete.
  * @param props
  */
-export const Autocomplete2 = ({ label, open = false, onCancel, detached = true, queryParams, classNames, resultContainer, ...otherProps }: AutocompleteProps): JSX.Element => {
+export const Autocomplete2 = ({ label, open = false, onCancel, detached = true, onOpen, queryParams, classNames, resultContainer, ...otherProps }: AutocompleteProps): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
   const panelRootRef = useRef<any>(null)
   const rootRef = useRef<HTMLElement | null>(null)
@@ -39,6 +41,9 @@ export const Autocomplete2 = ({ label, open = false, onCancel, detached = true, 
       container: containerRef.current,
       renderer: { createElement, Fragment, render: () => {} },
       onStateChange: props => {
+        if (!props.prevState.isOpen && props.state.isOpen) {
+          if (onOpen != null) onOpen()
+        }
         if (props.prevState.isOpen && !props.state.isOpen) {
           if (onCancel != null) onCancel()
         }

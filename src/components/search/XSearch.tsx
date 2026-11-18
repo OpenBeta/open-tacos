@@ -5,6 +5,7 @@ import { Autocomplete2 } from './Autocomplete2'
 import { xsearchTypesense } from './sources'
 import { AddNewButton } from './templates/ClimbResultXSearch'
 import { ReactNode } from 'react'
+import { trackEvent } from '@/js/analytics/posthog'
 interface XSearchProps {
   placeholder?: string
 }
@@ -15,6 +16,7 @@ interface XSearchProps {
 export default function XSearch ({ placeholder = 'Try "Cat In the Hat" or "Las Vegas"' }: XSearchProps): JSX.Element {
   return (
     <Autocomplete2
+      onOpen={() => trackEvent('search_opened', { variant: 'XSearch' })}
       id={CUSTOM_CLASSES.root}
       placeholder={placeholder}
       getSources={async ({ query }) => {
@@ -30,6 +32,7 @@ export default function XSearch ({ placeholder = 'Try "Cat In the Hat" or "Las V
 export function XSearchMinimal ({ placeholder = 'Try "Cat In the Hat" or "Las Vegas"' }: XSearchProps): JSX.Element {
   return (
     <Autocomplete2
+      onOpen={() => trackEvent('search_opened', { variant: 'XSearchMinimal' })}
       id={CUSTOM_CLASSES.root}
       placeholder={placeholder}
       open={false}
@@ -66,6 +69,7 @@ export const CUSTOM_CLASSES: Partial<AutocompleteClassNames> = {
 export const XSearchMobile = (): JSX.Element => {
   return (
     <Autocomplete2
+      onOpen={() => trackEvent('search_opened', { variant: 'XSearchMobile' })}
       label={
         <button className='btn btn-ghost btn-square'>
           <MagnifyingGlassIcon className='stroke-white w-6 h-6 stroke-2' />
